@@ -1,0 +1,6 @@
+﻿numpy
+scipy
+scikit-image
+matplotlib
+PyQt6
+gmsh
