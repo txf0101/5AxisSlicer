@@ -101,7 +101,7 @@ class MeshModel:
 
 @dataclass(slots=True)
 class SurfaceMap:
-    """Regular XY sampling of the printable conformal surface."""
+    """Regular 2D parameter sampling of the printable conformal surface."""
 
     x_min: float
     y_min: float
@@ -111,6 +111,7 @@ class SurfaceMap:
     z_map: np.ndarray
     normal_map: np.ndarray
     valid_mask: np.ndarray
+    point_map: np.ndarray | None = None
 
     @property
     def shape(self) -> tuple[int, int]:
@@ -195,6 +196,16 @@ class SliceParameters:
 
     def resolved_planar_line_spacing_mm(self) -> float:
         return self.planar_line_spacing_mm if self.planar_line_spacing_mm > 0.0 else self.line_spacing_mm
+
+
+@dataclass(slots=True)
+class SliceSelection:
+    """Optional user selection that chooses which geometries take part in each phase."""
+
+    substrate_component_index: int | None = None
+    conformal_component_indices: tuple[int, ...] = ()
+    substrate_face_indices: tuple[int, ...] = ()
+    conformal_face_indices: tuple[int, ...] = ()
 
 
 @dataclass(slots=True)
@@ -315,6 +326,4 @@ def _normalize_vectors(vectors: np.ndarray) -> np.ndarray:
     normalized = vectors / safe_norms
     normalized[norms[:, 0] < 1e-9] = np.array([0.0, 0.0, 1.0])
     return normalized
-
-
 

@@ -9,65 +9,226 @@ The slicer follows the Open5X-style intent more closely:
 from __future__ import annotations
 
 import math
+from dataclasses import replace
 
 import numpy as np
 from scipy import ndimage
 from skimage import measure
 
-from .core import MeshModel, SliceParameters, SliceResult, SurfaceMap, Toolpath
-from .geometry import resample_polyline
-from .planar import RotaryCoreProfile, estimate_rotary_core_profile, point_in_polygon, slice_planar_core
+from .core import MeshModel, SliceParameters, SliceResult, SliceSelection, SurfaceMap, Toolpath
+from .geometry import combine_meshes, extract_submesh, resample_polyline, split_mesh_into_components
+from .planar import (
+    HorizontalSectionExtractor,
+    RotaryCoreProfile,
+    estimate_rotary_core_profile,
+    point_in_polygon,
+    slice_planar_core,
+    slice_planar_mesh,
+)
 
 
 class ConformalSlicer:
     """Main entry point for hybrid slicing."""
 
-    def slice(self, mesh: MeshModel, params: SliceParameters) -> SliceResult:
+    def slice(self, mesh: MeshModel, params: SliceParameters, selection: SliceSelection | None = None) -> SliceResult:
         working_mesh = mesh.centered_for_build() if params.auto_center_model else mesh
         warnings: list[str] = []
         toolpaths: list[Toolpath] = []
+        components = split_mesh_into_components(working_mesh)
+        component_mode = len(components) > 1
+        face_selection_active = selection is not None and (bool(selection.substrate_face_indices) or bool(selection.conformal_face_indices))
+        selected_substrate_faces = np.empty(0, dtype=np.int32)
+        selected_conformal_faces = np.empty(0, dtype=np.int32)
+        substrate_index: int | None = None
+        conformal_indices: tuple[int, ...] = ()
+        substrate_mesh: MeshModel | None = None
+        conformal_mesh: MeshModel | None = None
 
-        if params.enable_planar_core:
-            core_profile = estimate_rotary_core_profile(working_mesh, params)
+        if face_selection_active and selection is not None:
+            face_count = len(working_mesh.faces)
+            substrate_set = {int(index) for index in selection.substrate_face_indices if 0 <= int(index) < face_count}
+            conformal_set = {int(index) for index in selection.conformal_face_indices if 0 <= int(index) < face_count}
+            conformal_set.difference_update(substrate_set)
+            selected_substrate_faces = np.asarray(sorted(substrate_set), dtype=np.int32)
+            selected_conformal_faces = np.asarray(sorted(conformal_set), dtype=np.int32)
+            if len(selected_substrate_faces):
+                substrate_mesh = extract_submesh(
+                    working_mesh,
+                    selected_substrate_faces,
+                    name=f"{working_mesh.name} [Selected Substrate Faces]",
+                )
+            if len(selected_conformal_faces):
+                conformal_mesh = extract_submesh(
+                    working_mesh,
+                    selected_conformal_faces,
+                    name=f"{working_mesh.name} [Selected Conformal Faces]",
+                )
         else:
-            core_profile = RotaryCoreProfile(
-                center_xy=np.zeros(2, dtype=float),
-                z_levels_mm=np.zeros(0, dtype=float),
-                radii_mm=np.zeros(0, dtype=float),
+            substrate_index, conformal_indices = _resolve_component_selection(working_mesh, components, selection)
+            substrate_mesh = components[substrate_index] if component_mode and substrate_index is not None else None
+            conformal_mesh = (
+                combine_meshes([components[index] for index in conformal_indices], name=f"{working_mesh.name} [Conformal Selection]")
+                if component_mode and conformal_indices
+                else None
             )
 
+        explicit_selection_mode = face_selection_active or component_mode
+        use_open5x_surface_finish = explicit_selection_mode and conformal_mesh is not None
+
+        core_profile = RotaryCoreProfile(
+            center_xy=np.zeros(2, dtype=float),
+            z_levels_mm=np.zeros(0, dtype=float),
+            radii_mm=np.zeros(0, dtype=float),
+        )
         planar_toolpaths: list[Toolpath] = []
         planar_meta: dict[str, int | float] = {
             "layer_count": 0,
             "path_count": 0,
             "transition_height_mm": 0.0,
         }
-        if params.enable_planar_core and not core_profile.is_empty:
-            planar_toolpaths, planar_meta, planar_warnings = slice_planar_core(working_mesh, core_profile, params)
-            toolpaths.extend(planar_toolpaths)
-            warnings.extend(planar_warnings)
-        elif params.enable_planar_core:
-            warnings.append("No stable rotary core was detected near the model centre, so the planar core phase was skipped.")
 
-        full_surface_map = build_surface_map(working_mesh, params)
-        conformal_surface_map = exclude_rotary_core_from_surface(
-            full_surface_map,
-            core_profile,
-            margin_mm=max(params.line_spacing_mm * 0.45, params.nozzle_diameter_mm * 0.35),
-        )
+        if face_selection_active:
+            if params.enable_planar_core and substrate_mesh is not None:
+                planar_toolpaths, planar_meta, planar_warnings = slice_planar_mesh(substrate_mesh, params)
+                toolpaths.extend(planar_toolpaths)
+                warnings.extend(planar_warnings)
+            elif params.enable_planar_core:
+                warnings.append("No substrate faces were selected, so the planar base phase was skipped.")
+        elif component_mode:
+            if params.enable_planar_core and substrate_mesh is not None:
+                planar_toolpaths, planar_meta, planar_warnings = slice_planar_mesh(substrate_mesh, params)
+                toolpaths.extend(planar_toolpaths)
+                warnings.extend(planar_warnings)
+            elif params.enable_planar_core:
+                warnings.append("No substrate geometry was selected, so the planar base phase was skipped.")
+        else:
+            if params.enable_planar_core:
+                core_profile = estimate_rotary_core_profile(working_mesh, params)
+            if params.enable_planar_core and not core_profile.is_empty:
+                planar_toolpaths, planar_meta, planar_warnings = slice_planar_core(working_mesh, core_profile, params)
+                toolpaths.extend(planar_toolpaths)
+                warnings.extend(planar_warnings)
+            elif params.enable_planar_core:
+                warnings.append("No stable rotary core was detected near the model centre, so the planar core phase was skipped.")
 
-        conformal_perimeters = generate_conformal_perimeter_paths(conformal_surface_map, params, core_profile=core_profile)
-        if not conformal_perimeters:
-            warnings.append("No conformal perimeter paths were generated. The model may only support open edge segments after the rotary core is removed.")
-
+        conformal_meta: dict[str, float | int | str] = {
+            "layer_count": 0,
+            "strategy": "top-surface",
+        }
+        conformal_perimeters: list[Toolpath] = []
         conformal_infill: list[Toolpath] = []
-        if params.include_infill:
-            conformal_infill = generate_conformal_infill_paths(conformal_surface_map, params)
-            if not conformal_infill:
-                warnings.append("No conformal infill paths were generated for the selected surface.")
+        if use_open5x_surface_finish:
+            reference_center_xy = substrate_mesh.bounds_center[:2] if substrate_mesh is not None else working_mesh.bounds_center[:2]
+            radius_source_mesh = substrate_mesh if substrate_mesh is not None else conformal_mesh
+            reference_radius_mm = (
+                _cylindrical_reference_radius(radius_source_mesh, reference_center_xy, params)
+                if radius_source_mesh is not None
+                else None
+            )
+            conformal_surface_map, conformal_perimeters, conformal_meta = generate_open5x_surface_finish_paths(
+                conformal_mesh,
+                reference_center_xy,
+                params,
+                reference_radius_mm=reference_radius_mm,
+            )
+            full_surface_map = conformal_surface_map
+        elif face_selection_active:
+            if conformal_mesh is None:
+                full_surface_map = _empty_surface_map()
+                conformal_surface_map = full_surface_map
+                if params.include_infill or params.perimeters > 0:
+                    warnings.append("No conformal faces were selected, so the conformal phase was skipped.")
+            else:
+                if substrate_mesh is not None:
+                    conformal_surface_map, full_surface_map, thickness_map = build_conformal_base_surface_maps(
+                        substrate_mesh,
+                        conformal_mesh,
+                        params,
+                    )
+                    conformal_perimeters, conformal_infill, conformal_meta = generate_conformal_paths_from_base_surface(
+                        conformal_surface_map,
+                        thickness_map,
+                        params,
+                    )
+                else:
+                    center_xy = working_mesh.bounds_center[:2]
+                    full_surface_map = build_cylindrical_surface_map(conformal_mesh, center_xy, params)
+                    conformal_surface_map = full_surface_map
+                    conformal_perimeters = generate_conformal_perimeter_paths(
+                        conformal_surface_map,
+                        params,
+                        core_profile=None,
+                    )
+                    conformal_infill = generate_conformal_infill_paths(conformal_surface_map, params) if params.include_infill else []
+        elif component_mode:
+            if conformal_mesh is None:
+                full_surface_map = _empty_surface_map()
+                conformal_surface_map = full_surface_map
+                if params.include_infill or params.perimeters > 0:
+                    warnings.append("No conformal geometry was selected, so the conformal phase was skipped.")
+            else:
+                if substrate_mesh is not None:
+                    conformal_surface_map, full_surface_map, thickness_map = build_conformal_base_surface_maps(
+                        substrate_mesh,
+                        conformal_mesh,
+                        params,
+                    )
+                    conformal_perimeters, conformal_infill, conformal_meta = generate_conformal_paths_from_base_surface(
+                        conformal_surface_map,
+                        thickness_map,
+                        params,
+                    )
+                else:
+                    center_xy = working_mesh.bounds_center[:2]
+                    full_surface_map = build_cylindrical_surface_map(conformal_mesh, center_xy, params)
+                    conformal_surface_map = full_surface_map
+                    conformal_perimeters = generate_conformal_perimeter_paths(
+                        conformal_surface_map,
+                        params,
+                        core_profile=None,
+                    )
+                    conformal_infill = generate_conformal_infill_paths(conformal_surface_map, params) if params.include_infill else []
+        else:
+            surface_finish_params = replace(
+                params,
+                grid_step_mm=min(params.grid_step_mm, 0.1),
+                segment_length_mm=min(params.segment_length_mm, 0.1),
+            )
+            full_surface_map = build_cylindrical_surface_map(
+                working_mesh,
+                core_profile.center_xy,
+                surface_finish_params,
+            )
+            conformal_surface_map = exclude_rotary_core_from_surface(
+                full_surface_map,
+                core_profile,
+                margin_mm=max(surface_finish_params.line_spacing_mm * 0.45, surface_finish_params.nozzle_diameter_mm * 0.35),
+            )
+            conformal_perimeters, conformal_meta = generate_open5x_surface_finish_paths_from_surface_map(
+                conformal_surface_map,
+                core_profile.center_xy,
+                surface_finish_params,
+            )
+            conformal_infill = []
+
+        has_target_surface = (explicit_selection_mode and conformal_mesh is not None) or (not explicit_selection_mode and np.any(conformal_surface_map.valid_mask))
+        if not conformal_perimeters and has_target_surface:
+            warnings.append("No conformal perimeter paths were generated for the selected surface or geometry.")
+
+        if params.include_infill and not conformal_infill and has_target_surface and str(conformal_meta.get("strategy", "")) != "open5x-surface-finish":
+            warnings.append("No conformal infill paths were generated for the selected surface or geometry.")
 
         conformal_toolpaths = conformal_perimeters + conformal_infill
         toolpaths.extend(conformal_toolpaths)
+
+        core_center_xy = substrate_mesh.bounds_center[:2] if substrate_mesh is not None else core_profile.center_xy
+        core_min_z_mm = float(substrate_mesh.bounds_min[2]) if substrate_mesh is not None else float(core_profile.min_z_mm) if not core_profile.is_empty else 0.0
+        core_max_z_mm = float(substrate_mesh.bounds_max[2]) if substrate_mesh is not None else float(core_profile.max_z_mm) if not core_profile.is_empty else 0.0
+        core_max_radius_mm = (
+            float(np.max(np.linalg.norm(substrate_mesh.vertices[:, :2] - substrate_mesh.bounds_center[:2], axis=1)))
+            if substrate_mesh is not None and len(substrate_mesh.vertices)
+            else float(np.max(core_profile.radii_mm)) if len(core_profile.radii_mm) else 0.0
+        )
 
         metadata = {
             "path_count": len(toolpaths),
@@ -82,11 +243,19 @@ class ConformalSlicer:
             "transition_height_mm": float(planar_meta.get("transition_height_mm", 0.0)),
             "surface_min_z_mm": float(np.nanmin(conformal_surface_map.z_map)) if np.any(conformal_surface_map.valid_mask) else 0.0,
             "surface_max_z_mm": float(np.nanmax(conformal_surface_map.z_map)) if np.any(conformal_surface_map.valid_mask) else 0.0,
-            "core_center_x_mm": float(core_profile.center_xy[0]) if len(core_profile.center_xy) == 2 else 0.0,
-            "core_center_y_mm": float(core_profile.center_xy[1]) if len(core_profile.center_xy) == 2 else 0.0,
-            "core_max_radius_mm": float(np.max(core_profile.radii_mm)) if len(core_profile.radii_mm) else 0.0,
-            "core_min_z_mm": float(core_profile.min_z_mm) if not core_profile.is_empty else 0.0,
-            "core_max_z_mm": float(core_profile.max_z_mm) if not core_profile.is_empty else 0.0,
+            "conformal_layer_count": int(conformal_meta.get("layer_count", 0)),
+            "conformal_strategy": str(conformal_meta.get("strategy", "top-surface")),
+            "core_center_x_mm": float(core_center_xy[0]) if len(core_center_xy) == 2 else 0.0,
+            "core_center_y_mm": float(core_center_xy[1]) if len(core_center_xy) == 2 else 0.0,
+            "core_max_radius_mm": core_max_radius_mm,
+            "core_min_z_mm": core_min_z_mm,
+            "core_max_z_mm": core_max_z_mm,
+            "component_count": len(components),
+            "substrate_component_index": -1 if substrate_index is None else int(substrate_index),
+            "conformal_component_indices": list(int(index) for index in conformal_indices),
+            "selection_mode": "faces" if face_selection_active else "components" if component_mode else "auto",
+            "selected_substrate_face_count": int(len(selected_substrate_faces)),
+            "selected_conformal_face_count": int(len(selected_conformal_faces)),
         }
 
         return SliceResult(
@@ -98,15 +267,118 @@ class ConformalSlicer:
         )
 
 
-def build_surface_map(mesh: MeshModel, params: SliceParameters) -> SurfaceMap:
+def slice_planar_model(mesh: MeshModel, params: SliceParameters) -> SliceResult:
+    """Slice the whole mesh with ordinary horizontal layers for 3-axis mode."""
+
+    working_mesh = mesh.centered_for_build() if params.auto_center_model else mesh
+    toolpaths, planar_meta, warnings = slice_planar_mesh(working_mesh, params)
+    metadata = {
+        "path_count": len(toolpaths),
+        "planar_path_count": len(toolpaths),
+        "conformal_path_count": 0,
+        "conformal_perimeter_count": 0,
+        "conformal_infill_count": 0,
+        "planar_layer_count": int(planar_meta.get("layer_count", 0)),
+        "model_size_mm": working_mesh.size.tolist(),
+        "surface_samples": 0,
+        "full_surface_samples": 0,
+        "transition_height_mm": float(planar_meta.get("transition_height_mm", 0.0)),
+        "surface_min_z_mm": 0.0,
+        "surface_max_z_mm": 0.0,
+        "core_center_x_mm": float(planar_meta.get("core_center_x_mm", working_mesh.bounds_center[0])),
+        "core_center_y_mm": float(planar_meta.get("core_center_y_mm", working_mesh.bounds_center[1])),
+        "core_max_radius_mm": float(planar_meta.get("core_max_radius_mm", 0.0)),
+        "core_min_z_mm": float(working_mesh.bounds_min[2]),
+        "core_max_z_mm": float(working_mesh.bounds_max[2]),
+        "component_count": len(split_mesh_into_components(working_mesh)),
+        "substrate_component_index": -1,
+        "conformal_component_indices": [],
+        "selection_mode": "planar-only",
+        "selected_substrate_face_count": 0,
+        "selected_conformal_face_count": 0,
+    }
+    return SliceResult(
+        mesh=working_mesh,
+        surface_map=_empty_surface_map(),
+        toolpaths=toolpaths,
+        warnings=warnings,
+        metadata=metadata,
+    )
+
+
+def _empty_surface_map() -> SurfaceMap:
+    x_coords = np.array([0.0], dtype=float)
+    y_coords = np.array([0.0], dtype=float)
+    return SurfaceMap(
+        x_min=0.0,
+        y_min=0.0,
+        step_mm=1.0,
+        x_coords=x_coords,
+        y_coords=y_coords,
+        z_map=np.full((1, 1), np.nan, dtype=float),
+        normal_map=np.array([[[0.0, 0.0, 1.0]]], dtype=float),
+        valid_mask=np.zeros((1, 1), dtype=bool),
+        point_map=np.array([[[0.0, 0.0, 0.0]]], dtype=float),
+    )
+
+
+def _resolve_component_selection(
+    working_mesh: MeshModel,
+    components: list[MeshModel],
+    selection: SliceSelection | None,
+) -> tuple[int | None, tuple[int, ...]]:
+    if len(components) <= 1:
+        return None, ()
+
+    selected_substrate = selection.substrate_component_index if selection is not None else None
+    if selected_substrate is None or not (0 <= selected_substrate < len(components)):
+        selected_substrate = _detect_default_substrate_component(working_mesh, components)
+
+    selected_conformal = tuple(index for index in (selection.conformal_component_indices if selection is not None else ()) if 0 <= index < len(components) and index != selected_substrate)
+    if not selected_conformal:
+        selected_conformal = tuple(index for index in range(len(components)) if index != selected_substrate)
+    return selected_substrate, selected_conformal
+
+
+def _detect_default_substrate_component(working_mesh: MeshModel, components: list[MeshModel]) -> int:
+    overall_center_xy = working_mesh.bounds_center[:2]
+    best_index = 0
+    best_score = (math.inf, math.inf, math.inf)
+    for index, component in enumerate(components):
+        radial_distance = float(np.linalg.norm(component.bounds_center[:2] - overall_center_xy))
+        score = (
+            radial_distance,
+            -float(component.size[2]),
+            -float(len(component.faces)),
+        )
+        if score < best_score:
+            best_index = index
+            best_score = score
+    return best_index
+
+
+def build_surface_map(
+    mesh: MeshModel,
+    params: SliceParameters,
+    x_coords: np.ndarray | None = None,
+    y_coords: np.ndarray | None = None,
+) -> SurfaceMap:
     """Sample the printable top surface on a regular XY grid."""
 
     bounds_min = mesh.bounds_min
     bounds_max = mesh.bounds_max
-    step = max(params.grid_step_mm, 0.1)
-
-    x_coords = np.arange(bounds_min[0], bounds_max[0] + step, step, dtype=float)
-    y_coords = np.arange(bounds_min[1], bounds_max[1] + step, step, dtype=float)
+    if x_coords is None or y_coords is None:
+        step = max(params.grid_step_mm, 0.1)
+        x_coords = np.arange(bounds_min[0], bounds_max[0] + step, step, dtype=float)
+        y_coords = np.arange(bounds_min[1], bounds_max[1] + step, step, dtype=float)
+    else:
+        x_coords = np.asarray(x_coords, dtype=float)
+        y_coords = np.asarray(y_coords, dtype=float)
+        if len(x_coords) == 0 or len(y_coords) == 0:
+            return _empty_surface_map()
+        step_x = float(np.mean(np.diff(x_coords))) if len(x_coords) > 1 else max(params.grid_step_mm, 0.1)
+        step_y = float(np.mean(np.diff(y_coords))) if len(y_coords) > 1 else max(params.grid_step_mm, 0.1)
+        step = max(min(step_x, step_y), 0.1)
 
     z_map = np.full((len(y_coords), len(x_coords)), -np.inf, dtype=float)
     normal_map = np.zeros((len(y_coords), len(x_coords), 3), dtype=float)
@@ -157,6 +429,9 @@ def build_surface_map(mesh: MeshModel, params: SliceParameters) -> SurfaceMap:
     z_map[~valid_mask] = np.nan
     normal_map[~valid_mask] = np.array([0.0, 0.0, 1.0])
 
+    xx, yy = np.meshgrid(x_coords, y_coords)
+    point_map = np.stack([xx, yy, z_map], axis=-1)
+
     return SurfaceMap(
         x_min=float(x_coords[0]),
         y_min=float(y_coords[0]),
@@ -166,7 +441,572 @@ def build_surface_map(mesh: MeshModel, params: SliceParameters) -> SurfaceMap:
         z_map=z_map,
         normal_map=normal_map,
         valid_mask=valid_mask,
+        point_map=point_map,
     )
+
+
+def build_conformal_base_surface_maps(
+    substrate_mesh: MeshModel,
+    conformal_mesh: MeshModel,
+    params: SliceParameters,
+) -> tuple[SurfaceMap, SurfaceMap, np.ndarray]:
+    """Build a base-referenced conformal volume estimate from substrate and shell meshes.
+
+    The intent is to approximate Open5X's "slice the conformal body with the
+    substrate surface function": first sample the substrate top surface, then
+    measure how much conformal material exists above each substrate sample.
+    """
+
+    center_xy = substrate_mesh.bounds_center[:2]
+    reference_radius_mm = _cylindrical_reference_radius(substrate_mesh, center_xy, params)
+    substrate_surface_map = build_cylindrical_surface_map(
+        substrate_mesh,
+        center_xy,
+        params,
+        reference_radius_mm=reference_radius_mm,
+    )
+    conformal_top_map = build_cylindrical_surface_map(
+        conformal_mesh,
+        center_xy,
+        params,
+        x_coords=substrate_surface_map.x_coords,
+        y_coords=substrate_surface_map.y_coords,
+        reference_radius_mm=reference_radius_mm,
+    )
+    base_points = (
+        substrate_surface_map.point_map.copy()
+        if substrate_surface_map.point_map is not None
+        else np.zeros((*substrate_surface_map.z_map.shape, 3), dtype=float)
+    )
+    base_normals = _normalize(substrate_surface_map.normal_map.copy())
+    overlap_mask = substrate_surface_map.valid_mask & conformal_top_map.valid_mask
+
+    thickness_map = np.zeros(substrate_surface_map.z_map.shape, dtype=float)
+    if np.any(overlap_mask):
+        delta_points = conformal_top_map.point_map - base_points
+        signed_gap = np.einsum("...i,...i->...", delta_points, base_normals)
+        thickness_map[overlap_mask] = np.maximum(signed_gap[overlap_mask], 0.0)
+
+    base_reference_map = build_offset_surface_map(
+        substrate_surface_map,
+        thickness_map,
+        offset_mm=0.0,
+        min_remaining_mm=max(params.layer_height_mm * 0.2, params.nozzle_diameter_mm * 0.15),
+    )
+    if substrate_surface_map.point_map is not None:
+        base_reference_map = SurfaceMap(
+            x_min=base_reference_map.x_min,
+            y_min=base_reference_map.y_min,
+            step_mm=base_reference_map.step_mm,
+            x_coords=base_reference_map.x_coords.copy(),
+            y_coords=base_reference_map.y_coords.copy(),
+            z_map=base_reference_map.z_map.copy(),
+            normal_map=base_reference_map.normal_map.copy(),
+            valid_mask=base_reference_map.valid_mask.copy(),
+            point_map=base_reference_map.point_map.copy(),
+        )
+    return base_reference_map, conformal_top_map, thickness_map
+
+
+def build_offset_surface_map(
+    base_surface_map: SurfaceMap,
+    thickness_map: np.ndarray,
+    offset_mm: float,
+    min_remaining_mm: float,
+) -> SurfaceMap:
+    point_map = (
+        base_surface_map.point_map.copy()
+        if base_surface_map.point_map is not None
+        else np.zeros((*base_surface_map.z_map.shape, 3), dtype=float)
+    )
+    normal_map = _normalize(base_surface_map.normal_map.copy())
+    valid_mask = base_surface_map.valid_mask & (thickness_map >= (offset_mm + min_remaining_mm))
+    offset_points = point_map + normal_map * float(offset_mm)
+    z_map = offset_points[..., 2].copy()
+    z_map[~valid_mask] = np.nan
+    normal_map[~valid_mask] = np.array([0.0, 0.0, 1.0])
+    offset_points[~valid_mask] = np.array([0.0, 0.0, 0.0])
+    return SurfaceMap(
+        x_min=base_surface_map.x_min,
+        y_min=base_surface_map.y_min,
+        step_mm=base_surface_map.step_mm,
+        x_coords=base_surface_map.x_coords.copy(),
+        y_coords=base_surface_map.y_coords.copy(),
+        z_map=z_map,
+        normal_map=normal_map,
+        valid_mask=valid_mask,
+        point_map=offset_points,
+    )
+
+
+def generate_open5x_surface_finish_paths(
+    conformal_mesh: MeshModel,
+    center_xy: np.ndarray,
+    params: SliceParameters,
+    *,
+    reference_radius_mm: float | None = None,
+) -> tuple[SurfaceMap, list[Toolpath], dict[str, float | int | str]]:
+    surface_finish_params = replace(
+        params,
+        grid_step_mm=min(params.grid_step_mm, 0.1),
+        segment_length_mm=min(params.segment_length_mm, 0.1),
+    )
+    full_surface_map = build_cylindrical_surface_map(
+        conformal_mesh,
+        center_xy,
+        surface_finish_params,
+        reference_radius_mm=reference_radius_mm,
+    )
+    if not np.any(full_surface_map.valid_mask):
+        return full_surface_map, [], {"layer_count": 0, "strategy": "open5x-surface-finish"}
+    seam_shift_cols = _surface_finish_seam_shift(full_surface_map)
+    full_surface_map = _roll_surface_map_columns(full_surface_map, -seam_shift_cols)
+
+    paths: list[Toolpath] = []
+    component_meshes = split_mesh_into_components(conformal_mesh)
+    component_meshes = sorted(
+        component_meshes,
+        key=lambda component: _surface_finish_component_angle_deg(component, center_xy),
+    )
+    for component_index, component_mesh in enumerate(component_meshes, start=1):
+        component_surface_map = build_cylindrical_surface_map(
+            component_mesh,
+            center_xy,
+            surface_finish_params,
+            x_coords=full_surface_map.x_coords,
+            y_coords=full_surface_map.y_coords,
+            reference_radius_mm=reference_radius_mm,
+        )
+        component_surface_map = _roll_surface_map_columns(component_surface_map, -seam_shift_cols)
+        paths.extend(_surface_finish_component_toolpaths(component_surface_map, component_index, center_xy))
+
+    metadata = {
+        "layer_count": 1 if paths else 0,
+        "strategy": "open5x-surface-finish",
+        "path_count": len(paths),
+        "component_count": len(component_meshes),
+        "sample_step_mm": surface_finish_params.grid_step_mm,
+    }
+    return full_surface_map, paths, metadata
+
+
+def generate_open5x_surface_finish_paths_from_surface_map(
+    surface_map: SurfaceMap,
+    center_xy: np.ndarray,
+    params: SliceParameters,
+) -> tuple[list[Toolpath], dict[str, float | int | str]]:
+    if surface_map.point_map is None or not np.any(surface_map.valid_mask):
+        return [], {"layer_count": 0, "strategy": "open5x-surface-finish", "path_count": 0, "component_count": 0}
+    surface_map = _roll_surface_map_columns(surface_map, -_surface_finish_seam_shift(surface_map))
+
+    component_labels, component_count = ndimage.label(surface_map.valid_mask.astype(np.int8))
+    component_sizes = [int(np.count_nonzero(component_labels == component_index)) for component_index in range(1, int(component_count) + 1)]
+    largest_component = max(component_sizes, default=0)
+    minimum_component_size = max(64, int(largest_component * 0.005))
+    component_surfaces: list[tuple[float, SurfaceMap]] = []
+    for component_index in range(1, int(component_count) + 1):
+        component_mask = component_labels == component_index
+        if int(np.count_nonzero(component_mask)) < minimum_component_size:
+            continue
+        component_surface_map = SurfaceMap(
+            x_min=surface_map.x_min,
+            y_min=surface_map.y_min,
+            step_mm=surface_map.step_mm,
+            x_coords=surface_map.x_coords.copy(),
+            y_coords=surface_map.y_coords.copy(),
+            z_map=surface_map.z_map.copy(),
+            normal_map=surface_map.normal_map.copy(),
+            valid_mask=component_mask,
+            point_map=None if surface_map.point_map is None else surface_map.point_map.copy(),
+        )
+        component_surfaces.append((_surface_finish_component_angle_from_surface(component_surface_map, center_xy), component_surface_map))
+
+    component_surfaces.sort(key=lambda item: item[0])
+    paths: list[Toolpath] = []
+    for component_index, (_, component_surface_map) in enumerate(component_surfaces, start=1):
+        paths.extend(_surface_finish_component_toolpaths(component_surface_map, component_index, center_xy))
+
+    metadata = {
+        "layer_count": 1 if paths else 0,
+        "strategy": "open5x-surface-finish",
+        "path_count": len(paths),
+        "component_count": len(component_surfaces),
+        "sample_step_mm": params.grid_step_mm,
+    }
+    return paths, metadata
+
+
+def _surface_finish_component_angle_deg(component_mesh: MeshModel, center_xy: np.ndarray) -> float:
+    radial_xy = np.asarray(component_mesh.bounds_center[:2], dtype=float) - np.asarray(center_xy, dtype=float)
+    return math.degrees(math.atan2(float(radial_xy[1]), float(radial_xy[0]))) % 360.0
+
+
+def _surface_finish_component_angle_from_surface(surface_map: SurfaceMap, center_xy: np.ndarray) -> float:
+    if surface_map.point_map is None or not np.any(surface_map.valid_mask):
+        return 0.0
+    points = np.asarray(surface_map.point_map[surface_map.valid_mask], dtype=float)
+    mean_xy = points[:, :2].mean(axis=0)
+    radial_xy = mean_xy - np.asarray(center_xy, dtype=float)
+    return math.degrees(math.atan2(float(radial_xy[1]), float(radial_xy[0]))) % 360.0
+
+
+def _surface_finish_seam_shift(surface_map: SurfaceMap) -> int:
+    if surface_map.point_map is None or not np.any(surface_map.valid_mask):
+        return 0
+    valid_counts = np.count_nonzero(surface_map.valid_mask, axis=0)
+    if len(valid_counts) == 0:
+        return 0
+    return int(np.argmin(valid_counts))
+
+
+def _roll_surface_map_columns(surface_map: SurfaceMap, shift_cols: int) -> SurfaceMap:
+    if surface_map.point_map is None or not np.any(surface_map.valid_mask):
+        return surface_map
+    column_count = surface_map.valid_mask.shape[1]
+    if column_count == 0:
+        return surface_map
+    normalized_shift = int(shift_cols) % column_count
+    if normalized_shift == 0:
+        return surface_map
+    return SurfaceMap(
+        x_min=surface_map.x_min,
+        y_min=surface_map.y_min,
+        step_mm=surface_map.step_mm,
+        x_coords=surface_map.x_coords.copy(),
+        y_coords=surface_map.y_coords.copy(),
+        z_map=np.roll(surface_map.z_map, normalized_shift, axis=1),
+        normal_map=np.roll(surface_map.normal_map, normalized_shift, axis=1),
+        valid_mask=np.roll(surface_map.valid_mask, normalized_shift, axis=1),
+        point_map=np.roll(surface_map.point_map, normalized_shift, axis=1),
+    )
+
+
+def _surface_finish_component_toolpaths(
+    surface_map: SurfaceMap,
+    component_index: int,
+    center_xy: np.ndarray,
+) -> list[Toolpath]:
+    row_runs = _surface_finish_row_runs(surface_map)
+    if not row_runs:
+        return []
+
+    stitched_paths = _stitch_surface_finish_row_runs(row_runs, surface_map.step_mm)
+    toolpaths: list[Toolpath] = []
+    for path_index, (points, normals) in enumerate(stitched_paths, start=1):
+        points, normals = _resample_surface_finish_path(
+            points,
+            normals,
+            spacing_mm=_surface_finish_sample_step(surface_map.step_mm),
+        )
+        if len(points) < 16:
+            continue
+        name_suffix = f"-{path_index}" if len(stitched_paths) > 1 else ""
+        radial_normals = _surface_finish_open5x_normals(points, normals, center_xy)
+        toolpaths.append(
+            Toolpath(
+                name=f"Open5x Surface C{component_index}{name_suffix}",
+                kind="conformal-surface-finish",
+                points=points,
+                normals=radial_normals,
+                closed=False,
+                phase="conformal",
+                layer_index=1,
+                z_height_mm=0.0,
+            )
+        )
+    return toolpaths
+
+
+def _surface_finish_sample_step(step_mm: float) -> float:
+    return max(min(float(step_mm) * 1.5, 0.15), float(step_mm))
+
+
+def _resample_surface_finish_path(
+    points: np.ndarray,
+    normals: np.ndarray,
+    spacing_mm: float,
+) -> tuple[np.ndarray, np.ndarray]:
+    points = np.asarray(points, dtype=float)
+    normals = _normalize(np.asarray(normals, dtype=float))
+    if len(points) < 2:
+        return points.copy(), normals.copy()
+
+    spacing_mm = max(float(spacing_mm), 1e-6)
+    segment_vectors = np.diff(points, axis=0)
+    segment_lengths = np.linalg.norm(segment_vectors, axis=1)
+    total_length_mm = float(segment_lengths.sum())
+    if total_length_mm <= spacing_mm:
+        return points.copy(), normals.copy()
+
+    cumulative = np.concatenate([[0.0], np.cumsum(segment_lengths)])
+    samples = np.arange(0.0, total_length_mm, spacing_mm, dtype=float)
+    if len(samples) == 0 or not math.isclose(samples[-1], total_length_mm, rel_tol=1e-6, abs_tol=1e-6):
+        samples = np.append(samples, total_length_mm)
+
+    sampled_points: list[np.ndarray] = []
+    sampled_normals: list[np.ndarray] = []
+    segment_index = 0
+    for target_mm in samples:
+        while segment_index < len(segment_lengths) - 1 and cumulative[segment_index + 1] < target_mm:
+            segment_index += 1
+        start_mm = cumulative[segment_index]
+        end_mm = cumulative[segment_index + 1]
+        ratio = 0.0 if math.isclose(end_mm, start_mm) else (target_mm - start_mm) / (end_mm - start_mm)
+        sampled_points.append(points[segment_index] * (1.0 - ratio) + points[segment_index + 1] * ratio)
+        sampled_normals.append(normals[segment_index] * (1.0 - ratio) + normals[segment_index + 1] * ratio)
+
+    return np.asarray(sampled_points, dtype=float), _normalize(np.asarray(sampled_normals, dtype=float))
+
+
+def _surface_finish_open5x_normals(
+    points: np.ndarray,
+    reference_normals: np.ndarray,
+    center_xy: np.ndarray,
+) -> np.ndarray:
+    radial = np.asarray(points, dtype=float).copy()
+    radial[:, 0] -= float(center_xy[0])
+    radial[:, 1] -= float(center_xy[1])
+    radial[:, 2] = 0.0
+    radial = _normalize(radial)
+
+    reference_normals = _normalize(np.asarray(reference_normals, dtype=float))
+    z_component = reference_normals[:, 2].astype(float, copy=False)
+    if len(z_component) >= 5:
+        kernel_size = min(9, len(z_component) if len(z_component) % 2 == 1 else len(z_component) - 1)
+        kernel_size = max(kernel_size, 3)
+        pad = kernel_size // 2
+        padded = np.pad(z_component, (pad, pad), mode="edge")
+        kernel = np.full(kernel_size, 1.0 / kernel_size, dtype=float)
+        z_component = np.convolve(padded, kernel, mode="valid")
+
+    slope_z = np.clip(z_component * 0.088, -0.088, 0.088)
+    xy_scale = np.sqrt(np.maximum(1.0 - slope_z**2, 1e-6))
+    blended = radial * xy_scale[:, None]
+    blended[:, 2] = slope_z
+    return _normalize(blended)
+
+
+def _surface_finish_row_runs(surface_map: SurfaceMap) -> list[tuple[int, np.ndarray, np.ndarray]]:
+    if surface_map.point_map is None or not np.any(surface_map.valid_mask):
+        return []
+
+    row_runs: list[tuple[int, np.ndarray, np.ndarray]] = []
+    for row_index in range(surface_map.valid_mask.shape[0]):
+        cols = np.flatnonzero(surface_map.valid_mask[row_index])
+        if len(cols) < 3:
+            continue
+        runs = _split_index_runs(cols)
+        if not runs:
+            continue
+        best_run = max(runs, key=len)
+        if len(best_run) < 3:
+            continue
+        points = surface_map.point_map[row_index, best_run].copy()
+        normals = _normalize(surface_map.normal_map[row_index, best_run].copy())
+        row_runs.append((row_index, points, normals))
+    return row_runs
+
+
+def _stitch_surface_finish_row_runs(
+    row_runs: list[tuple[int, np.ndarray, np.ndarray]],
+    step_mm: float,
+) -> list[tuple[np.ndarray, np.ndarray]]:
+    if not row_runs:
+        return []
+
+    stitched_paths: list[tuple[np.ndarray, np.ndarray]] = []
+    # Surface-finish sweeps should favor a few long continuous paths. The earlier
+    # 4 mm threshold fragmented blade surfaces into many short blocks.
+    connect_threshold_mm = max(step_mm * 160.0, 16.0)
+    current_points = row_runs[0][1].copy()
+    current_normals = row_runs[0][2].copy()
+
+    for _, points, normals in row_runs[1:]:
+        forward = (points, normals)
+        backward = (points[::-1].copy(), normals[::-1].copy())
+        best_points, best_normals = min(
+            (forward, backward),
+            key=lambda candidate: float(np.linalg.norm(candidate[0][0] - current_points[-1])),
+        )
+        gap_mm = float(np.linalg.norm(best_points[0] - current_points[-1]))
+        if gap_mm > connect_threshold_mm:
+            stitched_paths.append((current_points, _normalize(current_normals)))
+            current_points = best_points.copy()
+            current_normals = best_normals.copy()
+            continue
+
+        bridge_points, bridge_normals = _surface_finish_bridge(
+            current_points[-1],
+            current_normals[-1],
+            best_points[0],
+            best_normals[0],
+            step_mm,
+        )
+        current_points = np.vstack([current_points, bridge_points[1:], best_points[1:]])
+        current_normals = np.vstack([current_normals, bridge_normals[1:], best_normals[1:]])
+
+    stitched_paths.append((current_points, _normalize(current_normals)))
+    return stitched_paths
+
+
+def _surface_finish_bridge(
+    start_point: np.ndarray,
+    start_normal: np.ndarray,
+    end_point: np.ndarray,
+    end_normal: np.ndarray,
+    step_mm: float,
+) -> tuple[np.ndarray, np.ndarray]:
+    gap_mm = float(np.linalg.norm(end_point - start_point))
+    if gap_mm <= 1e-9:
+        return (
+            np.vstack([start_point, end_point]),
+            _normalize(np.vstack([start_normal, end_normal])),
+        )
+
+    steps = max(2, int(math.ceil(gap_mm / max(step_mm, 1e-6))) + 1)
+    t_values = np.linspace(0.0, 1.0, steps)
+    bridge_points = start_point[None, :] * (1.0 - t_values[:, None]) + end_point[None, :] * t_values[:, None]
+    bridge_normals = start_normal[None, :] * (1.0 - t_values[:, None]) + end_normal[None, :] * t_values[:, None]
+    return bridge_points, _normalize(bridge_normals)
+
+
+def _split_index_runs(indices: np.ndarray) -> list[np.ndarray]:
+    if len(indices) == 0:
+        return []
+    split_points = np.where(np.diff(indices) > 1)[0] + 1
+    return [run for run in np.split(indices, split_points) if len(run) > 0]
+
+
+def generate_conformal_paths_from_base_surface(
+    base_surface_map: SurfaceMap,
+    thickness_map: np.ndarray,
+    params: SliceParameters,
+) -> tuple[list[Toolpath], list[Toolpath], dict[str, float | int | str]]:
+    if not np.any(base_surface_map.valid_mask):
+        return [], [], {"layer_count": 0, "strategy": "substrate-offset"}
+
+    max_thickness_mm = float(np.max(thickness_map[base_surface_map.valid_mask])) if np.any(base_surface_map.valid_mask) else 0.0
+    if max_thickness_mm <= 1e-6:
+        return [], [], {"layer_count": 0, "strategy": "substrate-offset"}
+
+    layer_step = max(params.layer_height_mm, 1e-3)
+    perimeter_paths: list[Toolpath] = []
+    infill_paths: list[Toolpath] = []
+    emitted_layers = 0
+
+    layer_offsets = np.arange(0.0, max_thickness_mm + layer_step * 0.5, layer_step, dtype=float)
+    for layer_index, offset_mm in enumerate(layer_offsets, start=1):
+        layer_surface_map = build_offset_surface_map(
+            base_surface_map,
+            thickness_map,
+            offset_mm=float(offset_mm),
+            min_remaining_mm=max(layer_step * 0.15, params.nozzle_diameter_mm * 0.1),
+        )
+        if not np.any(layer_surface_map.valid_mask):
+            continue
+
+        layer_perimeters = generate_conformal_perimeter_paths(layer_surface_map, params)
+        layer_infill = generate_conformal_infill_paths(layer_surface_map, params) if params.include_infill else []
+        if not layer_perimeters and not layer_infill:
+            continue
+
+        emitted_layers += 1
+        perimeter_paths.extend(_annotate_conformal_layer_paths(layer_perimeters, layer_index, float(offset_mm)))
+        infill_paths.extend(_annotate_conformal_layer_paths(layer_infill, layer_index, float(offset_mm)))
+
+    return perimeter_paths, infill_paths, {"layer_count": emitted_layers, "strategy": "substrate-offset"}
+
+
+def _annotate_conformal_layer_paths(toolpaths: list[Toolpath], layer_index: int, offset_mm: float) -> list[Toolpath]:
+    annotated_paths: list[Toolpath] = []
+    for toolpath in toolpaths:
+        annotated_paths.append(
+            Toolpath(
+                name=f"{toolpath.name} L{layer_index}",
+                kind=toolpath.kind,
+                points=toolpath.points,
+                normals=toolpath.normals,
+                closed=toolpath.closed,
+                phase=toolpath.phase,
+                layer_index=layer_index,
+                z_height_mm=offset_mm,
+            )
+        )
+    return annotated_paths
+
+
+def build_cylindrical_surface_map(
+    mesh: MeshModel,
+    center_xy: np.ndarray,
+    params: SliceParameters,
+    x_coords: np.ndarray | None = None,
+    y_coords: np.ndarray | None = None,
+    reference_radius_mm: float | None = None,
+) -> SurfaceMap:
+    """Sample a selected conformal geometry around the substrate in cylindrical coordinates."""
+
+    z_step = max(params.grid_step_mm, 0.1)
+    reference_radius = reference_radius_mm or _cylindrical_reference_radius(mesh, center_xy, params)
+
+    if y_coords is None:
+        z_coords = np.arange(mesh.bounds_min[2], mesh.bounds_max[2] + z_step * 0.5, z_step, dtype=float)
+        if len(z_coords) == 0:
+            z_coords = np.array([mesh.bounds_center[2]], dtype=float)
+    else:
+        z_coords = np.asarray(y_coords, dtype=float)
+        if len(z_coords) == 0:
+            return _empty_surface_map()
+
+    if x_coords is None:
+        circumference_mm = max(2.0 * math.pi * reference_radius, params.grid_step_mm * 16.0)
+        theta_count = max(int(math.ceil(circumference_mm / z_step)), 64)
+        x_coords = np.arange(theta_count, dtype=float) * z_step
+    else:
+        x_coords = np.asarray(x_coords, dtype=float)
+        if len(x_coords) == 0:
+            return _empty_surface_map()
+    theta_values = x_coords / max(reference_radius, 1e-6)
+
+    point_map = np.zeros((len(z_coords), len(x_coords), 3), dtype=float)
+    normal_map = np.zeros((len(z_coords), len(x_coords), 3), dtype=float)
+    z_map = np.full((len(z_coords), len(x_coords)), np.nan, dtype=float)
+    valid_mask = np.zeros((len(z_coords), len(x_coords)), dtype=bool)
+
+    extractor = HorizontalSectionExtractor(mesh)
+    for row_index, z_value in enumerate(z_coords):
+        segments = extractor.segments_with_normals(float(z_value))
+        if not segments:
+            continue
+        for col_index, theta in enumerate(theta_values):
+            direction = np.array([math.cos(theta), math.sin(theta)], dtype=float)
+            hit = _nearest_cylindrical_hit(center_xy, direction, float(z_value), segments)
+            if hit is None:
+                continue
+            point, normal = hit
+            point_map[row_index, col_index] = point
+            normal_map[row_index, col_index] = normal
+            z_map[row_index, col_index] = point[2]
+            valid_mask[row_index, col_index] = True
+
+    normal_map[~valid_mask] = np.array([0.0, 0.0, 1.0])
+    point_map[~valid_mask] = np.array([0.0, 0.0, 0.0])
+    return SurfaceMap(
+        x_min=float(x_coords[0]),
+        y_min=float(z_coords[0]),
+        step_mm=z_step,
+        x_coords=x_coords,
+        y_coords=z_coords,
+        z_map=z_map,
+        normal_map=normal_map,
+        valid_mask=valid_mask,
+        point_map=point_map,
+    )
+
+
+def _cylindrical_reference_radius(mesh: MeshModel, center_xy: np.ndarray, params: SliceParameters) -> float:
+    radial_distances = np.linalg.norm(mesh.vertices[:, :2] - center_xy[None, :], axis=1)
+    positive_radii = radial_distances[radial_distances > 1e-6]
+    return float(np.median(positive_radii)) if len(positive_radii) else max(params.nozzle_diameter_mm * 4.0, 1.0)
 
 
 def exclude_rotary_core_from_surface(
@@ -179,9 +1019,6 @@ def exclude_rotary_core_from_surface(
     if core_profile.is_empty or not np.any(surface_map.valid_mask):
         return surface_map
 
-    xx, yy = np.meshgrid(surface_map.x_coords, surface_map.y_coords)
-    radial_distance = np.sqrt((xx - core_profile.center_xy[0]) ** 2 + (yy - core_profile.center_xy[1]) ** 2)
-
     filtered_valid = surface_map.valid_mask.copy()
     valid_rows, valid_cols = np.nonzero(filtered_valid)
     if len(valid_rows) == 0:
@@ -189,9 +1026,16 @@ def exclude_rotary_core_from_surface(
 
     valid_z = surface_map.z_map[valid_rows, valid_cols]
     core_radii = np.interp(valid_z, core_profile.z_levels_mm, core_profile.radii_mm, left=0.0, right=0.0)
+    if surface_map.point_map is not None:
+        valid_points = np.asarray(surface_map.point_map[valid_rows, valid_cols], dtype=float)
+        radial_distance = np.linalg.norm(valid_points[:, :2] - core_profile.center_xy[None, :], axis=1)
+    else:
+        xx, yy = np.meshgrid(surface_map.x_coords, surface_map.y_coords)
+        radial_grid = np.sqrt((xx - core_profile.center_xy[0]) ** 2 + (yy - core_profile.center_xy[1]) ** 2)
+        radial_distance = radial_grid[valid_rows, valid_cols]
     # Everything inside the detected rotary core is treated as already printed by the
     # planar phase, so the conformal phase must stay outside this radius.
-    keep = radial_distance[valid_rows, valid_cols] > (core_radii + margin_mm)
+    keep = radial_distance > (core_radii + margin_mm)
     filtered_valid[valid_rows, valid_cols] = keep
 
     z_map = surface_map.z_map.copy()
@@ -207,6 +1051,7 @@ def exclude_rotary_core_from_surface(
         z_map=z_map,
         normal_map=normal_map,
         valid_mask=filtered_valid,
+        point_map=surface_map.point_map.copy() if surface_map.point_map is not None else None,
     )
 
 
@@ -363,8 +1208,11 @@ def split_surface_map_by_height(
             continue
         component_z_map = surface_map.z_map.copy()
         component_normal_map = surface_map.normal_map.copy()
+        component_point_map = surface_map.point_map.copy() if surface_map.point_map is not None else None
         component_z_map[~component_valid] = np.nan
         component_normal_map[~component_valid] = np.array([0.0, 0.0, 1.0])
+        if component_point_map is not None:
+            component_point_map[~component_valid] = np.array([0.0, 0.0, 0.0])
         component_maps.append(
             SurfaceMap(
                 x_min=surface_map.x_min,
@@ -375,6 +1223,7 @@ def split_surface_map_by_height(
                 z_map=component_z_map,
                 normal_map=component_normal_map,
                 valid_mask=component_valid,
+                point_map=component_point_map,
             )
         )
 
@@ -541,9 +1390,13 @@ def _nearest_valid_surface_sample(
     if best is None or best_distance > 2.5:
         return None
     row_index, col_index = best
-    z_value = surface_map.z_map[row_index, col_index]
+    if surface_map.point_map is not None:
+        point = surface_map.point_map[row_index, col_index]
+    else:
+        z_value = surface_map.z_map[row_index, col_index]
+        point = np.array([x_value, y_value, z_value], dtype=float)
     normal = surface_map.normal_map[row_index, col_index]
-    return np.array([x_value, y_value, z_value], dtype=float), normal
+    return np.asarray(point, dtype=float), normal
 
 
 def sample_surface_point(surface_map: SurfaceMap, x_value: float, y_value: float) -> tuple[np.ndarray | None, np.ndarray]:
@@ -567,13 +1420,16 @@ def sample_surface_point(surface_map: SurfaceMap, x_value: float, y_value: float
         (row + 1, col + 1, tx * ty),
     ]
 
-    z_acc = 0.0
+    point_acc = np.zeros(3, dtype=float)
     normal_acc = np.zeros(3, dtype=float)
     total_weight = 0.0
     for row_index, col_index, weight in corners:
         if not surface_map.valid_mask[row_index, col_index]:
             continue
-        z_acc += surface_map.z_map[row_index, col_index] * weight
+        if surface_map.point_map is not None:
+            point_acc += surface_map.point_map[row_index, col_index] * weight
+        else:
+            point_acc += np.array([x_value, y_value, surface_map.z_map[row_index, col_index]], dtype=float) * weight
         normal_acc += surface_map.normal_map[row_index, col_index] * weight
         total_weight += weight
 
@@ -583,10 +1439,59 @@ def sample_surface_point(surface_map: SurfaceMap, x_value: float, y_value: float
             return fallback
         return None, np.array([0.0, 0.0, 1.0])
 
-    z_value = z_acc / total_weight
+    point = point_acc / total_weight
     normal = normal_acc / total_weight
     normal = normal / max(np.linalg.norm(normal), 1e-9)
-    return np.array([x_value, y_value, z_value], dtype=float), normal
+    return point, normal
+
+
+def _nearest_cylindrical_hit(
+    center_xy: np.ndarray,
+    direction_xy: np.ndarray,
+    z_value: float,
+    segments: list[tuple[np.ndarray, np.ndarray]],
+) -> tuple[np.ndarray, np.ndarray] | None:
+    best_radius = math.inf
+    best_point: np.ndarray | None = None
+    best_normal: np.ndarray | None = None
+    radial_direction = np.array([direction_xy[0], direction_xy[1], 0.0], dtype=float)
+    for segment_points, segment_normals in segments:
+        hit = _ray_segment_intersection_with_u(center_xy, direction_xy, segment_points[0], segment_points[1])
+        if hit is None:
+            continue
+        radius_mm, segment_u = hit
+        if radius_mm <= 1e-4 or radius_mm >= best_radius:
+            continue
+        point_xy = center_xy + direction_xy * radius_mm
+        normal = segment_normals[0] * (1.0 - segment_u) + segment_normals[1] * segment_u
+        normal = _normalize(np.asarray([normal], dtype=float))[0]
+        if float(np.dot(normal, radial_direction)) < 0.0:
+            normal = -normal
+        best_radius = radius_mm
+        best_point = np.array([point_xy[0], point_xy[1], z_value], dtype=float)
+        best_normal = normal
+    if best_point is None or best_normal is None:
+        return None
+    return best_point, best_normal
+
+
+def _ray_segment_intersection_with_u(
+    center_xy: np.ndarray,
+    direction_xy: np.ndarray,
+    point_a: np.ndarray,
+    point_b: np.ndarray,
+) -> tuple[float, float] | None:
+    segment_vector = point_b - point_a
+    denom = direction_xy[0] * segment_vector[1] - direction_xy[1] * segment_vector[0]
+    if abs(denom) < 1e-9:
+        return None
+
+    delta = point_a - center_xy
+    ray_t = (delta[0] * segment_vector[1] - delta[1] * segment_vector[0]) / denom
+    segment_u = (delta[0] * direction_xy[1] - delta[1] * direction_xy[0]) / denom
+    if ray_t >= 0.0 and -1e-6 <= segment_u <= 1.0 + 1e-6:
+        return float(ray_t), float(np.clip(segment_u, 0.0, 1.0))
+    return None
 
 
 def _barycentric_2d(projected_triangle: np.ndarray, xx: np.ndarray, yy: np.ndarray) -> np.ndarray:
@@ -622,5 +1527,3 @@ def _split_boolean_runs(mask: np.ndarray) -> list[np.ndarray]:
     if start is not None:
         runs.append(np.arange(start, len(mask)))
     return runs
-
-

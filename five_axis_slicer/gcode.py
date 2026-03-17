@@ -1,4 +1,4 @@
-﻿"""G-code export for the hybrid slicer.
+"""G-code export for the hybrid slicer.
 
 The exporter writes one continuous job: first the rotary core with U/V
 locked, then the five-axis conformal shell. The summary comments near the top
@@ -9,7 +9,7 @@ with the software settings during calibration.
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 import numpy as np
 
@@ -18,8 +18,24 @@ from .kinematics import (
     apply_rotary_axis_calibration,
     machine_position_for_point,
     normal_to_rotary_angles,
-    shortest_angular_delta_deg,
 )
+from .open5x_adapter import solve_toolpath_raw_angles_open5x
+
+_OPEN5X_SURFACE_START_TEMPLATE = (
+    "; Open5x surface-finish export\n"
+    "G90\n"
+    "G0 Z150\n"
+    "G92 E0\n"
+    "M104 S220\n"
+    "M109 S220\n"
+    "G21\n"
+    "G90\n"
+    "M83"
+)
+_OPEN5X_SURFACE_END_TEMPLATE = "M400\nG92 E0\nM104 S0\nM140 S0"
+_OPEN5X_SURFACE_PREFERRED_B_MIN_DEG = -95.0
+_OPEN5X_SURFACE_PREFERRED_B_MAX_DEG = 180.0
+
 
 
 @dataclass(slots=True)
@@ -45,32 +61,34 @@ def generate_gcode(
     slice_params: SliceParameters,
     machine_params: MachineParameters,
 ) -> tuple[str, list[str]]:
-    """Convert the hybrid slice result into one continuous G-code program.
+    """Convert the slice result into a runnable G-code program."""
 
-    The important contract is that path boundaries become travel moves, not
-    extrusion moves. That is what lets separate blade faces stay separate in the
-    final program instead of being connected by false deposited lines.
-    """
+    if _uses_open5x_surface_finish(result):
+        return _generate_surface_finish_hybrid_gcode(result, slice_params, machine_params)
+
+    export_machine = machine_params
 
     lines: list[str] = []
     warnings = list(result.warnings)
 
-    _append_template(lines, machine_params.start_gcode_template, result, slice_params, machine_params)
+    _append_template(lines, export_machine.start_gcode_template, result, slice_params, export_machine)
     _append_extra_gcode(lines, slice_params.start_gcode)
-    lines.extend(_machine_summary_comments(result, machine_params))
+    lines.extend(_machine_summary_comments(result, export_machine))
 
     previous_end_pose: Pose | None = None
     previous_raw_v_deg: float | None = None
-    previous_commanded_v_deg: float | None = machine_params.home_v_deg
+    previous_commanded_u_deg: float | None = export_machine.home_u_deg
+    previous_commanded_v_deg: float | None = export_machine.home_v_deg
     total_e = 0.0
     current_phase: str | None = None
+    open5x_fallback_emitted = False
 
     for toolpath in result.toolpaths:
         phase_changed = toolpath.phase != current_phase
         if phase_changed:
             lines.append(_phase_comment(toolpath.phase))
             if current_phase == "planar" and toolpath.phase == "conformal":
-                _append_template(lines, machine_params.phase_change_gcode_template, result, slice_params, machine_params)
+                _append_template(lines, export_machine.phase_change_gcode_template, result, slice_params, export_machine)
             current_phase = toolpath.phase
 
         poses: list[Pose] = []
@@ -78,21 +96,51 @@ def generate_gcode(
         max_u_cmd = -math.inf
         min_v_cmd = math.inf
         max_v_cmd = -math.inf
-        for point, normal in zip(toolpath.points, toolpath.normals):
-            raw_u_deg, raw_v_deg = normal_to_rotary_angles(normal, previous_v_deg=previous_raw_v_deg)
+        raw_angle_pairs: list[tuple[float, float]] | None = None
+        if toolpath.phase != "planar":
+            try:
+                raw_angle_pairs = solve_toolpath_raw_angles_open5x(
+                    toolpath.points,
+                    toolpath.normals,
+                    export_machine,
+                    previous_command_u_deg=previous_commanded_u_deg,
+                    previous_command_v_deg=previous_commanded_v_deg,
+                )
+            except Exception as exc:
+                if not open5x_fallback_emitted:
+                    warnings.append(
+                        "Open5x Python rotary solver failed for at least one conformal path; using built-in IK fallback. "
+                        f"First error: {exc}"
+                    )
+                    open5x_fallback_emitted = True
+                raw_angle_pairs = None
+
+        if raw_angle_pairs is None:
+            if toolpath.phase != "planar" and not open5x_fallback_emitted:
+                warnings.append("Open5x Python rotary solver was unavailable; using built-in IK fallback.")
+                open5x_fallback_emitted = True
+            raw_angle_pairs = []
+            local_previous_raw_v_deg = previous_raw_v_deg
+            for normal in toolpath.normals:
+                raw_u_deg, raw_v_deg = normal_to_rotary_angles(normal, previous_v_deg=local_previous_raw_v_deg)
+                raw_angle_pairs.append((raw_u_deg, raw_v_deg))
+                local_previous_raw_v_deg = raw_v_deg
+
+        for (point, normal), (raw_u_deg, raw_v_deg) in zip(zip(toolpath.points, toolpath.normals), raw_angle_pairs, strict=True):
             command_u_deg, command_v_deg = apply_rotary_axis_calibration(
                 raw_u_deg,
                 raw_v_deg,
-                machine_params,
+                export_machine,
                 previous_commanded_v_deg=previous_commanded_v_deg,
             )
             previous_raw_v_deg = raw_v_deg
+            previous_commanded_u_deg = command_u_deg
             previous_commanded_v_deg = command_v_deg
             min_u_cmd = min(min_u_cmd, command_u_deg)
             max_u_cmd = max(max_u_cmd, command_u_deg)
             min_v_cmd = min(min_v_cmd, command_v_deg)
             max_v_cmd = max(max_v_cmd, command_v_deg)
-            xyz = machine_position_for_point(point, raw_u_deg, raw_v_deg, machine_params)
+            xyz = machine_position_for_point(point, raw_u_deg, raw_v_deg, export_machine)
             poses.append(
                 Pose(
                     xyz=xyz,
@@ -105,16 +153,22 @@ def generate_gcode(
                 )
             )
 
+        if poses:
+            min_u_cmd = min(pose.command_u_deg for pose in poses)
+            max_u_cmd = max(pose.command_u_deg for pose in poses)
+            min_v_cmd = min(pose.command_v_deg for pose in poses)
+            max_v_cmd = max(pose.command_v_deg for pose in poses)
+
         if toolpath.phase != "planar":
-            if min_u_cmd < machine_params.min_u_deg or max_u_cmd > machine_params.max_u_deg:
+            if min_u_cmd < export_machine.min_u_deg or max_u_cmd > export_machine.max_u_deg:
                 warnings.append(
                     f"{toolpath.name}: U range [{min_u_cmd:.2f}, {max_u_cmd:.2f}] deg exceeds configured limit "
-                    f"[{machine_params.min_u_deg:.2f}, {machine_params.max_u_deg:.2f}] deg."
+                    f"[{export_machine.min_u_deg:.2f}, {export_machine.max_u_deg:.2f}] deg."
                 )
-            if min_v_cmd < machine_params.min_v_deg or max_v_cmd > machine_params.max_v_deg:
+            if min_v_cmd < export_machine.min_v_deg or max_v_cmd > export_machine.max_v_deg:
                 warnings.append(
                     f"{toolpath.name}: V range [{min_v_cmd:.2f}, {max_v_cmd:.2f}] deg exceeds configured limit "
-                    f"[{machine_params.min_v_deg:.2f}, {machine_params.max_v_deg:.2f}] deg."
+                    f"[{export_machine.min_v_deg:.2f}, {export_machine.max_v_deg:.2f}] deg."
                 )
 
         if len(poses) < 2:
@@ -122,14 +176,143 @@ def generate_gcode(
 
         lift_height_mm = slice_params.travel_height_mm
         if phase_changed and previous_end_pose is not None and toolpath.phase == "conformal":
-            lift_height_mm = max(lift_height_mm, machine_params.phase_change_lift_mm)
+            lift_height_mm = max(lift_height_mm, export_machine.phase_change_lift_mm)
+
+        travel_lines = build_travel_sequence(
+            previous_end_pose,
+            poses[0],
+            slice_params,
+            export_machine,
+            lift_height_mm=lift_height_mm,
+        )
+        lines.extend(travel_lines)
+
+        nominal_speed = toolpath_print_speed_mm_s(toolpath, slice_params)
+        for current_pose, next_pose in zip(poses[:-1], poses[1:]):
+            segment_length = float(np.linalg.norm(next_pose.point - current_pose.point))
+            if segment_length < 1e-9:
+                continue
+            e_delta = extrusion_for_segment(segment_length, toolpath, slice_params)
+            total_e += e_delta
+            feed_mm_min = compensated_feed(current_pose, next_pose, segment_length, nominal_speed, export_machine)
+            lines.append(format_move(next_pose, export_machine, feed_mm_min, e_delta))
+
+        previous_end_pose = poses[-1]
+
+    _append_extra_gcode(lines, slice_params.end_gcode)
+    _append_template(lines, export_machine.end_gcode_template, result, slice_params, export_machine)
+    lines.append(f"; Estimated extrusion: {total_e:.3f} mm of filament")
+    return "\n".join(lines) + "\n", _deduplicate_warnings(warnings)
+
+
+def _uses_open5x_surface_finish(result: SliceResult) -> bool:
+    return str(result.metadata.get("conformal_strategy", "")) == "open5x-surface-finish"
+
+
+def _surface_finish_export_machine(machine_params: MachineParameters) -> MachineParameters:
+    return replace(
+        machine_params,
+        linear_axis_names=("X", "Y", "z"),
+        rotary_axis_names=("A", "B"),
+        start_gcode_template=_OPEN5X_SURFACE_START_TEMPLATE,
+        phase_change_gcode_template="",
+        end_gcode_template=_OPEN5X_SURFACE_END_TEMPLATE,
+    )
+
+
+def _generate_surface_finish_hybrid_gcode(
+    result: SliceResult,
+    slice_params: SliceParameters,
+    machine_params: MachineParameters,
+) -> tuple[str, list[str]]:
+    planar_machine = machine_params
+    surface_machine = _surface_finish_export_machine(machine_params)
+    planar_toolpaths = [toolpath for toolpath in result.toolpaths if toolpath.phase == "planar"]
+    surface_toolpaths = [toolpath for toolpath in result.toolpaths if toolpath.kind == "conformal-surface-finish"]
+
+    lines: list[str] = []
+    warnings = list(result.warnings)
+    total_e = 0.0
+
+    if planar_toolpaths:
+        _append_template(lines, planar_machine.start_gcode_template, result, slice_params, planar_machine)
+        _append_extra_gcode(lines, slice_params.start_gcode)
+        lines.extend(_machine_summary_comments(result, planar_machine))
+        planar_lines, planar_extrusion = _emit_planar_phase(planar_toolpaths, slice_params, planar_machine)
+        lines.extend(planar_lines)
+        total_e += planar_extrusion
+
+    for path_index, toolpath in enumerate(surface_toolpaths, start=1):
+        if lines and lines[-1].strip():
+            lines.append("")
+        lines.append("; START 5-axis G-code")
+        lines.append("; Surface-finish segment exported as an independent five-axis block.")
+        _append_template(lines, surface_machine.start_gcode_template, result, slice_params, surface_machine)
+
+        poses, pose_warnings = _resolve_rotary_toolpath_poses(
+            toolpath,
+            surface_machine,
+            previous_command_u_deg=surface_machine.home_u_deg,
+            previous_command_v_deg=surface_machine.home_v_deg,
+            previous_raw_v_deg=None,
+            canonicalize_surface_finish=True,
+        )
+        warnings.extend(pose_warnings)
+        if len(poses) < 2:
+            continue
+
+        segment_lift_mm = max(slice_params.travel_height_mm, surface_machine.phase_change_lift_mm, 10.0)
+        segment_feed_mm_min = min(slice_params.travel_speed_mm_s * 60.0, 600.0)
+        lines.extend(_surface_finish_segment_intro(poses[0], slice_params, surface_machine, segment_lift_mm, segment_feed_mm_min))
+
+        nominal_speed = toolpath_print_speed_mm_s(toolpath, slice_params)
+        for current_pose, next_pose in zip(poses[:-1], poses[1:]):
+            segment_length = float(np.linalg.norm(next_pose.point - current_pose.point))
+            if segment_length < 1e-9:
+                continue
+            e_delta = extrusion_for_segment(segment_length, toolpath, slice_params)
+            total_e += e_delta
+            feed_mm_min = compensated_feed(current_pose, next_pose, segment_length, nominal_speed, surface_machine)
+            lines.append(format_move(next_pose, surface_machine, feed_mm_min, e_delta))
+
+        lines.append(_format_surface_positioning_move(poses[-1], surface_machine, segment_feed_mm_min, z_override=poses[-1].xyz[2] + segment_lift_mm))
+
+    _append_extra_gcode(lines, slice_params.end_gcode)
+    if surface_toolpaths:
+        lines.append("G1 E-1.00000 F1200.0")
+        _append_template(lines, surface_machine.end_gcode_template, result, slice_params, surface_machine)
+    else:
+        _append_template(lines, planar_machine.end_gcode_template, result, slice_params, planar_machine)
+    lines.append(f"; Estimated extrusion: {total_e:.3f} mm of filament")
+    return "\n".join(lines) + "\n", _deduplicate_warnings(warnings)
+
+
+def _emit_planar_phase(
+    toolpaths: list[Toolpath],
+    slice_params: SliceParameters,
+    machine_params: MachineParameters,
+) -> tuple[list[str], float]:
+    lines: list[str] = []
+    total_e = 0.0
+    previous_end_pose: Pose | None = None
+    current_phase: str | None = None
+
+    for toolpath in toolpaths:
+        phase_changed = toolpath.phase != current_phase
+        if phase_changed:
+            lines.append(_phase_comment(toolpath.phase))
+            current_phase = toolpath.phase
+
+        poses = _planar_toolpath_poses(toolpath, machine_params)
+        if len(poses) < 2:
+            continue
 
         travel_lines = build_travel_sequence(
             previous_end_pose,
             poses[0],
             slice_params,
             machine_params,
-            lift_height_mm=lift_height_mm,
+            lift_height_mm=slice_params.travel_height_mm,
         )
         lines.extend(travel_lines)
 
@@ -145,10 +328,193 @@ def generate_gcode(
 
         previous_end_pose = poses[-1]
 
-    _append_extra_gcode(lines, slice_params.end_gcode)
-    _append_template(lines, machine_params.end_gcode_template, result, slice_params, machine_params)
-    lines.append(f"; Estimated extrusion: {total_e:.3f} mm of filament")
-    return "\n".join(lines) + "\n", _deduplicate_warnings(warnings)
+    return lines, total_e
+
+
+def _planar_toolpath_poses(toolpath: Toolpath, machine_params: MachineParameters) -> list[Pose]:
+    home_u_deg = machine_params.home_u_deg
+    home_v_deg = machine_params.home_v_deg
+    poses: list[Pose] = []
+    for point in np.asarray(toolpath.points, dtype=float):
+        point_xyz = np.asarray(point, dtype=float)
+        poses.append(
+            Pose(
+                xyz=point_xyz.copy(),
+                raw_u_deg=home_u_deg,
+                raw_v_deg=home_v_deg,
+                command_u_deg=home_u_deg,
+                command_v_deg=home_v_deg,
+                point=point_xyz.copy(),
+                normal=np.array([0.0, 0.0, 1.0], dtype=float),
+            )
+        )
+    return poses
+
+
+def _resolve_rotary_toolpath_poses(
+    toolpath: Toolpath,
+    machine_params: MachineParameters,
+    *,
+    previous_command_u_deg: float | None,
+    previous_command_v_deg: float | None,
+    previous_raw_v_deg: float | None,
+    canonicalize_surface_finish: bool,
+) -> tuple[list[Pose], list[str]]:
+    warnings: list[str] = []
+    raw_angle_pairs: list[tuple[float, float]] | None = None
+
+    try:
+        raw_angle_pairs = solve_toolpath_raw_angles_open5x(
+            toolpath.points,
+            toolpath.normals,
+            machine_params,
+            previous_command_u_deg=previous_command_u_deg,
+            previous_command_v_deg=previous_command_v_deg,
+        )
+    except Exception as exc:
+        warnings.append(
+            "Open5x Python rotary solver failed for at least one conformal path; using built-in IK fallback. "
+            f"First error: {exc}"
+        )
+        raw_angle_pairs = None
+
+    if raw_angle_pairs is None:
+        warnings.append("Open5x Python rotary solver was unavailable; using built-in IK fallback.")
+        raw_angle_pairs = []
+        local_previous_raw_v_deg = previous_raw_v_deg
+        for normal in toolpath.normals:
+            raw_u_deg, raw_v_deg = normal_to_rotary_angles(normal, previous_v_deg=local_previous_raw_v_deg)
+            raw_angle_pairs.append((raw_u_deg, raw_v_deg))
+            local_previous_raw_v_deg = raw_v_deg
+
+    poses: list[Pose] = []
+    min_u_cmd = math.inf
+    max_u_cmd = -math.inf
+    min_v_cmd = math.inf
+    max_v_cmd = -math.inf
+    local_previous_command_v_deg = previous_command_v_deg
+    for (point, normal), (raw_u_deg, raw_v_deg) in zip(zip(toolpath.points, toolpath.normals), raw_angle_pairs, strict=True):
+        command_u_deg, command_v_deg = apply_rotary_axis_calibration(
+            raw_u_deg,
+            raw_v_deg,
+            machine_params,
+            previous_commanded_v_deg=local_previous_command_v_deg,
+        )
+        local_previous_command_v_deg = command_v_deg
+        min_u_cmd = min(min_u_cmd, command_u_deg)
+        max_u_cmd = max(max_u_cmd, command_u_deg)
+        min_v_cmd = min(min_v_cmd, command_v_deg)
+        max_v_cmd = max(max_v_cmd, command_v_deg)
+        xyz = machine_position_for_point(point, raw_u_deg, raw_v_deg, machine_params)
+        poses.append(
+            Pose(
+                xyz=xyz,
+                raw_u_deg=raw_u_deg,
+                raw_v_deg=raw_v_deg,
+                command_u_deg=command_u_deg,
+                command_v_deg=command_v_deg,
+                point=point,
+                normal=normal,
+            )
+        )
+
+    if canonicalize_surface_finish and toolpath.kind == "conformal-surface-finish":
+        poses = _canonicalize_surface_finish_b_branch(poses, machine_params)
+        if poses:
+            min_u_cmd = min(pose.command_u_deg for pose in poses)
+            max_u_cmd = max(pose.command_u_deg for pose in poses)
+            min_v_cmd = min(pose.command_v_deg for pose in poses)
+            max_v_cmd = max(pose.command_v_deg for pose in poses)
+
+    if poses:
+        if min_u_cmd < machine_params.min_u_deg or max_u_cmd > machine_params.max_u_deg:
+            warnings.append(
+                f"{toolpath.name}: U range [{min_u_cmd:.2f}, {max_u_cmd:.2f}] deg exceeds configured limit "
+                f"[{machine_params.min_u_deg:.2f}, {machine_params.max_u_deg:.2f}] deg."
+            )
+        if min_v_cmd < machine_params.min_v_deg or max_v_cmd > machine_params.max_v_deg:
+            warnings.append(
+                f"{toolpath.name}: V range [{min_v_cmd:.2f}, {max_v_cmd:.2f}] deg exceeds configured limit "
+                f"[{machine_params.min_v_deg:.2f}, {machine_params.max_v_deg:.2f}] deg."
+            )
+
+    return poses, warnings
+
+
+def _surface_finish_segment_intro(
+    start_pose: Pose,
+    slice_params: SliceParameters,
+    machine_params: MachineParameters,
+    lift_height_mm: float,
+    feed_mm_min: float,
+) -> list[str]:
+    lines = ["G1 E0.10000 F300.0"]
+    retract_mm = max(slice_params.retraction_mm, 1.0)
+    lines.append(f"G1 E{-retract_mm:.5f} F{slice_params.retract_speed_mm_s * 60.0:.1f}")
+    lines.append(_format_surface_positioning_move(start_pose, machine_params, feed_mm_min, z_override=start_pose.xyz[2] + lift_height_mm))
+    lines.append(f"G1 E{retract_mm + 0.1:.5f} F{slice_params.prime_speed_mm_s * 60.0:.1f}")
+    lines.append(_format_surface_positioning_move(start_pose, machine_params, feed_mm_min))
+    return lines
+
+
+def _format_surface_positioning_move(
+    pose: Pose,
+    machine_params: MachineParameters,
+    feed_mm_min: float,
+    *,
+    z_override: float | None = None,
+) -> str:
+    x_name, y_name, z_name = machine_params.linear_axis_names
+    u_name, v_name = machine_params.rotary_axis_names
+    z_value = pose.xyz[2] if z_override is None else float(z_override)
+    return (
+        f"G1 F{feed_mm_min:.1f} "
+        f"{x_name}{pose.xyz[0]:.3f} {y_name}{pose.xyz[1]:.3f} {z_name}{z_value:.3f} "
+        f"{u_name}{pose.command_u_deg:.3f} {v_name}{pose.command_v_deg:.3f} E0"
+    )
+
+
+def _canonicalize_surface_finish_b_branch(
+    poses: list[Pose],
+    machine_params: MachineParameters,
+) -> list[Pose]:
+    if not poses:
+        return poses
+
+    command_v = np.asarray([pose.command_v_deg for pose in poses], dtype=float)
+    best_shift_deg = 0.0
+    best_score = float("inf")
+
+    for turn_count in range(-2, 3):
+        shift_deg = float(turn_count) * 360.0
+        shifted_v = command_v + shift_deg
+        if shifted_v.min() < machine_params.min_v_deg - 1e-6 or shifted_v.max() > machine_params.max_v_deg + 1e-6:
+            continue
+        score = _surface_finish_b_shift_score(shifted_v, shift_deg)
+        if score < best_score:
+            best_score = score
+            best_shift_deg = shift_deg
+
+    if math.isclose(best_shift_deg, 0.0, abs_tol=1e-9):
+        return poses
+
+    return [
+        replace(
+            pose,
+            raw_v_deg=pose.raw_v_deg + best_shift_deg,
+            command_v_deg=pose.command_v_deg + best_shift_deg,
+        )
+        for pose in poses
+    ]
+
+
+def _surface_finish_b_shift_score(command_v_deg: np.ndarray, shift_deg: float) -> float:
+    low_penalty = max(_OPEN5X_SURFACE_PREFERRED_B_MIN_DEG - float(command_v_deg.min()), 0.0)
+    high_penalty = max(float(command_v_deg.max()) - _OPEN5X_SURFACE_PREFERRED_B_MAX_DEG, 0.0)
+    mean_v_deg = float(np.mean(command_v_deg))
+    wrapped_mean_deg = mean_v_deg % 360.0
+    absolute_penalty = min(abs(mean_v_deg), abs(wrapped_mean_deg - 180.0))
+    return (low_penalty + high_penalty) * 1000.0 + absolute_penalty + abs(shift_deg) * 0.01
 
 
 def toolpath_print_speed_mm_s(toolpath: Toolpath, slice_params: SliceParameters) -> float:
@@ -231,7 +597,7 @@ def compensated_feed(
 ) -> float:
     delta_xyz = float(np.linalg.norm(nxt.xyz - current.xyz))
     delta_u_mm = math.radians(abs(nxt.command_u_deg - current.command_u_deg)) * machine_params.rotary_scale_radius_mm
-    delta_v_mm = math.radians(abs(shortest_angular_delta_deg(nxt.command_v_deg, current.command_v_deg))) * machine_params.rotary_scale_radius_mm
+    delta_v_mm = math.radians(abs(nxt.command_v_deg - current.command_v_deg)) * machine_params.rotary_scale_radius_mm
     machine_distance = math.sqrt(delta_xyz**2 + delta_u_mm**2 + delta_v_mm**2)
     ratio = machine_distance / max(segment_length_mm, 1e-6)
     nominal = nominal_speed_mm_s * 60.0
@@ -345,5 +711,3 @@ def _deduplicate_warnings(warnings: list[str]) -> list[str]:
         seen.add(warning)
         deduped.append(warning)
     return deduped
-
-

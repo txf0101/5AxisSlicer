@@ -3,11 +3,11 @@
 import argparse
 from pathlib import Path
 
-from five_axis_slicer.core import MachineParameters, SliceParameters
+from five_axis_slicer.core import MachineParameters, SliceParameters, SliceSelection
 from five_axis_slicer.gcode import generate_gcode
 from five_axis_slicer.geometry import generate_demo_dome_mesh, load_mesh
 from five_axis_slicer.hardware import open5x_freddi_hong_machine
-from five_axis_slicer.slicer import ConformalSlicer
+from five_axis_slicer.slicer import ConformalSlicer, slice_planar_model
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -16,12 +16,15 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("-o", "--output", help="Path to the exported G-code file")
     parser.add_argument("--demo", action="store_true", help="Use the built-in demo dome instead of loading a file")
     parser.add_argument("--headless", action="store_true", help="Run without opening the GUI")
+    parser.add_argument("--slice-mode", choices=("hybrid", "planar"), default="hybrid", help="Choose the hybrid five-axis workflow or a pure planar three-axis slice")
     parser.add_argument("--layer-height", type=float, help="Override conformal layer height")
     parser.add_argument("--planar-layer-height", type=float, help="Override planar core layer height")
     parser.add_argument("--grid-step", type=float, help="Override surface sampling grid step")
     parser.add_argument("--core-top-z", "--transition-z", dest="core_top_z", type=float, help="Manual rotary core top Z (legacy alias: --transition-z)")
     parser.add_argument("--core-detection-percentile", "--transition-percentile", dest="core_detection_percentile", type=float, help="Percentile used when estimating the rotary core radius")
     parser.add_argument("--disable-planar-core", action="store_true", help="Disable the planar core phase")
+    parser.add_argument("--substrate-component", type=int, help="Connected component index used as the planar substrate geometry")
+    parser.add_argument("--conformal-components", help="Comma-separated component indices used for conformal printing")
     parser.add_argument("--u-sign", type=int, choices=(-1, 1), help="Machine U axis sign")
     parser.add_argument("--v-sign", type=int, choices=(-1, 1), help="Machine V axis sign")
     parser.add_argument("--u-zero", type=float, help="Machine U zero offset in degrees")
@@ -73,6 +76,22 @@ def apply_machine_overrides(machine: MachineParameters, args: argparse.Namespace
     return machine
 
 
+def build_slice_selection(args: argparse.Namespace) -> SliceSelection | None:
+    substrate_index = args.substrate_component
+    conformal_indices: tuple[int, ...] = ()
+    if args.conformal_components:
+        parsed = []
+        for token in args.conformal_components.split(","):
+            token = token.strip()
+            if not token:
+                continue
+            parsed.append(int(token))
+        conformal_indices = tuple(parsed)
+    if substrate_index is None and not conformal_indices:
+        return None
+    return SliceSelection(substrate_component_index=substrate_index, conformal_component_indices=conformal_indices)
+
+
 def main() -> None:
     parser = build_parser()
     args = parser.parse_args()
@@ -92,8 +111,12 @@ def main() -> None:
 
     slice_params = apply_slice_overrides(SliceParameters(), args)
     machine_params = apply_machine_overrides(open5x_freddi_hong_machine(), args)
-    slicer = ConformalSlicer()
-    slice_result = slicer.slice(mesh, slice_params)
+    slice_selection = build_slice_selection(args)
+    if args.slice_mode == "planar":
+        slice_result = slice_planar_model(mesh, slice_params)
+    else:
+        slicer = ConformalSlicer()
+        slice_result = slicer.slice(mesh, slice_params, selection=slice_selection)
     gcode, warnings = generate_gcode(slice_result, slice_params, machine_params)
 
     if warnings:
@@ -102,6 +125,7 @@ def main() -> None:
             print(f"- {warning}")
 
     output_path = Path(args.output) if args.output else Path("five_axis_output.gcode")
+    output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(gcode, encoding="utf-8")
     print(f"Wrote G-code to {output_path.resolve()}")
     print(f"Paths: {len(slice_result.toolpaths)}")
@@ -111,5 +135,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
-

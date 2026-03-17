@@ -6,6 +6,7 @@ import math
 import os
 import struct
 import sys
+from collections import defaultdict
 from pathlib import Path
 
 import numpy as np
@@ -14,6 +15,54 @@ from .core import MeshModel
 
 _GMSH_DLL_HANDLES: list[object] = []
 _GMSH_DLL_DIRS: set[str] = set()
+
+
+def _conda_package_cache_dirs(dll_names: tuple[str, ...]) -> list[Path]:
+    if not sys.platform.startswith("win"):
+        return []
+
+    roots: list[Path] = []
+    seen_roots: set[str] = set()
+
+    def add_root(path: Path | None) -> None:
+        if path is None:
+            return
+        try:
+            resolved = path.resolve()
+        except OSError:
+            resolved = path
+        key = os.path.normcase(str(resolved))
+        if key in seen_roots or not resolved.exists():
+            return
+        seen_roots.add(key)
+        roots.append(resolved)
+
+    prefix = Path(sys.prefix).resolve()
+    prefix_parent = prefix.parent
+    if prefix_parent.name.lower() == "envs":
+        add_root(prefix_parent.parent / "pkgs")
+
+    conda_prefix = os.environ.get("CONDA_PREFIX")
+    if conda_prefix:
+        conda_prefix_path = Path(conda_prefix).resolve()
+        conda_parent = conda_prefix_path.parent
+        if conda_parent.name.lower() == "envs":
+            add_root(conda_parent.parent / "pkgs")
+
+    add_root(Path.home() / ".conda" / "pkgs")
+
+    package_dirs: list[Path] = []
+    seen_dirs: set[str] = set()
+    for root in roots:
+        for dll_name in dll_names:
+            for match in sorted(root.glob(f"*/Library/bin/{dll_name}"), reverse=True):
+                directory = match.parent
+                key = os.path.normcase(str(directory))
+                if key in seen_dirs:
+                    continue
+                seen_dirs.add(key)
+                package_dirs.append(directory)
+    return package_dirs
 
 
 def _gmsh_runtime_dirs() -> list[Path]:
@@ -69,6 +118,13 @@ def _gmsh_runtime_dirs() -> list[Path]:
             continue
         for subdir in subdirs:
             add(root if subdir is None else root / subdir)
+
+    # Some conda-forge Windows gmsh builds still depend on cairo.dll even when
+    # newer cairo packages expose cairo-2.dll inside the active env. Fall back
+    # to compatible DLLs in the local conda package cache so STEP import keeps
+    # working without requiring a manual environment repair first.
+    for package_dir in _conda_package_cache_dirs(("cairo.dll",)):
+        add(package_dir)
 
     return roots
 
@@ -253,6 +309,198 @@ def resample_polyline(points: np.ndarray, spacing_mm: float, closed: bool = Fals
     if closed and np.linalg.norm(result_array[0] - result_array[-1]) > 1e-6:
         result_array = np.vstack([result_array, result_array[0]])
     return result_array
+
+
+def face_adjacency(mesh: MeshModel) -> list[set[int]]:
+    """Return edge-based neighbouring faces for every triangle in the mesh."""
+
+    if len(mesh.faces) == 0:
+        return []
+
+    edge_to_faces: dict[tuple[int, int], list[int]] = defaultdict(list)
+    for face_index, face in enumerate(mesh.faces):
+        a_idx, b_idx, c_idx = map(int, face)
+        for start_idx, end_idx in ((a_idx, b_idx), (b_idx, c_idx), (c_idx, a_idx)):
+            if start_idx > end_idx:
+                start_idx, end_idx = end_idx, start_idx
+            edge_to_faces[(start_idx, end_idx)].append(face_index)
+
+    adjacency = [set() for _ in range(len(mesh.faces))]
+    for attached_faces in edge_to_faces.values():
+        if len(attached_faces) < 2:
+            continue
+        for face_index in attached_faces:
+            adjacency[face_index].update(other_face for other_face in attached_faces if other_face != face_index)
+    return adjacency
+
+
+def face_centers(mesh: MeshModel) -> np.ndarray:
+    if len(mesh.faces) == 0:
+        return np.empty((0, 3), dtype=float)
+    return mesh.face_vertices.mean(axis=1)
+
+
+def selection_boundary_edges(mesh: MeshModel, face_indices: np.ndarray | list[int] | set[int]) -> list[tuple[int, int]]:
+    """Return mesh edges that sit on the boundary of the selected face set."""
+
+    selected = {int(index) for index in np.asarray(tuple(face_indices), dtype=np.int32).tolist()}
+    if not selected:
+        return []
+
+    edge_to_faces: dict[tuple[int, int], list[int]] = defaultdict(list)
+    for face_index, face in enumerate(mesh.faces):
+        a_idx, b_idx, c_idx = map(int, face)
+        for start_idx, end_idx in ((a_idx, b_idx), (b_idx, c_idx), (c_idx, a_idx)):
+            if start_idx > end_idx:
+                start_idx, end_idx = end_idx, start_idx
+            edge_to_faces[(start_idx, end_idx)].append(face_index)
+
+    boundary_edges: list[tuple[int, int]] = []
+    for edge, attached_faces in edge_to_faces.items():
+        selected_count = sum(1 for face_index in attached_faces if face_index in selected)
+        if selected_count == 1:
+            boundary_edges.append(edge)
+    return boundary_edges
+
+
+def grow_face_selection(
+    mesh: MeshModel,
+    face_indices: np.ndarray | list[int] | set[int],
+    center_xy: np.ndarray,
+    *,
+    max_layers: int = 2,
+    max_added_faces: int = 48,
+    normal_dot_threshold: float = 0.35,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Expand a face selection conservatively across nearby, similarly oriented faces.
+
+    This is intentionally conservative: it only grows into adjacent faces whose
+    normals and radial location remain close to the already selected region.
+    The GUI uses this as a "small gap closing" helper rather than a full repair
+    algorithm for arbitrary meshes.
+    """
+
+    selected = {int(index) for index in np.asarray(tuple(face_indices), dtype=np.int32).tolist()}
+    if not selected or len(mesh.faces) == 0:
+        return np.empty(0, dtype=np.int32), np.empty(0, dtype=np.int32)
+
+    adjacency = face_adjacency(mesh)
+    centers = face_centers(mesh)
+    normals = np.asarray(mesh.face_normals, dtype=float)
+    center_xy = np.asarray(center_xy, dtype=float)
+
+    selected_array = np.asarray(sorted(selected), dtype=np.int32)
+    selected_centers = centers[selected_array]
+    radial_distances = np.linalg.norm(selected_centers[:, :2] - center_xy[None, :], axis=1)
+    z_values = selected_centers[:, 2]
+
+    radial_span = float(np.ptp(radial_distances)) if len(radial_distances) > 1 else 0.0
+    z_span = float(np.ptp(z_values)) if len(z_values) > 1 else 0.0
+    radial_low = float(np.percentile(radial_distances, 5.0)) - max(radial_span * 0.18, 2.0)
+    radial_high = float(np.percentile(radial_distances, 95.0)) + max(radial_span * 0.18, 2.0)
+    z_low = float(np.min(z_values)) - max(z_span * 0.12, 2.0)
+    z_high = float(np.max(z_values)) + max(z_span * 0.12, 2.0)
+
+    frontier = set(selected)
+    added_faces: list[int] = []
+    for _ in range(max(max_layers, 0)):
+        candidates: set[int] = set()
+        for face_index in frontier:
+            candidates.update(adjacency[face_index])
+        candidates.difference_update(selected)
+        if not candidates:
+            break
+
+        accepted: list[int] = []
+        for candidate in sorted(candidates):
+            candidate_center = centers[candidate]
+            radial_value = float(np.linalg.norm(candidate_center[:2] - center_xy))
+            if radial_value < radial_low or radial_value > radial_high:
+                continue
+            if candidate_center[2] < z_low or candidate_center[2] > z_high:
+                continue
+
+            attached_selected = [neighbor for neighbor in adjacency[candidate] if neighbor in selected]
+            if not attached_selected:
+                continue
+            best_dot = max(float(np.dot(normals[candidate], normals[neighbor])) for neighbor in attached_selected)
+            if best_dot < normal_dot_threshold:
+                continue
+            accepted.append(candidate)
+
+        if not accepted:
+            break
+
+        selected.update(accepted)
+        frontier = set(accepted)
+        added_faces.extend(accepted)
+        if len(added_faces) >= max_added_faces:
+            break
+
+    return np.asarray(sorted(selected), dtype=np.int32), np.asarray(sorted(added_faces), dtype=np.int32)
+
+
+def split_mesh_into_components(mesh: MeshModel) -> list[MeshModel]:
+    """Split a mesh into face-connected sub-meshes."""
+
+    if len(mesh.faces) == 0:
+        return []
+
+    adjacency = face_adjacency(mesh)
+    components: list[MeshModel] = []
+    visited = np.zeros(len(mesh.faces), dtype=bool)
+    for face_index in range(len(mesh.faces)):
+        if visited[face_index]:
+            continue
+        stack = [face_index]
+        visited[face_index] = True
+        component_faces: list[int] = []
+        while stack:
+            current_face = stack.pop()
+            component_faces.append(current_face)
+            for next_face in adjacency[current_face]:
+                if visited[next_face]:
+                    continue
+                visited[next_face] = True
+                stack.append(next_face)
+        components.append(extract_submesh(mesh, np.asarray(component_faces, dtype=np.int32), name=f"{mesh.name} [Component {len(components)}]"))
+    return components
+
+
+def extract_submesh(mesh: MeshModel, face_indices: np.ndarray, name: str | None = None) -> MeshModel:
+    face_indices = np.asarray(face_indices, dtype=np.int32)
+    selected_faces = mesh.faces[face_indices]
+    unique_vertices, inverse = np.unique(selected_faces.reshape(-1), return_inverse=True)
+    vertices = mesh.vertices[unique_vertices]
+    faces = inverse.reshape(-1, 3).astype(np.int32)
+    return _mesh_from_vertices_faces(name or mesh.name, vertices, faces, mesh.source_path)
+
+
+def combine_meshes(meshes: list[MeshModel], name: str | None = None) -> MeshModel:
+    if not meshes:
+        raise ValueError("Cannot combine an empty mesh list.")
+    if len(meshes) == 1:
+        mesh = meshes[0]
+        return MeshModel(
+            name=name or mesh.name,
+            vertices=mesh.vertices.copy(),
+            faces=mesh.faces.copy(),
+            face_normals=mesh.face_normals.copy(),
+            vertex_normals=mesh.vertex_normals.copy(),
+            source_path=mesh.source_path,
+        )
+
+    vertices_list: list[np.ndarray] = []
+    faces_list: list[np.ndarray] = []
+    vertex_offset = 0
+    for mesh in meshes:
+        vertices_list.append(mesh.vertices)
+        faces_list.append(mesh.faces + vertex_offset)
+        vertex_offset += len(mesh.vertices)
+    vertices = np.vstack(vertices_list)
+    faces = np.vstack(faces_list)
+    source_path = meshes[0].source_path if all(mesh.source_path == meshes[0].source_path for mesh in meshes) else None
+    return _mesh_from_vertices_faces(name or meshes[0].name, vertices, faces, source_path)
 
 
 

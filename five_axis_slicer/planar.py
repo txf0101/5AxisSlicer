@@ -56,47 +56,31 @@ class HorizontalSectionExtractor:
 
     def __init__(self, mesh: MeshModel, tolerance_mm: float = 1e-4) -> None:
         self.triangles = mesh.face_vertices
+        self.triangle_vertex_normals = mesh.vertex_normals[mesh.faces]
         self.tolerance_mm = tolerance_mm
         self.z_values = self.triangles[:, :, 2]
         self.z_min = self.z_values.min(axis=1)
         self.z_max = self.z_values.max(axis=1)
 
     def loops(self, z_mm: float) -> list[np.ndarray]:
+        segments = [segment for segment, _ in self.segments_with_normals(z_mm)]
+        return _stitch_segments_to_loops(segments, max(self.tolerance_mm, 1e-3))
+
+    def segments_with_normals(self, z_mm: float) -> list[tuple[np.ndarray, np.ndarray]]:
         tol = self.tolerance_mm
         active = (self.z_min <= z_mm + tol) & (self.z_max >= z_mm - tol)
-        segments: list[np.ndarray] = []
+        segments: list[tuple[np.ndarray, np.ndarray]] = []
 
-        for tri in self.triangles[active]:
-            points: list[np.ndarray] = []
-            for a_idx, b_idx in _EDGE_PAIRS:
-                p1 = tri[a_idx]
-                p2 = tri[b_idx]
-                d1 = p1[2] - z_mm
-                d2 = p2[2] - z_mm
-                if abs(d1) <= tol and abs(d2) <= tol:
-                    continue
-                if d1 * d2 > tol * tol:
-                    continue
-                if abs(d1) <= tol:
-                    points.append(p1[:2])
-                    continue
-                if abs(d2) <= tol:
-                    points.append(p2[:2])
-                    continue
-                if abs(p2[2] - p1[2]) <= tol:
-                    continue
-                ratio = (z_mm - p1[2]) / (p2[2] - p1[2])
-                if -tol <= ratio <= 1.0 + tol:
-                    points.append((p1 + ratio * (p2 - p1))[:2])
-
-            unique = _deduplicate_points(points, tol)
-            if len(unique) < 2:
+        for tri, tri_normals in zip(self.triangles[active], self.triangle_vertex_normals[active]):
+            points, normals = _triangle_plane_intersections(tri, tri_normals, z_mm, tol)
+            if len(points) < 2:
                 continue
-            if len(unique) > 2:
-                unique = _farthest_pair(unique)
-            segments.append(np.asarray(unique[:2], dtype=float))
-
-        return _stitch_segments_to_loops(segments, max(tol, 1e-3))
+            if len(points) > 2:
+                point_a, point_b, index_a, index_b = _farthest_pair_with_indices(points)
+                points = [point_a, point_b]
+                normals = [normals[index_a], normals[index_b]]
+            segments.append((np.asarray(points[:2], dtype=float), _normalize_rows(np.asarray(normals[:2], dtype=float))))
+        return segments
 
 
 def estimate_rotary_core_profile(mesh: MeshModel, params: SliceParameters) -> RotaryCoreProfile:
@@ -157,10 +141,7 @@ def estimate_rotary_core_center(mesh: MeshModel, loops_by_z: list[list[np.ndarra
     for loops in loops_by_z:
         if not loops:
             continue
-        for row_index, y_value in enumerate(ys):
-            for col_index, x_value in enumerate(xs):
-                if point_in_loops(np.array([x_value, y_value], dtype=float), loops):
-                    occupancy[row_index, col_index] += 1
+        occupancy += _loops_occupancy_mask(xs, ys, loops)
 
     max_hits = int(occupancy.max())
     if max_hits <= 0:
@@ -211,6 +192,45 @@ def slice_planar_core(
         "core_center_x_mm": float(core_profile.center_xy[0]),
         "core_center_y_mm": float(core_profile.center_xy[1]),
         "core_max_radius_mm": float(np.max(core_profile.radii_mm)) if len(core_profile.radii_mm) else 0.0,
+    }
+    return toolpaths, metadata, warnings
+
+
+def slice_planar_mesh(
+    mesh: MeshModel,
+    params: SliceParameters,
+) -> tuple[list[Toolpath], dict[str, float | int], list[str]]:
+    """Slice a selected substrate mesh directly from its true section contours."""
+
+    warnings: list[str] = []
+    toolpaths: list[Toolpath] = []
+    layer_height = max(params.resolved_planar_layer_height_mm(), 1e-3)
+    z_levels = np.arange(mesh.bounds_min[2] + layer_height, mesh.bounds_max[2] + layer_height * 0.5, layer_height)
+    if len(z_levels) == 0:
+        z_levels = np.array([mesh.bounds_min[2] + layer_height], dtype=float)
+
+    extractor = HorizontalSectionExtractor(mesh)
+    emitted_layers = 0
+    last_z_mm = 0.0
+    for layer_index, z_mm in enumerate(z_levels, start=1):
+        loops = extractor.loops(float(z_mm))
+        loops = [loop for loop in loops if abs(polygon_area(loop)) >= max(params.nozzle_diameter_mm**2 * 0.25, 0.05)]
+        if not loops:
+            continue
+
+        emitted_layers += 1
+        last_z_mm = float(z_mm)
+        toolpaths.extend(generate_planar_perimeter_paths(loops, float(z_mm), layer_index, params))
+        if params.planar_include_infill:
+            toolpaths.extend(generate_planar_infill_paths(loops, float(z_mm), layer_index, params))
+
+    metadata = {
+        "layer_count": emitted_layers,
+        "path_count": len(toolpaths),
+        "transition_height_mm": last_z_mm,
+        "core_center_x_mm": float(mesh.bounds_center[0]),
+        "core_center_y_mm": float(mesh.bounds_center[1]),
+        "core_max_radius_mm": float(np.max(np.linalg.norm(mesh.vertices[:, :2] - mesh.bounds_center[:2], axis=1))) if len(mesh.vertices) else 0.0,
     }
     return toolpaths, metadata, warnings
 
@@ -394,6 +414,48 @@ def point_in_polygon(point: np.ndarray, polygon: np.ndarray) -> bool:
     return inside
 
 
+def _loops_occupancy_mask(x_coords: np.ndarray, y_coords: np.ndarray, loops: list[np.ndarray]) -> np.ndarray:
+    mask = np.zeros((len(y_coords), len(x_coords)), dtype=bool)
+    for loop in loops:
+        if len(loop) < 3:
+            continue
+
+        x_min = float(np.min(loop[:, 0]))
+        x_max = float(np.max(loop[:, 0]))
+        y_min = float(np.min(loop[:, 1]))
+        y_max = float(np.max(loop[:, 1]))
+        col_mask = (x_coords >= x_min) & (x_coords <= x_max)
+        row_mask = (y_coords >= y_min) & (y_coords <= y_max)
+        if not np.any(col_mask) or not np.any(row_mask):
+            continue
+
+        local_mask = _polygon_mask(x_coords[col_mask], y_coords[row_mask], loop)
+        mask[np.ix_(row_mask, col_mask)] ^= local_mask
+    return mask
+
+
+def _polygon_mask(x_coords: np.ndarray, y_coords: np.ndarray, polygon: np.ndarray) -> np.ndarray:
+    if len(polygon) < 3:
+        return np.zeros((len(y_coords), len(x_coords)), dtype=bool)
+
+    xx, yy = np.meshgrid(x_coords, y_coords)
+    start = polygon
+    end = np.roll(polygon, -1, axis=0)
+
+    x0 = start[:, 0][None, None, :]
+    y0 = start[:, 1][None, None, :]
+    x1 = end[:, 0][None, None, :]
+    y1 = end[:, 1][None, None, :]
+
+    yy_expanded = yy[:, :, None]
+    xx_expanded = xx[:, :, None]
+    crosses = (y0 > yy_expanded) != (y1 > yy_expanded)
+    denom = np.where(np.abs(y1 - y0) < 1e-12, 1e-12, y1 - y0)
+    x_cross = (x1 - x0) * (yy_expanded - y0) / denom + x0
+    hits = crosses & (xx_expanded < x_cross)
+    return (np.count_nonzero(hits, axis=2) % 2) == 1
+
+
 def _estimate_slice_core_radius(
     center_xy: np.ndarray,
     loops: list[np.ndarray],
@@ -572,6 +634,29 @@ def _deduplicate_points(points: list[np.ndarray], tolerance: float) -> list[np.n
     return unique
 
 
+def _deduplicate_points_with_normals(
+    points: list[np.ndarray],
+    normals: list[np.ndarray],
+    tolerance: float,
+) -> tuple[list[np.ndarray], list[np.ndarray]]:
+    unique_points: list[np.ndarray] = []
+    unique_normals: list[np.ndarray] = []
+    for point, normal in zip(points, normals):
+        point_arr = np.asarray(point, dtype=float)
+        normal_arr = np.asarray(normal, dtype=float)
+        merged_index = None
+        for index, existing in enumerate(unique_points):
+            if np.linalg.norm(point_arr - existing) <= tolerance:
+                merged_index = index
+                break
+        if merged_index is None:
+            unique_points.append(point_arr)
+            unique_normals.append(normal_arr)
+        else:
+            unique_normals[merged_index] = _normalize_rows(np.asarray([unique_normals[merged_index] + normal_arr], dtype=float))[0]
+    return unique_points, unique_normals
+
+
 def _farthest_pair(points: list[np.ndarray]) -> list[np.ndarray]:
     best_pair = [points[0], points[1]]
     best_distance = -1.0
@@ -581,6 +666,18 @@ def _farthest_pair(points: list[np.ndarray]) -> list[np.ndarray]:
             if distance > best_distance:
                 best_distance = distance
                 best_pair = [point_a, point_b]
+    return best_pair
+
+
+def _farthest_pair_with_indices(points: list[np.ndarray]) -> tuple[np.ndarray, np.ndarray, int, int]:
+    best_pair = (points[0], points[1], 0, 1)
+    best_distance = -1.0
+    for idx, point_a in enumerate(points):
+        for next_index, point_b in enumerate(points[idx + 1 :], start=idx + 1):
+            distance = float(np.linalg.norm(point_a - point_b))
+            if distance > best_distance:
+                best_distance = distance
+                best_pair = (point_a, point_b, idx, next_index)
     return best_pair
 
 
@@ -594,3 +691,45 @@ def _deduplicate_path(points: np.ndarray, tolerance: float) -> np.ndarray:
     return np.asarray(deduped, dtype=float)
 
 
+def _triangle_plane_intersections(
+    triangle: np.ndarray,
+    triangle_normals: np.ndarray,
+    z_mm: float,
+    tolerance_mm: float,
+) -> tuple[list[np.ndarray], list[np.ndarray]]:
+    points: list[np.ndarray] = []
+    normals: list[np.ndarray] = []
+    for a_idx, b_idx in _EDGE_PAIRS:
+        point_a = triangle[a_idx]
+        point_b = triangle[b_idx]
+        normal_a = triangle_normals[a_idx]
+        normal_b = triangle_normals[b_idx]
+        delta_a = point_a[2] - z_mm
+        delta_b = point_b[2] - z_mm
+        if abs(delta_a) <= tolerance_mm and abs(delta_b) <= tolerance_mm:
+            continue
+        if delta_a * delta_b > tolerance_mm * tolerance_mm:
+            continue
+        if abs(delta_a) <= tolerance_mm:
+            points.append(point_a[:2].copy())
+            normals.append(normal_a.copy())
+            continue
+        if abs(delta_b) <= tolerance_mm:
+            points.append(point_b[:2].copy())
+            normals.append(normal_b.copy())
+            continue
+        if abs(point_b[2] - point_a[2]) <= tolerance_mm:
+            continue
+        ratio = (z_mm - point_a[2]) / (point_b[2] - point_a[2])
+        if -tolerance_mm <= ratio <= 1.0 + tolerance_mm:
+            points.append((point_a + ratio * (point_b - point_a))[:2])
+            normals.append(normal_a * (1.0 - ratio) + normal_b * ratio)
+    return _deduplicate_points_with_normals(points, normals, tolerance_mm)
+
+
+def _normalize_rows(vectors: np.ndarray) -> np.ndarray:
+    norms = np.linalg.norm(vectors, axis=1, keepdims=True)
+    safe_norms = np.where(norms < 1e-9, 1.0, norms)
+    normalized = vectors / safe_norms
+    normalized[norms[:, 0] < 1e-9] = np.array([0.0, 0.0, 1.0])
+    return normalized

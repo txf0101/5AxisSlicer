@@ -49,8 +49,13 @@ def apply_rotary_axis_calibration(
 
     commanded_u = machine.u_zero_offset_deg + machine.u_axis_sign * u_deg
     commanded_v = machine.v_zero_offset_deg + machine.v_axis_sign * v_deg
-    if previous_commanded_v_deg is not None:
-        commanded_v = unwrap_angle(commanded_v, previous_commanded_v_deg)
+    reference_v_deg = previous_commanded_v_deg if previous_commanded_v_deg is not None else machine.home_v_deg
+    commanded_v = choose_bounded_equivalent_angle(
+        commanded_v,
+        reference_v_deg,
+        machine.min_v_deg,
+        machine.max_v_deg,
+    )
     return commanded_u, commanded_v
 
 
@@ -109,6 +114,26 @@ def unwrap_angle(angle_deg: float, reference_deg: float) -> float:
 
     candidates = [angle_deg + k * 360.0 for k in (-1, 0, 1)]
     return min(candidates, key=lambda candidate: abs(candidate - reference_deg))
+
+
+def choose_bounded_equivalent_angle(
+    angle_deg: float,
+    reference_deg: float,
+    min_deg: float,
+    max_deg: float,
+) -> float:
+    """Return the closest equivalent angle that stays within machine travel."""
+
+    if min_deg > max_deg:
+        min_deg, max_deg = max_deg, min_deg
+
+    min_turns = math.ceil((min_deg - angle_deg) / 360.0)
+    max_turns = math.floor((max_deg - angle_deg) / 360.0)
+    if min_turns <= max_turns:
+        candidates = [angle_deg + 360.0 * turns for turns in range(min_turns, max_turns + 1)]
+        return min(candidates, key=lambda candidate: (abs(candidate - reference_deg), abs(candidate)))
+
+    return unwrap_angle(angle_deg, reference_deg)
 
 
 def shortest_angular_delta_deg(target_deg: float, source_deg: float) -> float:

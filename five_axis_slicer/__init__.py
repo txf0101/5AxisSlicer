@@ -1,9 +1,10 @@
-﻿__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 from .core import (
     MachineParameters,
     MeshModel,
     SliceParameters,
+    SliceSelection,
     SliceResult,
     SurfaceMap,
     Toolpath,
@@ -15,6 +16,7 @@ __all__ = [
     "MachineParameters",
     "MeshModel",
     "SliceParameters",
+    "SliceSelection",
     "SliceResult",
     "SurfaceMap",
     "Toolpath",

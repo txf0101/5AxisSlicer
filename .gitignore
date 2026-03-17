@@ -15,6 +15,14 @@ __pycache__/
 venv/
 env/
 
+/outputs/dotnet_home/
+/outputs/verification/
+/outputs/selection_cache.json
+
+# Generated G-code outputs: keep only explicit reference samples in model-example.
+*.gcode
+!model-example/EXAMPLE.gcode
+
 /five_axis_output.gcode
 /build_test_*.gcode
 /packaged_*.gcode

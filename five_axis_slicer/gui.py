@@ -1,12 +1,13 @@
 ﻿from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import numpy as np
 
-from .core import MachineParameters, MeshModel, SliceParameters, SliceResult
+from .core import MachineParameters, MeshModel, SliceParameters, SliceResult, SliceSelection
 from .gcode import generate_gcode
-from .geometry import generate_demo_dome_mesh, load_mesh
+from .geometry import generate_demo_dome_mesh, grow_face_selection, load_mesh, selection_boundary_edges, split_mesh_into_components
 from .gui_text import AXES, PATH_KIND_LABEL_KEYS, PATH_KIND_ORDER, UI_TEXT
 from .hardware import machine_profile_summary, open5x_freddi_hong_machine
 from .qt_compat import (
@@ -35,7 +36,7 @@ from .qt_compat import (
     QT_HORIZONTAL,
     qt_exec,
 )
-from .slicer import ConformalSlicer
+from .slicer import ConformalSlicer, slice_planar_model
 from .viewer import PATH_STYLE_MAP, PreviewCanvas
 
 
@@ -58,6 +59,108 @@ class NoWheelSpinBox(_NoWheelMixin, QSpinBox):
     pass
 
 
+def _set_button_selected(button: QPushButton, selected: bool) -> None:
+    button.setProperty("selected", selected)
+    style = button.style()
+    if style is not None:
+        style.unpolish(button)
+        style.polish(button)
+    button.update()
+
+
+class BooleanChoice(QWidget):
+    """Compact yes/no selector used for boolean process settings."""
+
+    def __init__(self, checked: bool = False) -> None:
+        super().__init__()
+        self._checked = bool(checked)
+        self._callbacks: list = []
+
+        self.yes_button = QPushButton()
+        self.no_button = QPushButton()
+        for button in (self.yes_button, self.no_button):
+            button.setObjectName("choiceButton")
+            button.setCheckable(True)
+            button.setMinimumWidth(52)
+
+        self.yes_button.clicked.connect(lambda: self.setChecked(True))
+        self.no_button.clicked.connect(lambda: self.setChecked(False))
+
+        layout = QHBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(8)
+        layout.addWidget(self.yes_button)
+        layout.addWidget(self.no_button)
+        self.setLayout(layout)
+
+        if hasattr(QSizePolicy, "Policy"):
+            self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        else:
+            self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+
+        self.setChecked(self._checked)
+
+    def isChecked(self) -> bool:
+        return self._checked
+
+    def setChecked(self, checked: bool) -> None:
+        checked = bool(checked)
+        changed = checked != self._checked
+        self._checked = checked
+        self.yes_button.setChecked(checked)
+        self.no_button.setChecked(not checked)
+        _set_button_selected(self.yes_button, checked)
+        _set_button_selected(self.no_button, not checked)
+        if changed:
+            for callback in list(self._callbacks):
+                callback(self._checked)
+
+    def set_labels(self, yes_text: str, no_text: str) -> None:
+        self.yes_button.setText(yes_text)
+        self.no_button.setText(no_text)
+
+    def on_changed(self, callback) -> None:
+        self._callbacks.append(callback)
+
+
+class CollapsibleSection(QWidget):
+    def __init__(self, title: str = "", expanded: bool = True) -> None:
+        super().__init__()
+        self._title = title
+        self._expanded = bool(expanded)
+
+        self.header_button = QPushButton()
+        self.header_button.setObjectName("collapsibleHeader")
+        self.header_button.clicked.connect(self.toggle)
+        self.content_widget = QWidget()
+
+        layout = QVBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(10)
+        layout.addWidget(self.header_button)
+        layout.addWidget(self.content_widget)
+        self.setLayout(layout)
+
+        self.set_title(title)
+        self.set_expanded(expanded)
+
+    def set_title(self, title: str) -> None:
+        self._title = title
+        prefix = "[-]" if self._expanded else "[+]"
+        self.header_button.setText(f"{prefix} {self._title}")
+
+    def set_content_layout(self, content_layout: QVBoxLayout) -> None:
+        self.content_widget.setLayout(content_layout)
+
+    def set_expanded(self, expanded: bool) -> None:
+        self._expanded = bool(expanded)
+        self.content_widget.setVisible(self._expanded)
+        self.set_title(self._title)
+
+    def toggle(self) -> None:
+        self.set_expanded(not self._expanded)
+
+
 class MainWindow(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
@@ -66,11 +169,16 @@ class MainWindow(QMainWindow):
 
         self.source_mesh: MeshModel | None = None
         self.mesh: MeshModel | None = None
+        self.component_meshes: list[MeshModel] = []
         self.slice_result: SliceResult | None = None
         self.generated_gcode: str | None = None
         self.export_warnings: list[str] = []
         self.placement_rotation_deg = np.zeros(3, dtype=float)
         self.placement_translation_mm = np.zeros(3, dtype=float)
+        self.selected_substrate_component_index: int | None = None
+        self.selected_conformal_component_indices: set[int] = set()
+        self.selected_substrate_face_indices: set[int] = set()
+        self.selected_conformal_face_indices: set[int] = set()
 
         self.slicer = ConformalSlicer()
         self.slice_controls: dict[str, object] = {}
@@ -87,6 +195,64 @@ class MainWindow(QMainWindow):
 
         self.model_info = QLabel()
         self.model_info.setWordWrap(True)
+        self.slice_mode_label = QLabel()
+        self.slice_mode_combo = NoWheelComboBox()
+        self.slice_mode_combo.setObjectName("softInput")
+        self.slice_mode_combo.addItem("", "hybrid")
+        self.slice_mode_combo.addItem("", "planar")
+        self.slice_mode_combo.currentIndexChanged.connect(self._on_slice_mode_changed)
+        self._set_expand_policy(self.slice_mode_combo)
+        self.face_selection_title = QLabel()
+        self.face_selection_title.setWordWrap(True)
+        self.face_selection_help = QLabel()
+        self.face_selection_help.setWordWrap(True)
+        self.enable_face_picking_checkbox = QCheckBox()
+        self.enable_face_picking_checkbox.toggled.connect(self._on_face_picking_toggled)
+        self.face_pick_target_label = QLabel()
+        self.face_pick_target_combo = NoWheelComboBox()
+        self.face_pick_target_combo.setObjectName("softInput")
+        self.face_pick_target_combo.addItem("", "substrate")
+        self.face_pick_target_combo.addItem("", "conformal")
+        self._set_expand_policy(self.face_pick_target_combo)
+        self.clear_substrate_faces_button = QPushButton()
+        self.clear_substrate_faces_button.setObjectName("secondaryButton")
+        self.clear_substrate_faces_button.clicked.connect(lambda: self._clear_face_selection("substrate"))
+        self.clear_conformal_faces_button = QPushButton()
+        self.clear_conformal_faces_button.setObjectName("secondaryButton")
+        self.clear_conformal_faces_button.clicked.connect(lambda: self._clear_face_selection("conformal"))
+        self.face_selection_summary = QLabel()
+        self.face_selection_summary.setWordWrap(True)
+        self.face_brush_help = QLabel()
+        self.face_brush_help.setWordWrap(True)
+        self.face_brush_label = QLabel()
+        self.face_brush_enabled = BooleanChoice(False)
+        self.face_brush_enabled.on_changed(lambda _: self._on_face_brush_settings_changed())
+        self.face_brush_size_label = QLabel()
+        self.face_brush_size_combo = NoWheelComboBox()
+        self.face_brush_size_combo.setObjectName("softInput")
+        self.face_brush_size_combo.addItem("", 18)
+        self.face_brush_size_combo.addItem("", 30)
+        self.face_brush_size_combo.addItem("", 44)
+        self.face_brush_size_combo.setCurrentIndex(1)
+        self.face_brush_size_combo.currentIndexChanged.connect(self._on_face_brush_settings_changed)
+        self._set_expand_policy(self.face_brush_size_combo)
+        self.component_selection_title = QLabel()
+        self.component_selection_title.setWordWrap(True)
+        self.component_summary = QLabel()
+        self.component_summary.setWordWrap(True)
+        self.selection_section = CollapsibleSection()
+        self.substrate_component_label = QLabel()
+        self.substrate_component_combo = NoWheelComboBox()
+        self.substrate_component_combo.setObjectName("softInput")
+        self.substrate_component_combo.currentIndexChanged.connect(self._on_component_selection_changed)
+        self._set_expand_policy(self.substrate_component_combo)
+        self.conformal_components_label = QLabel()
+        self.conformal_components_host = QWidget()
+        self.conformal_components_layout = QVBoxLayout()
+        self.conformal_components_layout.setContentsMargins(0, 0, 0, 0)
+        self.conformal_components_layout.setSpacing(6)
+        self.conformal_components_host.setLayout(self.conformal_components_layout)
+        self.conformal_component_checks: dict[int, QCheckBox] = {}
         self.stats_info = QLabel()
         self.stats_info.setWordWrap(True)
         self.machine_profile_info = QLabel()
@@ -310,6 +476,42 @@ class MainWindow(QMainWindow):
                 border-color: #c7c7cc;
                 background: #f0f0f3;
             }
+            QPushButton#choiceButton {
+                border-radius: 12px;
+                padding: 8px 14px;
+                font-weight: 700;
+            }
+            QPushButton#choiceButton[selected="true"] {
+                background: #1d1d1f;
+                color: #f5f5f7;
+                border: 1px solid #1d1d1f;
+            }
+            QPushButton#choiceButton[selected="true"]:hover {
+                background: #313135;
+                border-color: #313135;
+            }
+            QPushButton#choiceButton[selected="false"] {
+                background: #ffffff;
+                color: #6e6e73;
+                border: 1px solid #c7c7cc;
+            }
+            QPushButton#choiceButton[selected="false"]:hover {
+                background: #f7f7fa;
+                color: #1d1d1f;
+                border-color: #8e8e93;
+            }
+            QPushButton#collapsibleHeader {
+                background: #fbfbfd;
+                border: 1px solid #d2d2d7;
+                border-radius: 14px;
+                padding: 10px 14px;
+                font-weight: 700;
+                text-align: left;
+            }
+            QPushButton#collapsibleHeader:hover {
+                background: #f0f0f4;
+                border-color: #b8b8be;
+            }
             QSplitter::handle {
                 background: #d2d2d7;
                 width: 2px;
@@ -329,6 +531,21 @@ class MainWindow(QMainWindow):
                 background: transparent;
                 border: none;
             }
+            QScrollBar:horizontal {
+                background: transparent;
+                height: 10px;
+                margin: 0 6px 0 6px;
+            }
+            QScrollBar::handle:horizontal {
+                background: #c2c2c7;
+                border-radius: 5px;
+                min-width: 24px;
+            }
+            QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal,
+            QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+                background: transparent;
+                border: none;
+            }
             """
         self.setStyleSheet(style.replace("__CHECKMARK_ICON__", checkmark_icon))
 
@@ -336,6 +553,38 @@ class MainWindow(QMainWindow):
         self.model_group = QGroupBox()
         layout = QVBoxLayout()
         layout.addWidget(self.model_info)
+        mode_form = QFormLayout()
+        mode_form.addRow(self.slice_mode_label, self.slice_mode_combo)
+        layout.addLayout(mode_form)
+
+        selection_layout = QVBoxLayout()
+        selection_layout.setContentsMargins(0, 0, 0, 0)
+        selection_layout.setSpacing(10)
+        selection_layout.addWidget(self.face_selection_title)
+        selection_layout.addWidget(self.face_selection_help)
+        selection_layout.addWidget(self.enable_face_picking_checkbox)
+        face_form = QFormLayout()
+        face_form.addRow(self.face_pick_target_label, self.face_pick_target_combo)
+        face_form.addRow(self.face_brush_label, self.face_brush_enabled)
+        face_form.addRow(self.face_brush_size_label, self.face_brush_size_combo)
+        selection_layout.addLayout(face_form)
+        selection_layout.addWidget(self.face_brush_help)
+        face_button_row = QHBoxLayout()
+        face_button_row.setSpacing(10)
+        face_button_row.addWidget(self.clear_substrate_faces_button)
+        face_button_row.addWidget(self.clear_conformal_faces_button)
+        face_button_row.addStretch(1)
+        selection_layout.addLayout(face_button_row)
+        selection_layout.addWidget(self.face_selection_summary)
+        selection_layout.addWidget(self.component_selection_title)
+        selection_layout.addWidget(self.component_summary)
+
+        component_form = QFormLayout()
+        component_form.addRow(self.substrate_component_label, self.substrate_component_combo)
+        component_form.addRow(self.conformal_components_label, self.conformal_components_host)
+        selection_layout.addLayout(component_form)
+        self.selection_section.set_content_layout(selection_layout)
+        layout.addWidget(self.selection_section)
         layout.addWidget(self.stats_info)
         self.model_group.setLayout(layout)
         return self.model_group
@@ -437,24 +686,19 @@ class MainWindow(QMainWindow):
         self.slice_controls["planar_perimeters"] = self._int_spin(1, 4, 1, 1)
         self.slice_controls["planar_infill_angle_deg"] = self._double_spin(0.0, 180.0, 0.0, 5.0)
 
-        include_infill = QCheckBox()
-        include_infill.setChecked(True)
+        include_infill = BooleanChoice(True)
         self.slice_controls["include_infill"] = include_infill
 
-        auto_center = QCheckBox()
-        auto_center.setChecked(True)
+        auto_center = BooleanChoice(True)
         self.slice_controls["auto_center_model"] = auto_center
 
-        enable_planar = QCheckBox()
-        enable_planar.setChecked(True)
+        enable_planar = BooleanChoice(True)
         self.slice_controls["enable_planar_core"] = enable_planar
 
-        auto_transition = QCheckBox()
-        auto_transition.setChecked(True)
+        auto_transition = BooleanChoice(True)
         self.slice_controls["auto_core_transition"] = auto_transition
 
-        planar_include_infill = QCheckBox()
-        planar_include_infill.setChecked(True)
+        planar_include_infill = BooleanChoice(True)
         self.slice_controls["planar_include_infill"] = planar_include_infill
 
         field_pairs = [
@@ -673,6 +917,27 @@ class MainWindow(QMainWindow):
         self.transform_group.setTitle(self.t("transform_group"))
         self.slice_group.setTitle(self.t("slicing_group"))
         self.machine_group.setTitle(self.t("machine_group"))
+        self.slice_mode_label.setText(self.t("slice_mode"))
+        self.slice_mode_combo.setItemText(0, self.t("slice_mode_hybrid"))
+        self.slice_mode_combo.setItemText(1, self.t("slice_mode_planar"))
+        self.face_selection_title.setText(self.t("face_selection"))
+        self.face_selection_help.setText(self.t("face_selection_help"))
+        self.enable_face_picking_checkbox.setText(self.t("enable_face_picking"))
+        self.face_pick_target_label.setText(self.t("face_pick_target"))
+        self.face_pick_target_combo.setItemText(0, self.t("face_pick_target_substrate"))
+        self.face_pick_target_combo.setItemText(1, self.t("face_pick_target_conformal"))
+        self.face_brush_label.setText(self.t("face_brush"))
+        self.face_brush_help.setText(self.t("face_brush_help"))
+        self.face_brush_size_label.setText(self.t("face_brush_size"))
+        self.face_brush_size_combo.setItemText(0, self.t("brush_size_small"))
+        self.face_brush_size_combo.setItemText(1, self.t("brush_size_medium"))
+        self.face_brush_size_combo.setItemText(2, self.t("brush_size_large"))
+        self.clear_substrate_faces_button.setText(self.t("clear_substrate_faces"))
+        self.clear_conformal_faces_button.setText(self.t("clear_conformal_faces"))
+        self.component_selection_title.setText(self.t("component_selection"))
+        self.selection_section.set_title(self.t("selection_tools_section"))
+        self.substrate_component_label.setText(self.t("substrate_component"))
+        self.conformal_components_label.setText(self.t("conformal_components"))
 
         self.preview_help_label.setText(self.t("preview_help"))
         self.show_mesh_checkbox.setText(self.t("show_mesh"))
@@ -697,11 +962,18 @@ class MainWindow(QMainWindow):
         self.reset_machine_button.setText(self.t("machine_reset"))
         self._update_sign_combo_text(self.machine_controls["u_axis_sign"])
         self._update_sign_combo_text(self.machine_controls["v_axis_sign"])
+        for control in self.slice_controls.values():
+            if isinstance(control, BooleanChoice):
+                control.set_labels(self.t("choice_yes"), self.t("choice_no"))
+        self.face_brush_enabled.set_labels(self.t("choice_yes"), self.t("choice_no"))
 
         self._refresh_model_info()
         self._refresh_transform_info()
         self._refresh_machine_profile_info()
         self._refresh_stats(self.export_warnings)
+        self._refresh_face_selection_summary()
+        self._sync_face_brush_state()
+        self._sync_component_widgets()
 
     def _update_sign_combo_text(self, combo: object) -> None:
         if isinstance(combo, QComboBox):
@@ -721,6 +993,260 @@ class MainWindow(QMainWindow):
             show_mesh=self.show_mesh_checkbox.isChecked(),
             visible_kinds=self._selected_visible_kinds(),
         )
+
+    def _current_slice_mode(self) -> str:
+        return str(self.slice_mode_combo.currentData() or "hybrid")
+
+    def _selection_cache_path(self) -> Path:
+        return Path("outputs") / "selection_cache.json"
+
+    def _mesh_selection_cache_key(self) -> str | None:
+        if self.mesh is None:
+            return None
+        source = self.mesh.source_path or f"demo::{self.mesh.name}"
+        if self.mesh.source_path:
+            try:
+                source = str(Path(source).resolve())
+            except OSError:
+                source = str(source)
+        return f"{source}|faces={len(self.mesh.faces)}|verts={len(self.mesh.vertices)}"
+
+    def _load_cached_face_selection(self) -> None:
+        self.selected_substrate_face_indices.clear()
+        self.selected_conformal_face_indices.clear()
+        cache_key = self._mesh_selection_cache_key()
+        if cache_key is None:
+            return
+        cache_path = self._selection_cache_path()
+        if not cache_path.exists():
+            return
+        try:
+            payload = json.loads(cache_path.read_text(encoding="utf-8"))
+        except Exception:
+            return
+        entries = payload.get("entries", {})
+        entry = entries.get(cache_key, {})
+        face_count = len(self.mesh.faces) if self.mesh is not None else 0
+        self.selected_substrate_face_indices = {
+            int(index) for index in entry.get("substrate_faces", []) if 0 <= int(index) < face_count
+        }
+        self.selected_conformal_face_indices = {
+            int(index) for index in entry.get("conformal_faces", []) if 0 <= int(index) < face_count
+        }
+        self.selected_conformal_face_indices.difference_update(self.selected_substrate_face_indices)
+        if self.selected_substrate_face_indices or self.selected_conformal_face_indices:
+            self._append_log(
+                self.t(
+                    "selection_cache_loaded_log",
+                    substrate=len(self.selected_substrate_face_indices),
+                    conformal=len(self.selected_conformal_face_indices),
+                )
+            )
+
+    def _save_cached_face_selection(self) -> None:
+        cache_key = self._mesh_selection_cache_key()
+        if cache_key is None:
+            return
+        cache_path = self._selection_cache_path()
+        try:
+            if cache_path.exists():
+                payload = json.loads(cache_path.read_text(encoding="utf-8"))
+            else:
+                payload = {}
+        except Exception:
+            payload = {}
+        entries = payload.setdefault("entries", {})
+        if self.selected_substrate_face_indices or self.selected_conformal_face_indices:
+            entries[cache_key] = {
+                "substrate_faces": sorted(int(index) for index in self.selected_substrate_face_indices),
+                "conformal_faces": sorted(int(index) for index in self.selected_conformal_face_indices),
+            }
+        else:
+            entries.pop(cache_key, None)
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        cache_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    def _refresh_face_selection_summary(self) -> None:
+        substrate_count = len(self.selected_substrate_face_indices)
+        conformal_count = len(self.selected_conformal_face_indices)
+        self.face_selection_summary.setText(
+            self.t(
+                "face_selection_summary",
+                substrate_count=substrate_count,
+                conformal_count=conformal_count,
+                pick_state=self.t("face_picking_on") if self.enable_face_picking_checkbox.isChecked() else self.t("face_picking_off"),
+                target=self.t(
+                    "face_pick_target_substrate"
+                    if self._current_face_pick_target() == "substrate"
+                    else "face_pick_target_conformal"
+                ),
+                brush_state=(
+                    self.t("face_picking_on")
+                    if self.enable_face_picking_checkbox.isChecked() and self.face_brush_enabled.isChecked()
+                    else self.t("face_picking_off")
+                ),
+                brush_size=self._current_face_brush_label(),
+            )
+        )
+        self.clear_substrate_faces_button.setEnabled(substrate_count > 0)
+        self.clear_conformal_faces_button.setEnabled(conformal_count > 0)
+
+    def _clear_face_selection(self, group: str | None = None) -> None:
+        if group == "substrate":
+            self.selected_substrate_face_indices.clear()
+        elif group == "conformal":
+            self.selected_conformal_face_indices.clear()
+        else:
+            self.selected_substrate_face_indices.clear()
+            self.selected_conformal_face_indices.clear()
+        self._save_cached_face_selection()
+        self._invalidate_slice_result()
+        self._refresh_face_selection_summary()
+        self._render_current_preview(preserve_camera=True)
+
+    def _on_slice_mode_changed(self) -> None:
+        self._invalidate_slice_result()
+        self._refresh_face_selection_summary()
+
+    def _on_face_picking_toggled(self, checked: bool) -> None:
+        self.preview.set_face_picking(checked, self._on_preview_faces_picked if checked else None)
+        self._sync_face_brush_state()
+        self._refresh_face_selection_summary()
+
+    def _current_face_pick_target(self) -> str:
+        return str(self.face_pick_target_combo.currentData() or "substrate")
+
+    def _current_face_brush_label(self) -> str:
+        label_keys = ["brush_size_small", "brush_size_medium", "brush_size_large"]
+        current_index = min(max(self.face_brush_size_combo.currentIndex(), 0), len(label_keys) - 1)
+        return self.t(label_keys[current_index])
+
+    def _on_face_brush_settings_changed(self) -> None:
+        self._sync_face_brush_state()
+        self._refresh_face_selection_summary()
+
+    def _sync_face_brush_state(self) -> None:
+        picking_enabled = self.enable_face_picking_checkbox.isChecked()
+        self.face_brush_enabled.setEnabled(picking_enabled)
+        self.face_brush_size_combo.setEnabled(picking_enabled)
+        brush_enabled = picking_enabled and self.face_brush_enabled.isChecked()
+        self.preview.set_face_brush(brush_enabled, int(self.face_brush_size_combo.currentData() or 18))
+
+    def _on_preview_faces_picked(self, face_indices: list[int]) -> None:
+        if self.mesh is None:
+            return
+        valid_faces = sorted({int(face_index) for face_index in face_indices if 0 <= int(face_index) < len(self.mesh.faces)})
+        if not valid_faces:
+            return
+
+        target = self._current_face_pick_target()
+        brush_enabled = self.enable_face_picking_checkbox.isChecked() and self.face_brush_enabled.isChecked()
+        changed = False
+        for face_index in valid_faces:
+            if target == "substrate":
+                if brush_enabled:
+                    if face_index not in self.selected_substrate_face_indices:
+                        self.selected_substrate_face_indices.add(face_index)
+                        self.selected_conformal_face_indices.discard(face_index)
+                        changed = True
+                    continue
+                if face_index in self.selected_substrate_face_indices:
+                    self.selected_substrate_face_indices.discard(face_index)
+                else:
+                    self.selected_substrate_face_indices.add(face_index)
+                    self.selected_conformal_face_indices.discard(face_index)
+                changed = True
+            else:
+                if brush_enabled:
+                    if face_index not in self.selected_conformal_face_indices:
+                        self.selected_conformal_face_indices.add(face_index)
+                        self.selected_substrate_face_indices.discard(face_index)
+                        changed = True
+                    continue
+                if face_index in self.selected_conformal_face_indices:
+                    self.selected_conformal_face_indices.discard(face_index)
+                else:
+                    self.selected_conformal_face_indices.add(face_index)
+                    self.selected_substrate_face_indices.discard(face_index)
+                changed = True
+        if not changed:
+            return
+
+        self._save_cached_face_selection()
+        self._invalidate_slice_result()
+        self._refresh_face_selection_summary()
+        self._render_current_preview(preserve_camera=True)
+
+    def _selection_faces_for_preview(self) -> dict[str, np.ndarray]:
+        return {
+            "substrate": np.asarray(sorted(self.selected_substrate_face_indices), dtype=np.int32),
+            "conformal": np.asarray(sorted(self.selected_conformal_face_indices), dtype=np.int32),
+        }
+
+    def _selection_center_xy(self, face_indices: set[int]) -> np.ndarray:
+        if self.mesh is None or not face_indices:
+            return np.zeros(2, dtype=float)
+        triangles = self.mesh.face_vertices[np.asarray(sorted(face_indices), dtype=np.int32)]
+        return triangles.mean(axis=(0, 1))[:2]
+
+    def _maybe_autoclose_substrate_selection(self) -> bool:
+        if self.mesh is None or not self.selected_substrate_face_indices:
+            return False
+
+        boundary_edges = selection_boundary_edges(self.mesh, self.selected_substrate_face_indices)
+        if not boundary_edges:
+            return False
+
+        center_xy = self._selection_center_xy(self.selected_substrate_face_indices)
+        grown_selection, added_faces = grow_face_selection(
+            self.mesh,
+            self.selected_substrate_face_indices,
+            center_xy,
+            max_layers=2,
+            max_added_faces=max(24, int(len(self.selected_substrate_face_indices) * 0.18)),
+        )
+
+        small_gap_limit = max(12, int(len(self.selected_substrate_face_indices) * 0.12))
+        if 0 < len(added_faces) <= small_gap_limit:
+            should_close = self._ask_yes_no(
+                self.t("selection_not_closed_title"),
+                self.t("selection_not_closed_message_small", added=len(added_faces)),
+                default_yes=True,
+            )
+            if should_close:
+                self.selected_substrate_face_indices = {int(index) for index in grown_selection.tolist()}
+                self.selected_conformal_face_indices.difference_update(self.selected_substrate_face_indices)
+                self._save_cached_face_selection()
+                self._refresh_face_selection_summary()
+                self._render_current_preview(preserve_camera=True)
+                self._append_log(self.t("selection_autoclosed_log", added=len(added_faces)))
+            return False
+
+        large_gap_limit = max(24, int(len(self.selected_substrate_face_indices) * 0.3))
+        if len(added_faces) > large_gap_limit or len(boundary_edges) > max(40, int(len(self.selected_substrate_face_indices) * 0.8)):
+            return self._ask_yes_no(
+                self.t("selection_not_closed_title"),
+                self.t("selection_not_closed_message_large"),
+                default_yes=False,
+            )
+        return False
+
+    def _ask_yes_no(self, title: str, message: str, *, default_yes: bool) -> bool:
+        icon_enum = getattr(QMessageBox, "Icon", QMessageBox)
+        role_enum = getattr(QMessageBox, "ButtonRole", QMessageBox)
+        msg_box = QMessageBox(self)
+        msg_box.setIcon(icon_enum.Question)
+        msg_box.setWindowTitle(title)
+        msg_box.setText(message)
+        yes_button = msg_box.addButton(self.t("choice_yes"), role_enum.YesRole)
+        no_button = msg_box.addButton(self.t("choice_no"), role_enum.NoRole)
+        yes_button.setObjectName("choiceButton")
+        no_button.setObjectName("choiceButton")
+        _set_button_selected(yes_button, True)
+        _set_button_selected(no_button, False)
+        msg_box.setDefaultButton(yes_button if default_yes else no_button)
+        msg_box.exec()
+        return msg_box.clickedButton() == yes_button
 
     def reset_machine_defaults(self, log: bool = True) -> None:
         self._set_machine_controls_from_params(open5x_freddi_hong_machine())
@@ -751,13 +1277,17 @@ class MainWindow(QMainWindow):
         self.show_mesh_checkbox.setChecked(True)
 
         auto_center = self.slice_controls.get("auto_center_model")
-        if isinstance(auto_center, QCheckBox):
+        if isinstance(auto_center, BooleanChoice):
             auto_center.setChecked(True)
 
+        self._load_cached_face_selection()
+        self._refresh_component_controls(reset_defaults=True)
         self._invalidate_slice_result()
-        self._render_current_preview()
         self._refresh_model_info()
         self._refresh_transform_info()
+        self._refresh_face_selection_summary()
+        self._render_current_preview()
+        self._sync_face_brush_state()
         self._append_log(log_message)
 
     def open_model(self) -> None:
@@ -823,7 +1353,7 @@ class MainWindow(QMainWindow):
 
     def _disable_auto_center_for_manual_placement(self) -> None:
         auto_center = self.slice_controls.get("auto_center_model")
-        if isinstance(auto_center, QCheckBox) and auto_center.isChecked():
+        if isinstance(auto_center, BooleanChoice) and auto_center.isChecked():
             auto_center.setChecked(False)
             self._append_log(self.t("auto_center_disabled_log"))
 
@@ -832,6 +1362,7 @@ class MainWindow(QMainWindow):
         self._render_current_preview()
         self._refresh_model_info()
         self._refresh_transform_info()
+        self._refresh_component_controls(reset_defaults=False)
         self._append_log(log_message)
 
     def run_slice(self) -> None:
@@ -842,7 +1373,33 @@ class MainWindow(QMainWindow):
         try:
             slice_params = self._collect_slice_parameters()
             machine_params = self._current_machine_parameters()
-            self.slice_result = self.slicer.slice(self.mesh, slice_params)
+            slice_mode = self._current_slice_mode()
+
+            if slice_mode == "hybrid" and self.selected_conformal_face_indices and not self.selected_substrate_face_indices:
+                should_switch_planar = self._ask_yes_no(
+                    self.t("missing_substrate_title"),
+                    self.t("missing_substrate_message"),
+                    default_yes=False,
+                )
+                if should_switch_planar:
+                    combo_index = self.slice_mode_combo.findData("planar")
+                    if combo_index >= 0:
+                        self.slice_mode_combo.setCurrentIndex(combo_index)
+                    slice_mode = "planar"
+                    self._append_log(self.t("switched_planar_log"))
+
+            if slice_mode == "hybrid" and self._maybe_autoclose_substrate_selection():
+                combo_index = self.slice_mode_combo.findData("planar")
+                if combo_index >= 0:
+                    self.slice_mode_combo.setCurrentIndex(combo_index)
+                slice_mode = "planar"
+                self._append_log(self.t("switched_planar_log"))
+
+            if slice_mode == "planar":
+                self.slice_result = slice_planar_model(self.mesh, slice_params)
+            else:
+                slice_selection = self._collect_slice_selection()
+                self.slice_result = self.slicer.slice(self.mesh, slice_params, selection=slice_selection)
             self.generated_gcode, self.export_warnings = generate_gcode(
                 self.slice_result,
                 slice_params,
@@ -883,17 +1440,32 @@ class MainWindow(QMainWindow):
         if not file_path:
             return
 
-        Path(file_path).write_text(self.generated_gcode, encoding="utf-8")
+        output_path = Path(file_path)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(self.generated_gcode, encoding="utf-8")
         self._append_log(self.t("saved_gcode_log", path=file_path))
 
     def _collect_slice_parameters(self) -> SliceParameters:
         values = {}
         for key, control in self.slice_controls.items():
-            if isinstance(control, QCheckBox):
+            if isinstance(control, BooleanChoice):
                 values[key] = control.isChecked()
             elif isinstance(control, (QDoubleSpinBox, QSpinBox)):
                 values[key] = control.value()
         return SliceParameters(**values)
+
+    def _collect_slice_selection(self) -> SliceSelection | None:
+        has_face_selection = bool(self.selected_substrate_face_indices or self.selected_conformal_face_indices)
+        substrate_index = self.selected_substrate_component_index
+        conformal_indices = tuple(sorted(self.selected_conformal_component_indices))
+        if not has_face_selection and len(self.component_meshes) <= 1:
+            return None
+        return SliceSelection(
+            substrate_component_index=substrate_index,
+            conformal_component_indices=conformal_indices,
+            substrate_face_indices=tuple(sorted(self.selected_substrate_face_indices)),
+            conformal_face_indices=tuple(sorted(self.selected_conformal_face_indices)),
+        )
 
     def _current_machine_parameters(self) -> MachineParameters:
         values = {}
@@ -912,6 +1484,124 @@ class MainWindow(QMainWindow):
         except Exception:
             machine = open5x_freddi_hong_machine()
         self.machine_profile_info.setText(machine_profile_summary(machine, language=self.language))
+
+    def _refresh_component_controls(self, reset_defaults: bool) -> None:
+        if self.mesh is None:
+            self.component_meshes = []
+            self.selected_substrate_component_index = None
+            self.selected_conformal_component_indices.clear()
+            self._sync_component_widgets()
+            return
+
+        self.component_meshes = split_mesh_into_components(self.mesh)
+        if len(self.component_meshes) <= 1:
+            self.selected_substrate_component_index = None
+            self.selected_conformal_component_indices.clear()
+            self._sync_component_widgets()
+            return
+
+        if reset_defaults or self.selected_substrate_component_index is None or self.selected_substrate_component_index >= len(self.component_meshes):
+            self.selected_substrate_component_index = self._default_substrate_component_index()
+        valid_indices = {index for index in self.selected_conformal_component_indices if index < len(self.component_meshes)}
+        if reset_defaults or not valid_indices:
+            valid_indices = {index for index in range(len(self.component_meshes)) if index != self.selected_substrate_component_index}
+        self.selected_conformal_component_indices = valid_indices
+        self._sync_component_widgets()
+
+    def _default_substrate_component_index(self) -> int:
+        if not self.component_meshes or self.mesh is None:
+            return 0
+        overall_center_xy = self.mesh.bounds_center[:2]
+        best_index = 0
+        best_score = (float("inf"), float("inf"), float("inf"))
+        for index, component in enumerate(self.component_meshes):
+            radial_distance = float(np.linalg.norm(component.bounds_center[:2] - overall_center_xy))
+            score = (radial_distance, -float(component.size[2]), -float(len(component.faces)))
+            if score < best_score:
+                best_index = index
+                best_score = score
+        return best_index
+
+    def _sync_component_widgets(self) -> None:
+        self.substrate_component_combo.blockSignals(True)
+        self.substrate_component_combo.clear()
+        for checkbox in self.conformal_component_checks.values():
+            self.conformal_components_layout.removeWidget(checkbox)
+            checkbox.deleteLater()
+        self.conformal_component_checks.clear()
+
+        has_components = len(self.component_meshes) > 1
+        self.component_selection_title.setVisible(has_components)
+        self.component_summary.setVisible(has_components)
+        self.substrate_component_label.setVisible(has_components)
+        self.substrate_component_combo.setVisible(has_components)
+        self.conformal_components_label.setVisible(has_components)
+        self.conformal_components_host.setVisible(has_components)
+        if not has_components:
+            self.component_summary.setText("")
+            self.substrate_component_combo.blockSignals(False)
+            return
+
+        summary_lines = []
+        for index, component in enumerate(self.component_meshes):
+            center = component.bounds_center
+            size = component.size
+            radial = float(np.linalg.norm(center[:2] - self.mesh.bounds_center[:2])) if self.mesh is not None else 0.0
+            label = self.t(
+                "component_item",
+                index=index,
+                faces=len(component.faces),
+                center_x=center[0],
+                center_y=center[1],
+                center_z=center[2],
+                size_x=size[0],
+                size_y=size[1],
+                size_z=size[2],
+                radial=radial,
+            )
+            summary_lines.append(label)
+            self.substrate_component_combo.addItem(label, index)
+
+            checkbox = QCheckBox(label)
+            checkbox.setChecked(index in self.selected_conformal_component_indices)
+            checkbox.toggled.connect(lambda checked, component_index=index: self._on_conformal_component_toggled(component_index, checked))
+            self.conformal_components_layout.addWidget(checkbox)
+            self.conformal_component_checks[index] = checkbox
+
+        self.component_summary.setText("\n".join(summary_lines))
+        if self.selected_substrate_component_index is not None:
+            combo_index = self.substrate_component_combo.findData(self.selected_substrate_component_index)
+            if combo_index >= 0:
+                self.substrate_component_combo.setCurrentIndex(combo_index)
+        self.substrate_component_combo.blockSignals(False)
+        self._apply_component_checkbox_rules()
+
+    def _apply_component_checkbox_rules(self) -> None:
+        for index, checkbox in self.conformal_component_checks.items():
+            is_substrate = index == self.selected_substrate_component_index
+            checkbox.blockSignals(True)
+            if is_substrate:
+                checkbox.setChecked(False)
+                checkbox.setEnabled(False)
+            else:
+                checkbox.setEnabled(True)
+                checkbox.setChecked(index in self.selected_conformal_component_indices)
+            checkbox.blockSignals(False)
+
+    def _on_component_selection_changed(self) -> None:
+        current_index = self.substrate_component_combo.currentData()
+        self.selected_substrate_component_index = int(current_index) if current_index is not None else None
+        if self.selected_substrate_component_index in self.selected_conformal_component_indices:
+            self.selected_conformal_component_indices.discard(self.selected_substrate_component_index)
+        self._apply_component_checkbox_rules()
+        self._invalidate_slice_result()
+
+    def _on_conformal_component_toggled(self, component_index: int, checked: bool) -> None:
+        if checked:
+            self.selected_conformal_component_indices.add(component_index)
+        else:
+            self.selected_conformal_component_indices.discard(component_index)
+        self._invalidate_slice_result()
 
     def _refresh_model_info(self) -> None:
         if self.mesh is None:
@@ -985,20 +1675,33 @@ class MainWindow(QMainWindow):
         self._set_path_filter_enabled(False)
         self.stats_info.setText(self.t("slice_result_placeholder"))
 
-    def _render_current_preview(self) -> None:
+    def _render_current_preview(self, preserve_camera: bool = False) -> None:
         if self.mesh is None:
             self.preview.clear()
             return
 
+        selection_faces = self._selection_faces_for_preview()
         if self.slice_result is None:
-            self.preview.plot_mesh(self.mesh.vertices, self.mesh.faces)
+            self.preview.plot_mesh(
+                self.mesh.vertices,
+                self.mesh.faces,
+                selection_faces=selection_faces,
+                preserve_camera=preserve_camera,
+            )
         else:
             toolpaths = [(path.points, path.kind) for path in self.slice_result.toolpaths]
             self.preview.plot_toolpaths(
                 self.slice_result.mesh.vertices,
                 self.slice_result.mesh.faces,
                 toolpaths,
+                selection_faces=selection_faces,
+                preserve_camera=preserve_camera,
             )
+        self.preview.set_face_picking(
+            self.enable_face_picking_checkbox.isChecked(),
+            self._on_preview_faces_picked if self.enable_face_picking_checkbox.isChecked() else None,
+        )
+        self._sync_face_brush_state()
         self._update_preview_visibility()
 
     def _append_log(self, text: str) -> None:
@@ -1020,27 +1723,3 @@ def launch() -> None:
     window = MainWindow()
     window.show()
     qt_exec(app)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
