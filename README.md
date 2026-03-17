@@ -57,8 +57,8 @@ Current version / 当前版本: `V0.2.0`
 > **当前对齐基准 / Current structural reference**
 >
 > - 正确的五轴结构参考文件是 [EXAMPLE.gcode](/F:/【项目和任务】/5AxisCutting/model-example/EXAMPLE.gcode)
-> - 当前五轴导出逻辑优先对齐它的“平面主体 + 少量长五轴尾段”结构
-> - 旧的其他样例 `gcode` 不能再当作主基准
+> - 当前文档、验证和五轴导出逻辑统一对齐它的“平面主体 + 少量长五轴尾段”结构
+> - `V0.2.0` 的说明、验证和示例均以这份参考文件为准
 
 ## 1. Project Summary | 项目简介
 
@@ -112,25 +112,25 @@ The current version already provides:
 
 ### 中文
 
-`V0.2.0` 的重点不是单纯修界面，而是纠正了五轴切片和导出的结构基准：
+相对于 `V0.1.0`，`V0.2.0` 的更新集中在五轴混合切片、Open5x 纯 Python 接入和使用流程完善三个方向：
 
-1. 五轴结构基准改为 [EXAMPLE.gcode](/F:/【项目和任务】/5AxisCutting/model-example/EXAMPLE.gcode)
-2. 五轴链路重新回到“平面主体 + 五轴尾段”的混合架构
-3. Open5x 纯 Python 姿态求解继续保留，Rhino 相关代码不作为运行时依赖
-4. 曲面参数图增加 seam 重排逻辑，避免把缝开在叶片上
-5. surface-finish 路径拼接阈值放宽，减少碎片化五轴段
-6. GUI 选面、刷子模式、预览遮挡和路径显示做了多轮修正
+1. `V0.1.0` 以通用混合切片框架为主，`V0.2.0` 增加了 [EXAMPLE.gcode](/F:/【项目和任务】/5AxisCutting/model-example/EXAMPLE.gcode) 这一结构参考，用来统一五轴尾段的组织方式。
+2. `V0.1.0` 已支持基础混合切片，`V0.2.0` 进一步把五轴导出收敛到“平面主体 + 少量长五轴尾段”的输出结构。
+3. `V0.1.0` 侧重本地姿态求解，`V0.2.0` 接入了 `Open5x-main/Grasshopper_Definition/open5x` 的纯 Python 逻辑，并继续保持运行时不依赖 Rhino。
+4. `V0.2.0` 在圆柱参数图中增加了 seam 重排逻辑，并优化了 surface-finish 路径拼接阈值，用于减少五轴碎片段。
+5. `V0.2.0` 扩展了 GUI 的显式选面、刷子模式、预览遮挡和路径显示能力，便于手动指定基底和共形区域。
+6. `V0.2.0` 也重写了 README，把安装、启动、切片和导出步骤前置，方便直接上手。
 
 ### English
 
-`V0.2.0` is primarily about correcting the structural reference for five-axis slicing and export:
+Compared with `V0.1.0`, `V0.2.0` focuses on hybrid five-axis slicing, Open5x pure-Python integration, and a clearer usage workflow:
 
-1. The main structural reference is now [EXAMPLE.gcode](/F:/【项目和任务】/5AxisCutting/model-example/EXAMPLE.gcode)
-2. The pipeline is back to a hybrid structure: planar body first, five-axis tail after that
-3. Open5x pure-Python solving remains in use, while Rhino-related code stays out of the runtime path
-4. Cylindrical surface-map seam relocation was added so the seam does not cut through blade regions
-5. The surface-finish stitching threshold was relaxed to reduce fragmented five-axis segments
-6. The GUI selection workflow, brush mode, preview occlusion, and path rendering were refined over multiple fixes
+1. `V0.1.0` introduced the general hybrid slicing framework, while `V0.2.0` adds [EXAMPLE.gcode](/F:/【项目和任务】/5AxisCutting/model-example/EXAMPLE.gcode) as the main structural reference for the five-axis tail.
+2. `V0.1.0` already supported baseline hybrid slicing, and `V0.2.0` further organizes the exported result as a planar body followed by a small number of long five-axis tail segments.
+3. `V0.1.0` mainly used the local orientation path, and `V0.2.0` integrates the pure-Python logic from `Open5x-main/Grasshopper_Definition/open5x` while keeping Rhino out of the runtime path.
+4. `V0.2.0` adds cylindrical surface-map seam relocation and adjusts the surface-finish stitching threshold to reduce fragmented five-axis segments.
+5. `V0.2.0` expands the GUI workflow with explicit face selection, brush mode, preview occlusion, and better path visualization.
+6. `V0.2.0` also rewrites the README so installation, launch, slicing, and export steps appear at the top of the document.
 
 ## 3. Installation | 安装与环境
 
