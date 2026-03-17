@@ -20,22 +20,22 @@ Current version / 当前版本: `V0.2.0`
 >
 > **最常用使用步骤 / Recommended usage steps**
 >
-> 1. 激活环境：`conda activate 5AxisSlicer`
-> 2. 启动界面：`python main.py`
-> 3. 点击“打开模型”，导入 `STL` 或 `STEP`
-> 4. 在左侧选择切片模式：
->    - `五轴混合切片`：平面主体 + 五轴曲面尾段
->    - `三轴平面切片`：只输出平面切片
-> 5. 如果要手动指定基底和共形区域，展开“面片 / 组件选择”，开启预览区选面，再用点击或刷子模式选面
-> 6. 点击“开始切片”，先检查右侧预览和下方日志
-> 7. 点击“导出 G-code”，把结果保存到你自己的输出路径
+> 1. 激活环境 / Activate the environment: `conda activate 5AxisSlicer`
+> 2. 启动界面 / Launch the GUI: `python main.py`
+> 3. 点击“打开模型”导入 `STL` 或 `STEP` / Click `Open Model` and import an `STL` or `STEP`
+> 4. 在左侧选择切片模式 / Choose the slicing mode on the left:
+>    - `五轴混合切片`：平面主体 + 五轴曲面尾段 / planar body + five-axis surface tail
+>    - `三轴平面切片`：只输出平面切片 / planar-only output
+> 5. 如果要手动指定基底和共形区域，展开“面片 / 组件选择”，开启预览区选面，再用点击或刷子模式选面 / If you want to define substrate and conformal regions manually, expand `Face / Component Selection`, enable preview picking, then use clicking or brush mode
+> 6. 点击“开始切片”并检查右侧预览和下方日志 / Click `Start Slice` and inspect the preview and log panel
+> 7. 点击“导出 G-code”并保存结果 / Click `Export G-code` and save the result
 >
 > **推荐 GUI 流程 / Recommended GUI workflow**
 >
-> - 混合切片推荐先看预览，再决定是否手动选面
-> - 手动选面时，先选“基底面片”，再选“共形面片”
-> - 面片结果会缓存到 `outputs/selection_cache.json`
-> - 预览里刷子模式只是选面工具，不会改变切片参数
+> - 混合切片推荐先看预览，再决定是否手动选面 / For hybrid slicing, inspect the preview first and then decide whether explicit face selection is needed
+> - 手动选面时，先选“基底面片”，再选“共形面片” / When selecting faces manually, pick substrate faces first and conformal faces second
+> - 面片结果会缓存到 `outputs/selection_cache.json` / Face selections are cached in `outputs/selection_cache.json`
+> - 预览里刷子模式只是选面工具，不会改变切片参数 / Brush mode is only a face-selection tool and does not change slicing parameters
 >
 > **推荐命令 / Recommended commands**
 >
@@ -56,9 +56,9 @@ Current version / 当前版本: `V0.2.0`
 >
 > **当前对齐基准 / Current structural reference**
 >
-> - 正确的五轴结构参考文件是 [EXAMPLE.gcode](/F:/【项目和任务】/5AxisCutting/model-example/EXAMPLE.gcode)
-> - 当前文档、验证和五轴导出逻辑统一对齐它的“平面主体 + 少量长五轴尾段”结构
-> - `V0.2.0` 的说明、验证和示例均以这份参考文件为准
+> - 正确的五轴结构参考文件是 [EXAMPLE.gcode](/F:/【项目和任务】/5AxisCutting/model-example/EXAMPLE.gcode) / The main five-axis reference file is [EXAMPLE.gcode](/F:/【项目和任务】/5AxisCutting/model-example/EXAMPLE.gcode)
+> - 当前文档、验证和五轴导出逻辑统一对齐它的“平面主体 + 少量长五轴尾段”结构 / The current documentation, validation flow, and five-axis export logic all follow its “planar body + a small number of long five-axis tail segments” structure
+> - `V0.2.0` 的说明、验证和示例均以这份参考文件为准 / The `V0.2.0` notes, validation steps, and examples all use this file as the reference
 
 ## 1. Project Summary | 项目简介
 
@@ -114,20 +114,20 @@ The current version already provides:
 
 相对于 `V0.1.0`，`V0.2.0` 的更新集中在五轴混合切片、Open5x 纯 Python 接入和使用流程完善三个方向：
 
-1. `V0.1.0` 以通用混合切片框架为主，`V0.2.0` 增加了 [EXAMPLE.gcode](/F:/【项目和任务】/5AxisCutting/model-example/EXAMPLE.gcode) 这一结构参考，用来统一五轴尾段的组织方式。
+1. `V0.1.0` 以通用混合切片框架为主，`V0.2.0` 增加了Open5x里面用于演示的 [EXAMPLE.gcode](/F:/【项目和任务】/5AxisCutting/model-example/EXAMPLE.gcode) 这一结构参考，用来统一五轴尾段的组织方式。
 2. `V0.1.0` 已支持基础混合切片，`V0.2.0` 进一步把五轴导出收敛到“平面主体 + 少量长五轴尾段”的输出结构。
-3. `V0.1.0` 侧重本地姿态求解，`V0.2.0` 接入了 `Open5x-main/Grasshopper_Definition/open5x` 的纯 Python 逻辑，并继续保持运行时不依赖 Rhino。
-4. `V0.2.0` 在圆柱参数图中增加了 seam 重排逻辑，并优化了 surface-finish 路径拼接阈值，用于减少五轴碎片段。
-5. `V0.2.0` 扩展了 GUI 的显式选面、刷子模式、预览遮挡和路径显示能力，便于手动指定基底和共形区域。
-6. `V0.2.0` 也重写了 README，把安装、启动、切片和导出步骤前置，方便直接上手。
+3. `V0.1.0` 侧重本地姿态求解，`V0.2.0` 接入了 `Open5x-main/Grasshopper_Definition/open5x` 的纯 Python 逻辑（由Codex转译），并继续保持运行时不依赖 Rhino。
+4. 在圆柱参数图中增加了 seam 重排逻辑，并优化了 surface-finish 路径拼接阈值，用于减少五轴碎片段。
+5.  扩展了 GUI 的显式选面、刷子模式、预览遮挡和路径显示能力，便于手动指定基底和共形区域。
+6.  重写了 README，把安装、启动、切片和导出步骤前置，方便直接上手。
 
 ### English
 
 Compared with `V0.1.0`, `V0.2.0` focuses on hybrid five-axis slicing, Open5x pure-Python integration, and a clearer usage workflow:
 
-1. `V0.1.0` introduced the general hybrid slicing framework, while `V0.2.0` adds [EXAMPLE.gcode](/F:/【项目和任务】/5AxisCutting/model-example/EXAMPLE.gcode) as the main structural reference for the five-axis tail.
+1. `V0.1.0` introduced the general hybrid slicing framework, and `V0.2.0` adds the Open5x demo file [EXAMPLE.gcode](/F:/【项目和任务】/5AxisCutting/model-example/EXAMPLE.gcode) as the main structural reference for the five-axis tail.
 2. `V0.1.0` already supported baseline hybrid slicing, and `V0.2.0` further organizes the exported result as a planar body followed by a small number of long five-axis tail segments.
-3. `V0.1.0` mainly used the local orientation path, and `V0.2.0` integrates the pure-Python logic from `Open5x-main/Grasshopper_Definition/open5x` while keeping Rhino out of the runtime path.
+3. `V0.1.0` mainly used the local orientation path, and `V0.2.0` integrates the pure-Python logic from `Open5x-main/Grasshopper_Definition/open5x`, translated and adapted by Codex, while keeping Rhino out of the runtime path.
 4. `V0.2.0` adds cylindrical surface-map seam relocation and adjusts the surface-finish stitching threshold to reduce fragmented five-axis segments.
 5. `V0.2.0` expands the GUI workflow with explicit face selection, brush mode, preview occlusion, and better path visualization.
 6. `V0.2.0` also rewrites the README so installation, launch, slicing, and export steps appear at the top of the document.
@@ -142,7 +142,22 @@ Compared with `V0.1.0`, `V0.2.0` focuses on hybrid five-axis slicing, Open5x pur
 conda activate 5AxisSlicer
 ```
 
-主要依赖见 [requirements.txt](/F:/【项目和任务】/5AxisCutting/requirements.txt)：
+主要依赖见 [requirements.txt](/requirements.txt)：
+
+- `numpy`
+- `scipy`
+- `scikit-image`
+- `matplotlib`
+- `PyQt6`
+- `gmsh`
+
+Recommended environment:
+
+```bash
+conda activate 5AxisSlicer
+```
+
+The main dependencies are listed in [requirements.txt](/requirements.txt):
 
 - `numpy`
 - `scipy`
@@ -155,12 +170,21 @@ conda activate 5AxisSlicer
 
 当前工程会优先复用：
 
-- [open5x_adapter.py](/F:/【项目和任务】/5AxisCutting/five_axis_slicer/open5x_adapter.py)
-- [pipeline.py](/F:/【项目和任务】/5AxisCutting/Open5x-main/Open5x-main/Grasshopper_Definition/open5x/pipeline.py)
-- [kinematics.py](/F:/【项目和任务】/5AxisCutting/Open5x-main/Open5x-main/Grasshopper_Definition/open5x/kinematics.py)
-- [gcode.py](/F:/【项目和任务】/5AxisCutting/Open5x-main/Open5x-main/Grasshopper_Definition/open5x/gcode.py)
+- [open5x_adapter.py](/five_axis_slicer/open5x_adapter.py)
+- [pipeline.py](/Open5x-main/Open5x-main/Grasshopper_Definition/open5x/pipeline.py)
+- [kinematics.py](/Open5x-main/Open5x-main/Grasshopper_Definition/open5x/kinematics.py)
+- [gcode.py](/Open5x-main/Open5x-main/Grasshopper_Definition/open5x/gcode.py)
 
 运行时只使用这些纯 Python 逻辑。`rhino_io.py` 与 `.gh` 文件不参与当前软件的运行流程。
+
+The current project primarily reuses:
+
+- [open5x_adapter.py](/five_axis_slicer/open5x_adapter.py)
+- [pipeline.py](/Open5x-main/Open5x-main/Grasshopper_Definition/open5x/pipeline.py)
+- [kinematics.py](/Open5x-main/Open5x-main/Grasshopper_Definition/open5x/kinematics.py)
+- [gcode.py](/Open5x-main/Open5x-main/Grasshopper_Definition/open5x/gcode.py)
+
+Only these pure-Python modules are used at runtime. `rhino_io.py` and `.gh` files are kept as references and are not part of the runtime path.
 
 ## 4. How To Use | 使用方法
 
@@ -216,6 +240,14 @@ Recommended GUI steps:
 - 按住左键拖动可以连续选取
 - 结果缓存到 `outputs/selection_cache.json`
 
+Brush mode is used for continuous face selection and is not a slicing parameter.
+
+- `是`: brush mode on
+- `否`: brush mode off
+- multiple brush sizes are available
+- hold the left mouse button and drag to paint-select faces
+- the result is cached in `outputs/selection_cache.json`
+
 ### 4.3 Headless Workflow | 无界面命令行流程
 
 混合切片：
@@ -239,21 +271,42 @@ conda activate 5AxisSlicer
 python main.py model-example/Propeller-D.STEP --headless --substrate-component 0 --conformal-components 1,2 -o outputs/verification/propeller_manual_v020.gcode
 ```
 
+Hybrid slicing:
+
+```bash
+conda activate 5AxisSlicer
+python main.py model-example/Propeller-D.STEP --headless -o outputs/verification/propeller_v020.gcode
+```
+
+Planar slicing:
+
+```bash
+conda activate 5AxisSlicer
+python main.py model-example/Propeller-D.STEP --headless --slice-mode planar -o outputs/verification/propeller_planar_v020.gcode
+```
+
+Headless export with explicit component selection:
+
+```bash
+conda activate 5AxisSlicer
+python main.py model-example/Propeller-D.STEP --headless --substrate-component 0 --conformal-components 1,2 -o outputs/verification/propeller_manual_v020.gcode
+```
+
 ### 4.4 Common CLI Options | 常用命令行参数
 
-- `--slice-mode hybrid|planar`：混合五轴或纯三轴
-- `--layer-height`：共形阶段层高
-- `--planar-layer-height`：平面阶段层高
-- `--grid-step`：曲面采样步长
-- `--core-top-z`：手动指定核心顶高
-- `--core-detection-percentile`：核心检测百分位
-- `--disable-planar-core`：关闭平面核心阶段
-- `--substrate-component`：手动指定基底组件
-- `--conformal-components`：手动指定共形组件列表
-- `--u-sign` / `--v-sign`：机床旋转轴方向
-- `--u-zero` / `--v-zero`：机床零位偏移
-- `--min-u` / `--max-u` / `--min-v` / `--max-v`：机床角度限位
-- `--phase-lift`：切换到五轴阶段时的安全抬升
+- `--slice-mode hybrid|planar`：混合五轴或纯三轴 / hybrid five-axis or planar-only slicing
+- `--layer-height`：共形阶段层高 / conformal-layer height
+- `--planar-layer-height`：平面阶段层高 / planar-layer height
+- `--grid-step`：曲面采样步长 / surface sampling step
+- `--core-top-z`：手动指定核心顶高 / manual core top height
+- `--core-detection-percentile`：核心检测百分位 / rotary-core detection percentile
+- `--disable-planar-core`：关闭平面核心阶段 / disable the planar core phase
+- `--substrate-component`：手动指定基底组件 / manually set the substrate component
+- `--conformal-components`：手动指定共形组件列表 / manually set the conformal component list
+- `--u-sign` / `--v-sign`：机床旋转轴方向 / rotary-axis sign
+- `--u-zero` / `--v-zero`：机床零位偏移 / rotary zero offset
+- `--min-u` / `--max-u` / `--min-v` / `--max-v`：机床角度限位 / rotary-axis limits
+- `--phase-lift`：切换到五轴阶段时的安全抬升 / safe lift during the switch to the five-axis phase
 
 ## 5. Reference Files | 参考文件
 
@@ -263,12 +316,10 @@ python main.py model-example/Propeller-D.STEP --headless --substrate-component 0
 
 - [EXAMPLE.gcode](/F:/【项目和任务】/5AxisCutting/model-example/EXAMPLE.gcode)
   - 当前主要结构参考
-  - 用来校准“五轴尾段应该是什么组织形式”
+  - 用来校准五轴尾段应该是什么组织形式
 - `model-example/` 下的几何模型
   - 用来跑自动模式或显式选面模式
-- `outputs/verification/`
-  - 本地验证输出目录
-  - 不作为发布物
+
 
 ### English
 
@@ -279,9 +330,7 @@ Use the example files like this:
   - used to calibrate how the five-axis tail should be organized
 - geometry files under `model-example/`
   - used for auto-mode and explicit face-selection tests
-- `outputs/verification/`
-  - local verification output directory
-  - not intended as a release artifact
+
 
 ## 6. Repository Layout | 仓库结构
 
@@ -369,6 +418,11 @@ flowchart LR
 - 检测回转核心
 - 生成三轴 perimeter / infill
 
+- load the mesh
+- center the model automatically
+- detect the rotary core
+- generate planar perimeter and infill paths
+
 ### 8.2 Hybrid Five-Axis Phase | 混合五轴阶段
 
 - 构建圆柱参数图
@@ -378,6 +432,13 @@ flowchart LR
 - 通过 Open5x 纯 Python 求解 `A/B` 或 `U/V` 姿态
 - 将五轴段附加到平面段之后导出
 
+- build the cylindrical surface map
+- remove the region that already belongs to the rotary core
+- move the seam to the emptiest angular region
+- generate surface-finish toolpaths
+- solve `A/B` or `U/V` orientations with the Open5x pure-Python logic
+- append the five-axis segments after the planar phase during export
+
 ### 8.3 Explicit Face Selection | 显式选面模式
 
 如果用户在 GUI 中选了面片，则流程会优先尊重选面结果：
@@ -386,6 +447,13 @@ flowchart LR
 - 选中的“共形面片”进入五轴阶段
 - 预览保留相机视角
 - 选面缓存可恢复
+
+If the user selects faces in the GUI, the workflow gives priority to the explicit face-selection result:
+
+- selected substrate faces go into the planar phase
+- selected conformal faces go into the five-axis phase
+- the preview keeps the current camera view
+- the face-selection cache can be restored
 
 ## 9. Main Files | 主要文件说明
 
@@ -453,6 +521,17 @@ Recommended selection strategy:
    - 切片结果是否能导出
 5. 对照 [EXAMPLE.gcode](/F:/【项目和任务】/5AxisCutting/model-example/EXAMPLE.gcode) 检查五轴块结构
 
+Recommended checks:
+
+1. `python main.py`
+2. `python main.py model-example/Propeller-D.STEP --headless -o outputs/verification/propeller_v020.gcode`
+3. `python main.py model-example/Propeller-D.STEP --headless --slice-mode planar -o outputs/verification/propeller_planar_v020.gcode`
+4. Open the GUI and check manually:
+   - whether the preview renders correctly
+   - whether face highlights behave correctly
+   - whether slicing results can be exported
+5. Compare the five-axis block structure against [EXAMPLE.gcode](/F:/【项目和任务】/5AxisCutting/model-example/EXAMPLE.gcode)
+
 ## 12. Git And Release Policy | Git 与发布规则
 
 ### 中文
@@ -493,6 +572,11 @@ To keep the repository clean:
 - 某些模型仍可能出现轻微的 `U` / `V` 限位告警
 - `STEP` 导入依赖 `gmsh`
 - OpenGL 预览效果与显卡、驱动、Qt 版本有关
+
+- `Propeller-D` has already converged to a small number of long five-axis blocks, but it has not fully converged to the three-block structure of the reference example yet
+- some models may still produce minor `U` / `V` limit warnings
+- `STEP` import depends on `gmsh`
+- the OpenGL preview depends on the GPU, driver, and Qt environment
 
 ## 14. References | 参考资料
 
