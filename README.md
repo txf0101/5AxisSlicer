@@ -1,8 +1,8 @@
 # 5AxisSlicer
 
-`5AxisSlicer` 是一个面向五轴回转床 3D 打印研究的 Python 切片软件。它围绕“平面主体先打印，五轴曲面路径后打印”的混合流程展开，支持 GUI 交互、显式选面、Open5x 纯 Python 姿态求解接入，以及混合 `G-code` 导出。
+`5AxisSlicer` 是一个面向五轴回转床 3D 打印研究的 Python 切片软件。它围绕“平面主体先打印，五轴曲面路径后打印”的混合流程展开，支持 GUI 交互、显式选面、Open5x 纯 Python 姿态求解接入，以及混合 `G-code` 导出。视频教程地址：https://www.bilibili.com/video/BV1ubwvzMEzD
 
-`5AxisSlicer` is a Python slicing application for research on five-axis rotary-bed 3D printing. It focuses on a hybrid workflow: print the planar body first, then append five-axis surface paths. The project provides a GUI, explicit face selection, Open5x pure-Python orientation solving, and hybrid `G-code` export.
+`5AxisSlicer` is a Python slicing application for research on five-axis rotary-bed 3D printing. It focuses on a hybrid workflow: print the planar body first, then append five-axis surface paths. The project provides a GUI, explicit face selection, Open5x pure-Python orientation solving, and hybrid `G-code` export. Video tutorial link: https://www.bilibili.com/video/BV1ubwvzMEzD
 
 Current version / 当前版本: `V0.2.0`
 
