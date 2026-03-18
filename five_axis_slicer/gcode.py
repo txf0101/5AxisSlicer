@@ -585,9 +585,7 @@ def build_travel_sequence(
     lift_height_mm: float,
 ) -> list[str]:
     """Build a safe travel sequence between two poses.
-
     在两个位姿之间拼出一段安全的空移序列。
-
     The sequence can include retract, lift, rapid travel, and re-prime steps.
     这段序列会按情况插入回抽、抬升、快速移动和补料。
     """
@@ -632,7 +630,6 @@ def _lifted_pose(base_pose: Pose, height_mm: float, machine_params: MachineParam
 
 def extrusion_for_segment(segment_length_mm: float, toolpath: Toolpath, slice_params: SliceParameters) -> float:
     """Estimate the filament needed for one printed segment.
-
     估算一段打印路径需要多少丝材挤出。
     """
 
@@ -667,7 +664,6 @@ def compensated_feed(
 
 def format_move(pose: Pose, machine_params: MachineParameters, feed_mm_min: float, e_delta: float) -> str:
     """Format one coordinated printing move.
-
     格式化一条联动打印指令。
     """
 
@@ -681,7 +677,6 @@ def format_move(pose: Pose, machine_params: MachineParameters, feed_mm_min: floa
 
 def format_rapid(pose: Pose, machine_params: MachineParameters, feed_mm_min: float) -> str:
     """Format one coordinated rapid move without extrusion.
-
     格式化一条不带挤出的联动快速移动指令。
     """
 
