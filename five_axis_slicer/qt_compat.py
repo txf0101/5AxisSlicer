@@ -1,5 +1,8 @@
 ﻿from __future__ import annotations
 
+# Support both PyQt6 and PyQt5 from one place so the rest of the GUI does not
+# have to care about the binding in use.
+# 把 PyQt6 和 PyQt5 的兼容处理收在这里，GUI 其他地方就不用到处判断版本了。
 try:
     from PyQt6.QtCore import Qt
     from PyQt6.QtWidgets import (
@@ -30,6 +33,11 @@ try:
     PLAIN_TEXT_NO_WRAP = QPlainTextEdit.LineWrapMode.NoWrap
 
     def qt_exec(app: QApplication) -> int:
+        """Run the Qt event loop with the API shape of the active binding.
+
+        按当前 Qt 绑定的接口形式启动事件循环。
+        """
+
         return app.exec()
 
 except ImportError:
@@ -62,6 +70,11 @@ except ImportError:
     PLAIN_TEXT_NO_WRAP = QPlainTextEdit.NoWrap
 
     def qt_exec(app: QApplication) -> int:
+        """Run the Qt event loop with the API shape of the active binding.
+
+        按当前 Qt 绑定的接口形式启动事件循环。
+        """
+
         return app.exec_()
 
 __all__ = [

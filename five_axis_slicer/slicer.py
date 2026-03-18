@@ -26,11 +26,33 @@ from .planar import (
     slice_planar_mesh,
 )
 
+# This file is the conductor. It decides what belongs to the planar phase and
+# what belongs to the conformal phase, then hands the actual geometry work to
+# the helper modules.
+# 这里管的是总流程。先判断哪些几何进平面阶段，哪些进共形阶段，再把具体
+# 几何计算分给下面的辅助模块。
+
 
 class ConformalSlicer:
-    """Main entry point for hybrid slicing."""
+    """Main entry point for the hybrid slicing pipeline.
+
+    混合切片流程的主入口。
+
+    Automatic core detection, component selection, and face-painted selection
+    all meet here.
+    自动核心识别、组件选择和面片刷选最后都会收口到这里。
+    """
 
     def slice(self, mesh: MeshModel, params: SliceParameters, selection: SliceSelection | None = None) -> SliceResult:
+        """Slice a mesh into planar and conformal toolpaths.
+
+        将网格切分为平面阶段和共形阶段路径。
+
+        It first settles the phase split, then generates the matching paths
+        and metadata.
+        先把阶段划分定下来，再生成对应的路径和元数据。
+        """
+
         working_mesh = mesh.centered_for_build() if params.auto_center_model else mesh
         warnings: list[str] = []
         toolpaths: list[Toolpath] = []
@@ -44,6 +66,11 @@ class ConformalSlicer:
         substrate_mesh: MeshModel | None = None
         conformal_mesh: MeshModel | None = None
 
+        # Phase splitting comes first. Explicit face picks win over component
+        # heuristics, and component heuristics win over full automatic
+        # detection.
+        # 阶段划分是第一步。显式的面片选择优先级最高，其次是组件选择，最后
+        # 才是全自动检测。
         if face_selection_active and selection is not None:
             face_count = len(working_mesh.faces)
             substrate_set = {int(index) for index in selection.substrate_face_indices if 0 <= int(index) < face_count}
@@ -87,6 +114,10 @@ class ConformalSlicer:
             "transition_height_mm": 0.0,
         }
 
+        # The planar/base phase depends on how the user split the model: picked
+        # faces, picked components, or a fully automatic rotary core.
+        # 平面和基底阶段怎么走，取决于模型是按面片拆、按组件拆，还是完全
+        # 自动恢复回转核心。
         if face_selection_active:
             if params.enable_planar_core and substrate_mesh is not None:
                 planar_toolpaths, planar_meta, planar_warnings = slice_planar_mesh(substrate_mesh, params)
@@ -117,6 +148,9 @@ class ConformalSlicer:
         }
         conformal_perimeters: list[Toolpath] = []
         conformal_infill: list[Toolpath] = []
+        # Once the planar phase is settled, pick the conformal strategy that
+        # matches the current selection mode.
+        # 平面阶段定下来以后，再按当前选择模式去决定共形阶段走哪条策略。
         if use_open5x_surface_finish:
             reference_center_xy = substrate_mesh.bounds_center[:2] if substrate_mesh is not None else working_mesh.bounds_center[:2]
             radius_source_mesh = substrate_mesh if substrate_mesh is not None else conformal_mesh
@@ -268,7 +302,10 @@ class ConformalSlicer:
 
 
 def slice_planar_model(mesh: MeshModel, params: SliceParameters) -> SliceResult:
-    """Slice the whole mesh with ordinary horizontal layers for 3-axis mode."""
+    """Slice the whole mesh with ordinary horizontal layers for 3-axis mode.
+
+    在纯三轴模式下，用普通水平分层对整个模型进行切片。
+    """
 
     working_mesh = mesh.centered_for_build() if params.auto_center_model else mesh
     toolpaths, planar_meta, warnings = slice_planar_mesh(working_mesh, params)
@@ -307,6 +344,11 @@ def slice_planar_model(mesh: MeshModel, params: SliceParameters) -> SliceResult:
 
 
 def _empty_surface_map() -> SurfaceMap:
+    """Return a tiny placeholder ``SurfaceMap`` for empty states.
+
+    返回一个给空状态占位的小 ``SurfaceMap``。
+    """
+
     x_coords = np.array([0.0], dtype=float)
     y_coords = np.array([0.0], dtype=float)
     return SurfaceMap(
@@ -363,7 +405,14 @@ def build_surface_map(
     x_coords: np.ndarray | None = None,
     y_coords: np.ndarray | None = None,
 ) -> SurfaceMap:
-    """Sample the printable top surface on a regular XY grid."""
+    """Sample the printable top surface on a regular XY grid.
+
+    在规则 XY 网格上采样可打印顶部表面。
+
+    This turns the triangle mesh into a height/normal raster that is easy to
+    query later.
+    它会把三角网格整理成后面容易查询的高度和法向栅格。
+    """
 
     bounds_min = mesh.bounds_min
     bounds_max = mesh.bounds_max
@@ -386,6 +435,10 @@ def build_surface_map(
     tri_vertices = mesh.face_vertices
     tri_vertex_normals = mesh.vertex_normals[mesh.faces]
 
+    # Rasterize each upward-facing triangle into the XY grid and keep the
+    # highest valid hit in every sample cell.
+    # 把每个朝上的三角面片栅格化到 XY 网格里，每个采样格只保留最高的
+    # 有效命中。
     for tri, normals in zip(tri_vertices, tri_vertex_normals):
         projected = tri[:, :2]
         normal_hint = np.cross(tri[1] - tri[0], tri[2] - tri[0])
@@ -450,11 +503,14 @@ def build_conformal_base_surface_maps(
     conformal_mesh: MeshModel,
     params: SliceParameters,
 ) -> tuple[SurfaceMap, SurfaceMap, np.ndarray]:
-    """Build a base-referenced conformal volume estimate from substrate and shell meshes.
+    """Estimate conformal thickness on top of a substrate surface.
 
-    The intent is to approximate Open5X's "slice the conformal body with the
-    substrate surface function": first sample the substrate top surface, then
-    measure how much conformal material exists above each substrate sample.
+    从基底网格和共形网格估计“基底上方还有多厚的共形材料”。
+
+    The idea is close to Open5x: sample the substrate first, then measure how
+    much conformal material sits above each sample.
+    思路和 Open5x 比较接近，先把基底表面采出来，再去量每个采样点上方还有
+    多少共形材料。
     """
 
     center_xy = substrate_mesh.bounds_center[:2]
@@ -514,6 +570,11 @@ def build_offset_surface_map(
     offset_mm: float,
     min_remaining_mm: float,
 ) -> SurfaceMap:
+    """Offset a surface map along its normals and respect remaining thickness.
+
+    沿法向偏移表面图，同时顾及剩余材料厚度约束。
+    """
+
     point_map = (
         base_surface_map.point_map.copy()
         if base_surface_map.point_map is not None
@@ -546,6 +607,11 @@ def generate_open5x_surface_finish_paths(
     *,
     reference_radius_mm: float | None = None,
 ) -> tuple[SurfaceMap, list[Toolpath], dict[str, float | int | str]]:
+    """Generate single-pass Open5x-style surface-finish paths from a mesh.
+
+    从网格直接生成 Open5x 风格的单道曲面精加工路径。
+    """
+
     surface_finish_params = replace(
         params,
         grid_step_mm=min(params.grid_step_mm, 0.1),
@@ -595,6 +661,15 @@ def generate_open5x_surface_finish_paths_from_surface_map(
     center_xy: np.ndarray,
     params: SliceParameters,
 ) -> tuple[list[Toolpath], dict[str, float | int | str]]:
+    """Generate Open5x-style surface-finish paths from an existing surface map.
+
+    基于现成的表面图生成 Open5x 风格的曲面精加工路径。
+
+    Use this when the surface map is already available and only the final
+    single-pass path extraction is left.
+    当项目已经拿到表面图，只剩最后那一步单道路径提取时，就走这个变体。
+    """
+
     if surface_map.point_map is None or not np.any(surface_map.valid_mask):
         return [], {"layer_count": 0, "strategy": "open5x-surface-finish", "path_count": 0, "component_count": 0}
     surface_map = _roll_surface_map_columns(surface_map, -_surface_finish_seam_shift(surface_map))
@@ -882,6 +957,11 @@ def generate_conformal_paths_from_base_surface(
     thickness_map: np.ndarray,
     params: SliceParameters,
 ) -> tuple[list[Toolpath], list[Toolpath], dict[str, float | int | str]]:
+    """Create layered conformal perimeters and infill from a thickness field.
+
+    根据厚度场生成分层的共形外轮廓和填充路径。
+    """
+
     if not np.any(base_surface_map.valid_mask):
         return [], [], {"layer_count": 0, "strategy": "substrate-offset"}
 
@@ -943,7 +1023,14 @@ def build_cylindrical_surface_map(
     y_coords: np.ndarray | None = None,
     reference_radius_mm: float | None = None,
 ) -> SurfaceMap:
-    """Sample a selected conformal geometry around the substrate in cylindrical coordinates."""
+    """Sample conformal geometry around the substrate in cylindrical form.
+
+    以柱坐标的方式围绕基底中心采样共形几何。
+
+    The X axis of the map is arc length around the rotary centre, and the Y
+    axis is Z height.
+    结果里的 X 轴表示绕回转中心展开后的弧长，Y 轴表示 Z 高度。
+    """
 
     z_step = max(params.grid_step_mm, 0.1)
     reference_radius = reference_radius_mm or _cylindrical_reference_radius(mesh, center_xy, params)
@@ -972,6 +1059,9 @@ def build_cylindrical_surface_map(
     z_map = np.full((len(z_coords), len(x_coords)), np.nan, dtype=float)
     valid_mask = np.zeros((len(z_coords), len(x_coords)), dtype=bool)
 
+    # Walk upward one Z slice at a time and, for each angular sample, search
+    # the nearest hit along the radial direction.
+    # 这里按 Z 切片一层层往上扫，并在每个角度采样位置沿径向找最近命中点。
     extractor = HorizontalSectionExtractor(mesh)
     for row_index, z_value in enumerate(z_coords):
         segments = extractor.segments_with_normals(float(z_value))
@@ -1014,7 +1104,10 @@ def exclude_rotary_core_from_surface(
     core_profile: RotaryCoreProfile,
     margin_mm: float,
 ) -> SurfaceMap:
-    """Remove the already-printed rotary core from the conformal surface mask."""
+    """Remove the already-printed rotary core from the conformal surface mask.
+
+    从共形表面掩码里移除平面阶段已经打完的回转核心区域。
+    """
 
     if core_profile.is_empty or not np.any(surface_map.valid_mask):
         return surface_map
@@ -1033,8 +1126,10 @@ def exclude_rotary_core_from_surface(
         xx, yy = np.meshgrid(surface_map.x_coords, surface_map.y_coords)
         radial_grid = np.sqrt((xx - core_profile.center_xy[0]) ** 2 + (yy - core_profile.center_xy[1]) ** 2)
         radial_distance = radial_grid[valid_rows, valid_cols]
-    # Everything inside the detected rotary core is treated as already printed by the
-    # planar phase, so the conformal phase must stay outside this radius.
+    # Everything inside the detected rotary core is treated as already printed
+    # by the planar phase, so conformal paths stay outside this radius.
+    # 落在回转核心半径以内的区域都视为平面阶段已经完成，共形路径要绕开
+    # 这部分范围。
     keep = radial_distance > (core_radii + margin_mm)
     filtered_valid[valid_rows, valid_cols] = keep
 
@@ -1060,6 +1155,11 @@ def generate_conformal_perimeter_paths(
     params: SliceParameters,
     core_profile: RotaryCoreProfile | None = None,
 ) -> list[Toolpath]:
+    """Extract conformal perimeter paths from one or more surface patches.
+
+    从一个或多个表面图分区中提取共形外轮廓路径。
+    """
+
     paths: list[Toolpath] = []
     if not np.any(surface_map.valid_mask):
         return paths
@@ -1107,6 +1207,11 @@ def generate_conformal_perimeter_paths(
 
 
 def generate_conformal_infill_paths(surface_map: SurfaceMap, params: SliceParameters) -> list[Toolpath]:
+    """Generate conformal infill by scanning the surface map in rotated strips.
+
+    通过沿旋转方向扫描表面图来生成共形填充路径。
+    """
+
     if not np.any(surface_map.valid_mask):
         return []
 
@@ -1172,7 +1277,15 @@ def split_surface_map_by_height(
     z_jump_threshold_mm: float,
     min_component_size: int,
 ) -> list[SurfaceMap]:
-    """Split the projected top surface into height-continuous patches."""
+    """Split the projected top surface into height-continuous patches.
+
+    按高度连续性把投影后的顶部表面拆成多个区域块。
+
+    This avoids joining blades or shells that happen to overlap in XY but are
+    actually far apart in height.
+    这样可以避免把只是在 XY 投影上挨得近、实际高度差很大的叶片或壳体
+    错误拼到一起。
+    """
 
     if not np.any(surface_map.valid_mask):
         return []
@@ -1253,7 +1366,10 @@ def sample_valid(surface_map: SurfaceMap, x_values: np.ndarray, y_values: np.nda
 
 
 def sample_surface(surface_map: SurfaceMap, xy_points: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    """Compatibility helper that returns the first contiguous valid segment."""
+    """Compatibility helper that returns the first contiguous valid segment.
+
+    兼容性辅助函数，返回第一段连续有效的表面采样结果。
+    """
 
     segments = sample_surface_segments(surface_map, xy_points, closed=False)
     if not segments:
@@ -1267,6 +1383,11 @@ def sample_surface_segments(
     xy_points: np.ndarray,
     closed: bool,
 ) -> list[tuple[np.ndarray, np.ndarray, bool]]:
+    """Sample a polyline against the surface map and split it at invalid gaps.
+
+    将一条折线投射到表面图上，并在无效区间处自动断开。
+    """
+
     xy_points = np.asarray(xy_points, dtype=float)
     if len(xy_points) == 0:
         return []
@@ -1278,8 +1399,10 @@ def sample_surface_segments(
     current_points: list[np.ndarray] = []
     current_normals: list[np.ndarray] = []
     had_gap = False
-    # A large 3D jump usually means the XY contour crossed onto another face patch.
-    # We split there so the exporter can insert travel instead of false extrusion.
+    # A large 3D jump usually means the XY contour stepped onto another face
+    # patch. Split there so the exporter inserts a travel move.
+    # 三维跳变一旦太大，通常就说明 XY 轮廓跨到了另一块面片区域。这时直接
+    # 断开，让导出器插入空移就行。
     jump_threshold_mm = max(surface_map.step_mm * 2.4, 2.0)
 
     for x_value, y_value in xy_points:
@@ -1400,6 +1523,15 @@ def _nearest_valid_surface_sample(
 
 
 def sample_surface_point(surface_map: SurfaceMap, x_value: float, y_value: float) -> tuple[np.ndarray | None, np.ndarray]:
+    """Bilinearly sample one XY position from a surface map.
+
+    对表面图中的单个 XY 位置做双线性采样。
+
+    When the query falls outside the main bilinear cell, the helper first
+    tries a nearby valid fallback sample.
+    查询点落在主双线性单元之外时，会先试着找附近还能用的采样点。
+    """
+
     fx = (x_value - surface_map.x_coords[0]) / surface_map.step_mm
     fy = (y_value - surface_map.y_coords[0]) / surface_map.step_mm
     col = int(math.floor(fx))

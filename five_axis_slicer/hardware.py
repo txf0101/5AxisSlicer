@@ -8,6 +8,11 @@ from __future__ import annotations
 
 from .core import MachineParameters
 
+# The default Open5x-style machine profile lives here so the GUI, CLI, and
+# exporter all start from the same calibration baseline.
+# 默认的 Open5x 风格机床预设集中放在这里，GUI、CLI、导出器就能共用同一套
+# 标定基线。
+
 OPEN5X_PROFILE_NAME = "Open5x / Prusa i3 MK3s (Freddi Hong style)"
 OPEN5X_PROFILE_DESCRIPTION = (
     "Converted Cartesian printer with a rotary bed. U is the bed tilt around the machine Y axis. "
@@ -20,12 +25,17 @@ OPEN5X_PROFILE_DESCRIPTION_ZH = (
 
 
 def open5x_freddi_hong_machine() -> MachineParameters:
-    """Return the default hardware preset used by this project.
+    """Return the default machine preset used by this project.
 
-    Numeric offsets are kept conservative because every converted printer needs a
-    final physical measurement on the real machine. The important part here is
-    that the axis meaning, sign, homes and template structure already match the
-    Open5x workflow.
+    返回本项目默认使用的机床预设。
+
+    The numeric offsets are still conservative because every converted printer
+    needs a last round of measurements on the real machine. What matters here
+    is that the axis meaning, signs, homes, and template structure already
+    match the Open5x workflow.
+    数值偏移先收得比较保守，因为每台改装机器最后都得回到实机再量一遍。
+    更重要的是，轴的含义、方向、回零角和模板结构已经先对齐了 Open5x 的
+    工作流。
     """
 
     return MachineParameters(
@@ -57,7 +67,10 @@ def open5x_freddi_hong_machine() -> MachineParameters:
 
 
 def machine_profile_summary(machine: MachineParameters, language: str = "en") -> str:
-    """Human-readable summary shown in the GUI and README examples."""
+    """Build the short machine summary shown in the GUI and README examples.
+
+    生成 GUI 和 README 示例里那段简短的机床摘要。
+    """
 
     if language == "zh":
         return (

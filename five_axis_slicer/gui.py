@@ -39,6 +39,11 @@ from .qt_compat import (
 from .slicer import ConformalSlicer, slice_planar_model
 from .viewer import PATH_STYLE_MAP, PreviewCanvas
 
+# The desktop workflow comes together here. Load a model, tweak settings,
+# preview the result, slice, then export.
+# 桌面端的完整流程都在这里串起来了，载入模型、改参数、看预览、切片、导出。
+# 真正算几何的重活还在别的模块里，这里主要负责把交互和流程接起来。
+
 
 class _NoWheelMixin:
     """Ignore mouse-wheel changes so scrolling the panel does not edit values."""
@@ -69,7 +74,10 @@ def _set_button_selected(button: QPushButton, selected: bool) -> None:
 
 
 class BooleanChoice(QWidget):
-    """Compact yes/no selector used for boolean process settings."""
+    """Compact yes/no control for boolean process settings.
+
+    给布尔型工艺参数用的紧凑“是/否”控件。
+    """
 
     def __init__(self, checked: bool = False) -> None:
         super().__init__()
@@ -124,6 +132,11 @@ class BooleanChoice(QWidget):
 
 
 class CollapsibleSection(QWidget):
+    """Collapsible container that keeps the long settings panel easier to scan.
+
+    把长设置面板收拾得更清楚一点的折叠容器。
+    """
+
     def __init__(self, title: str = "", expanded: bool = True) -> None:
         super().__init__()
         self._title = title
@@ -162,6 +175,15 @@ class CollapsibleSection(QWidget):
 
 
 class MainWindow(QMainWindow):
+    """Main desktop window for the five-axis slicer.
+
+    五轴切片应用的主窗口。
+
+    It keeps track of user input, preview state, and calls into slicing and
+    export when the user asks for them.
+    这里负责接住用户输入、维护预览状态，并在需要时调用切片和导出流程。
+    """
+
     def __init__(self) -> None:
         super().__init__()
         self.language = "zh"
@@ -1719,6 +1741,11 @@ def _axis_index(axis: str) -> int:
 
 
 def launch() -> None:
+    """Create the Qt application, show the main window, and start the loop.
+
+    创建 Qt 应用，显示主窗口，然后进入事件循环。
+    """
+
     app = QApplication.instance() or QApplication([])
     window = MainWindow()
     window.show()

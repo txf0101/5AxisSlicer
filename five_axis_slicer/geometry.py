@@ -13,6 +13,10 @@ import numpy as np
 
 from .core import MeshModel
 
+# File loading and mesh utilities live here.
+# 这里放模型导入和最基础的网格工具，目标是把外部数据整理成 slicer 可以直接
+# 用的 MeshModel。
+
 _GMSH_DLL_HANDLES: list[object] = []
 _GMSH_DLL_DIRS: set[str] = set()
 
@@ -164,6 +168,14 @@ def _find_gmsh_library(directories: list[Path]) -> str | None:
 
 
 def load_mesh(path: str | Path) -> MeshModel:
+    """Load an STL or STEP file and normalize it into ``MeshModel``.
+
+    加载 STL 或 STEP 文件，并整理成统一的 ``MeshModel``。
+
+    Callers do not need to care which backend was used.
+    调用方不用关心底层走的是哪种导入后端。
+    """
+
     path = Path(path)
     suffix = path.suffix.lower()
     if suffix == ".stl":
@@ -175,6 +187,15 @@ def load_mesh(path: str | Path) -> MeshModel:
 
 
 def load_stl(path: str | Path) -> MeshModel:
+    """Read an STL file and rebuild triangle connectivity.
+
+    读取 STL 文件并重建三角网格连接关系。
+
+    Both binary and ASCII STL show up in real datasets, so this loader handles
+    both.
+    实际数据里二进制和 ASCII STL 都会碰到，这里两种都支持。
+    """
+
     path = Path(path)
     data = path.read_bytes()
     if _is_binary_stl(data):
@@ -186,6 +207,16 @@ def load_stl(path: str | Path) -> MeshModel:
 
 
 def load_step(path: str | Path) -> MeshModel:
+    """Import a STEP model through gmsh and triangulate it.
+
+    通过 gmsh 导入 STEP 模型并完成三角化。
+
+    STEP import depends on extra runtime libraries, so keeping it separate
+    makes environment failures easier to diagnose.
+    STEP 导入依赖额外运行时，把它单独拆开后，环境问题和几何问题会更容易
+    分开看。
+    """
+
     path = Path(path)
 
     try:
@@ -203,6 +234,9 @@ def load_step(path: str | Path) -> MeshModel:
             f"Original error: {gmsh_error}"
         )
 
+    # gmsh gives the most reliable route here from B-rep CAD geometry to
+    # triangles.
+    # 对这条链路来说，gmsh 是把 B-rep CAD 几何转成三角网格最稳的一步。
     gmsh.initialize()
     try:
         gmsh.option.setNumber("General.Terminal", 0)
@@ -235,6 +269,15 @@ def load_step(path: str | Path) -> MeshModel:
 
 
 def generate_demo_dome_mesh(radius_mm: float = 25.0, height_mm: float = 15.0, resolution: int = 48) -> MeshModel:
+    """Generate the built-in dome mesh used by demos and smoke tests.
+
+    生成内置的穹顶示例网格，给演示和冒烟测试使用。
+
+    The shape is simple, but it still exercises the main conformal-surface
+    code path because the curvature is smooth and the footprint is clean.
+    形状虽然简单，但曲率连续、底面规整，足够把共形表面的主流程跑一遍。
+    """
+
     theta = np.linspace(0.0, 2.0 * math.pi, resolution, endpoint=False)
     radial = np.linspace(0.0, radius_mm, resolution // 2 + 1)
     rr, tt = np.meshgrid(radial, theta, indexing="xy")
@@ -277,6 +320,15 @@ def generate_demo_dome_mesh(radius_mm: float = 25.0, height_mm: float = 15.0, re
 
 
 def resample_polyline(points: np.ndarray, spacing_mm: float, closed: bool = False) -> np.ndarray:
+    """Redistribute samples along a polyline at roughly uniform spacing.
+
+    按近似均匀的间距重新分布折线采样点。
+
+    This keeps downstream toolpaths numerically steadier when the source
+    contour is too sparse or uneven.
+    原始轮廓太稀或者间距忽大忽小时，这一步能让后面的路径更稳。
+    """
+
     points = np.asarray(points, dtype=float)
     if len(points) < 2:
         return points.copy()
@@ -312,7 +364,14 @@ def resample_polyline(points: np.ndarray, spacing_mm: float, closed: bool = Fals
 
 
 def face_adjacency(mesh: MeshModel) -> list[set[int]]:
-    """Return edge-based neighbouring faces for every triangle in the mesh."""
+    """Return edge-based face neighbours for every triangle.
+
+    返回每个三角面片按共享边得到的邻面关系。
+
+    The same adjacency graph is reused by component splitting, boundary
+    detection, and the GUI selection tools.
+    组件拆分、边界提取和 GUI 选面工具都会复用这张邻接图。
+    """
 
     if len(mesh.faces) == 0:
         return []
@@ -341,7 +400,14 @@ def face_centers(mesh: MeshModel) -> np.ndarray:
 
 
 def selection_boundary_edges(mesh: MeshModel, face_indices: np.ndarray | list[int] | set[int]) -> list[tuple[int, int]]:
-    """Return mesh edges that sit on the boundary of the selected face set."""
+    """Return the mesh edges that lie on the boundary of a face selection.
+
+    返回当前面片选区边界上的网格边。
+
+    An edge is on the boundary when only one of its adjacent faces is
+    selected.
+    一条边两侧的面里只有一个被选中时，它就算选区边界。
+    """
 
     selected = {int(index) for index in np.asarray(tuple(face_indices), dtype=np.int32).tolist()}
     if not selected:
@@ -372,12 +438,15 @@ def grow_face_selection(
     max_added_faces: int = 48,
     normal_dot_threshold: float = 0.35,
 ) -> tuple[np.ndarray, np.ndarray]:
-    """Expand a face selection conservatively across nearby, similarly oriented faces.
+    """Grow a face selection conservatively across nearby faces.
 
-    This is intentionally conservative: it only grows into adjacent faces whose
-    normals and radial location remain close to the already selected region.
-    The GUI uses this as a "small gap closing" helper rather than a full repair
-    algorithm for arbitrary meshes.
+    把当前面片选择保守地扩到附近的面上。
+
+    It only moves into neighbours whose normals and radial position still look
+    close to the current region. The GUI uses it as a small gap-closing
+    helper.
+    它只会往法向和径向位置都还接近当前选区的邻面上扩。GUI 里拿它做的是
+    “小缺口补全”，不是通用网格修复。
     """
 
     selected = {int(index) for index in np.asarray(tuple(face_indices), dtype=np.int32).tolist()}
@@ -441,7 +510,13 @@ def grow_face_selection(
 
 
 def split_mesh_into_components(mesh: MeshModel) -> list[MeshModel]:
-    """Split a mesh into face-connected sub-meshes."""
+    """Split a mesh into face-connected submeshes.
+
+    按面片连通性把网格拆成多个子网格。
+
+    This is the starting point for the substrate/conformal selection flow.
+    这是基底和共形选择流程最基础的一步。
+    """
 
     if len(mesh.faces) == 0:
         return []
@@ -505,6 +580,15 @@ def combine_meshes(meshes: list[MeshModel], name: str | None = None) -> MeshMode
 
 
 def _import_gmsh():
+    """Import gmsh after setting up the runtime search paths.
+
+    先把运行时搜索路径准备好，再导入 gmsh。
+
+    That keeps the STEP import code focused on meshing. DLL lookup details
+    stay here.
+    这样 STEP 导入那边就能专心做网格化，DLL 查找的麻烦事都留在这里。
+    """
+
     runtime_dirs = _gmsh_runtime_dirs()
     _prepend_search_paths("PATH", runtime_dirs)
     if sys.platform == "darwin":
@@ -581,6 +665,15 @@ def _read_ascii_stl(data: bytes) -> np.ndarray:
 
 
 def _mesh_from_triangles(name: str, triangles: np.ndarray, source_path: str | None) -> MeshModel:
+    """Collapse raw triangle soup into a deduplicated indexed mesh.
+
+    把原始三角片集合压成去重后的索引网格。
+
+    A light quantization step keeps tiny floating-point noise from inventing
+    extra vertices.
+    先做一层轻量量化，可以避免微小浮点误差平白拆出额外顶点。
+    """
+
     flat = triangles.reshape(-1, 3)
     scale = 1_000_000.0
     quantized = np.round(flat * scale).astype(np.int64)
@@ -597,6 +690,14 @@ def _mesh_from_vertices_faces(
     faces: np.ndarray,
     source_path: str | None,
 ) -> MeshModel:
+    """Build ``MeshModel`` from vertices and faces, then derive normals.
+
+    根据顶点和面索引构建 ``MeshModel``，再顺手算出法向。
+
+    All importers and mesh-edit helpers come back to this constructor.
+    所有导入和网格编辑辅助函数最后都会回到这个构造入口。
+    """
+
     vertices = np.asarray(vertices, dtype=float)
     faces = np.asarray(faces, dtype=np.int32)
     tri_vertices = vertices[faces]

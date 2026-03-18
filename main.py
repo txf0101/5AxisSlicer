@@ -1,4 +1,14 @@
-﻿from __future__ import annotations
+﻿"""Command-line entry points for the five-axis slicer.
+
+五轴切片器的命令行入口。
+
+The CLI maps arguments onto the same slicer, machine, and export objects used
+by the GUI, so batch runs and interactive runs still share one pipeline.
+命令行参数最后会落到和 GUI 共用的切片、机床、导出对象上，批处理和交互式
+运行走的是同一条流程。
+"""
+
+from __future__ import annotations
 
 import argparse
 from pathlib import Path
@@ -11,6 +21,11 @@ from five_axis_slicer.slicer import ConformalSlicer, slice_planar_model
 
 
 def build_parser() -> argparse.ArgumentParser:
+    """Build the CLI parser used by ``main()``.
+
+    构建 ``main()`` 使用的命令行解析器。
+    """
+
     parser = argparse.ArgumentParser(description="Five-axis hybrid slicer for Open5x-style rotary-bed printers")
     parser.add_argument("input", nargs="?", help="Path to an STL or STEP file")
     parser.add_argument("-o", "--output", help="Path to the exported G-code file")
@@ -38,6 +53,11 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def apply_slice_overrides(params: SliceParameters, args: argparse.Namespace) -> SliceParameters:
+    """Apply CLI overrides onto slicer process settings.
+
+    把命令行里的切片参数覆盖到当前工艺设置上。
+    """
+
     if args.layer_height is not None:
         params.layer_height_mm = args.layer_height
     if args.planar_layer_height is not None:
@@ -55,6 +75,11 @@ def apply_slice_overrides(params: SliceParameters, args: argparse.Namespace) -> 
 
 
 def apply_machine_overrides(machine: MachineParameters, args: argparse.Namespace) -> MachineParameters:
+    """Apply CLI calibration overrides onto a machine profile.
+
+    把命令行里的机床标定覆盖到当前机床预设上。
+    """
+
     if args.u_sign is not None:
         machine.u_axis_sign = args.u_sign
     if args.v_sign is not None:
@@ -77,6 +102,11 @@ def apply_machine_overrides(machine: MachineParameters, args: argparse.Namespace
 
 
 def build_slice_selection(args: argparse.Namespace) -> SliceSelection | None:
+    """Translate component-selection CLI flags into a selection object.
+
+    把组件选择相关的命令行参数整理成 ``SliceSelection``。
+    """
+
     substrate_index = args.substrate_component
     conformal_indices: tuple[int, ...] = ()
     if args.conformal_components:
@@ -93,6 +123,11 @@ def build_slice_selection(args: argparse.Namespace) -> SliceSelection | None:
 
 
 def main() -> None:
+    """Run the CLI workflow or launch the GUI when no headless input is given.
+
+    在给出命令行输入时运行 CLI 流程，否则启动 GUI。
+    """
+
     parser = build_parser()
     args = parser.parse_args()
 
@@ -117,6 +152,7 @@ def main() -> None:
     else:
         slicer = ConformalSlicer()
         slice_result = slicer.slice(mesh, slice_params, selection=slice_selection)
+
     gcode, warnings = generate_gcode(slice_result, slice_params, machine_params)
 
     if warnings:

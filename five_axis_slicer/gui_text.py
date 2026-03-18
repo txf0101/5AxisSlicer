@@ -1,5 +1,8 @@
 ﻿from __future__ import annotations
 
+# Keep UI strings separate from widget logic so language switching stays
+# simple.
+# 界面文案和控件逻辑分开放，切换语言时就不用把大段字符串塞进事件处理里。
 UI_TEXT = {
     "zh": {
         "app_title": "五轴混合切片软件 ({api})",

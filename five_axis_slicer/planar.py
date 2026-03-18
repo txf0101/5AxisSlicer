@@ -18,10 +18,24 @@ from .geometry import resample_polyline
 
 _EDGE_PAIRS = ((0, 1), (1, 2), (2, 0))
 
+# The planar phase prints the rotary core or chosen substrate first while U/V
+# stay fixed.
+# 平面阶段会在 U/V 固定的情况下先打回转核心或选中的基底。
+# Its job is to build a stable three-axis body for the later five-axis phase.
+# 它先做出一个稳定的三轴实体，后面的五轴路径再接着往上走。
+
 
 @dataclass(slots=True)
 class RotaryCoreProfile:
-    """Axisymmetric core estimated around the printer rotary axis."""
+    """Axisymmetric core estimated around the printer's rotary axis.
+
+    围绕打印机回转轴估出来的轴对称核心轮廓。
+
+    It stores one radius per Z layer so the planar phase can build a printable
+    cylindrical core before switching to conformal paths.
+    它按 Z 层保存半径，平面阶段就能先长出一个可打印的近圆柱核心，再切到
+    共形路径。
+    """
 
     center_xy: np.ndarray
     z_levels_mm: np.ndarray
@@ -52,7 +66,14 @@ class RotaryCoreProfile:
 
 
 class HorizontalSectionExtractor:
-    """Extract XY contour loops from a triangle mesh at a chosen Z height."""
+    """Extract XY contour loops from a mesh at a chosen Z height.
+
+    在指定 Z 高度上从网格里提取 XY 截面轮廓。
+
+    Core detection and planar slicing both rely on this repeated horizontal
+    intersection step.
+    核心识别和平面切片都会反复用到这一步水平求交。
+    """
 
     def __init__(self, mesh: MeshModel, tolerance_mm: float = 1e-4) -> None:
         self.triangles = mesh.face_vertices
@@ -84,12 +105,15 @@ class HorizontalSectionExtractor:
 
 
 def estimate_rotary_core_profile(mesh: MeshModel, params: SliceParameters) -> RotaryCoreProfile:
-    """Estimate the central rotary body that should be printed with fixed U/V.
+    """Estimate the central rotary body that should be printed first.
 
-    The profile is defined by a centre in XY and a radius for every planar layer
-    height. Radii are derived from the largest radial region that stays inside
-    the mesh around the centre, which approximates the axisymmetric “hub /
-    substrate / core column” used in Open5X-style workflows.
+    估计出那根应该先在 U/V 固定状态下打印的中心回转实体。
+
+    The profile is described by one XY centre and one radius per planar layer.
+    The radius comes from the largest radial region that stays inside the
+    model.
+    这个轮廓由一个 XY 中心和每层一个半径组成。半径取自围绕中心、又始终
+    落在模型内部的最大径向区域。
     """
 
     layer_height = max(params.resolved_planar_layer_height_mm(), 1e-3)
@@ -98,8 +122,10 @@ def estimate_rotary_core_profile(mesh: MeshModel, params: SliceParameters) -> Ro
         z_levels = np.array([mesh.bounds_min[2] + layer_height], dtype=float)
 
     extractor = HorizontalSectionExtractor(mesh)
-    # We keep every horizontal slice so the later centre/radius estimation can ask:
-    # "which XY point stays inside the model most consistently across height?"
+    # Keep every horizontal slice so the later centre/radius estimate can ask
+    # which XY location stays inside the model most reliably.
+    # 把所有水平截面都留下来，后面的中心和半径估计才好回答一个简单问题。
+    # 哪个 XY 位置在各层里最稳定地待在实体内部？
     loops_by_z: list[list[np.ndarray]] = []
     for z_mm in z_levels:
         loops = extractor.loops(float(z_mm))
@@ -115,7 +141,9 @@ def estimate_rotary_core_profile(mesh: MeshModel, params: SliceParameters) -> Ro
         ],
         dtype=float,
     )
-    # Smooth small slice-to-slice noise so the core becomes a printable rotary body.
+    # Smooth slice-to-slice noise so the recovered core prints more like a real
+    # rotary body.
+    # 把层与层之间的小噪声抹平一点，恢复出来的核心才更像能直接打印的回转体。
     radii = _smooth_positive_radii(radii)
     radii = _keep_primary_core_run(radii, min_radius_mm=max(params.nozzle_diameter_mm * 1.15, 0.6))
 
@@ -126,7 +154,10 @@ def estimate_rotary_core_profile(mesh: MeshModel, params: SliceParameters) -> Ro
 
 
 def estimate_rotary_core_center(mesh: MeshModel, loops_by_z: list[list[np.ndarray]], params: SliceParameters) -> np.ndarray:
-    """Find the XY point most persistently occupied across horizontal slices."""
+    """Find the XY point that stays inside the solid most consistently.
+
+    在所有水平截面里找出那个最稳定落在实体内部的 XY 点。
+    """
 
     bbox_center = mesh.bounds_center[:2]
     focus_half_size = np.maximum(mesh.size[:2] * 0.35, 6.0)
@@ -153,7 +184,9 @@ def estimate_rotary_core_center(mesh: MeshModel, loops_by_z: list[list[np.ndarra
         row_index, col_index = np.unravel_index(int(np.argmax(occupancy)), occupancy.shape)
         return np.array([xs[col_index], ys[row_index]], dtype=float)
 
-    # Average the best occupied cells instead of trusting a single pixel-like winner.
+    # Average the best occupied cells. A single lucky grid hit is too noisy to
+    # trust on its own.
+    # 不去赌某一个碰巧最优的网格点，而是把最好那一片区域取平均，结果会稳一些。
     sampled_points = np.column_stack([xs[coords[:, 1]], ys[coords[:, 0]]])
     return sampled_points.mean(axis=0)
 
@@ -163,7 +196,10 @@ def slice_planar_core(
     core_profile: RotaryCoreProfile,
     params: SliceParameters,
 ) -> tuple[list[Toolpath], dict[str, float | int], list[str]]:
-    """Slice the recovered rotary core with ordinary horizontal layers."""
+    """Slice the recovered rotary core with ordinary horizontal layers.
+
+    使用普通水平分层方式切出识别得到的回转核心。
+    """
 
     warnings: list[str] = []
     toolpaths: list[Toolpath] = []
@@ -200,7 +236,10 @@ def slice_planar_mesh(
     mesh: MeshModel,
     params: SliceParameters,
 ) -> tuple[list[Toolpath], dict[str, float | int], list[str]]:
-    """Slice a selected substrate mesh directly from its true section contours."""
+    """Slice a selected substrate mesh directly from its true section contours.
+
+    直接依据真实截面轮廓对选中的基底网格进行平面切片。
+    """
 
     warnings: list[str] = []
     toolpaths: list[Toolpath] = []
@@ -236,6 +275,11 @@ def slice_planar_mesh(
 
 
 def build_rotary_core_perimeter_loops(center_xy: np.ndarray, radius_mm: float, params: SliceParameters) -> list[np.ndarray]:
+    """Generate concentric perimeter loops for one planar core layer.
+
+    为单层回转核心生成同心外轮廓环。
+    """
+
     loops: list[np.ndarray] = []
     line_spacing = params.resolved_planar_line_spacing_mm()
     perimeter_count = max(params.planar_perimeters, 1)
@@ -248,6 +292,11 @@ def build_rotary_core_perimeter_loops(center_xy: np.ndarray, radius_mm: float, p
 
 
 def build_circle_loop(center_xy: np.ndarray, radius_mm: float, segment_length_mm: float) -> np.ndarray:
+    """Approximate a circle with a polyline at the requested segment length.
+
+    按给定离散段长用折线近似一个圆。
+    """
+
     circumference = max(2.0 * math.pi * radius_mm, segment_length_mm * 6.0)
     point_count = max(int(math.ceil(circumference / max(segment_length_mm, 1e-3))), 24)
     angles = np.linspace(0.0, 2.0 * math.pi, point_count, endpoint=False)
@@ -265,6 +314,11 @@ def generate_planar_perimeter_paths(
     layer_index: int,
     params: SliceParameters,
 ) -> list[Toolpath]:
+    """Turn planar contour loops into perimeter toolpaths.
+
+    把平面轮廓环转换为外轮廓路径。
+    """
+
     paths: list[Toolpath] = []
     for loop_index, loop in enumerate(sorted(loops, key=lambda item: -abs(polygon_area(item))), start=1):
         sampled_xy = resample_polyline(loop, params.segment_length_mm, closed=True)
@@ -291,6 +345,11 @@ def generate_planar_infill_paths(
     layer_index: int,
     params: SliceParameters,
 ) -> list[Toolpath]:
+    """Generate simple scanline infill inside planar loops.
+
+    在平面轮廓内部生成简单的扫描线填充路径。
+    """
+
     line_spacing = params.resolved_planar_line_spacing_mm()
     if line_spacing <= 1e-6:
         return []
@@ -337,6 +396,11 @@ def generate_planar_infill_paths(
 
 
 def scanline_segments(uv_loops: list[np.ndarray], v_value: float, tolerance: float = 1e-6) -> list[tuple[float, float]]:
+    """Intersect rotated loops with one horizontal scanline in UV space.
+
+    在 UV 空间里求旋转后轮廓与一条水平扫描线的交段。
+    """
+
     intersections: list[float] = []
     for loop in uv_loops:
         start = loop

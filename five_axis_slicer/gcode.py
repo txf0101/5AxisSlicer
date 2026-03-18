@@ -1,9 +1,8 @@
 """G-code export for the hybrid slicer.
 
-The exporter writes one continuous job: first the rotary core with U/V
-locked, then the five-axis conformal shell. The summary comments near the top
-of the file are intentionally verbose so a student can match machine behaviour
-with the software settings during calibration.
+The exporter writes one continuous job. It prints the rotary core with U/V
+locked first, then the five-axis conformal shell. The header comments stay
+detailed so calibration runs are easier to read against machine behaviour.
 """
 
 from __future__ import annotations
@@ -20,6 +19,11 @@ from .kinematics import (
     normal_to_rotary_angles,
 )
 from .open5x_adapter import solve_toolpath_raw_angles_open5x
+
+# Toolpaths arrive here in model space. This file turns them into machine
+# moves that can be run on a real printer.
+# 切片器把模型空间里的路径交到这里，再由这里把它们整理成真实机器可执行的
+# 运动指令。
 
 _OPEN5X_SURFACE_START_TEMPLATE = (
     "; Open5x surface-finish export\n"
@@ -40,7 +44,16 @@ _OPEN5X_SURFACE_PREFERRED_B_MAX_DEG = 180.0
 
 @dataclass(slots=True)
 class Pose:
-    """Single machine pose used during export."""
+    """Single machine pose used while exporting G-code.
+
+    导出 G-code 时使用的单个位姿。
+
+    It keeps both raw rotary angles and calibrated command angles so logs and
+    debugging output can show what the geometry wanted and what the printer
+    saw.
+    它同时记着原始回转角和标定后的指令角，排查问题时就能分清几何上想要
+    什么、机器上实际发了什么。
+    """
 
     xyz: np.ndarray
     raw_u_deg: float
@@ -61,7 +74,14 @@ def generate_gcode(
     slice_params: SliceParameters,
     machine_params: MachineParameters,
 ) -> tuple[str, list[str]]:
-    """Convert the slice result into a runnable G-code program."""
+    """Convert the slice result into a runnable G-code program.
+
+    把切片结果整理成可以直接执行的 G-code 程序。
+
+    Travel moves, phase transitions, rotary solving, and extrusion all come
+    together here.
+    空移、阶段切换、回转求解和挤出计算都会在这里串成一条完整流程。
+    """
 
     if _uses_open5x_surface_finish(result):
         return _generate_surface_finish_hybrid_gcode(result, slice_params, machine_params)
@@ -159,6 +179,10 @@ def generate_gcode(
             min_v_cmd = min(pose.command_v_deg for pose in poses)
             max_v_cmd = max(pose.command_v_deg for pose in poses)
 
+        # Conformal paths need rotary angles. Try the vendored Open5x solver
+        # first, but keep the local solver ready so export can still finish.
+        # 共形路径需要回转角。先试仓库里带的 Open5x 求解器，本地求解器也会
+        # 随时兜底，导出流程不会因为它缺失而中断。
         if toolpath.phase != "planar":
             if min_u_cmd < export_machine.min_u_deg or max_u_cmd > export_machine.max_u_deg:
                 warnings.append(
@@ -225,6 +249,11 @@ def _generate_surface_finish_hybrid_gcode(
     slice_params: SliceParameters,
     machine_params: MachineParameters,
 ) -> tuple[str, list[str]]:
+    """Export the Open5x hybrid program with a planar core and surface finish.
+
+    导出“先打平面核心、再走曲面精加工”的 Open5x 混合程序。
+    """
+
     planar_machine = machine_params
     surface_machine = _surface_finish_export_machine(machine_params)
     planar_toolpaths = [toolpath for toolpath in result.toolpaths if toolpath.phase == "planar"]
@@ -292,6 +321,11 @@ def _emit_planar_phase(
     slice_params: SliceParameters,
     machine_params: MachineParameters,
 ) -> tuple[list[str], float]:
+    """Emit the G-code for the planar phase and return total extrusion.
+
+    输出平面阶段的 G-code，并返回这一阶段的总挤出量。
+    """
+
     lines: list[str] = []
     total_e = 0.0
     previous_end_pose: Pose | None = None
@@ -360,6 +394,11 @@ def _resolve_rotary_toolpath_poses(
     previous_raw_v_deg: float | None,
     canonicalize_surface_finish: bool,
 ) -> tuple[list[Pose], list[str]]:
+    """Resolve every machine pose needed for one rotary toolpath.
+
+    求解一条回转路径上每个采样点对应的机床位姿。
+    """
+
     warnings: list[str] = []
     raw_angle_pairs: list[tuple[float, float]] | None = None
 
@@ -393,6 +432,9 @@ def _resolve_rotary_toolpath_poses(
     min_v_cmd = math.inf
     max_v_cmd = -math.inf
     local_previous_command_v_deg = previous_command_v_deg
+
+    # Turn each geometry-space sample into a fully calibrated machine pose.
+    # 把几何空间里的每个采样点都换成带完整标定的机床位姿。
     for (point, normal), (raw_u_deg, raw_v_deg) in zip(zip(toolpath.points, toolpath.normals), raw_angle_pairs, strict=True):
         command_u_deg, command_v_deg = apply_rotary_axis_calibration(
             raw_u_deg,
@@ -542,6 +584,14 @@ def build_travel_sequence(
     machine_params: MachineParameters,
     lift_height_mm: float,
 ) -> list[str]:
+    """Build a safe travel sequence between two poses.
+
+    在两个位姿之间拼出一段安全的空移序列。
+
+    The sequence can include retract, lift, rapid travel, and re-prime steps.
+    这段序列会按情况插入回抽、抬升、快速移动和补料。
+    """
+
     lines: list[str] = []
     rapid_feed = slice_params.travel_speed_mm_s * 60.0
 
@@ -581,6 +631,11 @@ def _lifted_pose(base_pose: Pose, height_mm: float, machine_params: MachineParam
 
 
 def extrusion_for_segment(segment_length_mm: float, toolpath: Toolpath, slice_params: SliceParameters) -> float:
+    """Estimate the filament needed for one printed segment.
+
+    估算一段打印路径需要多少丝材挤出。
+    """
+
     line_width = toolpath_line_width_mm(toolpath, slice_params)
     layer_height = toolpath_layer_height_mm(toolpath, slice_params)
     volume = line_width * layer_height * segment_length_mm * slice_params.extrusion_multiplier
@@ -595,6 +650,11 @@ def compensated_feed(
     nominal_speed_mm_s: float,
     machine_params: MachineParameters,
 ) -> float:
+    """Scale nominal feed so rotary motion stays inside machine feed limits.
+
+    调整标称进给速度，让带回转的运动也别超过机床的进给能力。
+    """
+
     delta_xyz = float(np.linalg.norm(nxt.xyz - current.xyz))
     delta_u_mm = math.radians(abs(nxt.command_u_deg - current.command_u_deg)) * machine_params.rotary_scale_radius_mm
     delta_v_mm = math.radians(abs(nxt.command_v_deg - current.command_v_deg)) * machine_params.rotary_scale_radius_mm
@@ -606,6 +666,11 @@ def compensated_feed(
 
 
 def format_move(pose: Pose, machine_params: MachineParameters, feed_mm_min: float, e_delta: float) -> str:
+    """Format one coordinated printing move.
+
+    格式化一条联动打印指令。
+    """
+
     x_name, y_name, z_name = machine_params.linear_axis_names
     u_name, v_name = machine_params.rotary_axis_names
     return (
@@ -615,6 +680,11 @@ def format_move(pose: Pose, machine_params: MachineParameters, feed_mm_min: floa
 
 
 def format_rapid(pose: Pose, machine_params: MachineParameters, feed_mm_min: float) -> str:
+    """Format one coordinated rapid move without extrusion.
+
+    格式化一条不带挤出的联动快速移动指令。
+    """
+
     x_name, y_name, z_name = machine_params.linear_axis_names
     u_name, v_name = machine_params.rotary_axis_names
     return (
@@ -679,6 +749,11 @@ def _template_context(
 
 
 def _machine_summary_comments(result: SliceResult, machine_params: MachineParameters) -> list[str]:
+    """Build the detailed header comments for slice and machine state.
+
+    生成文件开头那段详细摘要注释，把切片结果和机床状态交代清楚。
+    """
+
     transition_height = float(result.metadata.get("transition_height_mm", 0.0))
     core_center_x = float(result.metadata.get("core_center_x_mm", 0.0))
     core_center_y = float(result.metadata.get("core_center_y_mm", 0.0))

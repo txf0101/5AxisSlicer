@@ -40,6 +40,11 @@ except ImportError:
     _DASH_LINE = Qt.DashLine
     _PAINTER_ANTIALIASING = QPainter.Antialiasing
 
+# This module provides a lightweight OpenGL preview so users can inspect mesh
+# placement, selected faces, and generated toolpaths without leaving the app.
+# 这里放的是轻量级 OpenGL 预览，用户不用离开应用就能看模型摆放、面片
+# 选择和生成出来的路径。
+
 
 PATH_STYLE_MAP = {
     "planar-perimeter": {"color": "#ff8f3f", "width": 1.8, "alpha": 0.98},
@@ -113,13 +118,26 @@ void main() {
 
 @dataclass(slots=True)
 class _GpuBuffer:
+    """Small wrapper that keeps GPU buffer metadata together.
+
+    用来把 GPU 缓冲区对象和相关元数据放在一起的小包装。
+    """
+
     buffer: QOpenGLBuffer | None = None
     count: int = 0
     stride_bytes: int = 0
 
 
 class PreviewCanvas(QOpenGLWidget):
-    """GPU preview that feels closer to Cura / Bambu Studio than matplotlib."""
+    """GPU preview that feels closer to Cura or Bambu Studio than matplotlib.
+
+    更接近 Cura 或拓竹预览体验的 GPU 预览控件，不是 matplotlib 那种静态图。
+
+    The widget cares more about smooth interaction and clear path visibility
+    than photorealism, which makes it a good fit for iterative slicing work.
+    这个控件更看重交互流畅和路径清楚，不追求照片级渲染，所以很适合反复
+    调参和检查切片结果。
+    """
 
     def __init__(self) -> None:
         super().__init__()
@@ -185,6 +203,11 @@ class PreviewCanvas(QOpenGLWidget):
         self._hover_visible = False
 
     def clear(self) -> None:
+        """Reset the preview state back to an empty scene.
+
+        把预览状态重置回空场景。
+        """
+
         self._vertices = np.empty((0, 3), dtype=np.float32)
         self._faces = np.empty((0, 3), dtype=np.int32)
         self._toolpaths = []
@@ -217,6 +240,11 @@ class PreviewCanvas(QOpenGLWidget):
         selection_faces: dict[str, np.ndarray] | None = None,
         preserve_camera: bool = False,
     ) -> None:
+        """Display a mesh and optional face selections in the preview.
+
+        在预览里显示网格，以及可选的面片选择结果。
+        """
+
         self._set_scene(vertices, faces, [], selection_faces=selection_faces, preserve_camera=preserve_camera)
 
     def plot_toolpaths(
@@ -227,6 +255,11 @@ class PreviewCanvas(QOpenGLWidget):
         selection_faces: dict[str, np.ndarray] | None = None,
         preserve_camera: bool = False,
     ) -> None:
+        """Display toolpaths on top of the current mesh scene.
+
+        在当前网格场景上叠加显示工具路径。
+        """
+
         self._set_scene(vertices, faces, toolpaths, selection_faces=selection_faces, preserve_camera=preserve_camera)
 
     def set_visibility(self, show_mesh: bool | None = None, visible_kinds: set[str] | None = None) -> None:
