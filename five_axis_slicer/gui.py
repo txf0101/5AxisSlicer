@@ -1,12 +1,13 @@
 ﻿from __future__ import annotations
 
+from dataclasses import asdict
 import json
 from pathlib import Path
 
 import numpy as np
 
 from .core import MachineParameters, MeshModel, SliceParameters, SliceResult, SliceSelection
-from .gcode import generate_gcode
+from .gcode import generate_gcode, preview_toolpaths
 from .geometry import generate_demo_dome_mesh, grow_face_selection, load_mesh, selection_boundary_edges, split_mesh_into_components
 from .gui_text import AXES, PATH_KIND_LABEL_KEYS, PATH_KIND_ORDER, UI_TEXT
 from .hardware import machine_profile_summary, open5x_freddi_hong_machine
@@ -21,6 +22,7 @@ from .qt_compat import (
     QGroupBox,
     QHBoxLayout,
     QLabel,
+    QLineEdit,
     QMainWindow,
     QMessageBox,
     QPlainTextEdit,
@@ -34,6 +36,7 @@ from .qt_compat import (
     PLAIN_TEXT_NO_WRAP,
     QT_API,
     QT_HORIZONTAL,
+    QT_VERTICAL,
     qt_exec,
 )
 from .slicer import ConformalSlicer, slice_planar_model
@@ -193,6 +196,7 @@ class MainWindow(QMainWindow):
         self.mesh: MeshModel | None = None
         self.component_meshes: list[MeshModel] = []
         self.slice_result: SliceResult | None = None
+        self.last_slice_parameters: SliceParameters | None = None
         self.generated_gcode: str | None = None
         self.export_warnings: list[str] = []
         self.placement_rotation_deg = np.zeros(3, dtype=float)
@@ -208,15 +212,38 @@ class MainWindow(QMainWindow):
         self.slice_label_widgets: dict[str, QLabel] = {}
         self.machine_label_widgets: dict[str, QLabel] = {}
         self.path_filter_checks: dict[str, QCheckBox] = {}
+        self._settings_sync_enabled = False
+        self.main_splitter: QSplitter | None = None
+        self.right_splitter: QSplitter | None = None
 
         self.preview = PreviewCanvas()
         self.log_box = QPlainTextEdit()
         self.log_box.setObjectName("logBox")
         self.log_box.setReadOnly(True)
         self.log_box.setLineWrapMode(PLAIN_TEXT_NO_WRAP)
+        self.preview_feature_title = QLabel()
+        self.preview_toolpath_title = QLabel()
+        self.preview_all_button = QPushButton()
+        self.preview_core_button = QPushButton()
+        self.preview_conformal_button = QPushButton()
+        self.preview_none_button = QPushButton()
 
         self.model_info = QLabel()
         self.model_info.setWordWrap(True)
+        self.model_path_label = QLabel()
+        self.model_path_input = QLineEdit()
+        self.model_path_input.setObjectName("softInput")
+        self.model_path_input.returnPressed.connect(self._open_model_from_manual_path)
+        self.model_path_open_button = QPushButton()
+        self.model_path_open_button.setObjectName("secondaryButton")
+        self.model_path_open_button.clicked.connect(self._open_model_from_manual_path)
+        self.gcode_output_path_label = QLabel()
+        self.gcode_output_path_input = QLineEdit()
+        self.gcode_output_path_input.setObjectName("softInput")
+        self.gcode_output_path_input.returnPressed.connect(self.export_gcode)
+        self.gcode_output_path_button = QPushButton()
+        self.gcode_output_path_button.setObjectName("secondaryButton")
+        self.gcode_output_path_button.clicked.connect(self.export_gcode)
         self.slice_mode_label = QLabel()
         self.slice_mode_combo = NoWheelComboBox()
         self.slice_mode_combo.setObjectName("softInput")
@@ -287,8 +314,13 @@ class MainWindow(QMainWindow):
         self._build_ui()
         self._apply_theme()
         self.reset_machine_defaults(log=False)
+        settings_loaded = self._load_saved_ui_settings()
         self._retranslate_ui()
+        self._connect_persistent_setting_signals()
+        self._settings_sync_enabled = True
         self._set_path_filter_enabled(False)
+        if settings_loaded:
+            self._append_log(self.t("settings_loaded_log"))
         self._append_log(self.t("ready_log"))
 
     def t(self, key: str, **kwargs: object) -> str:
@@ -341,33 +373,56 @@ class MainWindow(QMainWindow):
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setWidget(left_panel)
-        scroll.setMinimumWidth(560)
+        scroll.setMinimumWidth(480)
 
-        right_layout = QVBoxLayout()
-        right_layout.setSpacing(12)
-        right_layout.addWidget(self._build_preview_group())
-        right_layout.addWidget(self.preview, stretch=4)
         self.log_title = QLabel()
-        right_layout.addWidget(self.log_title)
-        right_layout.addWidget(self.log_box, stretch=2)
+
+        preview_panel = QWidget()
+        preview_layout = QVBoxLayout()
+        preview_layout.setContentsMargins(0, 0, 0, 0)
+        preview_layout.setSpacing(12)
+        preview_layout.addWidget(self._build_preview_group())
+        preview_layout.addWidget(self.preview, stretch=1)
+        preview_panel.setLayout(preview_layout)
+
+        log_panel = QWidget()
+        log_layout = QVBoxLayout()
+        log_layout.setContentsMargins(0, 0, 0, 0)
+        log_layout.setSpacing(8)
+        log_layout.addWidget(self.log_title)
+        log_layout.addWidget(self.log_box, stretch=1)
+        log_panel.setLayout(log_layout)
 
         right_panel = QWidget()
+        right_layout = QVBoxLayout()
+        right_layout.setContentsMargins(0, 0, 0, 0)
+        right_layout.setSpacing(0)
+        self.right_splitter = QSplitter(QT_VERTICAL)
+        self.right_splitter.addWidget(preview_panel)
+        self.right_splitter.addWidget(log_panel)
+        self.right_splitter.setChildrenCollapsible(False)
+        self.right_splitter.setStretchFactor(0, 5)
+        self.right_splitter.setStretchFactor(1, 2)
+        self.right_splitter.setSizes([720, 220])
+        right_layout.addWidget(self.right_splitter)
         right_panel.setLayout(right_layout)
 
-        splitter = QSplitter(QT_HORIZONTAL)
-        splitter.addWidget(scroll)
-        splitter.addWidget(right_panel)
-        splitter.setStretchFactor(0, 0)
-        splitter.setStretchFactor(1, 1)
+        self.main_splitter = QSplitter(QT_HORIZONTAL)
+        self.main_splitter.addWidget(scroll)
+        self.main_splitter.addWidget(right_panel)
+        self.main_splitter.setChildrenCollapsible(False)
+        self.main_splitter.setStretchFactor(0, 0)
+        self.main_splitter.setStretchFactor(1, 1)
+        self.main_splitter.setSizes([560, 940])
 
         container = QWidget()
         layout = QVBoxLayout()
         layout.setContentsMargins(18, 18, 18, 18)
         layout.setSpacing(14)
-        layout.addWidget(splitter)
+        layout.addWidget(self.main_splitter)
         container.setLayout(layout)
         self.setCentralWidget(container)
-        self.resize(1500, 920)
+        self.resize(1620, 960)
 
     def _apply_theme(self) -> None:
         checkmark_icon = (Path(__file__).resolve().parent / "assets" / "checkmark_black.svg").as_posix()
@@ -431,7 +486,7 @@ class MainWindow(QMainWindow):
                 background: #ffffff;
                 color: #1d1d1f;
             }
-            QComboBox, QDoubleSpinBox, QSpinBox, QPlainTextEdit {
+            QComboBox, QDoubleSpinBox, QSpinBox, QLineEdit, QPlainTextEdit {
                 background: #ffffff;
                 border: 1px solid #d2d2d7;
                 border-radius: 12px;
@@ -439,10 +494,10 @@ class MainWindow(QMainWindow):
                 selection-background-color: #1d1d1f;
                 selection-color: #f5f5f7;
             }
-            QComboBox:hover, QDoubleSpinBox:hover, QSpinBox:hover, QPlainTextEdit:hover {
+            QComboBox:hover, QDoubleSpinBox:hover, QSpinBox:hover, QLineEdit:hover, QPlainTextEdit:hover {
                 border-color: #b8b8be;
             }
-            QComboBox:focus, QDoubleSpinBox:focus, QSpinBox:focus, QPlainTextEdit:focus {
+            QComboBox:focus, QDoubleSpinBox:focus, QSpinBox:focus, QLineEdit:focus, QPlainTextEdit:focus {
                 border: 1px solid #1d1d1f;
             }
             QComboBox::drop-down {
@@ -575,6 +630,24 @@ class MainWindow(QMainWindow):
         self.model_group = QGroupBox()
         layout = QVBoxLayout()
         layout.addWidget(self.model_info)
+        path_form = QFormLayout()
+        path_row = QWidget()
+        path_row_layout = QHBoxLayout()
+        path_row_layout.setContentsMargins(0, 0, 0, 0)
+        path_row_layout.setSpacing(8)
+        path_row_layout.addWidget(self.model_path_input, stretch=1)
+        path_row_layout.addWidget(self.model_path_open_button)
+        path_row.setLayout(path_row_layout)
+        path_form.addRow(self.model_path_label, path_row)
+        export_row = QWidget()
+        export_row_layout = QHBoxLayout()
+        export_row_layout.setContentsMargins(0, 0, 0, 0)
+        export_row_layout.setSpacing(8)
+        export_row_layout.addWidget(self.gcode_output_path_input, stretch=1)
+        export_row_layout.addWidget(self.gcode_output_path_button)
+        export_row.setLayout(export_row_layout)
+        path_form.addRow(self.gcode_output_path_label, export_row)
+        layout.addLayout(path_form)
         mode_form = QFormLayout()
         mode_form.addRow(self.slice_mode_label, self.slice_mode_combo)
         layout.addLayout(mode_form)
@@ -614,15 +687,36 @@ class MainWindow(QMainWindow):
     def _build_preview_group(self) -> QGroupBox:
         self.preview_group = QGroupBox()
         layout = QVBoxLayout()
+        layout.setSpacing(10)
 
         self.preview_help_label = QLabel()
         self.preview_help_label.setWordWrap(True)
         layout.addWidget(self.preview_help_label)
 
+        self.preview_feature_title.setWordWrap(True)
+        layout.addWidget(self.preview_feature_title)
+
         self.show_mesh_checkbox = QCheckBox()
         self.show_mesh_checkbox.setChecked(True)
         self.show_mesh_checkbox.toggled.connect(self._update_preview_visibility)
         layout.addWidget(self.show_mesh_checkbox)
+
+        self.preview_toolpath_title.setWordWrap(True)
+        layout.addWidget(self.preview_toolpath_title)
+
+        quick_row = QHBoxLayout()
+        quick_row.setSpacing(8)
+        for button, handler in (
+            (self.preview_all_button, lambda: self._apply_preview_filter_preset("all")),
+            (self.preview_core_button, lambda: self._apply_preview_filter_preset("core")),
+            (self.preview_conformal_button, lambda: self._apply_preview_filter_preset("conformal")),
+            (self.preview_none_button, lambda: self._apply_preview_filter_preset("none")),
+        ):
+            button.setObjectName("secondaryButton")
+            button.clicked.connect(handler)
+            quick_row.addWidget(button)
+        quick_row.addStretch(1)
+        layout.addLayout(quick_row)
 
         for kind in PATH_KIND_ORDER:
             checkbox = QCheckBox()
@@ -696,6 +790,16 @@ class MainWindow(QMainWindow):
         self.slice_controls["planar_print_speed_mm_s"] = self._double_spin(1.0, 500.0, 24.0, 1.0)
         self.slice_controls["travel_speed_mm_s"] = self._double_spin(1.0, 500.0, 60.0, 5.0)
         self.slice_controls["travel_height_mm"] = self._double_spin(0.0, 50.0, 2.0, 0.2)
+        self.slice_controls["nozzle_temperature_c"] = self._double_spin(0.0, 400.0, 220.0, 5.0)
+        self.slice_controls["bed_temperature_c"] = self._double_spin(0.0, 200.0, 50.0, 5.0)
+        self.slice_controls["adhesion_type"] = NoWheelComboBox()
+        self.slice_controls["adhesion_type"].setObjectName("softInput")
+        self.slice_controls["adhesion_type"].addItem("", "none")
+        self.slice_controls["adhesion_type"].addItem("", "skirt")
+        self._set_expand_policy(self.slice_controls["adhesion_type"])
+        self.slice_controls["adhesion_type"].currentIndexChanged.connect(self._refresh_adhesion_controls)
+        self.slice_controls["skirt_line_count"] = self._int_spin(1, 10, 1, 1)
+        self.slice_controls["skirt_margin_mm"] = self._double_spin(0.5, 50.0, 5.0, 0.5)
         self.slice_controls["filament_diameter_mm"] = self._double_spin(1.0, 5.0, 1.75, 0.05)
         self.slice_controls["extrusion_multiplier"] = self._double_spin(0.2, 3.0, 1.0, 0.05)
         self.slice_controls["retraction_mm"] = self._double_spin(0.0, 20.0, 0.8, 0.1)
@@ -723,6 +827,12 @@ class MainWindow(QMainWindow):
         planar_include_infill = BooleanChoice(True)
         self.slice_controls["planar_include_infill"] = planar_include_infill
 
+        wait_for_nozzle = BooleanChoice(True)
+        self.slice_controls["wait_for_nozzle"] = wait_for_nozzle
+
+        wait_for_bed = BooleanChoice(True)
+        self.slice_controls["wait_for_bed"] = wait_for_bed
+
         field_pairs = [
             ("nozzle_diameter_mm", self.slice_controls["nozzle_diameter_mm"]),
             ("layer_height_mm", self.slice_controls["layer_height_mm"]),
@@ -747,6 +857,13 @@ class MainWindow(QMainWindow):
             ("planar_print_speed_mm_s", self.slice_controls["planar_print_speed_mm_s"]),
             ("travel_speed_mm_s", self.slice_controls["travel_speed_mm_s"]),
             ("travel_height_mm", self.slice_controls["travel_height_mm"]),
+            ("nozzle_temperature_c", self.slice_controls["nozzle_temperature_c"]),
+            ("bed_temperature_c", self.slice_controls["bed_temperature_c"]),
+            ("wait_for_nozzle", wait_for_nozzle),
+            ("wait_for_bed", wait_for_bed),
+            ("adhesion_type", self.slice_controls["adhesion_type"]),
+            ("skirt_line_count", self.slice_controls["skirt_line_count"]),
+            ("skirt_margin_mm", self.slice_controls["skirt_margin_mm"]),
             ("filament_diameter_mm", self.slice_controls["filament_diameter_mm"]),
             ("extrusion_multiplier", self.slice_controls["extrusion_multiplier"]),
             ("retraction_mm", self.slice_controls["retraction_mm"]),
@@ -757,6 +874,7 @@ class MainWindow(QMainWindow):
             self._add_form_row(form, self.slice_label_widgets, key, field)
 
         self.slice_group.setLayout(form)
+        self._refresh_adhesion_controls()
         return self.slice_group
 
     def _build_machine_group(self) -> QGroupBox:
@@ -773,6 +891,8 @@ class MainWindow(QMainWindow):
         header_row.addStretch(1)
 
         form = QFormLayout()
+        self.machine_controls["u_axis_name"] = self._axis_name_combo("A")
+        self.machine_controls["v_axis_name"] = self._axis_name_combo("B")
         self.machine_controls["x_offset_mm"] = self._double_spin(-1000.0, 1000.0, 0.0, 1.0)
         self.machine_controls["y_offset_mm"] = self._double_spin(-1000.0, 1000.0, 0.0, 1.0)
         self.machine_controls["z_offset_mm"] = self._double_spin(-1000.0, 1000.0, 0.0, 1.0)
@@ -782,6 +902,8 @@ class MainWindow(QMainWindow):
         self.machine_controls["bed_diameter_mm"] = self._double_spin(10.0, 500.0, 90.0, 1.0)
         self.machine_controls["rotary_scale_radius_mm"] = self._double_spin(1.0, 1000.0, 35.0, 1.0)
         self.machine_controls["phase_change_lift_mm"] = self._double_spin(0.0, 100.0, 8.0, 0.5)
+        self.machine_controls["rotary_safe_z_mm"] = self._double_spin(0.0, 500.0, 150.0, 1.0)
+        self.machine_controls["rotary_safe_reposition_trigger_deg"] = self._double_spin(0.0, 360.0, 25.0, 1.0)
         self.machine_controls["u_axis_sign"] = self._sign_combo(1)
         self.machine_controls["v_axis_sign"] = self._sign_combo(1)
         self.machine_controls["u_zero_offset_deg"] = self._double_spin(-720.0, 720.0, 0.0, 1.0)
@@ -799,6 +921,8 @@ class MainWindow(QMainWindow):
 
         field_pairs = [
             ("preset_summary", self.machine_profile_info),
+            ("u_axis_name", self.machine_controls["u_axis_name"]),
+            ("v_axis_name", self.machine_controls["v_axis_name"]),
             ("x_offset_mm", self.machine_controls["x_offset_mm"]),
             ("y_offset_mm", self.machine_controls["y_offset_mm"]),
             ("z_offset_mm", self.machine_controls["z_offset_mm"]),
@@ -808,6 +932,8 @@ class MainWindow(QMainWindow):
             ("bed_diameter_mm", self.machine_controls["bed_diameter_mm"]),
             ("rotary_scale_radius_mm", self.machine_controls["rotary_scale_radius_mm"]),
             ("phase_change_lift_mm", self.machine_controls["phase_change_lift_mm"]),
+            ("rotary_safe_z_mm", self.machine_controls["rotary_safe_z_mm"]),
+            ("rotary_safe_reposition_trigger_deg", self.machine_controls["rotary_safe_reposition_trigger_deg"]),
             ("u_axis_sign", self.machine_controls["u_axis_sign"]),
             ("v_axis_sign", self.machine_controls["v_axis_sign"]),
             ("u_zero_offset_deg", self.machine_controls["u_zero_offset_deg"]),
@@ -865,6 +991,23 @@ class MainWindow(QMainWindow):
         self._set_expand_policy(widget)
         return widget
 
+    def _axis_name_combo(self, axis_name: str) -> QComboBox:
+        widget = NoWheelComboBox()
+        widget.setEditable(True)
+        for candidate in ("A", "B", "C", "U", "V"):
+            widget.addItem(candidate, candidate)
+        self._set_combo_text(widget, axis_name)
+        self._set_expand_policy(widget)
+        return widget
+
+    def _set_combo_text(self, widget: QComboBox, text: str) -> None:
+        target = str(text).strip().upper()
+        index = widget.findText(target)
+        if index >= 0:
+            widget.setCurrentIndex(index)
+        elif widget.isEditable():
+            widget.setEditText(target)
+
     def _plain_text_box(self, minimum_height: int) -> QPlainTextEdit:
         widget = QPlainTextEdit()
         widget.setLineWrapMode(PLAIN_TEXT_NO_WRAP)
@@ -893,9 +1036,67 @@ class MainWindow(QMainWindow):
             return option_enum.DontUseNativeDialog
         return QFileDialog.DontUseNativeDialog
 
+    def _path_from_text(self, path_text: str) -> Path | None:
+        normalized = path_text.strip().strip('"').strip("'")
+        if not normalized:
+            return None
+        return Path(normalized).expanduser()
+
+    def _directory_hint_from_path_text(self, path_text: str) -> str:
+        candidate = self._path_from_text(path_text)
+        if candidate is None:
+            return ""
+        if candidate.exists() and candidate.is_dir():
+            try:
+                return str(candidate.resolve())
+            except Exception:
+                return str(candidate)
+        parent = candidate.parent
+        if not str(parent):
+            return ""
+        try:
+            return str(parent.resolve())
+        except Exception:
+            return str(parent)
+
     def _default_model_directory(self) -> str:
+        typed_directory = self._directory_hint_from_path_text(self.model_path_input.text())
+        if typed_directory:
+            return typed_directory
+        if self.mesh is not None and self.mesh.source_path:
+            try:
+                return str(Path(self.mesh.source_path).expanduser().resolve().parent)
+            except Exception:
+                return str(Path(self.mesh.source_path).expanduser().parent)
         example_dir = Path("model-example")
         return str(example_dir.resolve()) if example_dir.exists() else ""
+
+    def _default_export_path(self, default_name: str) -> str:
+        manual_export_path = self._resolved_manual_export_path(default_name)
+        if manual_export_path is not None:
+            return str(manual_export_path)
+        typed_directory = self._directory_hint_from_path_text(self.model_path_input.text())
+        if typed_directory:
+            return str(Path(typed_directory) / default_name)
+        if self.mesh is not None and self.mesh.source_path:
+            try:
+                return str(Path(self.mesh.source_path).expanduser().resolve().with_name(default_name))
+            except Exception:
+                return str(Path(self.mesh.source_path).expanduser().with_name(default_name))
+        outputs_dir = Path("outputs")
+        if outputs_dir.exists():
+            return str((outputs_dir / default_name).resolve())
+        return default_name
+
+    def _resolved_manual_export_path(self, default_name: str) -> Path | None:
+        candidate = self._path_from_text(self.gcode_output_path_input.text())
+        if candidate is None:
+            return None
+        if candidate.exists() and candidate.is_dir():
+            return candidate / default_name
+        if candidate.suffix:
+            return candidate
+        return candidate.with_suffix(".gcode")
 
     def _get_open_file_name(self, caption: str, directory: str, file_filter: str) -> tuple[str, str]:
         # Avoid native Windows dialog crashes caused by shell extensions or Qt/plugin mismatches.
@@ -922,14 +1123,52 @@ class MainWindow(QMainWindow):
             return
         self.language = language
         self._retranslate_ui()
+        self._save_ui_settings()
+
+    def _current_axis_text_kwargs(self) -> dict[str, str]:
+        try:
+            machine = self._current_machine_parameters()
+        except Exception:
+            machine = open5x_freddi_hong_machine()
+        return {"u_axis": machine.u_axis_name, "v_axis": machine.v_axis_name}
+
+    def _machine_label_text(self, key: str, axis_kwargs: dict[str, str]) -> str:
+        if key == "u_axis_sign":
+            return self.t("axis_sign_label", axis=axis_kwargs["u_axis"])
+        if key == "v_axis_sign":
+            return self.t("axis_sign_label", axis=axis_kwargs["v_axis"])
+        if key == "u_zero_offset_deg":
+            return self.t("axis_zero_offset_label", axis=axis_kwargs["u_axis"])
+        if key == "v_zero_offset_deg":
+            return self.t("axis_zero_offset_label", axis=axis_kwargs["v_axis"])
+        if key == "home_u_deg":
+            return self.t("axis_home_label", axis=axis_kwargs["u_axis"])
+        if key == "home_v_deg":
+            return self.t("axis_home_label", axis=axis_kwargs["v_axis"])
+        if key == "min_u_deg":
+            return self.t("axis_min_label", axis=axis_kwargs["u_axis"])
+        if key == "max_u_deg":
+            return self.t("axis_max_label", axis=axis_kwargs["u_axis"])
+        if key == "min_v_deg":
+            return self.t("axis_min_label", axis=axis_kwargs["v_axis"])
+        if key == "max_v_deg":
+            return self.t("axis_max_label", axis=axis_kwargs["v_axis"])
+        return self.t(key, **axis_kwargs)
 
     def _retranslate_ui(self) -> None:
+        axis_kwargs = self._current_axis_text_kwargs()
         self.setWindowTitle(self.t("app_title", api=QT_API))
         self.open_button.setText(self.t("open_model"))
         self.demo_button.setText(self.t("load_demo"))
         self.slice_button.setText(self.t("slice"))
         self.export_button.setText(self.t("export_gcode"))
         self.language_label.setText(self.t("language"))
+        self.model_path_label.setText(self.t("model_path"))
+        self.model_path_input.setPlaceholderText(self.t("model_path_placeholder"))
+        self.model_path_open_button.setText(self.t("open_model_from_path"))
+        self.gcode_output_path_label.setText(self.t("gcode_output_path"))
+        self.gcode_output_path_input.setPlaceholderText(self.t("gcode_output_path_placeholder"))
+        self.gcode_output_path_button.setText(self.t("export_to_typed_path"))
         self.log_title.setText(self.t("log_title"))
         self.language_combo.setItemText(0, self.t("language_name_zh"))
         self.language_combo.setItemText(1, self.t("language_name_en"))
@@ -962,6 +1201,12 @@ class MainWindow(QMainWindow):
         self.conformal_components_label.setText(self.t("conformal_components"))
 
         self.preview_help_label.setText(self.t("preview_help"))
+        self.preview_feature_title.setText(self.t("feature_visibility_section"))
+        self.preview_toolpath_title.setText(self.t("toolpath_visibility_section"))
+        self.preview_all_button.setText(self.t("preview_filter_all"))
+        self.preview_core_button.setText(self.t("preview_filter_core"))
+        self.preview_conformal_button.setText(self.t("preview_filter_conformal"))
+        self.preview_none_button.setText(self.t("preview_filter_none"))
         self.show_mesh_checkbox.setText(self.t("show_mesh"))
         for kind in PATH_KIND_ORDER:
             self.path_filter_checks[kind].setText(self.t(PATH_KIND_LABEL_KEYS[kind]))
@@ -976,14 +1221,18 @@ class MainWindow(QMainWindow):
         self.reset_placement_button.setText(self.t("reset_placement"))
 
         for key, label in self.slice_label_widgets.items():
-            label.setText(self.t(key))
+            label.setText(self.t(key, **axis_kwargs))
         for key, label in self.machine_label_widgets.items():
-            label.setText(self.t(key))
+            label.setText(self._machine_label_text(key, axis_kwargs))
 
-        self.machine_intro.setText(self.t("machine_intro"))
+        self.machine_intro.setText(self.t("machine_intro", **axis_kwargs))
         self.reset_machine_button.setText(self.t("machine_reset"))
         self._update_sign_combo_text(self.machine_controls["u_axis_sign"])
         self._update_sign_combo_text(self.machine_controls["v_axis_sign"])
+        adhesion_combo = self.slice_controls.get("adhesion_type")
+        if isinstance(adhesion_combo, QComboBox):
+            adhesion_combo.setItemText(0, self.t("adhesion_type_none"))
+            adhesion_combo.setItemText(1, self.t("adhesion_type_skirt"))
         for control in self.slice_controls.values():
             if isinstance(control, BooleanChoice):
                 control.set_labels(self.t("choice_yes"), self.t("choice_no"))
@@ -995,6 +1244,7 @@ class MainWindow(QMainWindow):
         self._refresh_stats(self.export_warnings)
         self._refresh_face_selection_summary()
         self._sync_face_brush_state()
+        self._refresh_adhesion_controls()
         self._sync_component_widgets()
 
     def _update_sign_combo_text(self, combo: object) -> None:
@@ -1002,10 +1252,42 @@ class MainWindow(QMainWindow):
             combo.setItemText(0, self.t("sign_same_math"))
             combo.setItemText(1, self.t("sign_invert_direction"))
 
+    def _refresh_adhesion_controls(self) -> None:
+        adhesion_combo = self.slice_controls.get("adhesion_type")
+        adhesion_type = str(adhesion_combo.currentData() if isinstance(adhesion_combo, QComboBox) else "none")
+        show_skirt = adhesion_type == "skirt"
+        for key in ("skirt_line_count", "skirt_margin_mm"):
+            label = self.slice_label_widgets.get(key)
+            control = self.slice_controls.get(key)
+            if label is not None:
+                label.setVisible(show_skirt)
+            if isinstance(control, QWidget):
+                control.setVisible(show_skirt)
+
     def _set_path_filter_enabled(self, enabled: bool) -> None:
         for checkbox in self.path_filter_checks.values():
             checkbox.setEnabled(True)
             checkbox.setToolTip(self.t("path_filter_ready_tooltip") if enabled else self.t("path_filter_waiting_tooltip"))
+
+    def _set_visible_path_kinds(self, visible_kinds: set[str]) -> None:
+        normalized = set(visible_kinds)
+        for kind, checkbox in self.path_filter_checks.items():
+            previous = checkbox.blockSignals(True)
+            checkbox.setChecked(kind in normalized)
+            checkbox.blockSignals(previous)
+        self._update_preview_visibility()
+        self._save_ui_settings()
+
+    def _apply_preview_filter_preset(self, preset: str) -> None:
+        if preset == "core":
+            visible_kinds = {"adhesion-skirt", "planar-perimeter", "planar-infill"}
+        elif preset == "conformal":
+            visible_kinds = {"conformal-perimeter", "conformal-surface-finish", "conformal-infill"}
+        elif preset == "none":
+            visible_kinds = set()
+        else:
+            visible_kinds = set(PATH_KIND_ORDER)
+        self._set_visible_path_kinds(visible_kinds)
 
     def _selected_visible_kinds(self) -> set[str]:
         return {kind for kind, checkbox in self.path_filter_checks.items() if checkbox.isChecked()}
@@ -1018,6 +1300,128 @@ class MainWindow(QMainWindow):
 
     def _current_slice_mode(self) -> str:
         return str(self.slice_mode_combo.currentData() or "hybrid")
+
+    def _settings_path(self) -> Path:
+        return Path("outputs") / "user_settings.json"
+
+    def _connect_persistent_setting_signals(self) -> None:
+        self.slice_mode_combo.currentIndexChanged.connect(self._on_slice_settings_changed)
+        self.model_path_input.textChanged.connect(lambda *_: self._save_ui_settings())
+        self.gcode_output_path_input.textChanged.connect(lambda *_: self._save_ui_settings())
+        self.show_mesh_checkbox.toggled.connect(lambda *_: self._save_ui_settings())
+        for checkbox in self.path_filter_checks.values():
+            checkbox.toggled.connect(lambda *_: self._save_ui_settings())
+        for control in self.slice_controls.values():
+            self._connect_setting_signal(control, self._on_slice_settings_changed)
+        for control in self.machine_controls.values():
+            self._connect_setting_signal(control, self._on_machine_settings_changed)
+        if self.main_splitter is not None:
+            self.main_splitter.splitterMoved.connect(lambda *_: self._save_ui_settings())
+        if self.right_splitter is not None:
+            self.right_splitter.splitterMoved.connect(lambda *_: self._save_ui_settings())
+
+    def _connect_setting_signal(self, control: object, callback) -> None:
+        if isinstance(control, BooleanChoice):
+            control.on_changed(lambda _: callback())
+            return
+        if isinstance(control, (QDoubleSpinBox, QSpinBox)):
+            control.valueChanged.connect(lambda *_: callback())
+            return
+        if isinstance(control, QComboBox):
+            control.currentIndexChanged.connect(lambda *_: callback())
+            if control.isEditable():
+                control.editTextChanged.connect(lambda *_: callback())
+            return
+        if isinstance(control, QPlainTextEdit):
+            control.textChanged.connect(callback)
+
+    def _on_slice_settings_changed(self) -> None:
+        self._refresh_adhesion_controls()
+        self._save_ui_settings()
+
+    def _on_machine_settings_changed(self) -> None:
+        self._refresh_machine_profile_info()
+        self._retranslate_ui()
+        self._save_ui_settings()
+
+    def _load_saved_ui_settings(self) -> bool:
+        settings_path = self._settings_path()
+        if not settings_path.exists():
+            return False
+        try:
+            payload = json.loads(settings_path.read_text(encoding="utf-8"))
+        except Exception:
+            return False
+
+        try:
+            language = str(payload.get("language", self.language))
+            if language in UI_TEXT:
+                language_index = self.language_combo.findData(language)
+                if language_index >= 0:
+                    self.language_combo.setCurrentIndex(language_index)
+                self.language = language
+
+            slice_defaults = asdict(SliceParameters())
+            slice_payload = payload.get("slice_parameters", {})
+            if isinstance(slice_payload, dict):
+                slice_defaults.update(slice_payload)
+            self._set_slice_controls_from_params(SliceParameters(**slice_defaults))
+
+            machine_defaults = asdict(open5x_freddi_hong_machine())
+            machine_payload = payload.get("machine_parameters", {})
+            if isinstance(machine_payload, dict):
+                machine_defaults.update(machine_payload)
+            machine_defaults["linear_axis_names"] = tuple(machine_defaults.get("linear_axis_names", ("X", "Y", "Z")))
+            machine_defaults["rotary_axis_names"] = tuple(machine_defaults.get("rotary_axis_names", ("A", "B")))
+            self._set_machine_controls_from_params(MachineParameters(**machine_defaults))
+
+            slice_mode = str(payload.get("slice_mode", self._current_slice_mode()))
+            slice_mode_index = self.slice_mode_combo.findData(slice_mode)
+            if slice_mode_index >= 0:
+                self.slice_mode_combo.setCurrentIndex(slice_mode_index)
+
+            model_path_text = str(payload.get("model_path_text", "")).strip()
+            if model_path_text:
+                self.model_path_input.setText(model_path_text)
+            gcode_output_path_text = str(payload.get("gcode_output_path_text", "")).strip()
+            if gcode_output_path_text:
+                self.gcode_output_path_input.setText(gcode_output_path_text)
+
+            self.show_mesh_checkbox.setChecked(bool(payload.get("preview_show_mesh", True)))
+            visible_path_kinds = payload.get("preview_visible_path_kinds", PATH_KIND_ORDER)
+            if isinstance(visible_path_kinds, list):
+                self._set_visible_path_kinds({str(kind) for kind in visible_path_kinds if str(kind) in self.path_filter_checks})
+
+            main_sizes = payload.get("main_splitter_sizes", [])
+            if self.main_splitter is not None and isinstance(main_sizes, list) and main_sizes:
+                self.main_splitter.setSizes([max(int(size), 1) for size in main_sizes])
+            right_sizes = payload.get("right_splitter_sizes", [])
+            if self.right_splitter is not None and isinstance(right_sizes, list) and right_sizes:
+                self.right_splitter.setSizes([max(int(size), 1) for size in right_sizes])
+        except Exception:
+            return False
+
+        return True
+
+    def _save_ui_settings(self) -> None:
+        if not self._settings_sync_enabled:
+            return
+        payload = {
+            "version": 1,
+            "language": self.language,
+            "slice_mode": self._current_slice_mode(),
+            "model_path_text": self.model_path_input.text().strip(),
+            "gcode_output_path_text": self.gcode_output_path_input.text().strip(),
+            "preview_show_mesh": self.show_mesh_checkbox.isChecked(),
+            "preview_visible_path_kinds": sorted(self._selected_visible_kinds()),
+            "slice_parameters": asdict(self._collect_slice_parameters()),
+            "machine_parameters": asdict(self._current_machine_parameters()),
+            "main_splitter_sizes": self.main_splitter.sizes() if self.main_splitter is not None else [],
+            "right_splitter_sizes": self.right_splitter.sizes() if self.right_splitter is not None else [],
+        }
+        settings_path = self._settings_path()
+        settings_path.parent.mkdir(parents=True, exist_ok=True)
+        settings_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
     def _selection_cache_path(self) -> Path:
         return Path("outputs") / "selection_cache.json"
@@ -1129,6 +1533,7 @@ class MainWindow(QMainWindow):
     def _on_slice_mode_changed(self) -> None:
         self._invalidate_slice_result()
         self._refresh_face_selection_summary()
+        self._save_ui_settings()
 
     def _on_face_picking_toggled(self, checked: bool) -> None:
         self.preview.set_face_picking(checked, self._on_preview_faces_picked if checked else None)
@@ -1274,6 +1679,24 @@ class MainWindow(QMainWindow):
         self._set_machine_controls_from_params(open5x_freddi_hong_machine())
         if log:
             self._append_log(self.t("reset_machine_log"))
+        self._save_ui_settings()
+
+    def _set_slice_controls_from_params(self, params: SliceParameters) -> None:
+        for key, control in self.slice_controls.items():
+            value = getattr(params, key)
+            if isinstance(control, BooleanChoice):
+                control.setChecked(bool(value))
+            elif isinstance(control, QDoubleSpinBox):
+                control.setValue(float(value))
+            elif isinstance(control, QSpinBox):
+                control.setValue(int(value))
+            elif isinstance(control, QComboBox):
+                index = control.findData(value)
+                if index >= 0:
+                    control.setCurrentIndex(index)
+                else:
+                    self._set_combo_text(control, str(value))
+        self._refresh_adhesion_controls()
 
     def _set_machine_controls_from_params(self, machine: MachineParameters) -> None:
         for key, control in self.machine_controls.items():
@@ -1283,9 +1706,12 @@ class MainWindow(QMainWindow):
             elif isinstance(control, QSpinBox):
                 control.setValue(int(value))
             elif isinstance(control, QComboBox):
-                index = control.findData(int(value))
-                if index >= 0:
-                    control.setCurrentIndex(index)
+                if key in {"u_axis_name", "v_axis_name"}:
+                    self._set_combo_text(control, str(value))
+                else:
+                    index = control.findData(int(value))
+                    if index >= 0:
+                        control.setCurrentIndex(index)
             elif isinstance(control, QPlainTextEdit):
                 control.setPlainText(str(value))
         self._refresh_machine_profile_info()
@@ -1312,20 +1738,48 @@ class MainWindow(QMainWindow):
         self._sync_face_brush_state()
         self._append_log(log_message)
 
-    def open_model(self) -> None:
+    def _load_model_from_path(self, file_path: str) -> None:
+        candidate_path = self._path_from_text(file_path)
+        if candidate_path is None:
+            return
+        try:
+            resolved_path = str(candidate_path.resolve())
+        except Exception:
+            resolved_path = str(candidate_path)
+        try:
+            mesh = load_mesh(resolved_path)
+        except Exception as exc:
+            self._show_error(self.t("failed_to_load_model", error=exc))
+            return
+        self.model_path_input.setText(resolved_path)
+        self._load_mesh_into_workspace(mesh, self.t("loaded_model_log", path=resolved_path))
+        self._save_ui_settings()
+
+    def _open_model_from_manual_path(self) -> None:
+        candidate_path = self._path_from_text(self.model_path_input.text())
+        if candidate_path is None:
+            self.open_model()
+            return
+        if candidate_path.exists() and candidate_path.is_dir():
+            self.open_model(str(candidate_path))
+            return
+        if not candidate_path.exists():
+            self._show_error(self.t("missing_model_path", path=str(candidate_path)))
+            return
+        if candidate_path.suffix.lower() not in {".stl", ".step", ".stp"}:
+            self._show_error(self.t("unsupported_model_path", path=str(candidate_path)))
+            return
+        self._load_model_from_path(str(candidate_path))
+
+    def open_model(self, initial_path: str | None = None) -> None:
         file_path, _ = self._get_open_file_name(
             self.t("open_cad_model"),
-            self._default_model_directory(),
+            self._directory_hint_from_path_text(initial_path or "") or self._default_model_directory(),
             "CAD Model (*.stl *.step *.stp)",
         )
         if not file_path:
             return
-        try:
-            mesh = load_mesh(file_path)
-        except Exception as exc:
-            self._show_error(self.t("failed_to_load_model", error=exc))
-            return
-        self._load_mesh_into_workspace(mesh, self.t("loaded_model_log", path=file_path))
+        self._load_model_from_path(file_path)
 
     def load_demo(self) -> None:
         self._load_mesh_into_workspace(generate_demo_dome_mesh(), self.t("loaded_demo_log"))
@@ -1422,6 +1876,7 @@ class MainWindow(QMainWindow):
             else:
                 slice_selection = self._collect_slice_selection()
                 self.slice_result = self.slicer.slice(self.mesh, slice_params, selection=slice_selection)
+            self.last_slice_parameters = slice_params
             self.generated_gcode, self.export_warnings = generate_gcode(
                 self.slice_result,
                 slice_params,
@@ -1454,18 +1909,28 @@ class MainWindow(QMainWindow):
         if self.mesh and self.mesh.source_path:
             default_name = f"{Path(self.mesh.source_path).stem}_hybrid_5axis.gcode"
 
-        file_path, _ = self._get_save_file_name(
-            self.t("save_gcode"),
-            default_name,
-            "G-code (*.gcode *.nc *.txt)",
-        )
-        if not file_path:
-            return
+        manual_output_path = self._resolved_manual_export_path(default_name)
+        if manual_output_path is None:
+            file_path, _ = self._get_save_file_name(
+                self.t("save_gcode"),
+                self._default_export_path(default_name),
+                "G-code (*.gcode *.nc *.txt)",
+            )
+            if not file_path:
+                return
+            output_path = Path(file_path).expanduser()
+        else:
+            output_path = manual_output_path.expanduser()
+            file_path = str(output_path)
 
-        output_path = Path(file_path)
         output_path.parent.mkdir(parents=True, exist_ok=True)
         output_path.write_text(self.generated_gcode, encoding="utf-8")
-        self._append_log(self.t("saved_gcode_log", path=file_path))
+        try:
+            saved_path = str(output_path.resolve())
+        except Exception:
+            saved_path = str(output_path)
+        self.gcode_output_path_input.setText(saved_path)
+        self._append_log(self.t("saved_gcode_log", path=saved_path))
 
     def _collect_slice_parameters(self) -> SliceParameters:
         values = {}
@@ -1474,6 +1939,8 @@ class MainWindow(QMainWindow):
                 values[key] = control.isChecked()
             elif isinstance(control, (QDoubleSpinBox, QSpinBox)):
                 values[key] = control.value()
+            elif isinstance(control, QComboBox):
+                values[key] = control.currentData()
         return SliceParameters(**values)
 
     def _collect_slice_selection(self) -> SliceSelection | None:
@@ -1491,13 +1958,21 @@ class MainWindow(QMainWindow):
 
     def _current_machine_parameters(self) -> MachineParameters:
         values = {}
+        u_axis_name = "A"
+        v_axis_name = "B"
         for key, control in self.machine_controls.items():
             if isinstance(control, (QDoubleSpinBox, QSpinBox)):
                 values[key] = control.value()
             elif isinstance(control, QComboBox):
-                values[key] = int(control.currentData())
+                if key == "u_axis_name":
+                    u_axis_name = control.currentText()
+                elif key == "v_axis_name":
+                    v_axis_name = control.currentText()
+                else:
+                    values[key] = int(control.currentData())
             elif isinstance(control, QPlainTextEdit):
                 values[key] = control.toPlainText().strip()
+        values["rotary_axis_names"] = (u_axis_name, v_axis_name)
         return MachineParameters(**values)
 
     def _refresh_machine_profile_info(self) -> None:
@@ -1692,6 +2167,7 @@ class MainWindow(QMainWindow):
 
     def _invalidate_slice_result(self) -> None:
         self.slice_result = None
+        self.last_slice_parameters = None
         self.generated_gcode = None
         self.export_warnings = []
         self._set_path_filter_enabled(False)
@@ -1711,7 +2187,8 @@ class MainWindow(QMainWindow):
                 preserve_camera=preserve_camera,
             )
         else:
-            toolpaths = [(path.points, path.kind) for path in self.slice_result.toolpaths]
+            slice_params = self.last_slice_parameters or self._collect_slice_parameters()
+            toolpaths = [(path.points, path.kind) for path in preview_toolpaths(self.slice_result, slice_params)]
             self.preview.plot_toolpaths(
                 self.slice_result.mesh.vertices,
                 self.slice_result.mesh.faces,

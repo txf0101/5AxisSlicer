@@ -7,7 +7,7 @@ helpers, so they are re-exported here.
 大多数脚本只会用到共享数据模型和默认机床预设辅助函数，这里就统一导出了。
 """
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 from .core import (
     MachineParameters,

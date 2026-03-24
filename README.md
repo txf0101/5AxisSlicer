@@ -4,7 +4,7 @@
 
 `5AxisSlicer` is a Python slicing application for research on five-axis rotary-bed 3D printing. It focuses on a hybrid workflow: print the planar body first, then append five-axis surface paths. The project provides a GUI, explicit face selection, Open5x pure-Python orientation solving, and hybrid `G-code` export. Video tutorial link: https://www.bilibili.com/video/BV1ubwvzMEzD
 
-Current version / 当前版本: `V0.2.0`
+Current version / 当前版本: `V0.3.0`
 
 ![软件内效果](mdpic/Snipaste_2026-03-16_22-25-30.png)
 
@@ -46,19 +46,36 @@ Current version / 当前版本: `V0.2.0`
 >
 > ```bash
 > conda activate 5AxisSlicer
-> python main.py model-example/Propeller-D.STEP --headless -o outputs/verification/propeller_v020.gcode
+> python main.py model-example/Propeller-D.STEP --headless -o outputs/verification/propeller_v030.gcode
 > ```
 >
 > ```bash
 > conda activate 5AxisSlicer
-> python main.py model-example/Propeller-D.STEP --headless --slice-mode planar -o outputs/verification/propeller_planar_v020.gcode
+> python main.py model-example/Propeller-D.STEP --headless --slice-mode planar -o outputs/verification/propeller_planar_v030.gcode
 > ```
 >
 > **当前对齐基准 / Current structural reference**
 >
 > - 正确的五轴结构参考文件是 [EXAMPLE.gcode](/F:/【项目和任务】/5AxisCutting/model-example/EXAMPLE.gcode) / The main five-axis reference file is [EXAMPLE.gcode](/F:/【项目和任务】/5AxisCutting/model-example/EXAMPLE.gcode)
 > - 当前文档、验证和五轴导出逻辑统一对齐它的“平面主体 + 少量长五轴尾段”结构 / The current documentation, validation flow, and five-axis export logic all follow its “planar body + a small number of long five-axis tail segments” structure
-> - `V0.2.0` 的说明、验证和示例均以这份参考文件为准 / The `V0.2.0` notes, validation steps, and examples all use this file as the reference
+> - `V0.3.0` 的说明、验证和示例均以这份参考文件为准 / The `V0.3.0` notes, validation steps, and examples all use this file as the reference
+
+## Release Notes | 更新日志
+
+### V0.3.0
+
+- 中文: 自定义旋转轴命名、喷头/热床与 `Skirt` 设置、设置持久化、模型与导出路径直输、预览过滤面板，以及更安全的五轴 `Z` 动作
+- English: custom rotary-axis naming, nozzle/bed plus `Skirt` settings, persistent settings, direct model/output paths, clearer preview filters, and safer five-axis `Z` handling
+
+### V0.2.0
+
+- 中文: 接入 Open5x 纯 Python 姿态求解，优化混合导出结构、seam 重排和 `surface-finish` 路径拼接，并补全 GUI 选面与预览流程
+- English: Open5x pure-Python orientation solving, improved hybrid export structure, seam relocation and `surface-finish` stitching, plus expanded GUI face-selection and preview flow
+
+### V0.1.0
+
+- 中文: 建立基础的三轴/五轴混合切片框架、GUI 流程和 `G-code` 导出链路
+- English: baseline hybrid slicing framework, GUI workflow, and `G-code` export pipeline
 
 ## 1. Project Summary | 项目简介
 
@@ -254,42 +271,42 @@ Brush mode is used for continuous face selection and is not a slicing parameter.
 
 ```bash
 conda activate 5AxisSlicer
-python main.py model-example/Propeller-D.STEP --headless -o outputs/verification/propeller_v020.gcode
+python main.py model-example/Propeller-D.STEP --headless -o outputs/verification/propeller_v030.gcode
 ```
 
 纯平面切片：
 
 ```bash
 conda activate 5AxisSlicer
-python main.py model-example/Propeller-D.STEP --headless --slice-mode planar -o outputs/verification/propeller_planar_v020.gcode
+python main.py model-example/Propeller-D.STEP --headless --slice-mode planar -o outputs/verification/propeller_planar_v030.gcode
 ```
 
 带组件选择的 headless：
 
 ```bash
 conda activate 5AxisSlicer
-python main.py model-example/Propeller-D.STEP --headless --substrate-component 0 --conformal-components 1,2 -o outputs/verification/propeller_manual_v020.gcode
+python main.py model-example/Propeller-D.STEP --headless --substrate-component 0 --conformal-components 1,2 -o outputs/verification/propeller_manual_v030.gcode
 ```
 
 Hybrid slicing:
 
 ```bash
 conda activate 5AxisSlicer
-python main.py model-example/Propeller-D.STEP --headless -o outputs/verification/propeller_v020.gcode
+python main.py model-example/Propeller-D.STEP --headless -o outputs/verification/propeller_v030.gcode
 ```
 
 Planar slicing:
 
 ```bash
 conda activate 5AxisSlicer
-python main.py model-example/Propeller-D.STEP --headless --slice-mode planar -o outputs/verification/propeller_planar_v020.gcode
+python main.py model-example/Propeller-D.STEP --headless --slice-mode planar -o outputs/verification/propeller_planar_v030.gcode
 ```
 
 Headless export with explicit component selection:
 
 ```bash
 conda activate 5AxisSlicer
-python main.py model-example/Propeller-D.STEP --headless --substrate-component 0 --conformal-components 1,2 -o outputs/verification/propeller_manual_v020.gcode
+python main.py model-example/Propeller-D.STEP --headless --substrate-component 0 --conformal-components 1,2 -o outputs/verification/propeller_manual_v030.gcode
 ```
 
 ### 4.4 Common CLI Options | 常用命令行参数
@@ -513,8 +530,8 @@ Recommended selection strategy:
 推荐至少做以下检查：
 
 1. `python main.py`
-2. `python main.py model-example/Propeller-D.STEP --headless -o outputs/verification/propeller_v020.gcode`
-3. `python main.py model-example/Propeller-D.STEP --headless --slice-mode planar -o outputs/verification/propeller_planar_v020.gcode`
+2. `python main.py model-example/Propeller-D.STEP --headless -o outputs/verification/propeller_v030.gcode`
+3. `python main.py model-example/Propeller-D.STEP --headless --slice-mode planar -o outputs/verification/propeller_planar_v030.gcode`
 4. 打开 GUI 手动检查：
    - 预览是否正常显示
    - 选面高亮是否正常
@@ -524,8 +541,8 @@ Recommended selection strategy:
 Recommended checks:
 
 1. `python main.py`
-2. `python main.py model-example/Propeller-D.STEP --headless -o outputs/verification/propeller_v020.gcode`
-3. `python main.py model-example/Propeller-D.STEP --headless --slice-mode planar -o outputs/verification/propeller_planar_v020.gcode`
+2. `python main.py model-example/Propeller-D.STEP --headless -o outputs/verification/propeller_v030.gcode`
+3. `python main.py model-example/Propeller-D.STEP --headless --slice-mode planar -o outputs/verification/propeller_planar_v030.gcode`
 4. Open the GUI and check manually:
    - whether the preview renders correctly
    - whether face highlights behave correctly
@@ -542,7 +559,7 @@ Recommended checks:
 - 不提交 `outputs/verification/` 下的验证导出结果
 - 不提交根目录下临时生成的 `gcode`
 - 只保留明确需要的参考 `gcode`
-- 发布 `V0.2.0` 时，优先提交：
+- 发布 `V0.3.0` 时，优先提交：
   - `README.md`
   - `.gitignore`
   - `main.py`
@@ -558,7 +575,7 @@ To keep the repository clean:
 - do not commit `outputs/verification/` exports
 - do not commit temporary root-level `gcode` files
 - keep only explicit reference `gcode` files when needed
-- for the `V0.2.0` release, prioritize:
+- for the `V0.3.0` release, prioritize:
   - `README.md`
   - `.gitignore`
   - `main.py`

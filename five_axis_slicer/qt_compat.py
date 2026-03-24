@@ -16,6 +16,7 @@ try:
         QGroupBox,
         QHBoxLayout,
         QLabel,
+        QLineEdit,
         QMainWindow,
         QMessageBox,
         QPlainTextEdit,
@@ -30,6 +31,7 @@ try:
 
     QT_API = "PyQt6"
     QT_HORIZONTAL = Qt.Orientation.Horizontal
+    QT_VERTICAL = Qt.Orientation.Vertical
     PLAIN_TEXT_NO_WRAP = QPlainTextEdit.LineWrapMode.NoWrap
 
     def qt_exec(app: QApplication) -> int:
@@ -53,6 +55,7 @@ except ImportError:
         QGroupBox,
         QHBoxLayout,
         QLabel,
+        QLineEdit,
         QMainWindow,
         QMessageBox,
         QPlainTextEdit,
@@ -67,6 +70,7 @@ except ImportError:
 
     QT_API = "PyQt5"
     QT_HORIZONTAL = Qt.Horizontal
+    QT_VERTICAL = Qt.Vertical
     PLAIN_TEXT_NO_WRAP = QPlainTextEdit.NoWrap
 
     def qt_exec(app: QApplication) -> int:
@@ -88,6 +92,7 @@ __all__ = [
     "QGroupBox",
     "QHBoxLayout",
     "QLabel",
+    "QLineEdit",
     "QMainWindow",
     "QMessageBox",
     "QPlainTextEdit",
@@ -101,5 +106,6 @@ __all__ = [
     "PLAIN_TEXT_NO_WRAP",
     "QT_API",
     "QT_HORIZONTAL",
+    "QT_VERTICAL",
     "qt_exec",
 ]

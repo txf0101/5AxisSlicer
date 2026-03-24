@@ -18,6 +18,41 @@ import numpy as np
 # 核心数据对象集中放在这里，geometry、slicer、gcode、gui 之间传的都是这一套。
 
 
+def _normalize_axis_name(value: object, fallback: str) -> str:
+    text = str(value or "").strip().upper()
+    for character in text:
+        if character.isalpha():
+            return character
+    return fallback
+
+
+def _normalize_rotary_axis_names(value: object) -> tuple[str, str]:
+    if isinstance(value, (list, tuple)) and len(value) >= 2:
+        raw_u, raw_v = value[0], value[1]
+    else:
+        raw_u, raw_v = "A", "B"
+    u_name = _normalize_axis_name(raw_u, "A")
+    v_name = _normalize_axis_name(raw_v, "B")
+    if v_name == u_name:
+        for candidate in ("B", "C", "V", "U", "A"):
+            if candidate != u_name:
+                v_name = candidate
+                break
+    return u_name, v_name
+
+
+def _normalize_linear_axis_names(value: object) -> tuple[str, str, str]:
+    if isinstance(value, (list, tuple)) and len(value) >= 3:
+        raw_x, raw_y, raw_z = value[0], value[1], value[2]
+    else:
+        raw_x, raw_y, raw_z = "X", "Y", "Z"
+    return (
+        _normalize_axis_name(raw_x, "X"),
+        _normalize_axis_name(raw_y, "Y"),
+        _normalize_axis_name(raw_z, "Z"),
+    )
+
+
 @dataclass(slots=True)
 class MeshModel:
     """Triangle mesh carried through the whole slicing pipeline.
@@ -215,6 +250,13 @@ class SliceParameters:
     planar_print_speed_mm_s: float = 24.0
     travel_speed_mm_s: float = 60.0
     travel_height_mm: float = 2.0
+    nozzle_temperature_c: float = 220.0
+    bed_temperature_c: float = 50.0
+    wait_for_nozzle: bool = True
+    wait_for_bed: bool = True
+    adhesion_type: str = "none"
+    skirt_line_count: int = 1
+    skirt_margin_mm: float = 5.0
     filament_diameter_mm: float = 1.75
     extrusion_multiplier: float = 1.0
     retraction_mm: float = 0.8
@@ -282,6 +324,8 @@ class MachineParameters:
     bed_diameter_mm: float = 90.0
     rotary_scale_radius_mm: float = 35.0
     phase_change_lift_mm: float = 8.0
+    rotary_safe_z_mm: float = 150.0
+    rotary_safe_reposition_trigger_deg: float = 25.0
     u_axis_sign: int = 1
     v_axis_sign: int = 1
     u_zero_offset_deg: float = 0.0
@@ -294,30 +338,37 @@ class MachineParameters:
     max_v_deg: float = 540.0
     max_feed_mm_min: float = 9000.0
     linear_axis_names: tuple[str, str, str] = ("X", "Y", "Z")
-    rotary_axis_names: tuple[str, str] = ("U", "V")
+    rotary_axis_names: tuple[str, str] = ("A", "B")
     start_gcode_template: str = (
         "; Machine profile: {profile_name}\n"
-        "; U axis: tilt bed about machine Y\n"
-        "; V axis: spin tilted bed about local rotary axis\n"
+        "; {u_axis_name} axis: tilt bed about machine Y\n"
+        "; {v_axis_name} axis: spin tilted bed about local rotary axis\n"
         "G21\n"
         "G90\n"
         "M83\n"
         "G92 E0\n"
+        "{start_heat_gcode}\n"
         "G28\n"
+        "G0 {z_axis}{rotary_safe_z_mm:.3f} F3000\n"
         "G0 {u_axis}{home_u_deg:.3f} {v_axis}{home_v_deg:.3f} F3000"
     )
     phase_change_gcode_template: str = (
         "M400\n"
         "; Switching from planar core to five-axis conformal phase\n"
-        "G92 E0"
+        "G92 E0\n"
+        "G0 {z_axis}{rotary_safe_z_mm:.3f} F{travel_feed_mm_min:.1f}"
     )
     end_gcode_template: str = (
         "M400\n"
         "G92 E0\n"
+        "G0 {z_axis}{rotary_safe_z_mm:.3f} F3000\n"
         "G0 {u_axis}{home_u_deg:.3f} {v_axis}{home_v_deg:.3f} F3000\n"
-        "M104 S0\n"
-        "M140 S0"
+        "{shutdown_heat_gcode}"
     )
+
+    def __post_init__(self) -> None:
+        self.linear_axis_names = _normalize_linear_axis_names(self.linear_axis_names)
+        self.rotary_axis_names = _normalize_rotary_axis_names(self.rotary_axis_names)
 
     @property
     def rotary_center(self) -> np.ndarray:

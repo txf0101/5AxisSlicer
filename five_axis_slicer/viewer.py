@@ -40,13 +40,14 @@ except ImportError:
     _DASH_LINE = Qt.DashLine
     _PAINTER_ANTIALIASING = QPainter.Antialiasing
 
-# This module provides a lightweight OpenGL preview so users can inspect mesh
-# placement, selected faces, and generated toolpaths without leaving the app.
+# Preview widget for inspecting mesh placement, selected faces, and generated
+# toolpaths inside the application.
 # 这里放的是轻量级 OpenGL 预览，用户不用离开应用就能看模型摆放、面片
 # 选择和生成出来的路径。
 
 
 PATH_STYLE_MAP = {
+    "adhesion-skirt": {"color": "#f97316", "width": 1.55, "alpha": 0.92},
     "planar-perimeter": {"color": "#ff8f3f", "width": 1.8, "alpha": 0.98},
     "planar-infill": {"color": "#ffc857", "width": 1.25, "alpha": 0.86},
     "conformal-perimeter": {"color": "#54d2a0", "width": 1.9, "alpha": 0.98},
@@ -129,12 +130,11 @@ class _GpuBuffer:
 
 
 class PreviewCanvas(QOpenGLWidget):
-    """GPU preview that feels closer to Cura or Bambu Studio than matplotlib.
+    """Interactive GPU preview for mesh and toolpath inspection.
 
-    更接近 Cura 或拓竹预览体验的 GPU 预览控件，不是 matplotlib 那种静态图。
+    用于查看模型和路径的交互式 GPU 预览控件。
 
-    The widget cares more about smooth interaction and clear path visibility
-    than photorealism, which makes it a good fit for iterative slicing work.
+    用于查看模型和路径的交互式 GPU 预览控件。
     这个控件更看重交互流畅和路径清楚，不追求照片级渲染，所以很适合反复
     调参和检查切片结果。
     """

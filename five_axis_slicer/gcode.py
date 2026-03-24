@@ -28,10 +28,9 @@ from .open5x_adapter import solve_toolpath_raw_angles_open5x
 _OPEN5X_SURFACE_START_TEMPLATE = (
     "; Open5x surface-finish export\n"
     "G90\n"
-    "G0 Z150\n"
+    "G0 {z_axis}{rotary_safe_z_mm:.3f}\n"
     "G92 E0\n"
-    "M104 S220\n"
-    "M109 S220\n"
+    "{start_heat_gcode}\n"
     "G21\n"
     "G90\n"
     "M83"
@@ -102,8 +101,9 @@ def generate_gcode(
     total_e = 0.0
     current_phase: str | None = None
     open5x_fallback_emitted = False
+    export_toolpaths = preview_toolpaths(result, slice_params)
 
-    for toolpath in result.toolpaths:
+    for toolpath in export_toolpaths:
         phase_changed = toolpath.phase != current_phase
         if phase_changed:
             lines.append(_phase_comment(toolpath.phase))
@@ -186,12 +186,12 @@ def generate_gcode(
         if toolpath.phase != "planar":
             if min_u_cmd < export_machine.min_u_deg or max_u_cmd > export_machine.max_u_deg:
                 warnings.append(
-                    f"{toolpath.name}: U range [{min_u_cmd:.2f}, {max_u_cmd:.2f}] deg exceeds configured limit "
+                    f"{toolpath.name}: {export_machine.u_axis_name} range [{min_u_cmd:.2f}, {max_u_cmd:.2f}] deg exceeds configured limit "
                     f"[{export_machine.min_u_deg:.2f}, {export_machine.max_u_deg:.2f}] deg."
                 )
             if min_v_cmd < export_machine.min_v_deg or max_v_cmd > export_machine.max_v_deg:
                 warnings.append(
-                    f"{toolpath.name}: V range [{min_v_cmd:.2f}, {max_v_cmd:.2f}] deg exceeds configured limit "
+                    f"{toolpath.name}: {export_machine.v_axis_name} range [{min_v_cmd:.2f}, {max_v_cmd:.2f}] deg exceeds configured limit "
                     f"[{export_machine.min_v_deg:.2f}, {export_machine.max_v_deg:.2f}] deg."
                 )
 
@@ -233,11 +233,57 @@ def _uses_open5x_surface_finish(result: SliceResult) -> bool:
     return str(result.metadata.get("conformal_strategy", "")) == "open5x-surface-finish"
 
 
+def preview_toolpaths(result: SliceResult, slice_params: SliceParameters) -> list[Toolpath]:
+    skirt_paths = _build_skirt_toolpaths(result, slice_params)
+    if not skirt_paths:
+        return list(result.toolpaths)
+    return skirt_paths + list(result.toolpaths)
+
+
+def _build_skirt_toolpaths(result: SliceResult, slice_params: SliceParameters) -> list[Toolpath]:
+    if str(slice_params.adhesion_type) != "skirt":
+        return []
+    mesh = result.mesh
+    if mesh.vertices.size == 0:
+        return []
+
+    z_height_mm = slice_params.resolved_planar_layer_height_mm()
+    line_spacing = max(slice_params.resolved_planar_line_spacing_mm(), slice_params.nozzle_diameter_mm)
+    base_margin_mm = max(slice_params.skirt_margin_mm, slice_params.nozzle_diameter_mm)
+    min_x, min_y = mesh.bounds_min[:2]
+    max_x, max_y = mesh.bounds_max[:2]
+    skirt_paths: list[Toolpath] = []
+    for line_index in range(max(int(slice_params.skirt_line_count), 1)):
+        offset_mm = base_margin_mm + line_index * line_spacing
+        points = np.asarray(
+            [
+                [min_x - offset_mm, min_y - offset_mm, z_height_mm],
+                [max_x + offset_mm, min_y - offset_mm, z_height_mm],
+                [max_x + offset_mm, max_y + offset_mm, z_height_mm],
+                [min_x - offset_mm, max_y + offset_mm, z_height_mm],
+                [min_x - offset_mm, min_y - offset_mm, z_height_mm],
+            ],
+            dtype=float,
+        )
+        normals = np.tile(np.array([[0.0, 0.0, 1.0]], dtype=float), (len(points), 1))
+        skirt_paths.append(
+            Toolpath(
+                name=f"adhesion-skirt-{line_index + 1}",
+                kind="adhesion-skirt",
+                points=points,
+                normals=normals,
+                closed=True,
+                phase="planar",
+                layer_index=0,
+                z_height_mm=z_height_mm,
+            )
+        )
+    return skirt_paths
+
+
 def _surface_finish_export_machine(machine_params: MachineParameters) -> MachineParameters:
     return replace(
         machine_params,
-        linear_axis_names=("X", "Y", "z"),
-        rotary_axis_names=("A", "B"),
         start_gcode_template=_OPEN5X_SURFACE_START_TEMPLATE,
         phase_change_gcode_template="",
         end_gcode_template=_OPEN5X_SURFACE_END_TEMPLATE,
@@ -256,7 +302,7 @@ def _generate_surface_finish_hybrid_gcode(
 
     planar_machine = machine_params
     surface_machine = _surface_finish_export_machine(machine_params)
-    planar_toolpaths = [toolpath for toolpath in result.toolpaths if toolpath.phase == "planar"]
+    planar_toolpaths = [toolpath for toolpath in preview_toolpaths(result, slice_params) if toolpath.phase == "planar"]
     surface_toolpaths = [toolpath for toolpath in result.toolpaths if toolpath.kind == "conformal-surface-finish"]
 
     lines: list[str] = []
@@ -304,7 +350,13 @@ def _generate_surface_finish_hybrid_gcode(
             feed_mm_min = compensated_feed(current_pose, next_pose, segment_length, nominal_speed, surface_machine)
             lines.append(format_move(next_pose, surface_machine, feed_mm_min, e_delta))
 
-        lines.append(_format_surface_positioning_move(poses[-1], surface_machine, segment_feed_mm_min, z_override=poses[-1].xyz[2] + segment_lift_mm))
+        lines.append(
+            format_partial_rapid(
+                surface_machine,
+                segment_feed_mm_min,
+                z=max(surface_machine.rotary_safe_z_mm, poses[-1].xyz[2] + segment_lift_mm),
+            )
+        )
 
     _append_extra_gcode(lines, slice_params.end_gcode)
     if surface_toolpaths:
@@ -471,12 +523,12 @@ def _resolve_rotary_toolpath_poses(
     if poses:
         if min_u_cmd < machine_params.min_u_deg or max_u_cmd > machine_params.max_u_deg:
             warnings.append(
-                f"{toolpath.name}: U range [{min_u_cmd:.2f}, {max_u_cmd:.2f}] deg exceeds configured limit "
+                f"{toolpath.name}: {machine_params.u_axis_name} range [{min_u_cmd:.2f}, {max_u_cmd:.2f}] deg exceeds configured limit "
                 f"[{machine_params.min_u_deg:.2f}, {machine_params.max_u_deg:.2f}] deg."
             )
         if min_v_cmd < machine_params.min_v_deg or max_v_cmd > machine_params.max_v_deg:
             warnings.append(
-                f"{toolpath.name}: V range [{min_v_cmd:.2f}, {max_v_cmd:.2f}] deg exceeds configured limit "
+                f"{toolpath.name}: {machine_params.v_axis_name} range [{min_v_cmd:.2f}, {max_v_cmd:.2f}] deg exceeds configured limit "
                 f"[{machine_params.min_v_deg:.2f}, {machine_params.max_v_deg:.2f}] deg."
             )
 
@@ -493,9 +545,31 @@ def _surface_finish_segment_intro(
     lines = ["G1 E0.10000 F300.0"]
     retract_mm = max(slice_params.retraction_mm, 1.0)
     lines.append(f"G1 E{-retract_mm:.5f} F{slice_params.retract_speed_mm_s * 60.0:.1f}")
-    lines.append(_format_surface_positioning_move(start_pose, machine_params, feed_mm_min, z_override=start_pose.xyz[2] + lift_height_mm))
+    lines.append(
+        format_partial_rapid(
+            machine_params,
+            feed_mm_min,
+            z=max(machine_params.rotary_safe_z_mm, start_pose.xyz[2] + lift_height_mm),
+        )
+    )
+    lines.append(
+        format_partial_rapid(
+            machine_params,
+            feed_mm_min,
+            u=start_pose.command_u_deg,
+            v=start_pose.command_v_deg,
+        )
+    )
+    lines.append(
+        format_partial_rapid(
+            machine_params,
+            feed_mm_min,
+            x=start_pose.xyz[0],
+            y=start_pose.xyz[1],
+        )
+    )
     lines.append(f"G1 E{retract_mm + 0.1:.5f} F{slice_params.prime_speed_mm_s * 60.0:.1f}")
-    lines.append(_format_surface_positioning_move(start_pose, machine_params, feed_mm_min))
+    lines.append(format_partial_rapid(machine_params, feed_mm_min, z=start_pose.xyz[2]))
     return lines
 
 
@@ -594,19 +668,56 @@ def build_travel_sequence(
     rapid_feed = slice_params.travel_speed_mm_s * 60.0
 
     if previous_end_pose is None:
-        safe_start = _lifted_pose(next_start_pose, lift_height_mm, machine_params)
-        lines.append(format_rapid(safe_start, machine_params, rapid_feed))
-        lines.append(format_rapid(next_start_pose, machine_params, rapid_feed))
+        safe_z = _absolute_rotary_safe_z(None, next_start_pose, lift_height_mm, machine_params)
+        lines.append(format_partial_rapid(machine_params, rapid_feed, z=safe_z))
+        lines.append(
+            format_partial_rapid(
+                machine_params,
+                rapid_feed,
+                u=next_start_pose.command_u_deg,
+                v=next_start_pose.command_v_deg,
+            )
+        )
+        lines.append(
+            format_partial_rapid(
+                machine_params,
+                rapid_feed,
+                x=next_start_pose.xyz[0],
+                y=next_start_pose.xyz[1],
+            )
+        )
+        lines.append(format_partial_rapid(machine_params, rapid_feed, z=next_start_pose.xyz[2]))
         return lines
 
     if slice_params.retraction_mm > 0.0:
         lines.append(f"G1 E{-slice_params.retraction_mm:.5f} F{slice_params.retract_speed_mm_s * 60.0:.1f}")
 
-    safe_prev = _lifted_pose(previous_end_pose, lift_height_mm, machine_params)
-    safe_next = _lifted_pose(next_start_pose, lift_height_mm, machine_params)
-    lines.append(format_rapid(safe_prev, machine_params, rapid_feed))
-    lines.append(format_rapid(safe_next, machine_params, rapid_feed))
-    lines.append(format_rapid(next_start_pose, machine_params, rapid_feed))
+    if _needs_absolute_rotary_safe_z(previous_end_pose, next_start_pose, machine_params):
+        safe_z = _absolute_rotary_safe_z(previous_end_pose, next_start_pose, lift_height_mm, machine_params)
+        lines.append(format_partial_rapid(machine_params, rapid_feed, z=safe_z))
+        lines.append(
+            format_partial_rapid(
+                machine_params,
+                rapid_feed,
+                u=next_start_pose.command_u_deg,
+                v=next_start_pose.command_v_deg,
+            )
+        )
+        lines.append(
+            format_partial_rapid(
+                machine_params,
+                rapid_feed,
+                x=next_start_pose.xyz[0],
+                y=next_start_pose.xyz[1],
+            )
+        )
+        lines.append(format_partial_rapid(machine_params, rapid_feed, z=next_start_pose.xyz[2]))
+    else:
+        safe_prev = _lifted_pose(previous_end_pose, lift_height_mm, machine_params)
+        safe_next = _lifted_pose(next_start_pose, lift_height_mm, machine_params)
+        lines.append(format_rapid(safe_prev, machine_params, rapid_feed))
+        lines.append(format_rapid(safe_next, machine_params, rapid_feed))
+        lines.append(format_rapid(next_start_pose, machine_params, rapid_feed))
 
     if slice_params.retraction_mm > 0.0:
         lines.append(f"G1 E{slice_params.retraction_mm:.5f} F{slice_params.prime_speed_mm_s * 60.0:.1f}")
@@ -688,6 +799,59 @@ def format_rapid(pose: Pose, machine_params: MachineParameters, feed_mm_min: flo
     )
 
 
+def format_partial_rapid(
+    machine_params: MachineParameters,
+    feed_mm_min: float,
+    *,
+    x: float | None = None,
+    y: float | None = None,
+    z: float | None = None,
+    u: float | None = None,
+    v: float | None = None,
+) -> str:
+    x_name, y_name, z_name = machine_params.linear_axis_names
+    u_name, v_name = machine_params.rotary_axis_names
+    tokens = ["G0"]
+    if x is not None:
+        tokens.append(f"{x_name}{float(x):.3f}")
+    if y is not None:
+        tokens.append(f"{y_name}{float(y):.3f}")
+    if z is not None:
+        tokens.append(f"{z_name}{float(z):.3f}")
+    if u is not None:
+        tokens.append(f"{u_name}{float(u):.3f}")
+    if v is not None:
+        tokens.append(f"{v_name}{float(v):.3f}")
+    tokens.append(f"F{feed_mm_min:.1f}")
+    return " ".join(tokens)
+
+
+def _needs_absolute_rotary_safe_z(
+    previous_end_pose: Pose | None,
+    next_start_pose: Pose,
+    machine_params: MachineParameters,
+) -> bool:
+    if previous_end_pose is None:
+        return True
+    rotary_delta_deg = max(
+        abs(next_start_pose.command_u_deg - previous_end_pose.command_u_deg),
+        abs(next_start_pose.command_v_deg - previous_end_pose.command_v_deg),
+    )
+    return rotary_delta_deg >= machine_params.rotary_safe_reposition_trigger_deg
+
+
+def _absolute_rotary_safe_z(
+    previous_end_pose: Pose | None,
+    next_start_pose: Pose,
+    lift_height_mm: float,
+    machine_params: MachineParameters,
+) -> float:
+    safe_z = max(machine_params.rotary_safe_z_mm, next_start_pose.xyz[2] + lift_height_mm)
+    if previous_end_pose is not None:
+        safe_z = max(safe_z, previous_end_pose.xyz[2] + lift_height_mm)
+    return safe_z
+
+
 def _phase_comment(phase: str) -> str:
     if phase == "planar":
         return "; --- Begin planar core / substrate phase ---"
@@ -721,9 +885,13 @@ def _template_context(
     slice_params: SliceParameters,
     machine_params: MachineParameters,
 ) -> dict[str, float | int | str]:
+    x_axis, y_axis, z_axis = machine_params.linear_axis_names
     return {
         "profile_name": machine_params.profile_name,
         "profile_description": machine_params.profile_description,
+        "x_axis": x_axis,
+        "y_axis": y_axis,
+        "z_axis": z_axis,
         "u_axis": machine_params.u_axis_name,
         "v_axis": machine_params.v_axis_name,
         "u_axis_name": machine_params.u_axis_name,
@@ -731,8 +899,17 @@ def _template_context(
         "home_u_deg": machine_params.home_u_deg,
         "home_v_deg": machine_params.home_v_deg,
         "phase_change_lift_mm": machine_params.phase_change_lift_mm,
+        "rotary_safe_z_mm": machine_params.rotary_safe_z_mm,
+        "rotary_safe_reposition_trigger_deg": machine_params.rotary_safe_reposition_trigger_deg,
         "travel_feed_mm_min": slice_params.travel_speed_mm_s * 60.0,
         "travel_height_mm": slice_params.travel_height_mm,
+        "nozzle_temperature_c": slice_params.nozzle_temperature_c,
+        "bed_temperature_c": slice_params.bed_temperature_c,
+        "start_heat_gcode": _start_heat_gcode(slice_params),
+        "shutdown_heat_gcode": _shutdown_heat_gcode(),
+        "adhesion_type": slice_params.adhesion_type,
+        "skirt_line_count": slice_params.skirt_line_count,
+        "skirt_margin_mm": slice_params.skirt_margin_mm,
         "transition_height_mm": float(result.metadata.get("transition_height_mm", 0.0)),
         "core_center_x_mm": float(result.metadata.get("core_center_x_mm", 0.0)),
         "core_center_y_mm": float(result.metadata.get("core_center_y_mm", 0.0)),
@@ -756,7 +933,7 @@ def _machine_summary_comments(result: SliceResult, machine_params: MachineParame
     core_max_z = float(result.metadata.get("core_max_z_mm", 0.0))
     core_max_radius = float(result.metadata.get("core_max_radius_mm", 0.0))
     return [
-        "; Strategy: print rotary core first with fixed U/V, then print the five-axis conformal shell.",
+        f"; Strategy: print rotary core first with fixed {machine_params.u_axis_name}/{machine_params.v_axis_name}, then print the five-axis conformal shell.",
         "; Travel moves are inserted between disconnected patches so blade-to-blade jumps do not extrude.",
         f"; Profile description: {machine_params.profile_description}",
         f"; Rotary centre (mm): X={machine_params.rotary_center_x_mm:.3f} Y={machine_params.rotary_center_y_mm:.3f} Z={machine_params.rotary_center_z_mm:.3f}",
@@ -764,12 +941,31 @@ def _machine_summary_comments(result: SliceResult, machine_params: MachineParame
         f"; Detected core centre (mm): X={core_center_x:.3f} Y={core_center_y:.3f}",
         f"; Detected core Z range (mm): [{core_min_z:.3f}, {core_max_z:.3f}]",
         f"; Detected core max radius (mm): {core_max_radius:.3f}",
-        f"; U command = {machine_params.u_axis_sign:+d} * U_math + {machine_params.u_zero_offset_deg:.3f} deg",
-        f"; V command = {machine_params.v_axis_sign:+d} * V_math + {machine_params.v_zero_offset_deg:.3f} deg",
-        f"; U limit range: [{machine_params.min_u_deg:.3f}, {machine_params.max_u_deg:.3f}] deg",
-        f"; V limit range: [{machine_params.min_v_deg:.3f}, {machine_params.max_v_deg:.3f}] deg",
+        f"; {machine_params.u_axis_name} command = {machine_params.u_axis_sign:+d} * U_math + {machine_params.u_zero_offset_deg:.3f} deg",
+        f"; {machine_params.v_axis_name} command = {machine_params.v_axis_sign:+d} * V_math + {machine_params.v_zero_offset_deg:.3f} deg",
+        f"; {machine_params.u_axis_name} limit range: [{machine_params.min_u_deg:.3f}, {machine_params.max_u_deg:.3f}] deg",
+        f"; {machine_params.v_axis_name} limit range: [{machine_params.min_v_deg:.3f}, {machine_params.max_v_deg:.3f}] deg",
+        f"; Safe absolute Z before large rotary reposition: {machine_params.rotary_safe_z_mm:.3f} mm",
+        f"; Rotary safe-Z trigger: {machine_params.rotary_safe_reposition_trigger_deg:.3f} deg",
         f"; Rotary core top Z / conformal handoff: {transition_height:.3f} mm",
     ]
+
+
+def _start_heat_gcode(slice_params: SliceParameters) -> str:
+    lines: list[str] = []
+    if slice_params.bed_temperature_c > 0.0:
+        lines.append(f"M140 S{slice_params.bed_temperature_c:.0f}")
+        if slice_params.wait_for_bed:
+            lines.append(f"M190 S{slice_params.bed_temperature_c:.0f}")
+    if slice_params.nozzle_temperature_c > 0.0:
+        lines.append(f"M104 S{slice_params.nozzle_temperature_c:.0f}")
+        if slice_params.wait_for_nozzle:
+            lines.append(f"M109 S{slice_params.nozzle_temperature_c:.0f}")
+    return "\n".join(lines)
+
+
+def _shutdown_heat_gcode() -> str:
+    return "M104 S0\nM140 S0"
 
 
 def _deduplicate_warnings(warnings: list[str]) -> list[str]:
