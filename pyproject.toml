@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "five-axis-slicer"
+version = "0.1.0"
+description = "Teaching STEP body and edge selector for additive manufacturing experiments."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "5AxisSclicer contributors" }]
+dependencies = [
+    "cadquery>=2.7",
+    "PyQt5>=5.15",
+    "vtk>=9.3",
+]
+
+[project.scripts]
+five-axis-slicer = "five_axis_slicer.app:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
