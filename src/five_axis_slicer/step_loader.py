@@ -24,13 +24,16 @@ PALETTE: tuple[tuple[float, float, float], ...] = (
     (0.68, 0.72, 0.78),
     (0.78, 0.80, 0.68),
 )
+STEP_SUFFIXES = {".step", ".stp"}
 
 
 class StepLoadError(RuntimeError):
-    """Raised when a STEP/STP file cannot be loaded into a usable model."""
+    """STEP/STP 文件无法读取为可用 CAD 模型时抛出。"""
 
 
 def file_sha256(path: Path) -> str:
+    """计算源文件哈希，保存项目时用于确认模型来源。"""
+
     digest = hashlib.sha256()
     with path.open("rb") as stream:
         for chunk in iter(lambda: stream.read(1024 * 1024), b""):
@@ -39,21 +42,8 @@ def file_sha256(path: Path) -> str:
 
 
 def load_step(path: str | Path) -> CadModel:
-    source_path = Path(path).expanduser().resolve()
-    if not source_path.exists():
-        raise StepLoadError(f"STEP file not found: {source_path}")
-    if source_path.suffix.lower() not in {".step", ".stp"}:
-        raise StepLoadError(f"Expected .step or .stp file: {source_path}")
-
-    reader = STEPControl_Reader()
-    status = reader.ReadFile(str(source_path))
-    if status != IFSelect_RetDone:
-        raise StepLoadError(f"OpenCascade failed to read STEP: {source_path}")
-    transferred = reader.TransferRoots()
-    if transferred <= 0:
-        raise StepLoadError(f"STEP file contains no transferable roots: {source_path}")
-
-    root_shape = reader.OneShape()
+    source_path = _resolve_step_path(path)
+    root_shape = _read_root_shape(source_path)
     solid_explorer = TopExp_Explorer(root_shape, TopAbs_SOLID)
 
     bodies: list[BodyInfo] = []
@@ -68,6 +58,8 @@ def load_step(path: str | Path) -> CadModel:
         solid = TopoDS.Solid_s(solid_explorer.Current())
         shapes[body_id] = solid
 
+        # OpenCascade 的 edge 枚举来自真实 BRep 拓扑。这里不先转网格，
+        # 以免丢失后续制造分组可能需要的边线身份。
         body_edges: list[str] = []
         edge_explorer = TopExp_Explorer(solid, TopAbs_EDGE)
         edge_index = 0
@@ -113,7 +105,29 @@ def load_step(path: str | Path) -> CadModel:
     )
 
 
+def _resolve_step_path(path: str | Path) -> Path:
+    source_path = Path(path).expanduser().resolve()
+    if not source_path.exists():
+        raise StepLoadError(f"STEP file not found: {source_path}")
+    if source_path.suffix.lower() not in STEP_SUFFIXES:
+        raise StepLoadError(f"Expected .step or .stp file: {source_path}")
+    return source_path
+
+
+def _read_root_shape(source_path: Path) -> object:
+    reader = STEPControl_Reader()
+    status = reader.ReadFile(str(source_path))
+    if status != IFSelect_RetDone:
+        raise StepLoadError(f"OpenCascade failed to read STEP: {source_path}")
+    transferred = reader.TransferRoots()
+    if transferred <= 0:
+        raise StepLoadError(f"STEP file contains no transferable roots: {source_path}")
+    return reader.OneShape()
+
+
 def sample_edge_points(edge: object, target_segments: int = 24) -> list[tuple[float, float, float]]:
+    """按参数区间均匀采样边线，用于预览 polyline 和长度提示。"""
+
     curve = BRepAdaptor_Curve(edge)
     first = float(curve.FirstParameter())
     last = float(curve.LastParameter())
@@ -130,10 +144,11 @@ def sample_edge_points(edge: object, target_segments: int = 24) -> list[tuple[fl
 
 
 def edge_length_hint(points: list[tuple[float, float, float]]) -> float | None:
+    """根据采样点累计折线长度，给右侧列表提供近似值。"""
+
     if len(points) < 2:
         return None
     total = 0.0
     for left, right in zip(points, points[1:]):
         total += math.dist(left, right)
     return total
-

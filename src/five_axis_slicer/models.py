@@ -7,6 +7,12 @@ from typing import Any
 
 @dataclass(slots=True)
 class EdgeInfo:
+    """从 STEP 拓扑枚举得到的边线元数据。
+
+    edge_id 是界面、HTTP 和 project.json 共用的稳定标识；length_hint 来自采样点
+    的近似长度，只用于列表辅助判断，不参与几何计算。
+    """
+
     edge_id: str
     body_id: str
     index: int
@@ -25,6 +31,12 @@ class EdgeInfo:
 
 @dataclass(slots=True)
 class BodyInfo:
+    """一个 STEP solid 对应一个 body。
+
+    当前版本不推断制造分区，body 只代表导入阶段发现的拓扑实体。
+    edge_ids 保持原始枚举顺序，便于右侧列表和保存文件稳定复现。
+    """
+
     body_id: str
     index: int
     name: str
@@ -45,6 +57,12 @@ class BodyInfo:
 
 @dataclass(slots=True)
 class CadModel:
+    """加载后的内存模型。
+
+    shapes 和 edge_shapes 保存 OCP 原始拓扑对象，渲染层按需转换为 VTK。
+    这样项目保存可记录轻量 JSON，界面刷新仍能使用真实 CAD 拓扑。
+    """
+
     source_path: Path
     source_hash: str
     bodies: list[BodyInfo]
@@ -71,6 +89,12 @@ class CadModel:
 
 @dataclass(slots=True)
 class SelectionState:
+    """全局选择状态。
+
+    右侧列表、左侧预览区、HTTP 自动化和项目保存共享这一份状态。
+    mode 保留为 edge，便于旧脚本读取；body 选择由 body_ids 显式表达。
+    """
+
     mode: str = "edge"
     body_ids: set[str] = field(default_factory=set)
     edge_ids: set[str] = field(default_factory=set)

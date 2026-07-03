@@ -3,17 +3,14 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from PyQt5.QtCore import Qt, QSignalBlocker
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (
     QAction,
-    QAbstractItemView,
     QApplication,
     QFileDialog,
     QFrame,
     QHBoxLayout,
     QLabel,
-    QListWidget,
-    QListWidgetItem,
     QMainWindow,
     QMessageBox,
     QPushButton,
@@ -28,12 +25,10 @@ from .automation import AutomationServer
 from .localization import tr
 from .models import CadModel
 from .project_io import save_project
+from .selection_list import SelectionList, SelectionRow
 from .step_loader import StepLoadError, load_step
+from .styles import APP_STYLE
 from .viewer import ModelViewer
-
-
-OBJECT_ID_ROLE = Qt.UserRole
-DISPLAY_TEXT_ROLE = Qt.UserRole + 1
 
 
 class MainWindow(QMainWindow):
@@ -42,7 +37,6 @@ class MainWindow(QMainWindow):
         self.language = "zh"
         self.model: CadModel | None = None
         self.last_project_dir: Path | None = None
-        self._refreshing_lists = False
 
         self.viewer = ModelViewer(self)
         self.viewer.set_selection_callback(self._on_viewer_selection)
@@ -106,27 +100,15 @@ class MainWindow(QMainWindow):
         return {"project_json": str(path)}
 
     def refresh_lists(self) -> None:
-        self._refreshing_lists = True
-        body_blocker = QSignalBlocker(self.body_list)
-        edge_blocker = QSignalBlocker(self.edge_list)
-        try:
-            self.body_list.clear()
-            self.edge_list.clear()
-            if self.model is None:
-                return
-            selected_bodies = self.viewer.selection.body_ids
-            selected_edges = self.viewer.selection.edge_ids
-            for body in self.model.bodies:
-                label = f"{body.body_id}  {body.name}  edges={len(body.edge_ids)}"
-                self._add_selection_item(self.body_list, body.body_id, label, body.body_id in selected_bodies)
-            for edge in self.model.edges:
-                length = "" if edge.length_hint is None else f"  len≈{edge.length_hint:.3f}"
-                label = f"{edge.edge_id}{length}"
-                self._add_selection_item(self.edge_list, edge.edge_id, label, edge.edge_id in selected_edges)
-        finally:
-            del body_blocker
-            del edge_blocker
-            self._refreshing_lists = False
+        if self.model is None:
+            self.body_list.set_rows([], set())
+            self.edge_list.set_rows([], set())
+            return
+
+        # 右侧列表是 SelectionState 的可视入口；预览区点选 edge 或 HTTP 写入后，
+        # 这里按最新状态反向刷新勾选符号。
+        self.body_list.set_rows(self._body_rows(), self.viewer.selection.body_ids)
+        self.edge_list.set_rows(self._edge_rows(), self.viewer.selection.edge_ids)
 
     def handle_automation(self, path: str, payload: dict[str, Any]) -> dict[str, Any]:
         if path == "/health":
@@ -251,10 +233,8 @@ class MainWindow(QMainWindow):
         self.right_title = QLabel()
         self.body_label = QLabel()
         self.edge_label = QLabel()
-        self.body_list = QListWidget()
-        self.edge_list = QListWidget()
-        self.body_list.setSelectionMode(QAbstractItemView.MultiSelection)
-        self.edge_list.setSelectionMode(QAbstractItemView.MultiSelection)
+        self.body_list = SelectionList()
+        self.edge_list = SelectionList()
         self.body_list.itemSelectionChanged.connect(self._on_body_list_selection_changed)
         self.edge_list.itemSelectionChanged.connect(self._on_edge_list_selection_changed)
         right_panel = QFrame()
@@ -299,94 +279,36 @@ class MainWindow(QMainWindow):
 
     def _apply_style(self) -> None:
         QApplication.setStyle("Fusion")
-        self.setStyleSheet(
-            """
-            QMainWindow, QWidget {
-                background: #111214;
-                color: #f4f4f2;
-                font-family: "Segoe UI", "Microsoft YaHei UI";
-                font-size: 15px;
-            }
-            QToolBar {
-                background: rgba(255, 255, 255, 0.08);
-                border: 0;
-                spacing: 8px;
-                padding: 9px;
-            }
-            QToolButton, QPushButton {
-                background: rgba(255, 255, 255, 0.16);
-                border: 1px solid rgba(255, 255, 255, 0.22);
-                border-radius: 8px;
-                padding: 9px 14px;
-                color: #f8f8f6;
-            }
-            QToolButton:hover, QPushButton:hover {
-                background: rgba(255, 255, 255, 0.24);
-            }
-            QLabel {
-                color: #eeeeec;
-            }
-            QLabel:first-child {
-                font-size: 18px;
-                font-weight: 600;
-            }
-            #glassPanel {
-                background: rgba(245, 245, 245, 0.10);
-                border: 1px solid rgba(255, 255, 255, 0.18);
-                border-radius: 12px;
-            }
-            QListWidget {
-                background: rgba(0, 0, 0, 0.20);
-                border: 1px solid rgba(255, 255, 255, 0.12);
-                border-radius: 8px;
-                padding: 7px;
-            }
-            QListWidget::item {
-                padding: 6px;
-            }
-            QListWidget::item:selected {
-                background: rgba(255, 255, 255, 0.20);
-            }
-            QStatusBar {
-                background: rgba(255, 255, 255, 0.08);
-                color: #d8d8d6;
-            }
-            """
-        )
+        self.setStyleSheet(APP_STYLE)
 
-    def _on_viewer_selection(self, kind: str, object_id: str) -> None:
+    def _on_viewer_selection(self, _kind: str, _obj_id: str) -> None:
         self.refresh_lists()
 
     def _on_body_list_selection_changed(self) -> None:
-        if self._refreshing_lists or self.model is None:
+        if self.model is None:
             return
-        self.viewer.set_selection(body_ids=self._selected_item_ids(self.body_list))
-        self._sync_list_item_text(self.body_list)
+        self.viewer.set_selection(body_ids=self.body_list.selected_ids())
+        self.body_list.sync_marks()
 
     def _on_edge_list_selection_changed(self) -> None:
-        if self._refreshing_lists or self.model is None:
+        if self.model is None:
             return
-        self.viewer.set_selection(edge_ids=self._selected_item_ids(self.edge_list))
-        self._sync_list_item_text(self.edge_list)
+        self.viewer.set_selection(edge_ids=self.edge_list.selected_ids())
+        self.edge_list.sync_marks()
 
-    def _add_selection_item(self, list_widget: QListWidget, object_id: str, label: str, selected: bool) -> None:
-        item = QListWidgetItem(f"{'✓ ' if selected else ''}{label}")
-        item.setData(OBJECT_ID_ROLE, object_id)
-        item.setData(DISPLAY_TEXT_ROLE, label)
-        list_widget.addItem(item)
-        item.setSelected(selected)
+    def _body_rows(self) -> list[SelectionRow]:
+        if self.model is None:
+            return []
+        return [
+            (body.body_id, f"{body.body_id}  {body.name}  edges={len(body.edge_ids)}")
+            for body in self.model.bodies
+        ]
 
-    def _selected_item_ids(self, list_widget: QListWidget) -> list[str]:
-        ids: list[str] = []
-        for item in list_widget.selectedItems():
-            object_id = item.data(OBJECT_ID_ROLE)
-            if object_id is not None:
-                ids.append(str(object_id))
-        return ids
-
-    def _sync_list_item_text(self, list_widget: QListWidget) -> None:
-        for row in range(list_widget.count()):
-            item = list_widget.item(row)
-            label = item.data(DISPLAY_TEXT_ROLE)
-            if label is not None:
-                item.setText(f"{'✓ ' if item.isSelected() else ''}{label}")
+    def _edge_rows(self) -> list[SelectionRow]:
+        if self.model is None:
+            return []
+        rows: list[SelectionRow] = []
+        for edge in self.model.edges:
+            length = "" if edge.length_hint is None else f"  len≈{edge.length_hint:.3f}"
+            rows.append((edge.edge_id, f"{edge.edge_id}{length}"))
+        return rows

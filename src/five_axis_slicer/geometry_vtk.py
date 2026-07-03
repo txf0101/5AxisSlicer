@@ -12,6 +12,12 @@ from .step_loader import sample_edge_points
 
 
 def shape_to_polydata(shape: object, linear_deflection: float = 0.35) -> vtk.vtkPolyData:
+    """把 OCP shape 网格化为 VTK polydata。
+
+    OCP 仍保留在模型层；这里仅为显示生成三角面。linear_deflection 越小，
+    曲面越细腻，载入时间和 actor 数据量也会增加。
+    """
+
     BRepMesh_IncrementalMesh(shape, linear_deflection)
     points = vtk.vtkPoints()
     polys = vtk.vtkCellArray()
@@ -22,6 +28,8 @@ def shape_to_polydata(shape: object, linear_deflection: float = 0.35) -> vtk.vtk
         loc = TopLoc_Location()
         triangulation = BRep_Tool.Triangulation_s(face, loc)
         if triangulation is not None:
+            # OpenCascade 的节点下标从 1 开始，VTK 的点下标从 0 开始。
+            # base 记录当前 polydata 已有点数，保证多个 face 追加后索引仍正确。
             transform = loc.Transformation()
             base = points.GetNumberOfPoints()
             for index in range(1, triangulation.NbNodes() + 1):
@@ -40,6 +48,7 @@ def shape_to_polydata(shape: object, linear_deflection: float = 0.35) -> vtk.vtk
     polydata.SetPoints(points)
     polydata.SetPolys(polys)
 
+    # 法线交给 VTK 统一生成，避免不同 STEP 导出器的面方向差异影响光照。
     normals = vtk.vtkPolyDataNormals()
     normals.SetInputData(polydata)
     normals.ConsistencyOn()
@@ -49,6 +58,8 @@ def shape_to_polydata(shape: object, linear_deflection: float = 0.35) -> vtk.vtk
 
 
 def edge_to_polydata(edge: object, segments: int = 24) -> vtk.vtkPolyData:
+    """把一条 CAD 边线采样为 VTK polyline actor 使用的数据。"""
+
     sampled = sample_edge_points(edge, target_segments=segments)
     points = vtk.vtkPoints()
     lines = vtk.vtkCellArray()
@@ -63,4 +74,3 @@ def edge_to_polydata(edge: object, segments: int = 24) -> vtk.vtkPolyData:
     polydata.SetPoints(points)
     polydata.SetLines(lines)
     return polydata
-

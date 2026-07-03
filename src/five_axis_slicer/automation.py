@@ -13,10 +13,18 @@ CommandHandler = Callable[[str, dict[str, Any]], dict[str, Any]]
 
 
 class AutomationBridge(QObject):
+    """把 HTTP 线程中的命令投递到 Qt 主线程。"""
+
     command = pyqtSignal(str, dict, object)
 
 
 class AutomationServer:
+    """本地 HTTP 自动化服务。
+
+    BaseHTTPRequestHandler 在后台线程处理网络请求；Qt 控件只能在主线程访问。
+    call() 内用 Queue 等待主线程执行结果，保证脚本拿到的状态和界面一致。
+    """
+
     def __init__(self, host: str, port: int, handler: CommandHandler) -> None:
         self.host = host
         self.port = port
@@ -69,18 +77,18 @@ class AutomationServer:
     def call(self, path: str, payload: dict[str, Any]) -> dict[str, Any]:
         if path in {"/health", "/state"}:
             return self.handler(path, payload)
-        queue: Queue[tuple[bool, dict[str, Any] | str]] = Queue(maxsize=1)
-        self.bridge.command.emit(path, payload, queue)
-        ok, result = queue.get(timeout=30.0)
+        reply: Queue[tuple[bool, dict[str, Any] | str]] = Queue(maxsize=1)
+        self.bridge.command.emit(path, payload, reply)
+        ok, result = reply.get(timeout=30.0)
         if ok:
             return result if isinstance(result, dict) else {"result": result}
         raise RuntimeError(str(result))
 
-    def _handle_on_qt_thread(self, path: str, payload: dict[str, Any], queue: Queue) -> None:
+    def _handle_on_qt_thread(self, path: str, payload: dict[str, Any], reply: Queue) -> None:
         try:
-            queue.put((True, self.handler(path, payload)))
+            reply.put((True, self.handler(path, payload)))
         except Exception as exc:
-            queue.put((False, str(exc)))
+            reply.put((False, str(exc)))
 
     @staticmethod
     def _send_json(request: BaseHTTPRequestHandler, status: int, payload: dict[str, Any]) -> None:
@@ -90,4 +98,3 @@ class AutomationServer:
         request.send_header("Content-Length", str(len(data)))
         request.end_headers()
         request.wfile.write(data)
-

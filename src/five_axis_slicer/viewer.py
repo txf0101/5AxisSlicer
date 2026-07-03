@@ -13,6 +13,15 @@ from .models import CadModel, SelectionState
 
 SelectionCallback = Callable[[str, str], None]
 
+BG_COLOR = (0.08, 0.085, 0.09)
+EDGE_COLOR = (0.10, 0.10, 0.10)
+EDGE_PICK_COLOR = (0.12, 0.12, 0.12)
+EDGE_SELECTED_COLOR = (1.0, 0.92, 0.42)
+BODY_SELECTED_COLOR = (0.98, 0.98, 0.98)
+BODY_SELECTED_EDGE_COLOR = (0.05, 0.05, 0.05)
+EDGE_PICK_WIDTH = 2.6
+EDGE_SELECTED_WIDTH = 5.0
+
 
 @dataclass(slots=True)
 class ActorRecord:
@@ -24,7 +33,7 @@ class ModelViewer(QVTKRenderWindowInteractor):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.renderer = vtk.vtkRenderer()
-        self.renderer.SetBackground(0.08, 0.085, 0.09)
+        self.renderer.SetBackground(*BG_COLOR)
         self.GetRenderWindow().AddRenderer(self.renderer)
         self.interactor = self.GetRenderWindow().GetInteractor()
         self.interactor.SetInteractorStyle(vtk.vtkInteractorStyleTrackballCamera())
@@ -54,6 +63,8 @@ class ModelViewer(QVTKRenderWindowInteractor):
         self.renderer.RemoveAllViewProps()
 
         for body in model.bodies:
+            # body 用面片 actor 承载外观和高亮；点选权交给右侧列表，
+            # 因此 actor 仍可显示，但在 set_mode("edge") 中会关闭 pickable。
             polydata = shape_to_polydata(model.shapes[body.body_id])
             body.triangle_count = polydata.GetNumberOfPolys()
             mapper = vtk.vtkPolyDataMapper()
@@ -70,12 +81,14 @@ class ModelViewer(QVTKRenderWindowInteractor):
             self.actor_records[actor] = ActorRecord("body", body.body_id)
 
             for edge_id in body.edge_ids:
+                # edge 保持独立 actor，点击命中后可直接回到 edge_id。
+                # 这种结构比合并成大 polydata 更直观，适合当前模型规模。
                 polyline = edge_to_polydata(model.edge_shapes[edge_id], segments=28)
                 edge_mapper = vtk.vtkPolyDataMapper()
                 edge_mapper.SetInputData(polyline)
                 edge_actor = vtk.vtkActor()
                 edge_actor.SetMapper(edge_mapper)
-                edge_actor.GetProperty().SetColor(0.12, 0.12, 0.12)
+                edge_actor.GetProperty().SetColor(*EDGE_PICK_COLOR)
                 edge_actor.GetProperty().SetLineWidth(2.0)
                 edge_actor.GetProperty().SetOpacity(0.72)
                 self.renderer.AddActor(edge_actor)
@@ -97,7 +110,7 @@ class ModelViewer(QVTKRenderWindowInteractor):
             actor.SetPickable(False)
         for actor in self.edge_actors.values():
             actor.SetPickable(True)
-            actor.GetProperty().SetLineWidth(2.6)
+            actor.GetProperty().SetLineWidth(EDGE_PICK_WIDTH)
             actor.GetProperty().SetOpacity(0.9)
         self.render()
 
@@ -117,9 +130,9 @@ class ModelViewer(QVTKRenderWindowInteractor):
             selected = body_id in self.selection.body_ids
             prop = actor.GetProperty()
             if selected:
-                prop.SetColor(0.98, 0.98, 0.98)
+                prop.SetColor(*BODY_SELECTED_COLOR)
                 prop.SetEdgeVisibility(True)
-                prop.SetEdgeColor(0.05, 0.05, 0.05)
+                prop.SetEdgeColor(*BODY_SELECTED_EDGE_COLOR)
                 prop.SetLineWidth(1.5)
             elif self.model:
                 color = self.model.body_map[body_id].color
@@ -130,12 +143,12 @@ class ModelViewer(QVTKRenderWindowInteractor):
             selected = edge_id in self.selection.edge_ids
             prop = actor.GetProperty()
             if selected:
-                prop.SetColor(1.0, 0.92, 0.42)
-                prop.SetLineWidth(5.0)
+                prop.SetColor(*EDGE_SELECTED_COLOR)
+                prop.SetLineWidth(EDGE_SELECTED_WIDTH)
                 prop.SetOpacity(1.0)
             else:
-                prop.SetColor(0.10, 0.10, 0.10)
-                prop.SetLineWidth(2.6 if self.selection.mode == "edge" else 1.6)
+                prop.SetColor(*EDGE_COLOR)
+                prop.SetLineWidth(EDGE_PICK_WIDTH if self.selection.mode == "edge" else 1.6)
                 prop.SetOpacity(0.9 if self.selection.mode == "edge" else 0.48)
         self.render()
 
@@ -211,18 +224,10 @@ class ModelViewer(QVTKRenderWindowInteractor):
         self.picker.Pick(x, y, 0, self.renderer)
         actor = self.picker.GetActor()
         record = self.actor_records.get(actor)
+        # 预览区固定承担 edge 点选；body 即使命中也不修改状态。
         if record is not None and record.kind == "edge":
             self._toggle_edge(record.object_id)
         self.interactor.GetInteractorStyle().OnLeftButtonDown()
-
-    def _toggle_body(self, body_id: str) -> None:
-        if body_id in self.selection.body_ids:
-            self.selection.body_ids.remove(body_id)
-        else:
-            self.selection.body_ids.add(body_id)
-        self.refresh_selection()
-        if self.selection_callback:
-            self.selection_callback("body", body_id)
 
     def _toggle_edge(self, edge_id: str) -> None:
         if edge_id in self.selection.edge_ids:
