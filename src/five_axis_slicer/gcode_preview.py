@@ -10,11 +10,15 @@ import re
 from typing import Any
 
 
-AXIS_RE = re.compile(r"([XYZABCUVEFxyzabcuvwef])\s*([-+]?(?:\d+(?:\.\d*)?|\.\d+))")
-COMMAND_RE = re.compile(r"\bG(0|1|28|90|91|92)\b", re.IGNORECASE)
+NUMBER_RE = r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?"
+AXIS_RE = re.compile(rf"([XYZABCUVWEFxyzabcuvwef])\s*({NUMBER_RE})")
+COMMAND_RE = re.compile(r"\bG(0|1|20|21|28|90|91|92)\b", re.IGNORECASE)
 LAYER_RE = re.compile(r"^Layer\s+(-?\d+)", re.IGNORECASE)
 TYPE_RE = re.compile(r"^TYPE\s*:\s*(.+)$", re.IGNORECASE)
-WIDTH_RE = re.compile(r"^WIDTH\s*:\s*([-+]?(?:\d+(?:\.\d*)?|\.\d+))", re.IGNORECASE)
+WIDTH_RE = re.compile(rf"^WIDTH\s*:\s*({NUMBER_RE})", re.IGNORECASE)
+CACHE_VERSION = "gcode-preview-v3-ac-inverse-spatial-segments"
+AC_INVERSE_TRANSFORM = "ac_inverse_rz_minus_c_after_rx_minus_a"
+MACHINE_COORDINATE_TRANSFORM = "machine_xyz"
 
 
 MOVE_OPTION_COLORS: dict[str, tuple[float, float, float]] = {
@@ -141,6 +145,9 @@ class GCodePathSegment:
     width: float | None = None
     comment: str = ""
     raw: str = ""
+    machine_start: tuple[float, float, float] | None = None
+    machine_end: tuple[float, float, float] | None = None
+    coordinate_transform: str = MACHINE_COORDINATE_TRANSFORM
 
     @property
     def has_spatial_length(self) -> bool:
@@ -170,6 +177,9 @@ class GCodePathSegment:
             "delta_e": self.delta_e,
             "width": self.width,
             "comment": self.comment,
+            "machine_start": None if self.machine_start is None else list(self.machine_start),
+            "machine_end": None if self.machine_end is None else list(self.machine_end),
+            "coordinate_transform": self.coordinate_transform,
         }
 
 
@@ -184,6 +194,7 @@ class GCodePreview:
     move_counts: dict[str, int]
     role_counts: dict[str, int]
     rotary_axes: list[str]
+    coordinate_transform: str = MACHINE_COORDINATE_TRANSFORM
 
     @property
     def layer_count(self) -> int:
@@ -204,6 +215,7 @@ class GCodePreview:
             "move_counts": dict(self.move_counts),
             "role_counts": dict(self.role_counts),
             "rotary_axes": list(self.rotary_axes),
+            "coordinate_transform": self.coordinate_transform,
             "bounds": None
             if self.bounds is None
             else {
@@ -276,14 +288,19 @@ def parse_gcode_lines(lines: Any, source_path: str | Path = "<memory>", sample_s
         command, words = _parse_code(code)
         if command is None:
             _apply_modal_command(state, code)
-            continue
+            if state.motion_command in {"G0", "G1"} and words:
+                command = state.motion_command
+            else:
+                continue
 
         if command in {"G90", "G91"}:
             state.absolute_xyz = command == "G90"
             continue
+        if command in {"G20", "G21"}:
+            state.units = 25.4 if command == "G20" else 1.0
+            continue
         if command == "G92":
-            if "E" in words:
-                state.axes["E"] = words["E"]
+            _apply_g92_words(state, words)
             continue
         if command == "G28":
             for axis in ("X", "Y", "Z"):
@@ -293,11 +310,27 @@ def parse_gcode_lines(lines: Any, source_path: str | Path = "<memory>", sample_s
         if command not in {"G0", "G1"}:
             continue
 
+        state.motion_command = command
         values = _apply_motion_words(state, command, words)
         if values is not None:
-            stats.add_values(*values[:8])
-            if stats.total_segment_count % sample_stride == 0:
-                segments.append(_make_segment(values, line_number, raw, comment))
+            display_start = _preview_xyz(values[3], values[5])
+            display_end = _preview_xyz(values[4], values[6])
+            transform_name = _coordinate_transform_name(values[5], values[6])
+            count_path_segment = values[11]
+            stats.add_values(
+                values[0],
+                values[1],
+                values[2],
+                display_start,
+                display_end,
+                values[5],
+                values[6],
+                _points_differ(display_start, display_end),
+                transform_name,
+                count_path_segment,
+            )
+            if count_path_segment and stats.total_segment_count % sample_stride == 0:
+                segments.append(_make_segment(values, line_number, raw, comment, display_start, display_end, transform_name))
 
     return _build_preview(source, segments, stats)
 
@@ -342,6 +375,13 @@ def preview_from_json(payload: dict[str, Any], source_path: Path) -> GCodePrevie
             delta_e=item.get("delta_e", 0.0),
             width=item.get("width"),
             comment=item.get("comment", ""),
+            machine_start=None
+            if item.get("machine_start") is None
+            else tuple(item["machine_start"]),
+            machine_end=None
+            if item.get("machine_end") is None
+            else tuple(item["machine_end"]),
+            coordinate_transform=item.get("coordinate_transform", summary.get("coordinate_transform", MACHINE_COORDINATE_TRANSFORM)),
         )
         for item in payload.get("segments", [])
     ]
@@ -355,6 +395,7 @@ def preview_from_json(payload: dict[str, Any], source_path: Path) -> GCodePrevie
         dict(summary.get("move_counts", {})),
         dict(summary.get("role_counts", {})),
         list(summary.get("rotary_axes", [])),
+        summary.get("coordinate_transform", MACHINE_COORDINATE_TRANSFORM),
     )
 
 
@@ -363,7 +404,9 @@ class _ParserState:
         self.axes = {axis: 0.0 for axis in ("X", "Y", "Z", "A", "B", "C", "U", "V", "W", "E")}
         self.feedrate: float | None = None
         self.absolute_xyz = True
-        self.relative_e = False
+        self.relative_e = True
+        self.units = 1.0
+        self.motion_command: str | None = None
         self.layer = -1
         self.current_role = "unknown"
         self.current_width: float | None = None
@@ -393,7 +436,7 @@ def _parse_code(code: str) -> tuple[str | None, dict[str, float]]:
                 number = int(float(value))
             except ValueError:
                 continue
-            if number in {0, 1, 28, 90, 91, 92}:
+            if number in {0, 1, 20, 21, 28, 90, 91, 92}:
                 command = f"G{number}"
         elif head in "XYZABCUVWEF" and value:
             try:
@@ -415,6 +458,13 @@ def _apply_modal_command(state: _ParserState, code: str) -> None:
         state.relative_e = False
     elif "M83" in upper:
         state.relative_e = True
+
+
+def _apply_g92_words(state: _ParserState, words: dict[str, float]) -> None:
+    for axis in ("X", "Y", "Z", "A", "B", "C", "U", "V", "W", "E"):
+        if axis not in words:
+            continue
+        state.axes[axis] = words[axis] * state.units if axis in {"X", "Y", "Z"} else words[axis]
 
 
 def _apply_comment_tag(state: _ParserState, comment: str) -> None:
@@ -473,6 +523,7 @@ def _apply_motion_words(
     float | None,
     float,
     float | None,
+    bool,
 ] | None:
     start_xyz = tuple(state.axes[axis] for axis in ("X", "Y", "Z"))
     start_rotary = {axis: state.axes[axis] for axis in ("A", "B", "C", "U", "V", "W")}
@@ -480,9 +531,11 @@ def _apply_motion_words(
     if "F" in words:
         state.feedrate = words["F"]
 
+    has_spatial_axis = any(axis in words for axis in ("X", "Y", "Z", "A", "B", "C", "U", "V", "W"))
     for axis in ("X", "Y", "Z", "A", "B", "C", "U", "V", "W"):
         if axis in words:
-            state.axes[axis] = state.axes[axis] + words[axis] if not state.absolute_xyz else words[axis]
+            value = words[axis] * state.units if axis in {"X", "Y", "Z"} else words[axis]
+            state.axes[axis] = state.axes[axis] + value if not state.absolute_xyz else value
 
     if "E" in words:
         if state.relative_e:
@@ -499,10 +552,12 @@ def _apply_motion_words(
     linear_motion = any(abs(left - right) > 1e-9 for left, right in zip(start_xyz, end_xyz))
     rotary_motion = any(abs(start_rotary[axis] - end_rotary[axis]) > 1e-9 for axis in start_rotary)
     e_motion = abs(delta_e) > 1e-12
-    if not linear_motion and not rotary_motion and not e_motion:
+    if not has_spatial_axis and not e_motion:
         return None
 
     move_type = _classify_move(command, linear_motion or rotary_motion, linear_motion, delta_e)
+    if has_spatial_axis and not e_motion and move_type == "noop":
+        move_type = "travel"
     rotary_start = {axis: value for axis, value in start_rotary.items() if abs(value) > 1e-9}
     rotary_end = {axis: value for axis, value in end_rotary.items() if abs(value) > 1e-9}
     return (
@@ -517,6 +572,7 @@ def _apply_motion_words(
         state.feedrate,
         delta_e,
         state.current_width,
+        has_spatial_axis,
     )
 
 
@@ -533,17 +589,21 @@ def _make_segment(
         float | None,
         float,
         float | None,
+        bool,
     ],
     line_number: int,
     raw: str,
     comment: str,
+    display_start: tuple[float, float, float],
+    display_end: tuple[float, float, float],
+    coordinate_transform: str,
 ) -> GCodePathSegment:
-    move_type, role, layer, start_xyz, end_xyz, rotary_start, rotary_end, _has_spatial, feedrate, delta_e, width = values
+    move_type, role, layer, start_xyz, end_xyz, rotary_start, rotary_end, _has_spatial, feedrate, delta_e, width, _count_path_segment = values
     return GCodePathSegment(
         line_number=line_number,
         layer=layer,
-        start=start_xyz,
-        end=end_xyz,
+        start=display_start,
+        end=display_end,
         rotary_start=rotary_start,
         rotary_end=rotary_end,
         move_type=move_type,
@@ -553,7 +613,58 @@ def _make_segment(
         width=width,
         comment=comment,
         raw=raw,
+        machine_start=start_xyz,
+        machine_end=end_xyz,
+        coordinate_transform=coordinate_transform,
     )
+
+
+def _points_differ(
+    start: tuple[float, float, float],
+    end: tuple[float, float, float],
+) -> bool:
+    return any(abs(left - right) > 1e-9 for left, right in zip(start, end))
+
+
+def _coordinate_transform_name(rotary_start: dict[str, float], rotary_end: dict[str, float]) -> str:
+    axes = set(rotary_start) | set(rotary_end)
+    if "A" in axes or "C" in axes:
+        return AC_INVERSE_TRANSFORM
+    return MACHINE_COORDINATE_TRANSFORM
+
+
+def _preview_xyz(
+    machine_xyz: tuple[float, float, float],
+    rotary: dict[str, float],
+) -> tuple[float, float, float]:
+    if "A" in rotary or "C" in rotary:
+        return _inverse_rotary_ac_to_xyz(
+            machine_xyz,
+            rotary.get("A", 0.0),
+            rotary.get("C", 0.0),
+        )
+    return machine_xyz
+
+
+def _inverse_rotary_ac_to_xyz(
+    machine_xyz: tuple[float, float, float],
+    a_deg: float,
+    c_deg: float,
+) -> tuple[float, float, float]:
+    # 与 MATLAB 叶轮脚本保持一致：P_part = Rz(-C) * Rx(-A) * P_machine。
+    x, y, z = machine_xyz
+    ax = math.radians(-a_deg)
+    cx = math.radians(-c_deg)
+    cos_a = math.cos(ax)
+    sin_a = math.sin(ax)
+    x1 = x
+    y1 = y * cos_a - z * sin_a
+    z1 = y * sin_a + z * cos_a
+    cos_c = math.cos(cx)
+    sin_c = math.sin(cx)
+    x2 = x1 * cos_c - y1 * sin_c
+    y2 = x1 * sin_c + y1 * cos_c
+    return (x2, y2, z1)
 
 
 def _classify_move(command: str, has_motion: bool, linear_motion: bool, delta_e: float) -> str:
@@ -580,6 +691,7 @@ class _PreviewStats:
         self.layer_max: int | None = None
         self.bounds_min: list[float] | None = None
         self.bounds_max: list[float] | None = None
+        self.coordinate_transform = MACHINE_COORDINATE_TRANSFORM
 
     def add(self, segment: GCodePathSegment) -> None:
         self.add_values(
@@ -591,6 +703,7 @@ class _PreviewStats:
             segment.rotary_start,
             segment.rotary_end,
             segment.has_spatial_length,
+            segment.coordinate_transform,
         )
 
     def add_values(
@@ -603,15 +716,21 @@ class _PreviewStats:
         rotary_start: dict[str, float],
         rotary_end: dict[str, float],
         has_spatial_length: bool,
+        coordinate_transform: str = MACHINE_COORDINATE_TRANSFORM,
+        count_path_segment: bool = True,
     ) -> None:
-        self.total_segment_count += 1
+        if count_path_segment:
+            self.total_segment_count += 1
+        if coordinate_transform != MACHINE_COORDINATE_TRANSFORM:
+            self.coordinate_transform = coordinate_transform
         self.move_counts[move_type] = self.move_counts.get(move_type, 0) + 1
         if move_type == "extrude":
             self.role_counts[extrusion_role] = self.role_counts.get(extrusion_role, 0) + 1
         for axis in set(rotary_start) | set(rotary_end):
             self.rotary_axes.add(axis)
-        self.layer_min = layer if self.layer_min is None else min(self.layer_min, layer)
-        self.layer_max = layer if self.layer_max is None else max(self.layer_max, layer)
+        if count_path_segment:
+            self.layer_min = layer if self.layer_min is None else min(self.layer_min, layer)
+            self.layer_max = layer if self.layer_max is None else max(self.layer_max, layer)
         if has_spatial_length:
             for point in (start, end):
                 if self.bounds_min is None or self.bounds_max is None:
@@ -641,12 +760,13 @@ def _build_preview(source: Path, segments: list[GCodePathSegment], stats: _Previ
         stats.move_counts,
         stats.role_counts,
         sorted(stats.rotary_axes),
+        stats.coordinate_transform,
     )
 
 
 def _cache_path(source_path: Path) -> Path:
     stat = source_path.stat()
-    key_source = f"{source_path}|{stat.st_size}|{stat.st_mtime_ns}".encode("utf-8", errors="replace")
+    key_source = f"{CACHE_VERSION}|{source_path}|{stat.st_size}|{stat.st_mtime_ns}".encode("utf-8", errors="replace")
     key = hashlib.sha1(key_source).hexdigest()
     return Path.cwd() / "outputs" / "gcode_preview_cache" / f"{key}.json.gz"
 

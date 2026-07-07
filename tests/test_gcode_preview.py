@@ -65,6 +65,91 @@ G1 F1200.0 E0.25 ; Reversed Retraction
     def test_unknown_type_falls_back_to_unknown(self) -> None:
         self.assertEqual(normalize_role("Not A Known Role"), "unknown")
 
+    def test_ac_rotary_coordinates_are_inversed_for_preview(self) -> None:
+        text = """
+G90
+M83
+;LAYER_CHANGE
+;TYPE:External perimeter
+G1 F600 X0 Y-42 Z12.2 A90 C-162 E0.1
+"""
+        preview = parse_gcode(text)
+        segment = preview.segments[0]
+
+        self.assertEqual(preview.summary()["coordinate_transform"], "ac_inverse_rz_minus_c_after_rx_minus_a")
+        self.assertEqual(segment.machine_end, (0.0, -42.0, 12.2))
+        self.assertAlmostEqual(segment.end[2], 42.0, places=6)
+        self.assertNotAlmostEqual(segment.end[1], segment.machine_end[1], places=3)
+
+    def test_pure_e_moves_are_counted_but_not_path_segments(self) -> None:
+        text = """
+G90
+M83
+;LAYER_CHANGE
+G1 X1 Y0 F1200
+G1 E-1 F1800
+G1 E1 F1800
+"""
+        preview = parse_gcode(text)
+
+        self.assertEqual(preview.summary()["segment_count"], 1)
+        self.assertEqual(len(preview.segments), 1)
+        self.assertEqual(preview.move_counts["travel"], 1)
+        self.assertEqual(preview.move_counts["retract"], 1)
+        self.assertEqual(preview.move_counts["prime"], 1)
+
+    def test_zero_length_spatial_line_keeps_matlab_segment_count(self) -> None:
+        text = """
+G90
+M83
+;LAYER_CHANGE
+G1 X0 Y0 Z0 A0 C0 F1200
+G1 X1 Y0 E0.1
+"""
+        preview = parse_gcode(text)
+
+        self.assertEqual(preview.summary()["segment_count"], 2)
+        self.assertEqual(preview.move_counts["travel"], 1)
+        self.assertEqual(preview.move_counts["extrude"], 1)
+        self.assertFalse(preview.segments[0].has_spatial_length)
+
+    def test_modal_g1_lines_follow_previous_motion_command(self) -> None:
+        text = """
+G90
+M83
+;LAYER_CHANGE
+G1 X0 Y0 Z0.2 F1000
+X1 Y0 E0.1
+Y1 E0.1
+"""
+        preview = parse_gcode(text)
+
+        self.assertEqual(preview.summary()["segment_count"], 3)
+        self.assertEqual(preview.move_counts["extrude"], 2)
+        self.assertAlmostEqual(preview.segments[-1].end[1], 1.0)
+
+    def test_units_and_g92_apply_to_machine_axes_and_absolute_e(self) -> None:
+        text = """
+G20
+G90
+M82
+;LAYER_CHANGE
+G92 X1 Y0 Z0 E3
+G1 X2 Y0 E4
+G1 E3.5
+G1 X2 Y0
+G1 X2.5 Y0 E4.25
+"""
+        preview = parse_gcode(text)
+
+        self.assertEqual(preview.summary()["segment_count"], 3)
+        self.assertEqual(preview.move_counts["extrude"], 2)
+        self.assertEqual(preview.move_counts["retract"], 1)
+        self.assertEqual(preview.move_counts["travel"], 1)
+        self.assertAlmostEqual(preview.segments[0].machine_start[0], 25.4)
+        self.assertAlmostEqual(preview.segments[0].machine_end[0], 50.8)
+        self.assertAlmostEqual(preview.segments[-1].machine_end[0], 63.5)
+
 
 if __name__ == "__main__":
     unittest.main()

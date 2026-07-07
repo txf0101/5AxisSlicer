@@ -117,8 +117,9 @@ class ModelViewer(QVTKRenderWindowInteractor):
         self.preview_settings = PreviewSettings(
             layer_min=preview.layer_min,
             layer_max=preview.layer_max,
-            show_travel=True,
+            show_travel=False,
             show_extrusion=True,
+            show_pose_samples=False,
         )
         self.refresh_selection()
         self.refresh_path_preview()

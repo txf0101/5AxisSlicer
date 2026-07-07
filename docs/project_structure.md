@@ -31,7 +31,7 @@ CAD 读取由 `step_loader.py` 完成，body/edge 选择状态由 `models.py` �
 - `__main__.py`：支持 `python -m five_axis_slicer` 的入口。
 - `app.py`：CLI 参数解析和 QApplication 创建。支持 `--model`、`--gcode`、`--demo`、`--host`、`--port`。
 - `automation.py`：本地 HTTP 服务。网络请求进入后台线程后，经 Qt signal 投递到主线程，避免后台线程直接操作 Qt 控件。
-- `gcode_preview.py`：G-code/NC 路径解析与缓存。路径段记录起点、终点、层号、运动类型、挤出角色、进给速度、E 增量、线宽、A/B/C/U/V/W 轴角度和注释来源；颜色由 `move_type`、`extrusion_role` 和颜色映射表确定。
+- `gcode_preview.py`：G-code/NC 路径解析与缓存。路径段记录工件坐标起点/终点、机床原始起点/终点、层号、运动类型、挤出角色、进给速度、E 增量、线宽、A/B/C/U/V/W 轴角度和注释来源；A/C 路径按 `P_part = Rz(-C) * Rx(-A) * P_machine` 反算工件坐标；纯 E 回抽和 prime 保留在运动统计中，但不生成 VTK 路径线；颜色由 `move_type`、`extrusion_role` 和颜色映射表确定。
 - `geometry_vtk.py`：OCP 拓扑到 VTK polydata 的转换层。
 - `localization.py`：中英翻译表和 `tr()`。
 - `models.py`：`BodyInfo`、`EdgeInfo`、`CadModel`、`SelectionState` 等共享数据结构。
@@ -72,9 +72,9 @@ CAD 读取由 `step_loader.py` 完成，body/edge 选择状态由 `models.py` �
 
 ## `example/`
 
-- `扇叶/风扇扇叶.STEP` 与 `扇叶/风扇扇叶_PLA_1h50m.gcode`：默认论文演示样例。
-- `叶轮/叶轮.stp` 与 `叶轮/叶轮完整.gcode`：叶轮示例，用于后续真实样例验收。
+- `叶轮/叶轮.stp` 与 `叶轮/叶轮完整.gcode`：当前默认论文演示样例。
 - `叶轮/render_gcode_complete_path_matlab.m`：MATLAB G-code 路径渲染脚本，输出 C 轴展开顶视图、原始机床 X/Y 顶视图和 AC 反算三维 FIG。
+- `扇叶/风扇扇叶.STEP` 与 `扇叶/风扇扇叶_PLA_1h50m.gcode`：扇叶示例，用于后续多样例对照。
 - `pipe/pipe_fitting_40pct_recommended_XYZAB_backup.gcode` 与 `pipe/pipe_fitting_40pct_recommended_XYZAC.gcode`：管件五轴轴名样例，用于 A/B 与 A/C 解析回归。
 - `球形NEU校徽/`、`三叶扇/`、`pipe/` 其他文件：模型、图片和旧阶段测试资产。
 

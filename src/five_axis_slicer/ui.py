@@ -45,8 +45,8 @@ from .viewer import ModelViewer
 
 
 ROOT = Path(__file__).resolve().parents[2]
-DEMO_STEP = ROOT / "example" / "扇叶" / "风扇扇叶.STEP"
-DEMO_GCODE = ROOT / "example" / "扇叶" / "风扇扇叶_PLA_1h50m.gcode"
+DEMO_STEP = ROOT / "example" / "叶轮" / "叶轮.stp"
+DEMO_GCODE = ROOT / "example" / "叶轮" / "叶轮完整.gcode"
 
 
 @dataclass(frozen=True, slots=True)
@@ -941,6 +941,7 @@ class MainWindow(QMainWindow):
                 layers=f"{settings.layer_min}-{settings.layer_max}",
                 roles=len(summary["role_counts"]),
                 axes=", ".join(summary["rotary_axes"]) or "-",
+                coord=self._coordinate_transform_label(summary.get("coordinate_transform", "machine_xyz")),
             )
         )
         self._update_segment_property()
@@ -962,6 +963,8 @@ class MainWindow(QMainWindow):
                 role=role_label(segment.extrusion_role, self.language),
                 start=self._format_point(segment.start),
                 end=self._format_point(segment.end),
+                machine_start=self._format_point(segment.machine_start or segment.start),
+                machine_end=self._format_point(segment.machine_end or segment.end),
                 feedrate="-" if segment.feedrate is None else f"{segment.feedrate:.1f}",
                 delta_e=f"{segment.delta_e:.5f}",
                 width="-" if segment.width is None else f"{segment.width:.3f}",
@@ -972,6 +975,11 @@ class MainWindow(QMainWindow):
 
     def _format_point(self, point: tuple[float, float, float]) -> str:
         return f"X{point[0]:.3f}, Y{point[1]:.3f}, Z{point[2]:.3f}"
+
+    def _coordinate_transform_label(self, transform: str) -> str:
+        if transform == "ac_inverse_rz_minus_c_after_rx_minus_a":
+            return tr(self.language, "coord_ac_inverse")
+        return tr(self.language, "coord_machine_xyz")
 
     def _update_checks(self) -> None:
         lines: list[str] = []

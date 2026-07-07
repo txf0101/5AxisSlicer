@@ -42,7 +42,7 @@ PrusaSlicer 的 G-code 预览逻辑核心是解析后的路径语义，注释文
 
 - `python -m compileall src tests`：已通过。
 - `python -m unittest discover -s tests`：12 个测试通过。
-- `scripts/desktop_workbench_smoke.py`：真实 GUI 冒烟测试已用于默认扇叶样例，截图输出到 `outputs/workbench_smoke/01_workbench_preview.png`。
+- `scripts/desktop_workbench_smoke.py`：真实 GUI 冒烟测试用于默认演示样例，截图输出到 `outputs/workbench_smoke/01_workbench_preview.png`。
 - G-code 单测覆盖 Orca/Prusa 风格 `;TYPE:`、Fractal Cortex 风格 `;Layer`、A/B 与 A/C 轴、相对挤出、绝对挤出、回抽、prime、空走和未知标签。
 - UI 状态测试覆盖 workbench 选择、中英切换、预览显隐设置和路径段属性面板。
 

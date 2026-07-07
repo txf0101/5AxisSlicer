@@ -7,8 +7,9 @@
 - Workbench 首页展示 Planar、Curve、Freeform、Rotary、Tube、Research 六类工作台。
 - Operation Session 包含 Objects、Print、Material、Machine、Preview、Checks 六个页签。
 - Objects 页保留 STEP/STP 的 body 列表选择和 edge 空间点选。
-- Preview 页叠加半透明 STEP 模型和 G-code 路径，支持 Feature Type 图例、层范围、travel/extrusion 显隐、五轴姿态抽样和路径段属性面板。
+- Preview 页叠加半透明 STEP 模型和 G-code 路径，支持 Feature Type 图例、层范围、travel/extrusion 显隐、五轴姿态抽样和路径段属性面板；默认优先显示正挤出路径，空走和姿态抽样可在面板中打开。
 - G-code 分色采用路径段数据结构中的 `move_type` 与 `extrusion_role` 字段，再由颜色映射表决定渲染颜色。`;TYPE:`、`;LAYER_CHANGE`、`;Layer` 等注释只作为解析线索。
+- A/C 五轴 G-code 预览采用 `P_part = Rz(-C) * Rx(-A) * P_machine` 反算工件坐标，原始机床 XYZ 会保留在路径段属性中；纯 E 回抽和 prime 只进入运动类型统计，不写入 VTK 路径线。
 - 第一版先读取已有 G-code，不重写完整切片算法，不做完整机床运动仿真。
 
 ## 环境
@@ -38,7 +39,7 @@ C:\Users\Tang Xufeng\.conda\envs\5AxisSlicer\python.exe
 指定 STEP 与 G-code：
 
 ```powershell
-.\scripts\run_app.ps1 -Model "example\扇叶\风扇扇叶.STEP" -GCode "example\扇叶\风扇扇叶_PLA_1h50m.gcode" -Port 8769
+.\scripts\run_app.ps1 -Model "example\叶轮\叶轮.stp" -GCode "example\叶轮\叶轮完整.gcode" -Port 8769
 ```
 
 直接走 Python 入口：
@@ -49,8 +50,8 @@ C:\Users\Tang Xufeng\.conda\envs\5AxisSlicer\python.exe
 
 默认演示文件：
 
-- `example/扇叶/风扇扇叶.STEP`
-- `example/扇叶/风扇扇叶_PLA_1h50m.gcode`
+- `example/叶轮/叶轮.stp`
+- `example/叶轮/叶轮完整.gcode`
 
 ## 快捷键
 

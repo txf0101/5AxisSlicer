@@ -13,7 +13,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="5AxisSclicer V2.0 workbench and NC preview")
     parser.add_argument("--model", help="STEP/STP file to open on startup")
     parser.add_argument("--gcode", help="NC/G-code file to open on startup")
-    parser.add_argument("--demo", action="store_true", help="Load the default fan blade STEP and G-code demo")
+    parser.add_argument("--demo", action="store_true", help="Load the default impeller STEP and G-code demo")
     parser.add_argument("--host", default="127.0.0.1", help="HTTP automation host")
     parser.add_argument("--port", default=8765, type=int, help="HTTP automation port")
     return parser
