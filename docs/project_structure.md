@@ -6,7 +6,7 @@
 
 程序入口位于 `run_app.py` 和 `scripts/run_app.ps1`。入口调用 `five_axis_slicer.app.main()` 创建 PyQt5 主窗口，主窗口显示 Workbench 首页；用户选择工作台后进入 Operation Session。当前可交互操作为 `Imported NC Review`，它承接 STEP 对象定义、导入 G-code 路径预览、层范围过滤、Feature Type 图例、路径段属性和检查摘要。
 
-CAD 读取由 `step_loader.py` 完成，body/edge 选择状态由 `models.py` 和 `selection_list.py` 维护。VTK 模型预览、edge 点选、G-code 路径 actor 分组和五轴姿态抽样集中在 `viewer.py`。G-code 注释、运动命令和挤出量解析在 `gcode_preview.py` 内完成。项目保存由 `project_io.py` 写出 `project.json`，HTTP 自动化由 `automation.py` 调度回主线程执行。
+CAD 读取由 `step_loader.py` 完成，body/edge 选择状态由 `models.py` 和 `selection_list.py` 维护。VTK 模型预览、edge 点选、G-code 实体道/轻量线 actor 分组和五轴姿态抽样集中在 `viewer.py`。G-code 注释、运动命令、挤出量、宽高和进度 timeline 解析在 `gcode_preview.py` 内完成。项目保存由 `project_io.py` 写出 `project.json`，HTTP 自动化由 `automation.py` 调度回主线程执行。
 
 ## 根目录
 
@@ -30,8 +30,8 @@ CAD 读取由 `step_loader.py` 完成，body/edge 选择状态由 `models.py` �
 - `__init__.py`：包初始化文件，声明版本号。
 - `__main__.py`：支持 `python -m five_axis_slicer` 的入口。
 - `app.py`：CLI 参数解析和 QApplication 创建。支持 `--model`、`--gcode`、`--demo`、`--host`、`--port`。
-- `automation.py`：本地 HTTP 服务。网络请求进入后台线程后，经 Qt signal 投递到主线程，避免后台线程直接操作 Qt 控件。
-- `gcode_preview.py`：G-code/NC 路径解析与缓存。路径段记录工件坐标起点/终点、机床原始起点/终点、层号、运动类型、挤出角色、进给速度、E 增量、线宽、A/B/C/U/V/W 轴角度和注释来源；A/C 路径按 `P_part = Rz(-C) * Rx(-A) * P_machine` 反算工件坐标；纯 E 回抽和 prime 保留在运动统计中，但不生成 VTK 路径线；颜色由 `move_type`、`extrusion_role` 和颜色映射表确定。
+- `automation.py`：本地 HTTP 服务。网络请求进入后台线程后，经 Qt signal 投递到主线程，避免后台线程直接操作 Qt 控件；实体路径场景下命令等待窗口为 120 秒。
+- `gcode_preview.py`：G-code/NC 路径解析与缓存。路径段记录工件坐标起点/终点、机床原始起点/终点、层号、运动类型、挤出角色、进给速度、E 增量、线宽、层高、A/B/C/U/V/W 轴角度、`step_index` 和注释来源；A/C 路径按 `P_part = Rz(-C) * Rx(-A) * P_machine` 反算工件坐标；全量 timeline 记录挤出、空走、回抽和 prime，纯 E 动作只进入进度读数与运动统计；颜色由 `move_type`、`extrusion_role` 和颜色映射表确定。
 - `geometry_vtk.py`：OCP 拓扑到 VTK polydata 的转换层。
 - `localization.py`：中英翻译表和 `tr()`。
 - `models.py`：`BodyInfo`、`EdgeInfo`、`CadModel`、`SelectionState` 等共享数据结构。
@@ -39,25 +39,26 @@ CAD 读取由 `step_loader.py` 完成，body/edge 选择状态由 `models.py` �
 - `selection_list.py`：body/edge 多选列表组件，保证选择输出顺序稳定。
 - `step_loader.py`：STEP/STP 加载器，负责路径校验、OpenCascade 读取、solid/edge 枚举和源文件哈希。
 - `styles.py`：集中 QSS，延续当前深色玻璃风格。
-- `ui.py`：主窗口和 Workbench/Operation Session 编排。包含首页卡片、左侧操作面板、Objects/Print/Material/Machine/Preview/Checks 页签、中英切换和 HTTP 命令入口。
-- `viewer.py`：VTK 视窗。管理 STEP body actor、edge actor、G-code path actor、姿态抽样 actor、相机命令和 edge 点选。
+- `ui.py`：主窗口和 Workbench/Operation Session 编排。包含首页卡片、左侧操作面板、Objects/Print/Material/Machine/Preview/Checks 页签、中英切换、横向 G-code 进度条和 HTTP 命令入口。
+- `viewer.py`：VTK 视窗。管理 STEP body actor、edge actor、G-code 实体道 actor、轻量线 actor、当前步骤高亮、姿态抽样 actor、相机命令和 edge 点选。
 
 ## `scripts/`
 
 - `automation_client.py`：HTTP 自动化命令行客户端，支持普通 JSON 和 base64 JSON。
 - `desktop_click_smoke.py`：早期 body/edge 选择桌面点击冒烟测试。
-- `desktop_workbench_smoke.py`：Workbench 与 NC 预览桌面冒烟测试。等待 `/state` 中出现可见路径后截图，输出到 `outputs/workbench_smoke/`。
+- `desktop_workbench_smoke.py`：Workbench 与 NC 预览桌面冒烟测试。等待 `/state` 中出现可见路径后截图，输出到 `outputs/workbench_smoke/`；实体道本轮另用 PID 锁定脚本保存到 `outputs/workbench_smoke_progress_solid_pid_v2/`。
 - `generate_sample_step.py`：用 CadQuery 生成两 body STEP 样本。
 - `inspect_step_models.py`：批量检查 STEP/STP 可读性和网格化统计。
 - `run_app.ps1`：PowerShell 启动脚本。参数包括 `-Python`、`-Model`、`-GCode`、`-Demo`、`-Port`。
 
 ## `tests/`
 
-- `test_gcode_preview.py`：覆盖 Prusa/Orca 风格 `;TYPE:`、Fractal Cortex 风格 `;Layer`、相对/绝对挤出、回抽、prime、A/B 与 A/C 轴、未知角色。
+- `test_gcode_preview.py`：覆盖 Prusa/Orca 风格 `;TYPE:`、Fractal Cortex 风格 `;Layer`、`;WIDTH:`、`;HEIGHT:`、相对/绝对挤出、回抽、prime、A/B 与 A/C 轴、未知角色、timeline 和层内进度。
 - `test_project_io.py`：覆盖项目保存、旧选择字段、workbench 状态、G-code 摘要和预览设置。
 - `test_selection_list.py`：覆盖列表重建、选择读取、文本标记同步和稳定输出顺序。
 - `test_step_loader.py`：覆盖 CadQuery 生成 STEP 后的 solid、edge 和哈希读取。
-- `test_ui_state.py`：覆盖 workbench 选择、中英切换、Preview 显隐状态和路径段属性面板。
+- `test_ui_state.py`：覆盖 workbench 选择、中英切换、Preview 显隐状态、进度接口和路径段属性面板。
+- `test_viewer_geometry.py`：覆盖五轴旋转姿态下实体道截面基向量的正交性。
 
 ## `docs/`
 
@@ -69,6 +70,7 @@ CAD 读取由 `step_loader.py` 完成，body/edge 选择状态由 `models.py` �
 - `reviews/2026-07-06_workbench_nc_preview_review.md`：论文优先 Workbench 与 NC 预览实现复盘。
 - `reviews/2026-07-06_gcode_3d_preview_refactor_review.md`：叶轮 G-code MATLAB 三维预览初版重构复盘。
 - `reviews/2026-07-07_gcode_ac_inverse_preview_fix_review.md`：叶轮 G-code AC 反算三维预览修正复盘。
+- `reviews/2026-07-07_gcode_volume_progress_preview_review.md`：五轴 G-code 实体道、timeline 和横向进度预览复盘。
 
 ## `example/`
 
@@ -82,7 +84,7 @@ CAD 读取由 `step_loader.py` 完成，body/edge 选择状态由 `models.py` �
 
 `outputs/` 存放可再生成产物，已被 `.gitignore` 忽略。近期相关目录：
 
-- `gcode_preview_cache/`：大 G-code 解析缓存，文件名由源路径、大小和修改时间哈希得到。
+- `gcode_preview_cache/`：大 G-code 解析缓存，文件名由源路径、大小、修改时间和解析版本哈希得到；当前 v4 缓存包含全量 timeline 和抽样几何段。
 - `workbench_smoke/`：Workbench/NC 预览冒烟测试截图和 `summary.json`。
 - `desktop_click_*`、`example_models/`、`http_smoke_project*`：旧阶段选择、真实模型和 HTTP 保存验证产物。
 

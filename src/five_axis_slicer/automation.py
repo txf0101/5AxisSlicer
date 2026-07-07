@@ -79,7 +79,7 @@ class AutomationServer:
             return self.handler(path, payload)
         reply: Queue[tuple[bool, dict[str, Any] | str]] = Queue(maxsize=1)
         self.bridge.command.emit(path, payload, reply)
-        ok, result = reply.get(timeout=30.0)
+        ok, result = reply.get(timeout=120.0)
         if ok:
             return result if isinstance(result, dict) else {"result": result}
         raise RuntimeError(str(result))

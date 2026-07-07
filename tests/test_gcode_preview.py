@@ -33,6 +33,28 @@ G1 X10 Y10 E0.4 A12 C-3
         self.assertEqual(extrusions[0].width, 0.42)
         self.assertEqual(preview.layer_min, 0)
         self.assertEqual(preview.layer_max, 0)
+        self.assertEqual(preview.summary()["timeline_step_count"], 4)
+
+    def test_height_width_defaults_and_inheritance_feed_beads(self) -> None:
+        text = """
+G90
+M83
+;LAYER_CHANGE
+;TYPE:Outer wall
+G1 X0 Y0 Z0.2
+G1 X1 Y0 E0.1
+;HEIGHT:0.32
+;WIDTH:0.55
+G1 X2 Y0 E0.1
+"""
+        preview = parse_gcode(text)
+
+        extrusions = [segment for segment in preview.segments if segment.move_type == "extrude"]
+        self.assertEqual(extrusions[0].width, 0.4)
+        self.assertEqual(extrusions[0].height, 0.2)
+        self.assertEqual(extrusions[1].width, 0.55)
+        self.assertEqual(extrusions[1].height, 0.32)
+        self.assertEqual(preview.summary()["height_range"], {"min": 0.2, "max": 0.32})
 
     def test_reads_fractal_layer_comments_and_absolute_e(self) -> None:
         text = """
@@ -94,9 +116,49 @@ G1 E1 F1800
 
         self.assertEqual(preview.summary()["segment_count"], 1)
         self.assertEqual(len(preview.segments), 1)
+        self.assertEqual(preview.summary()["timeline_step_count"], 3)
+        self.assertEqual([step.move_type for step in preview.timeline], ["travel", "retract", "prime"])
         self.assertEqual(preview.move_counts["travel"], 1)
         self.assertEqual(preview.move_counts["retract"], 1)
         self.assertEqual(preview.move_counts["prime"], 1)
+
+    def test_progress_state_is_layer_filtered_and_keeps_pure_e_steps(self) -> None:
+        text = """
+G90
+M83
+;LAYER_CHANGE
+G1 X0 Y0 Z0.2
+G1 X1 Y0 E0.1
+G1 E-0.1
+;LAYER_CHANGE
+G1 X2 Y0 E0.1
+"""
+        preview = parse_gcode(text)
+
+        layer_zero = preview.progress_state(0, 0, 2)
+        layer_one = preview.progress_state(1, 1, 0)
+
+        self.assertEqual(layer_zero["layer_step_count"], 3)
+        self.assertEqual(layer_zero["current_step"]["move_type"], "retract")
+        self.assertEqual(layer_one["layer_step_count"], 1)
+        self.assertEqual(layer_one["current_global_step"], 3)
+
+    def test_timeline_remains_full_when_path_segments_are_sampled(self) -> None:
+        text = """
+G90
+M83
+;LAYER_CHANGE
+G1 X0 Y0 Z0.2
+G1 X1 Y0 E0.1
+G1 X2 Y0 E0.1
+G1 X3 Y0 E0.1
+"""
+        preview = parse_gcode(text, sample_stride=2)
+
+        self.assertEqual(preview.summary()["segment_count"], 4)
+        self.assertEqual(preview.summary()["timeline_step_count"], 4)
+        self.assertEqual(len(preview.segments), 2)
+        self.assertEqual([segment.step_index for segment in preview.segments], [1, 3])
 
     def test_zero_length_spatial_line_keeps_matlab_segment_count(self) -> None:
         text = """

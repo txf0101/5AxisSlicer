@@ -68,6 +68,34 @@ G1 X1 Y0 E0.4 A12 C-4 F1200
         self.assertEqual(window.segment_property_title.text(), "Segment Properties")
         self.assertEqual(window.localized_groups[0][0].title(), "Layer and Bead")
 
+    def test_preview_progress_endpoint_updates_current_step(self) -> None:
+        window = MainWindow(http_port=0)
+        self.addCleanup(window.close)
+
+        preview = parse_gcode(
+            """
+;LAYER_CHANGE
+;TYPE:Outer wall
+G1 X0 Y0 Z0.2
+G1 X1 Y0 E0.4
+G1 E-0.2
+"""
+        )
+        window.gcode_preview = preview
+        window.viewer.gcode_preview = preview
+        window.viewer.preview_settings = PreviewSettings(layer_min=preview.layer_min, layer_max=preview.layer_max)
+        window.viewer.refresh_path_preview = lambda: None
+        window._sync_preview_controls()
+
+        result = window.handle_automation("/preview/progress", {"progress_index": 1})
+
+        progress = result["preview"]["progress"]
+        self.assertEqual(progress["progress_index"], 1)
+        self.assertEqual(progress["current_step"]["move_type"], "extrude")
+        self.assertEqual(window.progress_slider.value(), 1)
+        self.assertEqual(window.preview_progress_slider.value(), 1)
+        self.assertIn("行号", window.segment_property.text())
+
 
 if __name__ == "__main__":
     unittest.main()

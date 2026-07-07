@@ -16,9 +16,13 @@ COMMAND_RE = re.compile(r"\bG(0|1|20|21|28|90|91|92)\b", re.IGNORECASE)
 LAYER_RE = re.compile(r"^Layer\s+(-?\d+)", re.IGNORECASE)
 TYPE_RE = re.compile(r"^TYPE\s*:\s*(.+)$", re.IGNORECASE)
 WIDTH_RE = re.compile(rf"^WIDTH\s*:\s*({NUMBER_RE})", re.IGNORECASE)
-CACHE_VERSION = "gcode-preview-v3-ac-inverse-spatial-segments"
+HEIGHT_RE = re.compile(rf"^HEIGHT\s*:\s*({NUMBER_RE})", re.IGNORECASE)
+CACHE_VERSION = "gcode-preview-v4-timeline-beads"
 AC_INVERSE_TRANSFORM = "ac_inverse_rz_minus_c_after_rx_minus_a"
 MACHINE_COORDINATE_TRANSFORM = "machine_xyz"
+PROGRESS_DOMAIN = "layer_filtered_gcode_order"
+DEFAULT_BEAD_WIDTH = 0.4
+DEFAULT_LAYER_HEIGHT = 0.2
 
 
 MOVE_OPTION_COLORS: dict[str, tuple[float, float, float]] = {
@@ -132,6 +136,7 @@ COMMENT_ROLE_HINTS: tuple[tuple[str, str], ...] = (
 
 @dataclass(slots=True)
 class GCodePathSegment:
+    step_index: int
     line_number: int
     layer: int
     start: tuple[float, float, float]
@@ -143,6 +148,7 @@ class GCodePathSegment:
     feedrate: float | None = None
     delta_e: float = 0.0
     width: float | None = None
+    height: float | None = None
     comment: str = ""
     raw: str = ""
     machine_start: tuple[float, float, float] | None = None
@@ -152,6 +158,14 @@ class GCodePathSegment:
     @property
     def has_spatial_length(self) -> bool:
         return any(abs(left - right) > 1e-9 for left, right in zip(self.start, self.end))
+
+    @property
+    def bead_width(self) -> float:
+        return self.width if self.width is not None else DEFAULT_BEAD_WIDTH
+
+    @property
+    def bead_height(self) -> float:
+        return self.height if self.height is not None else DEFAULT_LAYER_HEIGHT
 
     def color_key(self) -> str:
         if self.move_type == "extrude":
@@ -165,6 +179,7 @@ class GCodePathSegment:
 
     def to_json(self) -> dict[str, Any]:
         return {
+            "step_index": self.step_index,
             "line_number": self.line_number,
             "layer": self.layer,
             "start": list(self.start),
@@ -176,10 +191,78 @@ class GCodePathSegment:
             "feedrate": self.feedrate,
             "delta_e": self.delta_e,
             "width": self.width,
+            "height": self.height,
             "comment": self.comment,
             "machine_start": None if self.machine_start is None else list(self.machine_start),
             "machine_end": None if self.machine_end is None else list(self.machine_end),
             "coordinate_transform": self.coordinate_transform,
+        }
+
+
+@dataclass(slots=True)
+class GCodeTimelineStep:
+    step_index: int
+    line_number: int
+    layer: int
+    start: tuple[float, float, float]
+    end: tuple[float, float, float]
+    rotary_start: dict[str, float] = field(default_factory=dict)
+    rotary_end: dict[str, float] = field(default_factory=dict)
+    move_type: str = "noop"
+    extrusion_role: str = "unknown"
+    feedrate: float | None = None
+    delta_e: float = 0.0
+    width: float | None = None
+    height: float | None = None
+    comment: str = ""
+    raw: str = ""
+    machine_start: tuple[float, float, float] | None = None
+    machine_end: tuple[float, float, float] | None = None
+    coordinate_transform: str = MACHINE_COORDINATE_TRANSFORM
+    has_spatial_axis: bool = False
+    has_spatial_length: bool = False
+    path_segment_index: int | None = None
+
+    @property
+    def bead_width(self) -> float:
+        return self.width if self.width is not None else DEFAULT_BEAD_WIDTH
+
+    @property
+    def bead_height(self) -> float:
+        return self.height if self.height is not None else DEFAULT_LAYER_HEIGHT
+
+    def color_key(self) -> str:
+        if self.move_type == "extrude":
+            return self.extrusion_role
+        return self.move_type
+
+    def color(self) -> tuple[float, float, float]:
+        if self.move_type == "extrude":
+            return ROLE_COLORS.get(self.extrusion_role, ROLE_COLORS["unknown"])
+        return MOVE_OPTION_COLORS.get(self.move_type, MOVE_OPTION_COLORS["noop"])
+
+    def to_json(self) -> dict[str, Any]:
+        return {
+            "step_index": self.step_index,
+            "line_number": self.line_number,
+            "layer": self.layer,
+            "start": list(self.start),
+            "end": list(self.end),
+            "rotary_start": dict(self.rotary_start),
+            "rotary_end": dict(self.rotary_end),
+            "move_type": self.move_type,
+            "extrusion_role": self.extrusion_role,
+            "feedrate": self.feedrate,
+            "delta_e": self.delta_e,
+            "width": self.width,
+            "height": self.height,
+            "comment": self.comment,
+            "machine_start": None if self.machine_start is None else list(self.machine_start),
+            "machine_end": None if self.machine_end is None else list(self.machine_end),
+            "coordinate_transform": self.coordinate_transform,
+            "has_spatial_axis": self.has_spatial_axis,
+            "has_spatial_length": self.has_spatial_length,
+            "path_segment_index": self.path_segment_index,
         }
 
 
@@ -195,6 +278,9 @@ class GCodePreview:
     role_counts: dict[str, int]
     rotary_axes: list[str]
     coordinate_transform: str = MACHINE_COORDINATE_TRANSFORM
+    timeline: list[GCodeTimelineStep] = field(default_factory=list)
+    height_min: float | None = None
+    height_max: float | None = None
 
     @property
     def layer_count(self) -> int:
@@ -216,12 +302,78 @@ class GCodePreview:
             "role_counts": dict(self.role_counts),
             "rotary_axes": list(self.rotary_axes),
             "coordinate_transform": self.coordinate_transform,
+            "timeline_step_count": len(self.timeline),
+            "height_range": None
+            if self.height_min is None or self.height_max is None
+            else {
+                "min": self.height_min,
+                "max": self.height_max,
+            },
+            "progress_domain": PROGRESS_DOMAIN,
             "bounds": None
             if self.bounds is None
             else {
                 "min": list(self.bounds[0]),
                 "max": list(self.bounds[1]),
             },
+        }
+
+    def timeline_count_for_layers(self, layer_min: int, layer_max: int) -> int:
+        return sum(1 for step in self.timeline if layer_min <= step.layer <= layer_max)
+
+    def timeline_step_for_layer_progress(
+        self,
+        layer_min: int,
+        layer_max: int,
+        progress_index: int,
+    ) -> GCodeTimelineStep | None:
+        if not self.timeline:
+            return None
+        target = max(0, progress_index)
+        local_index = 0
+        last_step: GCodeTimelineStep | None = None
+        for step in self.timeline:
+            if layer_min <= step.layer <= layer_max:
+                last_step = step
+                if local_index == target:
+                    return step
+                local_index += 1
+        return last_step
+
+    def progress_state(self, layer_min: int, layer_max: int, progress_index: int) -> dict[str, Any]:
+        count = 0
+        target = max(0, progress_index)
+        step: GCodeTimelineStep | None = None
+        last_step: GCodeTimelineStep | None = None
+        for candidate in self.timeline:
+            if layer_min <= candidate.layer <= layer_max:
+                if count == target:
+                    step = candidate
+                last_step = candidate
+                count += 1
+        if count == 0:
+            return {
+                "domain": PROGRESS_DOMAIN,
+                "layer_min": layer_min,
+                "layer_max": layer_max,
+                "layer_step_count": 0,
+                "progress_index": 0,
+                "progress_percent": 0.0,
+                "current_global_step": None,
+                "current_step": None,
+            }
+        index = max(0, min(progress_index, count - 1))
+        if step is None or target >= count:
+            step = last_step
+        return {
+            "domain": PROGRESS_DOMAIN,
+            "layer_min": layer_min,
+            "layer_max": layer_max,
+            "layer_step_count": count,
+            "progress_index": index,
+            "progress_percent": 0.0 if count <= 1 else index / (count - 1),
+            "current_global_step": None if step is None else step.step_index,
+            "current_step": None if step is None else step.to_json(),
         }
 
 
@@ -233,6 +385,9 @@ class PreviewSettings:
     show_extrusion: bool = True
     show_pose_samples: bool = True
     visible_roles: set[str] = field(default_factory=lambda: set(ROLE_COLORS))
+    progress_index: int = 0
+    show_upcoming: bool = True
+    solid_rendering: bool = True
 
     def to_json(self) -> dict[str, Any]:
         return {
@@ -242,6 +397,9 @@ class PreviewSettings:
             "show_extrusion": self.show_extrusion,
             "show_pose_samples": self.show_pose_samples,
             "visible_roles": sorted(self.visible_roles),
+            "progress_index": self.progress_index,
+            "show_upcoming": self.show_upcoming,
+            "solid_rendering": self.solid_rendering,
             "role_colors": {role: rgb_to_hex(color) for role, color in ROLE_COLORS.items()},
             "move_colors": {move: rgb_to_hex(color) for move, color in MOVE_OPTION_COLORS.items()},
         }
@@ -271,6 +429,7 @@ def parse_gcode_lines(lines: Any, source_path: str | Path = "<memory>", sample_s
     source = Path(source_path)
     state = _ParserState()
     segments: list[GCodePathSegment] = []
+    timeline: list[GCodeTimelineStep] = []
     stats = _PreviewStats()
     sample_stride = max(1, int(sample_stride))
 
@@ -313,26 +472,55 @@ def parse_gcode_lines(lines: Any, source_path: str | Path = "<memory>", sample_s
         state.motion_command = command
         values = _apply_motion_words(state, command, words)
         if values is not None:
-            display_start = _preview_xyz(values[3], values[5])
-            display_end = _preview_xyz(values[4], values[6])
-            transform_name = _coordinate_transform_name(values[5], values[6])
-            count_path_segment = values[11]
+            step_index = stats.timeline_step_count
+            display_start = _preview_xyz(values.start_xyz, values.rotary_start)
+            display_end = _preview_xyz(values.end_xyz, values.rotary_end)
+            transform_name = _coordinate_transform_name(values.rotary_start, values.rotary_end)
+            has_spatial_length = _points_differ(display_start, display_end)
             stats.add_values(
-                values[0],
-                values[1],
-                values[2],
+                values.move_type,
+                values.extrusion_role,
+                values.layer,
                 display_start,
                 display_end,
-                values[5],
-                values[6],
-                _points_differ(display_start, display_end),
+                values.rotary_start,
+                values.rotary_end,
+                has_spatial_length,
                 transform_name,
-                count_path_segment,
+                values.count_path_segment,
+                values.height,
             )
-            if count_path_segment and stats.total_segment_count % sample_stride == 0:
-                segments.append(_make_segment(values, line_number, raw, comment, display_start, display_end, transform_name))
+            path_segment_index = None
+            if values.count_path_segment and stats.total_segment_count % sample_stride == 0:
+                path_segment_index = len(segments)
+                segments.append(
+                    _make_segment(
+                        values,
+                        step_index,
+                        line_number,
+                        raw,
+                        comment,
+                        display_start,
+                        display_end,
+                        transform_name,
+                    )
+                )
+            timeline.append(
+                _make_timeline_step(
+                    values,
+                    step_index,
+                    line_number,
+                    raw,
+                    comment,
+                    display_start,
+                    display_end,
+                    transform_name,
+                    has_spatial_length,
+                    path_segment_index,
+                )
+            )
 
-    return _build_preview(source, segments, stats)
+    return _build_preview(source, segments, timeline, stats)
 
 
 def role_label(role: str, language: str) -> str:
@@ -349,6 +537,7 @@ def preview_to_json(preview: GCodePreview) -> str:
         {
             "summary": preview.summary(),
             "segments": [segment.to_json() for segment in preview.segments],
+            "timeline": [step.to_json() for step in preview.timeline],
         },
         ensure_ascii=False,
         indent=2,
@@ -363,6 +552,7 @@ def preview_from_json(payload: dict[str, Any], source_path: Path) -> GCodePrevie
         bounds = (tuple(bounds_payload["min"]), tuple(bounds_payload["max"]))
     segments = [
         GCodePathSegment(
+            step_index=item.get("step_index", item.get("line_number", 0) - 1),
             line_number=item["line_number"],
             layer=item["layer"],
             start=tuple(item["start"]),
@@ -374,6 +564,7 @@ def preview_from_json(payload: dict[str, Any], source_path: Path) -> GCodePrevie
             feedrate=item.get("feedrate"),
             delta_e=item.get("delta_e", 0.0),
             width=item.get("width"),
+            height=item.get("height"),
             comment=item.get("comment", ""),
             machine_start=None
             if item.get("machine_start") is None
@@ -384,6 +575,35 @@ def preview_from_json(payload: dict[str, Any], source_path: Path) -> GCodePrevie
             coordinate_transform=item.get("coordinate_transform", summary.get("coordinate_transform", MACHINE_COORDINATE_TRANSFORM)),
         )
         for item in payload.get("segments", [])
+    ]
+    timeline = [
+        GCodeTimelineStep(
+            step_index=item["step_index"],
+            line_number=item["line_number"],
+            layer=item["layer"],
+            start=tuple(item["start"]),
+            end=tuple(item["end"]),
+            rotary_start=dict(item.get("rotary_start", {})),
+            rotary_end=dict(item.get("rotary_end", {})),
+            move_type=item["move_type"],
+            extrusion_role=item["extrusion_role"],
+            feedrate=item.get("feedrate"),
+            delta_e=item.get("delta_e", 0.0),
+            width=item.get("width"),
+            height=item.get("height"),
+            comment=item.get("comment", ""),
+            machine_start=None
+            if item.get("machine_start") is None
+            else tuple(item["machine_start"]),
+            machine_end=None
+            if item.get("machine_end") is None
+            else tuple(item["machine_end"]),
+            coordinate_transform=item.get("coordinate_transform", summary.get("coordinate_transform", MACHINE_COORDINATE_TRANSFORM)),
+            has_spatial_axis=bool(item.get("has_spatial_axis", False)),
+            has_spatial_length=bool(item.get("has_spatial_length", False)),
+            path_segment_index=item.get("path_segment_index"),
+        )
+        for item in payload.get("timeline", [])
     ]
     return GCodePreview(
         source_path,
@@ -396,6 +616,9 @@ def preview_from_json(payload: dict[str, Any], source_path: Path) -> GCodePrevie
         dict(summary.get("role_counts", {})),
         list(summary.get("rotary_axes", [])),
         summary.get("coordinate_transform", MACHINE_COORDINATE_TRANSFORM),
+        timeline,
+        None if summary.get("height_range") is None else float(summary["height_range"]["min"]),
+        None if summary.get("height_range") is None else float(summary["height_range"]["max"]),
     )
 
 
@@ -409,7 +632,25 @@ class _ParserState:
         self.motion_command: str | None = None
         self.layer = -1
         self.current_role = "unknown"
-        self.current_width: float | None = None
+        self.current_width: float | None = DEFAULT_BEAD_WIDTH
+        self.current_height: float | None = DEFAULT_LAYER_HEIGHT
+
+
+@dataclass(slots=True)
+class _MotionValues:
+    move_type: str
+    extrusion_role: str
+    layer: int
+    start_xyz: tuple[float, float, float]
+    end_xyz: tuple[float, float, float]
+    rotary_start: dict[str, float]
+    rotary_end: dict[str, float]
+    has_linear_motion: bool
+    feedrate: float | None
+    delta_e: float
+    width: float | None
+    height: float | None
+    count_path_segment: bool
 
 
 def _split_comment(line: str) -> tuple[str, str]:
@@ -478,6 +719,11 @@ def _apply_comment_tag(state: _ParserState, comment: str) -> None:
         state.current_width = float(width_match.group(1))
         return
 
+    height_match = HEIGHT_RE.match(comment)
+    if height_match is not None:
+        state.current_height = float(height_match.group(1))
+        return
+
     if comment.upper().startswith("LAYER_CHANGE"):
         state.layer = 0 if state.layer < 0 else state.layer + 1
         return
@@ -511,20 +757,7 @@ def _apply_motion_words(
     state: _ParserState,
     command: str,
     words: dict[str, float],
-) -> tuple[
-    str,
-    str,
-    int,
-    tuple[float, float, float],
-    tuple[float, float, float],
-    dict[str, float],
-    dict[str, float],
-    bool,
-    float | None,
-    float,
-    float | None,
-    bool,
-] | None:
+) -> _MotionValues | None:
     start_xyz = tuple(state.axes[axis] for axis in ("X", "Y", "Z"))
     start_rotary = {axis: state.axes[axis] for axis in ("A", "B", "C", "U", "V", "W")}
     start_e = state.axes["E"]
@@ -560,37 +793,26 @@ def _apply_motion_words(
         move_type = "travel"
     rotary_start = {axis: value for axis, value in start_rotary.items() if abs(value) > 1e-9}
     rotary_end = {axis: value for axis, value in end_rotary.items() if abs(value) > 1e-9}
-    return (
-        move_type,
-        state.current_role,
-        max(state.layer, 0),
-        start_xyz,
-        end_xyz,
-        rotary_start,
-        rotary_end,
-        linear_motion,
-        state.feedrate,
-        delta_e,
-        state.current_width,
-        has_spatial_axis,
+    return _MotionValues(
+        move_type=move_type,
+        extrusion_role=state.current_role,
+        layer=max(state.layer, 0),
+        start_xyz=start_xyz,
+        end_xyz=end_xyz,
+        rotary_start=rotary_start,
+        rotary_end=rotary_end,
+        has_linear_motion=linear_motion,
+        feedrate=state.feedrate,
+        delta_e=delta_e,
+        width=state.current_width,
+        height=state.current_height,
+        count_path_segment=has_spatial_axis,
     )
 
 
 def _make_segment(
-    values: tuple[
-        str,
-        str,
-        int,
-        tuple[float, float, float],
-        tuple[float, float, float],
-        dict[str, float],
-        dict[str, float],
-        bool,
-        float | None,
-        float,
-        float | None,
-        bool,
-    ],
+    values: _MotionValues,
+    step_index: int,
     line_number: int,
     raw: str,
     comment: str,
@@ -598,24 +820,62 @@ def _make_segment(
     display_end: tuple[float, float, float],
     coordinate_transform: str,
 ) -> GCodePathSegment:
-    move_type, role, layer, start_xyz, end_xyz, rotary_start, rotary_end, _has_spatial, feedrate, delta_e, width, _count_path_segment = values
     return GCodePathSegment(
+        step_index=step_index,
         line_number=line_number,
-        layer=layer,
+        layer=values.layer,
         start=display_start,
         end=display_end,
-        rotary_start=rotary_start,
-        rotary_end=rotary_end,
-        move_type=move_type,
-        extrusion_role=role,
-        feedrate=feedrate,
-        delta_e=delta_e,
-        width=width,
+        rotary_start=values.rotary_start,
+        rotary_end=values.rotary_end,
+        move_type=values.move_type,
+        extrusion_role=values.extrusion_role,
+        feedrate=values.feedrate,
+        delta_e=values.delta_e,
+        width=values.width,
+        height=values.height,
         comment=comment,
         raw=raw,
-        machine_start=start_xyz,
-        machine_end=end_xyz,
+        machine_start=values.start_xyz,
+        machine_end=values.end_xyz,
         coordinate_transform=coordinate_transform,
+    )
+
+
+def _make_timeline_step(
+    values: _MotionValues,
+    step_index: int,
+    line_number: int,
+    raw: str,
+    comment: str,
+    display_start: tuple[float, float, float],
+    display_end: tuple[float, float, float],
+    coordinate_transform: str,
+    has_spatial_length: bool,
+    path_segment_index: int | None,
+) -> GCodeTimelineStep:
+    return GCodeTimelineStep(
+        step_index=step_index,
+        line_number=line_number,
+        layer=values.layer,
+        start=display_start,
+        end=display_end,
+        rotary_start=values.rotary_start,
+        rotary_end=values.rotary_end,
+        move_type=values.move_type,
+        extrusion_role=values.extrusion_role,
+        feedrate=values.feedrate,
+        delta_e=values.delta_e,
+        width=values.width,
+        height=values.height,
+        comment=comment,
+        raw=raw,
+        machine_start=values.start_xyz,
+        machine_end=values.end_xyz,
+        coordinate_transform=coordinate_transform,
+        has_spatial_axis=values.count_path_segment,
+        has_spatial_length=has_spatial_length,
+        path_segment_index=path_segment_index,
     )
 
 
@@ -684,6 +944,7 @@ def _classify_move(command: str, has_motion: bool, linear_motion: bool, delta_e:
 class _PreviewStats:
     def __init__(self) -> None:
         self.total_segment_count = 0
+        self.timeline_step_count = 0
         self.move_counts: dict[str, int] = {}
         self.role_counts: dict[str, int] = {}
         self.rotary_axes: set[str] = set()
@@ -691,6 +952,8 @@ class _PreviewStats:
         self.layer_max: int | None = None
         self.bounds_min: list[float] | None = None
         self.bounds_max: list[float] | None = None
+        self.height_min: float | None = None
+        self.height_max: float | None = None
         self.coordinate_transform = MACHINE_COORDINATE_TRANSFORM
 
     def add(self, segment: GCodePathSegment) -> None:
@@ -704,6 +967,8 @@ class _PreviewStats:
             segment.rotary_end,
             segment.has_spatial_length,
             segment.coordinate_transform,
+            True,
+            segment.height,
         )
 
     def add_values(
@@ -718,7 +983,9 @@ class _PreviewStats:
         has_spatial_length: bool,
         coordinate_transform: str = MACHINE_COORDINATE_TRANSFORM,
         count_path_segment: bool = True,
+        height: float | None = None,
     ) -> None:
+        self.timeline_step_count += 1
         if count_path_segment:
             self.total_segment_count += 1
         if coordinate_transform != MACHINE_COORDINATE_TRANSFORM:
@@ -726,11 +993,13 @@ class _PreviewStats:
         self.move_counts[move_type] = self.move_counts.get(move_type, 0) + 1
         if move_type == "extrude":
             self.role_counts[extrusion_role] = self.role_counts.get(extrusion_role, 0) + 1
+        if height is not None:
+            self.height_min = height if self.height_min is None else min(self.height_min, height)
+            self.height_max = height if self.height_max is None else max(self.height_max, height)
         for axis in set(rotary_start) | set(rotary_end):
             self.rotary_axes.add(axis)
-        if count_path_segment:
-            self.layer_min = layer if self.layer_min is None else min(self.layer_min, layer)
-            self.layer_max = layer if self.layer_max is None else max(self.layer_max, layer)
+        self.layer_min = layer if self.layer_min is None else min(self.layer_min, layer)
+        self.layer_max = layer if self.layer_max is None else max(self.layer_max, layer)
         if has_spatial_length:
             for point in (start, end):
                 if self.bounds_min is None or self.bounds_max is None:
@@ -742,9 +1011,14 @@ class _PreviewStats:
                         self.bounds_max[index] = max(self.bounds_max[index], point[index])
 
 
-def _build_preview(source: Path, segments: list[GCodePathSegment], stats: _PreviewStats) -> GCodePreview:
-    if stats.total_segment_count == 0:
-        return GCodePreview(source, [], 0, 0, -1, None, {}, {}, [])
+def _build_preview(
+    source: Path,
+    segments: list[GCodePathSegment],
+    timeline: list[GCodeTimelineStep],
+    stats: _PreviewStats,
+) -> GCodePreview:
+    if stats.total_segment_count == 0 and stats.timeline_step_count == 0:
+        return GCodePreview(source, [], 0, 0, -1, None, {}, {}, [], timeline=[])
 
     bounds = None
     if stats.bounds_min is not None and stats.bounds_max is not None:
@@ -761,6 +1035,9 @@ def _build_preview(source: Path, segments: list[GCodePathSegment], stats: _Previ
         stats.role_counts,
         sorted(stats.rotary_axes),
         stats.coordinate_transform,
+        timeline,
+        stats.height_min,
+        stats.height_max,
     )
 
 
@@ -793,6 +1070,7 @@ def _write_preview_cache(preview: GCodePreview) -> None:
     payload = {
         "summary": preview.summary(),
         "segments": [segment.to_json() for segment in preview.segments],
+        "timeline": [step.to_json() for step in preview.timeline],
     }
     with gzip.open(cache_path, "wt", encoding="utf-8") as stream:
         json.dump(payload, stream, ensure_ascii=False)

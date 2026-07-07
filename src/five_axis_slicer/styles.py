@@ -139,6 +139,11 @@ QCheckBox::indicator:checked {
 #toggleCheck::indicator:unchecked {
     background: rgba(0, 0, 0, 0.18);
 }
+#progressPanel {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 8px;
+}
 QSlider::groove:horizontal {
     height: 5px;
     border-radius: 2px;

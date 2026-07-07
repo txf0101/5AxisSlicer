@@ -9,7 +9,7 @@ from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 import vtk
 
 from .geometry_vtk import edge_to_polydata, shape_to_polydata
-from .gcode_preview import GCodePreview, PreviewSettings
+from .gcode_preview import GCodePathSegment, GCodePreview, GCodeTimelineStep, PreviewSettings
 from .models import CadModel, SelectionState
 
 
@@ -24,6 +24,12 @@ BODY_SELECTED_EDGE_COLOR = (0.05, 0.05, 0.05)
 POSE_SAMPLE_COLOR = (0.18, 0.78, 0.95)
 EDGE_PICK_WIDTH = 2.6
 EDGE_SELECTED_WIDTH = 5.0
+BEAD_SECTION_SIDES = 8
+STATIC_SOLID_SEGMENT_LIMIT = 400_000
+INTERACTIVE_LINE_SEGMENT_LIMIT = 25_000
+UPCOMING_OPACITY = 0.20
+COMPLETED_OPACITY = 0.96
+CURRENT_COLOR = (1.0, 1.0, 1.0)
 
 
 @dataclass(slots=True)
@@ -53,10 +59,16 @@ class ModelViewer(QVTKRenderWindowInteractor):
         self.path_actors: list[vtk.vtkActor] = []
         self.pose_actor: vtk.vtkActor | None = None
         self.visible_path_segment_count = 0
+        self.drawn_path_segment_count = 0
+        self.path_render_mode = "line"
+        self._interaction_preview = False
+        self._progress_dragging = False
 
         self.picker = vtk.vtkCellPicker()
         self.picker.SetTolerance(0.006)
         self.interactor.AddObserver("LeftButtonPressEvent", self._on_left_button)
+        self.interactor.AddObserver("StartInteractionEvent", self._on_interaction_start)
+        self.interactor.AddObserver("EndInteractionEvent", self._on_interaction_end)
 
     def set_selection_callback(self, callback: SelectionCallback) -> None:
         self.selection_callback = callback
@@ -121,6 +133,10 @@ class ModelViewer(QVTKRenderWindowInteractor):
             show_extrusion=True,
             show_pose_samples=False,
         )
+        self.preview_settings.progress_index = max(
+            0,
+            preview.timeline_count_for_layers(preview.layer_min, preview.layer_max) - 1,
+        )
         self.refresh_selection()
         self.refresh_path_preview()
         self.fit_view()
@@ -137,6 +153,22 @@ class ModelViewer(QVTKRenderWindowInteractor):
         high = min(self.gcode_preview.layer_max, max(layer_min, layer_max))
         self.preview_settings.layer_min = low
         self.preview_settings.layer_max = high
+        self._clamp_progress_index()
+        self.refresh_path_preview()
+
+    def set_preview_progress(self, progress_index: int, interactive: bool | None = None) -> None:
+        if self.gcode_preview is None:
+            return
+        if interactive is not None:
+            self._progress_dragging = bool(interactive)
+        self.preview_settings.progress_index = int(progress_index)
+        self._clamp_progress_index()
+        self.refresh_path_preview()
+
+    def set_progress_interaction(self, active: bool) -> None:
+        if self.gcode_preview is None:
+            return
+        self._progress_dragging = active
         self.refresh_path_preview()
 
     def set_preview_visibility(
@@ -162,11 +194,42 @@ class ModelViewer(QVTKRenderWindowInteractor):
             "summary": None if self.gcode_preview is None else self.gcode_preview.summary(),
             "settings": self.preview_settings.to_json(),
             "visible_path_segment_count": self.visible_path_segment_count,
+            "drawn_path_segment_count": self.drawn_path_segment_count,
+            "render_mode": self.path_render_mode,
+            "progress": self.progress_state(),
         }
+
+    def progress_state(self) -> dict:
+        if self.gcode_preview is None:
+            return {
+                "domain": "layer_filtered_gcode_order",
+                "layer_step_count": 0,
+                "progress_index": 0,
+                "current_global_step": None,
+                "current_step": None,
+            }
+        return self.gcode_preview.progress_state(
+            self.preview_settings.layer_min,
+            self.preview_settings.layer_max,
+            self.preview_settings.progress_index,
+        )
+
+    def current_progress_step(self) -> GCodeTimelineStep | None:
+        if self.gcode_preview is None:
+            return None
+        return self.gcode_preview.timeline_step_for_layer_progress(
+            self.preview_settings.layer_min,
+            self.preview_settings.layer_max,
+            self.preview_settings.progress_index,
+        )
 
     def representative_path_segment(self):
         if self.gcode_preview is None:
             return None
+        current_step = self.current_progress_step()
+        if current_step is not None and current_step.path_segment_index is not None:
+            if 0 <= current_step.path_segment_index < len(self.gcode_preview.segments):
+                return self.gcode_preview.segments[current_step.path_segment_index]
         visible = [segment for segment in self.gcode_preview.segments if self._segment_visible(segment)]
         spatial = [segment for segment in visible if segment.has_spatial_length]
         extrusions = [segment for segment in spatial if segment.move_type == "extrude"]
@@ -176,28 +239,45 @@ class ModelViewer(QVTKRenderWindowInteractor):
             return spatial[0]
         return visible[0] if visible else None
 
+    def _clamp_progress_index(self) -> None:
+        if self.gcode_preview is None:
+            self.preview_settings.progress_index = 0
+            return
+        count = self.gcode_preview.timeline_count_for_layers(
+            self.preview_settings.layer_min,
+            self.preview_settings.layer_max,
+        )
+        self.preview_settings.progress_index = 0 if count == 0 else max(0, min(self.preview_settings.progress_index, count - 1))
+
     def refresh_path_preview(self) -> None:
         self._remove_path_actors()
         self.visible_path_segment_count = 0
+        self.drawn_path_segment_count = 0
         if self.gcode_preview is None:
+            self.path_render_mode = "line"
             self.render()
             return
 
-        grouped: dict[str, tuple[tuple[float, float, float], list[tuple[tuple[float, float, float], tuple[float, float, float], str]]]] = {}
+        current_global_step = self.progress_state().get("current_global_step")
+        interactive = self._interaction_preview or self._progress_dragging
+        visible_segments = []
         for segment in self.gcode_preview.segments:
-            if not self._segment_visible(segment):
+            if not self._segment_visible(segment) or not segment.has_spatial_length:
                 continue
-            if not segment.has_spatial_length:
+            if (
+                current_global_step is not None
+                and not self.preview_settings.show_upcoming
+                and segment.step_index > current_global_step
+            ):
                 continue
-            color_key = segment.color_key()
-            color = segment.color()
-            grouped.setdefault(color_key, (color, []) )[1].append((segment.start, segment.end, segment.move_type))
-            self.visible_path_segment_count += 1
-
-        for color, lines in grouped.values():
-            actor = self._make_line_actor(lines, color)
-            self.renderer.AddActor(actor)
-            self.path_actors.append(actor)
+            visible_segments.append(segment)
+        self.visible_path_segment_count = len(visible_segments)
+        if interactive or not self.preview_settings.solid_rendering:
+            self.path_render_mode = "line_interactive" if interactive else "line"
+            self._add_line_groups(visible_segments, current_global_step, interactive)
+        else:
+            self.path_render_mode = "solid"
+            self._add_solid_groups(visible_segments, current_global_step)
 
         if self.preview_settings.show_pose_samples:
             self.pose_actor = self._make_pose_actor()
@@ -341,6 +421,18 @@ class ModelViewer(QVTKRenderWindowInteractor):
             self._toggle_edge(record.object_id)
         self.interactor.GetInteractorStyle().OnLeftButtonDown()
 
+    def _on_interaction_start(self, _obj, _event) -> None:
+        if self.gcode_preview is None or self._interaction_preview:
+            return
+        self._interaction_preview = True
+        self.refresh_path_preview()
+
+    def _on_interaction_end(self, _obj, _event) -> None:
+        if self.gcode_preview is None or not self._interaction_preview:
+            return
+        self._interaction_preview = False
+        self.refresh_path_preview()
+
     def _toggle_edge(self, edge_id: str) -> None:
         if edge_id in self.selection.edge_ids:
             self.selection.edge_ids.remove(edge_id)
@@ -377,10 +469,109 @@ class ModelViewer(QVTKRenderWindowInteractor):
             return settings.show_travel
         return settings.show_travel and segment.has_spatial_length
 
+    def _segment_phase(self, segment: GCodePathSegment, current_global_step: int | None) -> str:
+        if current_global_step is None:
+            return "completed"
+        if segment.step_index == current_global_step:
+            return "current"
+        if segment.step_index < current_global_step:
+            return "completed"
+        return "upcoming"
+
+    def _add_line_groups(
+        self,
+        segments: list[GCodePathSegment],
+        current_global_step: int | None,
+        interactive: bool,
+    ) -> None:
+        stride = _render_stride(len(segments), INTERACTIVE_LINE_SEGMENT_LIMIT if interactive else STATIC_SOLID_SEGMENT_LIMIT)
+        grouped: dict[
+            tuple[str, str],
+            tuple[tuple[float, float, float], list[tuple[tuple[float, float, float], tuple[float, float, float], str]]],
+        ] = {}
+        current_lines: list[tuple[tuple[float, float, float], tuple[float, float, float], str]] = []
+        for index, segment in enumerate(segments):
+            phase = self._segment_phase(segment, current_global_step)
+            if phase == "current":
+                current_lines.append((segment.start, segment.end, segment.move_type))
+                continue
+            if stride > 1 and index % stride != 0:
+                continue
+            color_key = segment.color_key()
+            grouped.setdefault((color_key, phase), (segment.color(), []))[1].append((segment.start, segment.end, segment.move_type))
+            self.drawn_path_segment_count += 1
+
+        for (_color_key, phase), (color, lines) in grouped.items():
+            actor = self._make_line_actor(lines, color, self._opacity_for_phase(phase, has_extrusion=any(line[2] == "extrude" for line in lines)))
+            self.renderer.AddActor(actor)
+            self.path_actors.append(actor)
+        if current_lines:
+            actor = self._make_line_actor(current_lines, CURRENT_COLOR, 1.0)
+            actor.GetProperty().SetLineWidth(4.0)
+            self.renderer.AddActor(actor)
+            self.path_actors.append(actor)
+            self.drawn_path_segment_count += len(current_lines)
+
+    def _add_solid_groups(self, segments: list[GCodePathSegment], current_global_step: int | None) -> None:
+        stride = _render_stride(len(segments), STATIC_SOLID_SEGMENT_LIMIT)
+        if stride > 1:
+            self.path_render_mode = f"solid_adaptive_{stride}"
+        solid_groups: dict[tuple[str, str], tuple[tuple[float, float, float], list[GCodePathSegment]]] = {}
+        line_groups: dict[
+            tuple[str, str],
+            tuple[tuple[float, float, float], list[tuple[tuple[float, float, float], tuple[float, float, float], str]]],
+        ] = {}
+        current_segments: list[GCodePathSegment] = []
+        current_lines: list[tuple[tuple[float, float, float], tuple[float, float, float], str]] = []
+
+        for index, segment in enumerate(segments):
+            phase = self._segment_phase(segment, current_global_step)
+            if phase == "current":
+                if segment.move_type == "extrude":
+                    current_segments.append(segment)
+                else:
+                    current_lines.append((segment.start, segment.end, segment.move_type))
+                continue
+            if stride > 1 and index % stride != 0:
+                continue
+            if segment.move_type == "extrude":
+                solid_groups.setdefault((segment.color_key(), phase), (segment.color(), []))[1].append(segment)
+            else:
+                line_groups.setdefault((segment.color_key(), phase), (segment.color(), []))[1].append((segment.start, segment.end, segment.move_type))
+            self.drawn_path_segment_count += 1
+
+        for (_color_key, phase), (color, group_segments) in solid_groups.items():
+            actor = self._make_bead_actor(group_segments, color, self._opacity_for_phase(phase, has_extrusion=True))
+            self.renderer.AddActor(actor)
+            self.path_actors.append(actor)
+        for (_color_key, phase), (color, lines) in line_groups.items():
+            actor = self._make_line_actor(lines, color, self._opacity_for_phase(phase, has_extrusion=False))
+            self.renderer.AddActor(actor)
+            self.path_actors.append(actor)
+        if current_segments:
+            actor = self._make_bead_actor(current_segments, CURRENT_COLOR, 1.0)
+            self.renderer.AddActor(actor)
+            self.path_actors.append(actor)
+            self.drawn_path_segment_count += len(current_segments)
+        if current_lines:
+            actor = self._make_line_actor(current_lines, CURRENT_COLOR, 1.0)
+            actor.GetProperty().SetLineWidth(4.0)
+            self.renderer.AddActor(actor)
+            self.path_actors.append(actor)
+            self.drawn_path_segment_count += len(current_lines)
+
+    def _opacity_for_phase(self, phase: str, has_extrusion: bool) -> float:
+        if phase == "upcoming":
+            return UPCOMING_OPACITY if has_extrusion else 0.16
+        if phase == "current":
+            return 1.0
+        return COMPLETED_OPACITY if has_extrusion else 0.50
+
     def _make_line_actor(
         self,
         lines: list[tuple[tuple[float, float, float], tuple[float, float, float], str]],
         color: tuple[float, float, float],
+        opacity: float | None = None,
     ) -> vtk.vtkActor:
         points = vtk.vtkPoints()
         cells = vtk.vtkCellArray()
@@ -401,7 +592,60 @@ class ModelViewer(QVTKRenderWindowInteractor):
         actor.SetMapper(mapper)
         actor.GetProperty().SetColor(*color)
         actor.GetProperty().SetLineWidth(2.6 if has_extrusion else 1.5)
-        actor.GetProperty().SetOpacity(0.95 if has_extrusion else 0.48)
+        actor.GetProperty().SetOpacity(opacity if opacity is not None else (0.95 if has_extrusion else 0.48))
+        actor.SetPickable(False)
+        return actor
+
+    def _make_bead_actor(
+        self,
+        segments: list[GCodePathSegment],
+        color: tuple[float, float, float],
+        opacity: float,
+    ) -> vtk.vtkActor:
+        points = vtk.vtkPoints()
+        points.SetDataTypeToFloat()
+        quads = vtk.vtkCellArray()
+        for segment in segments:
+            frame = _bead_frame(segment.start, segment.end, segment.rotary_end or segment.rotary_start)
+            if frame is None:
+                continue
+            tangent, width_axis, height_axis = frame
+            del tangent
+            width_radius = max(segment.bead_width, 1e-6) * 0.5
+            height_radius = max(segment.bead_height, 1e-6) * 0.5
+            start_ids: list[int] = []
+            end_ids: list[int] = []
+            for side in range(BEAD_SECTION_SIDES):
+                angle = 2.0 * math.pi * side / BEAD_SECTION_SIDES
+                offset = tuple(
+                    math.cos(angle) * width_radius * width_axis[index]
+                    + math.sin(angle) * height_radius * height_axis[index]
+                    for index in range(3)
+                )
+                start_ids.append(points.InsertNextPoint(*(segment.start[index] + offset[index] for index in range(3))))
+                end_ids.append(points.InsertNextPoint(*(segment.end[index] + offset[index] for index in range(3))))
+            for side in range(BEAD_SECTION_SIDES):
+                next_side = (side + 1) % BEAD_SECTION_SIDES
+                quad = vtk.vtkQuad()
+                quad.GetPointIds().SetId(0, start_ids[side])
+                quad.GetPointIds().SetId(1, start_ids[next_side])
+                quad.GetPointIds().SetId(2, end_ids[next_side])
+                quad.GetPointIds().SetId(3, end_ids[side])
+                quads.InsertNextCell(quad)
+
+        polydata = vtk.vtkPolyData()
+        polydata.SetPoints(points)
+        polydata.SetPolys(quads)
+        mapper = vtk.vtkPolyDataMapper()
+        mapper.SetInputData(polydata)
+        actor = vtk.vtkActor()
+        actor.SetMapper(mapper)
+        prop = actor.GetProperty()
+        prop.SetColor(*color)
+        prop.SetOpacity(opacity)
+        prop.SetSpecular(0.18)
+        prop.SetSpecularPower(16)
+        prop.SetInterpolationToPhong()
         actor.SetPickable(False)
         return actor
 
@@ -462,6 +706,58 @@ def _nozzle_axis_from_rotary(rotary: dict[str, float]) -> tuple[float, float, fl
     vector = _rotate_y(vector, math.radians(rotary.get("B", rotary.get("V", 0.0))))
     vector = _rotate_z(vector, math.radians(rotary.get("C", 0.0)))
     return vector
+
+
+def _bead_frame(
+    start: tuple[float, float, float],
+    end: tuple[float, float, float],
+    rotary: dict[str, float],
+) -> tuple[tuple[float, float, float], tuple[float, float, float], tuple[float, float, float]] | None:
+    tangent = _normalize(tuple(end[index] - start[index] for index in range(3)))
+    if tangent is None:
+        return None
+    nozzle = _normalize(_nozzle_axis_from_rotary(rotary)) or (0.0, 0.0, -1.0)
+    width_axis = _normalize(_cross(nozzle, tangent))
+    if width_axis is None:
+        width_axis = _normalize(_cross((0.0, 0.0, 1.0), tangent))
+    if width_axis is None:
+        width_axis = _normalize(_cross((1.0, 0.0, 0.0), tangent))
+    if width_axis is None:
+        return None
+    height_axis = _normalize(_cross(tangent, width_axis))
+    if height_axis is None:
+        return None
+    if _dot(height_axis, nozzle) < 0:
+        height_axis = tuple(-value for value in height_axis)
+    return tangent, width_axis, height_axis
+
+
+def _render_stride(count: int, limit: int) -> int:
+    if count <= 0 or limit <= 0:
+        return 1
+    return max(1, math.ceil(count / limit))
+
+
+def _normalize(vector: tuple[float, float, float]) -> tuple[float, float, float] | None:
+    length = math.sqrt(sum(value * value for value in vector))
+    if length <= 1e-12:
+        return None
+    return tuple(value / length for value in vector)
+
+
+def _cross(
+    left: tuple[float, float, float],
+    right: tuple[float, float, float],
+) -> tuple[float, float, float]:
+    return (
+        left[1] * right[2] - left[2] * right[1],
+        left[2] * right[0] - left[0] * right[2],
+        left[0] * right[1] - left[1] * right[0],
+    )
+
+
+def _dot(left: tuple[float, float, float], right: tuple[float, float, float]) -> float:
+    return sum(left[index] * right[index] for index in range(3))
 
 
 def _rotate_x(vector: tuple[float, float, float], angle: float) -> tuple[float, float, float]:

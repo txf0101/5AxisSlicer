@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import (
     QAction,
     QApplication,
@@ -128,11 +128,15 @@ class MainWindow(QMainWindow):
         self.current_workbench_key = "curve"
         self.current_operation = "imported_nc_review"
         self._updating_layer_controls = False
+        self._updating_progress_controls = False
         self.localized_groups: list[tuple[QGroupBox, str]] = []
         self.localized_labels: list[tuple[QLabel, str]] = []
 
         self.viewer = ModelViewer(self)
         self.viewer.set_selection_callback(self._on_viewer_selection)
+        self.progress_timer = QTimer(self)
+        self.progress_timer.setInterval(250)
+        self.progress_timer.timeout.connect(self._advance_progress)
         self.automation = AutomationServer(http_host, http_port, self.handle_automation)
         self.automation.start()
 
@@ -274,6 +278,12 @@ class MainWindow(QMainWindow):
             self.viewer.set_preview_layers(int(payload["layer_min"]), int(payload["layer_max"]))
             self._sync_preview_controls()
             return {"preview": self.viewer.preview_state()}
+        if path == "/preview/progress":
+            index = int(payload.get("progress_index", payload.get("index", 0)))
+            self.viewer.set_preview_progress(index, interactive=bool(payload.get("interactive", False)))
+            self._sync_progress_controls()
+            self._update_preview_summary()
+            return {"preview": self.viewer.preview_state()}
         if path == "/preview/visibility":
             self.viewer.set_preview_visibility(
                 show_travel=payload.get("show_travel"),
@@ -383,6 +393,13 @@ class MainWindow(QMainWindow):
         self.legend_title.setText(tr(self.language, "feature_legend"))
         self.preview_summary_title.setText(tr(self.language, "preview_summary"))
         self.segment_property_title.setText(tr(self.language, "segment_property"))
+        self.preview_progress_title.setText(tr(self.language, "path_progress"))
+        self.path_progress_title.setText(tr(self.language, "path_progress"))
+        self.progress_prev_button.setToolTip(tr(self.language, "progress_prev"))
+        self.progress_play_button.setToolTip(
+            tr(self.language, "progress_pause") if self.progress_timer.isActive() else tr(self.language, "progress_play")
+        )
+        self.progress_next_button.setToolTip(tr(self.language, "progress_next"))
         self.checks_title.setText(tr(self.language, "checks_title"))
         for group, key in self.localized_groups:
             group.setTitle(tr(self.language, key))
@@ -392,6 +409,7 @@ class MainWindow(QMainWindow):
         self._update_operation_combo()
         self._sync_legend_labels()
         self._update_file_labels()
+        self._sync_progress_controls()
         self._update_preview_summary()
         self._update_checks()
 
@@ -488,8 +506,48 @@ class MainWindow(QMainWindow):
         layout.setSpacing(10)
         layout.addWidget(self._build_left_panel())
         layout.addWidget(self._build_right_panel())
-        layout.addWidget(self.viewer, 1)
+        layout.addWidget(self._build_viewer_panel(), 1)
         return page
+
+    def _build_viewer_panel(self) -> QWidget:
+        panel = QWidget()
+        layout = QVBoxLayout(panel)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(8)
+        layout.addWidget(self.viewer, 1)
+
+        progress_frame = QFrame()
+        progress_frame.setObjectName("progressPanel")
+        progress_layout = QHBoxLayout(progress_frame)
+        progress_layout.setContentsMargins(10, 8, 10, 8)
+        self.path_progress_title = QLabel()
+        self.path_progress_title.setObjectName("mutedText")
+        self.progress_prev_button = QPushButton("|<")
+        self.progress_play_button = QPushButton(">")
+        self.progress_next_button = QPushButton(">|")
+        for button in (self.progress_prev_button, self.progress_play_button, self.progress_next_button):
+            button.setFixedWidth(42)
+        self.progress_slider = QSlider(Qt.Horizontal)
+        self.progress_slider.setMinimum(0)
+        self.progress_slider.setMaximum(0)
+        self.progress_slider.setEnabled(False)
+        self.progress_step_label = QLabel()
+        self.progress_step_label.setObjectName("fileText")
+        self.progress_step_label.setMinimumWidth(210)
+        self.progress_prev_button.clicked.connect(lambda: self._nudge_progress(-1))
+        self.progress_next_button.clicked.connect(lambda: self._nudge_progress(1))
+        self.progress_play_button.clicked.connect(self._toggle_progress_playback)
+        self.progress_slider.sliderPressed.connect(self._on_progress_slider_pressed)
+        self.progress_slider.sliderReleased.connect(self._on_progress_slider_released)
+        self.progress_slider.valueChanged.connect(self._on_progress_slider_changed)
+        progress_layout.addWidget(self.path_progress_title)
+        progress_layout.addWidget(self.progress_prev_button)
+        progress_layout.addWidget(self.progress_play_button)
+        progress_layout.addWidget(self.progress_next_button)
+        progress_layout.addWidget(self.progress_slider, 1)
+        progress_layout.addWidget(self.progress_step_label)
+        layout.addWidget(progress_frame)
+        return panel
 
     def _build_left_panel(self) -> QWidget:
         panel = QFrame()
@@ -669,6 +727,17 @@ class MainWindow(QMainWindow):
         self.preview_summary = QLabel()
         self.preview_summary.setObjectName("mutedText")
         self.preview_summary.setWordWrap(True)
+        self.preview_progress_title = QLabel()
+        self.preview_progress_title.setObjectName("panelTitle")
+        self.preview_progress_slider = QSlider(Qt.Horizontal)
+        self.preview_progress_slider.setMinimum(0)
+        self.preview_progress_slider.setMaximum(0)
+        self.preview_progress_slider.setEnabled(False)
+        self.preview_progress_label = QLabel()
+        self.preview_progress_label.setObjectName("fileText")
+        self.preview_progress_slider.sliderPressed.connect(self._on_progress_slider_pressed)
+        self.preview_progress_slider.sliderReleased.connect(self._on_progress_slider_released)
+        self.preview_progress_slider.valueChanged.connect(self._on_progress_slider_changed)
         self.segment_property_title = QLabel()
         self.segment_property_title.setObjectName("panelTitle")
         self.segment_property = QLabel()
@@ -727,6 +796,9 @@ class MainWindow(QMainWindow):
 
         layout.addWidget(self.preview_summary_title)
         layout.addWidget(self.preview_summary)
+        layout.addWidget(self.preview_progress_title)
+        layout.addWidget(self.preview_progress_slider)
+        layout.addWidget(self.preview_progress_label)
         layout.addWidget(self.layer_range_title)
         layout.addLayout(layer_row)
         layout.addWidget(self.travel_checkbox)
@@ -834,6 +906,7 @@ class MainWindow(QMainWindow):
         self.layer_max_spin.setValue(high)
         self._updating_layer_controls = False
         self.viewer.set_preview_layers(low, high)
+        self._sync_progress_controls()
         self._update_preview_summary()
 
     def _on_layer_spin_changed(self) -> None:
@@ -846,6 +919,61 @@ class MainWindow(QMainWindow):
         self.layer_max_slider.setValue(high)
         self._updating_layer_controls = False
         self.viewer.set_preview_layers(low, high)
+        self._sync_progress_controls()
+        self._update_preview_summary()
+
+    def _on_progress_slider_pressed(self) -> None:
+        self.viewer.set_progress_interaction(True)
+
+    def _on_progress_slider_released(self) -> None:
+        if self.gcode_preview is None:
+            return
+        slider = self._progress_sender_slider()
+        self.viewer.set_preview_progress(slider.value(), interactive=False)
+        self._sync_progress_controls()
+        self._update_preview_summary()
+
+    def _on_progress_slider_changed(self, value: int) -> None:
+        if self._updating_progress_controls or self.gcode_preview is None:
+            return
+        slider = self._progress_sender_slider()
+        self.viewer.set_preview_progress(value, interactive=slider.isSliderDown())
+        self._sync_progress_controls()
+        self._update_preview_summary()
+
+    def _nudge_progress(self, delta: int) -> None:
+        if self.gcode_preview is None:
+            return
+        self.viewer.set_preview_progress(self.viewer.preview_settings.progress_index + delta)
+        self._sync_progress_controls()
+        self._update_preview_summary()
+
+    def _toggle_progress_playback(self) -> None:
+        if self.progress_timer.isActive():
+            self.progress_timer.stop()
+            self.viewer.set_progress_interaction(False)
+            self.progress_play_button.setText(">")
+        else:
+            self.progress_timer.start()
+            self.progress_play_button.setText("||")
+        self.progress_play_button.setToolTip(
+            tr(self.language, "progress_pause") if self.progress_timer.isActive() else tr(self.language, "progress_play")
+        )
+
+    def _advance_progress(self) -> None:
+        if self.gcode_preview is None:
+            self.progress_timer.stop()
+            return
+        state = self.viewer.progress_state()
+        total = int(state.get("layer_step_count", 0))
+        current = int(state.get("progress_index", 0))
+        if total <= 0 or current >= total - 1:
+            self.progress_timer.stop()
+            self.viewer.set_progress_interaction(False)
+            self.progress_play_button.setText(">")
+            return
+        self.viewer.set_preview_progress(current + 1, interactive=True)
+        self._sync_progress_controls()
         self._update_preview_summary()
 
     def _on_preview_visibility_changed(self) -> None:
@@ -874,7 +1002,56 @@ class MainWindow(QMainWindow):
         self.layer_max_spin.setValue(preview.layer_max)
         self._updating_layer_controls = False
         self._sync_legend_from_settings()
+        self._sync_progress_controls()
         self._update_preview_summary()
+
+    def _sync_progress_controls(self) -> None:
+        self._updating_progress_controls = True
+        if self.gcode_preview is None:
+            for slider in self._progress_sliders():
+                slider.setMinimum(0)
+                slider.setMaximum(0)
+                slider.setValue(0)
+                slider.setEnabled(False)
+            for label in self._progress_labels():
+                label.setText(tr(self.language, "progress_empty"))
+            self._updating_progress_controls = False
+            return
+        state = self.viewer.progress_state()
+        total = int(state.get("layer_step_count", 0))
+        index = int(state.get("progress_index", 0))
+        for slider in self._progress_sliders():
+            slider.blockSignals(True)
+            slider.setEnabled(total > 0)
+            slider.setMinimum(0)
+            slider.setMaximum(max(0, total - 1))
+            slider.setValue(index)
+            slider.blockSignals(False)
+        current = state.get("current_step") or {}
+        label = tr(
+            self.language,
+            "progress_label_text",
+            current=index + 1 if total else 0,
+            total=total,
+            percent=float(state.get("progress_percent", 0.0)) * 100.0,
+            line=current.get("line_number", "-"),
+            move=current.get("move_type", "-"),
+        )
+        for progress_label in self._progress_labels():
+            progress_label.setText(label)
+        self._updating_progress_controls = False
+
+    def _progress_sender_slider(self) -> QSlider:
+        sender = self.sender()
+        if isinstance(sender, QSlider):
+            return sender
+        return self.progress_slider
+
+    def _progress_sliders(self) -> list[QSlider]:
+        return [self.progress_slider, self.preview_progress_slider]
+
+    def _progress_labels(self) -> list[QLabel]:
+        return [self.progress_step_label, self.preview_progress_label]
 
     def _sync_legend_from_settings(self) -> None:
         settings = self.viewer.preview_settings
@@ -938,38 +1115,44 @@ class MainWindow(QMainWindow):
                 "preview_summary_text",
                 segments=summary["segment_count"],
                 visible=self.viewer.visible_path_segment_count,
+                steps=summary.get("timeline_step_count", 0),
                 layers=f"{settings.layer_min}-{settings.layer_max}",
                 roles=len(summary["role_counts"]),
                 axes=", ".join(summary["rotary_axes"]) or "-",
                 coord=self._coordinate_transform_label(summary.get("coordinate_transform", "machine_xyz")),
+                render=self.viewer.path_render_mode,
             )
         )
         self._update_segment_property()
 
     def _update_segment_property(self) -> None:
+        step = self.viewer.current_progress_step()
         segment = self.viewer.representative_path_segment()
-        if segment is None:
+        current = step or segment
+        if current is None:
             self.segment_property.setText(tr(self.language, "segment_property_none"))
             return
-        rotary = segment.rotary_end or segment.rotary_start
+        rotary = current.rotary_end or current.rotary_start
         rotary_text = ", ".join(f"{axis}={value:.3f}" for axis, value in sorted(rotary.items())) or "-"
         self.segment_property.setText(
             tr(
                 self.language,
                 "segment_property_text",
-                line=segment.line_number,
-                layer=segment.layer,
-                move=segment.move_type,
-                role=role_label(segment.extrusion_role, self.language),
-                start=self._format_point(segment.start),
-                end=self._format_point(segment.end),
-                machine_start=self._format_point(segment.machine_start or segment.start),
-                machine_end=self._format_point(segment.machine_end or segment.end),
-                feedrate="-" if segment.feedrate is None else f"{segment.feedrate:.1f}",
-                delta_e=f"{segment.delta_e:.5f}",
-                width="-" if segment.width is None else f"{segment.width:.3f}",
+                step=current.step_index,
+                line=current.line_number,
+                layer=current.layer,
+                move=current.move_type,
+                role=role_label(current.extrusion_role, self.language),
+                start=self._format_point(current.start),
+                end=self._format_point(current.end),
+                machine_start=self._format_point(current.machine_start or current.start),
+                machine_end=self._format_point(current.machine_end or current.end),
+                feedrate="-" if current.feedrate is None else f"{current.feedrate:.1f}",
+                delta_e=f"{current.delta_e:.5f}",
+                width="-" if current.width is None else f"{current.width:.3f}",
+                height="-" if current.height is None else f"{current.height:.3f}",
                 rotary=rotary_text,
-                comment=segment.comment or "-",
+                comment=current.comment or "-",
             )
         )
 
