@@ -6,7 +6,7 @@
 
 程序入口位于 `run_app.py` 和 `scripts/run_app.ps1`。入口调用 `five_axis_slicer.app.main()` 创建 PyQt5 主窗口，主窗口显示 Workbench 首页；用户选择工作台后进入 Operation Session。当前可交互操作为 `Imported NC Review`，它承接 STEP 对象定义、导入 G-code 路径预览、层范围过滤、Feature Type 图例、路径段属性和检查摘要。
 
-CAD 读取由 `step_loader.py` 完成，body/edge 选择状态由 `models.py` 和 `selection_list.py` 维护。VTK 模型预览、edge 点选、G-code 实体道/轻量线 actor 分组和五轴姿态抽样集中在 `viewer.py`。G-code 注释、运动命令、挤出量、宽高和进度 timeline 解析在 `gcode_preview.py` 内完成。项目保存由 `project_io.py` 写出 `project.json`，HTTP 自动化由 `automation.py` 调度回主线程执行。
+CAD 读取由 `step_loader.py` 完成，body/edge 选择状态由 `models.py` 和 `selection_list.py` 维护。默认预览使用 `opengl_viewer.py`，VTK fallback 和后端选择入口保留在 `viewer.py`。G-code 注释、运动命令、挤出量、宽高、进度 timeline 和二进制索引缓存在 `gcode_preview.py` 内完成。项目保存由 `project_io.py` 写出 `project.json`，HTTP 自动化由 `automation.py` 调度回主线程执行。
 
 ## 根目录
 
@@ -21,9 +21,11 @@ CAD 读取由 `step_loader.py` 完成，body/edge 选择状态由 `models.py` �
 - `圭臬/`：项目目标和开发约束文档。
 - `.gitignore`：忽略缓存、输出和临时文件。
 - `README.md`：面向运行和验收的主说明。
-- `pyproject.toml`：包元数据、依赖和命令行入口。
+- `pyproject.toml`：包元数据、依赖、命令行入口和 pybind11 构建依赖。
 - `requirements.txt`：简化依赖清单。
 - `run_app.py`：仓库根目录 GUI 启动入口。
+- `setup.py`：可选 native 扩展构建入口，存在 C++ 编译链时生成 `five_axis_slicer_native`。
+- `native/`：C++/pybind11 源码目录，当前用于预览索引数组打包。
 
 ## `src/five_axis_slicer/`
 
@@ -31,16 +33,18 @@ CAD 读取由 `step_loader.py` 完成，body/edge 选择状态由 `models.py` �
 - `__main__.py`：支持 `python -m five_axis_slicer` 的入口。
 - `app.py`：CLI 参数解析和 QApplication 创建。支持 `--model`、`--gcode`、`--demo`、`--host`、`--port`。
 - `automation.py`：本地 HTTP 服务。网络请求进入后台线程后，经 Qt signal 投递到主线程，避免后台线程直接操作 Qt 控件；实体路径场景下命令等待窗口为 120 秒。
-- `gcode_preview.py`：G-code/NC 路径解析与缓存。路径段记录工件坐标起点/终点、机床原始起点/终点、层号、运动类型、挤出角色、进给速度、E 增量、线宽、层高、A/B/C/U/V/W 轴角度、`step_index` 和注释来源；A/C 路径按 `P_part = Rz(-C) * Rx(-A) * P_machine` 反算工件坐标；全量 timeline 记录挤出、空走、回抽和 prime，纯 E 动作只进入进度读数与运动统计；颜色由 `move_type`、`extrusion_role` 和颜色映射表确定。
+- `gcode_preview.py`：G-code/NC 路径解析与缓存。路径段记录工件坐标起点/终点、机床原始起点/终点、层号、运动类型、挤出角色、进给速度、E 增量、线宽、层高、A/B/C/U/V/W 轴角度、`step_index` 和注释来源；A/C 路径按 `P_part = Rz(-C) * Rx(-A) * P_machine` 反算工件坐标；全量 timeline 记录挤出、空走、回抽和 prime，纯 E 动作只进入进度读数与运动统计；颜色由 `move_type`、`extrusion_role` 和颜色映射表确定。v5 缓存采用小 JSON 元信息加 `.npz` 数组，保存 layer/timeline 前缀、segment step 索引、role/move chunk 和预览几何字段。
 - `geometry_vtk.py`：OCP 拓扑到 VTK polydata 的转换层。
 - `localization.py`：中英翻译表和 `tr()`。
 - `models.py`：`BodyInfo`、`EdgeInfo`、`CadModel`、`SelectionState` 等共享数据结构。
+- `native_preview_index.py`：预览索引打包入口。优先调用 `five_axis_slicer_native`，构建链不可用时使用 NumPy/Python fallback，输出同形状数组。
+- `opengl_viewer.py`：默认 OpenGL 预览后端。使用 `QOpenGLWidget`、PyOpenGL shader、VBO buffer、轻量线模式、实体道实例化数组、当前步高亮、姿态抽样和 edge color-id picking；VTK 后端仍保留为 fallback。
 - `project_io.py`：项目保存。复制 STEP/G-code 源文件，写入 workbench、operation、选择状态、G-code 摘要和预览设置。
 - `selection_list.py`：body/edge 多选列表组件，保证选择输出顺序稳定。
 - `step_loader.py`：STEP/STP 加载器，负责路径校验、OpenCascade 读取、solid/edge 枚举和源文件哈希。
 - `styles.py`：集中 QSS，延续当前深色玻璃风格。
 - `ui.py`：主窗口和 Workbench/Operation Session 编排。包含首页卡片、左侧操作面板、Objects/Print/Material/Machine/Preview/Checks 页签、中英切换、横向 G-code 进度条和 HTTP 命令入口。
-- `viewer.py`：VTK 视窗。管理 STEP body actor、edge actor、G-code 实体道 actor、轻量线 actor、当前步骤高亮、姿态抽样 actor、相机命令和 edge 点选。
+- `viewer.py`：VTK 视窗与后端选择入口。保留 STEP body actor、edge actor、G-code 实体道 actor、轻量线 actor、当前步骤高亮、姿态抽样 actor、相机命令和 edge 点选；默认尝试 OpenGL 后端，`FIVE_AXIS_RENDER_BACKEND=vtk` 或 offscreen 测试环境回到 VTK。
 
 ## `scripts/`
 
@@ -58,6 +62,7 @@ CAD 读取由 `step_loader.py` 完成，body/edge 选择状态由 `models.py` �
 - `test_selection_list.py`：覆盖列表重建、选择读取、文本标记同步和稳定输出顺序。
 - `test_step_loader.py`：覆盖 CadQuery 生成 STEP 后的 solid、edge 和哈希读取。
 - `test_ui_state.py`：覆盖 workbench 选择、中英切换、Preview 显隐状态、进度接口和路径段属性面板。
+- `test_preview_index.py`：覆盖 layer/timeline 前缀索引、native/Python 索引入口形状和 `.npz` 往返。
 - `test_viewer_geometry.py`：覆盖五轴旋转姿态下实体道截面基向量的正交性。
 
 ## `docs/`
@@ -84,7 +89,7 @@ CAD 读取由 `step_loader.py` 完成，body/edge 选择状态由 `models.py` �
 
 `outputs/` 存放可再生成产物，已被 `.gitignore` 忽略。近期相关目录：
 
-- `gcode_preview_cache/`：大 G-code 解析缓存，文件名由源路径、大小、修改时间和解析版本哈希得到；当前 v4 缓存包含全量 timeline 和抽样几何段。
+- `gcode_preview_cache/`：大 G-code 解析缓存，文件名由源路径、大小、修改时间和解析版本哈希得到；当前 v5 缓存由 `.json.gz` 元信息和 `.npz` 二进制数组组成，旧 v4 JSON.gz 可兼容读取并回写 v5。
 - `workbench_smoke/`：Workbench/NC 预览冒烟测试截图和 `summary.json`。
 - `desktop_click_*`、`example_models/`、`http_smoke_project*`：旧阶段选择、真实模型和 HTTP 保存验证产物。
 

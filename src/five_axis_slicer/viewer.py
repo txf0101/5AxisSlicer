@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import math
+import os
+import time
 from typing import Callable
 
 from PyQt5.QtCore import Qt
@@ -39,6 +41,8 @@ class ActorRecord:
 
 
 class ModelViewer(QVTKRenderWindowInteractor):
+    backend = "vtk"
+
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.renderer = vtk.vtkRenderer()
@@ -55,7 +59,7 @@ class ModelViewer(QVTKRenderWindowInteractor):
         self.edge_actors: dict[str, vtk.vtkActor] = {}
         self.edge_to_body: dict[str, str] = {}
         self.gcode_preview: GCodePreview | None = None
-        self.preview_settings = PreviewSettings()
+        self.preview_settings = PreviewSettings(render_backend=self.backend)
         self.path_actors: list[vtk.vtkActor] = []
         self.pose_actor: vtk.vtkActor | None = None
         self.visible_path_segment_count = 0
@@ -63,6 +67,7 @@ class ModelViewer(QVTKRenderWindowInteractor):
         self.path_render_mode = "line"
         self._interaction_preview = False
         self._progress_dragging = False
+        self._last_progress_ms = 0.0
 
         self.picker = vtk.vtkCellPicker()
         self.picker.SetTolerance(0.006)
@@ -132,6 +137,7 @@ class ModelViewer(QVTKRenderWindowInteractor):
             show_travel=False,
             show_extrusion=True,
             show_pose_samples=False,
+            render_backend=self.backend,
         )
         self.preview_settings.progress_index = max(
             0,
@@ -159,11 +165,13 @@ class ModelViewer(QVTKRenderWindowInteractor):
     def set_preview_progress(self, progress_index: int, interactive: bool | None = None) -> None:
         if self.gcode_preview is None:
             return
+        started = time.perf_counter()
         if interactive is not None:
             self._progress_dragging = bool(interactive)
         self.preview_settings.progress_index = int(progress_index)
         self._clamp_progress_index()
         self.refresh_path_preview()
+        self._last_progress_ms = (time.perf_counter() - started) * 1000.0
 
     def set_progress_interaction(self, active: bool) -> None:
         if self.gcode_preview is None:
@@ -197,6 +205,24 @@ class ModelViewer(QVTKRenderWindowInteractor):
             "drawn_path_segment_count": self.drawn_path_segment_count,
             "render_mode": self.path_render_mode,
             "progress": self.progress_state(),
+            "backend": self.backend,
+            "quality_mode": self.preview_settings.quality_mode,
+            "frame_ms": 0.0,
+            "gpu_draw_count": len(self.path_actors) + len(self.body_actors) + len(self.edge_actors),
+            "cache_format": None if self.gcode_preview is None else self.gcode_preview.summary().get("cache_format"),
+        }
+
+    def performance_state(self) -> dict:
+        return {
+            "backend": self.backend,
+            "quality_mode": self.preview_settings.quality_mode,
+            "frame_ms_avg": 0.0,
+            "frame_ms_max": 0.0,
+            "fps_avg": 0.0,
+            "progress_update_ms": self._last_progress_ms,
+            "gpu_draw_count": len(self.path_actors) + len(self.body_actors) + len(self.edge_actors),
+            "gpu_memory_estimate_mb": 0.0,
+            "buffers": {},
         }
 
     def progress_state(self) -> dict:
@@ -230,6 +256,12 @@ class ModelViewer(QVTKRenderWindowInteractor):
         if current_step is not None and current_step.path_segment_index is not None:
             if 0 <= current_step.path_segment_index < len(self.gcode_preview.segments):
                 return self.gcode_preview.segments[current_step.path_segment_index]
+        if current_step is not None:
+            index = self.gcode_preview.segment_index_for_step(current_step.step_index)
+            if index is None:
+                index = self.gcode_preview.nearest_segment_index_for_step(current_step.step_index)
+            if index is not None and 0 <= index < len(self.gcode_preview.segments):
+                return self.gcode_preview.segments[index]
         visible = [segment for segment in self.gcode_preview.segments if self._segment_visible(segment)]
         spatial = [segment for segment in visible if segment.has_spatial_length]
         extrusions = [segment for segment in spatial if segment.move_type == "extrude"]
@@ -779,3 +811,23 @@ def _rotate_z(vector: tuple[float, float, float], angle: float) -> tuple[float, 
     c = math.cos(angle)
     s = math.sin(angle)
     return x * c - y * s, x * s + y * c, z
+
+
+VtkModelViewer = ModelViewer
+
+
+def _select_model_viewer_class():
+    requested = os.environ.get("FIVE_AXIS_RENDER_BACKEND", "opengl").lower()
+    if requested == "vtk" or os.environ.get("QT_QPA_PLATFORM", "").lower() == "offscreen":
+        return VtkModelViewer
+    try:
+        from .opengl_viewer import OPENGL_AVAILABLE, OpenGLModelViewer
+
+        if OPENGL_AVAILABLE:
+            return OpenGLModelViewer
+    except Exception:
+        return VtkModelViewer
+    return VtkModelViewer
+
+
+ModelViewer = _select_model_viewer_class()

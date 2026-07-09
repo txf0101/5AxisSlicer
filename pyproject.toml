@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=68", "wheel", "pybind11>=2.13", "numpy>=1.26"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -12,7 +12,11 @@ license = { text = "MIT" }
 authors = [{ name = "5AxisSclicer contributors" }]
 dependencies = [
     "cadquery>=2.7",
+    "numpy>=1.26",
+    "PyOpenGL>=3.1",
     "PyQt5>=5.15",
+    "pybind11>=2.13",
+    "scikit-build-core>=0.10",
     "vtk>=9.3",
 ]
 

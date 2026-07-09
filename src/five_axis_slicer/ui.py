@@ -206,6 +206,7 @@ class MainWindow(QMainWindow):
             self._sync_preview_controls()
             self._update_file_labels()
             self._update_checks()
+            QTimer.singleShot(1400, self._update_preview_summary)
             self.statusBar().showMessage(
                 tr(
                     self.language,
@@ -274,6 +275,8 @@ class MainWindow(QMainWindow):
             return self.open_gcode(payload["path"], show_dialog=False)
         if path == "/preview/state":
             return {"preview": self.viewer.preview_state()}
+        if path == "/preview/perf":
+            return {"preview_perf": self.viewer.performance_state()}
         if path == "/preview/layers":
             self.viewer.set_preview_layers(int(payload["layer_min"]), int(payload["layer_max"]))
             self._sync_preview_controls()
@@ -283,6 +286,8 @@ class MainWindow(QMainWindow):
             self.viewer.set_preview_progress(index, interactive=bool(payload.get("interactive", False)))
             self._sync_progress_controls()
             self._update_preview_summary()
+            if not bool(payload.get("interactive", False)):
+                QTimer.singleShot(250, self._update_preview_summary)
             return {"preview": self.viewer.preview_state()}
         if path == "/preview/visibility":
             self.viewer.set_preview_visibility(
@@ -932,6 +937,7 @@ class MainWindow(QMainWindow):
         self.viewer.set_preview_progress(slider.value(), interactive=False)
         self._sync_progress_controls()
         self._update_preview_summary()
+        QTimer.singleShot(250, self._update_preview_summary)
 
     def _on_progress_slider_changed(self, value: int) -> None:
         if self._updating_progress_controls or self.gcode_preview is None:
