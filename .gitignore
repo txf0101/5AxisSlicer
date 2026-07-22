@@ -15,6 +15,9 @@ example/**/*.fig
 example/**/*.png
 example/**/*.jpg
 example/**/*.jpeg
+example/**/*.tif
+example/**/*.tiff
+example/**/*.log
 example/**/*.gcode
 example/**/*.nc
 example/**/*.tap
@@ -25,3 +28,4 @@ example/**/*.STL
 example/**/*.3dm
 example/**/*.m
 example/**/*_stats*.txt
+**/~$*.docx

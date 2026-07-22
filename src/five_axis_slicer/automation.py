@@ -75,7 +75,7 @@ class AutomationServer:
             self._send_json(request, 500, {"ok": False, "error": str(exc)})
 
     def call(self, path: str, payload: dict[str, Any]) -> dict[str, Any]:
-        if path in {"/health", "/state"}:
+        if path == "/health":
             return self.handler(path, payload)
         reply: Queue[tuple[bool, dict[str, Any] | str]] = Queue(maxsize=1)
         self.bridge.command.emit(path, payload, reply)

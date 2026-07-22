@@ -10,7 +10,7 @@
 - Preview 页叠加半透明 STEP 模型和 G-code 路径，支持 Feature Type 图例、层范围、travel/extrusion 显隐、五轴姿态抽样和路径段属性面板；默认优先显示正挤出路径，空走和姿态抽样可在面板中打开。
 - G-code 分色采用路径段数据结构中的 `move_type` 与 `extrusion_role` 字段，再由颜色映射表决定渲染颜色。`;TYPE:`、`;LAYER_CHANGE`、`;Layer` 等注释只作为解析线索。
 - A/C 五轴 G-code 预览采用 `P_part = Rz(-C) * Rx(-A) * P_machine` 反算工件坐标，原始机床 XYZ 会保留在路径段属性中；纯 E 回抽和 prime 只进入运动类型统计，不写入 VTK 路径线。
-- 第一版先读取已有 G-code，不重写完整切片算法，不做完整机床运动仿真。
+- 当前解析链路读取已有 G-code；完整五轴路径生成与机床运动仿真列入后续算法阶段。
 
 ## 环境
 
@@ -30,7 +30,7 @@ C:\Users\Tang Xufeng\.conda\envs\5AxisSlicer\python.exe
 
 ## 快速启动
 
-载入默认论文演示样例：
+打开内置叶轮项目：
 
 ```powershell
 .\scripts\run_app.ps1 -Demo
@@ -48,7 +48,7 @@ C:\Users\Tang Xufeng\.conda\envs\5AxisSlicer\python.exe
 & "C:\Users\Tang Xufeng\.conda\envs\5AxisSlicer\python.exe" run_app.py --demo --port 8769
 ```
 
-默认演示文件：
+内置叶轮项目文件：
 
 - `example/叶轮/叶轮.stp`
 - `example/叶轮/叶轮完整.gcode`
@@ -124,3 +124,58 @@ try {
 ```
 
 截图输出位置：`outputs/workbench_smoke/01_workbench_preview.png`。
+
+## 论文级切片成果预览
+
+成果页是 Workbench 与 Operation Session 之外的独立页面。首页“切片成果预览 / Slicing Result Preview”进入空态成果页，可打开内置叶轮项目、已有 G-code 或 STEP。左栏管理输入文件与工艺参数，中栏显示工件坐标路径和阶段进度，右栏给出源文件统计、固定缩略图、真实代码上下文及论文图导出。导入路径保持源 G-code 的坐标与统计，参数值写入项目状态时不触发重新解析。
+
+直接打开空态成果页：
+
+```powershell
+.\scripts\run_app.ps1 -Results
+```
+
+加载叶轮 STEP 与完整 G-code：
+
+```powershell
+.\scripts\run_app.ps1 -Demo
+```
+
+`--demo` 是内置叶轮项目的兼容启动参数；原有 `/demo/load`、`/gcode/open` 和 `/preview/*` 保持 Operation Session 的兼容行为。成果页自动化接口如下：
+
+```powershell
+curl -Method POST http://127.0.0.1:8765/results/demo -Body '{}' -ContentType 'application/json'
+curl http://127.0.0.1:8765/results/state
+curl -Method POST http://127.0.0.1:8765/results/quality -Body '{"mode":"paper"}' -ContentType 'application/json'
+curl -Method POST http://127.0.0.1:8765/results/export -Body '{"language":"both","strict":true}' -ContentType 'application/json'
+curl http://127.0.0.1:8765/results/perf
+```
+
+正式导出固定使用 1920 × 1080 逻辑布局与 2 倍离屏合成，并要求 OpenGL 全量路径能力；严格模式拒绝 VTK 抽样路径降级。默认产物位于 `outputs/paper_preview_acceptance/`，包含中英文 3840 × 2160 PNG 及同名 JSON。PNG 写入 sRGB、300 dpi 和不透明背景信息，JSON 记录加载时来源快照、统计、相机、显隐状态与渲染参数；同名文件对采用异常回滚和跨进程锁。视觉参考图归档在包资源 `src/five_axis_slicer/assets/impeller_four_panel_reference.png`，仅用于实现审计和视觉核查，不进入成果页可见内容。
+
+成果页采用统一字号 token：正文与控件 15 px、次要文字 13 px、表单标签 13 px、G-code 14 px、卡片标题 15 px、栏目标题 16 px、页面标题 22 px、徽标 12 px。中英文按钮、标签、统计项和显隐选项按实际字体宽度布局；换行文字在语言切换后重新计算高度，长路径在界面中间省略，并在 tooltip 与无障碍文本中保留完整内容。顶部工具栏只放置高频动作，其余动作保留在菜单中；1600 × 900 的中英文界面均无工具栏隐藏项，左右栏横向滚动范围为 0。成果页采用正式功能文案，参考依据、参数作用边界和代码定位行号保存在审计 JSON 与维护文档中。
+
+参考图对应的四个论文面板按独立 4K 图片导出，便于后续在论文中统一调整尺寸、间距与题注：
+
+```powershell
+python scripts\build_four_panel_paper_figure.py `
+  --overall outputs\paper_preview_acceptance\impeller_result_preview_zh_3840x2160.png `
+  --step example\叶轮\叶轮.stp `
+  --gcode example\叶轮\叶轮完整.gcode `
+  --output-dir outputs\paper_preview_acceptance\individual_panels `
+  --language zh
+```
+
+英文版及无压缩 TIFF：
+
+```powershell
+python scripts\build_four_panel_paper_figure.py `
+  --overall outputs\paper_preview_acceptance\impeller_result_preview_en_3840x2160.png `
+  --step example\叶轮\叶轮.stp `
+  --gcode example\叶轮\叶轮完整.gcode `
+  --output-dir outputs\paper_preview_acceptance\individual_panels `
+  --language en `
+  --uncompressed-tiff
+```
+
+输出目录包含界面总览、工艺参数、五轴路径和机床可执行 G-code 四张 3840 × 2160 图片。中文交付为 PNG；英文同时保留 PNG 预览和无压缩 RGB TIFF，每个文件配有审计 JSON，汇总 manifest 记录语言、顺序、格式、哈希及 TIFF 压缩标记。英文 TIFF 使用基线 `Compression=1`，保持 8-bit RGB、300 dpi 和逐像素一致，不执行二次缩放。五轴路径图由 OpenGL FBO 捕获完整路径，再重绘贴合 TOP、FRONT、RIGHT 投影面的方向立方体文字、Part XYZ 轴标和起终点图例。G-code 单图采用两行标题区，文件名与语法色说明分行显示；正文优先采用 22 px 等宽字体，并在 18 至 22 px 范围内按最长真实指令、行号栏和 21 行上下文自适应。任一中英文标题、语法标签或代码行无法完整容纳时，导出直接报错。四张单图不内嵌 `(a)` 至 `(d)` 题注，排版与题注由用户在论文编辑环境中完成。完整回归当前为 94 项，结果全部通过。

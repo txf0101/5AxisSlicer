@@ -7,8 +7,10 @@ import time
 from typing import Callable
 
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QImage
 from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 import vtk
+from vtk.util.numpy_support import vtk_to_numpy
 
 from .geometry_vtk import edge_to_polydata, shape_to_polydata
 from .gcode_preview import GCodePathSegment, GCodePreview, GCodeTimelineStep, PreviewSettings
@@ -17,12 +19,12 @@ from .models import CadModel, SelectionState
 
 SelectionCallback = Callable[[str, str], None]
 
-BG_COLOR = (0.08, 0.085, 0.09)
-EDGE_COLOR = (0.10, 0.10, 0.10)
-EDGE_PICK_COLOR = (0.12, 0.12, 0.12)
-EDGE_SELECTED_COLOR = (1.0, 0.92, 0.42)
-BODY_SELECTED_COLOR = (0.98, 0.98, 0.98)
-BODY_SELECTED_EDGE_COLOR = (0.05, 0.05, 0.05)
+BG_COLOR = (0.969, 0.976, 0.988)
+EDGE_COLOR = (0.31, 0.36, 0.43)
+EDGE_PICK_COLOR = (0.39, 0.45, 0.54)
+EDGE_SELECTED_COLOR = (0.145, 0.388, 0.922)
+BODY_SELECTED_COLOR = (0.86, 0.90, 0.96)
+BODY_SELECTED_EDGE_COLOR = (0.12, 0.16, 0.23)
 POSE_SAMPLE_COLOR = (0.18, 0.78, 0.95)
 EDGE_PICK_WIDTH = 2.6
 EDGE_SELECTED_WIDTH = 5.0
@@ -31,7 +33,7 @@ STATIC_SOLID_SEGMENT_LIMIT = 400_000
 INTERACTIVE_LINE_SEGMENT_LIMIT = 25_000
 UPCOMING_OPACITY = 0.20
 COMPLETED_OPACITY = 0.96
-CURRENT_COLOR = (1.0, 1.0, 1.0)
+CURRENT_COLOR = (0.96, 0.39, 0.12)
 
 
 @dataclass(slots=True)
@@ -65,6 +67,7 @@ class ModelViewer(QVTKRenderWindowInteractor):
         self.visible_path_segment_count = 0
         self.drawn_path_segment_count = 0
         self.path_render_mode = "line"
+        self.quality_mode = "interactive"
         self._interaction_preview = False
         self._progress_dragging = False
         self._last_progress_ms = 0.0
@@ -319,6 +322,18 @@ class ModelViewer(QVTKRenderWindowInteractor):
         self.renderer.ResetCameraClippingRange()
         self.render()
 
+    def clear_model(self) -> None:
+        self.model = None
+        self.selection.clear()
+        for actor in tuple(self.body_actors.values()) + tuple(self.edge_actors.values()):
+            self.renderer.RemoveActor(actor)
+        self.actor_records.clear()
+        self.body_actors.clear()
+        self.edge_actors.clear()
+        self.edge_to_body.clear()
+        self.renderer.ResetCameraClippingRange()
+        self.render()
+
     def set_mode(self, mode: str) -> None:
         if mode != "edge":
             raise ValueError(
@@ -388,6 +403,83 @@ class ModelViewer(QVTKRenderWindowInteractor):
         camera.OrthogonalizeViewUp()
         self.renderer.ResetCameraClippingRange()
         self.render()
+
+    def set_quality_mode(self, mode: str) -> None:
+        if mode not in {"interactive", "paper"}:
+            raise ValueError(f"Unknown quality mode: {mode}")
+        self.quality_mode = mode
+        self.preview_settings.quality_mode = mode
+        self.preview_settings.solid_rendering = mode == "interactive"
+        self.refresh_path_preview()
+
+    def set_standard_view(self, view: str) -> None:
+        view = str(view).lower()
+        if view in {"home", "isometric", "iso"}:
+            self.home_view()
+            return
+        directions = {
+            "front": ((0.0, -1.0, 0.0), (0.0, 0.0, 1.0)),
+            "back": ((0.0, 1.0, 0.0), (0.0, 0.0, 1.0)),
+            "left": ((-1.0, 0.0, 0.0), (0.0, 0.0, 1.0)),
+            "right": ((1.0, 0.0, 0.0), (0.0, 0.0, 1.0)),
+            "top": ((0.0, 0.0, 1.0), (0.0, 1.0, 0.0)),
+            "bottom": ((0.0, 0.0, -1.0), (0.0, 1.0, 0.0)),
+        }
+        if view not in directions:
+            raise ValueError(f"Unknown standard view: {view}")
+        self.renderer.ResetCamera()
+        camera = self.renderer.GetActiveCamera()
+        focal = camera.GetFocalPoint()
+        distance = max(camera.GetDistance(), 1.0)
+        direction, up = directions[view]
+        camera.SetPosition(*(focal[index] + direction[index] * distance for index in range(3)))
+        camera.SetViewUp(*up)
+        camera.OrthogonalizeViewUp()
+        self.renderer.ResetCameraClippingRange()
+        self.render()
+
+    def camera_state(self) -> dict[str, object]:
+        camera = self.renderer.GetActiveCamera()
+        return {
+            "position": list(camera.GetPosition()),
+            "focal_point": list(camera.GetFocalPoint()),
+            "view_up": list(camera.GetViewUp()),
+            "parallel_scale": float(camera.GetParallelScale()),
+            "view_angle": float(camera.GetViewAngle()),
+        }
+
+    def capabilities(self) -> dict[str, object]:
+        return {
+            "backend": self.backend,
+            "quality_mode": self.quality_mode,
+            "paper_quality_active": False,
+            "quality_modes": ["interactive", "paper"],
+            "offscreen_export": True,
+            "full_timeline_paper_path": False,
+        }
+
+    def render_scene_image(self, width: int, height: int) -> QImage:
+        width = max(1, int(width))
+        height = max(1, int(height))
+        render_window = self.GetRenderWindow()
+        old_size = render_window.GetSize()
+        render_window.SetSize(width, height)
+        self.renderer.ResetCameraClippingRange()
+        render_window.Render()
+        capture = vtk.vtkWindowToImageFilter()
+        capture.SetInput(render_window)
+        capture.SetInputBufferTypeToRGBA()
+        capture.ReadFrontBufferOff()
+        capture.Update()
+        writer = vtk.vtkPNGWriter()
+        writer.SetWriteToMemory(True)
+        writer.SetInputConnection(capture.GetOutputPort())
+        writer.Write()
+        payload = vtk_to_numpy(writer.GetResult()).tobytes()
+        image = QImage.fromData(payload, "PNG")
+        render_window.SetSize(*old_size)
+        render_window.Render()
+        return image
 
     def camera_command(self, command: str, value: float = 10.0) -> None:
         camera = self.renderer.GetActiveCamera()

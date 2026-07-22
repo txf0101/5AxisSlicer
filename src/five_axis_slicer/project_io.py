@@ -19,6 +19,7 @@ def save_project(
     workbench_state: dict[str, Any] | None = None,
     gcode_preview: GCodePreview | None = None,
     preview_settings: PreviewSettings | None = None,
+    result_preview_state: Any | None = None,
 ) -> Path:
     project_dir = Path(directory).expanduser().resolve()
     source_dir = project_dir / "source"
@@ -68,6 +69,13 @@ def save_project(
             "gcode": None if preview_settings is None else preview_settings.to_json(),
         },
     }
+    if result_preview_state is not None:
+        state_payload = (
+            result_preview_state.to_json()
+            if hasattr(result_preview_state, "to_json")
+            else dict(result_preview_state)
+        )
+        payload["result_preview"] = state_payload
 
     output = project_dir / "project.json"
     output.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")

@@ -3,6 +3,7 @@ param(
     [string]$Model = "",
     [string]$GCode = "",
     [switch]$Demo,
+    [switch]$Results,
     [int]$Port = 8765
 )
 
@@ -10,6 +11,9 @@ $repo = Split-Path -Parent $PSScriptRoot
 $argsList = @("$repo\run_app.py", "--port", "$Port")
 if ($Demo) {
     $argsList += @("--demo")
+}
+if ($Results) {
+    $argsList += @("--results")
 }
 if ($Model -ne "") {
     $argsList += @("--model", $Model)

@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import math
 from pathlib import Path
+from typing import Callable
 
 from OCP.BRepAdaptor import BRepAdaptor_Curve
 from OCP.IFSelect import IFSelect_RetDone
@@ -25,25 +26,49 @@ PALETTE: tuple[tuple[float, float, float], ...] = (
     (0.78, 0.80, 0.68),
 )
 STEP_SUFFIXES = {".step", ".stp"}
+_FILE_HASH_CHUNK_SIZE = 1024 * 1024
+
+CancelCheck = Callable[[], bool]
 
 
 class StepLoadError(RuntimeError):
     """STEP/STP 文件无法读取为可用 CAD 模型时抛出。"""
 
 
-def file_sha256(path: Path) -> str:
+class StepLoadCancelled(StepLoadError):
+    """Raised when a cooperative STEP load or source hash is cancelled."""
+
+
+def file_sha256(path: Path, *, cancel_check: CancelCheck | None = None) -> str:
     """计算源文件哈希，保存项目时用于确认模型来源。"""
 
+    _raise_if_cancelled(cancel_check)
     digest = hashlib.sha256()
     with path.open("rb") as stream:
-        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+        while True:
+            _raise_if_cancelled(cancel_check)
+            chunk = stream.read(_FILE_HASH_CHUNK_SIZE)
+            if not chunk:
+                break
             digest.update(chunk)
+            _raise_if_cancelled(cancel_check)
+    _raise_if_cancelled(cancel_check)
     return digest.hexdigest()
 
 
-def load_step(path: str | Path) -> CadModel:
+def load_step(
+    path: str | Path,
+    *,
+    cancel_check: CancelCheck | None = None,
+) -> CadModel:
+    _raise_if_cancelled(cancel_check)
     source_path = _resolve_step_path(path)
+    _raise_if_cancelled(cancel_check)
+    source_stat = source_path.stat()
+    source_hash = file_sha256(source_path, cancel_check=cancel_check)
+    _raise_if_cancelled(cancel_check)
     root_shape = _read_root_shape(source_path)
+    _raise_if_cancelled(cancel_check)
     solid_explorer = TopExp_Explorer(root_shape, TopAbs_SOLID)
 
     bodies: list[BodyInfo] = []
@@ -53,6 +78,7 @@ def load_step(path: str | Path) -> CadModel:
 
     solid_index = 0
     while solid_explorer.More():
+        _raise_if_cancelled(cancel_check)
         solid_index += 1
         body_id = f"body_{solid_index:03d}"
         solid = TopoDS.Solid_s(solid_explorer.Current())
@@ -64,10 +90,12 @@ def load_step(path: str | Path) -> CadModel:
         edge_explorer = TopExp_Explorer(solid, TopAbs_EDGE)
         edge_index = 0
         while edge_explorer.More():
+            _raise_if_cancelled(cancel_check)
             edge_index += 1
             edge_id = f"{body_id}_edge_{edge_index:04d}"
             edge = TopoDS.Edge_s(edge_explorer.Current())
             samples = sample_edge_points(edge, target_segments=16)
+            _raise_if_cancelled(cancel_check)
             edge_shapes[edge_id] = edge
             body_edges.append(edge_id)
             edges.append(
@@ -81,6 +109,7 @@ def load_step(path: str | Path) -> CadModel:
             )
             edge_explorer.Next()
 
+        _raise_if_cancelled(cancel_check)
         bodies.append(
             BodyInfo(
                 body_id=body_id,
@@ -95,14 +124,32 @@ def load_step(path: str | Path) -> CadModel:
     if not bodies:
         raise StepLoadError(f"No solid/body found in STEP: {source_path}")
 
+    _raise_if_cancelled(cancel_check)
+    final_stat = source_path.stat()
+    final_hash = file_sha256(source_path, cancel_check=cancel_check)
+    _raise_if_cancelled(cancel_check)
+    if (
+        final_stat.st_size != source_stat.st_size
+        or final_stat.st_mtime_ns != source_stat.st_mtime_ns
+        or final_hash != source_hash
+    ):
+        raise StepLoadError(f"STEP source changed while loading: {source_path}")
+
     return CadModel(
         source_path=source_path,
-        source_hash=file_sha256(source_path),
+        source_hash=source_hash,
         bodies=bodies,
         edges=edges,
         shapes=shapes,
         edge_shapes=edge_shapes,
+        source_size_bytes=int(source_stat.st_size),
+        source_mtime_ns=int(source_stat.st_mtime_ns),
     )
+
+
+def _raise_if_cancelled(cancel_check: CancelCheck | None) -> None:
+    if cancel_check is not None and cancel_check():
+        raise StepLoadCancelled("STEP loading cancelled")
 
 
 def _resolve_step_path(path: str | Path) -> Path:

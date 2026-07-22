@@ -25,3 +25,6 @@ five-axis-slicer = "five_axis_slicer.app:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+five_axis_slicer = ["assets/*.png"]

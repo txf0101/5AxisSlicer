@@ -33,7 +33,7 @@ class EdgeInfo:
 class BodyInfo:
     """一个 STEP solid 对应一个 body。
 
-    当前版本不推断制造分区，body 只代表导入阶段发现的拓扑实体。
+    不推断制造分区，body 只代表导入阶段发现的拓扑实体。
     edge_ids 保持原始枚举顺序，便于右侧列表和保存文件稳定复现。
     """
 
@@ -69,6 +69,8 @@ class CadModel:
     edges: list[EdgeInfo]
     shapes: dict[str, Any]
     edge_shapes: dict[str, Any]
+    source_size_bytes: int | None = None
+    source_mtime_ns: int | None = None
 
     @property
     def edge_map(self) -> dict[str, EdgeInfo]:
@@ -82,6 +84,8 @@ class CadModel:
         return {
             "source_path": str(self.source_path),
             "source_hash": self.source_hash,
+            "source_size_bytes": self.source_size_bytes,
+            "source_mtime_ns": self.source_mtime_ns,
             "bodies": [body.to_json() for body in self.bodies],
             "edges": [edge.to_json() for edge in self.edges],
         }

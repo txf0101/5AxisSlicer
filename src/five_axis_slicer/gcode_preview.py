@@ -5,12 +5,16 @@ import gzip
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
 import re
-from typing import Any
+import tempfile
+from typing import Any, Callable
+import uuid
 
 import numpy as np
 
+from .gcode_source import application_cache_dir
 from .native_preview_index import build_preview_index
 
 
@@ -28,6 +32,14 @@ MACHINE_COORDINATE_TRANSFORM = "machine_xyz"
 PROGRESS_DOMAIN = "layer_filtered_gcode_order"
 DEFAULT_BEAD_WIDTH = 0.4
 DEFAULT_LAYER_HEIGHT = 0.2
+
+
+ProgressCallback = Callable[[float, str], None]
+CancelCheck = Callable[[], bool]
+
+
+class GCodeLoadCancelled(RuntimeError):
+    pass
 
 
 MOVE_OPTION_COLORS: dict[str, tuple[float, float, float]] = {
@@ -852,27 +864,104 @@ class PreviewSettings:
         }
 
 
-def load_gcode(path: str | Path) -> GCodePreview:
+def load_gcode(
+    path: str | Path,
+    *,
+    progress_callback: ProgressCallback | None = None,
+    cancel_check: CancelCheck | None = None,
+    source_sha256: str | None = None,
+) -> GCodePreview:
     source_path = Path(path).expanduser().resolve()
     if not source_path.exists():
         raise FileNotFoundError(f"G-code file not found: {source_path}")
     if source_path.suffix.lower() not in {".gcode", ".nc", ".tap", ".txt"}:
         raise ValueError(f"Expected .gcode, .nc, .tap or .txt file: {source_path}")
-    cached = _load_preview_cache(source_path)
+    _raise_if_cancelled(cancel_check)
+    if progress_callback is not None:
+        progress_callback(0.02, "cache")
+    source_size_bytes = source_path.stat().st_size
+    cache_source_sha256 = source_sha256
+    if source_size_bytes >= 25_000_000 and cache_source_sha256 is None:
+        cache_source_sha256 = _file_sha256(source_path, cancel_check=cancel_check)
+    cached = _load_preview_cache(source_path, source_sha256=cache_source_sha256)
     if cached is not None:
+        _raise_if_cancelled(cancel_check)
+        if progress_callback is not None:
+            progress_callback(1.0, "cache")
         return cached
-    sample_stride = max(1, math.ceil(source_path.stat().st_size / 25_000_000))
+    sample_stride = max(1, math.ceil(source_size_bytes / 25_000_000))
+    source_size = max(1, source_size_bytes)
     with source_path.open("r", encoding="utf-8", errors="replace") as stream:
-        preview = parse_gcode_lines(stream, source_path, sample_stride=sample_stride)
-    _write_preview_cache(preview)
+        def iter_lines():
+            line_count = 0
+            while True:
+                raw_line = stream.readline()
+                if not raw_line:
+                    break
+                line_count += 1
+                if line_count % 4096 == 0:
+                    _raise_if_cancelled(cancel_check)
+                    if progress_callback is not None:
+                        try:
+                            fraction = min(0.97, max(0.03, stream.tell() / source_size))
+                        except OSError:
+                            fraction = 0.03
+                        progress_callback(fraction, "parse")
+                yield raw_line
+
+        preview = parse_gcode_lines(
+            iter_lines(),
+            source_path,
+            sample_stride=sample_stride,
+            progress_callback=None,
+            cancel_check=cancel_check,
+        )
+    _raise_if_cancelled(cancel_check)
+    if progress_callback is not None:
+        progress_callback(0.98, "cache_write")
+    try:
+        _write_preview_cache(
+            preview,
+            cancel_check=cancel_check,
+            source_sha256=cache_source_sha256,
+        )
+    except GCodeLoadCancelled:
+        raise
+    except Exception:
+        # A cache is optional. Keep a valid parsed result when persistence is
+        # unavailable, then re-check cancellation before reporting readiness.
+        _raise_if_cancelled(cancel_check)
+    _raise_if_cancelled(cancel_check)
+    if progress_callback is not None:
+        progress_callback(1.0, "ready")
     return preview
 
 
-def parse_gcode(text: str, source_path: str | Path = "<memory>", sample_stride: int = 1) -> GCodePreview:
-    return parse_gcode_lines(text.splitlines(), source_path, sample_stride=sample_stride)
+def parse_gcode(
+    text: str,
+    source_path: str | Path = "<memory>",
+    sample_stride: int = 1,
+    *,
+    progress_callback: ProgressCallback | None = None,
+    cancel_check: CancelCheck | None = None,
+) -> GCodePreview:
+    return parse_gcode_lines(
+        text.splitlines(),
+        source_path,
+        sample_stride=sample_stride,
+        progress_callback=progress_callback,
+        cancel_check=cancel_check,
+    )
 
 
-def parse_gcode_lines(lines: Any, source_path: str | Path = "<memory>", sample_stride: int = 1) -> GCodePreview:
+def parse_gcode_lines(
+    lines: Any,
+    source_path: str | Path = "<memory>",
+    sample_stride: int = 1,
+    *,
+    progress_callback: ProgressCallback | None = None,
+    cancel_check: CancelCheck | None = None,
+) -> GCodePreview:
     source = Path(source_path)
     state = _ParserState()
     segments: list[GCodePathSegment] = []
@@ -880,7 +969,12 @@ def parse_gcode_lines(lines: Any, source_path: str | Path = "<memory>", sample_s
     stats = _PreviewStats()
     sample_stride = max(1, int(sample_stride))
 
+    total_lines = len(lines) if hasattr(lines, "__len__") else None
     for line_number, raw_line in enumerate(lines, start=1):
+        if line_number == 1 or line_number % 4096 == 0:
+            _raise_if_cancelled(cancel_check)
+            if progress_callback is not None and total_lines:
+                progress_callback(min(1.0, line_number / max(1, total_lines)), "parse")
         raw = raw_line.strip()
         if not raw:
             continue
@@ -967,6 +1061,9 @@ def parse_gcode_lines(lines: Any, source_path: str | Path = "<memory>", sample_s
                 )
             )
 
+    _raise_if_cancelled(cancel_check)
+    if progress_callback is not None:
+        progress_callback(1.0, "parse")
     return _build_preview(source, segments, timeline, stats)
 
 
@@ -1517,34 +1614,95 @@ def _build_preview(
     )
 
 
-def _cache_stem(source_path: Path, version: str = CACHE_VERSION) -> Path:
+def _file_sha256(source_path: Path, *, cancel_check: CancelCheck | None = None) -> str:
+    digest = hashlib.sha256()
+    with source_path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            _raise_if_cancelled(cancel_check)
+            digest.update(chunk)
+    _raise_if_cancelled(cancel_check)
+    return digest.hexdigest()
+
+
+def _cache_stem(
+    source_path: Path,
+    version: str = CACHE_VERSION,
+    *,
+    source_sha256: str | None = None,
+) -> Path:
     stat = source_path.stat()
-    key_source = f"{version}|{source_path}|{stat.st_size}|{stat.st_mtime_ns}".encode("utf-8", errors="replace")
+    identity = source_sha256
+    if version == CACHE_VERSION:
+        identity = identity or _file_sha256(source_path)
+        key_text = f"{version}|{source_path}|{stat.st_size}|{stat.st_mtime_ns}|{identity}"
+    else:
+        key_text = f"{version}|{source_path}|{stat.st_size}|{stat.st_mtime_ns}"
+    key_source = key_text.encode("utf-8", errors="replace")
     key = hashlib.sha1(key_source).hexdigest()
-    return Path.cwd() / "outputs" / "gcode_preview_cache" / key
+    return application_cache_dir("gcode_preview_cache") / key
 
 
-def _cache_path(source_path: Path, version: str = CACHE_VERSION) -> Path:
-    return _cache_stem(source_path, version).with_suffix(".json.gz")
+def _cache_path(
+    source_path: Path,
+    version: str = CACHE_VERSION,
+    *,
+    source_sha256: str | None = None,
+) -> Path:
+    if source_sha256 is None:
+        stem = _cache_stem(source_path, version)
+    else:
+        stem = _cache_stem(source_path, version, source_sha256=source_sha256)
+    return stem.with_suffix(".json.gz")
 
 
-def _cache_index_path(source_path: Path, version: str = CACHE_VERSION) -> Path:
-    return _cache_stem(source_path, version).with_suffix(".npz")
+def _cache_index_path(
+    source_path: Path,
+    version: str = CACHE_VERSION,
+    *,
+    source_sha256: str | None = None,
+) -> Path:
+    if source_sha256 is None:
+        stem = _cache_stem(source_path, version)
+    else:
+        stem = _cache_stem(source_path, version, source_sha256=source_sha256)
+    return stem.with_suffix(".npz")
 
 
-def _load_preview_cache(source_path: Path) -> GCodePreview | None:
+def _raise_if_cancelled(cancel_check: CancelCheck | None) -> None:
+    if cancel_check is not None and cancel_check():
+        raise GCodeLoadCancelled("G-code loading cancelled")
+
+
+def _load_preview_cache(
+    source_path: Path,
+    *,
+    source_sha256: str | None = None,
+) -> GCodePreview | None:
     if source_path.stat().st_size < 25_000_000:
         return None
     for version in (CACHE_VERSION, *LEGACY_CACHE_VERSIONS):
-        cache_path = _cache_path(source_path, version)
-        if not cache_path.exists():
-            continue
         try:
+            cache_path = _cache_path(
+                source_path,
+                version,
+                source_sha256=source_sha256 if version == CACHE_VERSION else None,
+            )
+            if not cache_path.exists():
+                continue
             with gzip.open(cache_path, "rt", encoding="utf-8") as stream:
                 payload = json.load(stream)
-            index_path = _cache_index_path(source_path, version)
+            index_path = _cache_index_path(
+                source_path,
+                version,
+                source_sha256=source_sha256 if version == CACHE_VERSION else None,
+            )
+            binary_name = payload.get("binary_arrays")
+            if isinstance(binary_name, str) and binary_name:
+                index_path = cache_path.parent / Path(binary_name).name
             if payload.get("binary_arrays") and index_path.exists():
-                return _preview_from_binary_cache(payload, source_path, index_path)
+                preview = _preview_from_binary_cache(payload, source_path, index_path)
+                preview._index().source = "cache"
+                return preview
             preview = preview_from_json(payload, source_path)
             if index_path.exists():
                 try:
@@ -1558,50 +1716,119 @@ def _load_preview_cache(source_path: Path) -> GCodePreview | None:
                     _write_preview_cache(preview)
                 except Exception:
                     pass
+            preview._index().source = "cache"
             return preview
         except Exception:
             continue
     return None
 
 
-def _write_preview_cache(preview: GCodePreview) -> None:
+def _write_preview_cache(
+    preview: GCodePreview,
+    *,
+    cancel_check: CancelCheck | None = None,
+    source_sha256: str | None = None,
+) -> None:
     if preview.source_path == Path("<memory>") or preview.source_path.stat().st_size < 25_000_000:
         return
-    cache_path = _cache_path(preview.source_path)
+    _raise_if_cancelled(cancel_check)
+    cache_path = _cache_path(preview.source_path, source_sha256=source_sha256)
     cache_path.parent.mkdir(parents=True, exist_ok=True)
     index = preview._index()
     index.cache_format = "json.gz+npz-render-index-v2"
     timeline_arrays = preview.timeline_arrays or _timeline_arrays_from_steps(preview.timeline)
-    index_path = _cache_index_path(preview.source_path)
-    np.savez(
-        index_path,
-        layer_min=np.asarray([index.layer_min], dtype=np.int32),
-        layer_max=np.asarray([index.layer_max], dtype=np.int32),
-        layer_prefix_counts=index.layer_prefix_counts.astype(np.int32, copy=False),
-        timeline_indices=index.timeline_indices.astype(np.int32, copy=False),
-        segment_indices=index.segment_indices.astype(np.int32, copy=False),
-        source=np.asarray([index.source]),
-        timeline_line_numbers=timeline_arrays.line_numbers,
-        timeline_layers=timeline_arrays.layers,
-        timeline_starts=timeline_arrays.starts,
-        timeline_ends=timeline_arrays.ends,
-        timeline_rotary_starts=timeline_arrays.rotary_starts,
-        timeline_rotary_ends=timeline_arrays.rotary_ends,
-        timeline_move_codes=timeline_arrays.move_codes,
-        timeline_role_codes=timeline_arrays.role_codes,
-        timeline_feedrates=timeline_arrays.feedrates,
-        timeline_delta_es=timeline_arrays.delta_es,
-        timeline_widths=timeline_arrays.widths,
-        timeline_heights=timeline_arrays.heights,
-        timeline_machine_starts=timeline_arrays.machine_starts,
-        timeline_machine_ends=timeline_arrays.machine_ends,
-        timeline_flags=timeline_arrays.flags,
-        timeline_path_segment_indices=timeline_arrays.path_segment_indices,
-        **_segment_npz_arrays(preview.segments),
+    legacy_index_path = _cache_index_path(
+        preview.source_path,
+        source_sha256=source_sha256,
     )
-    payload = {
-        "summary": preview.summary(),
-        "binary_arrays": index_path.name,
-    }
-    with gzip.open(cache_path, "wt", encoding="utf-8") as stream:
-        json.dump(payload, stream, ensure_ascii=False)
+    previous_index_path: Path | None = None
+    if cache_path.exists():
+        try:
+            with gzip.open(cache_path, "rt", encoding="utf-8") as stream:
+                previous_payload = json.load(stream)
+            previous_name = previous_payload.get("binary_arrays")
+            if isinstance(previous_name, str) and previous_name:
+                previous_index_path = cache_path.parent / Path(previous_name).name
+            elif previous_name:
+                previous_index_path = legacy_index_path
+        except Exception:
+            previous_index_path = None
+
+    temporary_index: Path | None = None
+    temporary_cache: Path | None = None
+    generation_index: Path | None = None
+    manifest_committed = False
+    try:
+        _raise_if_cancelled(cancel_check)
+        with tempfile.NamedTemporaryFile(dir=legacy_index_path.parent, suffix=".npz", delete=False) as temporary:
+            temporary_index = Path(temporary.name)
+            np.savez(
+                temporary,
+                layer_min=np.asarray([index.layer_min], dtype=np.int32),
+                layer_max=np.asarray([index.layer_max], dtype=np.int32),
+                layer_prefix_counts=index.layer_prefix_counts.astype(np.int32, copy=False),
+                timeline_indices=index.timeline_indices.astype(np.int32, copy=False),
+                segment_indices=index.segment_indices.astype(np.int32, copy=False),
+                source=np.asarray([index.source]),
+                timeline_line_numbers=timeline_arrays.line_numbers,
+                timeline_layers=timeline_arrays.layers,
+                timeline_starts=timeline_arrays.starts,
+                timeline_ends=timeline_arrays.ends,
+                timeline_rotary_starts=timeline_arrays.rotary_starts,
+                timeline_rotary_ends=timeline_arrays.rotary_ends,
+                timeline_move_codes=timeline_arrays.move_codes,
+                timeline_role_codes=timeline_arrays.role_codes,
+                timeline_feedrates=timeline_arrays.feedrates,
+                timeline_delta_es=timeline_arrays.delta_es,
+                timeline_widths=timeline_arrays.widths,
+                timeline_heights=timeline_arrays.heights,
+                timeline_machine_starts=timeline_arrays.machine_starts,
+                timeline_machine_ends=timeline_arrays.machine_ends,
+                timeline_flags=timeline_arrays.flags,
+                timeline_path_segment_indices=timeline_arrays.path_segment_indices,
+                **_segment_npz_arrays(preview.segments),
+            )
+        _raise_if_cancelled(cancel_check)
+        generation_index = legacy_index_path.with_name(
+            f"{legacy_index_path.stem}.{uuid.uuid4().hex}{legacy_index_path.suffix}"
+        )
+        os.replace(temporary_index, generation_index)
+        temporary_index = None
+
+        payload = {
+            "summary": preview.summary(),
+            "binary_arrays": generation_index.name,
+        }
+        with tempfile.NamedTemporaryFile(dir=cache_path.parent, suffix=".json.gz", delete=False) as temporary:
+            temporary_cache = Path(temporary.name)
+        with gzip.open(temporary_cache, "wt", encoding="utf-8") as stream:
+            json.dump(payload, stream, ensure_ascii=False)
+        _raise_if_cancelled(cancel_check)
+        os.replace(temporary_cache, cache_path)
+        temporary_cache = None
+        manifest_committed = True
+        for obsolete_path in (previous_index_path, legacy_index_path):
+            if obsolete_path is None or obsolete_path == generation_index:
+                continue
+            try:
+                obsolete_path.unlink(missing_ok=True)
+            except OSError:
+                # The committed manifest already points at the new generation.
+                # A locked obsolete generation can be collected on a later run.
+                pass
+    finally:
+        if temporary_index is not None:
+            try:
+                temporary_index.unlink(missing_ok=True)
+            except OSError:
+                pass
+        if temporary_cache is not None:
+            try:
+                temporary_cache.unlink(missing_ok=True)
+            except OSError:
+                pass
+        if generation_index is not None and not manifest_committed:
+            try:
+                generation_index.unlink(missing_ok=True)
+            except OSError:
+                pass
