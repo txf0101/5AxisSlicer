@@ -9,6 +9,7 @@ from PyQt5.QtCore import QObject, QThread, pyqtSignal, pyqtSlot
 
 from .gcode_preview import GCodeLoadCancelled, load_gcode
 from .gcode_source import GCodeSourceIndex, GCodeSourceIndexCancelled
+from .project_io import ProjectLoadCancelled, load_project
 from .result_state import LoadRequest, LoadResult
 from .step_loader import StepLoadCancelled, file_sha256, load_step
 
@@ -81,13 +82,41 @@ class _ResultLoadWorker(QObject):
             self._check_cancelled()
             model = None
             preview = None
+            project = None
             source_audits: dict[str, dict[str, object]] = {}
+            if self.request.project_path is not None:
+                self.progress.emit(self.request.request_id, "project", 0.01)
+
+                def report_project(phase: str, fraction: float) -> None:
+                    self._check_cancelled()
+                    self.progress.emit(self.request.request_id, phase, fraction)
+
+                project = load_project(
+                    self.request.project_path,
+                    length_unit_override=self.request.length_unit_override,
+                    cancel_check=self.cancel_event.is_set,
+                    progress_callback=report_project,
+                )
+                self._check_cancelled()
+                model = project.model
+                if model is not None:
+                    source_audits["project_step_model"] = _source_audit(
+                        Path(model.source_path),
+                        getattr(model, "source_hash", None),
+                        size_bytes=getattr(model, "source_size_bytes", None),
+                        mtime_ns=getattr(model, "source_mtime_ns", None),
+                    )
+
             if self.request.model_path is not None:
                 self.progress.emit(self.request.request_id, "model", 0.05)
-                model = load_step(
-                    self.request.model_path,
-                    cancel_check=self.cancel_event.is_set,
-                )
+                step_options: dict[str, object] = {
+                    "cancel_check": self.cancel_event.is_set,
+                }
+                if self.request.length_unit_override is not None:
+                    step_options["length_unit_override"] = (
+                        self.request.length_unit_override
+                    )
+                model = load_step(self.request.model_path, **step_options)
                 self._check_cancelled()
                 source_audits["step_model"] = _source_audit(
                     self.request.model_path,
@@ -102,10 +131,6 @@ class _ResultLoadWorker(QObject):
                     self.request.gcode_path,
                     cancel_check=self.cancel_event.is_set,
                 )
-                gcode_load_audit = _source_audit(
-                    self.request.gcode_path,
-                    gcode_load_hash,
-                )
 
                 def report(fraction: float, phase: str = "gcode") -> None:
                     self._check_cancelled()
@@ -118,6 +143,19 @@ class _ResultLoadWorker(QObject):
                     cancel_check=self.cancel_event.is_set,
                     source_sha256=gcode_load_hash,
                 )
+                source_fingerprint = getattr(preview, "source_fingerprint", None)
+                if source_fingerprint is None:
+                    gcode_load_audit = _source_audit(
+                        self.request.gcode_path,
+                        gcode_load_hash,
+                    )
+                else:
+                    gcode_load_audit = _source_audit(
+                        self.request.gcode_path,
+                        source_fingerprint.sha256,
+                        size_bytes=source_fingerprint.size_bytes,
+                        mtime_ns=source_fingerprint.mtime_ns,
+                    )
                 self._check_cancelled()
                 self.progress.emit(self.request.request_id, "source_index", 0.88)
 
@@ -153,11 +191,20 @@ class _ResultLoadWorker(QObject):
                 source_audits["gcode"] = gcode_load_audit
 
             self._check_cancelled()
+            effective_unit_override = self.request.length_unit_override
+            loaded_units = None if model is None else getattr(model, "units", None)
+            if loaded_units is not None and bool(
+                getattr(loaded_units, "override_applied", False)
+            ):
+                effective_unit_override = str(loaded_units.source_length_unit)
             result = LoadResult(
                 request_id=self.request.request_id,
                 model_path=self.request.model_path,
                 gcode_path=self.request.gcode_path,
+                project_path=self.request.project_path,
+                length_unit_override=effective_unit_override,
                 model=model,
+                project=project,
                 gcode_preview=preview,
                 gcode_source_index=source_index,
                 source_audits=source_audits,
@@ -168,6 +215,7 @@ class _ResultLoadWorker(QObject):
             self.completed.emit(result)
         except (
             LoadCancelled,
+            ProjectLoadCancelled,
             StepLoadCancelled,
             GCodeLoadCancelled,
             GCodeSourceIndexCancelled,
@@ -299,7 +347,9 @@ class ResultLoadCoordinator(QObject):
         thread.start()
 
     @pyqtSlot(object, str, float)
-    def _forward_progress(self, request_id: object, phase: str, fraction: float) -> None:
+    def _forward_progress(
+        self, request_id: object, phase: str, fraction: float
+    ) -> None:
         if request_id == self._active_request_id:
             self.progress.emit(request_id, phase, fraction)
 

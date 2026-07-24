@@ -9,12 +9,20 @@ import os
 from pathlib import Path
 import re
 import tempfile
-from typing import Any, Callable
+from typing import Any, Callable, Mapping
 import uuid
 
 import numpy as np
 
 from .gcode_source import application_cache_dir
+from .manufacturing.preview_kinematics import (
+    AC_INVERSE_TRANSFORM,
+    DEFAULT_PREVIEW_KINEMATICS_REGISTRY,
+    MACHINE_COORDINATE_TRANSFORM,
+    NC_PREVIEW_OBJECT_ID,
+    reconstruct_preview_motion,
+)
+from .manufacturing.setup import IssueSeverity, ValidationIssue
 from .native_preview_index import build_preview_index
 
 
@@ -25,10 +33,10 @@ LAYER_RE = re.compile(r"^Layer\s+(-?\d+)", re.IGNORECASE)
 TYPE_RE = re.compile(r"^TYPE\s*:\s*(.+)$", re.IGNORECASE)
 WIDTH_RE = re.compile(rf"^WIDTH\s*:\s*({NUMBER_RE})", re.IGNORECASE)
 HEIGHT_RE = re.compile(rf"^HEIGHT\s*:\s*({NUMBER_RE})", re.IGNORECASE)
-CACHE_VERSION = "gcode-preview-v5-opengl-index"
-LEGACY_CACHE_VERSIONS = ("gcode-preview-v4-timeline-beads",)
-AC_INVERSE_TRANSFORM = "ac_inverse_rz_minus_c_after_rx_minus_a"
-MACHINE_COORDINATE_TRANSFORM = "machine_xyz"
+CACHE_VERSION = "gcode-preview-v7-file-coordinate-policy"
+# Older preview caches may contain silently ignored rotary axes.  They are
+# intentionally invalidated at this safety boundary and rebuilt from source.
+LEGACY_CACHE_VERSIONS: tuple[str, ...] = ()
 PROGRESS_DOMAIN = "layer_filtered_gcode_order"
 DEFAULT_BEAD_WIDTH = 0.4
 DEFAULT_LAYER_HEIGHT = 0.2
@@ -40,6 +48,59 @@ CancelCheck = Callable[[], bool]
 
 class GCodeLoadCancelled(RuntimeError):
     pass
+
+
+class GCodeSourceIntegrityError(ValueError):
+    """The source bytes no longer match the snapshot used by the preview."""
+
+
+@dataclass(frozen=True, slots=True)
+class GCodeSourceFingerprint:
+    """Stable identity of the file bytes consumed by ``load_gcode``."""
+
+    sha256: str
+    size_bytes: int
+    mtime_ns: int
+
+    def __post_init__(self) -> None:
+        normalized_hash = str(self.sha256).strip().lower()
+        if not re.fullmatch(r"[0-9a-f]{64}", normalized_hash):
+            raise ValueError("G-code source SHA-256 must contain 64 hex digits")
+        if isinstance(self.size_bytes, bool) or not isinstance(self.size_bytes, int):
+            raise ValueError("G-code source size must be an integer")
+        if self.size_bytes < 0:
+            raise ValueError("G-code source size cannot be negative")
+        if isinstance(self.mtime_ns, bool) or not isinstance(self.mtime_ns, int):
+            raise ValueError("G-code source mtime must be an integer")
+        if self.mtime_ns < 0:
+            raise ValueError("G-code source mtime cannot be negative")
+        object.__setattr__(self, "sha256", normalized_hash)
+
+    def to_json(self) -> dict[str, int | str]:
+        return {
+            "sha256": self.sha256,
+            "size_bytes": self.size_bytes,
+            "mtime_ns": self.mtime_ns,
+        }
+
+    @classmethod
+    def from_json(cls, payload: Mapping[str, Any]) -> "GCodeSourceFingerprint":
+        if not isinstance(payload, Mapping):
+            raise ValueError("G-code source fingerprint must be an object")
+        sha256 = payload.get("sha256")
+        size_bytes = payload.get("size_bytes")
+        mtime_ns = payload.get("mtime_ns")
+        if not isinstance(sha256, str):
+            raise ValueError("G-code source fingerprint SHA-256 must be a string")
+        if isinstance(size_bytes, bool) or not isinstance(size_bytes, int):
+            raise ValueError("G-code source fingerprint size must be an integer")
+        if isinstance(mtime_ns, bool) or not isinstance(mtime_ns, int):
+            raise ValueError("G-code source fingerprint mtime must be an integer")
+        return cls(
+            sha256=sha256,
+            size_bytes=size_bytes,
+            mtime_ns=mtime_ns,
+        )
 
 
 MOVE_OPTION_COLORS: dict[str, tuple[float, float, float]] = {
@@ -183,7 +244,9 @@ class GCodePathSegment:
 
     @property
     def has_spatial_length(self) -> bool:
-        return any(abs(left - right) > 1e-9 for left, right in zip(self.start, self.end))
+        return any(
+            abs(left - right) > 1e-9 for left, right in zip(self.start, self.end)
+        )
 
     @property
     def bead_width(self) -> float:
@@ -219,7 +282,9 @@ class GCodePathSegment:
             "width": self.width,
             "height": self.height,
             "comment": self.comment,
-            "machine_start": None if self.machine_start is None else list(self.machine_start),
+            "machine_start": (
+                None if self.machine_start is None else list(self.machine_start)
+            ),
             "machine_end": None if self.machine_end is None else list(self.machine_end),
             "coordinate_transform": self.coordinate_transform,
         }
@@ -283,7 +348,9 @@ class GCodeTimelineStep:
             "width": self.width,
             "height": self.height,
             "comment": self.comment,
-            "machine_start": None if self.machine_start is None else list(self.machine_start),
+            "machine_start": (
+                None if self.machine_start is None else list(self.machine_start)
+            ),
             "machine_end": None if self.machine_end is None else list(self.machine_end),
             "coordinate_transform": self.coordinate_transform,
             "has_spatial_axis": self.has_spatial_axis,
@@ -337,7 +404,11 @@ class GCodeTimelineArrays:
             raw="",
             machine_start=_tuple3_or_none(self.machine_starts[index]),
             machine_end=_tuple3_or_none(self.machine_ends[index]),
-            coordinate_transform=AC_INVERSE_TRANSFORM if flags & TIMELINE_FLAG_AC_TRANSFORM else MACHINE_COORDINATE_TRANSFORM,
+            coordinate_transform=(
+                AC_INVERSE_TRANSFORM
+                if flags & TIMELINE_FLAG_AC_TRANSFORM
+                else MACHINE_COORDINATE_TRANSFORM
+            ),
             has_spatial_axis=bool(flags & TIMELINE_FLAG_HAS_SPATIAL_AXIS),
             has_spatial_length=bool(flags & TIMELINE_FLAG_HAS_SPATIAL_LENGTH),
             path_segment_index=_index_or_none(int(self.path_segment_indices[index])),
@@ -382,7 +453,9 @@ class GCodeRenderIndex:
         )
 
     @classmethod
-    def from_npz(cls, path: Path, segments: list[GCodePathSegment]) -> "GCodeRenderIndex":
+    def from_npz(
+        cls, path: Path, segments: list[GCodePathSegment]
+    ) -> "GCodeRenderIndex":
         with np.load(path, allow_pickle=False) as payload:
             return cls(
                 int(payload["layer_min"][0]),
@@ -417,7 +490,9 @@ class GCodeRenderIndex:
             return 0
         low_offset = low - self.layer_min
         high_offset = high - self.layer_min + 1
-        return int(self.layer_prefix_counts[high_offset] - self.layer_prefix_counts[low_offset])
+        return int(
+            self.layer_prefix_counts[high_offset] - self.layer_prefix_counts[low_offset]
+        )
 
     def timeline_index_for_layer_progress(
         self,
@@ -441,7 +516,9 @@ class GCodeRenderIndex:
     def segment_index_for_step(self, step_index: int) -> int | None:
         if self.segment_step_indices.size == 0:
             return None
-        location = int(np.searchsorted(self.segment_step_indices, int(step_index), side="left"))
+        location = int(
+            np.searchsorted(self.segment_step_indices, int(step_index), side="left")
+        )
         if location >= int(self.segment_step_indices.size):
             return None
         if int(self.segment_step_indices[location]) != int(step_index):
@@ -451,7 +528,14 @@ class GCodeRenderIndex:
     def nearest_segment_index_for_step(self, step_index: int) -> int | None:
         if self.segment_step_indices.size == 0:
             return None
-        location = int(np.searchsorted(self.segment_step_indices, int(step_index), side="right")) - 1
+        location = (
+            int(
+                np.searchsorted(
+                    self.segment_step_indices, int(step_index), side="right"
+                )
+            )
+            - 1
+        )
         if location < 0:
             location = 0
         return int(self.segment_indices[location])
@@ -474,10 +558,17 @@ class GCodePreview:
     height_max: float | None = None
     render_index: GCodeRenderIndex | None = None
     timeline_arrays: GCodeTimelineArrays | None = None
+    controller_semantics: str | None = None
+    validation_issues: tuple[ValidationIssue, ...] = ()
+    source_fingerprint: GCodeSourceFingerprint | None = None
 
     @property
     def layer_count(self) -> int:
-        return 0 if self.layer_max < self.layer_min else self.layer_max - self.layer_min + 1
+        return (
+            0
+            if self.layer_max < self.layer_min
+            else self.layer_max - self.layer_min + 1
+        )
 
     @property
     def has_five_axis_words(self) -> bool:
@@ -495,23 +586,29 @@ class GCodePreview:
             "role_counts": dict(self.role_counts),
             "rotary_axes": list(self.rotary_axes),
             "coordinate_transform": self.coordinate_transform,
+            "controller_semantics": self.controller_semantics,
+            "validation_issues": [issue.to_json() for issue in self.validation_issues],
             "timeline_step_count": self._timeline_count(),
-            "height_range": None
-            if self.height_min is None or self.height_max is None
-            else {
-                "min": self.height_min,
-                "max": self.height_max,
-            },
+            "height_range": (
+                None
+                if self.height_min is None or self.height_max is None
+                else {
+                    "min": self.height_min,
+                    "max": self.height_max,
+                }
+            ),
             "progress_domain": PROGRESS_DOMAIN,
             "cache_format": self._index().cache_format,
             "render_index_source": self._index().source,
             "role_move_chunk_count": len(self._index().role_move_chunks),
-            "bounds": None
-            if self.bounds is None
-            else {
-                "min": list(self.bounds[0]),
-                "max": list(self.bounds[1]),
-            },
+            "bounds": (
+                None
+                if self.bounds is None
+                else {
+                    "min": list(self.bounds[0]),
+                    "max": list(self.bounds[1]),
+                }
+            ),
         }
 
     def timeline_count_for_layers(self, layer_min: int, layer_max: int) -> int:
@@ -525,7 +622,11 @@ class GCodePreview:
     ) -> GCodeTimelineStep | None:
         if not self.timeline and self.timeline_arrays is None:
             return None
-        timeline_index, _index, _count = self._index().timeline_index_for_layer_progress(
+        (
+            timeline_index,
+            _index,
+            _count,
+        ) = self._index().timeline_index_for_layer_progress(
             layer_min,
             layer_max,
             progress_index,
@@ -534,9 +635,15 @@ class GCodePreview:
             return None
         if self.timeline:
             return self.timeline[timeline_index]
-        return self.timeline_arrays.step_at(timeline_index) if self.timeline_arrays is not None else None
+        return (
+            self.timeline_arrays.step_at(timeline_index)
+            if self.timeline_arrays is not None
+            else None
+        )
 
-    def progress_state(self, layer_min: int, layer_max: int, progress_index: int) -> dict[str, Any]:
+    def progress_state(
+        self, layer_min: int, layer_max: int, progress_index: int
+    ) -> dict[str, Any]:
         timeline_index, index, count = self._index().timeline_index_for_layer_progress(
             layer_min,
             layer_max,
@@ -600,9 +707,19 @@ def _build_role_move_chunks(segments: list[GCodePathSegment]) -> list[dict[str, 
         return chunks
 
     start = 0
-    previous = (segments[0].layer, segments[0].move_type, segments[0].extrusion_role, segments[0].color_key())
+    previous = (
+        segments[0].layer,
+        segments[0].move_type,
+        segments[0].extrusion_role,
+        segments[0].color_key(),
+    )
     for index, segment in enumerate(segments[1:], start=1):
-        current = (segment.layer, segment.move_type, segment.extrusion_role, segment.color_key())
+        current = (
+            segment.layer,
+            segment.move_type,
+            segment.extrusion_role,
+            segment.color_key(),
+        )
         if current == previous:
             continue
         layer, move_type, role, color_key = previous
@@ -642,21 +759,41 @@ def _timeline_arrays_from_steps(steps: list[GCodeTimelineStep]) -> GCodeTimeline
         ends=_points_array([step.end for step in steps]),
         rotary_starts=_rotary_array([step.rotary_start for step in steps]),
         rotary_ends=_rotary_array([step.rotary_end for step in steps]),
-        move_codes=np.asarray([MOVE_CODES.get(step.move_type, MOVE_CODES["noop"]) for step in steps], dtype=np.uint8),
-        role_codes=np.asarray([ROLE_CODES.get(step.extrusion_role, ROLE_CODES["unknown"]) for step in steps], dtype=np.uint8),
-        feedrates=np.asarray([_nan_if_none(step.feedrate) for step in steps], dtype=np.float32),
+        move_codes=np.asarray(
+            [MOVE_CODES.get(step.move_type, MOVE_CODES["noop"]) for step in steps],
+            dtype=np.uint8,
+        ),
+        role_codes=np.asarray(
+            [
+                ROLE_CODES.get(step.extrusion_role, ROLE_CODES["unknown"])
+                for step in steps
+            ],
+            dtype=np.uint8,
+        ),
+        feedrates=np.asarray(
+            [_nan_if_none(step.feedrate) for step in steps], dtype=np.float32
+        ),
         delta_es=np.asarray([step.delta_e for step in steps], dtype=np.float32),
-        widths=np.asarray([_nan_if_none(step.width) for step in steps], dtype=np.float32),
-        heights=np.asarray([_nan_if_none(step.height) for step in steps], dtype=np.float32),
+        widths=np.asarray(
+            [_nan_if_none(step.width) for step in steps], dtype=np.float32
+        ),
+        heights=np.asarray(
+            [_nan_if_none(step.height) for step in steps], dtype=np.float32
+        ),
         machine_starts=_optional_points_array([step.machine_start for step in steps]),
         machine_ends=_optional_points_array([step.machine_end for step in steps]),
         flags=np.asarray([_timeline_flags(step) for step in steps], dtype=np.uint8),
-        path_segment_indices=np.asarray(
-            [-1 if step.path_segment_index is None else step.path_segment_index for step in steps],
-            dtype=np.int32,
-        )
-        if count
-        else np.empty((0,), dtype=np.int32),
+        path_segment_indices=(
+            np.asarray(
+                [
+                    -1 if step.path_segment_index is None else step.path_segment_index
+                    for step in steps
+                ],
+                dtype=np.int32,
+            )
+            if count
+            else np.empty((0,), dtype=np.int32)
+        ),
     )
 
 
@@ -677,29 +814,72 @@ def _timeline_arrays_from_npz(payload: Any) -> GCodeTimelineArrays:
         machine_starts=np.asarray(payload["timeline_machine_starts"], dtype=np.float32),
         machine_ends=np.asarray(payload["timeline_machine_ends"], dtype=np.float32),
         flags=np.asarray(payload["timeline_flags"], dtype=np.uint8),
-        path_segment_indices=np.asarray(payload["timeline_path_segment_indices"], dtype=np.int32),
+        path_segment_indices=np.asarray(
+            payload["timeline_path_segment_indices"], dtype=np.int32
+        ),
     )
 
 
 def _segment_npz_arrays(segments: list[GCodePathSegment]) -> dict[str, np.ndarray]:
     return {
-        "segment_step_indices": np.asarray([segment.step_index for segment in segments], dtype=np.int32),
-        "segment_line_numbers": np.asarray([segment.line_number for segment in segments], dtype=np.int32),
-        "segment_layers": np.asarray([segment.layer for segment in segments], dtype=np.int32),
+        "segment_step_indices": np.asarray(
+            [segment.step_index for segment in segments], dtype=np.int32
+        ),
+        "segment_line_numbers": np.asarray(
+            [segment.line_number for segment in segments], dtype=np.int32
+        ),
+        "segment_layers": np.asarray(
+            [segment.layer for segment in segments], dtype=np.int32
+        ),
         "segment_starts": _points_array([segment.start for segment in segments]),
         "segment_ends": _points_array([segment.end for segment in segments]),
-        "segment_rotary_starts": _rotary_array([segment.rotary_start for segment in segments]),
-        "segment_rotary_ends": _rotary_array([segment.rotary_end for segment in segments]),
-        "segment_move_codes": np.asarray([MOVE_CODES.get(segment.move_type, MOVE_CODES["noop"]) for segment in segments], dtype=np.uint8),
-        "segment_role_codes": np.asarray([ROLE_CODES.get(segment.extrusion_role, ROLE_CODES["unknown"]) for segment in segments], dtype=np.uint8),
-        "segment_feedrates": np.asarray([_nan_if_none(segment.feedrate) for segment in segments], dtype=np.float32),
-        "segment_delta_es": np.asarray([segment.delta_e for segment in segments], dtype=np.float32),
-        "segment_widths": np.asarray([_nan_if_none(segment.width) for segment in segments], dtype=np.float32),
-        "segment_heights": np.asarray([_nan_if_none(segment.height) for segment in segments], dtype=np.float32),
-        "segment_machine_starts": _optional_points_array([segment.machine_start for segment in segments]),
-        "segment_machine_ends": _optional_points_array([segment.machine_end for segment in segments]),
+        "segment_rotary_starts": _rotary_array(
+            [segment.rotary_start for segment in segments]
+        ),
+        "segment_rotary_ends": _rotary_array(
+            [segment.rotary_end for segment in segments]
+        ),
+        "segment_move_codes": np.asarray(
+            [
+                MOVE_CODES.get(segment.move_type, MOVE_CODES["noop"])
+                for segment in segments
+            ],
+            dtype=np.uint8,
+        ),
+        "segment_role_codes": np.asarray(
+            [
+                ROLE_CODES.get(segment.extrusion_role, ROLE_CODES["unknown"])
+                for segment in segments
+            ],
+            dtype=np.uint8,
+        ),
+        "segment_feedrates": np.asarray(
+            [_nan_if_none(segment.feedrate) for segment in segments], dtype=np.float32
+        ),
+        "segment_delta_es": np.asarray(
+            [segment.delta_e for segment in segments], dtype=np.float32
+        ),
+        "segment_widths": np.asarray(
+            [_nan_if_none(segment.width) for segment in segments], dtype=np.float32
+        ),
+        "segment_heights": np.asarray(
+            [_nan_if_none(segment.height) for segment in segments], dtype=np.float32
+        ),
+        "segment_machine_starts": _optional_points_array(
+            [segment.machine_start for segment in segments]
+        ),
+        "segment_machine_ends": _optional_points_array(
+            [segment.machine_end for segment in segments]
+        ),
         "segment_flags": np.asarray(
-            [TIMELINE_FLAG_AC_TRANSFORM if segment.coordinate_transform == AC_INVERSE_TRANSFORM else 0 for segment in segments],
+            [
+                (
+                    TIMELINE_FLAG_AC_TRANSFORM
+                    if segment.coordinate_transform == AC_INVERSE_TRANSFORM
+                    else 0
+                )
+                for segment in segments
+            ],
             dtype=np.uint8,
         ),
     }
@@ -725,7 +905,11 @@ def _segments_from_npz(payload: Any) -> list[GCodePathSegment]:
 
     segments: list[GCodePathSegment] = []
     for index in range(int(step_indices.size)):
-        transform = AC_INVERSE_TRANSFORM if int(flags[index]) & TIMELINE_FLAG_AC_TRANSFORM else MACHINE_COORDINATE_TRANSFORM
+        transform = (
+            AC_INVERSE_TRANSFORM
+            if int(flags[index]) & TIMELINE_FLAG_AC_TRANSFORM
+            else MACHINE_COORDINATE_TRANSFORM
+        )
         segments.append(
             GCodePathSegment(
                 step_index=int(step_indices[index]),
@@ -768,7 +952,9 @@ def _points_array(points: list[tuple[float, float, float]]) -> np.ndarray:
     return np.asarray(points, dtype=np.float32).reshape((-1, 3))
 
 
-def _optional_points_array(points: list[tuple[float, float, float] | None]) -> np.ndarray:
+def _optional_points_array(
+    points: list[tuple[float, float, float] | None]
+) -> np.ndarray:
     if not points:
         return np.empty((0, 3), dtype=np.float32)
     output = np.full((len(points), 3), np.nan, dtype=np.float32)
@@ -859,8 +1045,12 @@ class PreviewSettings:
             "solid_rendering": self.solid_rendering,
             "quality_mode": self.quality_mode,
             "render_backend": self.render_backend,
-            "role_colors": {role: rgb_to_hex(color) for role, color in ROLE_COLORS.items()},
-            "move_colors": {move: rgb_to_hex(color) for move, color in MOVE_OPTION_COLORS.items()},
+            "role_colors": {
+                role: rgb_to_hex(color) for role, color in ROLE_COLORS.items()
+            },
+            "move_colors": {
+                move: rgb_to_hex(color) for move, color in MOVE_OPTION_COLORS.items()
+            },
         }
 
 
@@ -870,6 +1060,7 @@ def load_gcode(
     progress_callback: ProgressCallback | None = None,
     cancel_check: CancelCheck | None = None,
     source_sha256: str | None = None,
+    controller_semantics: str | None = None,
 ) -> GCodePreview:
     source_path = Path(path).expanduser().resolve()
     if not source_path.exists():
@@ -879,19 +1070,37 @@ def load_gcode(
     _raise_if_cancelled(cancel_check)
     if progress_callback is not None:
         progress_callback(0.02, "cache")
-    source_size_bytes = source_path.stat().st_size
-    cache_source_sha256 = source_sha256
-    if source_size_bytes >= 25_000_000 and cache_source_sha256 is None:
-        cache_source_sha256 = _file_sha256(source_path, cancel_check=cancel_check)
-    cached = _load_preview_cache(source_path, source_sha256=cache_source_sha256)
+    initial_fingerprint = _capture_source_fingerprint(
+        source_path,
+        expected_sha256=source_sha256,
+        cancel_check=cancel_check,
+    )
+    source_size_bytes = initial_fingerprint.size_bytes
+    cache_source_sha256 = initial_fingerprint.sha256
+    cached = _load_preview_cache(
+        source_path,
+        source_sha256=cache_source_sha256,
+        controller_semantics=controller_semantics,
+    )
     if cached is not None:
         _raise_if_cancelled(cancel_check)
+        final_fingerprint = _capture_source_fingerprint(
+            source_path,
+            expected_sha256=initial_fingerprint.sha256,
+            cancel_check=cancel_check,
+        )
+        if final_fingerprint != initial_fingerprint:
+            raise GCodeSourceIntegrityError(
+                f"G-code source changed while loading: {source_path}"
+            )
+        cached.source_fingerprint = initial_fingerprint
         if progress_callback is not None:
             progress_callback(1.0, "cache")
         return cached
     sample_stride = max(1, math.ceil(source_size_bytes / 25_000_000))
     source_size = max(1, source_size_bytes)
     with source_path.open("r", encoding="utf-8", errors="replace") as stream:
+
         def iter_lines():
             line_count = 0
             while True:
@@ -915,8 +1124,19 @@ def load_gcode(
             sample_stride=sample_stride,
             progress_callback=None,
             cancel_check=cancel_check,
+            controller_semantics=controller_semantics,
         )
     _raise_if_cancelled(cancel_check)
+    final_fingerprint = _capture_source_fingerprint(
+        source_path,
+        expected_sha256=initial_fingerprint.sha256,
+        cancel_check=cancel_check,
+    )
+    if final_fingerprint != initial_fingerprint:
+        raise GCodeSourceIntegrityError(
+            f"G-code source changed while loading: {source_path}"
+        )
+    preview.source_fingerprint = initial_fingerprint
     if progress_callback is not None:
         progress_callback(0.98, "cache_write")
     try:
@@ -944,6 +1164,7 @@ def parse_gcode(
     *,
     progress_callback: ProgressCallback | None = None,
     cancel_check: CancelCheck | None = None,
+    controller_semantics: str | None = None,
 ) -> GCodePreview:
     return parse_gcode_lines(
         text.splitlines(),
@@ -951,6 +1172,7 @@ def parse_gcode(
         sample_stride=sample_stride,
         progress_callback=progress_callback,
         cancel_check=cancel_check,
+        controller_semantics=controller_semantics,
     )
 
 
@@ -961,12 +1183,13 @@ def parse_gcode_lines(
     *,
     progress_callback: ProgressCallback | None = None,
     cancel_check: CancelCheck | None = None,
+    controller_semantics: str | None = None,
 ) -> GCodePreview:
     source = Path(source_path)
     state = _ParserState()
     segments: list[GCodePathSegment] = []
     timeline: list[GCodeTimelineStep] = []
-    stats = _PreviewStats()
+    stats = _PreviewStats(controller_semantics)
     sample_stride = max(1, int(sample_stride))
 
     total_lines = len(lines) if hasattr(lines, "__len__") else None
@@ -1014,9 +1237,16 @@ def parse_gcode_lines(
         values = _apply_motion_words(state, command, words)
         if values is not None:
             step_index = stats.timeline_step_count
-            display_start = _preview_xyz(values.start_xyz, values.rotary_start)
-            display_end = _preview_xyz(values.end_xyz, values.rotary_end)
-            transform_name = _coordinate_transform_name(values.rotary_start, values.rotary_end)
+            reconstruction = reconstruct_preview_motion(
+                values.start_xyz,
+                values.end_xyz,
+                values.rotary_start,
+                values.rotary_end,
+                controller_semantics=controller_semantics,
+            )
+            display_start = reconstruction.start
+            display_end = reconstruction.end
+            transform_name = reconstruction.coordinate_transform
             has_spatial_length = _points_differ(display_start, display_end)
             stats.add_values(
                 values.move_type,
@@ -1030,9 +1260,13 @@ def parse_gcode_lines(
                 transform_name,
                 values.count_path_segment,
                 values.height,
+                reconstruction.issues,
             )
             path_segment_index = None
-            if values.count_path_segment and stats.total_segment_count % sample_stride == 0:
+            if (
+                values.count_path_segment
+                and stats.total_segment_count % sample_stride == 0
+            ):
                 path_segment_index = len(segments)
                 segments.append(
                     _make_segment(
@@ -1061,6 +1295,7 @@ def parse_gcode_lines(
                 )
             )
 
+    _finalize_file_coordinate_policy(segments, timeline, stats)
     _raise_if_cancelled(cancel_check)
     if progress_callback is not None:
         progress_callback(1.0, "parse")
@@ -1073,7 +1308,9 @@ def role_label(role: str, language: str) -> str:
 
 
 def rgb_to_hex(color: tuple[float, float, float]) -> str:
-    return "#" + "".join(f"{max(0, min(255, int(round(channel * 255)))):02X}" for channel in color)
+    return "#" + "".join(
+        f"{max(0, min(255, int(round(channel * 255)))):02X}" for channel in color
+    )
 
 
 def preview_to_json(preview: GCodePreview) -> str:
@@ -1110,13 +1347,18 @@ def preview_from_json(payload: dict[str, Any], source_path: Path) -> GCodePrevie
             width=item.get("width"),
             height=item.get("height"),
             comment=item.get("comment", ""),
-            machine_start=None
-            if item.get("machine_start") is None
-            else tuple(item["machine_start"]),
-            machine_end=None
-            if item.get("machine_end") is None
-            else tuple(item["machine_end"]),
-            coordinate_transform=item.get("coordinate_transform", summary.get("coordinate_transform", MACHINE_COORDINATE_TRANSFORM)),
+            machine_start=(
+                None
+                if item.get("machine_start") is None
+                else tuple(item["machine_start"])
+            ),
+            machine_end=(
+                None if item.get("machine_end") is None else tuple(item["machine_end"])
+            ),
+            coordinate_transform=item.get(
+                "coordinate_transform",
+                summary.get("coordinate_transform", MACHINE_COORDINATE_TRANSFORM),
+            ),
         )
         for item in payload.get("segments", [])
     ]
@@ -1136,13 +1378,18 @@ def preview_from_json(payload: dict[str, Any], source_path: Path) -> GCodePrevie
             width=item.get("width"),
             height=item.get("height"),
             comment=item.get("comment", ""),
-            machine_start=None
-            if item.get("machine_start") is None
-            else tuple(item["machine_start"]),
-            machine_end=None
-            if item.get("machine_end") is None
-            else tuple(item["machine_end"]),
-            coordinate_transform=item.get("coordinate_transform", summary.get("coordinate_transform", MACHINE_COORDINATE_TRANSFORM)),
+            machine_start=(
+                None
+                if item.get("machine_start") is None
+                else tuple(item["machine_start"])
+            ),
+            machine_end=(
+                None if item.get("machine_end") is None else tuple(item["machine_end"])
+            ),
+            coordinate_transform=item.get(
+                "coordinate_transform",
+                summary.get("coordinate_transform", MACHINE_COORDINATE_TRANSFORM),
+            ),
             has_spatial_axis=bool(item.get("has_spatial_axis", False)),
             has_spatial_length=bool(item.get("has_spatial_length", False)),
             path_segment_index=item.get("path_segment_index"),
@@ -1161,12 +1408,27 @@ def preview_from_json(payload: dict[str, Any], source_path: Path) -> GCodePrevie
         list(summary.get("rotary_axes", [])),
         summary.get("coordinate_transform", MACHINE_COORDINATE_TRANSFORM),
         timeline,
-        None if summary.get("height_range") is None else float(summary["height_range"]["min"]),
-        None if summary.get("height_range") is None else float(summary["height_range"]["max"]),
+        (
+            None
+            if summary.get("height_range") is None
+            else float(summary["height_range"]["min"])
+        ),
+        (
+            None
+            if summary.get("height_range") is None
+            else float(summary["height_range"]["max"])
+        ),
+        controller_semantics=summary.get("controller_semantics"),
+        validation_issues=tuple(
+            ValidationIssue.from_json(item)
+            for item in summary.get("validation_issues", ())
+        ),
     )
 
 
-def _preview_from_binary_cache(payload: dict[str, Any], source_path: Path, index_path: Path) -> GCodePreview:
+def _preview_from_binary_cache(
+    payload: dict[str, Any], source_path: Path, index_path: Path
+) -> GCodePreview:
     summary = payload["summary"]
     bounds_payload = summary.get("bounds")
     bounds = None
@@ -1188,16 +1450,32 @@ def _preview_from_binary_cache(payload: dict[str, Any], source_path: Path, index
         list(summary.get("rotary_axes", [])),
         summary.get("coordinate_transform", MACHINE_COORDINATE_TRANSFORM),
         [],
-        None if summary.get("height_range") is None else float(summary["height_range"]["min"]),
-        None if summary.get("height_range") is None else float(summary["height_range"]["max"]),
+        (
+            None
+            if summary.get("height_range") is None
+            else float(summary["height_range"]["min"])
+        ),
+        (
+            None
+            if summary.get("height_range") is None
+            else float(summary["height_range"]["max"])
+        ),
         render_index,
         timeline_arrays,
+        summary.get("controller_semantics"),
+        tuple(
+            ValidationIssue.from_json(item)
+            for item in summary.get("validation_issues", ())
+        ),
     )
 
 
 class _ParserState:
     def __init__(self) -> None:
-        self.axes = {axis: 0.0 for axis in ("X", "Y", "Z", "A", "B", "C", "U", "V", "W", "E")}
+        self.axes = {
+            axis: 0.0 for axis in ("X", "Y", "Z", "A", "B", "C", "U", "V", "W", "E")
+        }
+        self.unregistered_rotary_words_seen: set[str] = set()
         self.feedrate: float | None = None
         self.absolute_xyz = True
         self.relative_e = True
@@ -1275,10 +1553,15 @@ def _apply_modal_command(state: _ParserState, code: str) -> None:
 
 
 def _apply_g92_words(state: _ParserState, words: dict[str, float]) -> None:
+    state.unregistered_rotary_words_seen.update(
+        axis for axis in ("U", "V", "W") if axis in words
+    )
     for axis in ("X", "Y", "Z", "A", "B", "C", "U", "V", "W", "E"):
         if axis not in words:
             continue
-        state.axes[axis] = words[axis] * state.units if axis in {"X", "Y", "Z"} else words[axis]
+        state.axes[axis] = (
+            words[axis] * state.units if axis in {"X", "Y", "Z"} else words[axis]
+        )
 
 
 def _apply_comment_tag(state: _ParserState, comment: str) -> None:
@@ -1331,17 +1614,26 @@ def _apply_motion_words(
     command: str,
     words: dict[str, float],
 ) -> _MotionValues | None:
-    start_xyz = tuple(state.axes[axis] for axis in ("X", "Y", "Z"))
+    start_xyz = (state.axes["X"], state.axes["Y"], state.axes["Z"])
     start_rotary = {axis: state.axes[axis] for axis in ("A", "B", "C", "U", "V", "W")}
     start_e = state.axes["E"]
     if "F" in words:
         state.feedrate = words["F"]
 
-    has_spatial_axis = any(axis in words for axis in ("X", "Y", "Z", "A", "B", "C", "U", "V", "W"))
+    has_spatial_axis = any(
+        axis in words for axis in ("X", "Y", "Z", "A", "B", "C", "U", "V", "W")
+    )
+    state.unregistered_rotary_words_seen.update(
+        axis for axis in ("U", "V", "W") if axis in words
+    )
     for axis in ("X", "Y", "Z", "A", "B", "C", "U", "V", "W"):
         if axis in words:
-            value = words[axis] * state.units if axis in {"X", "Y", "Z"} else words[axis]
-            state.axes[axis] = state.axes[axis] + value if not state.absolute_xyz else value
+            value = (
+                words[axis] * state.units if axis in {"X", "Y", "Z"} else words[axis]
+            )
+            state.axes[axis] = (
+                state.axes[axis] + value if not state.absolute_xyz else value
+            )
 
     if "E" in words:
         if state.relative_e:
@@ -1353,19 +1645,33 @@ def _apply_motion_words(
     else:
         delta_e = 0.0
 
-    end_xyz = tuple(state.axes[axis] for axis in ("X", "Y", "Z"))
+    end_xyz = (state.axes["X"], state.axes["Y"], state.axes["Z"])
     end_rotary = {axis: state.axes[axis] for axis in ("A", "B", "C", "U", "V", "W")}
-    linear_motion = any(abs(left - right) > 1e-9 for left, right in zip(start_xyz, end_xyz))
-    rotary_motion = any(abs(start_rotary[axis] - end_rotary[axis]) > 1e-9 for axis in start_rotary)
+    linear_motion = any(
+        abs(left - right) > 1e-9 for left, right in zip(start_xyz, end_xyz)
+    )
+    rotary_motion = any(
+        abs(start_rotary[axis] - end_rotary[axis]) > 1e-9 for axis in start_rotary
+    )
     e_motion = abs(delta_e) > 1e-12
     if not has_spatial_axis and not e_motion:
         return None
 
-    move_type = _classify_move(command, linear_motion or rotary_motion, linear_motion, delta_e)
+    move_type = _classify_move(
+        command, linear_motion or rotary_motion, linear_motion, delta_e
+    )
     if has_spatial_axis and not e_motion and move_type == "noop":
         move_type = "travel"
-    rotary_start = {axis: value for axis, value in start_rotary.items() if abs(value) > 1e-9}
-    rotary_end = {axis: value for axis, value in end_rotary.items() if abs(value) > 1e-9}
+    rotary_start = {
+        axis: value
+        for axis, value in start_rotary.items()
+        if abs(value) > 1e-9 or axis in state.unregistered_rotary_words_seen
+    }
+    rotary_end = {
+        axis: value
+        for axis, value in end_rotary.items()
+        if abs(value) > 1e-9 or axis in state.unregistered_rotary_words_seen
+    }
     return _MotionValues(
         move_type=move_type,
         extrusion_role=state.current_role,
@@ -1452,6 +1758,132 @@ def _make_timeline_step(
     )
 
 
+def _finalize_file_coordinate_policy(
+    segments: list[GCodePathSegment],
+    timeline: list[GCodeTimelineStep],
+    stats: _PreviewStats,
+) -> None:
+    """Commit one coordinate space for every motion in an imported NC file."""
+
+    present_words: set[str] = set()
+    active_words: set[str] = set()
+    for step in timeline:
+        for rotary_values in (step.rotary_start, step.rotary_end):
+            present_words.update(rotary_values)
+            active_words.update(
+                word
+                for word, value in rotary_values.items()
+                if abs(float(value)) > 1.0e-12
+            )
+
+    semantics_required_words = active_words | (present_words & {"U", "V", "W"})
+    if not semantics_required_words:
+        _apply_file_coordinate_result(
+            segments,
+            timeline,
+            stats,
+            MACHINE_COORDINATE_TRANSFORM,
+            (),
+        )
+        return
+
+    semantics = DEFAULT_PREVIEW_KINEMATICS_REGISTRY.get(stats.controller_semantics)
+    if semantics is None:
+        issue = ValidationIssue(
+            code="nc_preview.controller_semantics_unknown",
+            severity=IssueSeverity.WARNING,
+            object_id=NC_PREVIEW_OBJECT_ID,
+            context={
+                "controller_semantics": (
+                    ""
+                    if stats.controller_semantics is None
+                    else str(stats.controller_semantics)
+                ),
+                "active_rotary_words": sorted(active_words),
+                "present_rotary_words": sorted(present_words),
+            },
+        )
+        _apply_file_coordinate_result(
+            segments,
+            timeline,
+            stats,
+            MACHINE_COORDINATE_TRANSFORM,
+            (issue,),
+        )
+        return
+
+    unsupported_words = sorted(
+        (active_words - semantics.supported_rotary_words)
+        | ((present_words & {"U", "V", "W"}) - semantics.supported_rotary_words)
+    )
+    if unsupported_words:
+        issue = ValidationIssue(
+            code="nc_preview.rotary_words_unsupported",
+            severity=IssueSeverity.WARNING,
+            object_id=NC_PREVIEW_OBJECT_ID,
+            context={
+                "controller_semantics": semantics.semantics_id,
+                "unsupported_rotary_words": unsupported_words,
+                "active_rotary_words": sorted(active_words),
+                "present_rotary_words": sorted(present_words),
+            },
+        )
+        _apply_file_coordinate_result(
+            segments,
+            timeline,
+            stats,
+            MACHINE_COORDINATE_TRANSFORM,
+            (issue,),
+        )
+        return
+
+    if stats.validation_issues:
+        _apply_file_coordinate_result(
+            segments,
+            timeline,
+            stats,
+            MACHINE_COORDINATE_TRANSFORM,
+            tuple(stats.validation_issues),
+        )
+        return
+
+    _apply_file_coordinate_result(
+        segments,
+        timeline,
+        stats,
+        semantics.transform_name,
+        (),
+    )
+
+
+def _apply_file_coordinate_result(
+    segments: list[GCodePathSegment],
+    timeline: list[GCodeTimelineStep],
+    stats: _PreviewStats,
+    coordinate_transform: str,
+    issues: tuple[ValidationIssue, ...],
+) -> None:
+    use_machine_coordinates = coordinate_transform == MACHINE_COORDINATE_TRANSFORM
+    for segment in segments:
+        if use_machine_coordinates:
+            if segment.machine_start is not None:
+                segment.start = segment.machine_start
+            if segment.machine_end is not None:
+                segment.end = segment.machine_end
+        segment.coordinate_transform = coordinate_transform
+
+    for step in timeline:
+        if use_machine_coordinates:
+            if step.machine_start is not None:
+                step.start = step.machine_start
+            if step.machine_end is not None:
+                step.end = step.machine_end
+        step.coordinate_transform = coordinate_transform
+        step.has_spatial_length = _points_differ(step.start, step.end)
+
+    stats.finalize_coordinate_result(timeline, coordinate_transform, issues)
+
+
 def _points_differ(
     start: tuple[float, float, float],
     end: tuple[float, float, float],
@@ -1459,48 +1891,9 @@ def _points_differ(
     return any(abs(left - right) > 1e-9 for left, right in zip(start, end))
 
 
-def _coordinate_transform_name(rotary_start: dict[str, float], rotary_end: dict[str, float]) -> str:
-    axes = set(rotary_start) | set(rotary_end)
-    if "A" in axes or "C" in axes:
-        return AC_INVERSE_TRANSFORM
-    return MACHINE_COORDINATE_TRANSFORM
-
-
-def _preview_xyz(
-    machine_xyz: tuple[float, float, float],
-    rotary: dict[str, float],
-) -> tuple[float, float, float]:
-    if "A" in rotary or "C" in rotary:
-        return _inverse_rotary_ac_to_xyz(
-            machine_xyz,
-            rotary.get("A", 0.0),
-            rotary.get("C", 0.0),
-        )
-    return machine_xyz
-
-
-def _inverse_rotary_ac_to_xyz(
-    machine_xyz: tuple[float, float, float],
-    a_deg: float,
-    c_deg: float,
-) -> tuple[float, float, float]:
-    # 与 MATLAB 叶轮脚本保持一致：P_part = Rz(-C) * Rx(-A) * P_machine。
-    x, y, z = machine_xyz
-    ax = math.radians(-a_deg)
-    cx = math.radians(-c_deg)
-    cos_a = math.cos(ax)
-    sin_a = math.sin(ax)
-    x1 = x
-    y1 = y * cos_a - z * sin_a
-    z1 = y * sin_a + z * cos_a
-    cos_c = math.cos(cx)
-    sin_c = math.sin(cx)
-    x2 = x1 * cos_c - y1 * sin_c
-    y2 = x1 * sin_c + y1 * cos_c
-    return (x2, y2, z1)
-
-
-def _classify_move(command: str, has_motion: bool, linear_motion: bool, delta_e: float) -> str:
+def _classify_move(
+    command: str, has_motion: bool, linear_motion: bool, delta_e: float
+) -> str:
     if command == "G0":
         return "travel"
     if delta_e < -1e-12:
@@ -1515,7 +1908,7 @@ def _classify_move(command: str, has_motion: bool, linear_motion: bool, delta_e:
 
 
 class _PreviewStats:
-    def __init__(self) -> None:
+    def __init__(self, controller_semantics: str | None = None) -> None:
         self.total_segment_count = 0
         self.timeline_step_count = 0
         self.move_counts: dict[str, int] = {}
@@ -1528,6 +1921,10 @@ class _PreviewStats:
         self.height_min: float | None = None
         self.height_max: float | None = None
         self.coordinate_transform = MACHINE_COORDINATE_TRANSFORM
+        self.controller_semantics = controller_semantics
+        self.validation_issues: list[ValidationIssue] = []
+        self._issue_keys: set[str] = set()
+        self._coordinate_transforms: set[str] = set()
 
     def add(self, segment: GCodePathSegment) -> None:
         self.add_values(
@@ -1557,18 +1954,36 @@ class _PreviewStats:
         coordinate_transform: str = MACHINE_COORDINATE_TRANSFORM,
         count_path_segment: bool = True,
         height: float | None = None,
+        validation_issues: tuple[ValidationIssue, ...] = (),
     ) -> None:
         self.timeline_step_count += 1
         if count_path_segment:
             self.total_segment_count += 1
-        if coordinate_transform != MACHINE_COORDINATE_TRANSFORM:
-            self.coordinate_transform = coordinate_transform
+        self._coordinate_transforms.add(coordinate_transform)
+        for issue in validation_issues:
+            key = json.dumps(issue.to_json(), ensure_ascii=True, sort_keys=True)
+            if key not in self._issue_keys:
+                self._issue_keys.add(key)
+                self.validation_issues.append(issue)
+        if (
+            AC_INVERSE_TRANSFORM in self._coordinate_transforms
+            and not self.validation_issues
+        ):
+            self.coordinate_transform = AC_INVERSE_TRANSFORM
+        else:
+            self.coordinate_transform = MACHINE_COORDINATE_TRANSFORM
         self.move_counts[move_type] = self.move_counts.get(move_type, 0) + 1
         if move_type == "extrude":
-            self.role_counts[extrusion_role] = self.role_counts.get(extrusion_role, 0) + 1
+            self.role_counts[extrusion_role] = (
+                self.role_counts.get(extrusion_role, 0) + 1
+            )
         if height is not None:
-            self.height_min = height if self.height_min is None else min(self.height_min, height)
-            self.height_max = height if self.height_max is None else max(self.height_max, height)
+            self.height_min = (
+                height if self.height_min is None else min(self.height_min, height)
+            )
+            self.height_max = (
+                height if self.height_max is None else max(self.height_max, height)
+            )
         for axis in set(rotary_start) | set(rotary_end):
             self.rotary_axes.add(axis)
         self.layer_min = layer if self.layer_min is None else min(self.layer_min, layer)
@@ -1580,8 +1995,42 @@ class _PreviewStats:
                     self.bounds_max = [point[0], point[1], point[2]]
                 else:
                     for index in range(3):
-                        self.bounds_min[index] = min(self.bounds_min[index], point[index])
-                        self.bounds_max[index] = max(self.bounds_max[index], point[index])
+                        self.bounds_min[index] = min(
+                            self.bounds_min[index], point[index]
+                        )
+                        self.bounds_max[index] = max(
+                            self.bounds_max[index], point[index]
+                        )
+
+    def finalize_coordinate_result(
+        self,
+        timeline: list[GCodeTimelineStep],
+        coordinate_transform: str,
+        issues: tuple[ValidationIssue, ...],
+    ) -> None:
+        self.coordinate_transform = coordinate_transform
+        self._coordinate_transforms = {coordinate_transform}
+        self.validation_issues = []
+        self._issue_keys = set()
+        for issue in issues:
+            key = json.dumps(issue.to_json(), ensure_ascii=True, sort_keys=True)
+            if key not in self._issue_keys:
+                self._issue_keys.add(key)
+                self.validation_issues.append(issue)
+
+        self.bounds_min = None
+        self.bounds_max = None
+        for step in timeline:
+            if not step.has_spatial_length:
+                continue
+            for point in (step.start, step.end):
+                if self.bounds_min is None or self.bounds_max is None:
+                    self.bounds_min = [point[0], point[1], point[2]]
+                    self.bounds_max = [point[0], point[1], point[2]]
+                    continue
+                for index in range(3):
+                    self.bounds_min[index] = min(self.bounds_min[index], point[index])
+                    self.bounds_max[index] = max(self.bounds_max[index], point[index])
 
 
 def _build_preview(
@@ -1591,11 +2040,35 @@ def _build_preview(
     stats: _PreviewStats,
 ) -> GCodePreview:
     if stats.total_segment_count == 0 and stats.timeline_step_count == 0:
-        return GCodePreview(source, [], 0, 0, -1, None, {}, {}, [], timeline=[])
+        return GCodePreview(
+            source,
+            [],
+            0,
+            0,
+            -1,
+            None,
+            {},
+            {},
+            [],
+            timeline=[],
+            controller_semantics=stats.controller_semantics,
+            validation_issues=tuple(stats.validation_issues),
+        )
 
     bounds = None
     if stats.bounds_min is not None and stats.bounds_max is not None:
-        bounds = (tuple(stats.bounds_min), tuple(stats.bounds_max))
+        bounds = (
+            (
+                stats.bounds_min[0],
+                stats.bounds_min[1],
+                stats.bounds_min[2],
+            ),
+            (
+                stats.bounds_max[0],
+                stats.bounds_max[1],
+                stats.bounds_max[2],
+            ),
+        )
 
     return GCodePreview(
         source,
@@ -1611,6 +2084,8 @@ def _build_preview(
         timeline,
         stats.height_min,
         stats.height_max,
+        controller_semantics=stats.controller_semantics,
+        validation_issues=tuple(stats.validation_issues),
     )
 
 
@@ -1624,17 +2099,61 @@ def _file_sha256(source_path: Path, *, cancel_check: CancelCheck | None = None) 
     return digest.hexdigest()
 
 
+def _capture_source_fingerprint(
+    source_path: Path,
+    *,
+    expected_sha256: str | None = None,
+    cancel_check: CancelCheck | None = None,
+) -> GCodeSourceFingerprint:
+    """Hash a stable file snapshot and optionally bind it to an expected hash."""
+
+    before = source_path.stat()
+    digest = _file_sha256(source_path, cancel_check=cancel_check)
+    after = source_path.stat()
+    if int(after.st_size) != int(before.st_size) or int(after.st_mtime_ns) != int(
+        before.st_mtime_ns
+    ):
+        raise GCodeSourceIntegrityError(
+            f"G-code source changed while hashing: {source_path}"
+        )
+    fingerprint = GCodeSourceFingerprint(
+        sha256=digest,
+        size_bytes=int(after.st_size),
+        mtime_ns=int(after.st_mtime_ns),
+    )
+    if expected_sha256 is not None:
+        normalized_expected = str(expected_sha256).strip().lower()
+        if not re.fullmatch(r"[0-9a-f]{64}", normalized_expected):
+            raise GCodeSourceIntegrityError(
+                "expected G-code source SHA-256 must contain 64 hex digits"
+            )
+        if fingerprint.sha256 != normalized_expected:
+            raise GCodeSourceIntegrityError(
+                f"G-code source hash mismatch: {source_path}"
+            )
+    return fingerprint
+
+
 def _cache_stem(
     source_path: Path,
     version: str = CACHE_VERSION,
     *,
     source_sha256: str | None = None,
+    controller_semantics: str | None = None,
 ) -> Path:
     stat = source_path.stat()
     identity = source_sha256
     if version == CACHE_VERSION:
         identity = identity or _file_sha256(source_path)
-        key_text = f"{version}|{source_path}|{stat.st_size}|{stat.st_mtime_ns}|{identity}"
+        semantics_key = (
+            "<unconfirmed>"
+            if controller_semantics is None
+            else str(controller_semantics).strip()
+        )
+        key_text = (
+            f"{version}|{source_path}|{stat.st_size}|{stat.st_mtime_ns}|"
+            f"{identity}|{semantics_key}"
+        )
     else:
         key_text = f"{version}|{source_path}|{stat.st_size}|{stat.st_mtime_ns}"
     key_source = key_text.encode("utf-8", errors="replace")
@@ -1647,11 +2166,17 @@ def _cache_path(
     version: str = CACHE_VERSION,
     *,
     source_sha256: str | None = None,
+    controller_semantics: str | None = None,
 ) -> Path:
-    if source_sha256 is None:
+    if source_sha256 is None and controller_semantics is None:
         stem = _cache_stem(source_path, version)
     else:
-        stem = _cache_stem(source_path, version, source_sha256=source_sha256)
+        stem = _cache_stem(
+            source_path,
+            version,
+            source_sha256=source_sha256,
+            controller_semantics=controller_semantics,
+        )
     return stem.with_suffix(".json.gz")
 
 
@@ -1660,11 +2185,17 @@ def _cache_index_path(
     version: str = CACHE_VERSION,
     *,
     source_sha256: str | None = None,
+    controller_semantics: str | None = None,
 ) -> Path:
-    if source_sha256 is None:
+    if source_sha256 is None and controller_semantics is None:
         stem = _cache_stem(source_path, version)
     else:
-        stem = _cache_stem(source_path, version, source_sha256=source_sha256)
+        stem = _cache_stem(
+            source_path,
+            version,
+            source_sha256=source_sha256,
+            controller_semantics=controller_semantics,
+        )
     return stem.with_suffix(".npz")
 
 
@@ -1677,6 +2208,7 @@ def _load_preview_cache(
     source_path: Path,
     *,
     source_sha256: str | None = None,
+    controller_semantics: str | None = None,
 ) -> GCodePreview | None:
     if source_path.stat().st_size < 25_000_000:
         return None
@@ -1686,6 +2218,9 @@ def _load_preview_cache(
                 source_path,
                 version,
                 source_sha256=source_sha256 if version == CACHE_VERSION else None,
+                controller_semantics=(
+                    controller_semantics if version == CACHE_VERSION else None
+                ),
             )
             if not cache_path.exists():
                 continue
@@ -1695,18 +2230,27 @@ def _load_preview_cache(
                 source_path,
                 version,
                 source_sha256=source_sha256 if version == CACHE_VERSION else None,
+                controller_semantics=(
+                    controller_semantics if version == CACHE_VERSION else None
+                ),
             )
             binary_name = payload.get("binary_arrays")
             if isinstance(binary_name, str) and binary_name:
                 index_path = cache_path.parent / Path(binary_name).name
             if payload.get("binary_arrays") and index_path.exists():
                 preview = _preview_from_binary_cache(payload, source_path, index_path)
+                if preview.controller_semantics != controller_semantics:
+                    continue
                 preview._index().source = "cache"
                 return preview
             preview = preview_from_json(payload, source_path)
+            if preview.controller_semantics != controller_semantics:
+                continue
             if index_path.exists():
                 try:
-                    preview.render_index = GCodeRenderIndex.from_npz(index_path, preview.segments)
+                    preview.render_index = GCodeRenderIndex.from_npz(
+                        index_path, preview.segments
+                    )
                 except Exception:
                     preview.render_index = None
             if preview.render_index is None and version != CACHE_VERSION:
@@ -1729,17 +2273,27 @@ def _write_preview_cache(
     cancel_check: CancelCheck | None = None,
     source_sha256: str | None = None,
 ) -> None:
-    if preview.source_path == Path("<memory>") or preview.source_path.stat().st_size < 25_000_000:
+    if (
+        preview.source_path == Path("<memory>")
+        or preview.source_path.stat().st_size < 25_000_000
+    ):
         return
     _raise_if_cancelled(cancel_check)
-    cache_path = _cache_path(preview.source_path, source_sha256=source_sha256)
+    cache_path = _cache_path(
+        preview.source_path,
+        source_sha256=source_sha256,
+        controller_semantics=preview.controller_semantics,
+    )
     cache_path.parent.mkdir(parents=True, exist_ok=True)
     index = preview._index()
     index.cache_format = "json.gz+npz-render-index-v2"
-    timeline_arrays = preview.timeline_arrays or _timeline_arrays_from_steps(preview.timeline)
+    timeline_arrays = preview.timeline_arrays or _timeline_arrays_from_steps(
+        preview.timeline
+    )
     legacy_index_path = _cache_index_path(
         preview.source_path,
         source_sha256=source_sha256,
+        controller_semantics=preview.controller_semantics,
     )
     previous_index_path: Path | None = None
     if cache_path.exists():
@@ -1760,13 +2314,17 @@ def _write_preview_cache(
     manifest_committed = False
     try:
         _raise_if_cancelled(cancel_check)
-        with tempfile.NamedTemporaryFile(dir=legacy_index_path.parent, suffix=".npz", delete=False) as temporary:
+        with tempfile.NamedTemporaryFile(
+            dir=legacy_index_path.parent, suffix=".npz", delete=False
+        ) as temporary:
             temporary_index = Path(temporary.name)
             np.savez(
                 temporary,
                 layer_min=np.asarray([index.layer_min], dtype=np.int32),
                 layer_max=np.asarray([index.layer_max], dtype=np.int32),
-                layer_prefix_counts=index.layer_prefix_counts.astype(np.int32, copy=False),
+                layer_prefix_counts=index.layer_prefix_counts.astype(
+                    np.int32, copy=False
+                ),
                 timeline_indices=index.timeline_indices.astype(np.int32, copy=False),
                 segment_indices=index.segment_indices.astype(np.int32, copy=False),
                 source=np.asarray([index.source]),
@@ -1799,7 +2357,9 @@ def _write_preview_cache(
             "summary": preview.summary(),
             "binary_arrays": generation_index.name,
         }
-        with tempfile.NamedTemporaryFile(dir=cache_path.parent, suffix=".json.gz", delete=False) as temporary:
+        with tempfile.NamedTemporaryFile(
+            dir=cache_path.parent, suffix=".json.gz", delete=False
+        ) as temporary:
             temporary_cache = Path(temporary.name)
         with gzip.open(temporary_cache, "wt", encoding="utf-8") as stream:
             json.dump(payload, stream, ensure_ascii=False)

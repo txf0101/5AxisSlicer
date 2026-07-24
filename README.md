@@ -1,15 +1,18 @@
 # 5AxisSclicer V2.0
 
-5AxisSclicer V2.0 当前聚焦论文优先版界面：以 Workbench 为入口，进入 Operation Session 后完成 STEP 对象定义、打印参数占位、材料与机器配置占位、导入 NC/G-code 路径预览和基础检查。当前可交互主线是 `Imported NC Review`，适合把已有 G-code 的空间路径、层范围和路径类型分色展示出来。
+5AxisSclicer V2.0 以 Workbench 为入口。当前有两条可交互主线：`Imported NC Review` 用于已有 NC/G-code 的空间路径、层范围和路径类型预览；Tube Workbench 已完成第一阶段 Setup 与坐标闭环，可定义 Part、Machine、Nozzle、Material、Model CS、Build CS 和 Placement，并保存、重开项目。
 
 当前范围：
 
 - Workbench 首页展示 Planar、Curve、Freeform、Rotary、Tube、Research 六类工作台。
 - Operation Session 包含 Objects、Print、Material、Machine、Preview、Checks 六个页签。
 - Objects 页保留 STEP/STP 的 body 列表选择和 edge 空间点选。
+- Tube Workbench 显式创建 `Tube Thin-Wall Indexed` 操作，Part 可包含多个封闭 solid；sheet、Ignore 和未分配实体保留显示且不进入后续制造计算。
+- Tube 坐标编辑采用原点、Z 方向、X 方向三参考定义，支持几何拾取、数值输入、方向翻转、Draft、Apply/Cancel 和六自由度装夹微调。
+- Machine、Nozzle、Material 使用内置模板、用户资源库和项目冻结快照；参考机型会产生 Warning，资源不完整或材料未审核会阻止 Setup Ready。
 - Preview 页叠加半透明 STEP 模型和 G-code 路径，支持 Feature Type 图例、层范围、travel/extrusion 显隐、五轴姿态抽样和路径段属性面板；默认优先显示正挤出路径，空走和姿态抽样可在面板中打开。
 - G-code 分色采用路径段数据结构中的 `move_type` 与 `extrusion_role` 字段，再由颜色映射表决定渲染颜色。`;TYPE:`、`;LAYER_CHANGE`、`;Layer` 等注释只作为解析线索。
-- A/C 五轴 G-code 预览采用 `P_part = Rz(-C) * Rx(-A) * P_machine` 反算工件坐标，原始机床 XYZ 会保留在路径段属性中；纯 E 回抽和 prime 只进入运动类型统计，不写入 VTK 路径线。
+- A/C 五轴 G-code 仅在调用方显式确认已注册的控制器语义后，采用 `P_part = Rz(-C) * Rx(-A) * P_machine` 反算工件坐标。未确认语义、非零 B、U/V/W 或运动学诊断会让整份文件统一保留 Machine XYZ；纯 E 回抽和 prime 只进入运动类型统计，不写入路径线。
 - 当前解析链路读取已有 G-code；完整五轴路径生成与机床运动仿真列入后续算法阶段。
 
 ## 环境
@@ -77,14 +80,18 @@ curl -Method POST http://127.0.0.1:8765/demo/load -Body '{}' -ContentType 'appli
 curl -Method POST http://127.0.0.1:8765/workbench/select -Body '{"key":"curve"}' -ContentType 'application/json'
 curl -Method POST http://127.0.0.1:8765/model/open -Body '{"path":"C:\\tmp\\model.step"}' -ContentType 'application/json'
 curl -Method POST http://127.0.0.1:8765/gcode/open -Body '{"path":"C:\\tmp\\path.gcode"}' -ContentType 'application/json'
+curl -Method POST http://127.0.0.1:8765/project/open -Body '{"path":"C:\\tmp\\five_axis_project"}' -ContentType 'application/json'
 curl http://127.0.0.1:8765/preview/state
 curl -Method POST http://127.0.0.1:8765/preview/layers -Body '{"layer_min":0,"layer_max":12}' -ContentType 'application/json'
 curl -Method POST http://127.0.0.1:8765/preview/visibility -Body '{"show_travel":false,"show_extrusion":true,"visible_roles":["external_perimeter","internal_infill"]}' -ContentType 'application/json'
 curl -Method POST http://127.0.0.1:8765/selection/set -Body '{"body_ids":["body_001"],"edge_ids":[]}' -ContentType 'application/json'
+curl -Method POST http://127.0.0.1:8765/selection/mode -Body '{"mode":"face"}' -ContentType 'application/json'
+curl -Method POST http://127.0.0.1:8765/selection/set -Body '{"face_ids":["face_001_001"],"vertex_ids":[]}' -ContentType 'application/json'
+curl http://127.0.0.1:8765/tube/state
 curl -Method POST http://127.0.0.1:8765/project/save -Body '{"directory":"C:\\tmp\\five_axis_project"}' -ContentType 'application/json'
 ```
 
-预览区固定用于 edge 点选。脚本需要设置 body 时，使用 `/selection/set` 写入 `body_ids`。
+普通 Operation Session 默认用于 edge 点选。Tube Workbench 可把 `/selection/mode` 设为 `body`、`face`、`edge` 或 `vertex`，再由 `/selection/set` 写入对应 ID；`/state` 和 `/tube/state` 返回当前 Setup、坐标与问题状态。
 
 PowerShell 转义复杂时，可用脚本的 base64 JSON 入口：
 
@@ -96,11 +103,11 @@ python scripts\automation_client.py /selection/set --payload64 eyJib2R5X2lkcyI6W
 
 保存目录包含：
 
-- `source/`：STEP 与 G-code 源文件副本。
-- `project.json`：workbench、operation、源文件路径、模型枚举、body/edge 选择、G-code 摘要、颜色映射、层范围和显示开关。
+- `source/`：按 SHA-256 内容寻址保存的 STEP 与 G-code 权威副本。
+- `project.json`：v2 清单，保存 workbench、`setups[]`、`operations[]`、资源快照、四级拓扑描述、body/face/edge/vertex 选择和预览状态。
 - `preview/`：预留预览产物目录。
 
-旧版 body/edge 选择字段继续保留，已有对象选择可随项目 JSON 恢复。
+项目保存使用临时清单和原子替换。v1 项目在内存迁移，第一次保存 v2 时备份原清单；未来版本、路径越界、源文件哈希变化、冻结快照损坏、顶层资源镜像与 Setup 快照冲突、拓扑签名漂移会被拒绝。用户资源库后来发生分叉时，项目继续使用冻结快照并报告 Warning。
 
 ## 验证
 
@@ -178,4 +185,4 @@ python scripts\build_four_panel_paper_figure.py `
   --uncompressed-tiff
 ```
 
-输出目录包含界面总览、工艺参数、五轴路径和机床可执行 G-code 四张 3840 × 2160 图片。中文交付为 PNG；英文同时保留 PNG 预览和无压缩 RGB TIFF，每个文件配有审计 JSON，汇总 manifest 记录语言、顺序、格式、哈希及 TIFF 压缩标记。英文 TIFF 使用基线 `Compression=1`，保持 8-bit RGB、300 dpi 和逐像素一致，不执行二次缩放。五轴路径图由 OpenGL FBO 捕获完整路径，再重绘贴合 TOP、FRONT、RIGHT 投影面的方向立方体文字、Part XYZ 轴标和起终点图例。G-code 单图采用两行标题区，文件名与语法色说明分行显示；正文优先采用 22 px 等宽字体，并在 18 至 22 px 范围内按最长真实指令、行号栏和 21 行上下文自适应。任一中英文标题、语法标签或代码行无法完整容纳时，导出直接报错。四张单图不内嵌 `(a)` 至 `(d)` 题注，排版与题注由用户在论文编辑环境中完成。完整回归当前为 94 项，结果全部通过。
+输出目录包含界面总览、工艺参数、五轴路径和机床可执行 G-code 四张 3840 × 2160 图片。中文交付为 PNG；英文同时保留 PNG 预览和无压缩 RGB TIFF，每个文件配有审计 JSON，汇总 manifest 记录语言、顺序、格式、哈希及 TIFF 压缩标记。英文 TIFF 使用基线 `Compression=1`，保持 8-bit RGB、300 dpi 和逐像素一致，不执行二次缩放。五轴路径图由 OpenGL FBO 捕获完整路径，再重绘贴合 TOP、FRONT、RIGHT 投影面的方向立方体文字、Part XYZ 轴标和起终点图例。G-code 单图采用两行标题区，文件名与四组语法色说明分行显示；正文优先采用 22 px 等宽字体，并在 18 至 22 px 范围内按最长真实指令、行号栏和 21 行上下文自适应。任一中英文标题、语法标签或代码行无法完整容纳时，导出直接报错。四张单图不内嵌 `(a)` 至 `(d)` 题注，排版与题注由用户在论文编辑环境中完成。2026-07-24 全仓回归结果为 271 passed、2 skipped；23 条 warning 均来自 CadQuery 测试辅助函数 `save()` 的 FutureWarning。

@@ -98,6 +98,29 @@ class UiStateTests(unittest.TestCase):
     def setUp(self) -> None:
         QSettings("5AxisSclicer", "5AxisSclicer V2.0").clear()
 
+    def test_coordinate_label_distinguishes_reconstructed_and_unresolved_raw_preview(
+        self,
+    ) -> None:
+        class LanguageStub:
+            language = "en"
+
+        label = MainWindow._coordinate_transform_label
+        stub = LanguageStub()
+
+        self.assertEqual(
+            label(stub, "ac_inverse_rz_minus_c_after_rx_minus_a"),
+            "AC inverse part coordinates",
+        )
+        self.assertEqual(label(stub, "machine_xyz"), "Machine XYZ")
+        self.assertEqual(
+            label(
+                stub,
+                "machine_xyz",
+                [{"code": "nc_preview.rotary_words_unsupported"}],
+            ),
+            "Machine XYZ (rotary semantics unresolved)",
+        )
+
     def test_workbench_and_language_state_are_exposed(self) -> None:
         window = MainWindow(http_port=0)
         self.addCleanup(window.close)
@@ -138,7 +161,9 @@ class UiStateTests(unittest.TestCase):
         self.addCleanup(second.close)
         self.assertEqual(second.language, "en")
 
-    def test_result_source_paths_elide_without_widening_the_supported_layout(self) -> None:
+    def test_result_source_paths_elide_without_widening_the_supported_layout(
+        self,
+    ) -> None:
         window = MainWindow(http_port=0, result_viewer_factory=ResultViewerStub)
         self.addCleanup(window.close)
         page = window.result_page
@@ -162,7 +187,9 @@ class UiStateTests(unittest.TestCase):
                     self.app.processEvents()
                     scroll = page.left_column
                     content = scroll.widget()
-                    self.assertLessEqual(content.minimumSizeHint().width(), scroll.viewport().width())
+                    self.assertLessEqual(
+                        content.minimumSizeHint().width(), scroll.viewport().width()
+                    )
                     self.assertLessEqual(content.width(), scroll.viewport().width())
                     self.assertEqual(scroll.horizontalScrollBar().maximum(), 0)
                     for label, path in paths.items():
@@ -184,7 +211,10 @@ class UiStateTests(unittest.TestCase):
             accepted = window.handle_automation("/results/open", {"path": str(source)})
             self.assertTrue(accepted["accepted"])
             deadline = time.monotonic() + 5.0
-            while window.result_page.state.status == "loading" and time.monotonic() < deadline:
+            while (
+                window.result_page.state.status == "loading"
+                and time.monotonic() < deadline
+            ):
                 self.app.processEvents()
                 time.sleep(0.005)
             try:
@@ -196,7 +226,9 @@ class UiStateTests(unittest.TestCase):
                 self.assertEqual(source_audit["path"], str(source.resolve()))
                 self.assertEqual(source_audit["size_bytes"], source.stat().st_size)
                 self.assertEqual(len(source_audit["sha256"]), 64)
-                quality = window.handle_automation("/results/quality", {"mode": "paper"})
+                quality = window.handle_automation(
+                    "/results/quality", {"mode": "paper"}
+                )
                 self.assertEqual(quality["results"]["display"]["quality_mode"], "paper")
                 self.assertEqual(window.result_page.viewer.quality_mode, "paper")
             finally:
@@ -215,7 +247,9 @@ class UiStateTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "仍在加载"):
             window.queue_result_export(mode="zh")
 
-    def test_result_export_lock_preserves_shell_and_result_interaction_state(self) -> None:
+    def test_result_export_lock_preserves_shell_and_result_interaction_state(
+        self,
+    ) -> None:
         window = MainWindow(http_port=0, result_viewer_factory=ResultViewerStub)
         self.addCleanup(window.close)
         window._show_results()
@@ -236,7 +270,9 @@ class UiStateTests(unittest.TestCase):
             window.load_results_demo_action.trigger()
 
             self.assertEqual(window.language, original_language)
-            self.assertEqual(window.result_page.state.show_model, original_model_visibility)
+            self.assertEqual(
+                window.result_page.state.show_model, original_model_visibility
+            )
             self.assertEqual(window.result_page.state.quality_mode, original_quality)
             self.assertTrue(window.result_visibility_actions["show_model"].isChecked())
             self.assertTrue(window.quality_actions["interactive"].isChecked())
@@ -280,7 +316,11 @@ class UiStateTests(unittest.TestCase):
 
         result = window.handle_automation(
             "/preview/visibility",
-            {"show_travel": False, "show_extrusion": True, "visible_roles": ["external_perimeter"]},
+            {
+                "show_travel": False,
+                "show_extrusion": True,
+                "visible_roles": ["external_perimeter"],
+            },
         )
         settings = result["preview"]["settings"]
         self.assertFalse(settings["show_travel"])
@@ -327,7 +367,9 @@ G1 E-0.2
         )
         window.gcode_preview = preview
         window.viewer.gcode_preview = preview
-        window.viewer.preview_settings = PreviewSettings(layer_min=preview.layer_min, layer_max=preview.layer_max)
+        window.viewer.preview_settings = PreviewSettings(
+            layer_min=preview.layer_min, layer_max=preview.layer_max
+        )
         window.viewer.refresh_path_preview = lambda: None
         window._sync_preview_controls()
 

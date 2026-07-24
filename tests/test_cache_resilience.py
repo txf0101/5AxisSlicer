@@ -17,6 +17,9 @@ from five_axis_slicer.gcode_source import (
     GCodeSourceIndexCancelled,
     application_cache_dir,
 )
+from five_axis_slicer.manufacturing.preview_kinematics import (
+    GENERIC_XYZAC_AC_SEMANTICS,
+)
 
 
 class CacheResilienceTests(unittest.TestCase):
@@ -100,13 +103,17 @@ class CacheResilienceTests(unittest.TestCase):
             ):
                 preview = load_gcode(
                     source,
-                    progress_callback=lambda fraction, phase: progress.append((fraction, phase)),
+                    progress_callback=lambda fraction, phase: progress.append(
+                        (fraction, phase)
+                    ),
                 )
 
             self.assertEqual(preview.summary()["segment_count"], 1)
             self.assertEqual(progress[-1], (1.0, "ready"))
 
-    def test_preview_cache_cancellation_is_not_downgraded_to_cache_failure(self) -> None:
+    def test_preview_cache_cancellation_is_not_downgraded_to_cache_failure(
+        self,
+    ) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             source = Path(tmp) / "source.gcode"
             source.write_text("G1 X1 Y0 E0.1\n", encoding="utf-8")
@@ -119,7 +126,9 @@ class CacheResilienceTests(unittest.TestCase):
                 with self.assertRaisesRegex(GCodeLoadCancelled, "cache write"):
                     load_gcode(source)
 
-    def test_default_cache_paths_do_not_depend_on_current_working_directory(self) -> None:
+    def test_default_cache_paths_do_not_depend_on_current_working_directory(
+        self,
+    ) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             working_directory = root / "working"
@@ -127,7 +136,9 @@ class CacheResilienceTests(unittest.TestCase):
             try:
                 application_cache_dir.cache_clear()
                 with (
-                    patch.object(gcode_source, "_qt_cache_location", return_value=user_cache),
+                    patch.object(
+                        gcode_source, "_qt_cache_location", return_value=user_cache
+                    ),
                     patch("pathlib.Path.cwd", return_value=working_directory),
                 ):
                     source_cache = application_cache_dir("gcode_source_index")
@@ -152,16 +163,27 @@ class CacheResilienceTests(unittest.TestCase):
             real_temporary_file = tempfile.TemporaryFile
 
             def probe(*args: object, **kwargs: object):
-                if Path(kwargs["dir"]) == qt_cache / "5AxisSclicer_V2.0" / "fallback_test":
+                if (
+                    Path(kwargs["dir"])
+                    == qt_cache / "5AxisSclicer_V2.0" / "fallback_test"
+                ):
                     raise PermissionError("profile cache is read-only")
                 return real_temporary_file(*args, **kwargs)
 
             try:
                 application_cache_dir.cache_clear()
                 with (
-                    patch.object(gcode_source, "_qt_cache_location", return_value=qt_cache),
-                    patch.object(gcode_source.tempfile, "gettempdir", return_value=str(temporary_root)),
-                    patch.object(gcode_source.tempfile, "TemporaryFile", side_effect=probe),
+                    patch.object(
+                        gcode_source, "_qt_cache_location", return_value=qt_cache
+                    ),
+                    patch.object(
+                        gcode_source.tempfile,
+                        "gettempdir",
+                        return_value=str(temporary_root),
+                    ),
+                    patch.object(
+                        gcode_source.tempfile, "TemporaryFile", side_effect=probe
+                    ),
                 ):
                     selected = application_cache_dir("fallback_test")
             finally:
@@ -204,6 +226,21 @@ class CacheResilienceTests(unittest.TestCase):
             self.assertEqual(source.stat().st_size, original_stat.st_size)
             self.assertEqual(source.stat().st_mtime_ns, original_stat.st_mtime_ns)
             self.assertNotEqual(first, second)
+
+    def test_preview_cache_identity_includes_confirmed_controller_semantics(
+        self,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / "rotary.gcode"
+            source.write_text("G1 X1 Y0 A30 E0.1\n", encoding="utf-8")
+
+            unconfirmed = gcode_preview._cache_stem(source)
+            confirmed = gcode_preview._cache_stem(
+                source,
+                controller_semantics=GENERIC_XYZAC_AC_SEMANTICS,
+            )
+
+            self.assertNotEqual(unconfirmed, confirmed)
 
 
 if __name__ == "__main__":

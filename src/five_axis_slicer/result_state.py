@@ -50,7 +50,10 @@ class IllustrativeProcessParameters:
         for name, value in positive_values.items():
             if not math.isfinite(float(value)) or float(value) <= 0.0:
                 raise ValueError(f"{name} must be a finite positive number")
-        for name, value in (("top_layers", self.top_layers), ("bottom_layers", self.bottom_layers)):
+        for name, value in (
+            ("top_layers", self.top_layers),
+            ("bottom_layers", self.bottom_layers),
+        ):
             if isinstance(value, bool) or int(value) != value or int(value) < 0:
                 raise ValueError(f"{name} must be a non-negative integer")
 
@@ -66,7 +69,9 @@ class IllustrativeProcessParameters:
         }
 
     @classmethod
-    def from_json(cls, payload: Mapping[str, Any] | None) -> "IllustrativeProcessParameters":
+    def from_json(
+        cls, payload: Mapping[str, Any] | None
+    ) -> "IllustrativeProcessParameters":
         values = payload or {}
         return cls(
             layer_height_mm=float(values.get("layer_height_mm", 0.20)),
@@ -86,18 +91,39 @@ class LoadRequest:
     request_id: int | str = 0
     model_path: Path | None = None
     gcode_path: Path | None = None
+    project_path: Path | None = None
+    length_unit_override: str | None = None
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "model_path", _path_or_none(self.model_path))
         object.__setattr__(self, "gcode_path", _path_or_none(self.gcode_path))
-        if self.model_path is None and self.gcode_path is None:
-            raise ValueError("A model_path or gcode_path is required")
+        object.__setattr__(self, "project_path", _path_or_none(self.project_path))
+        unit_override = (
+            None
+            if self.length_unit_override is None
+            else str(self.length_unit_override).strip() or None
+        )
+        object.__setattr__(self, "length_unit_override", unit_override)
+        if (
+            self.model_path is None
+            and self.gcode_path is None
+            and self.project_path is None
+        ):
+            raise ValueError("A model_path, gcode_path, or project_path is required")
+        if self.project_path is not None and (
+            self.model_path is not None or self.gcode_path is not None
+        ):
+            raise ValueError(
+                "project_path cannot be combined with model_path or gcode_path"
+            )
 
     def to_json(self) -> dict[str, Any]:
         return {
             "request_id": self.request_id,
             "model_path": _json_path(self.model_path),
             "gcode_path": _json_path(self.gcode_path),
+            "project_path": _json_path(self.project_path),
+            "length_unit_override": self.length_unit_override,
         }
 
 
@@ -108,7 +134,10 @@ class LoadResult:
     request_id: int | str
     model_path: Path | None = None
     gcode_path: Path | None = None
+    project_path: Path | None = None
+    length_unit_override: str | None = None
     model: Any | None = None
+    project: Any | None = None
     gcode_preview: Any | None = None
     gcode_source_index: Any | None = None
     source_audits: dict[str, dict[str, Any]] = field(default_factory=dict)
@@ -117,9 +146,14 @@ class LoadResult:
     def __post_init__(self) -> None:
         self.model_path = _path_or_none(self.model_path)
         self.gcode_path = _path_or_none(self.gcode_path)
+        self.project_path = _path_or_none(self.project_path)
+        self.length_unit_override = (
+            None
+            if self.length_unit_override is None
+            else str(self.length_unit_override).strip() or None
+        )
         self.source_audits = {
-            str(role): dict(audit)
-            for role, audit in self.source_audits.items()
+            str(role): dict(audit) for role, audit in self.source_audits.items()
         }
 
     @property
@@ -140,11 +174,13 @@ class LoadResult:
             "request_id": self.request_id,
             "model_path": _json_path(self.model_path),
             "gcode_path": _json_path(self.gcode_path),
+            "project_path": _json_path(self.project_path),
+            "length_unit_override": self.length_unit_override,
             "has_model": self.model is not None,
             "has_gcode": self.gcode_preview is not None,
+            "has_project": self.project is not None,
             "source_audits": {
-                role: dict(audit)
-                for role, audit in self.source_audits.items()
+                role: dict(audit) for role, audit in self.source_audits.items()
             },
             "elapsed_seconds": float(self.elapsed_seconds),
         }
@@ -161,7 +197,9 @@ class ResultPreviewState:
     status: str = "empty"
     progress: float = 0.0
     message: str = ""
-    parameters: IllustrativeProcessParameters = field(default_factory=IllustrativeProcessParameters)
+    parameters: IllustrativeProcessParameters = field(
+        default_factory=IllustrativeProcessParameters
+    )
     quality_mode: str = "interactive"
     selected_stage: str = "all"
     playback_progress: float = 1.0
@@ -198,7 +236,9 @@ class ResultPreviewState:
         self.progress = 0.0
         self.message = ""
 
-    def update_progress(self, request_id: int | str, fraction: float, message: str = "") -> bool:
+    def update_progress(
+        self, request_id: int | str, fraction: float, message: str = ""
+    ) -> bool:
         if request_id != self.current_request_id or self.status != "loading":
             return False
         self.progress = max(self.progress, max(0.0, min(1.0, float(fraction))))
@@ -232,7 +272,11 @@ class ResultPreviewState:
     def cancel_load(self, request_id: int | str) -> bool:
         if self.status != "loading" or request_id != self.current_request_id:
             return False
-        self.status = "ready" if self.active_model_path is not None or self.active_gcode_path is not None else "empty"
+        self.status = (
+            "ready"
+            if self.active_model_path is not None or self.active_gcode_path is not None
+            else "empty"
+        )
         self.progress = 0.0
         self.message = ""
         self.current_request_id = None
@@ -271,10 +315,20 @@ class ResultPreviewState:
     @classmethod
     def from_json(cls, payload: Mapping[str, Any] | None) -> "ResultPreviewState":
         values = payload or {}
-        sources = values.get("sources") if isinstance(values.get("sources"), Mapping) else {}
-        status = values.get("status") if isinstance(values.get("status"), Mapping) else {}
-        display = values.get("display") if isinstance(values.get("display"), Mapping) else {}
-        parameters = values.get("parameters") if isinstance(values.get("parameters"), Mapping) else {}
+        sources = (
+            values.get("sources") if isinstance(values.get("sources"), Mapping) else {}
+        )
+        status = (
+            values.get("status") if isinstance(values.get("status"), Mapping) else {}
+        )
+        display = (
+            values.get("display") if isinstance(values.get("display"), Mapping) else {}
+        )
+        parameters = (
+            values.get("parameters")
+            if isinstance(values.get("parameters"), Mapping)
+            else {}
+        )
         return cls(
             selected_model_path=sources.get("selected_model_path"),
             selected_gcode_path=sources.get("selected_gcode_path"),

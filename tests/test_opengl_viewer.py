@@ -18,6 +18,10 @@ from five_axis_slicer.gcode_preview import (  # noqa: E402
     GCodeTimelineStep,
     PreviewSettings,
     _timeline_arrays_from_steps,
+    parse_gcode,
+)
+from five_axis_slicer.manufacturing.preview_kinematics import (  # noqa: E402
+    GENERIC_XYZAC_AC_SEMANTICS,
 )
 from five_axis_slicer.opengl_viewer import (  # noqa: E402
     PAPER_PATH_COLOR,
@@ -57,21 +61,27 @@ class OpenGLPaperPathTests(unittest.TestCase):
         colors = np.ones((4, 4), dtype=np.float32)
         styles = np.asarray([1, 1, 0, 0], dtype=np.uint8)
 
-        vertices, vertex_colors, draw_starts, draw_counts = _build_continuous_line_strips(
-            starts,
-            ends,
-            colors,
-            styles,
-            tolerance=0.02,
+        vertices, vertex_colors, draw_starts, draw_counts = (
+            _build_continuous_line_strips(
+                starts,
+                ends,
+                colors,
+                styles,
+                tolerance=0.02,
+            )
         )
 
         self.assertEqual(draw_starts.tolist(), [0, 3])
         self.assertEqual(draw_counts.tolist(), [3, 3])
         self.assertEqual(vertices.shape, (6, 3))
         self.assertEqual(vertex_colors.shape, (6, 4))
-        np.testing.assert_allclose(vertices[:3], [(0.0, 0.0, 0.0), (1.0, 0.0, 0.0), (2.0, 0.0, 0.0)])
+        np.testing.assert_allclose(
+            vertices[:3], [(0.0, 0.0, 0.0), (1.0, 0.0, 0.0), (2.0, 0.0, 0.0)]
+        )
 
-    def test_paper_path_reads_full_timeline_arrays_instead_of_sampled_segments(self) -> None:
+    def test_paper_path_reads_full_timeline_arrays_instead_of_sampled_segments(
+        self,
+    ) -> None:
         steps = [
             _step(0, (0.0, 0.0, 0.0), (1.0, 0.0, 0.0), "extrude", 0.1),
             _step(1, (1.01, 0.0, 0.0), (2.0, 0.0, 0.0), "extrude", 0.1),
@@ -179,11 +189,108 @@ class OpenGLPaperPathTests(unittest.TestCase):
         self.assertEqual(viewer._edge_segments, [])
         self.assertEqual(viewer._pick_id_to_edge, {})
         self.assertTrue(
-            all(viewer._buffers[key].count == 0 for key in ("model", "edge", "edge_selected", "edge_pick"))
+            all(
+                viewer._buffers[key].count == 0
+                for key in ("model", "edge", "edge_selected", "edge_pick")
+            )
         )
+
+    def test_pose_buffer_uses_ac_inverse_and_machine_raw_axis_consistently(
+        self,
+    ) -> None:
+        cases = (
+            (
+                "G90\nM83\nG1 X0 Y-42 Z12.2 A90 C-162 E0.1\n",
+                (0.309016994, 0.951056516, 0.0),
+            ),
+            (
+                "G90\nM83\nG1 X0 Y-42 Z12.2 A90 C-162 U0 E0.1\n",
+                (0.0, 0.0, -1.0),
+            ),
+        )
+
+        for source, expected_axis in cases:
+            with self.subTest(source=source):
+                viewer = OpenGLModelViewer()
+                self.addCleanup(viewer.deleteLater)
+                preview = parse_gcode(
+                    source,
+                    controller_semantics=GENERIC_XYZAC_AC_SEMANTICS,
+                )
+                viewer.gcode_preview = preview
+                viewer.preview_settings.show_pose_samples = True
+
+                viewer._refresh_pose_buffer(preview.segments)
+
+                vertices = viewer._buffers["pose"].vertices
+                self.assertEqual(vertices.shape, (2, 3))
+                np.testing.assert_allclose(
+                    vertices[0],
+                    preview.segments[0].end,
+                    atol=1e-5,
+                )
+                axis = vertices[1] - vertices[0]
+                axis /= np.linalg.norm(axis)
+                np.testing.assert_allclose(axis, expected_axis, atol=1e-5)
 
 
 class VtkClearModelContractTests(unittest.TestCase):
+    def test_clear_gcode_resets_all_preview_state_without_touching_model(self) -> None:
+        path_actor = object()
+        pose_actor = object()
+
+        class RendererStub:
+            def __init__(self) -> None:
+                self.removed: list[object] = []
+
+            def RemoveActor(
+                self, actor: object
+            ) -> None:  # noqa: N802 - VTK API spelling
+                self.removed.append(actor)
+
+        class ViewerStub:
+            def __init__(self) -> None:
+                self.backend = "vtk"
+                self.model = object()
+                self.gcode_preview = object()
+                self.preview_settings = PreviewSettings(
+                    layer_min=4,
+                    layer_max=8,
+                    progress_index=7,
+                    render_backend="vtk",
+                )
+                self.path_actors = [path_actor]
+                self.pose_actor = pose_actor
+                self.visible_path_segment_count = 12
+                self.drawn_path_segment_count = 9
+                self.path_render_mode = "solid_adaptive_2"
+                self._interaction_preview = True
+                self._progress_dragging = True
+                self.renderer = RendererStub()
+                self.refresh_count = 0
+
+            def refresh_selection(self) -> None:
+                self.refresh_count += 1
+
+            def _remove_path_actors(self) -> None:
+                ModelViewer._remove_path_actors(self)  # type: ignore[arg-type]
+
+        viewer = ViewerStub()
+        ModelViewer.clear_gcode_preview(viewer)  # type: ignore[arg-type]
+
+        self.assertIsNotNone(viewer.model)
+        self.assertIsNone(viewer.gcode_preview)
+        self.assertEqual(viewer.path_actors, [])
+        self.assertIsNone(viewer.pose_actor)
+        self.assertEqual(viewer.renderer.removed, [path_actor, pose_actor])
+        self.assertEqual(viewer.visible_path_segment_count, 0)
+        self.assertEqual(viewer.drawn_path_segment_count, 0)
+        self.assertEqual(viewer.path_render_mode, "line")
+        self.assertFalse(viewer._interaction_preview)
+        self.assertFalse(viewer._progress_dragging)
+        self.assertEqual(viewer.preview_settings.progress_index, 0)
+        self.assertEqual(viewer.refresh_count, 1)
+
     def test_clear_model_removes_all_body_and_edge_actors(self) -> None:
         body_actor = object()
         edge_actor = object()
@@ -193,7 +300,9 @@ class VtkClearModelContractTests(unittest.TestCase):
                 self.removed: list[object] = []
                 self.reset_count = 0
 
-            def RemoveActor(self, actor: object) -> None:  # noqa: N802 - VTK API spelling
+            def RemoveActor(
+                self, actor: object
+            ) -> None:  # noqa: N802 - VTK API spelling
                 self.removed.append(actor)
 
             def ResetCameraClippingRange(self) -> None:  # noqa: N802 - VTK API spelling

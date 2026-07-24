@@ -10,7 +10,9 @@ from .ui import MainWindow
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="5AxisSclicer V2.0 workbench and NC preview")
+    parser = argparse.ArgumentParser(
+        description="5AxisSclicer V2.0 workbench and NC preview"
+    )
     parser.add_argument("--model", help="STEP/STP file to open on startup")
     parser.add_argument("--gcode", help="NC/G-code file to open on startup")
     parser.add_argument(
@@ -18,7 +20,9 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Load the built-in impeller STEP and complete G-code project",
     )
-    parser.add_argument("--results", action="store_true", help="Open the slicing-result preview page")
+    parser.add_argument(
+        "--results", action="store_true", help="Open the slicing-result preview page"
+    )
     parser.add_argument("--host", default="127.0.0.1", help="HTTP automation host")
     parser.add_argument("--port", default=8765, type=int, help="HTTP automation port")
     return parser
@@ -43,7 +47,11 @@ def main(argv: list[str] | None = None) -> int:
                 window.start_result_load(model_path=args.model, gcode_path=args.gcode)
             return
         if args.model:
-            window.open_model(args.model)
+            window.start_model_load(
+                args.model,
+                prompt_for_unknown_unit=True,
+                show_dialog=True,
+            )
         if args.gcode:
             window.open_gcode(args.gcode)
 

@@ -24,7 +24,7 @@ from five_axis_slicer.gcode_preview import GCodeLoadCancelled, parse_gcode
 from five_axis_slicer.gcode_source import GCodeSourceIndex
 from five_axis_slicer.localization import TRANSLATIONS
 from five_axis_slicer.models import SelectionState
-from five_axis_slicer.project_io import save_project
+from five_axis_slicer.project_io import PROJECT_VERSION, save_project
 from five_axis_slicer.result_state import (
     IllustrativeProcessParameters,
     LoadRequest,
@@ -49,8 +49,16 @@ class ResultStateAndProjectTests(unittest.TestCase):
 
         formatter = string.Formatter()
         for key in TRANSLATIONS["zh"]:
-            zh_fields = {name for _, name, _, _ in formatter.parse(TRANSLATIONS["zh"][key]) if name}
-            en_fields = {name for _, name, _, _ in formatter.parse(TRANSLATIONS["en"][key]) if name}
+            zh_fields = {
+                name
+                for _, name, _, _ in formatter.parse(TRANSLATIONS["zh"][key])
+                if name
+            }
+            en_fields = {
+                name
+                for _, name, _, _ in formatter.parse(TRANSLATIONS["en"][key])
+                if name
+            }
             self.assertEqual(zh_fields, en_fields, key)
             self.assertTrue(TRANSLATIONS["zh"][key].strip(), key)
             self.assertTrue(TRANSLATIONS["en"][key].strip(), key)
@@ -63,11 +71,15 @@ class ResultStateAndProjectTests(unittest.TestCase):
             "status_single_body",
             "gcode_viewer_entry",
         }
-        visible_copy = "".join(
-            TRANSLATIONS[language][key]
-            for language in ("zh", "en")
-            for key in visible_shell_keys
-        ).replace(" ", "").casefold()
+        visible_copy = (
+            "".join(
+                TRANSLATIONS[language][key]
+                for language in ("zh", "en")
+                for key in visible_shell_keys
+            )
+            .replace(" ", "")
+            .casefold()
+        )
         for forbidden in (
             "示意",
             "演示",
@@ -90,7 +102,9 @@ class ResultStateAndProjectTests(unittest.TestCase):
             top_layers=6,
             bottom_layers=4,
         )
-        state = ResultPreviewState(parameters=parameters, quality_mode="paper", show_travel=True)
+        state = ResultPreviewState(
+            parameters=parameters, quality_mode="paper", show_travel=True
+        )
 
         with patch("five_axis_slicer.gcode_preview.parse_gcode") as parse_mock:
             payload = state.to_json()
@@ -106,17 +120,24 @@ class ResultStateAndProjectTests(unittest.TestCase):
 
         parse_mock.assert_not_called()
         self.assertEqual(restored.parameters, parameters)
-        self.assertEqual(project_payload["version"], 1)
+        self.assertEqual(project_payload["version"], PROJECT_VERSION)
         self.assertEqual(project_payload["result_preview"]["schema_version"], 1)
-        self.assertFalse(project_payload["result_preview"]["parameters_affect_toolpath"])
-        self.assertNotIn("language", json.dumps(project_payload["result_preview"], ensure_ascii=False))
+        self.assertFalse(
+            project_payload["result_preview"]["parameters_affect_toolpath"]
+        )
+        self.assertNotIn(
+            "language",
+            json.dumps(project_payload["result_preview"], ensure_ascii=False),
+        )
 
-    def test_project_without_result_namespace_keeps_root_schema_compatible(self) -> None:
+    def test_project_without_result_namespace_keeps_root_schema_compatible(
+        self,
+    ) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_path = save_project(Path(tmp) / "project", None, SelectionState())
             payload = json.loads(project_path.read_text(encoding="utf-8"))
 
-        self.assertEqual(payload["version"], 1)
+        self.assertEqual(payload["version"], PROJECT_VERSION)
         self.assertNotIn("result_preview", payload)
 
     def test_load_state_rejects_stale_and_out_of_sequence_results(self) -> None:
@@ -128,9 +149,13 @@ class ResultStateAndProjectTests(unittest.TestCase):
             new_path.touch()
             state = ResultPreviewState(active_gcode_path=old_path, status="ready")
 
-            self.assertFalse(state.commit_load(LoadResult("orphan", gcode_path=new_path)))
+            self.assertFalse(
+                state.commit_load(LoadResult("orphan", gcode_path=new_path))
+            )
             state.begin_load(LoadRequest("new", gcode_path=new_path))
-            self.assertFalse(state.commit_load(LoadResult("stale", gcode_path=old_path)))
+            self.assertFalse(
+                state.commit_load(LoadResult("stale", gcode_path=old_path))
+            )
             self.assertFalse(state.fail_load("stale", "stale failure"))
             self.assertEqual(state.active_gcode_path, old_path.resolve())
             self.assertEqual(state.status, "loading")
@@ -165,9 +190,14 @@ class GCodeSourceIndexTests(unittest.TestCase):
             source.write_text("\r\n".join(lines), encoding="utf-8")
 
             progress: list[tuple[float, str]] = []
-            with GCodeSourceIndex(source, cache, progress_callback=lambda f, p: progress.append((f, p))) as index:
+            with GCodeSourceIndex(
+                source, cache, progress_callback=lambda f, p: progress.append((f, p))
+            ) as index:
                 self.assertEqual(index.line_count, len(lines))
-                self.assertEqual(index.read_context(4, radius=2), list(enumerate(lines[1:6], start=2)))
+                self.assertEqual(
+                    index.read_context(4, radius=2),
+                    list(enumerate(lines[1:6], start=2)),
+                )
                 self.assertEqual(index.search("needle", start_line=1), 5)
                 self.assertEqual(index.search("needle", start_line=6), 7)
                 self.assertEqual(index.search("needle", start_line=8), 5)
@@ -176,7 +206,10 @@ class GCodeSourceIndexTests(unittest.TestCase):
                 self.assertEqual(index.search("needle", start_line=4, forward=False), 7)
                 self.assertEqual(index.representative_five_axis_line(), 4)
                 self.assertEqual(
-                    [(stage.stage_id, stage.start_line, stage.end_line) for stage in index.stages],
+                    [
+                        (stage.stage_id, stage.start_line, stage.end_line)
+                        for stage in index.stages
+                    ],
                     [("base", 1, 2), ("blade_1", 3, 5), ("blade_2", 6, 9)],
                 )
             self.assertTrue(progress)
@@ -184,7 +217,10 @@ class GCodeSourceIndexTests(unittest.TestCase):
 
             with GCodeSourceIndex(source, cache) as cached:
                 self.assertEqual(cached.read_line(5), lines[4])
-                self.assertEqual([stage.stage_id for stage in cached.stages], ["base", "blade_1", "blade_2"])
+                self.assertEqual(
+                    [stage.stage_id for stage in cached.stages],
+                    ["base", "blade_1", "blade_2"],
+                )
 
     def test_empty_file_has_safe_context_and_search(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -213,17 +249,25 @@ class PreviewCacheTests(unittest.TestCase):
 
     @staticmethod
     def _cache_stem_factory(cache_root: Path):
-        def cache_stem(_source_path: Path, version: str = gcode_preview.CACHE_VERSION) -> Path:
+        def cache_stem(
+            _source_path: Path, version: str = gcode_preview.CACHE_VERSION
+        ) -> Path:
             return cache_root / version
 
         return cache_stem
 
-    def test_generation_manifest_commit_reloads_and_retires_previous_binary(self) -> None:
+    def test_generation_manifest_commit_reloads_and_retires_previous_binary(
+        self,
+    ) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             source, preview = self._sparse_source(root)
             cache_root = root / "cache"
-            with patch.object(gcode_preview, "_cache_stem", side_effect=self._cache_stem_factory(cache_root)):
+            with patch.object(
+                gcode_preview,
+                "_cache_stem",
+                side_effect=self._cache_stem_factory(cache_root),
+            ):
                 gcode_preview._write_preview_cache(preview)
                 manifest_path = gcode_preview._cache_path(source)
                 first_payload = self._read_manifest(manifest_path)
@@ -242,7 +286,9 @@ class PreviewCacheTests(unittest.TestCase):
             self.assertTrue(second_binary.exists())
             self.assertEqual(set(cache_root.iterdir()), {manifest_path, second_binary})
 
-    def test_manifest_replace_failure_preserves_valid_generation_and_cleans_temps(self) -> None:
+    def test_manifest_replace_failure_preserves_valid_generation_and_cleans_temps(
+        self,
+    ) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             source, preview = self._sparse_source(root)
@@ -263,7 +309,9 @@ class PreviewCacheTests(unittest.TestCase):
                         raise OSError("simulated manifest replace failure")
                     real_replace(source_path, target_path)
 
-                with patch.object(gcode_preview.os, "replace", side_effect=fail_manifest_replace):
+                with patch.object(
+                    gcode_preview.os, "replace", side_effect=fail_manifest_replace
+                ):
                     with self.assertRaisesRegex(OSError, "manifest replace"):
                         gcode_preview._write_preview_cache(preview)
 
@@ -284,11 +332,17 @@ class PreviewCacheTests(unittest.TestCase):
                 cancelled = True
 
             with (
-                patch.object(gcode_preview, "_cache_stem", side_effect=self._cache_stem_factory(cache_root)),
+                patch.object(
+                    gcode_preview,
+                    "_cache_stem",
+                    side_effect=self._cache_stem_factory(cache_root),
+                ),
                 patch.object(gcode_preview.np, "savez", side_effect=save_then_cancel),
             ):
                 with self.assertRaises(GCodeLoadCancelled):
-                    gcode_preview._write_preview_cache(preview, cancel_check=lambda: cancelled)
+                    gcode_preview._write_preview_cache(
+                        preview, cancel_check=lambda: cancelled
+                    )
 
             self.assertTrue(cache_root.exists())
             self.assertEqual(list(cache_root.iterdir()), [])
@@ -323,10 +377,14 @@ class BackgroundLoadTests(unittest.TestCase):
             completed: list[LoadResult] = []
             failed: list[tuple[object, str]] = []
             coordinator.completed.connect(completed.append)
-            coordinator.failed.connect(lambda request_id, message: failed.append((request_id, message)))
+            coordinator.failed.connect(
+                lambda request_id, message: failed.append((request_id, message))
+            )
             with (
                 patch.object(background_load, "load_gcode", return_value=preview),
-                patch.object(background_load, "GCodeSourceIndex", return_value=source_index),
+                patch.object(
+                    background_load, "GCodeSourceIndex", return_value=source_index
+                ),
             ):
                 coordinator.start(LoadRequest("success", gcode_path=source))
                 self._wait_until(lambda: not coordinator.busy)
@@ -363,7 +421,9 @@ class BackgroundLoadTests(unittest.TestCase):
             completed: list[LoadResult] = []
             coordinator.cancelled.connect(cancelled.append)
             coordinator.completed.connect(completed.append)
-            with patch.object(background_load, "load_gcode", side_effect=cancellable_load):
+            with patch.object(
+                background_load, "load_gcode", side_effect=cancellable_load
+            ):
                 coordinator.start(LoadRequest("cancel", gcode_path=source))
                 self._wait_until(entered.is_set)
                 coordinator.cancel()
@@ -377,7 +437,9 @@ class BackgroundLoadTests(unittest.TestCase):
             failed_coordinator.failed.connect(
                 lambda request_id, message: failures.append((request_id, message))
             )
-            with patch.object(background_load, "load_gcode", side_effect=ValueError("damaged G-code")):
+            with patch.object(
+                background_load, "load_gcode", side_effect=ValueError("damaged G-code")
+            ):
                 failed_coordinator.start(LoadRequest("failure", gcode_path=source))
                 self._wait_until(lambda: not failed_coordinator.busy)
             self.assertEqual(failures, [("failure", "damaged G-code")])
@@ -400,7 +462,9 @@ class BackgroundLoadTests(unittest.TestCase):
             completed: list[LoadResult] = []
             coordinator.cancelled.connect(cancelled.append)
             coordinator.completed.connect(completed.append)
-            with patch.object(background_load, "load_step", side_effect=cancellable_step):
+            with patch.object(
+                background_load, "load_step", side_effect=cancellable_step
+            ):
                 coordinator.start(LoadRequest("step-cancel", model_path=source))
                 self._wait_until(entered.is_set)
                 coordinator.cancel()
@@ -427,7 +491,9 @@ class BackgroundLoadTests(unittest.TestCase):
             completed: list[LoadResult] = []
             coordinator.cancelled.connect(cancelled.append)
             coordinator.completed.connect(completed.append)
-            with patch.object(background_load, "file_sha256", side_effect=cancellable_hash):
+            with patch.object(
+                background_load, "file_sha256", side_effect=cancellable_hash
+            ):
                 coordinator.start(LoadRequest("hash-cancel", gcode_path=source))
                 self._wait_until(entered.is_set)
                 coordinator.cancel()
@@ -459,7 +525,9 @@ class BackgroundLoadTests(unittest.TestCase):
             completed: list[LoadResult] = []
             coordinator.cancelled.connect(cancelled.append)
             coordinator.completed.connect(completed.append)
-            with patch.object(background_load, "load_gcode", side_effect=cancellable_load):
+            with patch.object(
+                background_load, "load_gcode", side_effect=cancellable_load
+            ):
                 coordinator.start(LoadRequest("old", gcode_path=old_source))
                 self._wait_until(entered.is_set)
                 coordinator.start(LoadRequest("new", gcode_path=new_source))
@@ -471,7 +539,9 @@ class BackgroundLoadTests(unittest.TestCase):
             self.assertEqual(load_calls, [old_source.resolve()])
             coordinator.deleteLater()
 
-    def test_superseded_completion_is_closed_and_only_latest_result_is_emitted(self) -> None:
+    def test_superseded_completion_is_closed_and_only_latest_result_is_emitted(
+        self,
+    ) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             old_source = root / "old.gcode"
@@ -502,8 +572,14 @@ class BackgroundLoadTests(unittest.TestCase):
             coordinator.completed.connect(completed.append)
             coordinator.busy_changed.connect(busy_states.append)
             with (
-                patch.object(background_load, "load_gcode", side_effect=lambda *_a, **_kw: object()),
-                patch.object(background_load, "GCodeSourceIndex", side_effect=make_index),
+                patch.object(
+                    background_load,
+                    "load_gcode",
+                    side_effect=lambda *_a, **_kw: object(),
+                ),
+                patch.object(
+                    background_load, "GCodeSourceIndex", side_effect=make_index
+                ),
                 patch.object(background_load, "LoadResult", side_effect=gated_result),
             ):
                 coordinator.start(LoadRequest("old", gcode_path=old_source))
@@ -522,7 +598,9 @@ class BackgroundLoadTests(unittest.TestCase):
             self.assertTrue(indexes[1].closed)
             coordinator.deleteLater()
 
-    def test_shutdown_timeout_keeps_uncooperative_step_worker_alive_for_repeated_wait(self) -> None:
+    def test_shutdown_timeout_keeps_uncooperative_step_worker_alive_for_repeated_wait(
+        self,
+    ) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             source = Path(tmp) / "blocking.step"
             source.touch()
@@ -539,7 +617,9 @@ class BackgroundLoadTests(unittest.TestCase):
             busy_states: list[bool] = []
             coordinator.busy_changed.connect(busy_states.append)
             try:
-                with patch.object(background_load, "load_step", side_effect=blocking_step):
+                with patch.object(
+                    background_load, "load_step", side_effect=blocking_step
+                ):
                     coordinator.start(LoadRequest("step", model_path=source))
                     self._wait_until(entered.is_set)
 
@@ -557,7 +637,9 @@ class BackgroundLoadTests(unittest.TestCase):
             self.assertEqual(busy_states, [True, False])
             coordinator.deleteLater()
 
-    def test_timed_out_worker_outlives_coordinator_qobject_until_native_thread_stops(self) -> None:
+    def test_timed_out_worker_outlives_coordinator_qobject_until_native_thread_stops(
+        self,
+    ) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             source = Path(tmp) / "detached.step"
             source.touch()
