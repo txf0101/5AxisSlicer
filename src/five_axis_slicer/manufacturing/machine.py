@@ -1,14 +1,21 @@
+"""Machine profiles and forward kinematics.
+
+Transforms use column vectors in a right-handed frame. Linear values are
+millimetres, rotary values are radians, and forward kinematics returns
+``T_machine_from_link``. Only ``PostAxisMap`` converts controller units.
+"""
+
 from __future__ import annotations
 
-from dataclasses import dataclass
 import math
 import re
+from collections.abc import Iterable, Mapping
+from dataclasses import dataclass
 from types import MappingProxyType
-from typing import Any, Iterable, Mapping
+from typing import Any, cast
 
 from .coordinates import Matrix4, RigidTransform
 from .json_contract import parse_json_bool, require_bool
-
 
 Vector3 = tuple[float, float, float]
 
@@ -30,7 +37,7 @@ def _vector3(value: Iterable[float], field_name: str) -> Vector3:
     items = tuple(float(component) for component in value)
     if len(items) != 3:
         raise ValueError(f"{field_name} must contain exactly three values")
-    return items  # type: ignore[return-value]
+    return cast(Vector3, items)
 
 
 def _identity_transform(source_frame: str, target_frame: str) -> RigidTransform:
@@ -225,9 +232,7 @@ class MountDatum:
         if transform.source_frame != self.mount_id:
             raise ValueError("T_parent_from_mount source_frame must equal mount_id")
         if transform.target_frame != self.parent_link_id:
-            raise ValueError(
-                "T_parent_from_mount target_frame must equal parent_link_id"
-            )
+            raise ValueError("T_parent_from_mount target_frame must equal parent_link_id")
 
     @property
     def datum_id(self) -> str:
@@ -252,9 +257,7 @@ class MountDatum:
             parent_link_id=str(payload.get("parent_link_id", "")),
             build_surface_id=str(payload.get("build_surface_id", "")),
             T_parent_from_mount=(
-                _transform_from_json(raw_transform)
-                if isinstance(raw_transform, Mapping)
-                else None
+                _transform_from_json(raw_transform) if isinstance(raw_transform, Mapping) else None
             ),
         )
 
@@ -296,9 +299,7 @@ class JointSpec:
             object.__setattr__(self, name, str(getattr(self, name)))
         object.__setattr__(self, "joint_type", self.joint_type.lower())
         object.__setattr__(self, "motion_side", self.motion_side.lower())
-        object.__setattr__(
-            self, "axis_direction", _vector3(self.axis_direction, "axis_direction")
-        )
+        object.__setattr__(self, "axis_direction", _vector3(self.axis_direction, "axis_direction"))
         object.__setattr__(
             self,
             "rotation_center_mm",
@@ -327,13 +328,9 @@ class JointSpec:
         elif not isinstance(zero_transform, RigidTransform):
             raise TypeError("T_parent_from_child_zero must be RigidTransform")
         if zero_transform.source_frame != self.child_link_id:
-            raise ValueError(
-                "T_parent_from_child_zero source_frame must equal child_link_id"
-            )
+            raise ValueError("T_parent_from_child_zero source_frame must equal child_link_id")
         if zero_transform.target_frame != self.parent_link_id:
-            raise ValueError(
-                "T_parent_from_child_zero target_frame must equal parent_link_id"
-            )
+            raise ValueError("T_parent_from_child_zero target_frame must equal parent_link_id")
 
     @property
     def axis(self) -> Vector3:
@@ -391,9 +388,7 @@ class JointSpec:
             "soft_limit_max": self.soft_limit_max,
             "max_velocity": self.max_velocity,
             "max_acceleration": self.max_acceleration,
-            "T_parent_from_child_zero": _transform_to_json(
-                self.T_parent_from_child_zero
-            ),
+            "T_parent_from_child_zero": _transform_to_json(self.T_parent_from_child_zero),
             "post_axis_map": (
                 self.post_axis_map.to_json() if self.post_axis_map is not None else None
             ),
@@ -406,7 +401,7 @@ class JointSpec:
         limits = payload.get("soft_limits")
         limit_min = payload.get("soft_limit_min")
         limit_max = payload.get("soft_limit_max")
-        if isinstance(limits, (list, tuple)) and len(limits) == 2:
+        if isinstance(limits, list | tuple) and len(limits) == 2:
             limit_min, limit_max = limits
         return cls(
             joint_id=str(payload.get("id", payload.get("joint_id", ""))),
@@ -429,14 +424,10 @@ class JointSpec:
             max_velocity=_optional_float(payload.get("max_velocity")),
             max_acceleration=_optional_float(payload.get("max_acceleration")),
             T_parent_from_child_zero=(
-                _transform_from_json(raw_transform)
-                if isinstance(raw_transform, Mapping)
-                else None
+                _transform_from_json(raw_transform) if isinstance(raw_transform, Mapping) else None
             ),
             post_axis_map=(
-                PostAxisMap.from_json(raw_post)
-                if isinstance(raw_post, Mapping)
-                else None
+                PostAxisMap.from_json(raw_post) if isinstance(raw_post, Mapping) else None
             ),
         )
 
@@ -505,164 +496,18 @@ class MachineProfile:
 
     @property
     def build_surface_map(self) -> Mapping[str, BuildSurface]:
-        return MappingProxyType(
-            {surface.surface_id: surface for surface in self.build_surfaces}
-        )
+        return MappingProxyType({surface.surface_id: surface for surface in self.build_surfaces})
 
     def validation_errors(self) -> tuple[str, ...]:
         errors: list[str] = []
-        if not self.profile_id:
-            errors.append("machine.missing_id")
-        if not self.name:
-            errors.append("machine.missing_name")
-        if self.version < 1:
-            errors.append("machine.invalid_version")
-        if not self.root_link_id:
-            errors.append("machine.missing_root_link")
-
-        duplicate_joint_ids = _duplicates(joint.joint_id for joint in self.joints)
-        errors.extend(f"joint.duplicate_id:{item}" for item in duplicate_joint_ids)
-        duplicate_child_links = _duplicates(
-            joint.child_link_id for joint in self.joints
-        )
-        errors.extend(
-            f"joint.duplicate_child_link:{item}" for item in duplicate_child_links
-        )
-        duplicate_mount_ids = _duplicates(mount.mount_id for mount in self.mount_datums)
-        errors.extend(f"mount.duplicate_id:{item}" for item in duplicate_mount_ids)
-        duplicate_surface_ids = _duplicates(
-            surface.surface_id for surface in self.build_surfaces
-        )
-        errors.extend(
-            f"build_surface.duplicate_id:{item}" for item in duplicate_surface_ids
-        )
-
+        _validate_machine_identity(self, errors)
+        _validate_machine_duplicates(self, errors)
         child_to_joint = {joint.child_link_id: joint for joint in self.joints}
-        valid_links = {self.root_link_id, *child_to_joint.keys()}
-        parent_side_counts: dict[tuple[str, str], int] = {}
-        post_words: dict[str, str] = {}
-        for joint in self.joints:
-            prefix = f"joint:{joint.joint_id}"
-            if not joint.joint_id:
-                errors.append("joint.missing_id")
-            if not joint.name:
-                errors.append(f"{prefix}.missing_name")
-            if not joint.parent_link_id or not joint.child_link_id:
-                errors.append(f"{prefix}.missing_link")
-            if joint.parent_link_id == joint.child_link_id:
-                errors.append(f"{prefix}.self_link")
-            if joint.child_link_id == self.root_link_id:
-                errors.append(f"{prefix}.root_is_child")
-            if joint.parent_link_id not in valid_links:
-                errors.append(f"{prefix}.unknown_parent:{joint.parent_link_id}")
-            if joint.joint_type not in _JOINT_TYPES:
-                errors.append(f"{prefix}.invalid_type")
-            if joint.motion_side not in _MOTION_SIDES:
-                errors.append(f"{prefix}.invalid_motion_side")
-            if not _finite_vector(joint.axis_direction):
-                errors.append(f"{prefix}.non_finite_axis")
-            elif abs(_norm(joint.axis_direction) - 1.0) > 1.0e-7:
-                errors.append(f"{prefix}.axis_not_unit")
-            if not _finite_vector(joint.rotation_center_mm):
-                errors.append(f"{prefix}.non_finite_rotation_center")
-            if not math.isfinite(joint.zero_offset):
-                errors.append(f"{prefix}.non_finite_zero_offset")
-            if joint.soft_limit_min is not None and not math.isfinite(
-                joint.soft_limit_min
-            ):
-                errors.append(f"{prefix}.invalid_soft_limit_min")
-            if joint.soft_limit_max is not None and not math.isfinite(
-                joint.soft_limit_max
-            ):
-                errors.append(f"{prefix}.invalid_soft_limit_max")
-            if (
-                joint.soft_limit_min is not None
-                and joint.soft_limit_max is not None
-                and joint.soft_limit_min > joint.soft_limit_max
-            ):
-                errors.append(f"{prefix}.reversed_soft_limits")
-            if joint.max_velocity is not None and not _positive_finite(
-                joint.max_velocity
-            ):
-                errors.append(f"{prefix}.invalid_max_velocity")
-            if joint.max_acceleration is not None and not _positive_finite(
-                joint.max_acceleration
-            ):
-                errors.append(f"{prefix}.invalid_max_acceleration")
-
-            zero_transform = joint.T_parent_from_child_zero
-            if zero_transform is None:
-                errors.append(f"{prefix}.missing_zero_transform")
-            else:
-                if zero_transform.source_frame != joint.child_link_id:
-                    errors.append(f"{prefix}.zero_transform_source_mismatch")
-                if zero_transform.target_frame != joint.parent_link_id:
-                    errors.append(f"{prefix}.zero_transform_target_mismatch")
-
-            if joint.post_axis_map is not None:
-                for error in joint.post_axis_map.validation_errors(joint.joint_type):
-                    errors.append(f"{prefix}.{error}")
-                other = post_words.get(joint.post_axis_map.word)
-                if other is not None:
-                    errors.append(
-                        f"post_axis.duplicate_word:{joint.post_axis_map.word}"
-                    )
-                else:
-                    post_words[joint.post_axis_map.word] = joint.joint_id
-
-            branch_key = (joint.parent_link_id, joint.motion_side)
-            parent_side_counts[branch_key] = parent_side_counts.get(branch_key, 0) + 1
-            parent_joint = child_to_joint.get(joint.parent_link_id)
-            if (
-                parent_joint is not None
-                and parent_joint.motion_side != joint.motion_side
-            ):
-                errors.append(f"{prefix}.motion_side_changes_within_chain")
-
-        for (parent_link, side), count in sorted(parent_side_counts.items()):
-            if count > 1:
-                errors.append(f"joint.branching_chain:{parent_link}:{side}")
-
+        valid_links = {self.root_link_id, *child_to_joint}
+        _validate_machine_joints(self, child_to_joint, valid_links, errors)
         errors.extend(_chain_errors(self.root_link_id, self.joints))
-
-        for surface in self.build_surfaces:
-            errors.extend(surface.validation_errors())
-        for mount in self.mount_datums:
-            prefix = f"mount:{mount.mount_id}"
-            if not mount.mount_id:
-                errors.append("mount.missing_id")
-            if not mount.name:
-                errors.append(f"{prefix}.missing_name")
-            if mount.parent_link_id not in valid_links:
-                errors.append(f"{prefix}.unknown_parent:{mount.parent_link_id}")
-            if mount.build_surface_id not in {
-                surface.surface_id for surface in self.build_surfaces
-            }:
-                errors.append(
-                    f"{prefix}.unknown_build_surface:{mount.build_surface_id}"
-                )
-            mount_transform = mount.T_parent_from_mount
-            if mount_transform is None:
-                errors.append(f"{prefix}.missing_transform")
-            else:
-                if mount_transform.source_frame != mount.mount_id:
-                    errors.append(f"{prefix}.transform_source_mismatch")
-                if mount_transform.target_frame != mount.parent_link_id:
-                    errors.append(f"{prefix}.transform_target_mismatch")
-
-        for endpoint, side, field_name in (
-            (self.tool_link_id, "tool", "tool_link_id"),
-            (self.workpiece_link_id, "workpiece", "workpiece_link_id"),
-        ):
-            if endpoint is None:
-                continue
-            if endpoint not in valid_links:
-                errors.append(f"machine.unknown_{field_name}:{endpoint}")
-            elif endpoint != self.root_link_id:
-                endpoint_joint = child_to_joint.get(endpoint)
-                if endpoint_joint is not None and endpoint_joint.motion_side != side:
-                    errors.append(f"machine.invalid_{field_name}_side:{endpoint}")
-
+        _validate_machine_mounts(self, valid_links, errors)
+        _validate_machine_endpoints(self, child_to_joint, valid_links, errors)
         return tuple(dict.fromkeys(errors))
 
     def validate(self) -> MachineProfile:
@@ -698,9 +543,7 @@ class MachineProfile:
                 local = joint.local_transform(positions.get(joint.joint_id, 0.0))
                 transforms[joint.child_link_id] = parent_transform @ local
             if len(remaining) == len(pending):
-                raise MachineProfileValidationError(
-                    ("machine.kinematic_chain_not_resolvable",)
-                )
+                raise MachineProfileValidationError(("machine.kinematic_chain_not_resolvable",))
             pending = remaining
         return transforms
 
@@ -729,9 +572,7 @@ class MachineProfile:
         parent = self.link_transform(mount.parent_link_id, joint_positions)
         return parent @ mount.T_parent_from_mount
 
-    def controller_values(
-        self, joint_positions: Mapping[str, float]
-    ) -> dict[str, float]:
+    def controller_values(self, joint_positions: Mapping[str, float]) -> dict[str, float]:
         self.validate()
         unknown = sorted(set(joint_positions) - set(self.joint_map))
         if unknown:
@@ -741,9 +582,7 @@ class MachineProfile:
             if joint.joint_id not in joint_positions or joint.post_axis_map is None:
                 continue
             value = joint.effective_position(joint_positions[joint.joint_id])
-            result[joint.post_axis_map.word] = joint.post_axis_map.encode(
-                value, joint.joint_type
-            )
+            result[joint.post_axis_map.word] = joint.post_axis_map.encode(value, joint.joint_type)
         return result
 
     def to_json(self) -> dict[str, Any]:
@@ -795,13 +634,198 @@ class MachineProfile:
                 source_uri=str(payload.get("source_uri", "")),
                 joints=tuple(JointSpec.from_json(item) for item in raw_joints),
                 mount_datums=tuple(MountDatum.from_json(item) for item in raw_mounts),
-                build_surfaces=tuple(
-                    BuildSurface.from_json(item) for item in raw_surfaces
-                ),
+                build_surfaces=tuple(BuildSurface.from_json(item) for item in raw_surfaces),
             )
         except (AttributeError, KeyError, TypeError, ValueError) as exc:
             raise ValueError("invalid Machine Profile payload") from exc
         return profile.validate()
+
+
+def _validate_machine_identity(profile: MachineProfile, errors: list[str]) -> None:
+    if not profile.profile_id:
+        errors.append("machine.missing_id")
+    if not profile.name:
+        errors.append("machine.missing_name")
+    if profile.version < 1:
+        errors.append("machine.invalid_version")
+    if not profile.root_link_id:
+        errors.append("machine.missing_root_link")
+
+
+def _validate_machine_duplicates(profile: MachineProfile, errors: list[str]) -> None:
+    groups = (
+        ("joint.duplicate_id", (joint.joint_id for joint in profile.joints)),
+        (
+            "joint.duplicate_child_link",
+            (joint.child_link_id for joint in profile.joints),
+        ),
+        ("mount.duplicate_id", (mount.mount_id for mount in profile.mount_datums)),
+        (
+            "build_surface.duplicate_id",
+            (surface.surface_id for surface in profile.build_surfaces),
+        ),
+    )
+    for code, identifiers in groups:
+        errors.extend(f"{code}:{item}" for item in _duplicates(identifiers))
+
+
+def _validate_machine_joints(
+    profile: MachineProfile,
+    child_to_joint: Mapping[str, JointSpec],
+    valid_links: set[str],
+    errors: list[str],
+) -> None:
+    branch_counts: dict[tuple[str, str], int] = {}
+    post_words: dict[str, str] = {}
+    for joint in profile.joints:
+        prefix = f"joint:{joint.joint_id}"
+        _validate_joint_identity(joint, profile.root_link_id, valid_links, prefix, errors)
+        _validate_joint_motion(joint, prefix, errors)
+        _validate_joint_limits(joint, prefix, errors)
+        _validate_joint_transform(joint, prefix, errors)
+        _validate_joint_post_axis(joint, prefix, post_words, errors)
+
+        branch_key = (joint.parent_link_id, joint.motion_side)
+        branch_counts[branch_key] = branch_counts.get(branch_key, 0) + 1
+        parent_joint = child_to_joint.get(joint.parent_link_id)
+        if parent_joint is not None and parent_joint.motion_side != joint.motion_side:
+            errors.append(f"{prefix}.motion_side_changes_within_chain")
+
+    for (parent_link, side), count in sorted(branch_counts.items()):
+        if count > 1:
+            errors.append(f"joint.branching_chain:{parent_link}:{side}")
+
+
+def _validate_joint_identity(
+    joint: JointSpec,
+    root_link_id: str,
+    valid_links: set[str],
+    prefix: str,
+    errors: list[str],
+) -> None:
+    if not joint.joint_id:
+        errors.append("joint.missing_id")
+    if not joint.name:
+        errors.append(f"{prefix}.missing_name")
+    if not joint.parent_link_id or not joint.child_link_id:
+        errors.append(f"{prefix}.missing_link")
+    if joint.parent_link_id == joint.child_link_id:
+        errors.append(f"{prefix}.self_link")
+    if joint.child_link_id == root_link_id:
+        errors.append(f"{prefix}.root_is_child")
+    if joint.parent_link_id not in valid_links:
+        errors.append(f"{prefix}.unknown_parent:{joint.parent_link_id}")
+
+
+def _validate_joint_motion(joint: JointSpec, prefix: str, errors: list[str]) -> None:
+    if joint.joint_type not in _JOINT_TYPES:
+        errors.append(f"{prefix}.invalid_type")
+    if joint.motion_side not in _MOTION_SIDES:
+        errors.append(f"{prefix}.invalid_motion_side")
+    if not _finite_vector(joint.axis_direction):
+        errors.append(f"{prefix}.non_finite_axis")
+    elif abs(_norm(joint.axis_direction) - 1.0) > 1.0e-7:
+        errors.append(f"{prefix}.axis_not_unit")
+    if not _finite_vector(joint.rotation_center_mm):
+        errors.append(f"{prefix}.non_finite_rotation_center")
+    if not math.isfinite(joint.zero_offset):
+        errors.append(f"{prefix}.non_finite_zero_offset")
+
+
+def _validate_joint_limits(joint: JointSpec, prefix: str, errors: list[str]) -> None:
+    low, high = joint.soft_limits
+    if low is not None and not math.isfinite(low):
+        errors.append(f"{prefix}.invalid_soft_limit_min")
+    if high is not None and not math.isfinite(high):
+        errors.append(f"{prefix}.invalid_soft_limit_max")
+    if low is not None and high is not None and low > high:
+        errors.append(f"{prefix}.reversed_soft_limits")
+    if joint.max_velocity is not None and not _positive_finite(joint.max_velocity):
+        errors.append(f"{prefix}.invalid_max_velocity")
+    if joint.max_acceleration is not None and not _positive_finite(joint.max_acceleration):
+        errors.append(f"{prefix}.invalid_max_acceleration")
+
+
+def _validate_joint_transform(joint: JointSpec, prefix: str, errors: list[str]) -> None:
+    transform = joint.T_parent_from_child_zero
+    if transform is None:
+        errors.append(f"{prefix}.missing_zero_transform")
+        return
+    if transform.source_frame != joint.child_link_id:
+        errors.append(f"{prefix}.zero_transform_source_mismatch")
+    if transform.target_frame != joint.parent_link_id:
+        errors.append(f"{prefix}.zero_transform_target_mismatch")
+
+
+def _validate_joint_post_axis(
+    joint: JointSpec,
+    prefix: str,
+    post_words: dict[str, str],
+    errors: list[str],
+) -> None:
+    axis_map = joint.post_axis_map
+    if axis_map is None:
+        return
+    errors.extend(f"{prefix}.{error}" for error in axis_map.validation_errors(joint.joint_type))
+    if axis_map.word in post_words:
+        errors.append(f"post_axis.duplicate_word:{axis_map.word}")
+    else:
+        post_words[axis_map.word] = joint.joint_id
+
+
+def _validate_machine_mounts(
+    profile: MachineProfile, valid_links: set[str], errors: list[str]
+) -> None:
+    for surface in profile.build_surfaces:
+        errors.extend(surface.validation_errors())
+    surface_ids = {surface.surface_id for surface in profile.build_surfaces}
+    for mount in profile.mount_datums:
+        prefix = f"mount:{mount.mount_id}"
+        if not mount.mount_id:
+            errors.append("mount.missing_id")
+        if not mount.name:
+            errors.append(f"{prefix}.missing_name")
+        if mount.parent_link_id not in valid_links:
+            errors.append(f"{prefix}.unknown_parent:{mount.parent_link_id}")
+        if mount.build_surface_id not in surface_ids:
+            errors.append(f"{prefix}.unknown_build_surface:{mount.build_surface_id}")
+        _validate_mount_transform(mount, prefix, errors)
+
+
+def _validate_mount_transform(mount: MountDatum, prefix: str, errors: list[str]) -> None:
+    transform = mount.T_parent_from_mount
+    if transform is None:
+        errors.append(f"{prefix}.missing_transform")
+        return
+    if transform.source_frame != mount.mount_id:
+        errors.append(f"{prefix}.transform_source_mismatch")
+    if transform.target_frame != mount.parent_link_id:
+        errors.append(f"{prefix}.transform_target_mismatch")
+
+
+def _validate_machine_endpoints(
+    profile: MachineProfile,
+    child_to_joint: Mapping[str, JointSpec],
+    valid_links: set[str],
+    errors: list[str],
+) -> None:
+    endpoints = (
+        (profile.tool_link_id, "tool", "tool_link_id"),
+        (profile.workpiece_link_id, "workpiece", "workpiece_link_id"),
+    )
+    for endpoint, side, field_name in endpoints:
+        if endpoint is None:
+            continue
+        if endpoint not in valid_links:
+            errors.append(f"machine.unknown_{field_name}:{endpoint}")
+            continue
+        endpoint_joint = child_to_joint.get(endpoint)
+        if (
+            endpoint != profile.root_link_id
+            and endpoint_joint is not None
+            and endpoint_joint.motion_side != side
+        ):
+            errors.append(f"machine.invalid_{field_name}_side:{endpoint}")
 
 
 def _optional_float(value: Any) -> float | None:
@@ -809,7 +833,7 @@ def _optional_float(value: Any) -> float | None:
 
 
 def _mapping_array(value: Any, field_name: str) -> tuple[Mapping[str, Any], ...]:
-    if not isinstance(value, (list, tuple)):
+    if not isinstance(value, list | tuple):
         raise ValueError(f"Machine Profile {field_name} must be an array")
     result: list[Mapping[str, Any]] = []
     for index, item in enumerate(value):
@@ -847,9 +871,7 @@ def _duplicates(values: Iterable[str]) -> tuple[str, ...]:
 
 def _chain_errors(root_link_id: str, joints: tuple[JointSpec, ...]) -> list[str]:
     child_to_parent = {
-        joint.child_link_id: joint.parent_link_id
-        for joint in joints
-        if joint.child_link_id
+        joint.child_link_id: joint.parent_link_id for joint in joints if joint.child_link_id
     }
     errors: list[str] = []
     for child in sorted(child_to_parent):

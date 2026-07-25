@@ -1,15 +1,23 @@
+"""Shared CAD topology, selection, and viewer-overlay value types.
+
+CAD entities and ``PickHit.position_source`` use Source CS in millimetres.
+Overlay origins and axes are already expressed in the viewer display frame;
+renderers must not apply the model transform to them a second time.
+"""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-
 Vector3 = tuple[float, float, float]
 
 
 @dataclass(frozen=True, slots=True)
 class PickRequest:
+    """Constrain one pick mode; ``None`` allows every ID of the chosen kind."""
+
     kind: str
     allowed_ids: frozenset[str] | None = None
     multiple: bool = False
@@ -21,6 +29,8 @@ class PickRequest:
 
 @dataclass(frozen=True, slots=True)
 class PickHit:
+    """A hit resolved back to Source CS; position is None when unavailable."""
+
     kind: str
     entity_id: str
     position_source: Vector3 | None = None
@@ -28,6 +38,8 @@ class PickHit:
 
 @dataclass(frozen=True, slots=True)
 class CoordinateFrameOverlay:
+    """Display-space right-handed unit axes with a millimetre draw scale."""
+
     frame_id: str
     name: str
     origin: Vector3
@@ -40,6 +52,8 @@ class CoordinateFrameOverlay:
 
 @dataclass(frozen=True, slots=True)
 class BuildSurfaceOverlay:
+    """A display-space build plane whose physical dimensions are millimetres."""
+
     surface_id: str
     shape: str
     origin: Vector3 = (0.0, 0.0, 0.0)
@@ -58,7 +72,9 @@ class BoundingBox:
     @property
     def diagonal(self) -> float:
         return (
-            sum((right - left) ** 2 for left, right in zip(self.minimum, self.maximum))
+            sum(
+                (right - left) ** 2 for left, right in zip(self.minimum, self.maximum, strict=False)
+            )
             ** 0.5
         )
 
@@ -144,9 +160,7 @@ class FaceInfo:
             "edge_ids": list(self.edge_ids),
             "normal": None if self.normal is None else list(self.normal),
             "axis_origin": None if self.axis_origin is None else list(self.axis_origin),
-            "axis_direction": (
-                None if self.axis_direction is None else list(self.axis_direction)
-            ),
+            "axis_direction": (None if self.axis_direction is None else list(self.axis_direction)),
             "radius": self.radius,
             "secondary_radius": self.secondary_radius,
             "semi_angle_rad": self.semi_angle_rad,
@@ -190,14 +204,10 @@ class EdgeInfo:
                 else [list(self.endpoints[0]), list(self.endpoints[1])]
             ),
             "arc_length_midpoint": (
-                None
-                if self.arc_length_midpoint is None
-                else list(self.arc_length_midpoint)
+                None if self.arc_length_midpoint is None else list(self.arc_length_midpoint)
             ),
             "center": None if self.center is None else list(self.center),
-            "axis_direction": (
-                None if self.axis_direction is None else list(self.axis_direction)
-            ),
+            "axis_direction": (None if self.axis_direction is None else list(self.axis_direction)),
             "radius": self.radius,
             "signature": self.signature,
         }
@@ -263,9 +273,7 @@ class CadModel:
     vertices: list[VertexInfo] = field(default_factory=list)
     face_shapes: dict[str, Any] = field(default_factory=dict)
     vertex_shapes: dict[str, Any] = field(default_factory=dict)
-    units: CadUnitInfo = field(
-        default_factory=lambda: CadUnitInfo(source_length_unit="millimetre")
-    )
+    units: CadUnitInfo = field(default_factory=lambda: CadUnitInfo(source_length_unit="millimetre"))
     bounds: BoundingBox | None = None
     source_size_bytes: int | None = None
     source_mtime_ns: int | None = None

@@ -1,5 +1,10 @@
-"""5AxisSclicer V2.0 five-axis slicing workbench."""
+"""Five-axis additive manufacturing workbench."""
+
+from importlib.metadata import PackageNotFoundError, version
+
+try:
+    __version__ = version("five-axis-slicer")
+except PackageNotFoundError:  # Source checkout before installation.
+    __version__ = "2.0.0"
 
 __all__ = ["__version__"]
-
-__version__ = "0.1.0"

@@ -1,54 +1,46 @@
+"""Versioned project manifests and embedded source verification.
+
+Embedded STEP and G-code copies are authoritative when a project reopens;
+external paths are provenance for an explicit source update. The manifest is
+published with fsync and replace. A failed save may leave an unreferenced
+content-addressed copy, while the published manifest keeps its prior state.
+"""
+
 from __future__ import annotations
 
-from dataclasses import dataclass
-from datetime import datetime, timezone
-from enum import Enum
 import hmac
 import json
 import math
 import os
-from pathlib import Path
 import shutil
-import stat
-import tempfile
-from typing import Any, Callable, Iterable, Mapping, Sequence
+from collections.abc import Callable, Iterable, Mapping, Sequence
+from dataclasses import dataclass
+from datetime import datetime, timezone
+from enum import Enum
+from pathlib import Path
+from typing import Any, NoReturn
 
+from . import project_assets, project_storage
 from .gcode_preview import (
-    GCodeLoadCancelled,
     GCodePreview,
     GCodeSourceFingerprint,
-    GCodeSourceIntegrityError,
     PreviewSettings,
     load_gcode,
 )
 from .models import CadModel, SelectionState
-from .step_loader import StepLoadCancelled, StepLoadError, file_sha256, load_step
-
+from .project_contract import (
+    ProjectError,
+    ProjectFormatError,
+    ProjectIntegrityError,
+    ProjectLoadCancelled,
+    UnsupportedProjectVersionError,
+)
+from .step_loader import file_sha256, load_step
 
 PROJECT_VERSION = 2
 PROJECT_FILE_NAME = "project.json"
 V1_BACKUP_FILE_NAME = "project.v1.json"
 _SHA256_LENGTH = 64
-
-
-class ProjectError(RuntimeError):
-    """Base class for project persistence failures."""
-
-
-class ProjectFormatError(ProjectError):
-    """The project JSON structure or a persisted domain object is invalid."""
-
-
-class ProjectIntegrityError(ProjectError):
-    """An embedded file or immutable resource differs from its saved hash."""
-
-
-class UnsupportedProjectVersionError(ProjectFormatError):
-    """The project was written by a newer unsupported schema."""
-
-
-class ProjectLoadCancelled(ProjectError):
-    """A cooperative project verification or embedded STEP load was cancelled."""
 
 
 SetupLoader = Callable[[Mapping[str, Any]], Any]
@@ -86,6 +78,40 @@ class ProjectLoaded:
         return self.migrated_from_v1
 
 
+@dataclass(frozen=True, slots=True)
+class ProjectSaveDocument:
+    """Typed snapshot consumed by one project-save transaction."""
+
+    directory: Path
+    model: CadModel | None
+    selection: SelectionState
+    workbench: dict[str, Any]
+    gcode_preview: GCodePreview | None
+    preview_settings: PreviewSettings | None
+    result_preview_state: Any | None
+    setups: tuple[Any, ...]
+    operations: tuple[Any, ...]
+    resources: Any
+    original_source_path: Path | None
+
+
+@dataclass(frozen=True, slots=True)
+class _ProjectManifest:
+    project_json: Path
+    project_directory: Path
+    payload: dict[str, Any]
+    migrated_from_v1: bool
+
+
+@dataclass(frozen=True, slots=True)
+class _ProjectDomainState:
+    selection: SelectionState
+    workbench: dict[str, Any]
+    setups: tuple[Any, ...]
+    operations: tuple[Any, ...]
+    resources: Any
+
+
 def save_project(
     directory: str | Path,
     model: CadModel | None,
@@ -113,179 +139,232 @@ def save_project(
         raise TypeError("selection must be a SelectionState")
     if setup is not None and setups is not None:
         raise ValueError("pass setup or setups, not both")
+    document = ProjectSaveDocument(
+        directory=Path(directory),
+        model=model,
+        selection=selection,
+        workbench=dict(workbench_state or {}),
+        gcode_preview=gcode_preview,
+        preview_settings=preview_settings,
+        result_preview_state=result_preview_state,
+        setups=(setup,) if setup is not None else _collection_values(setups),
+        operations=_collection_values(operations),
+        resources={} if resources is None else resources,
+        original_source_path=(None if original_source_path is None else Path(original_source_path)),
+    )
+    return _save_project_document(document)
 
-    requested_project_dir = Path(os.path.abspath(Path(directory).expanduser()))
-    if _is_link_or_reparse(requested_project_dir):
-        raise ProjectIntegrityError(
-            "project directory must not be a link or reparse point"
-        )
-    requested_project_dir.mkdir(parents=True, exist_ok=True)
-    if _is_link_or_reparse(requested_project_dir):
-        raise ProjectIntegrityError(
-            "project directory changed to a link or reparse point"
-        )
-    project_dir = requested_project_dir.resolve()
+
+def _save_project_document(document: ProjectSaveDocument) -> Path:
+    project_dir, source_dir, output = _prepare_save_destination(document.directory)
+    try:
+        with project_storage.project_save_lock(project_dir):
+            return _save_project_document_locked(document, project_dir, source_dir, output)
+    except project_storage.StorageIntegrityError as exc:
+        raise ProjectIntegrityError(str(exc)) from exc
+
+
+def _save_project_document_locked(
+    document: ProjectSaveDocument,
+    project_dir: Path,
+    source_dir: Path,
+    output: Path,
+) -> Path:
+    previous_payload = _read_existing_for_save(output)
+    source_payload, model_payload = _embed_model_source(
+        document.model,
+        source_dir,
+        document.original_source_path,
+    )
+    gcode_payload = _embed_gcode_source(document.gcode_preview, source_dir)
+    setups, operations, resources = _serialize_domain_state(document)
+    created_at = _existing_created_at(previous_payload) or _utc_now()
+    payload = _build_project_manifest(
+        document,
+        created_at=created_at,
+        source_payload=source_payload,
+        model_payload=model_payload,
+        gcode_payload=gcode_payload,
+        setups=setups,
+        operations=operations,
+        resources=resources,
+    )
+    _backup_v1_manifest(project_dir, output, previous_payload)
+    _atomic_write_json(output, payload)
+    return output
+
+
+def _prepare_save_destination(
+    directory: Path,
+) -> tuple[Path, Path, Path]:
+    requested = Path(os.path.abspath(directory.expanduser()))
+    if _is_link_or_reparse(requested):
+        raise ProjectIntegrityError("project directory must not be a link or reparse point")
+    requested.mkdir(parents=True, exist_ok=True)
+    if _is_link_or_reparse(requested):
+        raise ProjectIntegrityError("project directory changed to a link or reparse point")
+    project_dir = requested.resolve()
     _assert_real_directory(
         project_dir,
         context="project directory must remain a controlled real directory",
     )
     source_dir = project_dir / "source"
-    preview_dir = project_dir / "preview"
     _prepare_project_subdirectory(project_dir, source_dir, "source")
-    _prepare_project_subdirectory(project_dir, preview_dir, "preview")
+    _prepare_project_subdirectory(project_dir, project_dir / "preview", "preview")
     output = project_dir / PROJECT_FILE_NAME
-    _assert_safe_publish_target(output, project_dir, "project.json")
+    _assert_safe_publish_target(output, project_dir, PROJECT_FILE_NAME)
+    return project_dir, source_dir, output
 
-    previous_payload = _read_existing_for_save(output)
-    created_at = _existing_created_at(previous_payload) or _utc_now()
 
-    source_payload: dict[str, Any] | None = None
-    model_payload: dict[str, Any] | None = None
-    if model is not None:
-        source_path = Path(model.source_path).expanduser().resolve()
-        if not source_path.is_file():
-            raise ProjectIntegrityError(f"STEP source does not exist: {source_path}")
-        actual_hash = file_sha256(source_path)
-        expected_hash = str(model.source_hash).lower()
-        if not _valid_sha256(expected_hash):
-            raise ProjectIntegrityError("CAD model has an invalid source hash")
-        if not hmac.compare_digest(actual_hash, expected_hash):
-            raise ProjectIntegrityError("STEP source changed after it was loaded")
-        source_copy = _content_addressed_path(
-            source_dir,
-            source_path,
-            actual_hash,
-        )
-        _atomic_copy(
-            source_path,
-            source_copy,
-            expected_sha256=actual_hash,
-        )
-        final_source_hash = file_sha256(source_path)
-        if not hmac.compare_digest(final_source_hash, expected_hash):
-            raise ProjectIntegrityError("STEP source changed while saving")
-        copied_hash = file_sha256(source_copy)
-        if not hmac.compare_digest(copied_hash, actual_hash):
-            raise ProjectIntegrityError("embedded STEP verification failed after copy")
-        source_payload = {
-            # The embedded copy remains authoritative for project reopen.  This
-            # provenance path is consulted only after an explicit user request
-            # to update the model from its external source.
-            "original_path": str(
-                source_path
-                if original_source_path is None
-                else Path(original_source_path).expanduser().resolve()
-            ),
-            "project_path": (Path("source") / source_copy.name).as_posix(),
-            "sha256": copied_hash,
-        }
-        model_payload = _model_payload(model)
-        _verify_persisted_topology(model_payload, model)
+def _embed_model_source(
+    model: CadModel | None,
+    source_dir: Path,
+    original_source_path: Path | None,
+) -> tuple[dict[str, Any] | None, dict[str, Any] | None]:
+    if model is None:
+        return None, None
+    source_path = Path(model.source_path).expanduser().resolve()
+    if not source_path.is_file():
+        raise ProjectIntegrityError(f"STEP source does not exist: {source_path}")
+    actual_hash = file_sha256(source_path)
+    expected_hash = str(model.source_hash).lower()
+    if not _valid_sha256(expected_hash):
+        raise ProjectIntegrityError("CAD model has an invalid source hash")
+    if not hmac.compare_digest(actual_hash, expected_hash):
+        raise ProjectIntegrityError("STEP source changed after it was loaded")
 
-    gcode_payload: dict[str, Any] | None = None
-    if gcode_preview is not None:
-        gcode_source = Path(gcode_preview.source_path).expanduser().resolve()
-        source_fingerprint = gcode_preview.source_fingerprint
-        project_path: str | None = None
-        source_hash: str | None = None
-        embedded_fingerprint: GCodeSourceFingerprint | None = None
-        if isinstance(source_fingerprint, GCodeSourceFingerprint) and not (
-            gcode_source.is_file()
-        ):
-            raise ProjectIntegrityError(
-                "verified G-code source no longer exists; reload it before saving"
-            )
-        if gcode_source.is_file():
-            if not isinstance(source_fingerprint, GCodeSourceFingerprint):
-                raise ProjectIntegrityError(
-                    "G-code source fingerprint is missing; reload the source before saving"
-                )
-            _verify_gcode_source_fingerprint(
-                gcode_source,
-                source_fingerprint,
-                context="G-code source changed after it was loaded",
-            )
-            gcode_copy = _content_addressed_path(
-                source_dir,
-                gcode_source,
-                source_fingerprint.sha256,
-            )
-            _atomic_copy(
-                gcode_source,
-                gcode_copy,
-                expected_sha256=source_fingerprint.sha256,
-            )
-            _verify_gcode_source_fingerprint(
-                gcode_source,
-                source_fingerprint,
-                context="G-code source changed while saving",
-            )
-            embedded_fingerprint = _stable_file_fingerprint(
-                gcode_copy,
-                expected_sha256=source_fingerprint.sha256,
-                context="embedded G-code verification failed after copy",
-            )
-            source_hash = embedded_fingerprint.sha256
-            project_path = (Path("source") / gcode_copy.name).as_posix()
-        gcode_payload = {
-            "original_path": str(gcode_source),
-            "project_path": project_path,
-            "sha256": source_hash,
-            "source_fingerprint": (
-                None if embedded_fingerprint is None else embedded_fingerprint.to_json()
-            ),
-            "summary": _json_value(gcode_preview.summary(), path="gcode.summary"),
-        }
+    source_copy = _content_addressed_path(source_dir, source_path, actual_hash)
+    _atomic_copy(source_path, source_copy, expected_sha256=actual_hash)
+    if not hmac.compare_digest(file_sha256(source_path), expected_hash):
+        raise ProjectIntegrityError("STEP source changed while saving")
+    copied_hash = file_sha256(source_copy)
+    if not hmac.compare_digest(copied_hash, actual_hash):
+        raise ProjectIntegrityError("embedded STEP verification failed after copy")
 
-    setup_values = (setup,) if setup is not None else _collection_values(setups)
-    operation_values = _collection_values(operations)
-    serialized_setups = [
-        _json_value(value, path=f"setups[{index}]")
-        for index, value in enumerate(setup_values)
-    ]
-    serialized_operations = [
-        _json_value(value, path=f"operations[{index}]")
-        for index, value in enumerate(operation_values)
-    ]
-    serialized_resources = _json_value(
-        {} if resources is None else resources,
-        path="resources",
+    model_payload = _model_payload(model)
+    project_assets.verify_persisted_topology(model_payload, model)
+    provenance = (
+        source_path if original_source_path is None else original_source_path.expanduser().resolve()
     )
-    _validate_no_persisted_setup_drafts(serialized_setups)
-    _validate_setup_resource_mirror(serialized_setups, serialized_resources)
+    source_payload = {
+        "original_path": str(provenance),
+        "project_path": (Path("source") / source_copy.name).as_posix(),
+        "sha256": copied_hash,
+    }
+    return source_payload, model_payload
 
+
+def _embed_gcode_source(preview: GCodePreview | None, source_dir: Path) -> dict[str, Any] | None:
+    if preview is None:
+        return None
+    source = Path(preview.source_path).expanduser().resolve()
+    fingerprint = preview.source_fingerprint
+    if isinstance(fingerprint, GCodeSourceFingerprint) and not source.is_file():
+        raise ProjectIntegrityError(
+            "verified G-code source no longer exists; reload it before saving"
+        )
+
+    embedded: GCodeSourceFingerprint | None = None
+    project_path: str | None = None
+    if source.is_file():
+        if not isinstance(fingerprint, GCodeSourceFingerprint):
+            raise ProjectIntegrityError(
+                "G-code source fingerprint is missing; reload the source before saving"
+            )
+        _verify_gcode_source_fingerprint(
+            source,
+            fingerprint,
+            context="G-code source changed after it was loaded",
+        )
+        destination = _content_addressed_path(source_dir, source, fingerprint.sha256)
+        _atomic_copy(source, destination, expected_sha256=fingerprint.sha256)
+        _verify_gcode_source_fingerprint(
+            source,
+            fingerprint,
+            context="G-code source changed while saving",
+        )
+        embedded = _stable_file_fingerprint(
+            destination,
+            expected_sha256=fingerprint.sha256,
+            context="embedded G-code verification failed after copy",
+        )
+        project_path = (Path("source") / destination.name).as_posix()
+
+    return {
+        "original_path": str(source),
+        "project_path": project_path,
+        "sha256": None if embedded is None else embedded.sha256,
+        "source_fingerprint": None if embedded is None else embedded.to_json(),
+        "summary": _json_value(preview.summary(), path="gcode.summary"),
+    }
+
+
+def _serialize_domain_state(
+    document: ProjectSaveDocument,
+) -> tuple[list[Any], list[Any], Any]:
+    setups = [
+        _json_value(value, path=f"setups[{index}]") for index, value in enumerate(document.setups)
+    ]
+    operations = [
+        _json_value(value, path=f"operations[{index}]")
+        for index, value in enumerate(document.operations)
+    ]
+    resources = _json_value(document.resources, path="resources")
+    _validate_no_persisted_setup_drafts(setups)
+    _validate_setup_resource_mirror(setups, resources)
+    return setups, operations, resources
+
+
+def _build_project_manifest(
+    document: ProjectSaveDocument,
+    *,
+    created_at: str,
+    source_payload: dict[str, Any] | None,
+    model_payload: dict[str, Any] | None,
+    gcode_payload: dict[str, Any] | None,
+    setups: list[Any],
+    operations: list[Any],
+    resources: Any,
+) -> dict[str, Any]:
     payload: dict[str, Any] = {
         "version": PROJECT_VERSION,
         "created_at": created_at,
         "updated_at": _utc_now(),
-        "workbench": _json_value(workbench_state or {}, path="workbench"),
+        "workbench": _json_value(document.workbench, path="workbench"),
         "source": source_payload,
         "gcode": gcode_payload,
         "model": model_payload,
-        "selection": selection.to_json(),
-        "setups": serialized_setups,
-        "operations": serialized_operations,
-        "resources": serialized_resources,
-        # Retained for readers of the teaching-preview v1 format.
+        "selection": document.selection.to_json(),
+        "setups": setups,
+        "operations": operations,
+        "resources": resources,
+        # Schema v1 readers still inspect this field.
         "manufacturable_feature_groups": [],
         "preview": {
             "glb": None,
-            "gcode": None if preview_settings is None else preview_settings.to_json(),
+            "gcode": (
+                None if document.preview_settings is None else document.preview_settings.to_json()
+            ),
         },
     }
-    if result_preview_state is not None:
+    if document.result_preview_state is not None:
         payload["result_preview"] = _json_value(
-            result_preview_state,
+            document.result_preview_state,
             path="result_preview",
         )
+    return payload
 
-    if previous_payload is not None and previous_payload.get("version") == 1:
-        backup = project_dir / V1_BACKUP_FILE_NAME
-        if not backup.exists():
-            _atomic_copy(output, backup)
 
-    _atomic_write_json(output, payload)
-    return output
+def _backup_v1_manifest(
+    project_dir: Path,
+    output: Path,
+    previous_payload: Mapping[str, Any] | None,
+) -> None:
+    if previous_payload is None or previous_payload.get("version") != 1:
+        return
+    backup = project_dir / V1_BACKUP_FILE_NAME
+    if not backup.exists():
+        _atomic_copy(output, backup)
 
 
 def load_project(
@@ -299,6 +378,61 @@ def load_project(
 ) -> ProjectLoaded:
     """Load and verify a v1 or v2 project without reading original paths."""
 
+    manifest = _load_project_manifest(path, cancel_check, progress_callback)
+    model = project_assets.load_embedded_model(
+        manifest.project_directory,
+        manifest.payload,
+        length_unit_override=length_unit_override,
+        cancel_check=cancel_check,
+        progress_callback=progress_callback,
+        verify_topology=not manifest.migrated_from_v1,
+        hash_file=file_sha256,
+        step_loader=load_step,
+    )
+    _raise_if_load_cancelled(cancel_check)
+    gcode_preview = project_assets.load_embedded_gcode(
+        manifest.project_directory,
+        manifest.payload,
+        cancel_check=cancel_check,
+        progress_callback=progress_callback,
+        gcode_loader=load_gcode,
+    )
+    _raise_if_load_cancelled(cancel_check)
+    project_assets.verify_optional_project_files(
+        manifest.project_directory,
+        manifest.payload,
+        cancel_check=cancel_check,
+    )
+    _report_load_progress(progress_callback, "project_domain", 0.88)
+    domain = _load_project_domain(
+        manifest.payload,
+        setup_loader=setup_loader,
+        operation_loader=operation_loader,
+        cancel_check=cancel_check,
+    )
+
+    loaded = ProjectLoaded(
+        project_directory=manifest.project_directory,
+        project_json=manifest.project_json,
+        model=model,
+        selection=domain.selection,
+        workbench=domain.workbench,
+        setups=domain.setups,
+        operations=domain.operations,
+        resources=domain.resources,
+        migrated_from_v1=manifest.migrated_from_v1,
+        payload=manifest.payload,
+        gcode_preview=gcode_preview,
+    )
+    _report_load_progress(progress_callback, "project_ready", 1.0)
+    return loaded
+
+
+def _load_project_manifest(
+    path: str | Path,
+    cancel_check: CancelCheck | None,
+    progress_callback: ProgressCallback | None,
+) -> _ProjectManifest:
     _raise_if_load_cancelled(cancel_check)
     _report_load_progress(progress_callback, "project_metadata", 0.02)
     project_json = _resolve_project_json(path)
@@ -311,90 +445,70 @@ def load_project(
         )
     if version < 1:
         raise UnsupportedProjectVersionError(f"unsupported project schema {version}")
-
-    migrated_from_v1 = version == 1
-    payload = _migrate_v1_payload(raw_payload) if migrated_from_v1 else raw_payload
+    migrated = version == 1
+    payload = _migrate_v1_payload(raw_payload) if migrated else raw_payload
     _validate_v2_root(payload)
-    _validate_setup_resource_mirror(
-        payload["setups"],
-        payload["resources"],
-    )
-    project_dir = project_json.parent.resolve()
+    _validate_setup_resource_mirror(payload["setups"], payload["resources"])
     _report_load_progress(progress_callback, "project_metadata", 0.08)
+    return _ProjectManifest(
+        project_json=project_json,
+        project_directory=project_json.parent.resolve(),
+        payload=payload,
+        migrated_from_v1=migrated,
+    )
 
-    model = _load_embedded_model(
-        project_dir,
-        payload,
-        length_unit_override=length_unit_override,
-        cancel_check=cancel_check,
-        progress_callback=progress_callback,
-        verify_topology=not migrated_from_v1,
-    )
-    _raise_if_load_cancelled(cancel_check)
-    gcode_preview = _load_embedded_gcode(
-        project_dir,
-        payload,
-        cancel_check=cancel_check,
-        progress_callback=progress_callback,
-    )
-    _raise_if_load_cancelled(cancel_check)
-    _verify_optional_project_files(
-        project_dir,
-        payload,
-        cancel_check=cancel_check,
-    )
-    _report_load_progress(progress_callback, "project_domain", 0.88)
 
+def _load_project_domain(
+    payload: Mapping[str, Any],
+    *,
+    setup_loader: SetupLoader | None,
+    operation_loader: OperationLoader | None,
+    cancel_check: CancelCheck | None,
+) -> _ProjectDomainState:
     try:
         _raise_if_load_cancelled(cancel_check)
-        selection = SelectionState.from_json(payload.get("selection"))
-        workbench_payload = payload.get("workbench", {})
-        if not isinstance(workbench_payload, Mapping):
+        workbench = payload.get("workbench", {})
+        setups = payload.get("setups", [])
+        operations = payload.get("operations", [])
+        if not isinstance(workbench, Mapping):
             raise ValueError("workbench must be an object")
-        workbench = _json_clone(workbench_payload)
-
-        setup_values = payload.get("setups", [])
-        operation_values = payload.get("operations", [])
-        if not isinstance(setup_values, list):
+        if not isinstance(setups, list):
             raise ValueError("setups must be an array")
-        if not isinstance(operation_values, list):
+        if not isinstance(operations, list):
             raise ValueError("operations must be an array")
-        resolved_setup_loader = setup_loader or _default_setup_loader
-        resolved_operation_loader = operation_loader or _default_operation_loader
-        loaded_setups = tuple(
-            _load_domain_item(item, resolved_setup_loader, f"setups[{index}]")
-            for index, item in enumerate(setup_values)
+        loaded_setups = _load_domain_array(
+            setups,
+            setup_loader or _default_setup_loader,
+            "setups",
         )
         _raise_if_load_cancelled(cancel_check)
-        loaded_operations = tuple(
-            _load_domain_item(
-                item,
-                resolved_operation_loader,
-                f"operations[{index}]",
-            )
-            for index, item in enumerate(operation_values)
+        loaded_operations = _load_domain_array(
+            operations,
+            operation_loader or _default_operation_loader,
+            "operations",
         )
         _validate_unique_operation_ids(loaded_operations)
-        resources = _load_resource_state(payload.get("resources", {}))
+        state = _ProjectDomainState(
+            selection=SelectionState.from_json(payload.get("selection")),
+            workbench=_json_clone(workbench),
+            setups=loaded_setups,
+            operations=loaded_operations,
+            resources=_load_resource_state(payload.get("resources", {})),
+        )
         _raise_if_load_cancelled(cancel_check)
+        return state
     except Exception as exc:
         _raise_domain_load_error(exc)
 
-    loaded = ProjectLoaded(
-        project_directory=project_dir,
-        project_json=project_json,
-        model=model,
-        selection=selection,
-        workbench=workbench,
-        setups=loaded_setups,
-        operations=loaded_operations,
-        resources=resources,
-        migrated_from_v1=migrated_from_v1,
-        payload=payload,
-        gcode_preview=gcode_preview,
+
+def _load_domain_array(
+    values: Sequence[Any],
+    loader: Callable[[Mapping[str, Any]], Any],
+    field: str,
+) -> tuple[Any, ...]:
+    return tuple(
+        _load_domain_item(item, loader, f"{field}[{index}]") for index, item in enumerate(values)
     )
-    _report_load_progress(progress_callback, "project_ready", 1.0)
-    return loaded
 
 
 def _utc_now() -> str:
@@ -433,7 +547,7 @@ def _model_payload(model: CadModel) -> dict[str, Any]:
 def _collection_values(value: Iterable[Any] | Any | None) -> tuple[Any, ...]:
     if value is None:
         return ()
-    if isinstance(value, (str, bytes, bytearray, Mapping)) or hasattr(value, "to_json"):
+    if isinstance(value, str | bytes | bytearray | Mapping) or hasattr(value, "to_json"):
         return (value,)
     try:
         return tuple(value)
@@ -442,32 +556,37 @@ def _collection_values(value: Iterable[Any] | Any | None) -> tuple[Any, ...]:
 
 
 def _json_value(value: Any, *, path: str) -> Any:
-    if hasattr(value, "to_json") and not isinstance(value, Mapping):
-        value = value.to_json()
-    elif isinstance(value, Enum):
-        value = value.value
-    elif isinstance(value, Path):
-        value = str(value)
-
-    if value is None or isinstance(value, (str, bool, int)):
+    value = _json_adapt(value)
+    if value is None or isinstance(value, str | bool | int):
         return value
     if isinstance(value, float):
         if not math.isfinite(value):
             raise ValueError(f"{path} contains a non-finite number")
         return 0.0 if value == 0.0 else value
     if isinstance(value, Mapping):
-        output: dict[str, Any] = {}
-        for key, item in value.items():
-            if not isinstance(key, str):
-                raise TypeError(f"{path} contains a non-string mapping key")
-            output[key] = _json_value(item, path=f"{path}.{key}")
-        return output
-    if isinstance(value, Sequence) and not isinstance(value, (str, bytes, bytearray)):
-        return [
-            _json_value(item, path=f"{path}[{index}]")
-            for index, item in enumerate(value)
-        ]
+        return _json_mapping(value, path)
+    if isinstance(value, Sequence) and not isinstance(value, str | bytes | bytearray):
+        return [_json_value(item, path=f"{path}[{index}]") for index, item in enumerate(value)]
     raise TypeError(f"{path} contains unsupported value type {type(value).__name__}")
+
+
+def _json_adapt(value: Any) -> Any:
+    if hasattr(value, "to_json") and not isinstance(value, Mapping):
+        return value.to_json()
+    if isinstance(value, Enum):
+        return value.value
+    if isinstance(value, Path):
+        return str(value)
+    return value
+
+
+def _json_mapping(value: Mapping[Any, Any], path: str) -> dict[str, Any]:
+    output: dict[str, Any] = {}
+    for key, item in value.items():
+        if not isinstance(key, str):
+            raise TypeError(f"{path} contains a non-string mapping key")
+        output[key] = _json_value(item, path=f"{path}.{key}")
+    return output
 
 
 def _json_clone(value: Any) -> Any:
@@ -594,310 +713,6 @@ def _validate_setup_resource_mirror(setups: Any, resources: Any) -> None:
             )
 
 
-def _load_embedded_model(
-    project_dir: Path,
-    payload: Mapping[str, Any],
-    *,
-    length_unit_override: str | None,
-    cancel_check: CancelCheck | None,
-    progress_callback: ProgressCallback | None,
-    verify_topology: bool,
-) -> CadModel | None:
-    _raise_if_load_cancelled(cancel_check)
-    source = payload.get("source")
-    model_payload = payload.get("model")
-    if source is None:
-        if model_payload is not None:
-            raise ProjectFormatError("model metadata exists without an embedded source")
-        return None
-    if not isinstance(source, Mapping):
-        raise ProjectFormatError("source must be an object or null")
-    embedded = _safe_project_file(project_dir, source.get("project_path"), "source")
-    expected_hash = source.get("sha256")
-    if not isinstance(expected_hash, str) or not _valid_sha256(expected_hash.lower()):
-        raise ProjectFormatError("source.sha256 must be a SHA-256 value")
-    _report_load_progress(progress_callback, "project_source_hash", 0.12)
-    actual_hash = file_sha256(embedded, cancel_check=cancel_check)
-    if not hmac.compare_digest(actual_hash, expected_hash.lower()):
-        raise ProjectIntegrityError(
-            f"embedded STEP hash mismatch: expected {expected_hash.lower()}, "
-            f"calculated {actual_hash}"
-        )
-    persisted_units: Mapping[str, Any] | None = None
-    if isinstance(model_payload, Mapping) and isinstance(
-        model_payload.get("units"), Mapping
-    ):
-        persisted_units = model_payload["units"]
-    override_applied = False
-    if persisted_units is not None:
-        persisted_override = persisted_units.get("override_applied", False)
-        if not isinstance(persisted_override, bool):
-            raise ProjectFormatError("model.units.override_applied must be a boolean")
-        override_applied = persisted_override
-    effective_override = length_unit_override
-    if effective_override is None and persisted_units is not None:
-        if override_applied:
-            stored_unit = persisted_units.get("source_length_unit")
-            if isinstance(stored_unit, str) and stored_unit.strip():
-                effective_override = stored_unit
-    _raise_if_load_cancelled(cancel_check)
-    _report_load_progress(progress_callback, "project_step", 0.20)
-    try:
-        model = load_step(
-            embedded,
-            length_unit_override=effective_override,
-            cancel_check=cancel_check,
-        )
-    except StepLoadCancelled as exc:
-        raise ProjectLoadCancelled("project STEP loading cancelled") from exc
-    except StepLoadError as exc:
-        raise ProjectIntegrityError(
-            f"embedded STEP cannot be loaded: {embedded}"
-        ) from exc
-    _raise_if_load_cancelled(cancel_check)
-    _report_load_progress(progress_callback, "project_step", 0.82)
-    if not hmac.compare_digest(model.source_hash, expected_hash.lower()):
-        raise ProjectIntegrityError("embedded STEP changed during project loading")
-    if persisted_units is not None:
-        saved_scale = persisted_units.get("scale_to_mm")
-        if isinstance(saved_scale, (int, float)) and not math.isclose(
-            model.units.scale_to_mm,
-            float(saved_scale),
-            rel_tol=0.0,
-            abs_tol=1.0e-12,
-        ):
-            raise ProjectIntegrityError(
-                "embedded STEP unit conversion differs from the project"
-            )
-    if verify_topology:
-        _verify_persisted_topology(model_payload, model)
-    return model
-
-
-def _verify_persisted_topology(model_payload: Any, model: CadModel) -> None:
-    """Verify that persisted stable references still describe the STEP model."""
-
-    if not isinstance(model_payload, Mapping):
-        raise ProjectFormatError(
-            "schema-v2 source requires persisted model topology metadata"
-        )
-    specifications = (
-        ("bodies", "body_count", model.bodies, "body_id"),
-        ("faces", "face_count", model.faces, "face_id"),
-        ("edges", "edge_count", model.edges, "edge_id"),
-        ("vertices", "vertex_count", model.vertices, "vertex_id"),
-    )
-    for (
-        collection_name,
-        count_name,
-        actual_items,
-        identifier_attribute,
-    ) in specifications:
-        persisted_count = model_payload.get(count_name)
-        if (
-            isinstance(persisted_count, bool)
-            or not isinstance(persisted_count, int)
-            or persisted_count < 0
-        ):
-            raise ProjectFormatError(
-                f"model.{count_name} must be a non-negative integer"
-            )
-        persisted_items = model_payload.get(collection_name)
-        if not isinstance(persisted_items, list):
-            raise ProjectFormatError(f"model.{collection_name} must be an array")
-        if persisted_count != len(persisted_items):
-            raise ProjectIntegrityError(
-                f"persisted {collection_name} count does not match its topology array"
-            )
-        if persisted_count != len(actual_items):
-            raise ProjectIntegrityError(
-                f"persisted {collection_name} count differs from embedded STEP"
-            )
-        persisted_signatures = _persisted_topology_signatures(
-            persisted_items,
-            collection_name,
-        )
-        actual_signatures = _actual_topology_signatures(
-            actual_items,
-            collection_name,
-            identifier_attribute,
-        )
-        if persisted_signatures == actual_signatures:
-            continue
-        if persisted_signatures.keys() != actual_signatures.keys():
-            detail = "IDs"
-        else:
-            detail = "signatures"
-        raise ProjectIntegrityError(
-            f"persisted {collection_name} {detail} differ from embedded STEP"
-        )
-
-
-def _persisted_topology_signatures(
-    items: Sequence[Any],
-    collection_name: str,
-) -> dict[str, str]:
-    signatures: dict[str, str] = {}
-    for index, item in enumerate(items):
-        path = f"model.{collection_name}[{index}]"
-        if not isinstance(item, Mapping):
-            raise ProjectFormatError(f"{path} must be an object")
-        identifier = item.get("id")
-        signature = item.get("signature")
-        if not isinstance(identifier, str) or not identifier.strip():
-            raise ProjectFormatError(f"{path}.id must be a non-empty string")
-        if not isinstance(signature, str) or not _valid_sha256(signature):
-            raise ProjectFormatError(f"{path}.signature must be a SHA-256 value")
-        if identifier in signatures:
-            raise ProjectFormatError(
-                f"model.{collection_name} contains duplicate ID {identifier!r}"
-            )
-        signatures[identifier] = signature
-    return signatures
-
-
-def _actual_topology_signatures(
-    items: Sequence[Any],
-    collection_name: str,
-    identifier_attribute: str,
-) -> dict[str, str]:
-    signatures: dict[str, str] = {}
-    for item in items:
-        identifier = getattr(item, identifier_attribute, None)
-        signature = getattr(item, "signature", None)
-        if (
-            not isinstance(identifier, str)
-            or not identifier.strip()
-            or not isinstance(signature, str)
-            or not _valid_sha256(signature)
-            or identifier in signatures
-        ):
-            raise ProjectIntegrityError(
-                f"embedded STEP produced invalid {collection_name} identity metadata"
-            )
-        signatures[identifier] = signature
-    return signatures
-
-
-def _verify_optional_project_files(
-    project_dir: Path,
-    payload: Mapping[str, Any],
-    *,
-    cancel_check: CancelCheck | None,
-) -> None:
-    _raise_if_load_cancelled(cancel_check)
-    preview = payload.get("preview")
-    if isinstance(preview, Mapping) and preview.get("glb") is not None:
-        _safe_project_file(project_dir, preview.get("glb"), "preview.glb")
-    _raise_if_load_cancelled(cancel_check)
-
-
-def _load_embedded_gcode(
-    project_dir: Path,
-    payload: Mapping[str, Any],
-    *,
-    cancel_check: CancelCheck | None,
-    progress_callback: ProgressCallback | None,
-) -> GCodePreview | None:
-    """Verify and parse the authoritative project-local G-code copy."""
-
-    _raise_if_load_cancelled(cancel_check)
-    gcode = payload.get("gcode")
-    if gcode is None:
-        return None
-    if not isinstance(gcode, Mapping):
-        raise ProjectFormatError("gcode must be an object or null")
-
-    project_path = gcode.get("project_path")
-    if project_path is None:
-        return None
-    embedded = _safe_project_file(project_dir, project_path, "gcode")
-    expected_hash = gcode.get("sha256")
-    if not isinstance(expected_hash, str) or not _valid_sha256(expected_hash.lower()):
-        raise ProjectFormatError("gcode.sha256 must be a SHA-256 value")
-    expected_hash = expected_hash.lower()
-
-    manifest_fingerprint: GCodeSourceFingerprint | None = None
-    fingerprint_payload = gcode.get("source_fingerprint")
-    if fingerprint_payload is not None:
-        if not isinstance(fingerprint_payload, Mapping):
-            raise ProjectFormatError("gcode.source_fingerprint must be an object")
-        try:
-            manifest_fingerprint = GCodeSourceFingerprint.from_json(fingerprint_payload)
-        except (TypeError, ValueError) as exc:
-            raise ProjectFormatError("gcode.source_fingerprint is invalid") from exc
-        if not hmac.compare_digest(manifest_fingerprint.sha256, expected_hash):
-            raise ProjectIntegrityError(
-                "G-code manifest fingerprint diverges from gcode.sha256"
-            )
-
-    _report_load_progress(progress_callback, "project_gcode_hash", 0.83)
-
-    summary = gcode.get("summary", {})
-    if not isinstance(summary, Mapping):
-        raise ProjectFormatError("gcode.summary must be an object")
-    controller_semantics = summary.get("controller_semantics")
-    if controller_semantics is not None and (
-        not isinstance(controller_semantics, str) or not controller_semantics.strip()
-    ):
-        raise ProjectFormatError(
-            "gcode.summary.controller_semantics must be a non-empty string or null"
-        )
-
-    def report_gcode(fraction: float, phase: str = "gcode") -> None:
-        mapped = 0.83 + max(0.0, min(1.0, float(fraction))) * 0.04
-        _report_load_progress(progress_callback, f"project_gcode_{phase}", mapped)
-
-    try:
-        preview = load_gcode(
-            embedded,
-            progress_callback=report_gcode,
-            cancel_check=cancel_check,
-            source_sha256=expected_hash,
-            controller_semantics=controller_semantics,
-        )
-    except GCodeLoadCancelled as exc:
-        raise ProjectLoadCancelled("project G-code loading cancelled") from exc
-    except GCodeSourceIntegrityError as exc:
-        raise ProjectIntegrityError("embedded G-code hash mismatch") from exc
-    except (OSError, UnicodeError, ValueError) as exc:
-        raise ProjectIntegrityError(
-            f"embedded G-code cannot be loaded: {embedded}"
-        ) from exc
-
-    _raise_if_load_cancelled(cancel_check)
-    loaded_fingerprint = preview.source_fingerprint
-    if not isinstance(loaded_fingerprint, GCodeSourceFingerprint):
-        raise ProjectIntegrityError("loaded G-code has no verified source fingerprint")
-    if manifest_fingerprint is not None and (
-        not hmac.compare_digest(
-            loaded_fingerprint.sha256,
-            manifest_fingerprint.sha256,
-        )
-        or loaded_fingerprint.size_bytes != manifest_fingerprint.size_bytes
-    ):
-        raise ProjectIntegrityError("embedded G-code fingerprint mismatch")
-    return preview
-
-
-def _safe_project_file(project_dir: Path, value: Any, field: str) -> Path:
-    if not isinstance(value, str) or not value.strip():
-        raise ProjectFormatError(f"{field}.project_path must be a relative path")
-    relative = Path(value)
-    if relative.is_absolute() or relative.drive or relative.root:
-        raise ProjectIntegrityError(f"{field} path must stay inside the project")
-    candidate = (project_dir / relative).resolve()
-    try:
-        candidate.relative_to(project_dir)
-    except ValueError as exc:
-        raise ProjectIntegrityError(
-            f"{field} path escapes the project directory"
-        ) from exc
-    if not candidate.is_file():
-        raise ProjectIntegrityError(f"embedded {field} file does not exist: {value}")
-    return candidate
-
-
 def _default_setup_loader(payload: Mapping[str, Any]) -> Any:
     from .manufacturing.setup import ManufacturingSetup
 
@@ -916,9 +731,7 @@ def _default_operation_loader(payload: Mapping[str, Any]) -> Any:
     return TubeOperationDefinition.from_json(payload)
 
 
-def _load_domain_item(
-    value: Any, loader: Callable[[Mapping[str, Any]], Any], path: str
-) -> Any:
+def _load_domain_item(value: Any, loader: Callable[[Mapping[str, Any]], Any], path: str) -> Any:
     if not isinstance(value, Mapping):
         raise ValueError(f"{path} must be an object")
     return loader(value)
@@ -931,9 +744,7 @@ def _validate_unique_operation_ids(operations: Sequence[Any]) -> None:
         if operation_id is None and isinstance(operation, Mapping):
             operation_id = operation.get("operation_id")
         if not isinstance(operation_id, str) or not operation_id.strip():
-            raise ValueError(
-                f"operations[{index}].operation_id must be a non-empty string"
-            )
+            raise ValueError(f"operations[{index}].operation_id must be a non-empty string")
         canonical_id = operation_id.strip()
         if canonical_id in seen:
             raise ValueError(f"duplicate operation_id: {canonical_id}")
@@ -959,7 +770,7 @@ def _load_resource_state(value: Any) -> Any:
     return {str(key): _load_resource_state(item) for key, item in value.items()}
 
 
-def _raise_domain_load_error(exc: Exception) -> None:
+def _raise_domain_load_error(exc: Exception) -> NoReturn:
     if exc.__class__.__name__ == "ResourceIntegrityError":
         raise ProjectIntegrityError("resource snapshot integrity check failed") from exc
     if isinstance(exc, ProjectError):
@@ -980,23 +791,14 @@ def _content_addressed_path(directory: Path, source: Path, digest: str) -> Path:
 
 
 def _is_link_or_reparse(path: Path) -> bool:
-    if path.is_symlink():
-        return True
-    is_junction = getattr(path, "is_junction", None)
-    if callable(is_junction) and bool(is_junction()):
-        return True
-    try:
-        attributes = int(getattr(path.lstat(), "st_file_attributes", 0))
-    except FileNotFoundError:
-        return False
-    reparse_flag = int(getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0))
-    return bool(reparse_flag and attributes & reparse_flag)
+    return project_storage.is_link_or_reparse(path)
 
 
 def _assert_real_directory(path: Path, *, context: str) -> None:
-    absolute = Path(os.path.abspath(path))
-    if _is_link_or_reparse(absolute) or not absolute.is_dir():
-        raise ProjectIntegrityError(context)
+    try:
+        project_storage.assert_real_directory(path, context=context)
+    except project_storage.StorageIntegrityError as exc:
+        raise ProjectIntegrityError(str(exc)) from exc
 
 
 def _prepare_project_subdirectory(
@@ -1004,29 +806,10 @@ def _prepare_project_subdirectory(
     directory: Path,
     name: str,
 ) -> None:
-    _assert_real_directory(
-        project_dir,
-        context="project directory changed to a link or reparse point",
-    )
-    if directory.parent != project_dir:
-        raise ProjectIntegrityError(f"project {name}/ path escapes the project")
-    if _is_link_or_reparse(directory):
-        raise ProjectIntegrityError(
-            f"project {name}/ directory must not be a link or reparse point"
-        )
-    if directory.exists() and not directory.is_dir():
-        raise ProjectIntegrityError(f"project {name}/ path must be a directory")
-    directory.mkdir(parents=False, exist_ok=True)
-    _assert_real_directory(
-        directory,
-        context=f"project {name}/ directory must remain inside the project",
-    )
     try:
-        directory.resolve().relative_to(project_dir)
-    except ValueError as exc:
-        raise ProjectIntegrityError(
-            f"project {name}/ directory escapes the project"
-        ) from exc
+        project_storage.prepare_subdirectory(project_dir, directory, name)
+    except project_storage.StorageIntegrityError as exc:
+        raise ProjectIntegrityError(str(exc)) from exc
 
 
 def _assert_safe_publish_target(
@@ -1034,19 +817,10 @@ def _assert_safe_publish_target(
     allowed_parent: Path,
     name: str,
 ) -> None:
-    absolute = Path(os.path.abspath(destination))
     try:
-        absolute.parent.relative_to(allowed_parent)
-    except ValueError as exc:
-        raise ProjectIntegrityError(f"{name} target escapes the project") from exc
-    _assert_real_directory(
-        absolute.parent,
-        context=f"{name} parent must remain a controlled real directory",
-    )
-    if _is_link_or_reparse(absolute):
-        raise ProjectIntegrityError(
-            f"{name} target must not be a link or reparse point"
-        )
+        project_storage.assert_safe_publish_target(destination, allowed_parent, name)
+    except project_storage.StorageIntegrityError as exc:
+        raise ProjectIntegrityError(str(exc)) from exc
 
 
 def _stable_file_fingerprint(
@@ -1097,115 +871,25 @@ def _atomic_copy(
     expected_sha256: str | None = None,
 ) -> None:
     """Publish a copy only after its staged bytes match the content address."""
-
-    source = source.resolve()
-    destination = Path(os.path.abspath(destination))
-    if expected_sha256 is not None:
-        expected_sha256 = str(expected_sha256).lower()
-        if not _valid_sha256(expected_sha256):
-            raise ProjectIntegrityError("copy digest must be a SHA-256 value")
-    _assert_real_directory(
-        destination.parent,
-        context="copy destination parent must remain a controlled real directory",
-    )
-    if _is_link_or_reparse(destination):
-        raise ProjectIntegrityError(
-            "copy destination must not be a link or reparse point"
-        )
-    if destination.exists() and source == destination.resolve():
-        if expected_sha256 is not None:
-            _stable_file_fingerprint(
-                source,
-                expected_sha256=expected_sha256,
-                context="content-addressed source verification failed",
-            )
-        return
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    _assert_real_directory(
-        destination.parent,
-        context="copy destination parent must remain a controlled real directory",
-    )
-    if expected_sha256 is not None and destination.is_file():
-        try:
-            _stable_file_fingerprint(
-                destination,
-                expected_sha256=expected_sha256,
-                context="existing content-addressed copy is invalid",
-            )
-        except (FileNotFoundError, ProjectIntegrityError):
-            pass
-        else:
-            return
-    file_descriptor, temporary_name = tempfile.mkstemp(
-        prefix=f".{destination.name}.",
-        suffix=".tmp",
-        dir=destination.parent,
-    )
-    os.close(file_descriptor)
-    temporary = Path(temporary_name)
     try:
-        shutil.copy2(source, temporary)
-        if expected_sha256 is not None:
-            _stable_file_fingerprint(
-                temporary,
-                expected_sha256=expected_sha256,
-                context="staged content-addressed copy verification failed",
-            )
-        _assert_real_directory(
-            destination.parent,
-            context="copy destination parent changed to a link or reparse point",
+        project_storage.atomic_copy(
+            source,
+            destination,
+            expected_sha256=expected_sha256,
+            hash_file=file_sha256,
+            copy_file=shutil.copy2,
         )
-        if _is_link_or_reparse(destination):
-            raise ProjectIntegrityError(
-                "copy destination changed to a link or reparse point"
-            )
-        os.replace(temporary, destination)
-    finally:
-        if temporary.exists():
-            temporary.unlink()
+    except project_storage.StorageIntegrityError as exc:
+        raise ProjectIntegrityError(str(exc)) from exc
 
 
 def _atomic_write_json(destination: Path, payload: Mapping[str, Any]) -> None:
-    destination = Path(os.path.abspath(destination))
-    _assert_real_directory(
-        destination.parent,
-        context="project manifest parent must remain a controlled real directory",
-    )
-    if _is_link_or_reparse(destination):
-        raise ProjectIntegrityError(
-            "project manifest must not be a link or reparse point"
-        )
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    serialized = json.dumps(
-        payload,
-        ensure_ascii=False,
-        indent=2,
-        allow_nan=False,
-    )
-    file_descriptor, temporary_name = tempfile.mkstemp(
-        prefix=f".{destination.name}.",
-        suffix=".tmp",
-        dir=destination.parent,
-    )
-    temporary = Path(temporary_name)
+    """Publish a manifest with staged-file and directory durability."""
+
     try:
-        with os.fdopen(file_descriptor, "w", encoding="utf-8", newline="\n") as stream:
-            stream.write(serialized)
-            stream.write("\n")
-            stream.flush()
-            os.fsync(stream.fileno())
-        _assert_real_directory(
-            destination.parent,
-            context="project manifest parent changed to a link or reparse point",
-        )
-        if _is_link_or_reparse(destination):
-            raise ProjectIntegrityError(
-                "project manifest changed to a link or reparse point"
-            )
-        os.replace(temporary, destination)
-    finally:
-        if temporary.exists():
-            temporary.unlink()
+        project_storage.atomic_write_json(destination, payload)
+    except project_storage.StorageIntegrityError as exc:
+        raise ProjectIntegrityError(str(exc)) from exc
 
 
 __all__ = [

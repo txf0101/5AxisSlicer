@@ -3,12 +3,12 @@ from __future__ import annotations
 import hashlib
 import json
 import os
-from pathlib import Path
 import struct
 import sys
 import tempfile
 import threading
 import unittest
+from pathlib import Path
 from unittest import mock
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
@@ -19,8 +19,6 @@ from PyQt5.QtGui import QColor, QImage
 from PyQt5.QtWidgets import QApplication, QLabel, QVBoxLayout, QWidget
 
 from five_axis_slicer.paper_export import (
-    LOGICAL_HEIGHT,
-    LOGICAL_WIDTH,
     OUTPUT_HEIGHT,
     OUTPUT_WIDTH,
     PIXELS_PER_METER,
@@ -440,10 +438,7 @@ class PaperExportTests(unittest.TestCase):
             self.assertTrue(audit["render_parameters"]["degraded"])
             self.assertIn(
                 "source_snapshot",
-                {
-                    item["component"]
-                    for item in audit["render_parameters"]["degradations"]
-                },
+                {item["component"] for item in audit["render_parameters"]["degradations"]},
             )
 
     def test_strict_export_requires_load_time_audit_for_declared_sources(self) -> None:

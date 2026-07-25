@@ -6,7 +6,6 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
@@ -41,7 +40,7 @@ from five_axis_slicer.tube_controller import (  # noqa: E402
 )
 
 
-def cad_model() -> CadModel:
+def cad_model(source_hash: str = "a" * 64) -> CadModel:
     bodies = [
         BodyInfo("solid-base", 1, "Base", (0.4, 0.5, 0.6), kind="solid"),
         BodyInfo("solid-tube", 2, "Tube", (0.6, 0.5, 0.4), kind="solid"),
@@ -49,7 +48,7 @@ def cad_model() -> CadModel:
     ]
     return CadModel(
         source_path=Path("pipe2.step"),
-        source_hash="a" * 64,
+        source_hash=source_hash,
         bodies=bodies,
         edges=[],
         shapes={},
@@ -127,9 +126,7 @@ class TubeControllerTests(unittest.TestCase):
             json.loads(json.dumps(payload)),
             cad_model=cad_model(),
         )
-        self.assertEqual(
-            [item.operation_id for item in restored.operations], ["tube-1", "tube-2"]
-        )
+        self.assertEqual([item.operation_id for item in restored.operations], ["tube-1", "tube-2"])
         self.assertFalse(restored.can_create_operation)
         self.assertIn(
             "TUBE_OPERATION_COUNT_UNSUPPORTED",
@@ -186,9 +183,7 @@ class TubeControllerTests(unittest.TestCase):
         build = controller.apply_coordinate_draft(BUILD_CS_NODE)
 
         self.assertEqual(build.origin_reference.resolved_point, (15.0, 0.0, 0.0))
-        self.assertEqual(
-            build.T_target_from_source.transform_point((15, 0, 0)), (0.0, 0.0, 0.0)
-        )
+        self.assertEqual(build.T_target_from_source.transform_point((15, 0, 0)), (0.0, 0.0, 0.0))
 
     def test_dependencies_reach_coordinates_valid_and_setup_ready(self) -> None:
         controller = TubeSetupController(cad_model())
@@ -202,9 +197,7 @@ class TubeControllerTests(unittest.TestCase):
             get_builtin_material_profile("PLA").reviewed_copy("reviewed-pla")
         )
         controller.begin_placement_draft(mount_datum_id="build_plate_mount")
-        controller.set_placement_adjustment(
-            LocalAdjustment.from_euler_xyz((1, 2, 3), (0, 0, 0))
-        )
+        controller.set_placement_adjustment(LocalAdjustment.from_euler_xyz((1, 2, 3), (0, 0, 0)))
         controller.apply_placement_draft()
 
         report = controller.validation_report()
@@ -311,9 +304,7 @@ class TubeControllerTests(unittest.TestCase):
         detached_report = detached.validation_report()
         self.assertFalse(detached_report.setup_ready)
         self.assertIs(detached_report.state_for("part"), NodeState.INVALID)
-        self.assertIn(
-            "CAD_MODEL_MISSING", {issue.code for issue in detached_report.issues}
-        )
+        self.assertIn("CAD_MODEL_MISSING", {issue.code for issue in detached_report.issues})
 
         wrong_mount_setup = controller.setup.with_placement(
             "forged_mount",
@@ -402,6 +393,19 @@ class TubeControllerTests(unittest.TestCase):
             (BUILD_CS_NODE, MODEL_CS_NODE),
         )
 
+    def test_outer_transaction_restores_drafts_and_cad_authority(self) -> None:
+        controller = TubeSetupController(cad_model())
+        controller.begin_coordinate_draft(MODEL_CS_NODE)
+        before = controller.state_json()
+
+        with self.assertRaisesRegex(OSError, "viewer commit failed"):
+            with controller.draft_resolution_transaction("discard"):
+                controller.update_cad_model(cad_model("b" * 64))
+                raise OSError("viewer commit failed")
+
+        self.assertEqual(controller.state_json(), before)
+        self.assertEqual(controller.geometry_reference("solid-base").object_id, "solid-base")
+
     def test_apply_all_refreshes_placement_dependencies_after_build_commit(
         self,
     ) -> None:
@@ -423,9 +427,7 @@ class TubeControllerTests(unittest.TestCase):
             confirmed=True,
         )
         controller.begin_placement_draft()
-        controller.set_placement_adjustment(
-            LocalAdjustment.from_euler_xyz((1, 2, 3), (0, 0, 0))
-        )
+        controller.set_placement_adjustment(LocalAdjustment.from_euler_xyz((1, 2, 3), (0, 0, 0)))
         stale_draft = controller.placement_draft()
         self.assertEqual(stale_draft.build_cs_revision, old_build_revision)
 
@@ -436,9 +438,7 @@ class TubeControllerTests(unittest.TestCase):
             draft = current.placement_draft()
             observed["build_cs_revision"] = draft.build_cs_revision
             observed["machine_content_hash"] = draft.machine_content_hash
-            observed["placement_state"] = current.validation_report().state_for(
-                PLACEMENT_NODE
-            )
+            observed["placement_state"] = current.validation_report().state_for(PLACEMENT_NODE)
             return original_apply(current)
 
         with patch.object(

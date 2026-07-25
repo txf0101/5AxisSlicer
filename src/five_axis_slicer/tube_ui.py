@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from dataclasses import replace
 import math
-from typing import Any, Callable, Mapping
+from collections.abc import Callable, Mapping
+from dataclasses import replace
+from typing import Any
 from uuid import uuid4
 
 from PyQt5.QtCore import Qt, pyqtSignal
@@ -31,6 +32,7 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
+from . import tube_ui_presenter as presenter
 from .manufacturing.coordinates import (
     CoordinateFrameDefinition,
     DirectionReference,
@@ -47,7 +49,6 @@ from .manufacturing.resources import (
     NozzleProfile,
     ResourceSnapshot,
 )
-from .manufacturing.references import project_point_to_face
 from .manufacturing.setup import (
     BUILD_CS_NODE,
     MACHINE_NODE,
@@ -61,16 +62,14 @@ from .manufacturing.setup import (
     NodeState,
 )
 from .models import (
-    BuildSurfaceOverlay,
     CadModel,
-    CoordinateFrameOverlay,
     PickHit,
     PickRequest,
 )
 from .step_loader import geometry_candidates
 from .tube_controller import BodyRole, DraftNotFoundError, TubeSetupController
+from .tube_resource_selection import configured_nozzle_copy
 from .viewer import ModelViewer
-
 
 _NODE_ORDER = (
     PART_NODE,
@@ -407,12 +406,8 @@ class TubeSetupPage(QWidget):
         self.part_table = QTableWidget(0, 3)
         self.part_table.setObjectName("tubePartTable")
         self.part_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
-        self.part_table.horizontalHeader().setSectionResizeMode(
-            1, QHeaderView.ResizeToContents
-        )
-        self.part_table.horizontalHeader().setSectionResizeMode(
-            2, QHeaderView.ResizeToContents
-        )
+        self.part_table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeToContents)
+        self.part_table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeToContents)
         self.part_confirm_button = QPushButton()
         self.part_confirm_button.setObjectName("primaryButton")
         self.part_confirm_button.clicked.connect(self._confirm_part)
@@ -510,47 +505,7 @@ class TubeSetupPage(QWidget):
             ("z", (0.0, 0.0, 1.0)),
             ("x", (1.0, 0.0, 0.0)),
         ):
-            group = QFrame()
-            group.setObjectName("progressPanel")
-            grid = QGridLayout(group)
-            title = QLabel()
-            title.setObjectName("valueText")
-            combo = QComboBox()
-            values = tuple(self._spin(-1.0e6, 1.0e6, value, 6) for value in defaults)
-            pick = QPushButton()
-            confirm = QPushButton()
-            flip = QPushButton()
-            pick.clicked.connect(
-                lambda _checked=False, key=component: self._start_pick(key)
-            )
-            confirm.clicked.connect(
-                lambda _checked=False, key=component: self._confirm_coordinate_component(
-                    key
-                )
-            )
-            if component != "origin":
-                flip.clicked.connect(
-                    lambda _checked=False, key=component: self._flip_coordinate(key)
-                )
-            grid.addWidget(title, 0, 0, 1, 4)
-            grid.addWidget(combo, 1, 0, 1, 4)
-            for index, spin in enumerate(values):
-                grid.addWidget(spin, 2, index)
-            grid.addWidget(pick, 3, 0)
-            grid.addWidget(confirm, 3, 1, 1, 2)
-            if component != "origin":
-                grid.addWidget(flip, 3, 3)
-            layout.addWidget(group)
-            self.coordinate_inputs[component] = (combo, values, pick, title)
-            setattr(self, f"{component}_confirm_button", confirm)
-            setattr(self, f"{component}_flip_button", flip)
-            combo.currentIndexChanged.connect(
-                lambda _index, key=component: self._coordinate_candidate_changed(key)
-            )
-            for spin in values:
-                spin.valueChanged.connect(
-                    lambda _value, key=component: self._coordinate_value_changed(key)
-                )
+            self._add_coordinate_group(layout, component, defaults)
         buttons = QHBoxLayout()
         self.coordinate_apply_button = QPushButton()
         self.coordinate_apply_button.setObjectName("primaryButton")
@@ -566,6 +521,44 @@ class TubeSetupPage(QWidget):
         layout.addWidget(self.coordinate_feedback)
         layout.addStretch(1)
         return page
+
+    def _add_coordinate_group(
+        self,
+        layout: QVBoxLayout,
+        component: str,
+        defaults: tuple[float, float, float],
+    ) -> None:
+        group = QFrame()
+        group.setObjectName("progressPanel")
+        grid = QGridLayout(group)
+        title = QLabel()
+        title.setObjectName("valueText")
+        combo = QComboBox()
+        values = tuple(self._spin(-1.0e6, 1.0e6, value, 6) for value in defaults)
+        pick, confirm, flip = QPushButton(), QPushButton(), QPushButton()
+        pick.clicked.connect(lambda _checked=False: self._start_pick(component))
+        confirm.clicked.connect(
+            lambda _checked=False: self._confirm_coordinate_component(component)
+        )
+        if component != "origin":
+            flip.clicked.connect(lambda _checked=False: self._flip_coordinate(component))
+        grid.addWidget(title, 0, 0, 1, 4)
+        grid.addWidget(combo, 1, 0, 1, 4)
+        for index, spin in enumerate(values):
+            grid.addWidget(spin, 2, index)
+        grid.addWidget(pick, 3, 0)
+        grid.addWidget(confirm, 3, 1, 1, 2)
+        if component != "origin":
+            grid.addWidget(flip, 3, 3)
+        layout.addWidget(group)
+        self.coordinate_inputs[component] = (combo, values, pick, title)
+        setattr(self, f"{component}_confirm_button", confirm)
+        setattr(self, f"{component}_flip_button", flip)
+        combo.currentIndexChanged.connect(
+            lambda _index: self._coordinate_candidate_changed(component)
+        )
+        for spin in values:
+            spin.valueChanged.connect(lambda _value: self._coordinate_value_changed(component))
 
     def _build_placement_editor(self) -> QWidget:
         page = QWidget()
@@ -649,11 +642,7 @@ class TubeSetupPage(QWidget):
             snapshot_key = f"project-snapshot:{kind}:{snapshot.content_hash}"
             catalogs[kind][snapshot_key] = profile
             audit = next(
-                (
-                    item
-                    for item in self.controller.resource_audits
-                    if item.resource_type == kind
-                ),
+                (item for item in self.controller.resource_audits if item.resource_type == kind),
                 None,
             )
             status = "missing" if audit is None else audit.status
@@ -696,11 +685,7 @@ class TubeSetupPage(QWidget):
         return _matching_profile_key(kind, snapshot, profiles)
 
     def _resource_choice_label(self, kind: str, key: str, profile: Any) -> str:
-        name = (
-            profile.name
-            if isinstance(profile, MachineProfile)
-            else profile.display_name
-        )
+        name = profile.name if isinstance(profile, MachineProfile) else profile.display_name
         origin = self._resource_origins.get(kind, {}).get(key, "user")
         if origin == "builtin":
             qualifier = self._t("resource_origin_builtin")
@@ -709,9 +694,7 @@ class TubeSetupPage(QWidget):
         else:
             _prefix, _separator, status = origin.partition(":")
             status_key = (
-                "resource_status_diverged"
-                if status == "diverged"
-                else "resource_status_missing"
+                "resource_status_diverged" if status == "diverged" else "resource_status_missing"
             )
             qualifier = f"{self._t('resource_origin_snapshot')} · {self._t(status_key)}"
         return f"{name}  [{qualifier}]"
@@ -795,9 +778,7 @@ class TubeSetupPage(QWidget):
         self.set_view_mode("model")
         self.refresh()
 
-    def set_controller(
-        self, controller: TubeSetupController, model: CadModel | None
-    ) -> None:
+    def set_controller(self, controller: TubeSetupController, model: CadModel | None) -> None:
         if not isinstance(controller, TubeSetupController):
             raise TypeError("controller must be TubeSetupController")
         self.controller = controller
@@ -826,11 +807,7 @@ class TubeSetupPage(QWidget):
         self.refresh()
 
     def _rebuild_tree(self) -> None:
-        selected = (
-            self.tree.currentItem().data(0, Qt.UserRole)
-            if self.tree.currentItem()
-            else None
-        )
+        selected = self.tree.currentItem().data(0, Qt.UserRole) if self.tree.currentItem() else None
         self.tree.blockSignals(True)
         self.tree.clear()
         self._tree_items.clear()
@@ -872,9 +849,7 @@ class TubeSetupPage(QWidget):
                 continue
             state = report.node_states[node]
             base = (
-                self._t(node)
-                if node in _TEXT[self.language]
-                else item.text(0).split("  [", 1)[0]
+                self._t(node) if node in _TEXT[self.language] else item.text(0).split("  [", 1)[0]
             )
             item.setText(0, f"{base}  [{self._t('status_' + state.value)}]")
             item.setForeground(0, _state_color(state))
@@ -899,9 +874,7 @@ class TubeSetupPage(QWidget):
             self.issue_list.addItem(
                 f"[{marker}] {issue.code} · {issue.object_id or self.controller.setup.setup_id}"
             )
-            self.issue_list.item(self.issue_list.count() - 1).setData(
-                Qt.UserRole, issue.to_json()
-            )
+            self.issue_list.item(self.issue_list.count() - 1).setData(Qt.UserRole, issue.to_json())
         if not report.issues:
             self.issue_list.addItem(self._t("no_issues"))
         self._refresh_overlays()
@@ -966,10 +939,7 @@ class TubeSetupPage(QWidget):
 
     def _confirm_part(self) -> None:
         try:
-            roles = {
-                body_id: combo.currentData()
-                for body_id, combo in self._role_combos.items()
-            }
+            roles = {body_id: combo.currentData() for body_id, combo in self._role_combos.items()}
             self.controller.confirm_body_roles(roles)
             part_ids = self.controller.setup.assignments.part_body_ids
             if hasattr(self.viewer, "set_selection"):
@@ -1072,11 +1042,7 @@ class TubeSetupPage(QWidget):
         except DraftNotFoundError:
             draft = self.controller.begin_coordinate_draft(node)
         self.coordinate_help.setText(
-            self._t(
-                "coordinate_help_model"
-                if node == MODEL_CS_NODE
-                else "coordinate_help_build"
-            )
+            self._t("coordinate_help_model" if node == MODEL_CS_NODE else "coordinate_help_build")
         )
         self.coordinate_feedback.setText(
             f"Draft: origin={'✓' if draft.origin_reference else '—'}, "
@@ -1129,10 +1095,10 @@ class TubeSetupPage(QWidget):
         if not isinstance(data, Mapping):
             return
         resolved = data.get("point" if component == "origin" else "vector")
-        if isinstance(resolved, (list, tuple)) and len(resolved) == 3:
+        if isinstance(resolved, list | tuple) and len(resolved) == 3:
             self._updating_coordinate_controls = True
             try:
-                for spin, value in zip(values, resolved):
+                for spin, value in zip(values, resolved, strict=False):
                     spin.setValue(float(value))
             finally:
                 self._updating_coordinate_controls = False
@@ -1154,9 +1120,7 @@ class TubeSetupPage(QWidget):
                     continue
                 combo, values, _pick, _title = self.coordinate_inputs[component]
                 target_kind = reference.reference_type
-                target_id = (
-                    None if reference.geometry is None else reference.geometry.object_id
-                )
+                target_id = None if reference.geometry is None else reference.geometry.object_id
                 if target_kind == "face_pick":
                     target_kind = "pick_face"
                     target_id = None
@@ -1175,12 +1139,8 @@ class TubeSetupPage(QWidget):
                         selected_index = index
                         break
                 combo.setCurrentIndex(selected_index)
-                resolved = (
-                    reference.resolved_point
-                    if component == "origin"
-                    else reference.direction_in_source or reference.resolved_direction
-                )
-                for spin, value in zip(values, resolved):
+                resolved = presenter.reference_display_value(self.controller, draft.node, reference)
+                for spin, value in zip(values, resolved, strict=False):
                     spin.setValue(float(value))
         finally:
             self._updating_coordinate_controls = False
@@ -1206,13 +1166,9 @@ class TubeSetupPage(QWidget):
             )
             return
         if kind.startswith("pick_"):
-            raise ValueError(
-                "pick the requested geometry in the viewer before confirming"
-            )
+            raise ValueError("pick the requested geometry in the viewer before confirming")
         if kind == "numeric":
-            self.controller.set_numeric_direction(
-                self._coordinate_node, component, vector
-            )
+            self.controller.set_numeric_direction(self._coordinate_node, component, vector)
             return
         geometry = self._geometry_reference(str(data["entity_id"]))
         self.controller.set_direction_reference(
@@ -1234,9 +1190,7 @@ class TubeSetupPage(QWidget):
             }[component]
             if current is None or component in self._coordinate_control_dirty:
                 self._set_coordinate_reference_from_controls(component)
-            self.controller.confirm_coordinate_reference(
-                self._coordinate_node, component
-            )
+            self.controller.confirm_coordinate_reference(self._coordinate_node, component)
             self._coordinate_control_dirty.discard(component)
             self.coordinate_feedback.setText(f"{component.upper()} confirmed")
             self._refresh_overlays()
@@ -1259,9 +1213,7 @@ class TubeSetupPage(QWidget):
     def _apply_coordinate(self) -> None:
         try:
             frame = self.controller.apply_coordinate_draft(self._coordinate_node)
-            self.coordinate_feedback.setText(
-                f"Applied {frame.name} · revision {frame.revision}"
-            )
+            self.coordinate_feedback.setText(f"Applied {frame.name} · revision {frame.revision}")
             self.refresh()
         except Exception as exc:
             self._report_error(exc, self.coordinate_feedback)
@@ -1290,7 +1242,9 @@ class TubeSetupPage(QWidget):
             pick_kind = (
                 "face"
                 if kind == "pick_face"
-                else "vertex" if kind == "pick_vertex" else _entity_kind(str(entity_id))
+                else "vertex"
+                if kind == "pick_vertex"
+                else _entity_kind(str(entity_id))
             )
         elif kind == "pick_two_vertices":
             pick_kind = "vertex"
@@ -1306,9 +1260,7 @@ class TubeSetupPage(QWidget):
         self._pick_context = (self._coordinate_node, component, kind)
         if hasattr(self.viewer, "set_pick_request"):
             self.viewer.set_pick_request(
-                PickRequest(
-                    pick_kind, allowed_ids=allowed, multiple=kind == "pick_two_vertices"
-                )
+                PickRequest(pick_kind, allowed_ids=allowed, multiple=kind == "pick_two_vertices")
             )
         self.coordinate_feedback.setText(f"Pick {pick_kind}: {component.upper()}")
 
@@ -1319,99 +1271,37 @@ class TubeSetupPage(QWidget):
         try:
             geometry = self._geometry_reference(hit.entity_id)
             if component == "origin":
-                if hit.kind == "vertex":
-                    point = self.model.vertex_map[hit.entity_id].point
-                    reference = PointReference("vertex", point, geometry=geometry)
-                elif hit.kind == "face" and hit.position_source is not None:
-                    reference = PointReference(
-                        "face_pick",
-                        project_point_to_face(
-                            self.model,
-                            hit.entity_id,
-                            hit.position_source,
-                        ),
-                        geometry=geometry,
-                    )
-                elif hit.kind == "edge":
-                    edge = self.model.edge_map[hit.entity_id]
-                    kind = (
-                        requested_kind
-                        if requested_kind
-                        in {"circle_center", "ellipse_center", "arc_midpoint"}
-                        else "arc_midpoint"
-                    )
-                    edge_point = (
-                        edge.center
-                        if kind.endswith("center")
-                        else edge.arc_length_midpoint
-                    )
-                    if edge_point is None:
-                        raise ValueError(
-                            "the selected edge does not provide this origin reference"
-                        )
-                    reference = PointReference(kind, edge_point, geometry=geometry)
-                else:
-                    raise ValueError("unsupported origin pick")
-                self.controller.set_origin_reference(node, reference)
-            elif requested_kind == "pick_two_vertices":
-                self._two_point_hits.append(hit)
-                if len(self._two_point_hits) < 2:
-                    self.coordinate_feedback.setText("Pick second vertex")
-                    return
-                first_id, second_id = (
-                    item.entity_id for item in self._two_point_hits[:2]
+                point_reference = presenter.resolve_origin_pick(
+                    self.model, hit, requested_kind, geometry
                 )
-                first = self.model.vertex_map[first_id]
-                second = self.model.vertex_map[second_id]
-                self.controller.set_direction_reference(
-                    node,
-                    component,
-                    DirectionReference(
-                        "two_points",
-                        geometry=self._geometry_reference(first_id),
-                        secondary_geometry=self._geometry_reference(second_id),
-                        first_point_in_source_mm=first.point,
-                        second_point_in_source_mm=second.point,
-                    ),
+                self.controller.set_origin_reference(node, point_reference)
+            else:
+                first_hit = None
+                if requested_kind == "pick_two_vertices":
+                    self._two_point_hits.append(hit)
+                    if len(self._two_point_hits) < 2:
+                        self.coordinate_feedback.setText("Pick second vertex")
+                        return
+                    first_hit = self._two_point_hits[0]
+                direction_reference = presenter.resolve_direction_pick(
+                    self.model,
+                    hit,
+                    requested_kind,
+                    geometry,
+                    first_vertex_hit=first_hit,
+                    geometry_resolver=self._geometry_reference,
                 )
-            elif hit.kind == "edge":
-                edge = self.model.edge_map[hit.entity_id]
-                if edge.curve_type != "line" or edge.axis_direction is None:
-                    raise ValueError("direction picking requires a straight edge")
-                self.controller.set_direction_reference(
-                    node,
-                    component,
-                    DirectionReference(
-                        "line_edge", edge.axis_direction, geometry=geometry
-                    ),
-                )
-            elif hit.kind == "face":
-                face = self.model.face_map[hit.entity_id]
-                if face.surface_type == "plane" and face.normal is not None:
-                    kind, direction = "plane_normal", face.normal
-                elif (
-                    face.surface_type in {"cylinder", "cone"}
-                    and face.axis_direction is not None
-                ):
-                    kind, direction = "surface_axis", face.axis_direction
-                else:
-                    raise ValueError(
-                        "direction picking requires a plane, cylinder, or cone"
-                    )
-                self.controller.set_direction_reference(
-                    node,
-                    component,
-                    DirectionReference(kind, direction, geometry=geometry),
-                )
-            self._pick_context = None
-            self._coordinate_control_dirty.discard(component)
-            self.coordinate_feedback.setText(
-                f"Picked {hit.entity_id}; confirm {component.upper()}"
-            )
-            self._refresh_overlays()
-            self.refresh()
+                self.controller.set_direction_reference(node, component, direction_reference)
+            self._finish_pick(hit, component)
         except Exception as exc:
             self._report_error(exc, self.coordinate_feedback)
+
+    def _finish_pick(self, hit: PickHit, component: str) -> None:
+        self._pick_context = None
+        self._coordinate_control_dirty.discard(component)
+        self.coordinate_feedback.setText(f"Picked {hit.entity_id}; confirm {component.upper()}")
+        self._refresh_overlays()
+        self.refresh()
 
     def _geometry_reference(self, entity_id: str) -> GeometryReference:
         if self.model is None:
@@ -1440,9 +1330,7 @@ class TubeSetupPage(QWidget):
                 self.mount_combo.addItem(mount.name, mount.mount_id)
             current = self.controller.setup.mount_datum_id
             if current:
-                self.mount_combo.setCurrentIndex(
-                    max(0, self.mount_combo.findData(current))
-                )
+                self.mount_combo.setCurrentIndex(max(0, self.mount_combo.findData(current)))
         self.mount_combo.blockSignals(False)
 
     def _begin_placement_editor(self) -> None:
@@ -1454,20 +1342,15 @@ class TubeSetupPage(QWidget):
             draft = self.controller.begin_placement_draft(
                 mount_datum_id=None if mount_id is None else str(mount_id)
             )
-        if (
-            draft.mount_datum_id
-            and self.mount_combo.findData(draft.mount_datum_id) >= 0
-        ):
-            self.mount_combo.setCurrentIndex(
-                self.mount_combo.findData(draft.mount_datum_id)
-            )
+        if draft.mount_datum_id and self.mount_combo.findData(draft.mount_datum_id) >= 0:
+            self.mount_combo.setCurrentIndex(self.mount_combo.findData(draft.mount_datum_id))
         translation = draft.adjustment.translation_mm
         angles = draft.adjustment.euler_xyz_rad
         self._updating_placement_controls = True
         try:
-            for key, value in zip(("dx", "dy", "dz"), translation):
+            for key, value in zip(("dx", "dy", "dz"), translation, strict=False):
                 self.placement_spins[key].setValue(value)
-            for key, value in zip(("rx", "ry", "rz"), angles):
+            for key, value in zip(("rx", "ry", "rz"), angles, strict=False):
                 self.placement_spins[key].setValue(math.degrees(value))
         finally:
             self._updating_placement_controls = False
@@ -1493,12 +1376,9 @@ class TubeSetupPage(QWidget):
         except DraftNotFoundError:
             return
         try:
-            translation = tuple(
-                self.placement_spins[key].value() for key in ("dx", "dy", "dz")
-            )
+            translation = tuple(self.placement_spins[key].value() for key in ("dx", "dy", "dz"))
             rotation = tuple(
-                math.radians(self.placement_spins[key].value())
-                for key in ("rx", "ry", "rz")
+                math.radians(self.placement_spins[key].value()) for key in ("rx", "ry", "rz")
             )
             self.controller.set_placement_adjustment(translation, rotation)
             self._refresh_overlays()
@@ -1515,12 +1395,9 @@ class TubeSetupPage(QWidget):
                 self.controller.begin_placement_draft(
                     mount_datum_id=None if mount_id is None else str(mount_id)
                 )
-            translation = tuple(
-                self.placement_spins[key].value() for key in ("dx", "dy", "dz")
-            )
+            translation = tuple(self.placement_spins[key].value() for key in ("dx", "dy", "dz"))
             rotation = tuple(
-                math.radians(self.placement_spins[key].value())
-                for key in ("rx", "ry", "rz")
+                math.radians(self.placement_spins[key].value()) for key in ("rx", "ry", "rz")
             )
             self.controller.set_placement_adjustment(translation, rotation)
             transform = self.controller.apply_placement_draft()
@@ -1550,149 +1427,21 @@ class TubeSetupPage(QWidget):
         self._refresh_overlays()
 
     def _refresh_overlays(self) -> None:
-        if self.model is None:
-            if hasattr(self.viewer, "set_coordinate_frames"):
-                self.viewer.set_coordinate_frames((), active_frame_id=None)
-            if hasattr(self.viewer, "set_build_surface"):
-                self.viewer.set_build_surface(None)
-            if hasattr(self.viewer, "set_model_transform"):
-                self.viewer.set_model_transform(
-                    (
-                        (1.0, 0.0, 0.0, 0.0),
-                        (0.0, 1.0, 0.0, 0.0),
-                        (0.0, 0.0, 1.0, 0.0),
-                        (0.0, 0.0, 0.0, 1.0),
-                    )
-                )
-            return
-        transform = None
-        if self._view_mode == "machine":
-            transform = self._draft_machine_from_source()
-            if transform is None:
-                try:
-                    transform = self.controller.T_machine_from_source()
-                except ValueError:
-                    transform = None
+        presentation = presenter.viewer_presentation(
+            self.controller,
+            has_model=self.model is not None,
+            view_mode=self._view_mode,
+            active_coordinate_node=self._coordinate_node,
+        )
         if hasattr(self.viewer, "set_model_transform"):
-            identity = (
-                (1.0, 0.0, 0.0, 0.0),
-                (0.0, 1.0, 0.0, 0.0),
-                (0.0, 0.0, 1.0, 0.0),
-                (0.0, 0.0, 0.0, 1.0),
-            )
-            self.viewer.set_model_transform(
-                identity if transform is None else transform.matrix
-            )
-        overlays: list[CoordinateFrameOverlay] = []
-        for frame in (
-            self.controller.setup.model_coordinate_system,
-            self.controller.setup.build_coordinate_system,
-        ):
-            if frame is not None:
-                overlay = _overlay_from_frame(frame)
-                overlays.append(
-                    _transform_overlay(overlay, transform)
-                    if transform is not None
-                    else overlay
-                )
-        for node in (MODEL_CS_NODE, BUILD_CS_NODE):
-            try:
-                draft = self.controller.coordinate_draft(node)
-                if draft.is_complete:
-                    assert draft.origin_reference is not None
-                    assert draft.z_direction_reference is not None
-                    assert draft.x_direction_reference is not None
-                    frame = CoordinateFrameDefinition.from_references(
-                        f"{draft.frame_id}-draft",
-                        f"{draft.name} Draft",
-                        draft.origin_reference,
-                        draft.z_direction_reference,
-                        draft.x_direction_reference,
-                    )
-                    overlay = _overlay_from_frame(frame)
-                    overlays.append(
-                        _transform_overlay(overlay, transform)
-                        if transform is not None
-                        else overlay
-                    )
-            except (DraftNotFoundError, ValueError, TypeError):
-                pass
-        if self._view_mode == "machine":
-            overlays.append(
-                CoordinateFrameOverlay(
-                    "machine", "Machine CS", (0.0, 0.0, 0.0), scale=24.0
-                )
-            )
+            self.viewer.set_model_transform(presentation.model_matrix)
         if hasattr(self.viewer, "set_coordinate_frames"):
-            active = (
-                "machine"
-                if self._view_mode == "machine"
-                else ("build" if self._coordinate_node == BUILD_CS_NODE else "model")
+            self.viewer.set_coordinate_frames(
+                presentation.coordinate_frames,
+                active_frame_id=presentation.active_frame_id,
             )
-            self.viewer.set_coordinate_frames(overlays, active_frame_id=active)
-        surface_overlay = (
-            self._machine_surface_overlay() if self._view_mode == "machine" else None
-        )
         if hasattr(self.viewer, "set_build_surface"):
-            self.viewer.set_build_surface(surface_overlay)
-
-    def _machine_surface_overlay(self) -> BuildSurfaceOverlay | None:
-        setup = self.controller.setup
-        mount_id = setup.mount_datum_id
-        try:
-            draft = self.controller.placement_draft()
-            mount_id = draft.mount_datum_id or mount_id
-        except DraftNotFoundError:
-            pass
-        if setup.machine is None or mount_id is None:
-            return None
-        try:
-            profile = self.controller.machine_profile()
-            mount = profile.mount_map[mount_id]
-            surface = profile.build_surface_map[mount.build_surface_id]
-            transform = profile.mount_transform(mount.mount_id)
-        except (KeyError, ValueError):
-            return None
-        rotation = transform.rotation
-        return BuildSurfaceOverlay(
-            surface.surface_id,
-            surface.shape,
-            origin=transform.translation,
-            x_axis=(rotation[0][0], rotation[1][0], rotation[2][0]),
-            y_axis=(rotation[0][1], rotation[1][1], rotation[2][1]),
-            width_mm=surface.width_mm,
-            depth_mm=surface.depth_mm,
-            diameter_mm=surface.diameter_mm,
-        )
-
-    def _draft_machine_from_source(self) -> Any | None:
-        setup = self.controller.setup
-        build = setup.build_coordinate_system
-        machine = setup.machine
-        if build is None or not build.is_valid or machine is None:
-            return None
-        try:
-            draft = self.controller.placement_draft()
-        except DraftNotFoundError:
-            return None
-        if (
-            not draft.is_complete
-            or draft.mount_datum_id is None
-            or draft.build_cs_revision != build.revision
-            or draft.machine_content_hash != machine.content_hash
-        ):
-            return None
-        try:
-            machine_from_mount = self.controller.machine_profile().mount_transform(
-                draft.mount_datum_id
-            )
-            return (
-                machine_from_mount
-                @ draft.T_mount_from_build
-                @ build.T_target_from_source
-            )
-        except (KeyError, TypeError, ValueError):
-            return None
+            self.viewer.set_build_surface(presentation.build_surface)
 
     def _jump_to_issue(self) -> None:
         item = self.issue_list.currentItem()
@@ -1739,69 +1488,76 @@ class TubeSetupPage(QWidget):
 
         key = str(identifier).strip().lower()
         if kind == "machine":
-            machine_profile = next(
-                (
-                    item
-                    for item in self._machine_profiles.values()
-                    if key in {item.profile_id.lower(), item.name.lower()}
-                    or key in item.profile_id.lower()
-                ),
-                None,
-            )
-            if machine_profile is None:
-                raise KeyError(identifier)
-            self.controller.select_machine(machine_profile)
-            self._populate_mounts()
+            self._select_machine_resource(key, identifier)
         elif kind == "nozzle":
-            nozzle_profile = next(
-                (
-                    item
-                    for item in self._nozzle_profiles.values()
-                    if key
-                    in {item.resource_id.lower(), f"{item.orifice_diameter_mm:g}"}
-                    or key in item.display_name.lower()
-                ),
-                None,
-            )
-            if nozzle_profile is None:
-                raise KeyError(identifier)
-            if options.get("complete"):
-                length = float(options.get("length_mm", 18.0))
-                radius = max(2.0, nozzle_profile.orifice_diameter_mm * 3.0)
-                nozzle_profile = replace(
-                    nozzle_profile.editable_copy(str(uuid4())),
-                    interface=str(options.get("interface", "project-interface")),
-                    length_mm=length,
-                    construction_material=str(
-                        options.get("construction_material", "project-defined")
-                    ),
-                    flow_category=str(options.get("flow_category", "standard")),
-                    outer_profile_rz_mm=((radius * 0.45, 0.0), (radius, length)),
-                )
-                if options.get("persist_user_copy"):
-                    self.controller.save_user_resource(nozzle_profile)
-            self.controller.select_nozzle(nozzle_profile)
+            self._select_nozzle_resource(key, identifier, options)
         elif kind == "material":
-            material_profile = next(
-                (
-                    item
-                    for item in self._material_profiles.values()
-                    if key in {item.resource_id.lower(), item.material.lower()}
-                    or key in item.display_name.lower()
-                ),
-                None,
-            )
-            if material_profile is None:
-                raise KeyError(identifier)
-            if options.get("review_confirmed"):
-                material_profile = material_profile.reviewed_copy(str(uuid4()))
-                if options.get("persist_user_copy"):
-                    self.controller.save_user_resource(material_profile)
-            self.controller.select_material(material_profile)
+            self._select_material_resource(key, identifier, options)
         else:
             raise ValueError(f"unsupported resource kind: {kind}")
         self._reload_resource_catalogs()
         self.refresh()
+
+    def _select_machine_resource(self, key: str, identifier: str) -> None:
+        profile = next(
+            (
+                item
+                for item in self._machine_profiles.values()
+                if key in {item.profile_id.lower(), item.name.lower()}
+                or key in item.profile_id.lower()
+            ),
+            None,
+        )
+        if profile is None:
+            raise KeyError(identifier)
+        self.controller.select_machine(profile)
+        self._populate_mounts()
+
+    def _select_nozzle_resource(
+        self,
+        key: str,
+        identifier: str,
+        options: Mapping[str, Any],
+    ) -> None:
+        profile = next(
+            (
+                item
+                for item in self._nozzle_profiles.values()
+                if key in {item.resource_id.lower(), f"{item.orifice_diameter_mm:g}"}
+                or key in item.display_name.lower()
+            ),
+            None,
+        )
+        if profile is None:
+            raise KeyError(identifier)
+        if options.get("complete"):
+            profile = configured_nozzle_copy(profile, options)
+            if options.get("persist_user_copy"):
+                self.controller.save_user_resource(profile)
+        self.controller.select_nozzle(profile)
+
+    def _select_material_resource(
+        self,
+        key: str,
+        identifier: str,
+        options: Mapping[str, Any],
+    ) -> None:
+        profile = next(
+            (
+                item
+                for item in self._material_profiles.values()
+                if key in {item.resource_id.lower(), item.material.lower()}
+                or key in item.display_name.lower()
+            ),
+            None,
+        )
+        if profile is None:
+            raise KeyError(identifier)
+        if options.get("review_confirmed"):
+            profile = profile.reviewed_copy(str(uuid4()))
+            if options.get("persist_user_copy"):
+                self.controller.save_user_resource(profile)
+        self.controller.select_material(profile)
 
     def apply_numeric_coordinate(
         self,
@@ -1844,11 +1600,7 @@ class TubeSetupPage(QWidget):
 def _resource_profile_id(
     profile: MachineProfile | NozzleProfile | MaterialProfile,
 ) -> str:
-    return (
-        profile.profile_id
-        if isinstance(profile, MachineProfile)
-        else profile.resource_id
-    )
+    return profile.profile_id if isinstance(profile, MachineProfile) else profile.resource_id
 
 
 def _profile_from_snapshot(
@@ -1894,34 +1646,6 @@ def _state_color(state: NodeState) -> QColor:
         NodeState.DIRTY: QColor("#B7791F"),
         NodeState.INVALID: QColor("#C43D4E"),
     }[state]
-
-
-def _overlay_from_frame(frame: CoordinateFrameDefinition) -> CoordinateFrameOverlay:
-    source_from_frame = frame.T_target_from_source.inverse()
-    return CoordinateFrameOverlay(
-        frame.frame_id,
-        frame.name,
-        source_from_frame.transform_point((0.0, 0.0, 0.0)),
-        source_from_frame.transform_vector((1.0, 0.0, 0.0)),
-        source_from_frame.transform_vector((0.0, 1.0, 0.0)),
-        source_from_frame.transform_vector((0.0, 0.0, 1.0)),
-        scale=20.0,
-    )
-
-
-def _transform_overlay(
-    overlay: CoordinateFrameOverlay, transform: Any
-) -> CoordinateFrameOverlay:
-    return CoordinateFrameOverlay(
-        overlay.frame_id,
-        overlay.name,
-        transform.transform_point(overlay.origin),
-        transform.transform_vector(overlay.x_axis),
-        transform.transform_vector(overlay.y_axis),
-        transform.transform_vector(overlay.z_axis),
-        overlay.scale,
-        overlay.visible,
-    )
 
 
 __all__ = ["TubeSetupPage"]

@@ -7,11 +7,10 @@ import json
 import time
 import urllib.error
 import urllib.request
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable
 
 from PIL import ImageGrab
-
 
 SW_RESTORE = 9
 SWP_SHOWWINDOW = 0x0040
@@ -136,8 +135,6 @@ def body_list_candidates(rect: tuple[int, int, int, int]) -> list[tuple[int, int
 
 def viewer_candidates(rect: tuple[int, int, int, int]) -> list[tuple[int, int]]:
     left, top, right, bottom = rect
-    width = right - left
-    height = bottom - top
     x0 = left + 260
     x1 = right - 330
     y0 = top + 115
@@ -207,7 +204,9 @@ def main() -> int:
             str(out_dir / "04_edge_selected.png"),
         ],
     }
-    (out_dir / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
+    (out_dir / "summary.json").write_text(
+        json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
     print(json.dumps(summary, ensure_ascii=False, indent=2))
     return 0
 

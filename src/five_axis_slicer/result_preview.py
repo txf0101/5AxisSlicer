@@ -8,13 +8,13 @@ their dedicated application modules.  A viewer factory can be injected so Qt
 integration tests do not need to create a VTK or OpenGL context.
 """
 
-from bisect import bisect_left, bisect_right
-from copy import deepcopy
-from dataclasses import dataclass, fields
-import logging
-from pathlib import Path
 import re
-from typing import Any, Callable
+from bisect import bisect_left, bisect_right
+from collections.abc import Callable
+from copy import deepcopy
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
 
 import numpy as np
 
@@ -28,18 +28,17 @@ from .result_state import (
 )
 from .theme import LIGHT_THEME, UI_TYPOGRAPHY
 
-
 try:  # Importing data modules remains possible in headless/minimal installs.
     from PyQt5.QtCore import (
         QEvent,
         QObject,
         QRect,
         QRunnable,
-        QSize,
         QSignalBlocker,
+        QSize,
+        Qt,
         QThreadPool,
         QTimer,
-        Qt,
         pyqtSignal,
         pyqtSlot,
     )
@@ -56,22 +55,13 @@ try:  # Importing data modules remains possible in headless/minimal installs.
     )
     from PyQt5.QtWidgets import (
         QApplication,
-        QCheckBox,
-        QComboBox,
         QDoubleSpinBox,
         QFileDialog,
         QFrame,
-        QGridLayout,
         QHBoxLayout,
         QLabel,
-        QLineEdit,
-        QPlainTextEdit,
-        QProgressBar,
-        QPushButton,
         QScrollArea,
         QSizePolicy,
-        QSlider,
-        QSpinBox,
         QStyle,
         QTextEdit,
         QToolButton,
@@ -90,7 +80,6 @@ ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_OUTPUT_DIRECTORY = ROOT / "outputs" / "paper_preview_acceptance"
 CONTEXT_RADIUS = 20
 PLAYBACK_INTERVAL_MS = 80
-LOGGER = logging.getLogger(__name__)
 
 
 class ResultCommitError(RuntimeError):
@@ -154,6 +143,37 @@ def _compact_number(value: float, precision: int = 6) -> str:
     return f"{value:.{precision}f}".rstrip("0").rstrip(".")
 
 
+_ROTARY_COLUMNS = {"A": 0, "B": 1, "C": 2, "U": 3, "V": 4, "W": 5}
+
+
+def _timeline_axis_range(preview: Any, axis: str) -> list[float] | None:
+    arrays = getattr(preview, "timeline_arrays", None)
+    column = _ROTARY_COLUMNS.get(axis)
+    if arrays is None or column is None or not arrays.count:
+        return None
+    endpoints = (arrays.rotary_starts[:, column], arrays.rotary_ends[:, column])
+    finite = np.concatenate([values[np.isfinite(values)] for values in endpoints])
+    if axis in getattr(preview, "rotary_axes", ()):
+        finite = np.append(finite, 0.0)
+    if not finite.size:
+        return None
+    return [float(np.min(finite)), float(np.max(finite))]
+
+
+def _segment_axis_range(preview: Any, axis: str) -> list[float] | None:
+    values = [
+        float(rotary[axis])
+        for segment in getattr(preview, "segments", [])
+        for rotary in (segment.rotary_start, segment.rotary_end)
+        if axis in rotary
+    ]
+    if not values:
+        return None
+    if axis in getattr(preview, "rotary_axes", ()):
+        values.append(0.0)
+    return [min(values), max(values)]
+
+
 if QT_AVAILABLE:
 
     class _Card(QFrame):
@@ -161,7 +181,6 @@ if QT_AVAILABLE:
             super().__init__(parent)
             self.setObjectName("resultCard")
             self.setFrameShape(QFrame.NoFrame)
-
 
     class _MiddleElidingPathLabel(QLabel):
         """Single-line source label that never dictates the sidebar width."""
@@ -202,7 +221,6 @@ if QT_AVAILABLE:
             elided = self.fontMetrics().elidedText(self._full_text, Qt.ElideMiddle, width)
             if super().text() != elided:
                 super().setText(elided)
-
 
     class _WrappingLabel(QLabel):
         """Width-neutral label with deterministic height-for-width geometry."""
@@ -248,7 +266,6 @@ if QT_AVAILABLE:
                 self.setMinimumHeight(required)
                 self.updateGeometry()
 
-
     class _ColorLegend(QWidget):
         """Small, export-safe legend drawn without icon assets."""
 
@@ -291,7 +308,6 @@ if QT_AVAILABLE:
             painter.drawEllipse(second_x, 16, 10, 10)
             painter.drawText(second_x + 17, 27, self.end_text)
             painter.end()
-
 
     class _ViewerCanvas(QFrame):
         """Viewer host with vector overlays kept separate from render geometry."""
@@ -355,7 +371,6 @@ if QT_AVAILABLE:
             for child in (self.tool_rail, self.orientation_cube, self.axis_triad, self.legend):
                 child.raise_()
 
-
     class GCodeSyntaxHighlighter(QSyntaxHighlighter):
         """Highlight the five G-code word groups used by the paper figure."""
 
@@ -389,7 +404,9 @@ if QT_AVAILABLE:
             for match in self._WORD_PATTERN.finditer(code):
                 axis = match.group("axis").upper()
                 key = "XYZ" if axis in "XYZ" else "AC" if axis in "AC" else axis
-                self.setFormat(source_offset + match.start(), match.end() - match.start(), self.formats[key])
+                self.setFormat(
+                    source_offset + match.start(), match.end() - match.start(), self.formats[key]
+                )
             if comment_offset >= 0:
                 self.setFormat(
                     source_offset + comment_offset,
@@ -397,10 +414,8 @@ if QT_AVAILABLE:
                     self.comment_format,
                 )
 
-
     class _IndexTaskSignals(QObject):
         finished = pyqtSignal(int, str, object, object)
-
 
     class _IndexTask(QRunnable):
         """One cancellable-by-generation read operation on a source index."""
@@ -436,7 +451,6 @@ if QT_AVAILABLE:
                 result = None
                 error = str(exc)
             self.signals.finished.emit(self.token, self.operation, result, error)
-
 
     class ResultPreviewPage(QWidget):
         """Three-column slicing-result page with atomic load presentation."""
@@ -544,112 +558,9 @@ if QT_AVAILABLE:
         # Public integration contract
 
         def retranslate(self, language: str) -> None:
-            self.language = language if language in {"zh", "en"} else "zh"
-            self.title_label.setText(tr(self.language, "result_preview_title"))
-            self.subtitle_label.setText(tr(self.language, "result_preview_subtitle"))
-            self.back_button.setText(tr(self.language, "result_back_to_workbench"))
-            self.sources_heading.setText(tr(self.language, "result_column_sources"))
-            self.viewer_heading.setText(tr(self.language, "result_column_viewer"))
-            self.analysis_heading.setText(tr(self.language, "result_column_analysis"))
-            self.source_card_title.setText(tr(self.language, "result_current_source"))
-            self.model_source_title.setText(tr(self.language, "result_model_source"))
-            self.gcode_source_title.setText(tr(self.language, "result_gcode_source"))
-            self.reference_source_title.setText(tr(self.language, "result_reference_image"))
-            self.demo_button.setText(tr(self.language, "result_load_impeller_demo"))
-            self.open_gcode_button.setText(tr(self.language, "result_open_existing_gcode"))
-            self.open_step_button.setText(tr(self.language, "result_open_step"))
-            self.slice_button.setText(tr(self.language, "result_slice_and_preview"))
-            self.parameters_title.setText(tr(self.language, "process_parameters"))
-            self.parameter_labels["layer_height"].setText(tr(self.language, "parameter_layer_height"))
-            self.parameter_labels["print_speed"].setText(tr(self.language, "parameter_print_speed"))
-            self.parameter_labels["extrusion_width"].setText(tr(self.language, "parameter_extrusion_width"))
-            self.parameter_labels["nozzle_diameter"].setText(tr(self.language, "parameter_nozzle_diameter"))
-            self.parameter_labels["process_mode"].setText(tr(self.language, "parameter_process_mode"))
-            self.parameter_labels["top_bottom"].setText(tr(self.language, "parameter_top_bottom_layers"))
-            self.shell_checkbox.setText(tr(self.language, "parameter_process_mode_shell"))
-            self.edit_parameters_button.setText(tr(self.language, "parameter_edit"))
-            self.save_parameters_button.setText(tr(self.language, "parameter_save"))
-            self.reset_parameters_button.setText(tr(self.language, "parameter_reset"))
-            self.parameter_feedback.setText("")
+            from .result_preview_text import retranslate_result_preview
 
-            self.viewer_canvas.fit_button.setToolTip(tr(self.language, "tooltip_fit_view"))
-            self.viewer_canvas.home_button.setToolTip(tr(self.language, "tooltip_home_view"))
-            self.viewer_canvas.orientation_cube.setToolTip(tr(self.language, "tooltip_orientation_cube"))
-            self.viewer_canvas.axis_triad.setToolTip(tr(self.language, "view_part_axes"))
-            self.viewer_canvas.legend.set_texts(
-                tr(self.language, "legend_start"),
-                tr(self.language, "legend_end"),
-            )
-            self.stage_title.setText(tr(self.language, "stage_navigation"))
-            self.stage_combo.setToolTip(tr(self.language, "tooltip_stage_navigation"))
-            self.stage_fallback_label.setText(tr(self.language, "stage_marker_fallback"))
-            self.previous_stage_button.setToolTip(tr(self.language, "result_progress_previous"))
-            self.next_stage_button.setToolTip(tr(self.language, "result_progress_next"))
-            self.progress_title.setText(tr(self.language, "result_progress"))
-            self.progress_slider.setToolTip(tr(self.language, "tooltip_progress"))
-            self.quality_title.setText(tr(self.language, "quality_mode"))
-            self.quality_combo.setItemText(0, tr(self.language, "quality_interactive"))
-            self.quality_combo.setItemText(1, tr(self.language, "quality_paper"))
-            self.quality_combo.setToolTip(tr(self.language, "tooltip_quality_mode"))
-            self.visibility_title.setText(tr(self.language, "visibility_title"))
-            visibility_keys = (
-                "visibility_model",
-                "visibility_extrusion",
-                "visibility_travel",
-                "visibility_pose",
-                "visibility_start_end",
-                "visibility_part_axes",
-                "visibility_orientation_cube",
-            )
-            for checkbox, key in zip(self.visibility_checks, visibility_keys):
-                checkbox.setText(tr(self.language, key))
-
-            self.status_card_title.setText(tr(self.language, "result_state"))
-            self.statistics_title.setText(tr(self.language, "result_summary"))
-            self.thumbnail_title.setText(tr(self.language, "result_thumbnail"))
-            self.thumbnail_note.setText(tr(self.language, "result_thumbnail_fixed_camera"))
-            self.context_title.setText(tr(self.language, "gcode_context"))
-            self.search_edit.setPlaceholderText(tr(self.language, "gcode_search_placeholder"))
-            self.search_previous_button.setToolTip(tr(self.language, "gcode_search_previous"))
-            self.search_next_button.setToolTip(tr(self.language, "gcode_search_next"))
-            self.jump_edit.setPlaceholderText(tr(self.language, "gcode_jump_placeholder"))
-            self.jump_button.setText(tr(self.language, "gcode_jump_go"))
-            self.export_title.setText(tr(self.language, "paper_export"))
-            self.export_description.setText(tr(self.language, "paper_export_description"))
-            self.export_preset_value.setText(tr(self.language, "paper_export_preset_4k"))
-            self.output_label.setText(tr(self.language, "paper_export_output_folder"))
-            self.choose_output_button.setText(tr(self.language, "paper_export_choose_folder"))
-            self.export_current_button.setText(tr(self.language, "paper_export_current"))
-            self.export_both_button.setText(tr(self.language, "paper_export_both_languages"))
-            self.export_current_button.setToolTip(tr(self.language, "tooltip_paper_export"))
-            self.export_both_button.setToolTip(tr(self.language, "tooltip_paper_export"))
-
-            self.demo_button.setToolTip(tr(self.language, "tooltip_load_demo"))
-            self.open_gcode_button.setToolTip(tr(self.language, "tooltip_open_gcode"))
-            self.open_step_button.setToolTip(tr(self.language, "tooltip_open_step"))
-            self.slice_button.setToolTip(tr(self.language, "tooltip_slice_preview"))
-            self.cancel_button.setToolTip(tr(self.language, "tooltip_cancel_loading"))
-            self.edit_parameters_button.setToolTip(tr(self.language, "tooltip_parameter_edit"))
-            self.save_parameters_button.setToolTip(tr(self.language, "tooltip_parameter_save"))
-            self.reset_parameters_button.setToolTip(tr(self.language, "tooltip_parameter_reset"))
-            self.search_edit.setToolTip(tr(self.language, "tooltip_gcode_search"))
-            self.jump_edit.setToolTip(tr(self.language, "tooltip_gcode_jump"))
-
-            self._retranslate_statistics()
-            if self.stage_combo.count():
-                with QSignalBlocker(self.stage_combo):
-                    for index in range(self.stage_combo.count()):
-                        entry = self.stage_combo.itemData(index)
-                        if isinstance(entry, dict):
-                            self.stage_combo.setItemText(index, self._stage_text(entry))
-            else:
-                self._rebuild_stage_combo(preserve_id=self.state.selected_stage)
-            self._update_sources()
-            self._update_status()
-            self._update_statistics()
-            self._update_context_labels()
-            self._update_thumbnail_label()
-            self._refresh_wrapped_text_geometry()
+            retranslate_result_preview(self, language)
 
         def begin_load(self, request: LoadRequest) -> None:
             self._stop_playback()
@@ -684,270 +595,27 @@ if QT_AVAILABLE:
             return self.apply_load_commit(prepared)
 
         def prepare_load_commit(self, result: LoadResult) -> PreparedLoadCommit | None:
-            """Validate a result and capture rollback state without UI mutation."""
+            """Validate a worker result and capture an immutable rollback snapshot."""
 
-            if self.state.status != "loading" or result.request_id != self.state.current_request_id:
-                return None
-            if result.model_path is not None and result.model is None:
-                raise ValueError("The load result has a model path without model data")
-            if result.gcode_path is not None and result.gcode_preview is None:
-                raise ValueError("The load result has a G-code path without preview data")
-            if result.gcode_source_index is not None and result.gcode_preview is None:
-                raise ValueError("A source index requires matching G-code preview data")
-            if self.state.quality_mode not in {"interactive", "paper"}:
-                raise ValueError(f"Unsupported quality mode: {self.state.quality_mode}")
+            from .result_commit import prepare_load_commit
 
-            replacing_gcode = result.gcode_preview is not None
-            preview = result.gcode_preview if replacing_gcode else self._preview
-            source_index = result.gcode_source_index if replacing_gcode else self._source_index
-            owns_source_index = (
-                source_index is not None
-                if replacing_gcode
-                else self._owns_source_index
-            )
-            stage_entries = self._stage_entries_for(preview, source_index)
-            source_audits = deepcopy(self._source_audits)
-            source_audits.update(
-                {
-                    str(role): dict(audit)
-                    for role, audit in result.source_audits.items()
-                }
-            )
-            state_snapshot = {
-                field.name: deepcopy(getattr(self.state, field.name))
-                for field in fields(self.state)
-            }
-            return PreparedLoadCommit(
-                result=result,
-                previous_model=self._model,
-                previous_preview=self._preview,
-                previous_source_index=self._source_index,
-                previous_owns_source_index=self._owns_source_index,
-                previous_source_audits=deepcopy(self._source_audits),
-                previous_state=state_snapshot,
-                previous_stage_entries=deepcopy(self._stage_entries),
-                previous_stage_progress_start=self._stage_progress_start,
-                previous_stage_progress_end=self._stage_progress_end,
-                previous_stage_uses_layer_filter=self._stage_uses_layer_filter,
-                previous_progress_minimum=self.progress_slider.minimum(),
-                previous_progress_maximum=self.progress_slider.maximum(),
-                previous_progress_value=self.progress_slider.value(),
-                previous_current_line=self._current_line,
-                previous_context_lines=list(self._context_lines),
-                model=result.model if result.model is not None else self._model,
-                preview=preview,
-                source_index=source_index,
-                owns_source_index=owns_source_index,
-                source_audits=source_audits,
-                stage_entries=stage_entries,
-                quality_mode=self.state.quality_mode,
-            )
+            return prepare_load_commit(self, result)
 
         def apply_load_commit(self, prepared: PreparedLoadCommit) -> bool:
-            """Apply a prepared transaction and transfer its source-index ownership."""
+            """Apply a prepared result as one presentation transaction."""
 
-            result = prepared.result
-            if self.state.status != "loading" or result.request_id != self.state.current_request_id:
-                self._discard_load_result(result)
-                return False
-            if (
-                self._model is not prepared.previous_model
-                or self._preview is not prepared.previous_preview
-                or self._source_index is not prepared.previous_source_index
-            ):
-                cause = RuntimeError("The committed page changed after result preparation")
-                cleanup_errors = self._discard_load_result(result)
-                raise ResultCommitError(result.request_id, cause, cleanup_errors) from cause
-            if any(
-                getattr(self.state, name) != value
-                for name, value in prepared.previous_state.items()
-            ):
-                cause = RuntimeError("The result state changed after result preparation")
-                cleanup_errors = self._discard_load_result(result)
-                raise ResultCommitError(result.request_id, cause, cleanup_errors) from cause
+            from .result_commit import apply_load_commit
 
-            previous_signal_state = self.blockSignals(True)
-            attempted_viewer_steps: set[str] = set()
-            try:
-                self._stop_playback()
-                if hasattr(self.viewer, "set_quality_mode"):
-                    attempted_viewer_steps.add("quality")
-                    self.viewer.set_quality_mode(prepared.quality_mode)
-                if result.gcode_preview is not None and hasattr(self.viewer, "load_gcode_preview"):
-                    attempted_viewer_steps.add("gcode")
-                    self.viewer.load_gcode_preview(prepared.preview)
-                if result.model is not None and hasattr(self.viewer, "load_model"):
-                    attempted_viewer_steps.add("model")
-                    self.viewer.load_model(prepared.model)
-
-                self._model = prepared.model
-                self._preview = prepared.preview
-                self._source_index = prepared.source_index
-                self._owns_source_index = prepared.owns_source_index
-                self._source_audits = deepcopy(prepared.source_audits)
-                self._stage_entries = deepcopy(prepared.stage_entries)
-                if prepared.source_index is not prepared.previous_source_index:
-                    self._search_token += 1
-                    self._current_line = 1
-                    self._context_lines = []
-
-                if not self.state.commit_load(result):
-                    raise RuntimeError("The load state changed during result application")
-                self._set_post_commit_status()
-                with QSignalBlocker(self.quality_combo):
-                    self.quality_combo.setCurrentIndex(
-                        0 if prepared.quality_mode == "interactive" else 1
-                    )
-                self._rebuild_stage_combo(preserve_id=self.state.selected_stage)
-                self._update_sources()
-                self._update_status()
-                self._update_statistics()
-                self._update_context()
-                self._apply_visibility()
-                self.cancel_button.setEnabled(False)
-                if hasattr(self.viewer, "set_standard_view"):
-                    self.viewer.set_standard_view("isometric")
-                elif hasattr(self.viewer, "home_view"):
-                    self.viewer.home_view()
-            except Exception as exc:
-                rollback_errors = self._rollback_load_commit(
-                    prepared,
-                    frozenset(attempted_viewer_steps),
-                )
-                rollback_errors += self._discard_load_result(result)
-                raise ResultCommitError(result.request_id, exc, rollback_errors) from exc
-            finally:
-                self.blockSignals(previous_signal_state)
-
-            # Ownership changes only after every fallible presentation step has
-            # completed.  A result closed by the caller can no longer affect the
-            # page's active source index.
-            result.gcode_source_index = None
-            old_index = prepared.previous_source_index
-            if (
-                old_index is not None
-                and old_index is not prepared.source_index
-                and prepared.previous_owns_source_index
-            ):
-                try:
-                    old_index.close()
-                except Exception:
-                    LOGGER.warning("Failed to close the retired G-code source index", exc_info=True)
-            try:
-                self._queue_representative_line()
-            except Exception:
-                LOGGER.warning("Failed to schedule representative G-code lookup", exc_info=True)
-            QTimer.singleShot(0, self.capture_thumbnail)
-            self._emit_display_state()
-            return True
+            return apply_load_commit(self, prepared)
 
         def _rollback_load_commit(
             self,
             prepared: PreparedLoadCommit,
             attempted_viewer_steps: frozenset[str],
         ) -> tuple[str, ...]:
-            """Best-effort viewer compensation followed by exact page-state restore."""
+            from .result_commit import rollback_load_commit
 
-            errors: list[str] = []
-
-            def restore_quality() -> None:
-                if hasattr(self.viewer, "set_quality_mode"):
-                    self.viewer.set_quality_mode(
-                        str(prepared.previous_state["quality_mode"])
-                    )
-
-            def restore_gcode() -> None:
-                if prepared.previous_preview is not None:
-                    if hasattr(self.viewer, "load_gcode_preview"):
-                        self.viewer.load_gcode_preview(prepared.previous_preview)
-                elif hasattr(self.viewer, "clear_gcode_preview"):
-                    self.viewer.clear_gcode_preview()
-
-            def restore_model() -> None:
-                if prepared.previous_model is not None:
-                    if hasattr(self.viewer, "load_model"):
-                        self.viewer.load_model(prepared.previous_model)
-                elif hasattr(self.viewer, "clear_model"):
-                    self.viewer.clear_model()
-                elif hasattr(self.viewer, "model"):
-                    self.viewer.model = None
-                    raise RuntimeError(
-                        "viewer lacks clear_model; empty-scene visual rollback is unverified"
-                    )
-
-            operations: list[tuple[str, Callable[[], None]]] = []
-            if "quality" in attempted_viewer_steps:
-                operations.append(("quality", restore_quality))
-            if attempted_viewer_steps.intersection({"gcode", "model"}):
-                operations.append(("gcode", restore_gcode))
-            if "model" in attempted_viewer_steps:
-                operations.append(("model", restore_model))
-            for name, operation in operations:
-                try:
-                    operation()
-                except Exception as exc:  # Preserve the primary commit cause.
-                    errors.append(f"viewer {name}: {exc}")
-
-            self._model = prepared.previous_model
-            self._preview = prepared.previous_preview
-            self._source_index = prepared.previous_source_index
-            self._owns_source_index = prepared.previous_owns_source_index
-            self._source_audits = deepcopy(prepared.previous_source_audits)
-            self._stage_entries = deepcopy(prepared.previous_stage_entries)
-            self._current_line = prepared.previous_current_line
-            self._context_lines = list(prepared.previous_context_lines)
-            for name, value in prepared.previous_state.items():
-                setattr(self.state, name, deepcopy(value))
-
-            for name, operation in (
-                ("controls", self._apply_state_to_controls),
-                ("stages", lambda: self._rebuild_stage_combo(self.state.selected_stage)),
-            ):
-                try:
-                    operation()
-                except Exception as exc:
-                    errors.append(f"page {name}: {exc}")
-
-            # Stage activation is intentionally presentation-oriented and may
-            # update serializable progress.  Reapply the exact transaction
-            # snapshot and the prior slider/viewer position after rebuilding
-            # its widgets.
-            for name, value in prepared.previous_state.items():
-                setattr(self.state, name, deepcopy(value))
-            self._stage_progress_start = prepared.previous_stage_progress_start
-            self._stage_progress_end = prepared.previous_stage_progress_end
-            self._stage_uses_layer_filter = prepared.previous_stage_uses_layer_filter
-            with QSignalBlocker(self.progress_slider):
-                self.progress_slider.setRange(
-                    prepared.previous_progress_minimum,
-                    prepared.previous_progress_maximum,
-                )
-                self.progress_slider.setValue(prepared.previous_progress_value)
-            self.progress_value.setText(f"{self.state.playback_progress * 100:.1f}%")
-            if prepared.previous_preview is not None:
-                try:
-                    self._set_viewer_progress(
-                        prepared.previous_stage_progress_start
-                        + prepared.previous_progress_value,
-                        interactive=False,
-                    )
-                except Exception as exc:
-                    errors.append(f"viewer progress: {exc}")
-            self._current_line = prepared.previous_current_line
-            self._context_lines = list(prepared.previous_context_lines)
-
-            for name, operation in (
-                ("sources", self._update_sources),
-                ("status", self._update_status),
-                ("statistics", self._update_statistics),
-                ("context", self._update_context),
-                ("visibility", self._apply_visibility),
-            ):
-                try:
-                    operation()
-                except Exception as exc:
-                    errors.append(f"page {name}: {exc}")
-            return tuple(errors)
+            return rollback_load_commit(self, prepared, attempted_viewer_steps)
 
         def _discard_load_result(self, result: LoadResult) -> tuple[str, ...]:
             """Close an uncommitted index without closing the active index."""
@@ -1012,15 +680,21 @@ if QT_AVAILABLE:
             self._sync_slice_button()
 
         def set_reference_image(self, path: str | Path | None) -> None:
-            self._reference_image_path = None if path in (None, "") else Path(path).expanduser().resolve()
+            self._reference_image_path = (
+                None if path in (None, "") else Path(path).expanduser().resolve()
+            )
             self._update_sources()
 
         def set_selected_model_path(self, path: str | Path | None) -> None:
-            self.state.selected_model_path = None if path in (None, "") else Path(path).expanduser().resolve()
+            self.state.selected_model_path = (
+                None if path in (None, "") else Path(path).expanduser().resolve()
+            )
             self._update_sources()
 
         def set_selected_gcode_path(self, path: str | Path | None) -> None:
-            self.state.selected_gcode_path = None if path in (None, "") else Path(path).expanduser().resolve()
+            self.state.selected_gcode_path = (
+                None if path in (None, "") else Path(path).expanduser().resolve()
+            )
             self._update_sources()
             self._sync_slice_button()
 
@@ -1207,7 +881,11 @@ if QT_AVAILABLE:
             return super().eventFilter(watched, event)
 
         def capture_thumbnail(self) -> QImage:
-            if not hasattr(self.viewer, "render_scene_image") or self._model is None and self._preview is None:
+            if (
+                not hasattr(self.viewer, "render_scene_image")
+                or self._model is None
+                and self._preview is None
+            ):
                 self._thumbnail_image = QImage()
                 self._update_thumbnail_label()
                 return self._thumbnail_image
@@ -1234,436 +912,24 @@ if QT_AVAILABLE:
         # UI construction
 
         def _build_ui(self) -> None:
-            self.setObjectName("resultPreviewPage")
-            root_layout = QVBoxLayout(self)
-            root_layout.setContentsMargins(14, 12, 14, 14)
-            root_layout.setSpacing(10)
+            from .result_preview_layout import build_result_preview_ui
 
-            header = QFrame(self)
-            header.setObjectName("resultHeader")
-            header_layout = QHBoxLayout(header)
-            header_layout.setContentsMargins(12, 8, 12, 8)
-            self.back_button = QPushButton(header)
-            self.back_button.setObjectName("secondaryButton")
-            self.back_button.setMinimumWidth(138)
-            title_layout = QVBoxLayout()
-            title_layout.setSpacing(1)
-            self.title_label = QLabel(header)
-            self.title_label.setObjectName("resultPageTitle")
-            self.subtitle_label = QLabel(header)
-            self.subtitle_label.setObjectName("resultPageSubtitle")
-            title_layout.addWidget(self.title_label)
-            title_layout.addWidget(self.subtitle_label)
-            header_layout.addWidget(self.back_button)
-            header_layout.addSpacing(12)
-            header_layout.addLayout(title_layout, 1)
-            root_layout.addWidget(header)
-
-            columns = QHBoxLayout()
-            columns.setSpacing(10)
-            self.left_column = self._build_left_column()
-            self.center_column = self._build_center_column()
-            self.right_column = self._build_right_column()
-            self.left_column.setObjectName("resultLeftColumn")
-            self.center_column.setObjectName("resultCenterColumn")
-            self.right_column.setObjectName("resultRightColumn")
-            self.left_column.setMinimumWidth(250)
-            self.center_column.setMinimumWidth(620)
-            self.right_column.setMinimumWidth(330)
-            columns.addWidget(self.left_column, 18)
-            columns.addWidget(self.center_column, 56)
-            columns.addWidget(self.right_column, 26)
-            root_layout.addLayout(columns, 1)
-            self.columns_layout = columns
-            self._apply_local_style()
+            build_result_preview_ui(self)
 
         def _build_left_column(self) -> QWidget:
-            content = QWidget(self)
-            content_layout = QVBoxLayout(content)
-            content_layout.setContentsMargins(0, 0, 0, 0)
-            content_layout.setSpacing(8)
-            self.sources_heading = self._column_heading(content)
-            self.sources_heading.setWordWrap(True)
-            content_layout.addWidget(self.sources_heading)
+            from .result_preview_layout import build_left_column
 
-            source_card = _Card(content)
-            source_layout = QVBoxLayout(source_card)
-            source_layout.setContentsMargins(12, 12, 12, 12)
-            source_layout.setSpacing(7)
-            self.source_card_title = self._card_title(source_card)
-            source_layout.addWidget(self.source_card_title)
-            self.model_source_title, self.model_source_value = self._source_row(source_card)
-            self.gcode_source_title, self.gcode_source_value = self._source_row(source_card)
-            self.reference_source_title, self.reference_source_value = self._source_row(source_card)
-            for title, value in (
-                (self.model_source_title, self.model_source_value),
-                (self.gcode_source_title, self.gcode_source_value),
-            ):
-                source_layout.addWidget(title)
-                source_layout.addWidget(value)
-            self.reference_source_title.hide()
-            self.reference_source_value.hide()
-            self.demo_button = QPushButton(source_card)
-            self.demo_button.setObjectName("primaryButton")
-            self.open_gcode_button = QPushButton(source_card)
-            self.open_step_button = QPushButton(source_card)
-            source_layout.addSpacing(3)
-            source_layout.addWidget(self.demo_button)
-            source_layout.addWidget(self.open_gcode_button)
-            source_layout.addWidget(self.open_step_button)
-            self.slice_button = QPushButton(source_card)
-            self.slice_button.setObjectName("primaryButton")
-            source_layout.addSpacing(4)
-            source_layout.addWidget(self.slice_button)
-            content_layout.addWidget(source_card)
-
-            parameter_card = _Card(content)
-            parameter_layout = QVBoxLayout(parameter_card)
-            parameter_layout.setContentsMargins(12, 12, 12, 12)
-            parameter_layout.setSpacing(8)
-            self.parameters_title = self._card_title(parameter_card)
-            self.parameters_title.setWordWrap(True)
-            parameter_layout.addWidget(self.parameters_title)
-            # Retained as hidden compatibility attributes for callers that inspect
-            # an older ResultPreviewPage instance.  Production UI omits the
-            # Reference evidence remains in the audit record and is not part of the product UI.
-            self.parameters_badge = QLabel(parameter_card)
-            self.parameters_badge.hide()
-            self.parameters_note = QLabel(parameter_card)
-            self.parameters_note.hide()
-
-            grid = QGridLayout()
-            grid.setVerticalSpacing(4)
-            self.parameter_labels: dict[str, QLabel] = {}
-            self.layer_height_spin = self._double_spin(0.01, 10.0, 0.01, 2, " mm")
-            self.print_speed_spin = self._double_spin(1.0, 1_000_000.0, 10.0, 0, " mm/min")
-            self.extrusion_width_spin = self._double_spin(0.01, 10.0, 0.01, 2, " mm")
-            self.nozzle_diameter_spin = self._double_spin(0.01, 10.0, 0.01, 2, " mm")
-            self.shell_checkbox = QCheckBox(parameter_card)
-            self.top_layers_spin = QSpinBox(parameter_card)
-            self.bottom_layers_spin = QSpinBox(parameter_card)
-            for spin in (self.top_layers_spin, self.bottom_layers_spin):
-                spin.setRange(0, 999)
-            top_bottom_widget = QWidget(parameter_card)
-            top_bottom_layout = QHBoxLayout(top_bottom_widget)
-            top_bottom_layout.setContentsMargins(0, 0, 0, 0)
-            top_bottom_layout.setSpacing(4)
-            slash = QLabel("/", top_bottom_widget)
-            slash.setAlignment(Qt.AlignCenter)
-            top_bottom_layout.addWidget(self.top_layers_spin)
-            top_bottom_layout.addWidget(slash)
-            top_bottom_layout.addWidget(self.bottom_layers_spin)
-            parameter_rows = (
-                ("layer_height", self.layer_height_spin),
-                ("print_speed", self.print_speed_spin),
-                ("extrusion_width", self.extrusion_width_spin),
-                ("nozzle_diameter", self.nozzle_diameter_spin),
-                ("process_mode", self.shell_checkbox),
-                ("top_bottom", top_bottom_widget),
-            )
-            for row, (key, editor) in enumerate(parameter_rows):
-                label = QLabel(parameter_card)
-                label.setObjectName("formLabel")
-                self.parameter_labels[key] = label
-                grid.addWidget(label, row * 2, 0)
-                grid.addWidget(editor, row * 2 + 1, 0)
-            parameter_layout.addLayout(grid)
-            parameter_buttons = QGridLayout()
-            parameter_buttons.setHorizontalSpacing(6)
-            parameter_buttons.setVerticalSpacing(6)
-            self.edit_parameters_button = QPushButton(parameter_card)
-            self.save_parameters_button = QPushButton(parameter_card)
-            self.reset_parameters_button = QPushButton(parameter_card)
-            parameter_buttons.addWidget(self.edit_parameters_button, 0, 0)
-            parameter_buttons.addWidget(self.save_parameters_button, 0, 1)
-            parameter_buttons.addWidget(self.reset_parameters_button, 1, 0, 1, 2)
-            parameter_buttons.setColumnStretch(0, 1)
-            parameter_buttons.setColumnStretch(1, 1)
-            parameter_layout.addLayout(parameter_buttons)
-            self.parameter_feedback = _WrappingLabel(parent=parameter_card)
-            self.parameter_feedback.setObjectName("feedbackLabel")
-            self.parameter_feedback.setWordWrap(True)
-            parameter_layout.addWidget(self.parameter_feedback)
-            content_layout.addWidget(parameter_card)
-            content_layout.addStretch(1)
-            return self._scroll_column(content)
+            return build_left_column(self)
 
         def _build_center_column(self) -> QWidget:
-            column = QWidget(self)
-            layout = QVBoxLayout(column)
-            layout.setContentsMargins(0, 0, 0, 0)
-            layout.setSpacing(8)
-            self.viewer_heading = self._column_heading(column)
-            layout.addWidget(self.viewer_heading)
-            self.viewer_canvas = _ViewerCanvas(self.viewer, column)
-            self.viewer_canvas.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-            layout.addWidget(self.viewer_canvas, 1)
+            from .result_preview_layout import build_center_column
 
-            navigation = _Card(column)
-            nav_layout = QGridLayout(navigation)
-            nav_layout.setContentsMargins(12, 9, 12, 9)
-            nav_layout.setHorizontalSpacing(8)
-            nav_layout.setVerticalSpacing(6)
-            self.stage_title = QLabel(navigation)
-            self.stage_title.setObjectName("formLabel")
-            self.stage_combo = QComboBox(navigation)
-            self.previous_stage_button = QToolButton(navigation)
-            self.previous_stage_button.setText("‹")
-            self.next_stage_button = QToolButton(navigation)
-            self.next_stage_button.setText("›")
-            self.previous_stage_button.setFixedSize(34, 34)
-            self.next_stage_button.setFixedSize(34, 34)
-            self.progress_title = QLabel(navigation)
-            self.progress_title.setObjectName("formLabel")
-            self.progress_slider = QSlider(Qt.Horizontal, navigation)
-            self.play_button = QToolButton(navigation)
-            self.play_button.setText("▶")
-            self.play_button.setFixedSize(38, 34)
-            self.progress_value = QLabel("0.0%", navigation)
-            self.progress_value.setObjectName("monospaceValue")
-            self.progress_value.setMinimumWidth(62)
-            self.progress_value.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-            self.quality_title = QLabel(navigation)
-            self.quality_title.setObjectName("formLabel")
-            self.quality_combo = QComboBox(navigation)
-            self.quality_combo.addItem("", "interactive")
-            self.quality_combo.addItem("", "paper")
-            nav_layout.addWidget(self.stage_title, 0, 0)
-            nav_layout.addWidget(self.previous_stage_button, 0, 1)
-            nav_layout.addWidget(self.stage_combo, 0, 2, 1, 3)
-            nav_layout.addWidget(self.next_stage_button, 0, 5)
-            nav_layout.addWidget(self.progress_title, 1, 0)
-            nav_layout.addWidget(self.play_button, 1, 1)
-            nav_layout.addWidget(self.progress_slider, 1, 2, 1, 3)
-            nav_layout.addWidget(self.progress_value, 1, 5)
-            nav_layout.addWidget(self.quality_title, 2, 0)
-            nav_layout.addWidget(self.quality_combo, 2, 2, 1, 2)
-            self.stage_fallback_label = _WrappingLabel(parent=navigation)
-            self.stage_fallback_label.setObjectName("mutedNote")
-            self.stage_fallback_label.setWordWrap(True)
-            nav_layout.addWidget(self.stage_fallback_label, 3, 0, 1, 6)
-            layout.addWidget(navigation)
-
-            visibility = _Card(column)
-            visibility_layout = QVBoxLayout(visibility)
-            visibility_layout.setContentsMargins(12, 8, 12, 8)
-            visibility_layout.setSpacing(5)
-            self.visibility_title = self._card_title(visibility)
-            visibility_layout.addWidget(self.visibility_title)
-            check_layout = QGridLayout()
-            check_layout.setHorizontalSpacing(12)
-            check_layout.setVerticalSpacing(4)
-            self.model_check = QCheckBox(visibility)
-            self.extrusion_check = QCheckBox(visibility)
-            self.travel_check = QCheckBox(visibility)
-            self.pose_check = QCheckBox(visibility)
-            self.start_end_check = QCheckBox(visibility)
-            self.axes_check = QCheckBox(visibility)
-            self.cube_check = QCheckBox(visibility)
-            self.visibility_checks = (
-                self.model_check,
-                self.extrusion_check,
-                self.travel_check,
-                self.pose_check,
-                self.start_end_check,
-                self.axes_check,
-                self.cube_check,
-            )
-            for index, checkbox in enumerate(self.visibility_checks):
-                checkbox.setMinimumWidth(0)
-                checkbox.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
-                check_layout.addWidget(checkbox, index // 2, index % 2)
-            visibility_layout.addLayout(check_layout)
-            layout.addWidget(visibility)
-            return column
+            return build_center_column(self)
 
         def _build_right_column(self) -> QWidget:
-            content = QWidget(self)
-            layout = QVBoxLayout(content)
-            layout.setContentsMargins(0, 0, 0, 0)
-            layout.setSpacing(8)
-            self.analysis_heading = self._column_heading(content)
-            layout.addWidget(self.analysis_heading)
+            from .result_preview_layout import build_right_column
 
-            status_card = _Card(content)
-            status_layout = QVBoxLayout(status_card)
-            status_layout.setContentsMargins(12, 11, 12, 11)
-            status_layout.setSpacing(6)
-            self.status_card_title = self._card_title(status_card)
-            status_layout.addWidget(self.status_card_title)
-            status_row = QHBoxLayout()
-            self.status_indicator = QLabel(status_card)
-            self.status_indicator.setFixedSize(11, 11)
-            self.status_name = QLabel(status_card)
-            self.status_name.setObjectName("statusName")
-            status_row.addWidget(self.status_indicator)
-            status_row.addWidget(self.status_name, 1)
-            status_layout.addLayout(status_row)
-            self.status_detail = _WrappingLabel(parent=status_card)
-            self.status_detail.setWordWrap(True)
-            self.status_detail.setObjectName("mutedNote")
-            status_layout.addWidget(self.status_detail)
-            self.status_progress = QProgressBar(status_card)
-            self.status_progress.setRange(0, 1000)
-            self.status_progress.setTextVisible(True)
-            status_layout.addWidget(self.status_progress)
-            self.cancel_button = QPushButton(status_card)
-            self.cancel_button.setEnabled(False)
-            status_layout.addWidget(self.cancel_button)
-            layout.addWidget(status_card)
-
-            statistics_card = _Card(content)
-            statistics_layout = QVBoxLayout(statistics_card)
-            statistics_layout.setContentsMargins(12, 11, 12, 11)
-            statistics_layout.setSpacing(5)
-            self.statistics_title = self._card_title(statistics_card)
-            statistics_layout.addWidget(self.statistics_title)
-            self.statistics_grid = QGridLayout()
-            self.statistics_grid.setHorizontalSpacing(10)
-            self.statistics_grid.setVerticalSpacing(4)
-            self.statistic_labels: dict[str, QLabel] = {}
-            self.statistic_values: dict[str, QLabel] = {}
-            statistic_keys = (
-                "bodies",
-                "edges",
-                "base_layers",
-                "blade_stages",
-                "spatial_segments",
-                "extrusion_segments",
-                "travel_segments",
-                "layer_range",
-                "a_range",
-                "c_range",
-            )
-            for row, key in enumerate(statistic_keys):
-                label = _WrappingLabel(parent=statistics_card)
-                value = QLabel("—", statistics_card)
-                value.setObjectName("monospaceValue")
-                value.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-                self.statistic_labels[key] = label
-                self.statistic_values[key] = value
-                self.statistics_grid.addWidget(label, row, 0)
-                self.statistics_grid.addWidget(value, row, 1)
-            self.statistics_grid.setColumnStretch(0, 1)
-            self.statistics_grid.setColumnStretch(1, 0)
-            statistics_layout.addLayout(self.statistics_grid)
-            formula_label = _WrappingLabel(parent=statistics_card)
-            formula_label.setObjectName("formulaLabel")
-            formula_label.setText("P_part = Rz(-C) × Rx(-A) × P_machine")
-            formula_label.setWordWrap(True)
-            formula_label.setMinimumWidth(0)
-            formula_label.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Preferred)
-            formula_label.setTextInteractionFlags(Qt.TextSelectableByMouse)
-            statistics_layout.addWidget(formula_label)
-            self.continuity_label = _WrappingLabel("Polyline: 0.02 mm", statistics_card)
-            self.continuity_label.setObjectName("mutedNote")
-            self.continuity_label.setWordWrap(True)
-            self.continuity_label.setMinimumWidth(0)
-            self.continuity_label.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Preferred)
-            statistics_layout.addWidget(self.continuity_label)
-            self.statistics_evidence = _WrappingLabel(parent=statistics_card)
-            self.statistics_evidence.setObjectName("mutedNote")
-            self.statistics_evidence.setWordWrap(True)
-            statistics_layout.addWidget(self.statistics_evidence)
-            layout.addWidget(statistics_card)
-
-            thumbnail_card = _Card(content)
-            thumbnail_layout = QVBoxLayout(thumbnail_card)
-            thumbnail_layout.setContentsMargins(12, 10, 12, 10)
-            thumbnail_layout.setSpacing(5)
-            self.thumbnail_title = self._card_title(thumbnail_card)
-            thumbnail_layout.addWidget(self.thumbnail_title)
-            self.thumbnail_label = QLabel(thumbnail_card)
-            self.thumbnail_label.setObjectName("thumbnailViewport")
-            self.thumbnail_label.setMinimumHeight(132)
-            self.thumbnail_label.setAlignment(Qt.AlignCenter)
-            thumbnail_layout.addWidget(self.thumbnail_label)
-            self.thumbnail_note = _WrappingLabel(parent=thumbnail_card)
-            self.thumbnail_note.setObjectName("mutedNote")
-            self.thumbnail_note.setWordWrap(True)
-            thumbnail_layout.addWidget(self.thumbnail_note)
-            layout.addWidget(thumbnail_card)
-
-            context_card = _Card(content)
-            context_layout = QVBoxLayout(context_card)
-            context_layout.setContentsMargins(12, 10, 12, 10)
-            context_layout.setSpacing(5)
-            self.context_title = self._card_title(context_card)
-            context_layout.addWidget(self.context_title)
-            search_row = QHBoxLayout()
-            self.search_edit = QLineEdit(context_card)
-            self.search_previous_button = QToolButton(context_card)
-            self.search_previous_button.setText("↑")
-            self.search_next_button = QToolButton(context_card)
-            self.search_next_button.setText("↓")
-            search_row.addWidget(self.search_edit, 1)
-            search_row.addWidget(self.search_previous_button)
-            search_row.addWidget(self.search_next_button)
-            context_layout.addLayout(search_row)
-            jump_row = QHBoxLayout()
-            self.jump_edit = QLineEdit(context_card)
-            self.jump_edit.setMaximumWidth(110)
-            self.jump_button = QPushButton(context_card)
-            self.context_range_label = _WrappingLabel(parent=context_card)
-            self.context_range_label.setObjectName("mutedNote")
-            jump_row.addWidget(self.jump_edit)
-            jump_row.addWidget(self.jump_button)
-            context_layout.addLayout(jump_row)
-            self.context_range_label.setWordWrap(True)
-            context_layout.addWidget(self.context_range_label)
-            self.code_view = QPlainTextEdit(context_card)
-            self.code_view.setObjectName("gcodeContextView")
-            self.code_view.setReadOnly(True)
-            self.code_view.setLineWrapMode(QPlainTextEdit.NoWrap)
-            self.code_view.setMinimumHeight(250)
-            self.code_highlighter = GCodeSyntaxHighlighter(self.code_view.document())
-            context_layout.addWidget(self.code_view)
-            self.search_feedback = QLabel(context_card)
-            self.search_feedback.setObjectName("feedbackLabel")
-            context_layout.addWidget(self.search_feedback)
-            layout.addWidget(context_card)
-
-            export_card = _Card(content)
-            export_layout = QVBoxLayout(export_card)
-            export_layout.setContentsMargins(12, 11, 12, 11)
-            export_layout.setSpacing(6)
-            self.export_title = self._card_title(export_card)
-            self.export_description = _WrappingLabel(parent=export_card)
-            self.export_description.setObjectName("mutedNote")
-            self.export_description.setWordWrap(True)
-            export_layout.addWidget(self.export_title)
-            export_layout.addWidget(self.export_description)
-            self.export_preset_value = _WrappingLabel(parent=export_card)
-            self.export_preset_value.setObjectName("exportPreset")
-            self.export_preset_value.setWordWrap(True)
-            export_layout.addWidget(self.export_preset_value)
-            audit_line = _WrappingLabel(
-                "3840 × 2160 px  ·  300 dpi  ·  sRGB  ·  JSON",
-                export_card,
-            )
-            audit_line.setObjectName("mutedNote")
-            audit_line.setWordWrap(True)
-            audit_line.setMinimumWidth(0)
-            audit_line.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Preferred)
-            export_layout.addWidget(audit_line)
-            self.output_label = QLabel(export_card)
-            self.output_label.setObjectName("formLabel")
-            export_layout.addWidget(self.output_label)
-            self.output_path_value = _MiddleElidingPathLabel(export_card)
-            self.output_path_value.setObjectName("pathValue")
-            output_path = str(self._output_directory)
-            self.output_path_value.set_source_text(output_path, tooltip=output_path)
-            self.choose_output_button = QPushButton(export_card)
-            export_layout.addWidget(self.output_path_value)
-            export_layout.addWidget(self.choose_output_button)
-            self.export_current_button = QPushButton(export_card)
-            self.export_current_button.setObjectName("primaryButton")
-            self.export_both_button = QPushButton(export_card)
-            export_layout.addWidget(self.export_current_button)
-            export_layout.addWidget(self.export_both_button)
-            layout.addWidget(export_card)
-            layout.addStretch(1)
-            return self._scroll_column(content)
+            return build_right_column(self)
 
         def _connect_controls(self) -> None:
             self.back_button.clicked.connect(self.back_requested)
@@ -1691,7 +957,9 @@ if QT_AVAILABLE:
             self.jump_edit.returnPressed.connect(self._jump_to_line)
             self.jump_button.clicked.connect(self._jump_to_line)
             self.choose_output_button.clicked.connect(self._choose_output_directory)
-            self.export_current_button.clicked.connect(lambda: self.export_requested.emit("current"))
+            self.export_current_button.clicked.connect(
+                lambda: self.export_requested.emit("current")
+            )
             self.export_both_button.clicked.connect(lambda: self.export_requested.emit("both"))
 
         # ------------------------------------------------------------------
@@ -1713,7 +981,9 @@ if QT_AVAILABLE:
             with QSignalBlocker(self.cube_check):
                 self.cube_check.setChecked(self.state.show_orientation_cube)
             with QSignalBlocker(self.quality_combo):
-                self.quality_combo.setCurrentIndex(0 if self.state.quality_mode == "interactive" else 1)
+                self.quality_combo.setCurrentIndex(
+                    0 if self.state.quality_mode == "interactive" else 1
+                )
             self._set_parameter_editing(False)
             self._sync_slice_button()
 
@@ -1795,7 +1065,10 @@ if QT_AVAILABLE:
             self.cancel_loading_requested.emit()
 
         def _sync_slice_button(self) -> None:
-            has_gcode = self.state.selected_gcode_path is not None or self.state.active_gcode_path is not None
+            has_gcode = (
+                self.state.selected_gcode_path is not None
+                or self.state.active_gcode_path is not None
+            )
             self.slice_button.setEnabled(has_gcode and self.state.status != "loading")
 
         def _load_parameters_into_editors(self) -> None:
@@ -1957,7 +1230,9 @@ if QT_AVAILABLE:
             has_blade_markers = any(
                 entry.get("kind") == "blade" for entry in (self._stage_entries or [])
             )
-            self.stage_fallback_label.setVisible(self._preview is not None and not has_blade_markers)
+            self.stage_fallback_label.setVisible(
+                self._preview is not None and not has_blade_markers
+            )
             self._activate_stage(self.stage_combo.currentData() or {"id": "all", "kind": "all"})
 
         def _stage_text(self, entry: dict[str, Any]) -> str:
@@ -2033,7 +1308,9 @@ if QT_AVAILABLE:
             self.state.playback_progress = 1.0 if maximum > 0 else 0.0
             self.progress_value.setText(f"{self.state.playback_progress * 100:.1f}%")
             self.previous_stage_button.setEnabled(self.stage_combo.currentIndex() > 0)
-            self.next_stage_button.setEnabled(self.stage_combo.currentIndex() + 1 < self.stage_combo.count())
+            self.next_stage_button.setEnabled(
+                self.stage_combo.currentIndex() + 1 < self.stage_combo.count()
+            )
             self.stage_changed.emit(stage_id)
             self._sync_context_from_viewer()
             self._emit_display_state()
@@ -2058,7 +1335,9 @@ if QT_AVAILABLE:
             return max(0, min(start, last)), max(0, min(max(start, end), last))
 
         def _nudge_stage(self, delta: int) -> None:
-            index = max(0, min(self.stage_combo.currentIndex() + delta, self.stage_combo.count() - 1))
+            index = max(
+                0, min(self.stage_combo.currentIndex() + delta, self.stage_combo.count() - 1)
+            )
             self.stage_combo.setCurrentIndex(index)
 
         def _on_progress_pressed(self) -> None:
@@ -2073,7 +1352,9 @@ if QT_AVAILABLE:
 
         def _on_progress_changed(self, value: int) -> None:
             maximum = max(1, self.progress_slider.maximum())
-            self.state.playback_progress = value / maximum if self.progress_slider.maximum() > 0 else 0.0
+            self.state.playback_progress = (
+                value / maximum if self.progress_slider.maximum() > 0 else 0.0
+            )
             self.progress_value.setText(f"{self.state.playback_progress * 100:.1f}%")
             self._set_viewer_progress(self._viewer_progress_from_slider(), interactive=True)
             if not self.progress_slider.isSliderDown() and not self._playback_timer.isActive():
@@ -2144,8 +1425,14 @@ if QT_AVAILABLE:
             )
 
         def _update_statistics(self) -> None:
-            unavailable = tr(self.language, "statistics_unavailable") if hasattr(self, "statistic_values") else "—"
-            values: dict[str, str] = {key: unavailable for key in getattr(self, "statistic_values", {})}
+            unavailable = (
+                tr(self.language, "statistics_unavailable")
+                if hasattr(self, "statistic_values")
+                else "—"
+            )
+            values: dict[str, str] = {
+                key: unavailable for key in getattr(self, "statistic_values", {})
+            }
             if self._model is not None:
                 values["bodies"] = f"{len(getattr(self._model, 'bodies', [])):,}"
                 values["edges"] = f"{len(getattr(self._model, 'edges', [])):,}"
@@ -2181,31 +1468,10 @@ if QT_AVAILABLE:
         def _axis_range_values(self, axis: str) -> list[float] | None:
             if self._preview is None:
                 return None
-            values: list[np.ndarray] = []
-            arrays = getattr(self._preview, "timeline_arrays", None)
-            column = {"A": 0, "B": 1, "C": 2, "U": 3, "V": 4, "W": 5}.get(axis)
-            if arrays is not None and column is not None and arrays.count:
-                values.extend((arrays.rotary_starts[:, column], arrays.rotary_ends[:, column]))
-                finite = np.concatenate([value[np.isfinite(value)] for value in values])
-                if axis in getattr(self._preview, "rotary_axes", ()):
-                    finite = np.append(finite, 0.0)
-                if finite.size:
-                    return [float(np.min(finite)), float(np.max(finite))]
-            minimum: float | None = None
-            maximum: float | None = None
-            for segment in getattr(self._preview, "segments", []):
-                for rotary in (segment.rotary_start, segment.rotary_end):
-                    if axis not in rotary:
-                        continue
-                    value = float(rotary[axis])
-                    minimum = value if minimum is None else min(minimum, value)
-                    maximum = value if maximum is None else max(maximum, value)
-            if minimum is None or maximum is None:
-                return None
-            if axis in getattr(self._preview, "rotary_axes", ()):
-                minimum = min(minimum, 0.0)
-                maximum = max(maximum, 0.0)
-            return [minimum, maximum]
+            return _timeline_axis_range(self._preview, axis) or _segment_axis_range(
+                self._preview,
+                axis,
+            )
 
         def _replace_source_index(self, index: GCodeSourceIndex | None, owns_index: bool) -> None:
             self._search_token += 1
@@ -2284,7 +1550,11 @@ if QT_AVAILABLE:
                 line = 0
             if not 1 <= line <= self._source_index.line_count:
                 self.search_feedback.setText(
-                    tr(self.language, "gcode_line_out_of_range", maximum=self._source_index.line_count)
+                    tr(
+                        self.language,
+                        "gcode_line_out_of_range",
+                        maximum=self._source_index.line_count,
+                    )
                 )
                 return
             self.search_feedback.setText("")
@@ -2301,7 +1571,9 @@ if QT_AVAILABLE:
             if self._source_index is None:
                 return
             self._current_line = max(1, min(int(line), self._source_index.line_count))
-            self._context_lines = self._source_index.read_context(self._current_line, CONTEXT_RADIUS)
+            self._context_lines = self._source_index.read_context(
+                self._current_line, CONTEXT_RADIUS
+            )
             self._update_context()
 
         def _update_context(self) -> None:
@@ -2312,7 +1584,9 @@ if QT_AVAILABLE:
                 self.context_range_label.setText(tr(self.language, "statistics_unavailable"))
                 return
             if not self._context_lines:
-                self._context_lines = self._source_index.read_context(self._current_line, CONTEXT_RADIUS)
+                self._context_lines = self._source_index.read_context(
+                    self._current_line, CONTEXT_RADIUS
+                )
             width = max(6, len(str(self._source_index.line_count)))
             text = "\n".join(f"{line:>{width}}  {source}" for line, source in self._context_lines)
             self.code_view.setPlainText(text)
@@ -2361,7 +1635,9 @@ if QT_AVAILABLE:
         def _update_thumbnail_label(self) -> None:
             if self._thumbnail_image.isNull():
                 if hasattr(self, "thumbnail_label"):
-                    self.thumbnail_label.setPixmap(self.style().standardIcon(QStyle.SP_FileDialogInfoView).pixmap(32, 32))
+                    self.thumbnail_label.setPixmap(
+                        self.style().standardIcon(QStyle.SP_FileDialogInfoView).pixmap(32, 32)
+                    )
                     self.thumbnail_label.setToolTip(tr(self.language, "statistics_unavailable"))
                 return
             available = self.thumbnail_label.contentsRect().size()
@@ -2422,27 +1698,19 @@ if QT_AVAILABLE:
                     layout.activate()
 
         def _source_row(self, parent: QWidget) -> tuple[QLabel, _MiddleElidingPathLabel]:
-            title = QLabel(parent)
-            title.setObjectName("formLabel")
-            value = _MiddleElidingPathLabel(parent)
-            value.setObjectName("pathValue")
-            return title, value
+            from .result_preview_layout import _source_row
+
+            return _source_row(parent)
 
         def _column_heading(self, parent: QWidget) -> QLabel:
-            label = _WrappingLabel(parent=parent)
-            label.setObjectName("columnHeading")
-            label.setWordWrap(True)
-            label.setMinimumWidth(0)
-            label.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Preferred)
-            return label
+            from .result_preview_layout import _column_heading
+
+            return _column_heading(parent)
 
         def _card_title(self, parent: QWidget) -> QLabel:
-            label = _WrappingLabel(parent=parent)
-            label.setObjectName("cardTitle")
-            label.setWordWrap(True)
-            label.setMinimumWidth(0)
-            label.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Preferred)
-            return label
+            from .result_preview_layout import _card_title
+
+            return _card_title(parent)
 
         def _double_spin(
             self,
@@ -2452,83 +1720,19 @@ if QT_AVAILABLE:
             decimals: int,
             suffix: str,
         ) -> QDoubleSpinBox:
-            spin = QDoubleSpinBox(self)
-            spin.setRange(minimum, maximum)
-            spin.setSingleStep(step)
-            spin.setDecimals(decimals)
-            spin.setSuffix(suffix)
-            spin.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-            return spin
+            from .result_preview_layout import _double_spin
+
+            return _double_spin(self, minimum, maximum, step, decimals, suffix)
 
         def _scroll_column(self, content: QWidget) -> QScrollArea:
-            scroll = QScrollArea(self)
-            scroll.setWidgetResizable(True)
-            scroll.setFrameShape(QFrame.NoFrame)
-            scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-            scroll.setWidget(content)
-            return scroll
+            from .result_preview_layout import _scroll_column
+
+            return _scroll_column(self, content)
 
         def _apply_local_style(self) -> None:
-            self.setStyleSheet(
-                f"""
-                QWidget#resultPreviewPage {{
-                    background: {LIGHT_THEME.window}; color: {LIGHT_THEME.text};
-                    font-family: {LIGHT_THEME.ui_font_family}; font-size: {UI_TYPOGRAPHY.body_px}px;
-                }}
-                QFrame#resultHeader, QFrame#resultCard {{
-                    background: {LIGHT_THEME.panel};
-                    border: 1px solid {LIGHT_THEME.border};
-                    border-radius: 7px;
-                }}
-                QLabel#resultPageTitle {{ font-size: {UI_TYPOGRAPHY.page_title_px}px; font-weight: 650; color: {LIGHT_THEME.text}; }}
-                QLabel#resultPageSubtitle, QLabel#mutedNote {{ color: {LIGHT_THEME.muted_text}; font-size: {UI_TYPOGRAPHY.secondary_px}px; }}
-                QLabel#columnHeading {{ font-size: {UI_TYPOGRAPHY.section_title_px}px; font-weight: 650; color: {LIGHT_THEME.text}; padding: 1px 3px; }}
-                QLabel#cardTitle, QLabel#statusName {{ font-size: {UI_TYPOGRAPHY.card_title_px}px; font-weight: 650; color: {LIGHT_THEME.text}; }}
-                QLabel#formLabel {{ color: {LIGHT_THEME.muted_text}; font-size: {UI_TYPOGRAPHY.label_px}px; }}
-                QLabel#pathValue {{
-                    background: {LIGHT_THEME.hover_background}; border: 1px solid {LIGHT_THEME.border};
-                    border-radius: 4px; padding: 5px; color: {LIGHT_THEME.muted_text};
-                }}
-                QLabel#pathValue[loaded="true"] {{ color: {LIGHT_THEME.text}; }}
-                QLabel#warningBadge {{
-                    color: {LIGHT_THEME.warning}; background: #FFF4E8; border-radius: 4px;
-                    padding: 3px 5px; font-size: {UI_TYPOGRAPHY.badge_px}px;
-                }}
-                QLabel#feedbackLabel {{ color: {LIGHT_THEME.success}; font-size: {UI_TYPOGRAPHY.secondary_px}px; }}
-                QLabel#feedbackLabel[error="true"] {{ color: {LIGHT_THEME.error}; }}
-                QLabel#monospaceValue, QLabel#formulaLabel {{
-                    font-family: {LIGHT_THEME.code_font_family}; color: {LIGHT_THEME.text}; font-size: {UI_TYPOGRAPHY.code_px}px;
-                }}
-                QLabel#formulaLabel {{
-                    background: {LIGHT_THEME.code_background}; border: 1px solid {LIGHT_THEME.border};
-                    border-radius: 4px; padding: 6px;
-                }}
-                QLabel#thumbnailViewport {{
-                    background: #F6F8FB; border: 1px solid {LIGHT_THEME.border}; border-radius: 5px;
-                }}
-                QLabel#exportPreset {{
-                    color: {LIGHT_THEME.primary}; background: {LIGHT_THEME.primary_subtle};
-                    border: 1px solid #BFDBFE; border-radius: 4px; padding: 6px;
-                }}
-                QFrame#resultViewerCanvas {{
-                    background: #F8FAFC; border: 1px solid {LIGHT_THEME.border}; border-radius: 7px;
-                }}
-                QFrame#viewToolRail {{
-                    background: rgba(255,255,255,232); border: 1px solid {LIGHT_THEME.border}; border-radius: 6px;
-                }}
-                QPushButton#primaryButton {{
-                    background: {LIGHT_THEME.primary}; color: white; border-color: {LIGHT_THEME.primary};
-                    font-weight: 600;
-                }}
-                QPushButton#primaryButton:hover {{ background: {LIGHT_THEME.primary_hover}; }}
-                QPlainTextEdit#gcodeContextView {{
-                    background: {LIGHT_THEME.code_background}; color: {LIGHT_THEME.text};
-                    border: 1px solid {LIGHT_THEME.border}; border-radius: 4px;
-                    font-family: {LIGHT_THEME.code_font_family}; font-size: {UI_TYPOGRAPHY.code_px}px;
-                    selection-background-color: {LIGHT_THEME.selected_background};
-                }}
-                """
-            )
+            from .result_preview_layout import apply_local_style
+
+            apply_local_style(self)
 
 
 else:
@@ -2536,7 +1740,6 @@ else:
     class GCodeSyntaxHighlighter:  # pragma: no cover - PyQt-free compatibility stub.
         def __init__(self, *_args: object, **_kwargs: object) -> None:
             raise RuntimeError("PyQt5 is required to create the result preview UI")
-
 
     class ResultPreviewPage:  # pragma: no cover - PyQt-free compatibility stub.
         def __init__(self, *_args: object, **_kwargs: object) -> None:

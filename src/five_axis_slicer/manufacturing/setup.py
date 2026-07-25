@@ -1,11 +1,18 @@
-"""Manufacturing Setup aggregate, operation state, and validation reporting."""
+"""Manufacturing Setup aggregate, operation state, and validation reporting.
+
+State precedence is Invalid, Draft, Dirty, then the computed base state.
+Coordinates Valid requires Part, Machine, Model CS, Build CS, and Placement.
+Setup Ready additionally requires a complete Nozzle, reviewed Material, and no
+Error issue. Reports are derived snapshots and are never persisted as authority.
+"""
 
 from __future__ import annotations
 
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field, replace
 from enum import Enum
 from types import MappingProxyType
-from typing import Any, Iterable, Mapping
+from typing import Any
 
 from .coordinates import CoordinateFrameDefinition, LocalAdjustment, RigidTransform
 from .json_contract import parse_json_bool, require_bool
@@ -53,6 +60,32 @@ _COORDINATE_FRAME_IDS = {
     MODEL_CS_NODE: "model",
     BUILD_CS_NODE: "build",
 }
+_MISSING_ISSUES = {
+    PART_NODE: "SETUP_PART_MISSING",
+    MACHINE_NODE: "SETUP_MACHINE_MISSING",
+    NOZZLE_NODE: "SETUP_NOZZLE_MISSING",
+    MATERIAL_NODE: "SETUP_MATERIAL_MISSING",
+    MODEL_CS_NODE: "MODEL_CS_MISSING",
+    BUILD_CS_NODE: "BUILD_CS_MISSING",
+    PLACEMENT_NODE: "PLACEMENT_MISSING",
+}
+_INVALID_ISSUES = {
+    PART_NODE: "SETUP_PART_INVALID",
+    MACHINE_NODE: "SETUP_MACHINE_INVALID",
+    NOZZLE_NODE: "SETUP_NOZZLE_INVALID",
+    MATERIAL_NODE: "SETUP_MATERIAL_INVALID",
+    MODEL_CS_NODE: "MODEL_CS_INVALID",
+    BUILD_CS_NODE: "BUILD_CS_INVALID",
+    PLACEMENT_NODE: "PLACEMENT_INVALID",
+}
+_COORDINATE_NODES = (
+    PART_NODE,
+    MACHINE_NODE,
+    MODEL_CS_NODE,
+    BUILD_CS_NODE,
+    PLACEMENT_NODE,
+)
+_READY_NODES = _COORDINATE_NODES + (NOZZLE_NODE, MATERIAL_NODE)
 
 
 def _clean_identifier(value: Any, *, name: str) -> str:
@@ -78,19 +111,15 @@ def _unique_identifiers(values: Iterable[Any], *, name: str) -> tuple[str, ...]:
 
 
 def _freeze_context(value: Any, *, name: str = "context") -> Any:
-    if value is None or isinstance(value, (str, bool, int, float)):
+    if value is None or isinstance(value, str | bool | int | float):
         return value
     if isinstance(value, Mapping):
         return MappingProxyType(
-            {
-                str(key): _freeze_context(item, name=f"{name}.{key}")
-                for key, item in value.items()
-            }
+            {str(key): _freeze_context(item, name=f"{name}.{key}") for key, item in value.items()}
         )
-    if isinstance(value, (list, tuple)):
+    if isinstance(value, list | tuple):
         return tuple(
-            _freeze_context(item, name=f"{name}[{index}]")
-            for index, item in enumerate(value)
+            _freeze_context(item, name=f"{name}[{index}]") for index, item in enumerate(value)
         )
     raise ValueError(f"{name} contains a value that is not JSON-compatible")
 
@@ -172,6 +201,8 @@ class ValidationIssue:
 
 @dataclass(frozen=True, slots=True)
 class SetupValidationReport:
+    """Immutable, serializable result of one Setup validation pass."""
+
     issues: tuple[ValidationIssue, ...]
     node_states: Mapping[str, NodeState] = field(hash=False)
     coordinates_valid: bool = False
@@ -189,11 +220,7 @@ class SetupValidationReport:
             if node not in _ALL_STATE_NODES:
                 raise ValueError(f"unsupported node state key: {node!r}")
             try:
-                state = (
-                    raw_state
-                    if isinstance(raw_state, NodeState)
-                    else NodeState(str(raw_state))
-                )
+                state = raw_state if isinstance(raw_state, NodeState) else NodeState(str(raw_state))
             except ValueError as exc:
                 raise ValueError(f"unsupported node state: {raw_state!r}") from exc
             states[node] = state
@@ -227,9 +254,7 @@ class SetupValidationReport:
     def to_json(self) -> dict[str, Any]:
         return {
             "issues": [issue.to_json() for issue in self.issues],
-            "node_states": {
-                node: state.value for node, state in sorted(self.node_states.items())
-            },
+            "node_states": {node: state.value for node, state in sorted(self.node_states.items())},
             "coordinates_valid": self.coordinates_valid,
             "setup_ready": self.setup_ready,
         }
@@ -239,9 +264,7 @@ class SetupValidationReport:
         if not isinstance(payload, Mapping):
             raise ValueError("setup validation report payload must be an object")
         return cls(
-            issues=tuple(
-                ValidationIssue.from_json(item) for item in payload.get("issues", ())
-            ),
+            issues=tuple(ValidationIssue.from_json(item) for item in payload.get("issues", ())),
             node_states=payload.get("node_states", {}),
             coordinates_valid=parse_json_bool(
                 payload,
@@ -273,15 +296,9 @@ class ManufacturingObjectAssignments:
 
     def __post_init__(self) -> None:
         groups = {
-            "part_body_ids": _unique_identifiers(
-                self.part_body_ids, name="part_body_ids"
-            ),
-            "ignored_body_ids": _unique_identifiers(
-                self.ignored_body_ids, name="ignored_body_ids"
-            ),
-            "fixture_body_ids": _unique_identifiers(
-                self.fixture_body_ids, name="fixture_body_ids"
-            ),
+            "part_body_ids": _unique_identifiers(self.part_body_ids, name="part_body_ids"),
+            "ignored_body_ids": _unique_identifiers(self.ignored_body_ids, name="ignored_body_ids"),
+            "fixture_body_ids": _unique_identifiers(self.fixture_body_ids, name="fixture_body_ids"),
             "unassigned_body_ids": _unique_identifiers(
                 self.unassigned_body_ids, name="unassigned_body_ids"
             ),
@@ -317,9 +334,7 @@ class ManufacturingObjectAssignments:
     @classmethod
     def from_json(cls, payload: Mapping[str, Any]) -> ManufacturingObjectAssignments:
         if not isinstance(payload, Mapping):
-            raise ValueError(
-                "manufacturing object assignments payload must be an object"
-            )
+            raise ValueError("manufacturing object assignments payload must be an object")
         return cls(
             part_body_ids=tuple(payload.get("part_body_ids", ())),
             ignored_body_ids=tuple(payload.get("ignored_body_ids", ())),
@@ -348,11 +363,7 @@ class TubeOperationDefinition:
         if operation_type != "tube_thin_wall_indexed":
             raise ValueError(f"unsupported Tube operation_type: {operation_type!r}")
         try:
-            state = (
-                self.state
-                if isinstance(self.state, NodeState)
-                else NodeState(str(self.state))
-            )
+            state = self.state if isinstance(self.state, NodeState) else NodeState(str(self.state))
         except ValueError as exc:
             raise ValueError(f"unsupported operation state: {self.state!r}") from exc
         reasons = _unique_identifiers(self.dirty_reasons, name="dirty_reasons")
@@ -443,9 +454,7 @@ class ManufacturingSetup:
             if frame is not None and not isinstance(frame, CoordinateFrameDefinition):
                 raise TypeError(f"{frame_name} must be CoordinateFrameDefinition")
         mount_datum_id = (
-            None
-            if self.mount_datum_id is None
-            else str(self.mount_datum_id).strip() or None
+            None if self.mount_datum_id is None else str(self.mount_datum_id).strip() or None
         )
         if not isinstance(self.placement_adjustment, LocalAdjustment):
             raise TypeError("placement_adjustment must be LocalAdjustment")
@@ -471,9 +480,7 @@ class ManufacturingSetup:
         object.__setattr__(self, "issues", issues)
         object.__setattr__(self, "revision", revision)
 
-    def _resource_state(
-        self, node: str, snapshot: ResourceSnapshot | None
-    ) -> NodeState:
+    def _resource_state(self, node: str, snapshot: ResourceSnapshot | None) -> NodeState:
         if snapshot is None:
             return NodeState.MISSING
         if not _resource_type_matches(snapshot, node):
@@ -497,10 +504,7 @@ class ManufacturingSetup:
             )
             if non_review_blockers:
                 return NodeState.INVALID
-            if (
-                material_profile.review_required
-                and not material_profile.review_confirmed
-            ):
+            if material_profile.review_required and not material_profile.review_confirmed:
                 return NodeState.DRAFT
         if node == MACHINE_NODE:
             try:
@@ -513,9 +517,7 @@ class ManufacturingSetup:
 
     def _base_node_states(self) -> dict[str, NodeState]:
         states = {
-            PART_NODE: (
-                NodeState.VALID if self.assignments.has_part else NodeState.MISSING
-            ),
+            PART_NODE: (NodeState.VALID if self.assignments.has_part else NodeState.MISSING),
             MACHINE_NODE: self._resource_state(MACHINE_NODE, self.machine),
             NOZZLE_NODE: self._resource_state(NOZZLE_NODE, self.nozzle),
             MATERIAL_NODE: self._resource_state(MATERIAL_NODE, self.material),
@@ -585,125 +587,7 @@ class ManufacturingSetup:
         return NodeState.VALID if frame.is_valid else NodeState.INVALID
 
     def validation_report(self) -> SetupValidationReport:
-        states = self._base_node_states()
-        issues = list(self.issues)
-        issue_codes = {issue.code for issue in issues}
-        frame_role_mismatches: set[str] = set()
-        for node, frame in (
-            (MODEL_CS_NODE, self.model_coordinate_system),
-            (BUILD_CS_NODE, self.build_coordinate_system),
-        ):
-            expected_frame_id = _COORDINATE_FRAME_IDS[node]
-            if frame is None or frame.frame_id == expected_frame_id:
-                continue
-            frame_role_mismatches.add(node)
-            role_code = f"{node.upper()}_FRAME_ID_MISMATCH"
-            if role_code in issue_codes:
-                continue
-            issues.append(
-                ValidationIssue(
-                    code=role_code,
-                    severity=IssueSeverity.ERROR,
-                    object_id=frame.frame_id,
-                    context={
-                        "node": node,
-                        "expected_frame_id": expected_frame_id,
-                        "actual_frame_id": frame.frame_id,
-                    },
-                )
-            )
-            issue_codes.add(role_code)
-
-        issue_specs: dict[str, tuple[str, IssueSeverity]] = {
-            PART_NODE: ("SETUP_PART_MISSING", IssueSeverity.ERROR),
-            MACHINE_NODE: ("SETUP_MACHINE_MISSING", IssueSeverity.ERROR),
-            NOZZLE_NODE: ("SETUP_NOZZLE_MISSING", IssueSeverity.ERROR),
-            MATERIAL_NODE: ("SETUP_MATERIAL_MISSING", IssueSeverity.ERROR),
-            MODEL_CS_NODE: ("MODEL_CS_MISSING", IssueSeverity.ERROR),
-            BUILD_CS_NODE: ("BUILD_CS_MISSING", IssueSeverity.ERROR),
-            PLACEMENT_NODE: ("PLACEMENT_MISSING", IssueSeverity.ERROR),
-        }
-        invalid_codes = {
-            PART_NODE: "SETUP_PART_INVALID",
-            MACHINE_NODE: "SETUP_MACHINE_INVALID",
-            NOZZLE_NODE: "SETUP_NOZZLE_INVALID",
-            MATERIAL_NODE: "SETUP_MATERIAL_INVALID",
-            MODEL_CS_NODE: "MODEL_CS_INVALID",
-            BUILD_CS_NODE: "BUILD_CS_INVALID",
-            PLACEMENT_NODE: "PLACEMENT_INVALID",
-        }
-        for node, state in states.items():
-            code: str | None = None
-            severity = IssueSeverity.ERROR
-            if state is NodeState.MISSING:
-                code, severity = issue_specs[node]
-            elif state is NodeState.INVALID:
-                if node not in frame_role_mismatches:
-                    code = invalid_codes[node]
-            elif state is NodeState.DIRTY:
-                code = f"{node.upper()}_DIRTY"
-            elif state is NodeState.DRAFT:
-                code = (
-                    "MATERIAL_REVIEW_REQUIRED"
-                    if node == MATERIAL_NODE
-                    else f"{node.upper()}_DRAFT"
-                )
-            if code and code not in issue_codes:
-                issues.append(
-                    ValidationIssue(
-                        code=code,
-                        severity=severity,
-                        object_id=self.setup_id,
-                        context={"node": node, "state": state.value},
-                    )
-                )
-                issue_codes.add(code)
-
-        if self.machine is not None:
-            machine_payload = _resource_payload(self.machine)
-            try:
-                reference_only = parse_json_bool(
-                    machine_payload,
-                    "reference_only",
-                    default=True,
-                    field_name="machine.reference_only",
-                )
-            except TypeError:
-                reference_only = False
-            if reference_only:
-                code = "MACHINE_REFERENCE_ONLY"
-                if code not in issue_codes:
-                    issues.append(
-                        ValidationIssue(
-                            code=code,
-                            severity=IssueSeverity.WARNING,
-                            object_id=self.machine.resource_id,
-                            context={"resource_type": self.machine.resource_type},
-                        )
-                    )
-
-        coordinate_nodes = (
-            PART_NODE,
-            MACHINE_NODE,
-            MODEL_CS_NODE,
-            BUILD_CS_NODE,
-            PLACEMENT_NODE,
-        )
-        coordinates_valid = all(
-            states[node] is NodeState.VALID for node in coordinate_nodes
-        )
-        ready_nodes = coordinate_nodes + (NOZZLE_NODE, MATERIAL_NODE)
-        has_errors = any(issue.severity is IssueSeverity.ERROR for issue in issues)
-        setup_ready = (
-            all(states[node] is NodeState.VALID for node in ready_nodes)
-            and not has_errors
-        )
-        return SetupValidationReport(
-            issues=tuple(issues),
-            node_states=states,
-            coordinates_valid=coordinates_valid,
-            setup_ready=setup_ready,
-        )
+        return _validate_setup(self, self._base_node_states())
 
     @property
     def coordinates_valid(self) -> bool:
@@ -713,9 +597,7 @@ class ManufacturingSetup:
     def setup_ready(self) -> bool:
         return self.validation_report().setup_ready
 
-    def with_model_coordinate_system(
-        self, frame: CoordinateFrameDefinition
-    ) -> ManufacturingSetup:
+    def with_model_coordinate_system(self, frame: CoordinateFrameDefinition) -> ManufacturingSetup:
         return replace(
             self,
             model_coordinate_system=frame,
@@ -724,9 +606,7 @@ class ManufacturingSetup:
             revision=self.revision + 1,
         )
 
-    def with_build_coordinate_system(
-        self, frame: CoordinateFrameDefinition
-    ) -> ManufacturingSetup:
+    def with_build_coordinate_system(self, frame: CoordinateFrameDefinition) -> ManufacturingSetup:
         return replace(
             self,
             build_coordinate_system=frame,
@@ -760,9 +640,7 @@ class ManufacturingSetup:
             self,
             mount_datum_id=_clean_identifier(mount_datum_id, name="mount_datum_id"),
             T_mount_from_build=T_mount_from_build,
-            placement_adjustment=(
-                self.placement_adjustment if adjustment is None else adjustment
-            ),
+            placement_adjustment=(self.placement_adjustment if adjustment is None else adjustment),
             dirty_nodes=self.dirty_nodes - {PLACEMENT_NODE},
             draft_nodes=self.draft_nodes - {PLACEMENT_NODE},
             invalid_nodes=self.invalid_nodes - {PLACEMENT_NODE},
@@ -776,9 +654,7 @@ class ManufacturingSetup:
                 "mount_datum_id": self.mount_datum_id,
                 "adjustment": self.placement_adjustment.to_json(),
                 "T_mount_from_build": (
-                    None
-                    if self.T_mount_from_build is None
-                    else self.T_mount_from_build.to_json()
+                    None if self.T_mount_from_build is None else self.T_mount_from_build.to_json()
                 ),
             }
         return {
@@ -827,23 +703,17 @@ class ManufacturingSetup:
         def resource(name: str) -> ResourceSnapshot | None:
             resource_payload = resources.get(name)
             return (
-                None
-                if resource_payload is None
-                else ResourceSnapshot.from_json(resource_payload)
+                None if resource_payload is None else ResourceSnapshot.from_json(resource_payload)
             )
 
         model_payload = coordinates.get("model")
         build_payload = coordinates.get("build")
-        transform_payload = (
-            None if placement is None else placement.get("T_mount_from_build")
-        )
+        transform_payload = None if placement is None else placement.get("T_mount_from_build")
         adjustment_payload = None if placement is None else placement.get("adjustment")
         return cls(
             setup_id=str(payload.get("setup_id", "setup-1")),
             name=str(payload.get("name", "Manufacturing Setup 1")),
-            assignments=ManufacturingObjectAssignments.from_json(
-                payload.get("assignments", {})
-            ),
+            assignments=ManufacturingObjectAssignments.from_json(payload.get("assignments", {})),
             machine=resource("machine"),
             nozzle=resource("nozzle"),
             material=resource("material"),
@@ -857,26 +727,141 @@ class ManufacturingSetup:
                 if build_payload is None
                 else CoordinateFrameDefinition.from_json(build_payload)
             ),
-            mount_datum_id=(
-                None if placement is None else placement.get("mount_datum_id")
-            ),
+            mount_datum_id=(None if placement is None else placement.get("mount_datum_id")),
             placement_adjustment=(
                 LocalAdjustment()
                 if adjustment_payload is None
                 else LocalAdjustment.from_json(adjustment_payload)
             ),
             T_mount_from_build=(
-                None
-                if transform_payload is None
-                else RigidTransform.from_json(transform_payload)
+                None if transform_payload is None else RigidTransform.from_json(transform_payload)
             ),
             draft_nodes=frozenset(payload.get("draft_nodes", ())),
             dirty_nodes=frozenset(payload.get("dirty_nodes", ())),
             invalid_nodes=frozenset(payload.get("invalid_nodes", ())),
-            issues=tuple(
-                ValidationIssue.from_json(item) for item in payload.get("issues", ())
-            ),
+            issues=tuple(ValidationIssue.from_json(item) for item in payload.get("issues", ())),
             revision=int(payload.get("revision", 1)),
+        )
+
+
+def _validate_setup(
+    setup: ManufacturingSetup, states: Mapping[str, NodeState]
+) -> SetupValidationReport:
+    issues = list(setup.issues)
+    issue_codes = {issue.code for issue in issues}
+    frame_mismatches = _append_frame_role_issues(setup, issues, issue_codes)
+    _append_node_state_issues(
+        setup.setup_id,
+        states,
+        frame_mismatches,
+        issues,
+        issue_codes,
+    )
+    _append_reference_machine_issue(setup.machine, issues, issue_codes)
+    coordinates_valid = all(states[node] is NodeState.VALID for node in _COORDINATE_NODES)
+    setup_ready = all(states[node] is NodeState.VALID for node in _READY_NODES) and not any(
+        issue.severity is IssueSeverity.ERROR for issue in issues
+    )
+    return SetupValidationReport(
+        issues=tuple(issues),
+        node_states=states,
+        coordinates_valid=coordinates_valid,
+        setup_ready=setup_ready,
+    )
+
+
+def _append_frame_role_issues(
+    setup: ManufacturingSetup,
+    issues: list[ValidationIssue],
+    issue_codes: set[str],
+) -> set[str]:
+    mismatches: set[str] = set()
+    frames = (
+        (MODEL_CS_NODE, setup.model_coordinate_system),
+        (BUILD_CS_NODE, setup.build_coordinate_system),
+    )
+    for node, frame in frames:
+        expected = _COORDINATE_FRAME_IDS[node]
+        if frame is None or frame.frame_id == expected:
+            continue
+        mismatches.add(node)
+        code = f"{node.upper()}_FRAME_ID_MISMATCH"
+        if code in issue_codes:
+            continue
+        issues.append(
+            ValidationIssue(
+                code=code,
+                severity=IssueSeverity.ERROR,
+                object_id=frame.frame_id,
+                context={
+                    "node": node,
+                    "expected_frame_id": expected,
+                    "actual_frame_id": frame.frame_id,
+                },
+            )
+        )
+        issue_codes.add(code)
+    return mismatches
+
+
+def _append_node_state_issues(
+    setup_id: str,
+    states: Mapping[str, NodeState],
+    frame_mismatches: set[str],
+    issues: list[ValidationIssue],
+    issue_codes: set[str],
+) -> None:
+    for node, state in states.items():
+        code = _node_state_issue_code(node, state, frame_mismatches)
+        if code is None or code in issue_codes:
+            continue
+        issues.append(
+            ValidationIssue(
+                code=code,
+                severity=IssueSeverity.ERROR,
+                object_id=setup_id,
+                context={"node": node, "state": state.value},
+            )
+        )
+        issue_codes.add(code)
+
+
+def _node_state_issue_code(node: str, state: NodeState, frame_mismatches: set[str]) -> str | None:
+    if state is NodeState.MISSING:
+        return _MISSING_ISSUES[node]
+    if state is NodeState.INVALID:
+        return None if node in frame_mismatches else _INVALID_ISSUES[node]
+    if state is NodeState.DIRTY:
+        return f"{node.upper()}_DIRTY"
+    if state is NodeState.DRAFT:
+        return "MATERIAL_REVIEW_REQUIRED" if node == MATERIAL_NODE else f"{node.upper()}_DRAFT"
+    return None
+
+
+def _append_reference_machine_issue(
+    machine: ResourceSnapshot | None,
+    issues: list[ValidationIssue],
+    issue_codes: set[str],
+) -> None:
+    if machine is None or "MACHINE_REFERENCE_ONLY" in issue_codes:
+        return
+    try:
+        reference_only = parse_json_bool(
+            _resource_payload(machine),
+            "reference_only",
+            default=True,
+            field_name="machine.reference_only",
+        )
+    except TypeError:
+        reference_only = False
+    if reference_only:
+        issues.append(
+            ValidationIssue(
+                code="MACHINE_REFERENCE_ONLY",
+                severity=IssueSeverity.WARNING,
+                object_id=machine.resource_id,
+                context={"resource_type": machine.resource_type},
+            )
         )
 
 

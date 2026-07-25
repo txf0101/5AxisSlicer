@@ -9,11 +9,12 @@ never changes the last known-good Setup.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field, replace
-from enum import Enum
+from collections.abc import Iterable, Iterator, Mapping, Sequence
+from contextlib import contextmanager
+from dataclasses import replace
 from pathlib import Path
 from types import MappingProxyType
-from typing import Any, Iterable, Mapping, Sequence
+from typing import Any
 
 from .manufacturing.coordinates import (
     CoordinateFrameDefinition,
@@ -22,30 +23,26 @@ from .manufacturing.coordinates import (
     LocalAdjustment,
     PointReference,
     RigidTransform,
-    apply_local_adjustment,
 )
 from .manufacturing.library import (
-    ResourceLibraryDiagnostic,
-    ResourceLibraryError,
     ResourceProfile,
     ResourceSnapshotAudit,
     UserResourceLibrary,
 )
-from .manufacturing.machine import MachineProfile, builtin_machine_profiles
-from .manufacturing.resources import (
-    MaterialProfile,
-    NozzleProfile,
-    ResourceSnapshot,
-    builtin_material_profiles,
-    builtin_nozzle_profiles,
-)
+from .manufacturing.machine import MachineProfile
 from .manufacturing.references import (
     DEFAULT_REBIND_TOLERANCE,
     CadModelRebindResult,
     RebindTolerance,
-    audit_coordinate_frame_references,
-    geometry_reference as build_geometry_reference,
     rebind_cad_model_state,
+)
+from .manufacturing.references import (
+    geometry_reference as build_geometry_reference,
+)
+from .manufacturing.resources import (
+    MaterialProfile,
+    NozzleProfile,
+    ResourceSnapshot,
 )
 from .manufacturing.setup import (
     BUILD_CS_NODE,
@@ -53,10 +50,8 @@ from .manufacturing.setup import (
     MATERIAL_NODE,
     MODEL_CS_NODE,
     NOZZLE_NODE,
-    OPERATION_NODE,
     PART_NODE,
     PLACEMENT_NODE,
-    IssueSeverity,
     ManufacturingObjectAssignments,
     ManufacturingSetup,
     NodeState,
@@ -64,10 +59,39 @@ from .manufacturing.setup import (
     TubeOperationDefinition,
     ValidationIssue,
 )
-from .models import BodyInfo, CadModel
+from .models import CadModel
+from .tube_drafts import (
+    BodyCandidate,
+    BodyRole,
+    CoordinateFrameDraft,
+    DraftNotFoundError,
+    OperationLimitError,
+    PendingDraftError,
+    PlacementDraft,
+    StaleDraftError,
+    TubeControllerError,
+    coordinate_node,
+    direction_axis,
+    draft_node,
+    identity_mount_transform,
+    normalise_mount_transform,
+    numeric_input_frame,
+)
+from .tube_resource_context import TubeResourceContext
+from .tube_serialization import (
+    TUBE_CONTROLLER_SCHEMA_VERSION,
+    controller_project_json,
+    controller_state_json,
+    parse_controller_project,
+)
+from .tube_validation import (
+    TubeValidationContext,
+    merge_issues,
+)
+from .tube_validation import (
+    validation_report as build_validation_report,
+)
 
-
-TUBE_CONTROLLER_SCHEMA_VERSION = 1
 TUBE_OPERATION_TYPE = "tube_thin_wall_indexed"
 TUBE_OPERATION_NAME = "Tube Thin-Wall Indexed"
 AVAILABLE_TUBE_OPERATION_TYPES = (TUBE_OPERATION_TYPE,)
@@ -75,272 +99,6 @@ MAX_INTERACTIVE_OPERATIONS = 1
 
 _COORDINATE_NODES = frozenset({MODEL_CS_NODE, BUILD_CS_NODE})
 _DRAFT_NODES = _COORDINATE_NODES | {PLACEMENT_NODE}
-
-
-class TubeControllerError(RuntimeError):
-    """Base error raised at the workflow boundary."""
-
-
-class OperationLimitError(TubeControllerError):
-    """Raised when the first-release interactive operation limit is reached."""
-
-
-class DraftNotFoundError(TubeControllerError):
-    """Raised when an edit command targets a node with no active draft."""
-
-
-class PendingDraftError(TubeControllerError):
-    """Raised when persistence is requested while unapplied edits exist."""
-
-    def __init__(self, nodes: Iterable[str]) -> None:
-        self.nodes = tuple(sorted({str(node) for node in nodes}))
-        super().__init__("pending Setup drafts: " + ", ".join(self.nodes))
-
-
-class StaleDraftError(TubeControllerError):
-    """Raised when a Placement draft no longer matches its dependencies."""
-
-
-class BodyRole(str, Enum):
-    PART = "part"
-    IGNORE = "ignore"
-    FIXTURE = "fixture"
-    UNASSIGNED = "unassigned"
-
-
-@dataclass(frozen=True, slots=True)
-class BodyCandidate:
-    """Kernel-independent body descriptor used by the Part editor."""
-
-    body_id: str
-    name: str
-    kind: str
-    signature: str = ""
-
-    def __post_init__(self) -> None:
-        body_id = str(self.body_id).strip()
-        kind = str(self.kind).strip().lower()
-        if not body_id:
-            raise ValueError("body_id must not be empty")
-        if not kind:
-            raise ValueError("body kind must not be empty")
-        object.__setattr__(self, "body_id", body_id)
-        object.__setattr__(self, "name", str(self.name).strip() or body_id)
-        object.__setattr__(self, "kind", kind)
-        object.__setattr__(self, "signature", str(self.signature).strip())
-
-    @classmethod
-    def from_body_info(cls, body: BodyInfo) -> BodyCandidate:
-        return cls(body.body_id, body.name, body.kind, body.signature)
-
-    @property
-    def is_part_eligible(self) -> bool:
-        return self.kind == "solid"
-
-    def to_json(self) -> dict[str, Any]:
-        return {
-            "body_id": self.body_id,
-            "name": self.name,
-            "kind": self.kind,
-            "signature": self.signature,
-            "is_part_eligible": self.is_part_eligible,
-        }
-
-    @classmethod
-    def from_json(cls, payload: Mapping[str, Any]) -> BodyCandidate:
-        if not isinstance(payload, Mapping):
-            raise ValueError("body candidate payload must be an object")
-        return cls(
-            body_id=str(payload.get("body_id", payload.get("id", ""))),
-            name=str(payload.get("name", "")),
-            kind=str(payload.get("kind", "")),
-            signature=str(payload.get("signature", "")),
-        )
-
-
-@dataclass(frozen=True, slots=True)
-class CoordinateFrameDraft:
-    """Partial three-reference definition kept outside the applied Setup."""
-
-    node: str
-    frame_id: str
-    name: str
-    origin_reference: PointReference | None = None
-    z_direction_reference: DirectionReference | None = None
-    x_direction_reference: DirectionReference | None = None
-    base_revision: int = 0
-
-    def __post_init__(self) -> None:
-        node = _coordinate_node(self.node)
-        frame_id = str(self.frame_id).strip()
-        name = str(self.name).strip()
-        if not frame_id or not name:
-            raise ValueError("draft frame_id and name must not be empty")
-        if self.origin_reference is not None and not isinstance(
-            self.origin_reference, PointReference
-        ):
-            raise TypeError("origin_reference must be PointReference")
-        for field_name in ("z_direction_reference", "x_direction_reference"):
-            value = getattr(self, field_name)
-            if value is not None and not isinstance(value, DirectionReference):
-                raise TypeError(f"{field_name} must be DirectionReference")
-        base_revision = int(self.base_revision)
-        if base_revision < 0:
-            raise ValueError("base_revision cannot be negative")
-        object.__setattr__(self, "node", node)
-        object.__setattr__(self, "frame_id", frame_id)
-        object.__setattr__(self, "name", name)
-        object.__setattr__(self, "base_revision", base_revision)
-
-    @classmethod
-    def from_applied(
-        cls,
-        node: str,
-        frame: CoordinateFrameDefinition | None,
-    ) -> CoordinateFrameDraft:
-        canonical_node = _coordinate_node(node)
-        expected_frame_id = "model" if canonical_node == MODEL_CS_NODE else "build"
-        if frame is None:
-            name = "Model CS" if canonical_node == MODEL_CS_NODE else "Build CS"
-            return cls(canonical_node, expected_frame_id, name)
-        return cls(
-            node=canonical_node,
-            frame_id=expected_frame_id,
-            name=frame.name,
-            origin_reference=frame.origin_reference,
-            z_direction_reference=frame.z_direction_reference,
-            x_direction_reference=frame.x_direction_reference,
-            base_revision=frame.revision,
-        )
-
-    @property
-    def is_complete(self) -> bool:
-        return (
-            self.origin_reference is not None
-            and self.z_direction_reference is not None
-            and self.x_direction_reference is not None
-        )
-
-    @property
-    def is_confirmed(self) -> bool:
-        return bool(
-            self.is_complete
-            and self.origin_reference is not None
-            and self.origin_reference.confirmed
-            and self.z_direction_reference is not None
-            and self.z_direction_reference.confirmed
-            and self.x_direction_reference is not None
-            and self.x_direction_reference.confirmed
-        )
-
-    def to_applied(self) -> CoordinateFrameDefinition:
-        if not self.is_complete:
-            raise ValueError(f"{self.node} requires origin, Z, and X references")
-        if not self.is_confirmed:
-            raise ValueError(f"{self.node} references must be individually confirmed")
-        assert self.origin_reference is not None
-        assert self.z_direction_reference is not None
-        assert self.x_direction_reference is not None
-        return CoordinateFrameDefinition.from_references(
-            self.frame_id,
-            self.name,
-            self.origin_reference,
-            self.z_direction_reference,
-            self.x_direction_reference,
-            revision=self.base_revision + 1,
-        )
-
-    def to_json(self) -> dict[str, Any]:
-        return {
-            "node": self.node,
-            "frame_id": self.frame_id,
-            "name": self.name,
-            "origin_reference": (
-                None
-                if self.origin_reference is None
-                else self.origin_reference.to_json()
-            ),
-            "z_direction_reference": (
-                None
-                if self.z_direction_reference is None
-                else self.z_direction_reference.to_json()
-            ),
-            "x_direction_reference": (
-                None
-                if self.x_direction_reference is None
-                else self.x_direction_reference.to_json()
-            ),
-            "base_revision": self.base_revision,
-            "complete": self.is_complete,
-            "confirmed": self.is_confirmed,
-        }
-
-
-@dataclass(frozen=True, slots=True)
-class PlacementDraft:
-    """Mount pairing and local six-DOF adjustment under edit."""
-
-    mount_datum_id: str | None = None
-    T_reference_mount_from_build: RigidTransform | None = None
-    adjustment: LocalAdjustment = field(default_factory=LocalAdjustment)
-    build_cs_revision: int | None = None
-    machine_content_hash: str | None = None
-
-    def __post_init__(self) -> None:
-        mount_id = (
-            None
-            if self.mount_datum_id is None
-            else str(self.mount_datum_id).strip() or None
-        )
-        if self.T_reference_mount_from_build is not None and not isinstance(
-            self.T_reference_mount_from_build, RigidTransform
-        ):
-            raise TypeError("T_reference_mount_from_build must be RigidTransform")
-        if not isinstance(self.adjustment, LocalAdjustment):
-            raise TypeError("adjustment must be LocalAdjustment")
-        revision = (
-            None if self.build_cs_revision is None else int(self.build_cs_revision)
-        )
-        if revision is not None and revision < 1:
-            raise ValueError("build_cs_revision must be positive")
-        machine_hash = (
-            None
-            if self.machine_content_hash is None
-            else str(self.machine_content_hash).strip() or None
-        )
-        object.__setattr__(self, "mount_datum_id", mount_id)
-        object.__setattr__(self, "build_cs_revision", revision)
-        object.__setattr__(self, "machine_content_hash", machine_hash)
-
-    @property
-    def is_complete(self) -> bool:
-        return bool(
-            self.mount_datum_id is not None
-            and self.T_reference_mount_from_build is not None
-        )
-
-    @property
-    def T_mount_from_build(self) -> RigidTransform:
-        if self.T_reference_mount_from_build is None:
-            raise ValueError("Placement requires a mount reference transform")
-        return apply_local_adjustment(
-            self.T_reference_mount_from_build,
-            self.adjustment,
-        )
-
-    def to_json(self) -> dict[str, Any]:
-        return {
-            "mount_datum_id": self.mount_datum_id,
-            "T_reference_mount_from_build": (
-                None
-                if self.T_reference_mount_from_build is None
-                else self.T_reference_mount_from_build.to_json()
-            ),
-            "adjustment": self.adjustment.to_json(),
-            "build_cs_revision": self.build_cs_revision,
-            "machine_content_hash": self.machine_content_hash,
-            "complete": self.is_complete,
-        }
 
 
 class TubeSetupController:
@@ -365,8 +123,7 @@ class TubeSetupController:
             raise TypeError("setup must be ManufacturingSetup")
         self._operations = tuple(operations)
         if any(
-            not isinstance(operation, TubeOperationDefinition)
-            for operation in self._operations
+            not isinstance(operation, TubeOperationDefinition) for operation in self._operations
         ):
             raise TypeError("operations must contain TubeOperationDefinition")
         _ensure_unique_operation_ids(self._operations)
@@ -374,9 +131,7 @@ class TubeSetupController:
         candidates = tuple(body_catalog)
         if any(not isinstance(item, BodyCandidate) for item in candidates):
             raise TypeError("body_catalog must contain BodyCandidate")
-        self._body_catalog: dict[str, BodyCandidate] = {
-            item.body_id: item for item in candidates
-        }
+        self._body_catalog: dict[str, BodyCandidate] = {item.body_id: item for item in candidates}
         if len(self._body_catalog) != len(candidates):
             raise ValueError("body_catalog contains duplicate body IDs")
         self._source_hash: str | None = None
@@ -384,15 +139,7 @@ class TubeSetupController:
         self._cad_model: CadModel | None = None
         self._topology_ids: frozenset[str] = frozenset(self._body_catalog)
         self._drafts: dict[str, CoordinateFrameDraft | PlacementDraft] = {}
-        if resource_library is not None and not isinstance(
-            resource_library, UserResourceLibrary
-        ):
-            raise TypeError("resource_library must be UserResourceLibrary")
-        self._resource_library = resource_library
-        self._resource_catalogs: dict[str, tuple[ResourceProfile, ...]] = {}
-        self._resource_audits: dict[str, ResourceSnapshotAudit] = {}
-        self._resource_audit_failures: dict[str, str] = {}
-        self._resource_library_diagnostics: tuple[ResourceLibraryDiagnostic, ...] = ()
+        self._resources = TubeResourceContext(resource_library)
         self._modified = False
 
         if cad_model is not None:
@@ -437,6 +184,11 @@ class TubeSetupController:
     def is_modified(self) -> bool:
         return self._modified
 
+    def edit_state_token(self) -> tuple[object, ...]:
+        """Capture immutable identities used to reject a stale async commit."""
+
+        return self._setup, self._operations, tuple(sorted(self._drafts.items())), self._source_hash
+
     @property
     def coordinates_valid(self) -> bool:
         return self.validation_report().coordinates_valid
@@ -447,71 +199,27 @@ class TubeSetupController:
 
     @property
     def resource_library(self) -> UserResourceLibrary | None:
-        return self._resource_library
+        return self._resources.library
 
     @property
     def resource_audits(self) -> tuple[ResourceSnapshotAudit, ...]:
-        return tuple(
-            self._resource_audits[kind]
-            for kind in ("machine", "nozzle", "material")
-            if kind in self._resource_audits
-        )
+        return self._resources.ordered_audits
 
     def set_resource_library(self, library: UserResourceLibrary | None) -> None:
         """Attach the environment's editable library and audit frozen resources."""
 
-        if library is not None and not isinstance(library, UserResourceLibrary):
-            raise TypeError("library must be UserResourceLibrary")
-        self._resource_library = library
+        self._resources.set_library(library)
         self.refresh_resource_library()
 
     def refresh_resource_library(self) -> tuple[ResourceSnapshotAudit, ...]:
         """Re-audit project snapshots without replacing their frozen payloads."""
 
-        self._resource_audits.clear()
-        self._resource_audit_failures.clear()
-        self._resource_catalogs.clear()
-        self._resource_library_diagnostics = ()
-        library = self._resource_library
-        if library is None:
-            return ()
-        diagnostics: list[ResourceLibraryDiagnostic] = []
-        for kind in ("machine", "nozzle", "material"):
-            catalog = library.catalog(kind)
-            self._resource_catalogs[kind] = catalog.profiles
-            diagnostics.extend(catalog.diagnostics)
-        self._resource_library_diagnostics = tuple(diagnostics)
-        for kind in ("machine", "nozzle", "material"):
-            snapshot = getattr(self._setup, kind)
-            if snapshot is None:
-                continue
-            try:
-                self._resource_audits[kind] = library.audit_snapshot(snapshot)
-            except (
-                AttributeError,
-                KeyError,
-                ResourceLibraryError,
-                TypeError,
-                ValueError,
-            ) as exc:
-                # The project snapshot is the authority for a reopened project.
-                # A damaged user-library entry is therefore diagnostic only.
-                self._resource_audit_failures[kind] = str(exc)
-        return self.resource_audits
+        return self._resources.refresh(self._setup)
 
-    def available_resource_profiles(
-        self, resource_type: str
-    ) -> tuple[ResourceProfile, ...]:
+    def available_resource_profiles(self, resource_type: str) -> tuple[ResourceProfile, ...]:
         """Return immutable templates and editable user profiles for selection."""
 
-        kind = _resource_kind(resource_type)
-        if self._resource_library is not None:
-            return self._resource_catalogs.get(kind, ())
-        if kind == "machine":
-            return tuple(builtin_machine_profiles())
-        if kind == "nozzle":
-            return tuple(builtin_nozzle_profiles())
-        return tuple(builtin_material_profiles())
+        return self._resources.available_profiles(resource_type)
 
     def resolve_resource_profile(
         self,
@@ -520,23 +228,12 @@ class TubeSetupController:
     ) -> ResourceProfile:
         """Resolve one selectable profile by its stable identity."""
 
-        kind = _resource_kind(resource_type)
-        identifier = str(resource_id).strip()
-        if not identifier:
-            raise ValueError("resource_id must not be empty")
-        if self._resource_library is not None:
-            return self._resource_library.resolve(kind, identifier)
-        for profile in self.available_resource_profiles(kind):
-            if _profile_resource_id(profile) == identifier:
-                return profile
-        raise KeyError(identifier)
+        return self._resources.resolve(resource_type, resource_id)
 
     def save_user_resource(self, profile: ResourceProfile) -> Path:
         """Persist an explicitly edited user profile and refresh library audit."""
 
-        if self._resource_library is None:
-            raise ResourceLibraryError("no user resource library is configured")
-        path = self._resource_library.save(profile)
+        path = self._resources.save(profile)
         self.refresh_resource_library()
         return path
 
@@ -553,22 +250,7 @@ class TubeSetupController:
 
         if not isinstance(model, CadModel):
             raise TypeError("model must be CadModel")
-        candidates = tuple(BodyCandidate.from_body_info(body) for body in model.bodies)
-        identifiers = [item.body_id for item in candidates]
-        if len(set(identifiers)) != len(identifiers):
-            raise ValueError("CAD model contains duplicate body IDs")
-        self._body_catalog = {item.body_id: item for item in candidates}
-        self._source_hash = str(model.source_hash)
-        self._source_path = str(Path(model.source_path))
-        self._topology_ids = frozenset(
-            [
-                *(body.body_id for body in model.bodies),
-                *(face.face_id for face in model.faces),
-                *(edge.edge_id for edge in model.edges),
-                *(vertex.vertex_id for vertex in model.vertices),
-            ]
-        )
-        self._cad_model = model
+        self._attach_cad_authority(model)
         changed = self._initialise_unassigned_candidates()
         if mark_modified and changed:
             self._modified = True
@@ -607,11 +289,6 @@ class TubeSetupController:
         source_model = self._cad_model
         if source_model is None:
             raise ValueError("source update requires a previously attached CAD model")
-        candidates = tuple(BodyCandidate.from_body_info(body) for body in model.bodies)
-        identifiers = [item.body_id for item in candidates]
-        if len(set(identifiers)) != len(identifiers):
-            raise ValueError("CAD model contains duplicate body IDs")
-
         result = rebind_cad_model_state(
             source_model,
             model,
@@ -621,54 +298,56 @@ class TubeSetupController:
             tolerance=tolerance,
         )
 
-        previous_setup = self._setup
-        previous_build = previous_setup.build_coordinate_system
+        self._apply_rebind_result(result)
+        self._attach_cad_authority(model)
+        self._mark_operations_dirty("source_geometry_updated")
+        self._modified = True
+        return result
+
+    def _attach_cad_authority(self, model: CadModel) -> None:
+        candidates = tuple(BodyCandidate.from_body_info(body) for body in model.bodies)
+        identifiers = [item.body_id for item in candidates]
+        if len(set(identifiers)) != len(identifiers):
+            raise ValueError("CAD model contains duplicate body IDs")
+        self._body_catalog = {item.body_id: item for item in candidates}
+        self._source_hash = str(model.source_hash)
+        self._source_path = str(Path(model.source_path))
+        self._topology_ids = frozenset(
+            (
+                *identifiers,
+                *(face.face_id for face in model.faces),
+                *(edge.edge_id for edge in model.edges),
+                *(vertex.vertex_id for vertex in model.vertices),
+            )
+        )
+        self._cad_model = model
+
+    def _apply_rebind_result(self, result: CadModelRebindResult) -> None:
+        previous = self._setup
+        previous_build = previous.build_coordinate_system
         rebound_build = result.build_coordinate_system
-        build_transform_changed = bool(
+        transform_changed = bool(
             previous_build is not None
             and rebound_build is not None
             and not previous_build.T_target_from_source.almost_equal(
                 rebound_build.T_target_from_source
             )
         )
-        build_invalid = BUILD_CS_NODE in result.invalid_nodes
-        dirty_nodes = set(previous_setup.dirty_nodes)
-        if build_transform_changed or build_invalid:
+        dirty_nodes = set(previous.dirty_nodes)
+        if transform_changed or BUILD_CS_NODE in result.invalid_nodes:
             dirty_nodes.add(PLACEMENT_NODE)
-
-        revalidated_nodes = {PART_NODE, MODEL_CS_NODE, BUILD_CS_NODE}
-        retained_issues = tuple(
-            issue
-            for issue in previous_setup.issues
-            if not _is_source_rebind_issue(issue)
-        )
+        retained_issues = (issue for issue in previous.issues if not _is_source_rebind_issue(issue))
+        revalidated = {PART_NODE, MODEL_CS_NODE, BUILD_CS_NODE}
         self._setup = replace(
-            previous_setup,
+            previous,
             assignments=result.assignments,
             model_coordinate_system=result.model_coordinate_system,
             build_coordinate_system=result.build_coordinate_system,
-            invalid_nodes=(previous_setup.invalid_nodes - revalidated_nodes)
-            | result.invalid_nodes,
+            invalid_nodes=(previous.invalid_nodes - revalidated) | result.invalid_nodes,
             dirty_nodes=frozenset(dirty_nodes),
-            issues=_merge_issues(retained_issues, result.issues),
-            revision=previous_setup.revision + 1,
+            issues=merge_issues(retained_issues, result.issues),
+            revision=previous.revision + 1,
         )
-
-        self._body_catalog = {item.body_id: item for item in candidates}
-        self._source_hash = str(model.source_hash)
-        self._source_path = str(Path(model.source_path))
-        self._topology_ids = frozenset(
-            [
-                *(body.body_id for body in model.bodies),
-                *(face.face_id for face in model.faces),
-                *(edge.edge_id for edge in model.edges),
-                *(vertex.vertex_id for vertex in model.vertices),
-            ]
-        )
-        self._cad_model = model
-        self._mark_operations_dirty("source_geometry_updated")
-        self._modified = True
-        return result
 
     def _initialise_unassigned_candidates(self) -> bool:
         if not self._body_catalog:
@@ -680,9 +359,7 @@ class TubeSetupController:
             + assignments.fixture_body_ids
             + assignments.unassigned_body_ids
         )
-        new_ids = tuple(
-            body_id for body_id in self._body_catalog if body_id not in represented
-        )
+        new_ids = tuple(body_id for body_id in self._body_catalog if body_id not in represented)
         if not new_ids:
             return False
         updated = replace(
@@ -726,42 +403,12 @@ class TubeSetupController:
         selected = part + ignored + fixture
         if len(set(selected)) != len(selected):
             raise ValueError("a body cannot be assigned to more than one role")
-        if self._body_catalog:
-            unknown = tuple(item for item in selected if item not in self._body_catalog)
-            if unknown:
-                raise ValueError("unknown CAD body IDs: " + ", ".join(unknown))
-            ineligible = tuple(
-                item for item in part if not self._body_catalog[item].is_part_eligible
-            )
-            if ineligible:
-                raise ValueError(
-                    "Part accepts closed solids only: " + ", ".join(ineligible)
-                )
-
-        if unassigned_body_ids is None:
-            unassigned = tuple(
-                item for item in self._body_catalog if item not in set(selected)
-            )
-        else:
-            explicit = _identifier_tuple(unassigned_body_ids, "unassigned_body_ids")
-            if set(explicit) & set(selected):
-                raise ValueError("an explicitly assigned body cannot remain unassigned")
-            if self._body_catalog:
-                unknown = tuple(
-                    item for item in explicit if item not in self._body_catalog
-                )
-                if unknown:
-                    raise ValueError(
-                        "unknown unassigned body IDs: " + ", ".join(unknown)
-                    )
-                missing = tuple(
-                    item
-                    for item in self._body_catalog
-                    if item not in set(selected) and item not in set(explicit)
-                )
-                unassigned = explicit + missing
-            else:
-                unassigned = explicit
+        _validate_assignment_selection(self._body_catalog, part, selected)
+        unassigned = _resolve_unassigned_bodies(
+            self._body_catalog,
+            selected,
+            unassigned_body_ids,
+        )
 
         assignments = ManufacturingObjectAssignments(
             part_body_ids=part,
@@ -794,11 +441,7 @@ class TubeSetupController:
         for raw_id, raw_role in roles.items():
             body_id = str(raw_id).strip()
             try:
-                role = (
-                    raw_role
-                    if isinstance(raw_role, BodyRole)
-                    else BodyRole(str(raw_role))
-                )
+                role = raw_role if isinstance(raw_role, BodyRole) else BodyRole(str(raw_role))
             except ValueError as exc:
                 raise ValueError(f"unsupported body role: {raw_role!r}") from exc
             grouped[role].append(body_id)
@@ -871,9 +514,7 @@ class TubeSetupController:
             snapshot.as_material_profile()
         return self._select_resource(MATERIAL_NODE, snapshot)
 
-    def _select_resource(
-        self, node: str, snapshot: ResourceSnapshot
-    ) -> ResourceSnapshot:
+    def _select_resource(self, node: str, snapshot: ResourceSnapshot) -> ResourceSnapshot:
         current = getattr(self._setup, node)
         if current is not None and current.content_hash == snapshot.content_hash:
             return current
@@ -893,7 +534,7 @@ class TubeSetupController:
         return snapshot
 
     def begin_coordinate_draft(self, node: str) -> CoordinateFrameDraft:
-        canonical_node = _coordinate_node(node)
+        canonical_node = coordinate_node(node)
         applied = (
             self._setup.model_coordinate_system
             if canonical_node == MODEL_CS_NODE
@@ -904,7 +545,7 @@ class TubeSetupController:
         return draft
 
     def coordinate_draft(self, node: str) -> CoordinateFrameDraft:
-        canonical_node = _coordinate_node(node)
+        canonical_node = coordinate_node(node)
         draft = self._drafts.get(canonical_node)
         if not isinstance(draft, CoordinateFrameDraft):
             raise DraftNotFoundError(f"no active {canonical_node} draft")
@@ -930,7 +571,7 @@ class TubeSetupController:
         if not isinstance(reference, DirectionReference):
             raise TypeError("reference must be DirectionReference")
         draft = self.coordinate_draft(node)
-        canonical_axis = _direction_axis(axis)
+        canonical_axis = direction_axis(axis)
         draft = (
             replace(draft, z_direction_reference=reference)
             if canonical_axis == "z"
@@ -980,16 +621,12 @@ class TubeSetupController:
 
     def flip_direction(self, node: str, axis: str) -> CoordinateFrameDraft:
         draft = self.coordinate_draft(node)
-        canonical_axis = _direction_axis(axis)
+        canonical_axis = direction_axis(axis)
         reference = (
-            draft.z_direction_reference
-            if canonical_axis == "z"
-            else draft.x_direction_reference
+            draft.z_direction_reference if canonical_axis == "z" else draft.x_direction_reference
         )
         if reference is None:
-            raise ValueError(
-                f"{canonical_axis.upper()} reference has not been selected"
-            )
+            raise ValueError(f"{canonical_axis.upper()} reference has not been selected")
         return self.set_direction_reference(
             draft.node,
             canonical_axis,
@@ -1004,7 +641,7 @@ class TubeSetupController:
         input_frame: str | None = None,
         confirmed: bool = False,
     ) -> CoordinateFrameDraft:
-        canonical_node = _coordinate_node(node)
+        canonical_node = coordinate_node(node)
         point_in_source = self._point_to_source(
             canonical_node,
             point,
@@ -1024,7 +661,7 @@ class TubeSetupController:
         input_frame: str | None = None,
         confirmed: bool = False,
     ) -> CoordinateFrameDraft:
-        canonical_node = _coordinate_node(node)
+        canonical_node = coordinate_node(node)
         direction_in_source = self._direction_to_source(
             canonical_node,
             direction,
@@ -1047,7 +684,7 @@ class TubeSetupController:
         *,
         input_frame: str | None,
     ) -> tuple[float, float, float]:
-        base = _numeric_input_frame(node, input_frame)
+        base = numeric_input_frame(node, input_frame)
         if base == "source":
             return _vector3(point, "point")
         transform = self._input_frame_from_source(base)
@@ -1060,7 +697,7 @@ class TubeSetupController:
         *,
         input_frame: str | None,
     ) -> tuple[float, float, float]:
-        base = _numeric_input_frame(node, input_frame)
+        base = numeric_input_frame(node, input_frame)
         if base == "source":
             return _vector3(direction, "direction")
         transform = self._input_frame_from_source(base)
@@ -1074,13 +711,11 @@ class TubeSetupController:
         else:
             raise ValueError(f"unsupported numeric input frame: {frame!r}")
         if definition is None or not definition.is_valid:
-            raise ValueError(
-                f"{frame.title()} CS must be applied before numeric conversion"
-            )
+            raise ValueError(f"{frame.title()} CS must be applied before numeric conversion")
         return definition.T_target_from_source
 
     def apply_coordinate_draft(self, node: str) -> CoordinateFrameDefinition:
-        canonical_node = _coordinate_node(node)
+        canonical_node = coordinate_node(node)
         draft = self.coordinate_draft(canonical_node)
         applied = draft.to_applied()
         current = (
@@ -1088,9 +723,7 @@ class TubeSetupController:
             if canonical_node == MODEL_CS_NODE
             else self._setup.build_coordinate_system
         )
-        if current is not None and _frame_semantics(current) == _frame_semantics(
-            applied
-        ):
+        if current is not None and _frame_semantics(current) == _frame_semantics(applied):
             del self._drafts[canonical_node]
             return current
 
@@ -1112,9 +745,7 @@ class TubeSetupController:
         adjustment: LocalAdjustment | None = None,
     ) -> PlacementDraft:
         build = self._setup.build_coordinate_system
-        machine_hash = (
-            None if self._setup.machine is None else self._setup.machine.content_hash
-        )
+        machine_hash = None if self._setup.machine is None else self._setup.machine.content_hash
         selected_mount = mount_datum_id or self._setup.mount_datum_id
         selected_adjustment = adjustment or self._setup.placement_adjustment
 
@@ -1122,9 +753,9 @@ class TubeSetupController:
             local_inverse = selected_adjustment.to_transform("build").inverse()
             reference_transform = self._setup.T_mount_from_build @ local_inverse
         if reference_transform is None and selected_mount is not None:
-            reference_transform = _identity_mount_transform(selected_mount)
+            reference_transform = identity_mount_transform(selected_mount)
         if selected_mount is not None and reference_transform is not None:
-            reference_transform = _normalise_mount_transform(
+            reference_transform = normalise_mount_transform(
                 selected_mount,
                 reference_transform,
             )
@@ -1155,8 +786,8 @@ class TubeSetupController:
         if not mount_id:
             raise ValueError("mount_datum_id must not be empty")
         self._validate_mount_id(mount_id)
-        reference = reference_transform or _identity_mount_transform(mount_id)
-        reference = _normalise_mount_transform(mount_id, reference)
+        reference = reference_transform or identity_mount_transform(mount_id)
+        reference = normalise_mount_transform(mount_id, reference)
         draft = replace(
             draft,
             mount_datum_id=mount_id,
@@ -1215,13 +846,58 @@ class TubeSetupController:
         return transform
 
     def cancel_draft(self, node: str) -> None:
-        canonical_node = _draft_node(node)
+        canonical_node = draft_node(node)
         if canonical_node not in self._drafts:
             raise DraftNotFoundError(f"no active {canonical_node} draft")
         del self._drafts[canonical_node]
 
     def discard_all_drafts(self) -> None:
         self._drafts.clear()
+
+    @contextmanager
+    def draft_resolution_transaction(self, resolution: str | None) -> Iterator[None]:
+        """Rollback applied state and drafts when the surrounding commit fails."""
+
+        if resolution not in {None, "apply", "discard"}:
+            raise ValueError("draft resolution must be 'apply' or 'discard'")
+        if self._drafts and resolution is None:
+            raise PendingDraftError(self._drafts)
+
+        # A source refresh can change CAD authority even when no editor draft
+        # exists. The transaction therefore protects domain state in both paths.
+        original = (
+            self._setup,
+            self._operations,
+            dict(self._drafts),
+            self._modified,
+            dict(self._body_catalog),
+            self._source_hash,
+            self._source_path,
+            self._cad_model,
+            self._topology_ids,
+        )
+        if self._drafts and resolution == "apply":
+            self.apply_all_drafts()
+        elif self._drafts:
+            self.discard_all_drafts()
+
+        published = False
+        try:
+            yield
+            published = True
+        finally:
+            if not published:
+                (
+                    self._setup,
+                    self._operations,
+                    self._drafts,
+                    self._modified,
+                    self._body_catalog,
+                    self._source_hash,
+                    self._source_path,
+                    self._cad_model,
+                    self._topology_ids,
+                ) = original
 
     def apply_all_drafts(self) -> None:
         """Apply all active drafts as one transaction in dependency order."""
@@ -1246,9 +922,7 @@ class TubeSetupController:
                     placement,
                     build_cs_revision=None if build is None else build.revision,
                     machine_content_hash=(
-                        None
-                        if self._setup.machine is None
-                        else self._setup.machine.content_hash
+                        None if self._setup.machine is None else self._setup.machine.content_hash
                     ),
                 )
                 self._drafts[PLACEMENT_NODE] = placement
@@ -1263,9 +937,7 @@ class TubeSetupController:
     def _validate_mount_id(self, mount_datum_id: str) -> None:
         profile = self.machine_profile()
         if mount_datum_id not in profile.mount_map:
-            raise ValueError(
-                f"mount datum {mount_datum_id!r} is not present in selected Machine"
-            )
+            raise ValueError(f"mount datum {mount_datum_id!r} is not present in selected Machine")
 
     def machine_profile(self) -> MachineProfile:
         snapshot = self._setup.machine
@@ -1324,302 +996,46 @@ class TubeSetupController:
         return model.T_target_from_source @ build.T_target_from_source.inverse()
 
     def validation_report(self) -> SetupValidationReport:
-        invalid_nodes, domain_issues = self._domain_validation()
-        effective = replace(
-            self._setup,
-            draft_nodes=self._setup.draft_nodes | frozenset(self._drafts),
-            invalid_nodes=self._setup.invalid_nodes | invalid_nodes,
-            issues=_merge_issues(self._setup.issues, domain_issues),
+        context = TubeValidationContext(
+            setup=self._setup,
+            operations=self._operations,
+            body_catalog=self._body_catalog,
+            cad_model=self._cad_model,
+            draft_nodes=frozenset(self._drafts),
+            resource_audits=self._resources.audits,
+            resource_audit_failures=self._resources.audit_failures,
+            resource_library_diagnostics=self._resources.diagnostics,
         )
-        base = effective.validation_report()
-        states = dict(base.node_states)
-        operation_issues: list[ValidationIssue] = []
-        if not self._operations:
-            states[OPERATION_NODE] = NodeState.MISSING
-            operation_issues.append(
-                ValidationIssue(
-                    "TUBE_OPERATION_MISSING",
-                    IssueSeverity.WARNING,
-                    self._setup.setup_id,
-                    {"supported_type": TUBE_OPERATION_TYPE},
-                )
-            )
-        else:
-            states[OPERATION_NODE] = _aggregate_operation_state(self._operations)
-            if len(self._operations) > MAX_INTERACTIVE_OPERATIONS:
-                operation_issues.append(
-                    ValidationIssue(
-                        "TUBE_OPERATION_COUNT_UNSUPPORTED",
-                        IssueSeverity.WARNING,
-                        self._setup.setup_id,
-                        {
-                            "count": len(self._operations),
-                            "interactive_limit": MAX_INTERACTIVE_OPERATIONS,
-                        },
-                    )
-                )
-            for operation in self._operations:
-                if operation.setup_id != self._setup.setup_id:
-                    states[OPERATION_NODE] = NodeState.INVALID
-                    operation_issues.append(
-                        ValidationIssue(
-                            "TUBE_OPERATION_SETUP_MISMATCH",
-                            IssueSeverity.ERROR,
-                            operation.operation_id,
-                            {
-                                "operation_setup_id": operation.setup_id,
-                                "controller_setup_id": self._setup.setup_id,
-                            },
-                        )
-                    )
-        merged_issues = _merge_issues(base.issues, operation_issues)
-        setup_ready = base.setup_ready and not any(
-            issue.severity is IssueSeverity.ERROR for issue in merged_issues
+        return build_validation_report(
+            context,
+            operation_type=TUBE_OPERATION_TYPE,
+            operation_limit=MAX_INTERACTIVE_OPERATIONS,
         )
-        return SetupValidationReport(
-            issues=merged_issues,
-            node_states=states,
-            coordinates_valid=base.coordinates_valid,
-            setup_ready=setup_ready,
-        )
-
-    def _domain_validation(self) -> tuple[frozenset[str], tuple[ValidationIssue, ...]]:
-        invalid: set[str] = set()
-        issues: list[ValidationIssue] = []
-        assignments = self._setup.assignments
-        if assignments.has_part and self._cad_model is None:
-            invalid.add(PART_NODE)
-            issues.append(
-                ValidationIssue(
-                    "CAD_MODEL_MISSING",
-                    IssueSeverity.ERROR,
-                    self._setup.setup_id,
-                    {
-                        "node": PART_NODE,
-                        "part_body_ids": list(assignments.part_body_ids),
-                    },
-                )
-            )
-        elif self._body_catalog:
-            known = set(self._body_catalog)
-            referenced = (
-                assignments.part_body_ids
-                + assignments.ignored_body_ids
-                + assignments.fixture_body_ids
-                + assignments.unassigned_body_ids
-            )
-            missing = tuple(item for item in referenced if item not in known)
-            if missing:
-                if set(missing) & set(assignments.part_body_ids):
-                    invalid.add(PART_NODE)
-                issues.append(
-                    ValidationIssue(
-                        "CAD_BODY_REFERENCE_MISSING",
-                        IssueSeverity.ERROR,
-                        self._setup.setup_id,
-                        {"body_ids": list(missing)},
-                    )
-                )
-            ineligible = tuple(
-                item
-                for item in assignments.part_body_ids
-                if item in self._body_catalog
-                and not self._body_catalog[item].is_part_eligible
-            )
-            if ineligible:
-                invalid.add(PART_NODE)
-                issues.append(
-                    ValidationIssue(
-                        "PART_BODY_NOT_SOLID",
-                        IssueSeverity.ERROR,
-                        self._setup.setup_id,
-                        {"body_ids": list(ineligible)},
-                    )
-                )
-
-        for node, frame in (
-            (MODEL_CS_NODE, self._setup.model_coordinate_system),
-            (BUILD_CS_NODE, self._setup.build_coordinate_system),
-        ):
-            if frame is None or self._cad_model is None:
-                continue
-            coordinate_issues = audit_coordinate_frame_references(
-                frame,
-                self._cad_model,
-                node=node,
-            )
-            if coordinate_issues:
-                invalid.add(node)
-                issues.extend(coordinate_issues)
-
-        if self._setup.machine is not None:
-            try:
-                profile = self.machine_profile()
-            except (AttributeError, KeyError, TypeError, ValueError) as exc:
-                invalid.add(MACHINE_NODE)
-                issues.append(
-                    ValidationIssue(
-                        "MACHINE_PROFILE_INVALID",
-                        IssueSeverity.ERROR,
-                        self._setup.machine.resource_id,
-                        {"detail": str(exc)},
-                    )
-                )
-            else:
-                mount_id = self._setup.mount_datum_id
-                if mount_id is not None and mount_id not in profile.mount_map:
-                    invalid.add(PLACEMENT_NODE)
-                    issues.append(
-                        ValidationIssue(
-                            "PLACEMENT_MOUNT_MISSING",
-                            IssueSeverity.ERROR,
-                            mount_id,
-                            {"machine_id": profile.profile_id},
-                        )
-                    )
-
-        mount_id = self._setup.mount_datum_id
-        placement = self._setup.T_mount_from_build
-        if mount_id is not None and placement is not None:
-            if placement.source_frame != "build" or placement.target_frame != mount_id:
-                invalid.add(PLACEMENT_NODE)
-                issues.append(
-                    ValidationIssue(
-                        "PLACEMENT_FRAME_MISMATCH",
-                        IssueSeverity.ERROR,
-                        mount_id,
-                        {
-                            "expected_source_frame": "build",
-                            "actual_source_frame": placement.source_frame,
-                            "expected_target_frame": mount_id,
-                            "actual_target_frame": placement.target_frame,
-                        },
-                    )
-                )
-
-        for kind, audit in self._resource_audits.items():
-            if audit.status == "match":
-                continue
-            node = _resource_node(kind)
-            code = (
-                "RESOURCE_LIBRARY_DIVERGED"
-                if audit.status == "diverged"
-                else "RESOURCE_LIBRARY_ENTRY_MISSING"
-            )
-            issues.append(
-                ValidationIssue(
-                    code,
-                    IssueSeverity.WARNING,
-                    audit.resource_id,
-                    {
-                        "node": node,
-                        "resource_type": kind,
-                        "library_status": audit.status,
-                        "snapshot_content_hash": audit.snapshot_content_hash,
-                        "library_content_hash": audit.library_content_hash,
-                        "snapshot_retained": True,
-                    },
-                )
-            )
-        for kind, detail in self._resource_audit_failures.items():
-            snapshot = getattr(self._setup, kind)
-            issues.append(
-                ValidationIssue(
-                    "RESOURCE_LIBRARY_AUDIT_FAILED",
-                    IssueSeverity.WARNING,
-                    (
-                        self._setup.setup_id
-                        if snapshot is None
-                        else snapshot.resource_id
-                    ),
-                    {
-                        "node": _resource_node(kind),
-                        "resource_type": kind,
-                        "detail": detail,
-                        "snapshot_retained": True,
-                    },
-                )
-            )
-        for diagnostic in self._resource_library_diagnostics:
-            issues.append(
-                ValidationIssue(
-                    "RESOURCE_LIBRARY_ENTRY_INVALID",
-                    IssueSeverity.WARNING,
-                    diagnostic.resource_id or diagnostic.entry_name,
-                    {
-                        "node": _resource_node(diagnostic.resource_type),
-                        **diagnostic.to_json(),
-                    },
-                )
-            )
-
-        return frozenset(invalid), tuple(issues)
 
     def state_json(self) -> dict[str, Any]:
         """Return a JSON-compatible automation/UI snapshot, including drafts."""
 
         report = self.validation_report()
-        return {
-            "schema_version": TUBE_CONTROLLER_SCHEMA_VERSION,
-            "setup_id": self._setup.setup_id,
-            "setup_name": self._setup.name,
-            "source": {
-                "path": self._source_path,
-                "hash": self._source_hash,
-            },
-            "capabilities": {
-                "available_operation_types": list(AVAILABLE_TUBE_OPERATION_TYPES),
-                "max_interactive_operations": MAX_INTERACTIVE_OPERATIONS,
-                "fixture_editor_visible": False,
-            },
-            "body_candidates": [item.to_json() for item in self.body_candidates],
-            "assignments": self._setup.assignments.to_json(),
-            "resources": {
-                "machine": _snapshot_identity_json(self._setup.machine),
-                "nozzle": _snapshot_identity_json(self._setup.nozzle),
-                "material": _snapshot_identity_json(self._setup.material),
-            },
-            "resource_library": {
-                "configured": self._resource_library is not None,
-                "audits": [audit.to_json() for audit in self.resource_audits],
-                "audit_failures": [
-                    {"resource_type": kind, "detail": detail}
-                    for kind, detail in sorted(self._resource_audit_failures.items())
-                ],
-                "diagnostics": [
-                    diagnostic.to_json()
-                    for diagnostic in self._resource_library_diagnostics
-                ],
-            },
-            "coordinate_systems": {
-                "model": _frame_state_json(self._setup.model_coordinate_system),
-                "build": _frame_state_json(self._setup.build_coordinate_system),
-            },
-            "placement": {
-                "mount_datum_id": self._setup.mount_datum_id,
-                "applied": self._setup.T_mount_from_build is not None,
-            },
-            "operations": [item.to_json() for item in self._operations],
-            "drafts": {
-                node: draft.to_json() for node, draft in sorted(self._drafts.items())
-            },
-            "validation": report.to_json(),
-            "coordinates_valid": report.coordinates_valid,
-            "setup_ready": report.setup_ready,
-            "has_drafts": self.has_drafts,
-            "modified": self._modified,
-        }
+        return controller_state_json(
+            setup=self._setup,
+            operations=self._operations,
+            body_candidates=self.body_candidates,
+            drafts=self._drafts,
+            report=report,
+            source_path=self._source_path,
+            source_hash=self._source_hash,
+            resource_library=self._resources.state_json(),
+            operation_types=AVAILABLE_TUBE_OPERATION_TYPES,
+            operation_limit=MAX_INTERACTIVE_OPERATIONS,
+            modified=self._modified,
+        )
 
     def to_json(self, *, allow_drafts: bool = False) -> dict[str, Any]:
         """Return the project-format fragment owned by this controller."""
 
-        if self._drafts and not allow_drafts:
-            raise PendingDraftError(self._drafts)
-        return {
-            "schema_version": TUBE_CONTROLLER_SCHEMA_VERSION,
-            "setups": [self._setup.to_json()],
-            "operations": [item.to_json() for item in self._operations],
-        }
+        return controller_project_json(
+            self._setup, self._operations, self.draft_nodes, allow_drafts=allow_drafts
+        )
 
     @classmethod
     def from_json(
@@ -1629,32 +1045,12 @@ class TubeSetupController:
         cad_model: CadModel | None = None,
         resource_library: UserResourceLibrary | None = None,
     ) -> TubeSetupController:
-        if not isinstance(payload, Mapping):
-            raise ValueError("Tube controller payload must be an object")
-        version = int(payload.get("schema_version", TUBE_CONTROLLER_SCHEMA_VERSION))
-        if version > TUBE_CONTROLLER_SCHEMA_VERSION:
-            raise ValueError(f"unsupported Tube controller schema {version}")
-        raw_setups = payload.get("setups")
-        if raw_setups is None:
-            raw_setup = payload.get("setup")
-            raw_setups = () if raw_setup is None else (raw_setup,)
-        if not isinstance(raw_setups, (list, tuple)):
-            raise ValueError("setups must be an array")
-        if len(raw_setups) != 1:
-            raise ValueError("TubeSetupController requires exactly one Setup")
-        raw_operations = payload.get("operations", ())
-        if not isinstance(raw_operations, (list, tuple)):
-            raise ValueError("operations must be an array")
-        raw_catalog = payload.get("body_catalog", ())
-        if not isinstance(raw_catalog, (list, tuple)):
-            raise ValueError("body_catalog must be an array")
+        data = parse_controller_project(payload)
         return cls(
             cad_model=cad_model,
-            setup=ManufacturingSetup.from_json(raw_setups[0]),
-            operations=tuple(
-                TubeOperationDefinition.from_json(item) for item in raw_operations
-            ),
-            body_catalog=tuple(BodyCandidate.from_json(item) for item in raw_catalog),
+            setup=data.setup,
+            operations=data.operations,
+            body_catalog=data.body_catalog,
             resource_library=resource_library,
         )
 
@@ -1667,45 +1063,6 @@ class TubeSetupController:
             )
             for operation in self._operations
         )
-
-
-def _coordinate_node(node: str) -> str:
-    canonical = str(node).strip().lower()
-    aliases = {
-        "model": MODEL_CS_NODE,
-        "model_cs": MODEL_CS_NODE,
-        "build": BUILD_CS_NODE,
-        "build_cs": BUILD_CS_NODE,
-    }
-    try:
-        return aliases[canonical]
-    except KeyError as exc:
-        raise ValueError(f"unsupported coordinate node: {node!r}") from exc
-
-
-def _draft_node(node: str) -> str:
-    canonical = str(node).strip().lower()
-    if canonical in {"placement", PLACEMENT_NODE}:
-        return PLACEMENT_NODE
-    return _coordinate_node(canonical)
-
-
-def _direction_axis(axis: str) -> str:
-    canonical = str(axis).strip().lower()
-    if canonical in {"z", "z_direction"}:
-        return "z"
-    if canonical in {"x", "x_direction"}:
-        return "x"
-    raise ValueError(f"direction axis must be X or Z: {axis!r}")
-
-
-def _numeric_input_frame(node: str, input_frame: str | None) -> str:
-    if input_frame is None:
-        return "source" if node == MODEL_CS_NODE else "model"
-    canonical = str(input_frame).strip().lower().removesuffix("_cs")
-    if canonical not in {"source", "model", "build"}:
-        raise ValueError(f"unsupported numeric input frame: {input_frame!r}")
-    return canonical
 
 
 def _vector3(values: Sequence[float], name: str) -> tuple[float, float, float]:
@@ -1730,25 +1087,38 @@ def _identifier_tuple(values: Iterable[str], name: str) -> tuple[str, ...]:
     return sequence
 
 
-def _resource_kind(value: str) -> str:
-    kind = str(value).strip().lower().removesuffix("_profile")
-    if kind not in {"machine", "nozzle", "material"}:
-        raise ValueError(f"unsupported resource type: {value!r}")
-    return kind
+def _validate_assignment_selection(
+    catalog: Mapping[str, BodyCandidate],
+    part_ids: tuple[str, ...],
+    selected_ids: tuple[str, ...],
+) -> None:
+    if not catalog:
+        return
+    unknown = tuple(item for item in selected_ids if item not in catalog)
+    if unknown:
+        raise ValueError("unknown CAD body IDs: " + ", ".join(unknown))
+    ineligible = tuple(item for item in part_ids if not catalog[item].is_part_eligible)
+    if ineligible:
+        raise ValueError("Part accepts closed solids only: " + ", ".join(ineligible))
 
 
-def _resource_node(resource_type: str) -> str:
-    return {
-        "machine": MACHINE_NODE,
-        "nozzle": NOZZLE_NODE,
-        "material": MATERIAL_NODE,
-    }[_resource_kind(resource_type)]
-
-
-def _profile_resource_id(profile: ResourceProfile) -> str:
-    if isinstance(profile, MachineProfile):
-        return profile.profile_id
-    return profile.resource_id
+def _resolve_unassigned_bodies(
+    catalog: Mapping[str, BodyCandidate],
+    selected_ids: tuple[str, ...],
+    explicit_ids: Iterable[str] | None,
+) -> tuple[str, ...]:
+    selected = set(selected_ids)
+    if explicit_ids is None:
+        return tuple(item for item in catalog if item not in selected)
+    explicit = _identifier_tuple(explicit_ids, "unassigned_body_ids")
+    if set(explicit) & selected:
+        raise ValueError("an explicitly assigned body cannot remain unassigned")
+    unknown = tuple(item for item in explicit if catalog and item not in catalog)
+    if unknown:
+        raise ValueError("unknown unassigned body IDs: " + ", ".join(unknown))
+    explicit_set = set(explicit)
+    missing = tuple(item for item in catalog if item not in selected and item not in explicit_set)
+    return explicit + missing
 
 
 def _resource_snapshot(
@@ -1761,9 +1131,7 @@ def _resource_snapshot(
         else ResourceSnapshot.capture(expected_type, resource)
     )
     if snapshot.resource_type != expected_type:
-        raise ValueError(
-            f"expected {expected_type} resource, received {snapshot.resource_type}"
-        )
+        raise ValueError(f"expected {expected_type} resource, received {snapshot.resource_type}")
     if not snapshot.verify():
         raise ValueError("resource snapshot integrity check failed")
     return snapshot
@@ -1785,97 +1153,16 @@ def _next_operation_id(operations: Sequence[TubeOperationDefinition]) -> str:
     return f"tube-operation-{index}"
 
 
-def _aggregate_operation_state(
-    operations: Sequence[TubeOperationDefinition],
-) -> NodeState:
-    precedence = {
-        NodeState.INVALID: 5,
-        NodeState.DRAFT: 4,
-        NodeState.DIRTY: 3,
-        NodeState.MISSING: 2,
-        NodeState.VALID: 1,
-    }
-    return max((item.state for item in operations), key=precedence.__getitem__)
-
-
 def _frame_semantics(frame: CoordinateFrameDefinition) -> dict[str, Any]:
     payload = frame.to_json()
     payload.pop("revision", None)
     return payload
 
 
-def _identity_mount_transform(mount_datum_id: str) -> RigidTransform:
-    identity = RigidTransform.identity()
-    return RigidTransform(
-        identity.matrix,
-        source_frame="build",
-        target_frame=mount_datum_id,
-    )
-
-
-def _normalise_mount_transform(
-    mount_datum_id: str,
-    transform: RigidTransform,
-) -> RigidTransform:
-    if not isinstance(transform, RigidTransform):
-        raise TypeError("reference_transform must be RigidTransform")
-    if transform.source_frame not in {"", "build"}:
-        raise ValueError("T_mount_from_build source frame must be Build CS")
-    if transform.target_frame not in {"", "mount", mount_datum_id}:
-        raise ValueError("T_mount_from_build target frame must match the mount datum")
-    return RigidTransform(
-        transform.matrix,
-        source_frame="build",
-        target_frame=mount_datum_id,
-    )
-
-
-def _merge_issues(
-    *groups: Iterable[ValidationIssue],
-) -> tuple[ValidationIssue, ...]:
-    result: list[ValidationIssue] = []
-    seen: set[tuple[str, str, str]] = set()
-    for issue in (item for group in groups for item in group):
-        context_key = repr(issue.to_json()["context"])
-        key = (issue.code, issue.object_id, context_key)
-        if key not in seen:
-            seen.add(key)
-            result.append(issue)
-    return tuple(result)
-
-
 def _is_source_rebind_issue(issue: ValidationIssue) -> bool:
     """Identify issues owned by the most recent explicit source update."""
 
     return "_REBIND_" in issue.code
-
-
-def _snapshot_identity_json(
-    snapshot: ResourceSnapshot | None,
-) -> dict[str, Any] | None:
-    if snapshot is None:
-        return None
-    return {
-        "resource_type": snapshot.resource_type,
-        "resource_id": snapshot.resource_id,
-        "profile_version": snapshot.profile_version,
-        "content_hash": snapshot.content_hash,
-    }
-
-
-def _frame_state_json(
-    frame: CoordinateFrameDefinition | None,
-) -> dict[str, Any] | None:
-    if frame is None:
-        return None
-    return {
-        "frame_id": frame.frame_id,
-        "name": frame.name,
-        "revision": frame.revision,
-        "confirmed": frame.is_confirmed,
-        "valid": frame.is_valid,
-        "T_target_from_source": frame.T_target_from_source.to_json(),
-    }
 
 
 __all__ = [

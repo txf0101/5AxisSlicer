@@ -3,12 +3,12 @@ from __future__ import annotations
 import json
 import math
 import os
-from pathlib import Path
 import sys
 import tempfile
 import threading
 import time
 import unittest
+from pathlib import Path
 from unittest import mock
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
@@ -18,8 +18,8 @@ from PyQt5.QtCore import QEventLoop, QSettings, Qt, QTimer
 from PyQt5.QtTest import QTest
 from PyQt5.QtWidgets import QApplication, QWidget
 
+from five_axis_slicer import background_load, model_commit
 from five_axis_slicer.gcode_preview import PreviewSettings, load_gcode
-from five_axis_slicer import background_load
 from five_axis_slicer.manufacturing.coordinates import RigidTransform
 from five_axis_slicer.manufacturing.preview_kinematics import (
     GENERIC_XYZAC_AC_SEMANTICS,
@@ -34,9 +34,25 @@ from five_axis_slicer.manufacturing.setup import (
 )
 from five_axis_slicer.models import PickHit, SelectionState
 from five_axis_slicer.project_io import ProjectFormatError, ProjectLoaded
+from five_axis_slicer.result_state import LoadResult
 from five_axis_slicer.step_loader import StepLoadError, load_step
 from five_axis_slicer.tube_controller import DraftNotFoundError, TubeSetupController
 from five_axis_slicer.ui import MainWindow
+
+
+def complete_nozzle_options() -> dict[str, object]:
+    """Measured fixture data supplied explicitly to the automation boundary."""
+
+    return {
+        "complete": True,
+        "interface": "M6",
+        "length_mm": 12.5,
+        "construction_material": "brass",
+        "flow_category": "standard",
+        "temperature_limit_c": 300.0,
+        "wear_resistance_rating": "standard",
+        "outer_profile_rz_mm": ((0.2, 0.0), (3.0, 2.0), (3.0, 12.5)),
+    }
 
 
 class TubeViewerStub(QWidget):
@@ -239,9 +255,9 @@ class TubeUiTests(unittest.TestCase):
 
     def assertMatrixAlmostEqual(self, left, right, places: int = 9) -> None:
         self.assertEqual(len(left), len(right))
-        for left_row, right_row in zip(left, right):
+        for left_row, right_row in zip(left, right, strict=False):
             self.assertEqual(len(left_row), len(right_row))
-            for left_value, right_value in zip(left_row, right_row):
+            for left_value, right_value in zip(left_row, right_row, strict=False):
                 self.assertAlmostEqual(left_value, right_value, places=places)
 
     def test_tube_page_has_dedicated_tree_and_bilingual_1600_layout(self) -> None:
@@ -337,26 +353,18 @@ class TubeUiTests(unittest.TestCase):
         viewer = page.viewer
         self._select_tube_node(window, MODEL_CS_NODE)
 
-        origin_combo, _origin_values, origin_pick, _origin_title = (
-            page.coordinate_inputs["origin"]
-        )
-        origin_combo.setCurrentIndex(
-            self._combo_index_for_kind(origin_combo, "pick_face")
-        )
+        origin_combo, _origin_values, origin_pick, _origin_title = page.coordinate_inputs["origin"]
+        origin_combo.setCurrentIndex(self._combo_index_for_kind(origin_combo, "pick_face"))
         QTest.mouseClick(origin_pick, Qt.LeftButton)
         self.assertEqual(viewer.pick_request.kind, "face")
         face = window.model.faces[0]
         viewer.pick_callback(PickHit("face", face.face_id, face.centroid))
         self.app.processEvents()
-        face_reference = page.controller.coordinate_draft(
-            MODEL_CS_NODE
-        ).origin_reference
+        face_reference = page.controller.coordinate_draft(MODEL_CS_NODE).origin_reference
         self.assertEqual(face_reference.reference_type, "face_pick")
         self.assertEqual(face_reference.geometry.object_id, face.face_id)
 
-        origin_combo.setCurrentIndex(
-            self._combo_index_for_kind(origin_combo, "pick_vertex")
-        )
+        origin_combo.setCurrentIndex(self._combo_index_for_kind(origin_combo, "pick_vertex"))
         QTest.mouseClick(origin_pick, Qt.LeftButton)
         self.assertEqual(viewer.pick_request.kind, "vertex")
         origin_vertex = window.model.vertices[0]
@@ -370,9 +378,7 @@ class TubeUiTests(unittest.TestCase):
             if math.dist(vertex.point, first_vertex.point) > 1.0e-6
         )
         z_combo, _z_values, z_pick, _z_title = page.coordinate_inputs["z"]
-        z_combo.setCurrentIndex(
-            self._combo_index_for_kind(z_combo, "pick_two_vertices")
-        )
+        z_combo.setCurrentIndex(self._combo_index_for_kind(z_combo, "pick_two_vertices"))
         QTest.mouseClick(z_pick, Qt.LeftButton)
         self.assertEqual(viewer.pick_request.kind, "vertex")
         self.assertTrue(viewer.pick_request.multiple)
@@ -382,18 +388,19 @@ class TubeUiTests(unittest.TestCase):
         QTest.mouseClick(page.z_confirm_button, Qt.LeftButton)
 
         raw_z = tuple(
-            right - left for left, right in zip(first_vertex.point, second_vertex.point)
+            right - left
+            for left, right in zip(first_vertex.point, second_vertex.point, strict=False)
         )
         z_length = math.sqrt(sum(value * value for value in raw_z))
         unit_z = tuple(value / z_length for value in raw_z)
         basis_vectors = ((1.0, 0.0, 0.0), (0.0, 1.0, 0.0), (0.0, 0.0, 1.0))
         x_direction = min(
             basis_vectors,
-            key=lambda vector: abs(sum(a * b for a, b in zip(vector, unit_z))),
+            key=lambda vector: abs(sum(a * b for a, b in zip(vector, unit_z, strict=False))),
         )
         x_combo, x_values, _x_pick, _x_title = page.coordinate_inputs["x"]
         x_combo.setCurrentIndex(self._combo_index_for_kind(x_combo, "numeric"))
-        for spin, value in zip(x_values, x_direction):
+        for spin, value in zip(x_values, x_direction, strict=False):
             spin.setValue(value)
         QTest.mouseClick(page.x_confirm_button, Qt.LeftButton)
 
@@ -407,9 +414,7 @@ class TubeUiTests(unittest.TestCase):
         self.assertIsNotNone(frame)
         self.assertTrue(frame.is_valid)
         self.assertEqual(frame.origin_reference.reference_type, "vertex")
-        self.assertEqual(
-            frame.origin_reference.geometry.object_id, origin_vertex.vertex_id
-        )
+        self.assertEqual(frame.origin_reference.geometry.object_id, origin_vertex.vertex_id)
         self.assertEqual(frame.z_direction_reference.reference_type, "two_points")
         self.assertEqual(
             frame.z_direction_reference.secondary_geometry.object_id,
@@ -424,9 +429,7 @@ class TubeUiTests(unittest.TestCase):
         self._select_tube_node(window, MODEL_CS_NODE)
         QTest.mouseClick(page.z_flip_button, Qt.LeftButton)
         self.assertFalse(
-            page.controller.coordinate_draft(
-                MODEL_CS_NODE
-            ).z_direction_reference.flipped
+            page.controller.coordinate_draft(MODEL_CS_NODE).z_direction_reference.flipped
         )
         QTest.mouseClick(page.coordinate_cancel_button, Qt.LeftButton)
         self.assertEqual(
@@ -434,6 +437,43 @@ class TubeUiTests(unittest.TestCase):
             applied_payload,
         )
         self.assertFalse(page.controller.has_drafts)
+
+    def test_build_numeric_editor_round_trips_through_model_coordinates(self) -> None:
+        window = self._loaded_tube_window()
+        page = window.tube_page
+        page.apply_numeric_coordinate(
+            MODEL_CS_NODE,
+            (10.0, 0.0, 0.0),
+            (0.0, 0.0, 1.0),
+            (1.0, 0.0, 0.0),
+        )
+        page.apply_numeric_coordinate(
+            BUILD_CS_NODE,
+            (5.0, 0.0, 0.0),
+            (0.0, 0.0, 1.0),
+            (1.0, 0.0, 0.0),
+        )
+
+        build = page.controller.setup.build_coordinate_system
+        assert build is not None
+        self.assertEqual(build.origin_reference.resolved_point, (15.0, 0.0, 0.0))
+
+        self._select_tube_node(window, BUILD_CS_NODE)
+        _combo, origin_values, _pick, _title = page.coordinate_inputs["origin"]
+        self.assertAlmostEqual(origin_values[0].value(), 5.0)
+        origin_values[0].setValue(6.0)
+        QTest.mouseClick(page.origin_confirm_button, Qt.LeftButton)
+        QTest.mouseClick(page.coordinate_apply_button, Qt.LeftButton)
+
+        build = page.controller.setup.build_coordinate_system
+        assert build is not None
+        self.assertEqual(build.origin_reference.resolved_point, (16.0, 0.0, 0.0))
+        with tempfile.TemporaryDirectory() as tmp:
+            saved = window.save_project_to(Path(tmp) / "build-coordinate-project")
+            window.open_project(saved["project_json"])
+        reopened = window.tube_page.controller.setup.build_coordinate_system
+        assert reopened is not None
+        self.assertEqual(reopened.origin_reference.resolved_point, (16.0, 0.0, 0.0))
 
     def test_ui_propagates_coordinate_dirty_state_and_issue_navigation(self) -> None:
         window = self._loaded_tube_window()
@@ -465,9 +505,7 @@ class TubeUiTests(unittest.TestCase):
         self.assertIsNotNone(viewer.build_surface)
 
         self._select_tube_node(window, MODEL_CS_NODE)
-        model_origin_combo, model_origin_values, _pick, _title = page.coordinate_inputs[
-            "origin"
-        ]
+        model_origin_combo, model_origin_values, _pick, _title = page.coordinate_inputs["origin"]
         model_origin_combo.setCurrentIndex(
             self._combo_index_for_kind(model_origin_combo, "numeric")
         )
@@ -482,9 +520,7 @@ class TubeUiTests(unittest.TestCase):
         )
 
         self._select_tube_node(window, BUILD_CS_NODE)
-        build_origin_combo, build_origin_values, _pick, _title = page.coordinate_inputs[
-            "origin"
-        ]
+        build_origin_combo, build_origin_values, _pick, _title = page.coordinate_inputs["origin"]
         build_origin_combo.setCurrentIndex(
             self._combo_index_for_kind(build_origin_combo, "numeric")
         )
@@ -536,9 +572,7 @@ class TubeUiTests(unittest.TestCase):
 
         draft = page.controller.placement_draft()
         self.assertEqual(draft.adjustment.translation_mm, (12.5, 0.0, 0.0))
-        self.assertEqual(
-            page.controller.setup.placement_adjustment, committed_adjustment
-        )
+        self.assertEqual(page.controller.setup.placement_adjustment, committed_adjustment)
         expected_preview = (
             page.controller.machine_profile().mount_transform(draft.mount_datum_id)
             @ draft.T_mount_from_build
@@ -555,9 +589,7 @@ class TubeUiTests(unittest.TestCase):
         QTest.mouseClick(page.placement_cancel_button, Qt.LeftButton)
         with self.assertRaises(DraftNotFoundError):
             page.controller.placement_draft()
-        self.assertEqual(
-            page.controller.setup.placement_adjustment, committed_adjustment
-        )
+        self.assertEqual(page.controller.setup.placement_adjustment, committed_adjustment)
         self.assertMatrixAlmostEqual(viewer.model_transform, committed_transform)
 
         self._select_tube_node(window, MACHINE_NODE)
@@ -625,7 +657,11 @@ class TubeUiTests(unittest.TestCase):
         )
         window.handle_automation(
             "/tube/resource/select",
-            {"kind": "nozzle", "identifier": "0.4", "complete": True},
+            {
+                "kind": "nozzle",
+                "identifier": "0.4",
+                **complete_nozzle_options(),
+            },
         )
         window.handle_automation(
             "/tube/resource/select",
@@ -706,9 +742,7 @@ class TubeUiTests(unittest.TestCase):
             self.assertIsNone(window.viewer.gcode_preview)
             self.assertFalse(window.layer_min_slider.isEnabled())
             resaved = window.save_project_to(root / "clean-resaved")
-            resaved_payload = json.loads(
-                Path(resaved["project_json"]).read_text(encoding="utf-8")
-            )
+            resaved_payload = json.loads(Path(resaved["project_json"]).read_text(encoding="utf-8"))
             self.assertIsNone(resaved_payload["gcode"])
 
             restored_state = window.handle_automation(
@@ -735,6 +769,188 @@ class TubeUiTests(unittest.TestCase):
                 window.gcode_file_label.text(),
                 str(window.gcode_preview.source_path),
             )
+
+    def test_failed_project_publication_restores_committed_session(self) -> None:
+        window = self._loaded_tube_window()
+        original_model = window.model
+        original_controller = window.tube_page.controller
+        body_id = original_model.bodies[0].body_id
+        window.viewer.set_selection(body_ids=[body_id])
+        window.tube_page.viewer.set_selection(body_ids=[body_id])
+        window.tube_page._coordinate_node = BUILD_CS_NODE
+        window.tube_page._pick_context = (BUILD_CS_NODE, "origin", "vertex")
+        window.tube_page._two_point_hits[:] = [PickHit("vertex", "retained-hit")]
+        window.tube_page._coordinate_control_dirty = {"origin"}
+        window.tube_page.set_view_mode("machine")
+        original_page_state = model_commit._capture_tube_page(window.tube_page)
+        original_project_dir = Path("committed-project").resolve()
+        window.last_project_dir = original_project_dir
+        original_stack_index = window.stack.currentIndex()
+        original_tab_index = window.preview_tabs.currentIndex()
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            gcode_path = root / "candidate.gcode"
+            gcode_path.write_text("G1 X0 Y0 Z0.2\nG1 X1 Y0 Z0.2 E0.4\n", encoding="utf-8")
+            candidate_preview = load_gcode(gcode_path)
+            candidate_model = load_step(self.pipe2)
+            loaded = ProjectLoaded(
+                project_directory=root / "candidate-project",
+                project_json=root / "candidate-project" / "project.json",
+                model=candidate_model,
+                selection=SelectionState(body_ids={candidate_model.bodies[-1].body_id}),
+                workbench={"workbench": "curve", "operation": "curve_buildup"},
+                setups=(ManufacturingSetup(),),
+                operations=(),
+                resources={},
+                migrated_from_v1=False,
+                payload={},
+                gcode_preview=candidate_preview,
+            )
+            show_session = window._show_session
+            failed = False
+            candidate_was_visible = False
+
+            def fail_candidate_once() -> None:
+                nonlocal candidate_was_visible, failed
+                show_session()
+                if window.model is candidate_model and not failed:
+                    candidate_was_visible = (
+                        window.gcode_preview is candidate_preview
+                        and window.tube_page.controller is not original_controller
+                        and window.current_workbench_key == "curve"
+                        and window.tube_page._pick_context is None
+                    )
+                    failed = True
+                    raise RuntimeError("project viewer publication failed")
+
+            with (
+                mock.patch.object(
+                    window,
+                    "_show_session",
+                    side_effect=fail_candidate_once,
+                ),
+                self.assertRaisesRegex(RuntimeError, "project viewer publication failed"),
+            ):
+                window._commit_loaded_project(loaded)
+
+        self.assertTrue(candidate_was_visible)
+        self.assertIs(window.model, original_model)
+        self.assertIs(window.viewer.model, original_model)
+        self.assertIs(window.tube_page.viewer.model, original_model)
+        self.assertIs(window.tube_page.controller, original_controller)
+        self.assertIs(original_controller._cad_model, original_model)
+        self.assertIsNone(window.gcode_preview)
+        self.assertIsNone(window.viewer.gcode_preview)
+        self.assertEqual(window.viewer.selection.body_ids, {body_id})
+        self.assertEqual(window.tube_page.viewer.selection.body_ids, {body_id})
+        self.assertEqual(window.current_workbench_key, "tube")
+        self.assertEqual(window.last_project_dir, original_project_dir)
+        self.assertEqual(window.stack.currentIndex(), original_stack_index)
+        self.assertEqual(window.preview_tabs.currentIndex(), original_tab_index)
+        self.assertEqual(model_commit._capture_tube_page(window.tube_page), original_page_state)
+
+    def test_combined_model_and_gcode_failure_rolls_back_both_stages(self) -> None:
+        window = self._loaded_tube_window()
+        original_model = window.model
+        original_controller = window.tube_page.controller
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            old_gcode = root / "old.gcode"
+            old_gcode.write_text(
+                "G1 X0 Y0 Z0.2\nG1 X1 Y0 Z0.2 E0.4\nG1 Z0.4\nG1 X2 Y0 E0.8\n",
+                encoding="utf-8",
+            )
+            new_gcode = root / "new.gcode"
+            new_gcode.write_text("G1 X0 Y0 Z1\nG1 X3 Y0 Z1 E1\n", encoding="utf-8")
+            original_preview = load_gcode(old_gcode)
+            candidate_preview = load_gcode(new_gcode)
+            candidate_model = load_step(self.pipe2)
+            window._commit_gcode_preview(original_preview)
+            retained_layer = original_preview.layer_max
+            window.viewer.preview_settings.layer_min = retained_layer
+            window.viewer.preview_settings.layer_max = retained_layer
+            window._sync_preview_controls()
+            window.preview_tabs.setCurrentIndex(1)
+
+            load_preview = window.viewer.load_gcode_preview
+            failed = False
+
+            def fail_candidate_once(preview) -> None:
+                nonlocal failed
+                load_preview(preview)
+                if preview is candidate_preview and not failed:
+                    failed = True
+                    window.viewer.preview_settings.layer_min = preview.layer_min
+                    window.viewer.preview_settings.layer_max = preview.layer_max
+                    raise RuntimeError("G-code publication failed")
+
+            request_id = "gcode-combined-rollback"
+            window._gcode_load_outcomes[request_id] = {"status": "loading"}
+            window._gcode_load_show_errors[request_id] = False
+            result = LoadResult(
+                request_id=request_id,
+                model=candidate_model,
+                gcode_preview=candidate_preview,
+            )
+            with (
+                mock.patch.object(
+                    window.viewer,
+                    "load_gcode_preview",
+                    side_effect=fail_candidate_once,
+                ),
+                mock.patch.object(
+                    model_commit,
+                    "_capture",
+                    wraps=model_commit._capture,
+                ) as capture,
+            ):
+                window._on_gcode_load_completed(result)
+
+        self.assertEqual(window._gcode_load_outcomes[request_id]["status"], "error")
+        self.assertIs(window.model, original_model)
+        self.assertIs(window.viewer.model, original_model)
+        self.assertIs(window.tube_page.viewer.model, original_model)
+        self.assertIs(window.tube_page.controller, original_controller)
+        self.assertIs(original_controller._cad_model, original_model)
+        self.assertIs(window.gcode_preview, original_preview)
+        self.assertIs(window.viewer.gcode_preview, original_preview)
+        self.assertEqual(window.viewer.preview_settings.layer_min, retained_layer)
+        self.assertEqual(window.viewer.preview_settings.layer_max, retained_layer)
+        self.assertEqual(window.layer_min_slider.value(), retained_layer)
+        self.assertEqual(window.layer_max_slider.value(), retained_layer)
+        self.assertEqual(window.preview_tabs.currentIndex(), 1)
+        self.assertEqual(capture.call_count, 1)
+
+    def test_failed_save_restores_applied_and_discarded_drafts(self) -> None:
+        window = self._loaded_tube_window()
+        controller = window.tube_page.controller
+        controller.create_operation(operation_id="tube-save-rollback")
+        controller.mark_saved()
+
+        for resolution in ("apply", "discard"):
+            with self.subTest(resolution=resolution):
+                controller.begin_coordinate_draft(MODEL_CS_NODE)
+                controller.set_numeric_origin(MODEL_CS_NODE, (2, 3, 4), confirmed=True)
+                controller.set_numeric_direction(MODEL_CS_NODE, "z", (0, 0, 1), confirmed=True)
+                controller.set_numeric_direction(MODEL_CS_NODE, "x", (1, 0, 0), confirmed=True)
+                before = controller.state_json()
+
+                with (
+                    mock.patch(
+                        "five_axis_slicer.ui.save_project",
+                        side_effect=OSError("publication failed"),
+                    ),
+                    self.assertRaisesRegex(OSError, "publication failed"),
+                ):
+                    window.save_project_to(
+                        Path("unused-project-directory"),
+                        draft_resolution=resolution,
+                    )
+
+                self.assertEqual(controller.state_json(), before)
+                controller.discard_all_drafts()
 
     def test_face_and_vertex_selection_endpoints_remain_compatible(self) -> None:
         if self.pipe2 is None:
@@ -779,9 +995,7 @@ class TubeUiTests(unittest.TestCase):
             )
 
         self.assertEqual(loader.call_count, 2)
-        self.assertEqual(
-            loader.call_args_list[0].kwargs["length_unit_override"], "inch"
-        )
+        self.assertEqual(loader.call_args_list[0].kwargs["length_unit_override"], "inch")
         self.assertEqual(loader.call_args_list[1].kwargs["length_unit_override"], "cm")
         self.assertTrue(loader_threads)
         self.assertTrue(all(item != main_thread for item in loader_threads))
@@ -886,9 +1100,7 @@ class TubeUiTests(unittest.TestCase):
                 )
 
         self.assertEqual([item[0] for item in worker_calls], [None, "inch"])
-        self.assertTrue(
-            all(thread_id != main_thread for _unit, thread_id in worker_calls)
-        )
+        self.assertTrue(all(thread_id != main_thread for _unit, thread_id in worker_calls))
         self.assertEqual(prompt_threads, [main_thread])
         self.assertIs(window.model, model)
         state = window.handle_automation("/model/state", {})["model_load"]
@@ -923,12 +1135,8 @@ class TubeUiTests(unittest.TestCase):
             source = Path(tmp) / "unknown-unit.step"
             source.touch()
             with (
-                mock.patch.object(
-                    background_load, "load_step", side_effect=unknown_unit
-                ),
-                mock.patch.object(
-                    window, "_prompt_unknown_step_unit", return_value=None
-                ) as prompt,
+                mock.patch.object(background_load, "load_step", side_effect=unknown_unit),
+                mock.patch.object(window, "_prompt_unknown_step_unit", return_value=None) as prompt,
                 mock.patch.object(window, "show_error") as show_error,
             ):
                 window.start_model_load(source, prompt_for_unknown_unit=True)

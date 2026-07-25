@@ -1,15 +1,17 @@
 from __future__ import annotations
 
-from collections.abc import Mapping
-from pathlib import Path
 import threading
 import time
+from collections.abc import Callable, Mapping
+from dataclasses import dataclass, field
+from pathlib import Path
 
 from PyQt5.QtCore import QObject, QThread, pyqtSignal, pyqtSlot
 
-from .gcode_preview import GCodeLoadCancelled, load_gcode
+from .gcode_preview import GCodeLoadCancelled, GCodePreview, load_gcode
 from .gcode_source import GCodeSourceIndex, GCodeSourceIndexCancelled
-from .project_io import ProjectLoadCancelled, load_project
+from .models import CadModel
+from .project_io import ProjectLoadCancelled, ProjectLoaded, load_project
 from .result_state import LoadRequest, LoadResult
 from .step_loader import StepLoadCancelled, file_sha256, load_step
 
@@ -23,10 +25,10 @@ class LoadCancelled(RuntimeError):
 # coordinator in that case.  This prevents QObject teardown from destroying a
 # running QThread when an application elects to close after a bounded wait.
 _LIVE_WORKERS_LOCK = threading.Lock()
-_LIVE_WORKERS: dict[QThread, "_ResultLoadWorker"] = {}
+_LIVE_WORKERS: dict[QThread, _ResultLoadWorker] = {}
 
 
-def _retain_worker(thread: QThread, worker: "_ResultLoadWorker") -> None:
+def _retain_worker(thread: QThread, worker: _ResultLoadWorker) -> None:
     with _LIVE_WORKERS_LOCK:
         _LIVE_WORKERS[thread] = worker
 
@@ -62,6 +64,19 @@ def _source_audit(
     }
 
 
+@dataclass(slots=True)
+class _LoadArtifacts:
+    model: CadModel | None = None
+    project: ProjectLoaded | None = None
+    preview: GCodePreview | None = None
+    source_index: GCodeSourceIndex | None = None
+    source_audits: dict[str, dict[str, object]] = field(default_factory=dict)
+
+    def close_uncommitted(self) -> None:
+        if self.source_index is not None:
+            self.source_index.close()
+
+
 class _ResultLoadWorker(QObject):
     progress = pyqtSignal(object, str, float)
     completed = pyqtSignal(object)
@@ -77,140 +92,18 @@ class _ResultLoadWorker(QObject):
     @pyqtSlot()
     def run(self) -> None:
         started = time.perf_counter()
-        source_index: GCodeSourceIndex | None = None
+        artifacts = _LoadArtifacts()
         try:
             self._check_cancelled()
-            model = None
-            preview = None
-            project = None
-            source_audits: dict[str, dict[str, object]] = {}
             if self.request.project_path is not None:
-                self.progress.emit(self.request.request_id, "project", 0.01)
-
-                def report_project(phase: str, fraction: float) -> None:
-                    self._check_cancelled()
-                    self.progress.emit(self.request.request_id, phase, fraction)
-
-                project = load_project(
-                    self.request.project_path,
-                    length_unit_override=self.request.length_unit_override,
-                    cancel_check=self.cancel_event.is_set,
-                    progress_callback=report_project,
-                )
-                self._check_cancelled()
-                model = project.model
-                if model is not None:
-                    source_audits["project_step_model"] = _source_audit(
-                        Path(model.source_path),
-                        getattr(model, "source_hash", None),
-                        size_bytes=getattr(model, "source_size_bytes", None),
-                        mtime_ns=getattr(model, "source_mtime_ns", None),
-                    )
-
+                self._load_project(artifacts)
             if self.request.model_path is not None:
-                self.progress.emit(self.request.request_id, "model", 0.05)
-                step_options: dict[str, object] = {
-                    "cancel_check": self.cancel_event.is_set,
-                }
-                if self.request.length_unit_override is not None:
-                    step_options["length_unit_override"] = (
-                        self.request.length_unit_override
-                    )
-                model = load_step(self.request.model_path, **step_options)
-                self._check_cancelled()
-                source_audits["step_model"] = _source_audit(
-                    self.request.model_path,
-                    getattr(model, "source_hash", None),
-                    size_bytes=getattr(model, "source_size_bytes", None),
-                    mtime_ns=getattr(model, "source_mtime_ns", None),
-                )
-                self.progress.emit(self.request.request_id, "model", 0.22)
-
+                self._load_model(artifacts)
             if self.request.gcode_path is not None:
-                gcode_load_hash = file_sha256(
-                    self.request.gcode_path,
-                    cancel_check=self.cancel_event.is_set,
-                )
-
-                def report(fraction: float, phase: str = "gcode") -> None:
-                    self._check_cancelled()
-                    mapped = 0.22 + max(0.0, min(1.0, float(fraction))) * 0.63
-                    self.progress.emit(self.request.request_id, phase, mapped)
-
-                preview = load_gcode(
-                    self.request.gcode_path,
-                    progress_callback=report,
-                    cancel_check=self.cancel_event.is_set,
-                    source_sha256=gcode_load_hash,
-                )
-                source_fingerprint = getattr(preview, "source_fingerprint", None)
-                if source_fingerprint is None:
-                    gcode_load_audit = _source_audit(
-                        self.request.gcode_path,
-                        gcode_load_hash,
-                    )
-                else:
-                    gcode_load_audit = _source_audit(
-                        self.request.gcode_path,
-                        source_fingerprint.sha256,
-                        size_bytes=source_fingerprint.size_bytes,
-                        mtime_ns=source_fingerprint.mtime_ns,
-                    )
-                self._check_cancelled()
-                self.progress.emit(self.request.request_id, "source_index", 0.88)
-
-                def report_index(fraction: float, phase: str = "source_index") -> None:
-                    self._check_cancelled()
-                    mapped = 0.88 + max(0.0, min(1.0, float(fraction))) * 0.10
-                    self.progress.emit(self.request.request_id, phase, mapped)
-
-                source_index = GCodeSourceIndex(
-                    self.request.gcode_path,
-                    progress_callback=report_index,
-                    cancel_check=self.cancel_event.is_set,
-                )
-                signature = getattr(source_index, "source_signature", None)
-                indexed_audit = (
-                    dict(signature)
-                    if isinstance(signature, Mapping)
-                    else _source_audit(
-                        self.request.gcode_path,
-                        file_sha256(
-                            self.request.gcode_path,
-                            cancel_check=self.cancel_event.is_set,
-                        ),
-                    )
-                )
-                if any(
-                    indexed_audit.get(field) != gcode_load_audit.get(field)
-                    for field in ("path", "size_bytes", "mtime_ns", "sha256")
-                ):
-                    raise RuntimeError(
-                        f"G-code source changed while loading: {self.request.gcode_path}"
-                    )
-                source_audits["gcode"] = gcode_load_audit
-
+                self._load_gcode(artifacts)
             self._check_cancelled()
-            effective_unit_override = self.request.length_unit_override
-            loaded_units = None if model is None else getattr(model, "units", None)
-            if loaded_units is not None and bool(
-                getattr(loaded_units, "override_applied", False)
-            ):
-                effective_unit_override = str(loaded_units.source_length_unit)
-            result = LoadResult(
-                request_id=self.request.request_id,
-                model_path=self.request.model_path,
-                gcode_path=self.request.gcode_path,
-                project_path=self.request.project_path,
-                length_unit_override=effective_unit_override,
-                model=model,
-                project=project,
-                gcode_preview=preview,
-                gcode_source_index=source_index,
-                source_audits=source_audits,
-                elapsed_seconds=time.perf_counter() - started,
-            )
-            source_index = None
+            result = self._build_result(artifacts, started)
+            artifacts.source_index = None
             self.progress.emit(self.request.request_id, "commit", 1.0)
             self.completed.emit(result)
         except (
@@ -224,13 +117,163 @@ class _ResultLoadWorker(QObject):
         except Exception as exc:  # UI turns this into a localized message.
             self.failed.emit(self.request.request_id, str(exc))
         finally:
-            if source_index is not None:
-                source_index.close()
+            artifacts.close_uncommitted()
             self.finished.emit()
+
+    def _load_project(self, artifacts: _LoadArtifacts) -> None:
+        path = self.request.project_path
+        if path is None:
+            return
+        self.progress.emit(self.request.request_id, "project", 0.01)
+
+        def report(phase: str, fraction: float) -> None:
+            self._check_cancelled()
+            self.progress.emit(self.request.request_id, phase, fraction)
+
+        project = load_project(
+            path,
+            length_unit_override=self.request.length_unit_override,
+            cancel_check=self.cancel_event.is_set,
+            progress_callback=report,
+        )
+        self._check_cancelled()
+        artifacts.project = project
+        artifacts.model = project.model
+        if project.model is not None:
+            artifacts.source_audits["project_step_model"] = _model_audit(project.model)
+
+    def _load_model(self, artifacts: _LoadArtifacts) -> None:
+        path = self.request.model_path
+        if path is None:
+            return
+        self.progress.emit(self.request.request_id, "model", 0.05)
+        if self.request.length_unit_override is None:
+            model = load_step(path, cancel_check=self.cancel_event.is_set)
+        else:
+            model = load_step(
+                path,
+                length_unit_override=self.request.length_unit_override,
+                cancel_check=self.cancel_event.is_set,
+            )
+        self._check_cancelled()
+        artifacts.model = model
+        artifacts.source_audits["step_model"] = _model_audit(model)
+        self.progress.emit(self.request.request_id, "model", 0.22)
+
+    def _load_gcode(self, artifacts: _LoadArtifacts) -> None:
+        path = self.request.gcode_path
+        if path is None:
+            return
+        source_hash = file_sha256(path, cancel_check=self.cancel_event.is_set)
+        preview = load_gcode(
+            path,
+            progress_callback=self._report_gcode_progress,
+            cancel_check=self.cancel_event.is_set,
+            source_sha256=source_hash,
+        )
+        preview_audit = _preview_audit(path, preview, source_hash)
+        self._check_cancelled()
+        self.progress.emit(self.request.request_id, "source_index", 0.88)
+        source_index = GCodeSourceIndex(
+            path,
+            progress_callback=self._report_index_progress,
+            cancel_check=self.cancel_event.is_set,
+        )
+        artifacts.source_index = source_index
+        indexed_audit = _index_audit(path, source_index, self.cancel_event.is_set)
+        _require_same_source(path, preview_audit, indexed_audit)
+        artifacts.preview = preview
+        artifacts.source_audits["gcode"] = preview_audit
+
+    def _report_gcode_progress(
+        self,
+        fraction: float,
+        phase: str = "gcode",
+    ) -> None:
+        self._check_cancelled()
+        mapped = 0.22 + max(0.0, min(1.0, float(fraction))) * 0.63
+        self.progress.emit(self.request.request_id, phase, mapped)
+
+    def _report_index_progress(
+        self,
+        fraction: float,
+        phase: str = "source_index",
+    ) -> None:
+        self._check_cancelled()
+        mapped = 0.88 + max(0.0, min(1.0, float(fraction))) * 0.10
+        self.progress.emit(self.request.request_id, phase, mapped)
+
+    def _build_result(
+        self,
+        artifacts: _LoadArtifacts,
+        started: float,
+    ) -> LoadResult:
+        unit_override = self.request.length_unit_override
+        if artifacts.model is not None and artifacts.model.units.override_applied:
+            unit_override = artifacts.model.units.source_length_unit
+        return LoadResult(
+            request_id=self.request.request_id,
+            model_path=self.request.model_path,
+            gcode_path=self.request.gcode_path,
+            project_path=self.request.project_path,
+            length_unit_override=unit_override,
+            model=artifacts.model,
+            project=artifacts.project,
+            gcode_preview=artifacts.preview,
+            gcode_source_index=artifacts.source_index,
+            source_audits=artifacts.source_audits,
+            elapsed_seconds=time.perf_counter() - started,
+        )
 
     def _check_cancelled(self) -> None:
         if self.cancel_event.is_set():
             raise LoadCancelled("Loading cancelled")
+
+
+def _model_audit(model: CadModel) -> dict[str, object]:
+    return _source_audit(
+        Path(model.source_path),
+        model.source_hash,
+        size_bytes=model.source_size_bytes,
+        mtime_ns=model.source_mtime_ns,
+    )
+
+
+def _preview_audit(
+    path: Path,
+    preview: GCodePreview,
+    source_hash: str,
+) -> dict[str, object]:
+    fingerprint = getattr(preview, "source_fingerprint", None)
+    if fingerprint is None:
+        return _source_audit(path, source_hash)
+    return _source_audit(
+        path,
+        fingerprint.sha256,
+        size_bytes=fingerprint.size_bytes,
+        mtime_ns=fingerprint.mtime_ns,
+    )
+
+
+def _index_audit(
+    path: Path,
+    source_index: GCodeSourceIndex,
+    cancel_check: Callable[[], bool],
+) -> dict[str, object]:
+    signature = getattr(source_index, "source_signature", None)
+    if isinstance(signature, Mapping):
+        return dict(signature)
+    return _source_audit(path, file_sha256(path, cancel_check=cancel_check))
+
+
+def _require_same_source(
+    path: Path,
+    preview_audit: Mapping[str, object],
+    indexed_audit: Mapping[str, object],
+) -> None:
+    fields = ("path", "size_bytes", "mtime_ns", "sha256")
+    if any(indexed_audit.get(field) != preview_audit.get(field) for field in fields):
+        raise RuntimeError(f"G-code source changed while loading: {path}")
 
 
 class ResultLoadCoordinator(QObject):
@@ -240,6 +283,7 @@ class ResultLoadCoordinator(QObject):
     completed = pyqtSignal(object)
     failed = pyqtSignal(object, str)
     cancelled = pyqtSignal(object)
+    superseded = pyqtSignal(object, object)
     busy_changed = pyqtSignal(bool)
 
     def __init__(self, parent: QObject | None = None) -> None:
@@ -263,10 +307,13 @@ class ResultLoadCoordinator(QObject):
 
     def start(self, request: LoadRequest) -> None:
         if self.busy:
+            previous_request_id = self._active_request_id
             self._pending_request = request
             # Signals already queued by the superseded worker are stale as soon
             # as the newer request is accepted.
             self._active_request_id = request.request_id
+            if previous_request_id is not None:
+                self.superseded.emit(previous_request_id, request.request_id)
             self._request_worker_cancel()
             return
         self._launch(request)
@@ -347,9 +394,7 @@ class ResultLoadCoordinator(QObject):
         thread.start()
 
     @pyqtSlot(object, str, float)
-    def _forward_progress(
-        self, request_id: object, phase: str, fraction: float
-    ) -> None:
+    def _forward_progress(self, request_id: object, phase: str, fraction: float) -> None:
         if request_id == self._active_request_id:
             self.progress.emit(request_id, phase, fraction)
 

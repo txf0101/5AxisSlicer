@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 
 from PyQt5.QtCore import QTimer
@@ -10,9 +11,7 @@ from .ui import MainWindow
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
-        description="5AxisSclicer V2.0 workbench and NC preview"
-    )
+    parser = argparse.ArgumentParser(description="5AxisSclicer V2.0 workbench and NC preview")
     parser.add_argument("--model", help="STEP/STP file to open on startup")
     parser.add_argument("--gcode", help="NC/G-code file to open on startup")
     parser.add_argument(
@@ -25,13 +24,26 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--host", default="127.0.0.1", help="HTTP automation host")
     parser.add_argument("--port", default=8765, type=int, help="HTTP automation port")
+    parser.add_argument(
+        "--allow-remote-automation",
+        action="store_true",
+        help=(
+            "Allow a non-loopback automation bind; also requires a token in "
+            "FIVE_AXIS_SLICER_AUTOMATION_TOKEN"
+        ),
+    )
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     app = QApplication(sys.argv[:1])
-    window = MainWindow(http_host=args.host, http_port=args.port)
+    window = MainWindow(
+        http_host=args.host,
+        http_port=args.port,
+        http_allow_remote=args.allow_remote_automation,
+        http_token=os.environ.get("FIVE_AXIS_SLICER_AUTOMATION_TOKEN"),
+    )
     window.show()
     for viewer in (window.viewer, window.result_page.viewer):
         if hasattr(viewer, "Initialize"):
@@ -53,7 +65,7 @@ def main(argv: list[str] | None = None) -> int:
                 show_dialog=True,
             )
         if args.gcode:
-            window.open_gcode(args.gcode)
+            window.start_gcode_load(args.gcode)
 
     if args.demo or args.results or args.model or args.gcode:
         QTimer.singleShot(100, load_startup_inputs)

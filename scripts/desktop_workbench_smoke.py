@@ -10,7 +10,6 @@ from pathlib import Path
 
 from PIL import ImageGrab
 
-
 SW_RESTORE = 9
 SWP_SHOWWINDOW = 0x0040
 HWND_TOPMOST = -1
@@ -99,7 +98,7 @@ def screenshot(hwnd: int, output: Path) -> str:
     left, top, right, bottom = rect
     try:
         image = ImageGrab.grab(bbox=(left, top, right, bottom), all_screens=True).copy()
-    except Exception:
+    except Exception as exc:
         full = ImageGrab.grab(all_screens=True)
         origin_x = user32.GetSystemMetrics(SM_XVIRTUALSCREEN)
         origin_y = user32.GetSystemMetrics(SM_YVIRTUALSCREEN)
@@ -110,7 +109,9 @@ def screenshot(hwnd: int, output: Path) -> str:
             min(full.height, bottom - origin_y),
         )
         if crop_box[2] <= crop_box[0] or crop_box[3] <= crop_box[1]:
-            raise RuntimeError(f"Invalid screenshot crop box {crop_box} for full image {full.size}")
+            raise RuntimeError(
+                f"Invalid screenshot crop box {crop_box} for full image {full.size}"
+            ) from exc
         image = full.crop(crop_box).copy()
     output.parent.mkdir(parents=True, exist_ok=True)
     image.save(output)
@@ -166,7 +167,7 @@ def main() -> int:
     args = parser.parse_args()
 
     out_dir = Path(args.out)
-    state = wait_state(args.base)
+    wait_state(args.base)
     hwnd = find_window(args.title)
     rect = focus_and_resize(hwnd)
     if not rect_is_usable(rect):

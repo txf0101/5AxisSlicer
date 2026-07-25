@@ -1,11 +1,13 @@
+"""OpenGL Viewer whose widget lifecycle owns every GL resource operation."""
+
 from __future__ import annotations
 
-from collections import deque
-from dataclasses import dataclass
 import ctypes
 import math
 import time
-from typing import Callable, Iterable
+from collections import deque
+from collections.abc import Iterable
+from dataclasses import dataclass
 
 import numpy as np
 from PyQt5.QtCore import QPoint, Qt, QTimer
@@ -16,19 +18,19 @@ try:  # pragma: no cover - import availability is environment dependent.
     from OpenGL.GL import (
         GL_ARRAY_BUFFER,
         GL_BLEND,
+        GL_COLOR_ATTACHMENT0,
         GL_COLOR_BUFFER_BIT,
+        GL_DEPTH_ATTACHMENT,
         GL_DEPTH_BUFFER_BIT,
+        GL_DEPTH_COMPONENT24,
         GL_DEPTH_TEST,
         GL_FLOAT,
         GL_FRAGMENT_SHADER,
-        GL_COLOR_ATTACHMENT0,
-        GL_DEPTH_ATTACHMENT,
-        GL_DEPTH_COMPONENT24,
         GL_FRAMEBUFFER,
         GL_FRAMEBUFFER_BINDING,
         GL_FRAMEBUFFER_COMPLETE,
-        GL_LINES,
         GL_LINE_STRIP,
+        GL_LINES,
         GL_NEAREST,
         GL_ONE_MINUS_SRC_ALPHA,
         GL_RENDERBUFFER,
@@ -46,8 +48,8 @@ try:  # pragma: no cover - import availability is environment dependent.
         glBindRenderbuffer,
         glBindTexture,
         glBlendFunc,
-        glCheckFramebufferStatus,
         glBufferData,
+        glCheckFramebufferStatus,
         glClear,
         glClearColor,
         glDeleteBuffers,
@@ -85,18 +87,16 @@ try:  # pragma: no cover - import availability is environment dependent.
 except Exception:  # pragma: no cover - the VTK fallback handles this case.
     OPENGL_AVAILABLE = False
 
-import vtk
-
-from .geometry_vtk import edge_to_polydata, shape_to_polydata
+from . import opengl_picking as _picking
+from . import opengl_scene as _scene
+from . import viewer_common as _viewer_common
 from .gcode_preview import (
-    MOVE_CODES,
-    ROLE_CODES,
-    TIMELINE_FLAG_HAS_SPATIAL_LENGTH,
     GCodePathSegment,
     GCodePreview,
     GCodeTimelineStep,
     PreviewSettings,
 )
+from .geometry_vtk import edge_to_polydata, shape_to_polydata
 from .models import (
     BuildSurfaceOverlay,
     CadModel,
@@ -105,10 +105,75 @@ from .models import (
     PickRequest,
     SelectionState,
 )
+from .viewer_common import (
+    PickCallback,
+    SelectionCallback,
+    apply_pick_selection,
+    clamp_progress_index,
+    current_progress_step,
+    pick_request_for_mode,
+    preview_pose_for_segment,
+    preview_settings_for,
+    preview_state_payload,
+    progress_state,
+    replace_selection,
+    representative_path_segment,
+    segment_visible,
+    set_preview_layers,
+    update_preview_visibility,
+    vector3,
+)
 
+AXIS_X_COLOR = _scene.AXIS_X_COLOR
+AXIS_Y_COLOR = _scene.AXIS_Y_COLOR
+AXIS_Z_COLOR = _scene.AXIS_Z_COLOR
+BEAD_SECTION_SIDES = _scene.BEAD_SECTION_SIDES
+PAPER_PATH_COLOR = _scene.PAPER_PATH_COLOR
+PAPER_PATH_JOIN_TOLERANCE_MM = _scene.PAPER_PATH_JOIN_TOLERANCE_MM
+PAPER_TRAVEL_COLOR = _scene.PAPER_TRAVEL_COLOR
+_EdgeSegment = _scene.EdgeSegment
+_PaperPathArrays = _scene.PaperPathArrays
+_build_bead_arrays = _scene.build_bead_arrays
+_build_continuous_line_strips = _scene.build_continuous_line_strips
+_build_line_arrays = _scene.build_line_arrays
+_build_paper_path_arrays = _scene.build_paper_path_arrays
+_build_surface_lines = _scene.build_surface_lines
+_coordinate_frame_lines = _scene.coordinate_frame_lines
+_inclusive_grid_values = _scene.inclusive_grid_values
+_nice_grid_step = _scene.nice_grid_step
+_points_array = _scene.points_array
+_polydata_lines = _scene.polydata_lines
+_polydata_triangles = _scene.polydata_triangles
+_transform_points = _scene.transform_points
+_validate_coordinate_frame = _scene.validate_coordinate_frame
+_vertex_marker_lines = _scene.vertex_marker_lines
+_distance_to_screen_segment = _picking.distance_to_screen_segment
+_encode_pick_color = _picking.encode_pick_color
+_ray_triangle_intersection = _picking.ray_triangle_intersection
+_screen_segment_distance_and_fraction = _picking.screen_segment_distance_and_fraction
+_unproject_screen_ray = _picking.unproject_screen_ray
+_render_stride = _viewer_common.render_stride
+_validated_rigid_transform = _viewer_common.validated_rigid_transform
 
-SelectionCallback = Callable[[str, str], None]
-PickCallback = Callable[[PickHit], None]
+__all__ = [
+    "AXIS_X_COLOR",
+    "AXIS_Y_COLOR",
+    "AXIS_Z_COLOR",
+    "BEAD_SECTION_SIDES",
+    "OPENGL_AVAILABLE",
+    "OpenGLModelViewer",
+    "PAPER_PATH_COLOR",
+    "PAPER_TRAVEL_COLOR",
+    "_EdgeSegment",
+    "_PaperPathArrays",
+    "_build_continuous_line_strips",
+    "_build_surface_lines",
+    "_distance_to_screen_segment",
+    "_ray_triangle_intersection",
+    "_transform_points",
+    "_unproject_screen_ray",
+    "_validated_rigid_transform",
+]
 
 BG_COLOR = (0.965, 0.973, 0.984, 1.0)
 GRID_MINOR_COLOR = (0.839, 0.871, 0.910, 0.58)
@@ -120,20 +185,13 @@ FACE_SELECTED_COLOR = (0.961, 0.620, 0.043, 0.96)
 VERTEX_COLOR = (0.145, 0.388, 0.922, 0.92)
 VERTEX_SELECTED_COLOR = (0.961, 0.388, 0.120, 1.0)
 BUILD_SURFACE_COLOR = (0.420, 0.480, 0.580, 0.78)
-AXIS_X_COLOR = (0.890, 0.180, 0.150, 1.0)
-AXIS_Y_COLOR = (0.120, 0.680, 0.260, 1.0)
-AXIS_Z_COLOR = (0.130, 0.360, 0.920, 1.0)
 MODEL_WITH_PATH_COLOR = (0.690, 0.718, 0.765, 0.76)
 CURRENT_COLOR = (0.961, 0.620, 0.043, 1.0)
-PAPER_PATH_COLOR = (0.145, 0.388, 0.922, 0.94)
-PAPER_TRAVEL_COLOR = (0.961, 0.620, 0.043, 0.42)
 START_COLOR = (0.086, 0.639, 0.290, 1.0)
 END_COLOR = (0.863, 0.149, 0.149, 1.0)
-BEAD_SECTION_SIDES = 6
 STATIC_SOLID_SEGMENT_LIMIT = 18_000
 INTERACTIVE_LINE_SEGMENT_LIMIT = 35_000
 INITIAL_SOLID_SETTLE_MS = 1200
-PAPER_PATH_JOIN_TOLERANCE_MM = 0.02
 
 
 @dataclass(slots=True)
@@ -158,24 +216,6 @@ class _Buffer:
         if self.draw_counts is not None:
             ranges += self.draw_counts.nbytes
         return int(self.vertices.nbytes + self.colors.nbytes + ranges)
-
-
-@dataclass(slots=True)
-class _EdgeSegment:
-    edge_id: str
-    start: tuple[float, float, float]
-    end: tuple[float, float, float]
-
-
-@dataclass(frozen=True, slots=True)
-class _PaperPathArrays:
-    vertices: np.ndarray
-    colors: np.ndarray
-    draw_starts: np.ndarray
-    draw_counts: np.ndarray
-    segment_count: int
-    first_point: tuple[float, float, float] | None
-    last_point: tuple[float, float, float] | None
 
 
 class OpenGLModelViewer(QOpenGLWidget):
@@ -273,18 +313,14 @@ class OpenGLModelViewer(QOpenGLWidget):
                 continue
             polydata = shape_to_polydata(shape)
             body.triangle_count = polydata.GetNumberOfPolys()
-            self._body_triangles[body.body_id] = _points_array(
-                _polydata_triangles(polydata)
-            )
+            self._body_triangles[body.body_id] = _points_array(_polydata_triangles(polydata))
 
             for face_id in body.face_ids:
                 face_shape = model.face_shapes.get(face_id)
                 if face_shape is None:
                     continue
                 face_polydata = shape_to_polydata(face_shape)
-                self._face_triangles[face_id] = _points_array(
-                    _polydata_triangles(face_polydata)
-                )
+                self._face_triangles[face_id] = _points_array(_polydata_triangles(face_polydata))
 
             for edge_id in body.edge_ids:
                 edge_shape = model.edge_shapes.get(edge_id)
@@ -321,19 +357,11 @@ class OpenGLModelViewer(QOpenGLWidget):
 
     def load_gcode_preview(self, preview: GCodePreview) -> None:
         self.gcode_preview = preview
-        self.preview_settings = PreviewSettings(
-            layer_min=preview.layer_min,
-            layer_max=preview.layer_max,
-            show_travel=False,
-            show_extrusion=True,
-            show_pose_samples=False,
-            solid_rendering=self.quality_mode == "interactive",
+        self.preview_settings = preview_settings_for(
+            preview,
+            backend=self.backend,
             quality_mode=self.quality_mode,
-            render_backend=self.backend,
-        )
-        self.preview_settings.progress_index = max(
-            0,
-            preview.timeline_count_for_layers(preview.layer_min, preview.layer_max) - 1,
+            solid_rendering=self.quality_mode == "interactive",
         )
         self._path_cache_key = None
         self._settle_timer.stop()
@@ -372,17 +400,16 @@ class OpenGLModelViewer(QOpenGLWidget):
     def set_preview_layers(self, layer_min: int, layer_max: int) -> None:
         if self.gcode_preview is None:
             return
-        low = max(self.gcode_preview.layer_min, min(layer_min, layer_max))
-        high = min(self.gcode_preview.layer_max, max(layer_min, layer_max))
-        self.preview_settings.layer_min = low
-        self.preview_settings.layer_max = high
-        self._clamp_progress_index()
+        set_preview_layers(
+            self.gcode_preview,
+            self.preview_settings,
+            layer_min,
+            layer_max,
+        )
         self._path_cache_key = None
         self.refresh_path_preview()
 
-    def set_preview_progress(
-        self, progress_index: int, interactive: bool | None = None
-    ) -> None:
+    def set_preview_progress(self, progress_index: int, interactive: bool | None = None) -> None:
         if self.gcode_preview is None:
             return
         started = time.perf_counter()
@@ -418,14 +445,13 @@ class OpenGLModelViewer(QOpenGLWidget):
         visible_roles: list[str] | set[str] | None = None,
         show_pose_samples: bool | None = None,
     ) -> None:
-        if show_travel is not None:
-            self.preview_settings.show_travel = bool(show_travel)
-        if show_extrusion is not None:
-            self.preview_settings.show_extrusion = bool(show_extrusion)
-        if visible_roles is not None:
-            self.preview_settings.visible_roles = set(visible_roles)
-        if show_pose_samples is not None:
-            self.preview_settings.show_pose_samples = bool(show_pose_samples)
+        update_preview_visibility(
+            self.preview_settings,
+            show_travel=show_travel,
+            show_extrusion=show_extrusion,
+            visible_roles=visible_roles,
+            show_pose_samples=show_pose_samples,
+        )
         self._path_cache_key = None
         if self.gcode_preview is not None:
             self.refresh_path_preview()
@@ -577,30 +603,21 @@ class OpenGLModelViewer(QOpenGLWidget):
 
     def preview_state(self) -> dict:
         perf = self.performance_state()
-        return {
-            "summary": (
-                None if self.gcode_preview is None else self.gcode_preview.summary()
-            ),
-            "settings": self.preview_settings.to_json(),
-            "visible_path_segment_count": self.visible_path_segment_count,
-            "drawn_path_segment_count": self.drawn_path_segment_count,
-            "render_mode": self.path_render_mode,
-            "progress": self.progress_state(),
-            "backend": self.backend,
-            "quality_mode": self.preview_settings.quality_mode,
-            "frame_ms": perf["frame_ms_avg"],
-            "gpu_draw_count": perf["gpu_draw_count"],
-            "cache_format": (
-                None
-                if self.gcode_preview is None
-                else self.gcode_preview.summary().get("cache_format")
-            ),
-            "result_visibility": {
+        return preview_state_payload(
+            self.gcode_preview,
+            self.preview_settings,
+            backend=self.backend,
+            visible_count=self.visible_path_segment_count,
+            drawn_count=self.drawn_path_segment_count,
+            render_mode=self.path_render_mode,
+            frame_ms=float(perf["frame_ms_avg"]),
+            gpu_draw_count=int(perf["gpu_draw_count"]),
+            result_visibility={
                 "model": self._model_visible,
                 "start_end": self._start_end_visible,
                 "grid": self._grid_visible,
             },
-        }
+        )
 
     def performance_state(self) -> dict:
         samples = list(self._frame_ms)
@@ -620,53 +637,18 @@ class OpenGLModelViewer(QOpenGLWidget):
         }
 
     def progress_state(self) -> dict:
-        if self.gcode_preview is None:
-            return {
-                "domain": "layer_filtered_gcode_order",
-                "layer_step_count": 0,
-                "progress_index": 0,
-                "current_global_step": None,
-                "current_step": None,
-            }
-        return self.gcode_preview.progress_state(
-            self.preview_settings.layer_min,
-            self.preview_settings.layer_max,
-            self.preview_settings.progress_index,
-        )
+        return progress_state(self.gcode_preview, self.preview_settings)
 
     def current_progress_step(self) -> GCodeTimelineStep | None:
-        if self.gcode_preview is None:
-            return None
-        return self.gcode_preview.timeline_step_for_layer_progress(
-            self.preview_settings.layer_min,
-            self.preview_settings.layer_max,
-            self.preview_settings.progress_index,
-        )
+        return current_progress_step(self.gcode_preview, self.preview_settings)
 
-    def representative_path_segment(self):
-        if self.gcode_preview is None:
-            return None
-        current = self.current_progress_step()
-        if current is not None:
-            index = current.path_segment_index
-            if index is None:
-                index = self.gcode_preview.segment_index_for_step(current.step_index)
-            if index is None:
-                index = self.gcode_preview.nearest_segment_index_for_step(
-                    current.step_index
-                )
-            if index is not None and 0 <= index < len(self.gcode_preview.segments):
-                return self.gcode_preview.segments[index]
-        for segment in self.gcode_preview.segments:
-            if self._segment_visible(segment) and segment.has_spatial_length:
-                return segment
-        return None
+    def representative_path_segment(self) -> GCodePathSegment | None:
+        return representative_path_segment(self.gcode_preview, self.preview_settings)
 
     def set_mode(self, mode: str) -> None:
-        if mode not in {"body", "face", "edge", "vertex"}:
-            raise ValueError(f"Unsupported picking mode: {mode}")
+        request = pick_request_for_mode(mode)
         self.selection.mode = mode
-        self.pick_request = PickRequest(mode, multiple=mode in {"body", "edge"})
+        self.pick_request = request
         self.refresh_selection()
 
     def set_pick_request(self, request: PickRequest) -> None:
@@ -680,14 +662,13 @@ class OpenGLModelViewer(QOpenGLWidget):
         face_ids: list[str] | None = None,
         vertex_ids: list[str] | None = None,
     ) -> None:
-        if body_ids is not None:
-            self.selection.body_ids = set(body_ids)
-        if face_ids is not None:
-            self.selection.face_ids = set(face_ids)
-        if edge_ids is not None:
-            self.selection.edge_ids = set(edge_ids)
-        if vertex_ids is not None:
-            self.selection.vertex_ids = set(vertex_ids)
+        replace_selection(
+            self.selection,
+            body_ids=body_ids,
+            edge_ids=edge_ids,
+            face_ids=face_ids,
+            vertex_ids=vertex_ids,
+        )
         self.refresh_selection()
 
     def clear_selection(self) -> None:
@@ -719,23 +700,15 @@ class OpenGLModelViewer(QOpenGLWidget):
             if not frame.visible:
                 continue
             target_vertices = (
-                active_vertices
-                if frame.frame_id == active_frame_id
-                else normal_vertices
+                active_vertices if frame.frame_id == active_frame_id else normal_vertices
             )
-            target_colors = (
-                active_colors if frame.frame_id == active_frame_id else normal_colors
-            )
-            scale = float(frame.scale) * (
-                1.18 if frame.frame_id == active_frame_id else 1.0
-            )
+            target_colors = active_colors if frame.frame_id == active_frame_id else normal_colors
+            scale = float(frame.scale) * (1.18 if frame.frame_id == active_frame_id else 1.0)
             vertices, colors = _coordinate_frame_lines(frame, scale)
             target_vertices.extend(vertices)
             target_colors.extend(colors)
         self._set_buffer("coordinate_frames", normal_vertices, normal_colors, GL_LINES)
-        self._set_buffer(
-            "coordinate_frames_active", active_vertices, active_colors, GL_LINES
-        )
+        self._set_buffer("coordinate_frames_active", active_vertices, active_colors, GL_LINES)
         self._refresh_grid_buffer()
         self.update()
 
@@ -874,12 +847,8 @@ class OpenGLModelViewer(QOpenGLWidget):
             glBindRenderbuffer(GL_RENDERBUFFER, depth)
             glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height)
             glBindFramebuffer(GL_FRAMEBUFFER, framebuffer)
-            glFramebufferTexture2D(
-                GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0
-            )
-            glFramebufferRenderbuffer(
-                GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depth
-            )
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0)
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depth)
             if glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE:
                 raise RuntimeError("Unable to create the OpenGL export framebuffer")
 
@@ -938,9 +907,7 @@ class OpenGLModelViewer(QOpenGLWidget):
         glViewport(0, 0, max(1, width), max(1, height))
 
     def paintGL(self) -> None:  # noqa: N802 - Qt API
-        self._paint_scene(
-            max(1, self.width()), max(1, self.height()), record_metrics=True
-        )
+        self._paint_scene(max(1, self.width()), max(1, self.height()), record_metrics=True)
 
     def _paint_scene(self, width: int, height: int, *, record_metrics: bool) -> None:
         started = time.perf_counter()
@@ -972,12 +939,8 @@ class OpenGLModelViewer(QOpenGLWidget):
         if self._model_visible:
             self._set_shader_mvp(model_mvp)
             draw_count += self._draw_buffer("model", line_width=1.0)
-            draw_count += self._draw_buffer(
-                "face_selected", line_width=1.0, depth_bias=0.0002
-            )
-            draw_count += self._draw_buffer(
-                "edge", line_width=2.2 * line_scale, depth_bias=0.0004
-            )
+            draw_count += self._draw_buffer("face_selected", line_width=1.0, depth_bias=0.0002)
+            draw_count += self._draw_buffer("edge", line_width=2.2 * line_scale, depth_bias=0.0004)
             draw_count += self._draw_buffer(
                 "edge_selected",
                 line_width=5.0 * line_scale,
@@ -1000,28 +963,18 @@ class OpenGLModelViewer(QOpenGLWidget):
                 depth_bias=0.0010,
             )
         elif self.path_render_mode.startswith("opengl_solid"):
-            draw_count += self._draw_buffer(
-                "path_solid", line_width=1.0, depth_bias=0.0004
-            )
+            draw_count += self._draw_buffer("path_solid", line_width=1.0, depth_bias=0.0004)
         else:
             draw_count += self._draw_buffer(
                 "path_line",
                 line_width=2.4 * line_scale,
                 depth_bias=0.0004,
             )
-        draw_count += self._draw_buffer(
-            "pose", line_width=1.3 * line_scale, depth_bias=0.0008
-        )
-        draw_count += self._draw_buffer(
-            "current", line_width=4.5 * line_scale, depth_bias=0.0010
-        )
+        draw_count += self._draw_buffer("pose", line_width=1.3 * line_scale, depth_bias=0.0008)
+        draw_count += self._draw_buffer("current", line_width=4.5 * line_scale, depth_bias=0.0010)
         if self._start_end_visible:
-            draw_count += self._draw_buffer(
-                "start", line_width=3.2 * line_scale, depth_bias=0.0012
-            )
-            draw_count += self._draw_buffer(
-                "end", line_width=3.2 * line_scale, depth_bias=0.0012
-            )
+            draw_count += self._draw_buffer("start", line_width=3.2 * line_scale, depth_bias=0.0012)
+            draw_count += self._draw_buffer("end", line_width=3.2 * line_scale, depth_bias=0.0012)
         draw_count += self._draw_buffer(
             "coordinate_frames", line_width=2.4 * line_scale, depth_bias=0.0014
         )
@@ -1034,9 +987,7 @@ class OpenGLModelViewer(QOpenGLWidget):
 
         if record_metrics:
             self._last_gpu_draw_count = draw_count
-            self._last_memory_bytes = sum(
-                buffer.nbytes for buffer in self._buffers.values()
-            )
+            self._last_memory_bytes = sum(buffer.nbytes for buffer in self._buffers.values())
             self._frame_ms.append((time.perf_counter() - started) * 1000.0)
 
     def mousePressEvent(self, event) -> None:  # noqa: N802 - Qt API
@@ -1113,35 +1064,12 @@ class OpenGLModelViewer(QOpenGLWidget):
         super().keyPressEvent(event)
 
     def _clamp_progress_index(self) -> None:
-        if self.gcode_preview is None:
-            self.preview_settings.progress_index = 0
-            return
-        count = self.gcode_preview.timeline_count_for_layers(
-            self.preview_settings.layer_min,
-            self.preview_settings.layer_max,
-        )
-        self.preview_settings.progress_index = (
-            0
-            if count == 0
-            else max(0, min(self.preview_settings.progress_index, count - 1))
-        )
+        clamp_progress_index(self.gcode_preview, self.preview_settings)
 
     def _segment_visible(self, segment: GCodePathSegment) -> bool:
-        settings = self.preview_settings
-        if segment.layer < settings.layer_min or segment.layer > settings.layer_max:
-            return False
-        if segment.move_type == "extrude":
-            return (
-                settings.show_extrusion
-                and segment.extrusion_role in settings.visible_roles
-            )
-        if segment.move_type == "travel":
-            return settings.show_travel
-        return settings.show_travel and segment.has_spatial_length
+        return segment_visible(segment, self.preview_settings)
 
-    def _rebuild_path_buffers(
-        self, solid: bool, current_global_step: int | None
-    ) -> None:
+    def _rebuild_path_buffers(self, solid: bool, current_global_step: int | None) -> None:
         if self.gcode_preview is None:
             return
         visible = []
@@ -1268,14 +1196,11 @@ class OpenGLModelViewer(QOpenGLWidget):
         candidates = [
             segment
             for segment in visible_segments
-            if segment.move_type == "extrude"
-            and (segment.rotary_end or segment.rotary_start)
+            if segment.move_type == "extrude" and (segment.rotary_end or segment.rotary_start)
         ]
         if not candidates:
             self._set_buffer("pose", [], [], GL_LINES)
             return
-        from .viewer import _preview_pose_for_segment
-
         step = max(1, len(candidates) // 120)
         length = 4.0
         if self.gcode_preview is not None and self.gcode_preview.bounds is not None:
@@ -1286,7 +1211,7 @@ class OpenGLModelViewer(QOpenGLWidget):
         colors: list[tuple[float, float, float, float]] = []
         color = (0.18, 0.78, 0.95, 0.55)
         for segment in candidates[::step]:
-            start, axis = _preview_pose_for_segment(
+            start, axis = preview_pose_for_segment(
                 segment,
                 controller_semantics=(
                     self.gcode_preview.controller_semantics
@@ -1294,7 +1219,7 @@ class OpenGLModelViewer(QOpenGLWidget):
                     else None
                 ),
             )
-            end = tuple(start[index] + axis[index] * length for index in range(3))
+            end = vector3(start[index] + axis[index] * length for index in range(3))
             vertices.extend([start, end])
             colors.extend([color, color])
         self._set_buffer("pose", vertices, colors, GL_LINES)
@@ -1319,15 +1244,11 @@ class OpenGLModelViewer(QOpenGLWidget):
         x_values = _inclusive_grid_values(x_min, x_max, step)
         y_values = _inclusive_grid_values(y_min, y_max, step)
         for x in x_values:
-            color = (
-                GRID_MAJOR_COLOR if int(round(x / step)) % 5 == 0 else GRID_MINOR_COLOR
-            )
+            color = GRID_MAJOR_COLOR if int(round(x / step)) % 5 == 0 else GRID_MINOR_COLOR
             vertices.extend([(x, y_min, z), (x, y_max, z)])
             colors.extend([color, color])
         for y in y_values:
-            color = (
-                GRID_MAJOR_COLOR if int(round(y / step)) % 5 == 0 else GRID_MINOR_COLOR
-            )
+            color = GRID_MAJOR_COLOR if int(round(y / step)) % 5 == 0 else GRID_MINOR_COLOR
             vertices.extend([(x_min, y, z), (x_max, y, z)])
             colors.extend([color, color])
         self._set_buffer("grid", vertices, colors, GL_LINES)
@@ -1368,19 +1289,13 @@ class OpenGLModelViewer(QOpenGLWidget):
         selected_colors: list[tuple[float, float, float, float]] = []
         for segment in self._edge_segments:
             target_vertices = (
-                selected_vertices
-                if segment.edge_id in self.selection.edge_ids
-                else edge_vertices
+                selected_vertices if segment.edge_id in self.selection.edge_ids else edge_vertices
             )
             target_colors = (
-                selected_colors
-                if segment.edge_id in self.selection.edge_ids
-                else edge_colors
+                selected_colors if segment.edge_id in self.selection.edge_ids else edge_colors
             )
             color = (
-                EDGE_SELECTED_COLOR
-                if segment.edge_id in self.selection.edge_ids
-                else EDGE_COLOR
+                EDGE_SELECTED_COLOR if segment.edge_id in self.selection.edge_ids else EDGE_COLOR
             )
             target_vertices.extend([segment.start, segment.end])
             target_colors.extend([color, color])
@@ -1401,9 +1316,7 @@ class OpenGLModelViewer(QOpenGLWidget):
                 vertices.extend(marker)
                 colors.extend([VERTEX_COLOR] * len(marker))
         self._set_buffer("vertex", vertices, colors, GL_LINES)
-        self._set_buffer(
-            "vertex_selected", selected_vertices, selected_colors, GL_LINES
-        )
+        self._set_buffer("vertex_selected", selected_vertices, selected_colors, GL_LINES)
 
     def _refresh_pick_buffers(self) -> None:
         self._pick_id_to_entity.clear()
@@ -1446,12 +1359,12 @@ class OpenGLModelViewer(QOpenGLWidget):
         edge_colors: list[tuple[float, float, float, float]] = []
         edge_colors_by_id: dict[str, tuple[float, float, float, float]] = {}
         for segment in self._edge_segments:
-            color = edge_colors_by_id.get(segment.edge_id)
-            if color is None:
-                color = register("edge", segment.edge_id)
-                edge_colors_by_id[segment.edge_id] = color
+            edge_color = edge_colors_by_id.get(segment.edge_id)
+            if edge_color is None:
+                edge_color = register("edge", segment.edge_id)
+                edge_colors_by_id[segment.edge_id] = edge_color
             edge_vertices.extend([segment.start, segment.end])
-            edge_colors.extend([color, color])
+            edge_colors.extend([edge_color, edge_color])
         self._set_buffer("edge_pick", edge_vertices, edge_colors, GL_LINES)
 
         vertex_vertices: list[tuple[float, float, float]] = []
@@ -1464,18 +1377,13 @@ class OpenGLModelViewer(QOpenGLWidget):
         self._set_buffer("vertex_pick", vertex_vertices, vertex_colors, GL_LINES)
 
     def _apply_pick(self, hit: PickHit) -> None:
-        request = self.pick_request
-        if hit.kind != request.kind or not self._entity_allowed(hit.entity_id):
+        if not apply_pick_selection(
+            self.selection,
+            self.pick_request,
+            hit.kind,
+            hit.entity_id,
+        ):
             return
-        selected: set[str] = getattr(self.selection, f"{hit.kind}_ids")
-        if request.multiple:
-            if hit.entity_id in selected:
-                selected.remove(hit.entity_id)
-            else:
-                selected.add(hit.entity_id)
-        else:
-            selected.clear()
-            selected.add(hit.entity_id)
         self.refresh_selection()
         if self.selection_callback is not None:
             self.selection_callback(hit.kind, hit.entity_id)
@@ -1502,9 +1410,7 @@ class OpenGLModelViewer(QOpenGLWidget):
         entity = self._pick_entity_by_color_id(pos, kind)
         if entity is not None:
             if entity[0] == kind and self._entity_allowed(entity[1]):
-                return PickHit(
-                    kind, entity[1], self._hit_position_source(kind, entity[1], pos)
-                )
+                return PickHit(kind, entity[1], self._hit_position_source(kind, entity[1], pos))
             return None
         return self._pick_by_projection(pos, kind)
 
@@ -1524,9 +1430,7 @@ class OpenGLModelViewer(QOpenGLWidget):
             return None
         return entity[1]
 
-    def _pick_entity_by_color_id(
-        self, pos: QPoint, kind: str
-    ) -> tuple[str, str] | None:
+    def _pick_entity_by_color_id(self, pos: QPoint, kind: str) -> tuple[str, str] | None:
         buffer_key = f"{kind}_pick"
         buffer = self._buffers.get(buffer_key)
         if (
@@ -1570,12 +1474,8 @@ class OpenGLModelViewer(QOpenGLWidget):
             glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height)
 
             glBindFramebuffer(GL_FRAMEBUFFER, framebuffer)
-            glFramebufferTexture2D(
-                GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0
-            )
-            glFramebufferRenderbuffer(
-                GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depth
-            )
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0)
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depth)
             if glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE:
                 return None
 
@@ -1584,9 +1484,7 @@ class OpenGLModelViewer(QOpenGLWidget):
             glClearColor(0.0, 0.0, 0.0, 0.0)
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
             glUseProgram(self._program)
-            mvp = (
-                self._projection_matrix() @ self._view_matrix() @ self._model_transform
-            )
+            mvp = self._projection_matrix() @ self._view_matrix() @ self._model_transform
             self._set_shader_mvp(mvp)
             if kind in {"edge", "vertex"}:
                 self._draw_buffer("body_pick", line_width=1.0)
@@ -1647,14 +1545,9 @@ class OpenGLModelViewer(QOpenGLWidget):
             right = self._project(segment.end, mvp)
             if left is None or right is None:
                 continue
-            distance, fraction = _screen_segment_distance_and_fraction(
-                point, left, right
-            )
-            position = tuple(
-                float(
-                    segment.start[index]
-                    + fraction * (segment.end[index] - segment.start[index])
-                )
+            distance, fraction = _screen_segment_distance_and_fraction(point, left, right)
+            position = vector3(
+                float(segment.start[index] + fraction * (segment.end[index] - segment.start[index]))
                 for index in range(3)
             )
             if best is None or distance < best[0]:
@@ -1706,7 +1599,7 @@ class OpenGLModelViewer(QOpenGLWidget):
                 if distance is None or (best is not None and distance >= best[0]):
                     continue
                 point = origin + direction * distance
-                best = (distance, candidate_id, tuple(map(float, point)))
+                best = (distance, candidate_id, vector3(point))
         if best is None:
             return None
         return PickHit(kind, best[1], best[2])
@@ -1747,9 +1640,7 @@ class OpenGLModelViewer(QOpenGLWidget):
             return None if body is None else body.centroid
         return None
 
-    def _project(
-        self, point: tuple[float, float, float], mvp: np.ndarray
-    ) -> np.ndarray | None:
+    def _project(self, point: tuple[float, float, float], mvp: np.ndarray) -> np.ndarray | None:
         clip = mvp @ np.array([point[0], point[1], point[2], 1.0], dtype=np.float32)
         if float(clip[3]) <= 1e-6:
             return None
@@ -1786,18 +1677,18 @@ class OpenGLModelViewer(QOpenGLWidget):
         if vertex_array.shape[0] != color_array.shape[0]:
             raise ValueError("OpenGL buffer vertex and color counts must match")
         range_starts = (
-            None
-            if draw_starts is None
-            else np.asarray(draw_starts, dtype=np.int32).reshape((-1,))
+            None if draw_starts is None else np.asarray(draw_starts, dtype=np.int32).reshape((-1,))
         )
         range_counts = (
-            None
-            if draw_counts is None
-            else np.asarray(draw_counts, dtype=np.int32).reshape((-1,))
+            None if draw_counts is None else np.asarray(draw_counts, dtype=np.int32).reshape((-1,))
         )
         if (range_starts is None) != (range_counts is None):
             raise ValueError("OpenGL buffer draw ranges require both starts and counts")
-        if range_starts is not None and range_starts.size != range_counts.size:
+        if (
+            range_starts is not None
+            and range_counts is not None
+            and range_starts.size != range_counts.size
+        ):
             raise ValueError("OpenGL buffer draw range counts must match")
         old = self._buffers.get(key)
         vbo = 0 if old is None else old.vbo
@@ -1819,9 +1710,7 @@ class OpenGLModelViewer(QOpenGLWidget):
             buffer.vbo = int(glGenBuffers(1))
             buffer.dirty = True
         if buffer.dirty:
-            packed = np.hstack((buffer.vertices, buffer.colors)).astype(
-                np.float32, copy=False
-            )
+            packed = np.hstack((buffer.vertices, buffer.colors)).astype(np.float32, copy=False)
             glBindBuffer(GL_ARRAY_BUFFER, buffer.vbo)
             glBufferData(GL_ARRAY_BUFFER, packed.nbytes, packed, GL_STATIC_DRAW)
             buffer.dirty = False
@@ -1830,12 +1719,8 @@ class OpenGLModelViewer(QOpenGLWidget):
         glEnableVertexAttribArray(self._position_loc)
         glEnableVertexAttribArray(self._color_loc)
         glUniform1f(self._depth_bias_loc, float(depth_bias))
-        glVertexAttribPointer(
-            self._position_loc, 3, GL_FLOAT, False, stride, ctypes.c_void_p(0)
-        )
-        glVertexAttribPointer(
-            self._color_loc, 4, GL_FLOAT, False, stride, ctypes.c_void_p(3 * 4)
-        )
+        glVertexAttribPointer(self._position_loc, 3, GL_FLOAT, False, stride, ctypes.c_void_p(0))
+        glVertexAttribPointer(self._color_loc, 4, GL_FLOAT, False, stride, ctypes.c_void_p(3 * 4))
         if buffer.primitive == GL_LINES:
             glLineWidth(line_width)
         elif buffer.primitive == GL_LINE_STRIP:
@@ -1857,7 +1742,7 @@ class OpenGLModelViewer(QOpenGLWidget):
                         range_count,
                     )
                 except Exception:
-                    for first, count in zip(buffer.draw_starts, buffer.draw_counts):
+                    for first, count in zip(buffer.draw_starts, buffer.draw_counts, strict=False):
                         glDrawArrays(buffer.primitive, int(first), int(count))
         else:
             glDrawArrays(buffer.primitive, 0, buffer.count)
@@ -1867,9 +1752,7 @@ class OpenGLModelViewer(QOpenGLWidget):
         points: list[np.ndarray] = []
         model_buffer = self._buffers.get("model")
         if model_buffer is not None and model_buffer.count:
-            points.append(
-                _transform_points(model_buffer.vertices, self._model_transform)
-            )
+            points.append(_transform_points(model_buffer.vertices, self._model_transform))
         for key in (
             "path_line",
             "path_solid",
@@ -1906,9 +1789,7 @@ class OpenGLModelViewer(QOpenGLWidget):
         eye = target + direction * self._distance
         return eye, target, self._view_up
 
-    def _projection_matrix(
-        self, width: int | None = None, height: int | None = None
-    ) -> np.ndarray:
+    def _projection_matrix(self, width: int | None = None, height: int | None = None) -> np.ndarray:
         width = self.width() if width is None else int(width)
         height = self.height() if height is None else int(height)
         aspect = max(width, 1) / max(height, 1)
@@ -1924,579 +1805,6 @@ class OpenGLModelViewer(QOpenGLWidget):
                 buffer.vbo = 0
         self.doneCurrent()
         return super().close()
-
-
-def _build_paper_path_arrays(
-    preview: GCodePreview,
-    settings: PreviewSettings,
-    current_global_step: int | None,
-    *,
-    tolerance: float = PAPER_PATH_JOIN_TOLERANCE_MM,
-) -> _PaperPathArrays:
-    timeline_arrays = preview.timeline_arrays
-    if timeline_arrays is not None:
-        count = timeline_arrays.count
-        starts = timeline_arrays.starts
-        ends = timeline_arrays.ends
-        layers = timeline_arrays.layers
-        move_codes = timeline_arrays.move_codes
-        role_codes = timeline_arrays.role_codes
-        delta_es = timeline_arrays.delta_es
-        spatial = (timeline_arrays.flags & TIMELINE_FLAG_HAS_SPATIAL_LENGTH) != 0
-        step_indices = np.arange(count, dtype=np.int64)
-    else:
-        timeline = preview.timeline
-        count = len(timeline)
-        starts = np.asarray(
-            [step.start for step in timeline], dtype=np.float32
-        ).reshape((-1, 3))
-        ends = np.asarray([step.end for step in timeline], dtype=np.float32).reshape(
-            (-1, 3)
-        )
-        layers = np.asarray([step.layer for step in timeline], dtype=np.int32)
-        move_codes = np.asarray(
-            [MOVE_CODES.get(step.move_type, MOVE_CODES["noop"]) for step in timeline],
-            dtype=np.uint8,
-        )
-        role_codes = np.asarray(
-            [
-                ROLE_CODES.get(step.extrusion_role, ROLE_CODES["unknown"])
-                for step in timeline
-            ],
-            dtype=np.uint8,
-        )
-        delta_es = np.asarray([step.delta_e for step in timeline], dtype=np.float32)
-        spatial = np.asarray(
-            [step.has_spatial_length for step in timeline], dtype=np.bool_
-        )
-        step_indices = np.asarray(
-            [step.step_index for step in timeline], dtype=np.int64
-        )
-
-    if count == 0:
-        return _empty_paper_path_arrays()
-
-    low = min(settings.layer_min, settings.layer_max)
-    high = max(settings.layer_min, settings.layer_max)
-    layer_mask = (layers >= low) & (layers <= high)
-    extrusion_mask = (move_codes == MOVE_CODES["extrude"]) & (delta_es > 0.0) & spatial
-    if settings.visible_roles:
-        allowed_roles = np.asarray(
-            [ROLE_CODES[role] for role in settings.visible_roles if role in ROLE_CODES],
-            dtype=np.uint8,
-        )
-        role_mask = (
-            np.isin(role_codes, allowed_roles)
-            if allowed_roles.size
-            else np.zeros(count, dtype=np.bool_)
-        )
-    else:
-        role_mask = np.zeros(count, dtype=np.bool_)
-
-    visible = layer_mask & spatial
-    selected_type = np.zeros(count, dtype=np.bool_)
-    if settings.show_extrusion:
-        selected_type |= extrusion_mask & role_mask
-    if settings.show_travel:
-        selected_type |= ~extrusion_mask
-    visible &= selected_type
-    if current_global_step is not None and not settings.show_upcoming:
-        visible &= step_indices <= int(current_global_step)
-
-    indices = np.flatnonzero(visible)
-    if indices.size == 0:
-        return _empty_paper_path_arrays()
-
-    selected_starts = np.asarray(starts[indices], dtype=np.float32)
-    selected_ends = np.asarray(ends[indices], dtype=np.float32)
-    selected_extrusion = extrusion_mask[indices]
-    segment_colors = np.empty((indices.size, 4), dtype=np.float32)
-    segment_colors[selected_extrusion] = PAPER_PATH_COLOR
-    segment_colors[~selected_extrusion] = PAPER_TRAVEL_COLOR
-    style_keys = selected_extrusion.astype(np.uint8)
-    vertices, colors, draw_starts, draw_counts = _build_continuous_line_strips(
-        selected_starts,
-        selected_ends,
-        segment_colors,
-        style_keys,
-        tolerance=tolerance,
-    )
-    return _PaperPathArrays(
-        vertices=vertices,
-        colors=colors,
-        draw_starts=draw_starts,
-        draw_counts=draw_counts,
-        segment_count=int(indices.size),
-        first_point=tuple(float(value) for value in selected_starts[0]),
-        last_point=tuple(float(value) for value in selected_ends[-1]),
-    )
-
-
-def _empty_paper_path_arrays() -> _PaperPathArrays:
-    return _PaperPathArrays(
-        vertices=np.empty((0, 3), dtype=np.float32),
-        colors=np.empty((0, 4), dtype=np.float32),
-        draw_starts=np.empty((0,), dtype=np.int32),
-        draw_counts=np.empty((0,), dtype=np.int32),
-        segment_count=0,
-        first_point=None,
-        last_point=None,
-    )
-
-
-def _build_continuous_line_strips(
-    starts: np.ndarray,
-    ends: np.ndarray,
-    segment_colors: np.ndarray,
-    style_keys: np.ndarray,
-    *,
-    tolerance: float,
-) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-    starts = np.asarray(starts, dtype=np.float32).reshape((-1, 3))
-    ends = np.asarray(ends, dtype=np.float32).reshape((-1, 3))
-    segment_colors = np.asarray(segment_colors, dtype=np.float32).reshape((-1, 4))
-    style_keys = np.asarray(style_keys).reshape((-1,))
-    count = int(starts.shape[0])
-    if (
-        ends.shape[0] != count
-        or segment_colors.shape[0] != count
-        or style_keys.size != count
-    ):
-        raise ValueError(
-            "Polyline source arrays must contain the same number of segments"
-        )
-    if count == 0:
-        return (
-            np.empty((0, 3), dtype=np.float32),
-            np.empty((0, 4), dtype=np.float32),
-            np.empty((0,), dtype=np.int32),
-            np.empty((0,), dtype=np.int32),
-        )
-
-    break_before = np.ones(count, dtype=np.bool_)
-    if count > 1:
-        gaps = starts[1:] - ends[:-1]
-        distance_sq = np.einsum("ij,ij->i", gaps, gaps)
-        break_before[1:] = (distance_sq > max(0.0, float(tolerance)) ** 2) | (
-            style_keys[1:] != style_keys[:-1]
-        )
-    break_indices = np.flatnonzero(break_before).astype(np.int32, copy=False)
-    polyline_ids = np.cumsum(break_before, dtype=np.int32) - 1
-    start_positions = np.arange(count, dtype=np.int32) + polyline_ids
-    end_positions = start_positions + 1
-    vertex_count = count + int(break_indices.size)
-    vertices = np.empty((vertex_count, 3), dtype=np.float32)
-    vertices[start_positions] = starts
-    vertices[end_positions] = ends
-
-    draw_starts = break_indices + np.arange(break_indices.size, dtype=np.int32)
-    segment_run_ends = np.append(break_indices[1:], np.int32(count))
-    draw_counts = (segment_run_ends - break_indices + 1).astype(np.int32, copy=False)
-    colors = np.repeat(segment_colors[break_indices], draw_counts, axis=0).astype(
-        np.float32, copy=False
-    )
-    return vertices, colors, draw_starts, draw_counts
-
-
-def _points_array(points: Iterable[Iterable[float]]) -> np.ndarray:
-    values = tuple(tuple(point) for point in points)
-    if not values:
-        return np.empty((0, 3), dtype=np.float32)
-    return np.asarray(values, dtype=np.float32).reshape((-1, 3))
-
-
-def _validated_rigid_transform(matrix: Iterable[Iterable[float]]) -> np.ndarray:
-    values = np.asarray(tuple(tuple(row) for row in matrix), dtype=np.float64)
-    if values.shape != (4, 4) or not np.isfinite(values).all():
-        raise ValueError("model transform must be a finite 4x4 matrix")
-    if not np.allclose(values[3], (0.0, 0.0, 0.0, 1.0), atol=1e-7, rtol=0.0):
-        raise ValueError("model transform must use homogeneous rigid coordinates")
-    rotation = values[:3, :3]
-    if not np.allclose(rotation.T @ rotation, np.eye(3), atol=1e-6, rtol=0.0):
-        raise ValueError("model transform rotation must be orthonormal")
-    if not math.isclose(float(np.linalg.det(rotation)), 1.0, abs_tol=1e-6):
-        raise ValueError("model transform must preserve right-handed orientation")
-    return values
-
-
-def _validate_coordinate_frame(frame: CoordinateFrameOverlay) -> None:
-    origin = np.asarray(frame.origin, dtype=np.float64)
-    basis = np.column_stack(
-        (
-            np.asarray(frame.x_axis, dtype=np.float64),
-            np.asarray(frame.y_axis, dtype=np.float64),
-            np.asarray(frame.z_axis, dtype=np.float64),
-        )
-    )
-    if (
-        origin.shape != (3,)
-        or basis.shape != (3, 3)
-        or not np.isfinite(origin).all()
-        or not np.isfinite(basis).all()
-    ):
-        raise ValueError(
-            f"coordinate frame {frame.frame_id!r} must contain finite 3D vectors"
-        )
-    lengths = np.linalg.norm(basis, axis=0)
-    if np.any(lengths <= 1e-12):
-        raise ValueError(f"coordinate frame {frame.frame_id!r} contains a zero axis")
-    normalized = basis / lengths
-    if not np.allclose(normalized.T @ normalized, np.eye(3), atol=1e-5, rtol=0.0):
-        raise ValueError(f"coordinate frame {frame.frame_id!r} axes must be orthogonal")
-    if float(np.linalg.det(normalized)) <= 0.0:
-        raise ValueError(f"coordinate frame {frame.frame_id!r} must be right-handed")
-    if not math.isfinite(float(frame.scale)) or float(frame.scale) <= 0.0:
-        raise ValueError(f"coordinate frame {frame.frame_id!r} scale must be positive")
-
-
-def _coordinate_frame_lines(
-    frame: CoordinateFrameOverlay,
-    scale: float,
-) -> tuple[
-    list[tuple[float, float, float]],
-    list[tuple[float, float, float, float]],
-]:
-    origin = np.asarray(frame.origin, dtype=np.float64)
-    vertices: list[tuple[float, float, float]] = []
-    colors: list[tuple[float, float, float, float]] = []
-    for axis, color in (
-        (frame.x_axis, AXIS_X_COLOR),
-        (frame.y_axis, AXIS_Y_COLOR),
-        (frame.z_axis, AXIS_Z_COLOR),
-    ):
-        axis_vertices = _axis_arrow_lines(
-            origin, np.asarray(axis, dtype=np.float64), scale
-        )
-        vertices.extend(axis_vertices)
-        colors.extend([color] * len(axis_vertices))
-    return vertices, colors
-
-
-def _axis_arrow_lines(
-    origin: np.ndarray,
-    direction: np.ndarray,
-    scale: float,
-) -> list[tuple[float, float, float]]:
-    direction = direction / np.linalg.norm(direction)
-    tip = origin + direction * scale
-    helper = np.array((0.0, 0.0, 1.0), dtype=np.float64)
-    if abs(float(np.dot(direction, helper))) > 0.88:
-        helper = np.array((0.0, 1.0, 0.0), dtype=np.float64)
-    side = np.cross(direction, helper)
-    side /= np.linalg.norm(side)
-    up = np.cross(direction, side)
-    arrow_base = tip - direction * scale * 0.20
-    wing = scale * 0.085
-    points = [tuple(map(float, origin)), tuple(map(float, tip))]
-    for offset in (side * wing, -side * wing, up * wing, -up * wing):
-        points.extend((tuple(map(float, tip)), tuple(map(float, arrow_base + offset))))
-    return points
-
-
-def _build_surface_lines(
-    surface: BuildSurfaceOverlay,
-) -> list[tuple[float, float, float]]:
-    origin = np.asarray(surface.origin, dtype=np.float64)
-    x_axis = np.asarray(surface.x_axis, dtype=np.float64)
-    y_axis = np.asarray(surface.y_axis, dtype=np.float64)
-    if (
-        origin.shape != (3,)
-        or x_axis.shape != (3,)
-        or y_axis.shape != (3,)
-        or not np.isfinite(np.concatenate((origin, x_axis, y_axis))).all()
-    ):
-        raise ValueError("build surface basis must contain finite 3D vectors")
-    x_length = float(np.linalg.norm(x_axis))
-    y_length = float(np.linalg.norm(y_axis))
-    if x_length <= 1e-12 or y_length <= 1e-12:
-        raise ValueError("build surface axes must be nonzero")
-    x_axis /= x_length
-    y_axis /= y_length
-    if abs(float(np.dot(x_axis, y_axis))) > 1e-5:
-        raise ValueError("build surface axes must be orthogonal")
-
-    shape = str(surface.shape).lower()
-    if shape == "circle":
-        diameter = 100.0 if surface.diameter_mm is None else float(surface.diameter_mm)
-        if not math.isfinite(diameter) or diameter <= 0.0:
-            raise ValueError("circular build surface diameter must be positive")
-        half_x = half_y = diameter * 0.5
-        local = [
-            (
-                half_x * math.cos(2.0 * math.pi * index / 64),
-                half_y * math.sin(2.0 * math.pi * index / 64),
-            )
-            for index in range(64)
-        ]
-    elif shape == "rectangle":
-        width = 100.0 if surface.width_mm is None else float(surface.width_mm)
-        depth = width if surface.depth_mm is None else float(surface.depth_mm)
-        if (
-            not math.isfinite(width)
-            or not math.isfinite(depth)
-            or width <= 0.0
-            or depth <= 0.0
-        ):
-            raise ValueError("rectangular build surface dimensions must be positive")
-        half_x = width * 0.5
-        half_y = depth * 0.5
-        local = [
-            (-half_x, -half_y),
-            (half_x, -half_y),
-            (half_x, half_y),
-            (-half_x, half_y),
-        ]
-    else:
-        raise ValueError(f"unsupported build surface shape: {surface.shape}")
-
-    def world(point: tuple[float, float]) -> tuple[float, float, float]:
-        value = origin + point[0] * x_axis + point[1] * y_axis
-        return tuple(map(float, value))
-
-    vertices: list[tuple[float, float, float]] = []
-    for index, point in enumerate(local):
-        vertices.extend((world(point), world(local[(index + 1) % len(local)])))
-    vertices.extend((world((-half_x, 0.0)), world((half_x, 0.0))))
-    vertices.extend((world((0.0, -half_y)), world((0.0, half_y))))
-    return vertices
-
-
-def _vertex_marker_lines(
-    point: tuple[float, float, float],
-    radius: float,
-) -> list[tuple[float, float, float]]:
-    center = np.asarray(point, dtype=np.float64)
-    vertices: list[tuple[float, float, float]] = []
-    for axis in np.eye(3):
-        vertices.extend(
-            (
-                tuple(map(float, center - axis * radius)),
-                tuple(map(float, center + axis * radius)),
-            )
-        )
-    return vertices
-
-
-def _transform_points(points: np.ndarray, matrix: np.ndarray) -> np.ndarray:
-    values = np.asarray(points, dtype=np.float64).reshape((-1, 3))
-    if values.size == 0:
-        return np.empty((0, 3), dtype=np.float32)
-    homogeneous = np.column_stack((values, np.ones(len(values), dtype=np.float64)))
-    transformed = (np.asarray(matrix, dtype=np.float64) @ homogeneous.T).T
-    return np.asarray(transformed[:, :3] / transformed[:, 3, None], dtype=np.float32)
-
-
-def _screen_segment_distance_and_fraction(
-    point: np.ndarray,
-    start: np.ndarray,
-    end: np.ndarray,
-) -> tuple[float, float]:
-    segment = end - start
-    length_sq = float(np.dot(segment, segment))
-    if length_sq <= 1e-12:
-        return float(np.linalg.norm(point - start)), 0.0
-    fraction = max(0.0, min(1.0, float(np.dot(point - start, segment) / length_sq)))
-    projection = start + fraction * segment
-    return float(np.linalg.norm(point - projection)), fraction
-
-
-def _unproject_screen_ray(
-    x: float,
-    y: float,
-    width: int,
-    height: int,
-    mvp: np.ndarray,
-) -> tuple[np.ndarray, np.ndarray] | None:
-    if width <= 0 or height <= 0:
-        return None
-    try:
-        inverse = np.linalg.inv(np.asarray(mvp, dtype=np.float64))
-    except np.linalg.LinAlgError:
-        return None
-    ndc_x = 2.0 * float(x) / float(width) - 1.0
-    ndc_y = 1.0 - 2.0 * float(y) / float(height)
-    near = inverse @ np.array((ndc_x, ndc_y, -1.0, 1.0), dtype=np.float64)
-    far = inverse @ np.array((ndc_x, ndc_y, 1.0, 1.0), dtype=np.float64)
-    if abs(float(near[3])) <= 1e-12 or abs(float(far[3])) <= 1e-12:
-        return None
-    origin = near[:3] / near[3]
-    far_point = far[:3] / far[3]
-    direction = far_point - origin
-    length = float(np.linalg.norm(direction))
-    if length <= 1e-12 or not np.isfinite(direction).all():
-        return None
-    return origin, direction / length
-
-
-def _ray_triangle_intersection(
-    origin: np.ndarray,
-    direction: np.ndarray,
-    triangle: np.ndarray,
-) -> float | None:
-    first, second, third = np.asarray(triangle, dtype=np.float64)
-    edge_one = second - first
-    edge_two = third - first
-    cross = np.cross(direction, edge_two)
-    determinant = float(np.dot(edge_one, cross))
-    if abs(determinant) <= 1e-10:
-        return None
-    inverse = 1.0 / determinant
-    offset = origin - first
-    u = inverse * float(np.dot(offset, cross))
-    if u < -1e-9 or u > 1.0 + 1e-9:
-        return None
-    second_cross = np.cross(offset, edge_one)
-    v = inverse * float(np.dot(direction, second_cross))
-    if v < -1e-9 or u + v > 1.0 + 1e-9:
-        return None
-    distance = inverse * float(np.dot(edge_two, second_cross))
-    return distance if distance >= 0.0 else None
-
-
-def _nice_grid_step(target: float) -> float:
-    target = max(float(target), 1e-6)
-    magnitude = 10.0 ** math.floor(math.log10(target))
-    fraction = target / magnitude
-    if fraction <= 1.0:
-        multiplier = 1.0
-    elif fraction <= 2.0:
-        multiplier = 2.0
-    elif fraction <= 5.0:
-        multiplier = 5.0
-    else:
-        multiplier = 10.0
-    return multiplier * magnitude
-
-
-def _inclusive_grid_values(low: float, high: float, step: float) -> list[float]:
-    count = max(0, int(round((high - low) / step)))
-    return [low + index * step for index in range(count + 1)]
-
-
-def _polydata_triangles(polydata) -> list[tuple[float, float, float]]:
-    points = polydata.GetPoints()
-    if points is None:
-        return []
-    output: list[tuple[float, float, float]] = []
-    ids = vtk.vtkIdList()
-    polys = polydata.GetPolys()
-    polys.InitTraversal()
-    while polys.GetNextCell(ids):
-        count = ids.GetNumberOfIds()
-        if count < 3:
-            continue
-        first = tuple(points.GetPoint(ids.GetId(0)))
-        for index in range(1, count - 1):
-            output.append(first)
-            output.append(tuple(points.GetPoint(ids.GetId(index))))
-            output.append(tuple(points.GetPoint(ids.GetId(index + 1))))
-    return output
-
-
-def _polydata_lines(
-    polydata,
-) -> list[tuple[tuple[float, float, float], tuple[float, float, float]]]:
-    points = polydata.GetPoints()
-    if points is None:
-        return []
-    output: list[tuple[tuple[float, float, float], tuple[float, float, float]]] = []
-    ids = vtk.vtkIdList()
-    lines = polydata.GetLines()
-    lines.InitTraversal()
-    while lines.GetNextCell(ids):
-        for index in range(ids.GetNumberOfIds() - 1):
-            output.append(
-                (
-                    tuple(points.GetPoint(ids.GetId(index))),
-                    tuple(points.GetPoint(ids.GetId(index + 1))),
-                )
-            )
-    return output
-
-
-def _build_line_arrays(
-    segments: list[GCodePathSegment],
-    stride: int,
-) -> tuple[
-    list[tuple[float, float, float]], list[tuple[float, float, float, float]], int
-]:
-    vertices: list[tuple[float, float, float]] = []
-    colors: list[tuple[float, float, float, float]] = []
-    drawn = 0
-    for index, segment in enumerate(segments):
-        if stride > 1 and index % stride != 0:
-            continue
-        color = (*segment.color(), 0.96 if segment.move_type == "extrude" else 0.48)
-        vertices.extend([segment.start, segment.end])
-        colors.extend([color, color])
-        drawn += 1
-    return vertices, colors, drawn
-
-
-def _build_bead_arrays(
-    segments: list[GCodePathSegment],
-    stride: int,
-    *,
-    controller_semantics: str | None = None,
-) -> tuple[
-    list[tuple[float, float, float]], list[tuple[float, float, float, float]], int
-]:
-    from .viewer import _bead_frame
-
-    vertices: list[tuple[float, float, float]] = []
-    colors: list[tuple[float, float, float, float]] = []
-    drawn = 0
-    for index, segment in enumerate(segments):
-        if segment.move_type != "extrude":
-            continue
-        if stride > 1 and index % stride != 0:
-            continue
-        frame = _bead_frame(
-            segment.start,
-            segment.end,
-            segment.rotary_end,
-            controller_semantics=controller_semantics,
-            coordinate_transform=segment.coordinate_transform,
-        )
-        if frame is None:
-            continue
-        _tangent, width_axis, height_axis = frame
-        width_radius = max(segment.bead_width, 1e-6) * 0.5
-        height_radius = max(segment.bead_height, 1e-6) * 0.5
-        start_ring: list[tuple[float, float, float]] = []
-        end_ring: list[tuple[float, float, float]] = []
-        for side in range(BEAD_SECTION_SIDES):
-            angle = 2.0 * math.pi * side / BEAD_SECTION_SIDES
-            offset = tuple(
-                math.cos(angle) * width_radius * width_axis[axis]
-                + math.sin(angle) * height_radius * height_axis[axis]
-                for axis in range(3)
-            )
-            start_ring.append(
-                tuple(segment.start[axis] + offset[axis] for axis in range(3))
-            )
-            end_ring.append(
-                tuple(segment.end[axis] + offset[axis] for axis in range(3))
-            )
-        color = (*segment.color(), 0.96)
-        for side in range(BEAD_SECTION_SIDES):
-            next_side = (side + 1) % BEAD_SECTION_SIDES
-            quad = [
-                start_ring[side],
-                start_ring[next_side],
-                end_ring[next_side],
-                end_ring[side],
-            ]
-            vertices.extend([quad[0], quad[1], quad[2], quad[0], quad[2], quad[3]])
-            colors.extend([color] * 6)
-        drawn += 1
-    return vertices, colors, drawn
-
-
-def _render_stride(count: int, limit: int) -> int:
-    if count <= 0 or limit <= 0:
-        return 1
-    return max(1, math.ceil(count / limit))
 
 
 def _normalize(vector: np.ndarray) -> np.ndarray:
@@ -2530,26 +1838,6 @@ def _perspective(fovy: float, aspect: float, near: float, far: float) -> np.ndar
     matrix[2, 3] = (2.0 * far * near) / (near - far)
     matrix[3, 2] = -1.0
     return matrix
-
-
-def _distance_to_screen_segment(
-    point: np.ndarray, start: np.ndarray, end: np.ndarray
-) -> float:
-    segment = end - start
-    length_sq = float(np.dot(segment, segment))
-    if length_sq <= 1e-12:
-        return float(np.linalg.norm(point - start))
-    t = max(0.0, min(1.0, float(np.dot(point - start, segment) / length_sq)))
-    projection = start + t * segment
-    return float(np.linalg.norm(point - projection))
-
-
-def _encode_pick_color(identifier: int) -> tuple[float, float, float, float]:
-    identifier = max(0, min(int(identifier), 0xFFFFFF))
-    red = identifier & 0xFF
-    green = (identifier >> 8) & 0xFF
-    blue = (identifier >> 16) & 0xFF
-    return red / 255.0, green / 255.0, blue / 255.0, 1.0
 
 
 _VERTEX_SHADER = """

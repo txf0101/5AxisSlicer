@@ -1,28 +1,28 @@
+"""VTK Viewer implementation and runtime backend selection."""
+
 from __future__ import annotations
 
-from dataclasses import dataclass
 import math
 import os
 import time
-from typing import Callable, Iterable
+from collections.abc import Iterable
+from dataclasses import dataclass
 
 import numpy as np
+import vtk
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QImage
-from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
-import vtk
 from vtk.util.numpy_support import vtk_to_numpy
+from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
-from .geometry_vtk import edge_to_polydata, shape_to_polydata
+from . import viewer_common as _viewer_common
 from .gcode_preview import (
     GCodePathSegment,
     GCodePreview,
     GCodeTimelineStep,
     PreviewSettings,
 )
-from .manufacturing.preview_kinematics import (
-    reconstruct_preview_pose,
-)
+from .geometry_vtk import edge_to_polydata, shape_to_polydata
 from .models import (
     BuildSurfaceOverlay,
     CadModel,
@@ -31,10 +31,49 @@ from .models import (
     PickRequest,
     SelectionState,
 )
+from .viewer_common import (
+    PaperRenderCapability,
+    PickCallback,
+    SelectionCallback,
+    ViewerProtocol,
+    apply_pick_selection,
+    clamp_progress_index,
+    current_progress_step,
+    pick_request_for_mode,
+    preview_settings_for,
+    preview_state_payload,
+    progress_state,
+    replace_selection,
+    representative_path_segment,
+    segment_visible,
+    set_preview_layers,
+    update_preview_visibility,
+    vector3,
+)
 
+_bead_frame = _viewer_common.bead_frame
+_cross = _viewer_common.cross3
+_dot = _viewer_common.dot3
+_is_rigid_matrix = _viewer_common.is_rigid_transform
+_normalize = _viewer_common.normalize3
+_nozzle_axis_from_rotary = _viewer_common.nozzle_axis_from_rotary
+_preview_pose_for_segment = _viewer_common.preview_pose_for_segment
+_render_stride = _viewer_common.render_stride
 
-SelectionCallback = Callable[[str, str], None]
-PickCallback = Callable[[PickHit], None]
+__all__ = [
+    "ModelViewer",
+    "PaperRenderCapability",
+    "ViewerProtocol",
+    "VtkModelViewer",
+    "_bead_frame",
+    "_cross",
+    "_dot",
+    "_is_rigid_matrix",
+    "_normalize",
+    "_nozzle_axis_from_rotary",
+    "_preview_pose_for_segment",
+    "_render_stride",
+]
 
 BG_COLOR = (0.969, 0.976, 0.988)
 EDGE_COLOR = (0.31, 0.36, 0.43)
@@ -59,7 +98,7 @@ class ActorRecord:
     object_id: str
 
 
-class ModelViewer(QVTKRenderWindowInteractor):
+class VtkModelViewer(QVTKRenderWindowInteractor):
     backend = "vtk"
 
     def __init__(self, parent=None) -> None:
@@ -125,8 +164,7 @@ class ModelViewer(QVTKRenderWindowInteractor):
         self.renderer.RemoveAllViewProps()
 
         for body in model.bodies:
-            # body 用面片 actor 承载外观和高亮；点选权交给右侧列表，
-            # 因此 actor 仍可显示，但在 set_mode("edge") 中会关闭 pickable。
+            # 拾取模式只切换 pickable；同一 body actor 始终承载显示和高亮状态。
             polydata = shape_to_polydata(model.shapes[body.body_id])
             body.triangle_count = polydata.GetNumberOfPolys()
             mapper = vtk.vtkPolyDataMapper()
@@ -134,9 +172,7 @@ class ModelViewer(QVTKRenderWindowInteractor):
             actor = vtk.vtkActor()
             actor.SetMapper(mapper)
             actor.GetProperty().SetColor(*body.color)
-            actor.GetProperty().SetOpacity(
-                0.30 if self.gcode_preview is not None else 0.92
-            )
+            actor.GetProperty().SetOpacity(0.30 if self.gcode_preview is not None else 0.92)
             actor.GetProperty().SetSpecular(0.35)
             actor.GetProperty().SetSpecularPower(28)
             actor.GetProperty().SetInterpolationToPhong()
@@ -161,8 +197,7 @@ class ModelViewer(QVTKRenderWindowInteractor):
                 self.actor_records[face_actor] = ActorRecord("face", face_id)
 
             for edge_id in body.edge_ids:
-                # edge 保持独立 actor，点击命中后可直接回到 edge_id。
-                # 这种结构比合并成大 polydata 更直观，适合当前模型规模。
+                # 独立 actor 保留 edge_id，VTK 命中后无需按单元序号反查拓扑。
                 polyline = edge_to_polydata(model.edge_shapes[edge_id], segments=28)
                 edge_mapper = vtk.vtkPolyDataMapper()
                 edge_mapper.SetInputData(polyline)
@@ -176,9 +211,7 @@ class ModelViewer(QVTKRenderWindowInteractor):
                 self.edge_to_body[edge_id] = body.body_id
                 self.actor_records[edge_actor] = ActorRecord("edge", edge_id)
 
-            point_radius = max(
-                (model.bounds.diagonal if model.bounds else 10.0) * 0.006, 0.15
-            )
+            point_radius = max((model.bounds.diagonal if model.bounds else 10.0) * 0.006, 0.15)
             for vertex_id in body.vertex_ids:
                 vertex = model.vertex_map[vertex_id]
                 source = vtk.vtkSphereSource()
@@ -205,18 +238,7 @@ class ModelViewer(QVTKRenderWindowInteractor):
 
     def load_gcode_preview(self, preview: GCodePreview) -> None:
         self.gcode_preview = preview
-        self.preview_settings = PreviewSettings(
-            layer_min=preview.layer_min,
-            layer_max=preview.layer_max,
-            show_travel=False,
-            show_extrusion=True,
-            show_pose_samples=False,
-            render_backend=self.backend,
-        )
-        self.preview_settings.progress_index = max(
-            0,
-            preview.timeline_count_for_layers(preview.layer_min, preview.layer_max) - 1,
-        )
+        self.preview_settings = preview_settings_for(preview, backend=self.backend)
         self.refresh_selection()
         self.refresh_path_preview()
         self.fit_view()
@@ -235,16 +257,15 @@ class ModelViewer(QVTKRenderWindowInteractor):
     def set_preview_layers(self, layer_min: int, layer_max: int) -> None:
         if self.gcode_preview is None:
             return
-        low = max(self.gcode_preview.layer_min, min(layer_min, layer_max))
-        high = min(self.gcode_preview.layer_max, max(layer_min, layer_max))
-        self.preview_settings.layer_min = low
-        self.preview_settings.layer_max = high
-        self._clamp_progress_index()
+        set_preview_layers(
+            self.gcode_preview,
+            self.preview_settings,
+            layer_min,
+            layer_max,
+        )
         self.refresh_path_preview()
 
-    def set_preview_progress(
-        self, progress_index: int, interactive: bool | None = None
-    ) -> None:
+    def set_preview_progress(self, progress_index: int, interactive: bool | None = None) -> None:
         if self.gcode_preview is None:
             return
         started = time.perf_counter()
@@ -268,39 +289,28 @@ class ModelViewer(QVTKRenderWindowInteractor):
         visible_roles: list[str] | set[str] | None = None,
         show_pose_samples: bool | None = None,
     ) -> None:
-        if show_travel is not None:
-            self.preview_settings.show_travel = bool(show_travel)
-        if show_extrusion is not None:
-            self.preview_settings.show_extrusion = bool(show_extrusion)
-        if visible_roles is not None:
-            self.preview_settings.visible_roles = set(visible_roles)
-        if show_pose_samples is not None:
-            self.preview_settings.show_pose_samples = bool(show_pose_samples)
+        update_preview_visibility(
+            self.preview_settings,
+            show_travel=show_travel,
+            show_extrusion=show_extrusion,
+            visible_roles=visible_roles,
+            show_pose_samples=show_pose_samples,
+        )
         if self.gcode_preview is not None:
             self.refresh_path_preview()
 
     def preview_state(self) -> dict:
-        return {
-            "summary": (
-                None if self.gcode_preview is None else self.gcode_preview.summary()
-            ),
-            "settings": self.preview_settings.to_json(),
-            "visible_path_segment_count": self.visible_path_segment_count,
-            "drawn_path_segment_count": self.drawn_path_segment_count,
-            "render_mode": self.path_render_mode,
-            "progress": self.progress_state(),
-            "backend": self.backend,
-            "quality_mode": self.preview_settings.quality_mode,
-            "frame_ms": 0.0,
-            "gpu_draw_count": len(self.path_actors)
-            + len(self.body_actors)
-            + len(self.edge_actors),
-            "cache_format": (
-                None
-                if self.gcode_preview is None
-                else self.gcode_preview.summary().get("cache_format")
-            ),
-        }
+        draw_count = len(self.path_actors) + len(self.body_actors) + len(self.edge_actors)
+        return preview_state_payload(
+            self.gcode_preview,
+            self.preview_settings,
+            backend=self.backend,
+            visible_count=self.visible_path_segment_count,
+            drawn_count=self.drawn_path_segment_count,
+            render_mode=self.path_render_mode,
+            frame_ms=0.0,
+            gpu_draw_count=draw_count,
+        )
 
     def performance_state(self) -> dict:
         return {
@@ -310,78 +320,22 @@ class ModelViewer(QVTKRenderWindowInteractor):
             "frame_ms_max": 0.0,
             "fps_avg": 0.0,
             "progress_update_ms": self._last_progress_ms,
-            "gpu_draw_count": len(self.path_actors)
-            + len(self.body_actors)
-            + len(self.edge_actors),
+            "gpu_draw_count": len(self.path_actors) + len(self.body_actors) + len(self.edge_actors),
             "gpu_memory_estimate_mb": 0.0,
             "buffers": {},
         }
 
     def progress_state(self) -> dict:
-        if self.gcode_preview is None:
-            return {
-                "domain": "layer_filtered_gcode_order",
-                "layer_step_count": 0,
-                "progress_index": 0,
-                "current_global_step": None,
-                "current_step": None,
-            }
-        return self.gcode_preview.progress_state(
-            self.preview_settings.layer_min,
-            self.preview_settings.layer_max,
-            self.preview_settings.progress_index,
-        )
+        return progress_state(self.gcode_preview, self.preview_settings)
 
     def current_progress_step(self) -> GCodeTimelineStep | None:
-        if self.gcode_preview is None:
-            return None
-        return self.gcode_preview.timeline_step_for_layer_progress(
-            self.preview_settings.layer_min,
-            self.preview_settings.layer_max,
-            self.preview_settings.progress_index,
-        )
+        return current_progress_step(self.gcode_preview, self.preview_settings)
 
-    def representative_path_segment(self):
-        if self.gcode_preview is None:
-            return None
-        current_step = self.current_progress_step()
-        if current_step is not None and current_step.path_segment_index is not None:
-            if 0 <= current_step.path_segment_index < len(self.gcode_preview.segments):
-                return self.gcode_preview.segments[current_step.path_segment_index]
-        if current_step is not None:
-            index = self.gcode_preview.segment_index_for_step(current_step.step_index)
-            if index is None:
-                index = self.gcode_preview.nearest_segment_index_for_step(
-                    current_step.step_index
-                )
-            if index is not None and 0 <= index < len(self.gcode_preview.segments):
-                return self.gcode_preview.segments[index]
-        visible = [
-            segment
-            for segment in self.gcode_preview.segments
-            if self._segment_visible(segment)
-        ]
-        spatial = [segment for segment in visible if segment.has_spatial_length]
-        extrusions = [segment for segment in spatial if segment.move_type == "extrude"]
-        if extrusions:
-            return extrusions[0]
-        if spatial:
-            return spatial[0]
-        return visible[0] if visible else None
+    def representative_path_segment(self) -> GCodePathSegment | None:
+        return representative_path_segment(self.gcode_preview, self.preview_settings)
 
     def _clamp_progress_index(self) -> None:
-        if self.gcode_preview is None:
-            self.preview_settings.progress_index = 0
-            return
-        count = self.gcode_preview.timeline_count_for_layers(
-            self.preview_settings.layer_min,
-            self.preview_settings.layer_max,
-        )
-        self.preview_settings.progress_index = (
-            0
-            if count == 0
-            else max(0, min(self.preview_settings.progress_index, count - 1))
-        )
+        clamp_progress_index(self.gcode_preview, self.preview_settings)
 
     def refresh_path_preview(self) -> None:
         self._remove_path_actors()
@@ -452,10 +406,9 @@ class ModelViewer(QVTKRenderWindowInteractor):
         self.render()
 
     def set_mode(self, mode: str) -> None:
-        if mode not in {"body", "face", "edge", "vertex"}:
-            raise ValueError(f"Unsupported picking mode: {mode}")
+        request = pick_request_for_mode(mode)
         self.selection.mode = mode
-        self.pick_request = PickRequest(mode, multiple=mode in {"body", "edge"})
+        self.pick_request = request
         for actor in self.body_actors.values():
             actor.SetVisibility(mode != "face")
             actor.SetPickable(mode == "body")
@@ -483,14 +436,13 @@ class ModelViewer(QVTKRenderWindowInteractor):
         face_ids: list[str] | None = None,
         vertex_ids: list[str] | None = None,
     ) -> None:
-        if body_ids is not None:
-            self.selection.body_ids = set(body_ids)
-        if face_ids is not None:
-            self.selection.face_ids = set(face_ids)
-        if edge_ids is not None:
-            self.selection.edge_ids = set(edge_ids)
-        if vertex_ids is not None:
-            self.selection.vertex_ids = set(vertex_ids)
+        replace_selection(
+            self.selection,
+            body_ids=body_ids,
+            edge_ids=edge_ids,
+            face_ids=face_ids,
+            vertex_ids=vertex_ids,
+        )
         self.refresh_selection()
 
     def clear_selection(self) -> None:
@@ -499,6 +451,7 @@ class ModelViewer(QVTKRenderWindowInteractor):
 
     def refresh_selection(self) -> None:
         path_overlay = self.gcode_preview is not None
+        model = self.model
         for body_id, actor in self.body_actors.items():
             selected = body_id in self.selection.body_ids
             prop = actor.GetProperty()
@@ -516,13 +469,12 @@ class ModelViewer(QVTKRenderWindowInteractor):
         for face_id, actor in self.face_actors.items():
             selected = face_id in self.selection.face_ids
             prop = actor.GetProperty()
-            prop.SetColor(
-                *(
-                    EDGE_SELECTED_COLOR
-                    if selected
-                    else self.model.body_map[self.model.face_map[face_id].body_id].color
-                )
+            color = (
+                EDGE_SELECTED_COLOR
+                if selected or model is None
+                else model.body_map[model.face_map[face_id].body_id].color
             )
+            prop.SetColor(*color)
             prop.SetOpacity(1.0 if selected else 0.92)
 
         for edge_id, actor in self.edge_actors.items():
@@ -534,9 +486,7 @@ class ModelViewer(QVTKRenderWindowInteractor):
                 prop.SetOpacity(1.0)
             else:
                 prop.SetColor(*EDGE_COLOR)
-                prop.SetLineWidth(
-                    EDGE_PICK_WIDTH if self.selection.mode == "edge" else 1.6
-                )
+                prop.SetLineWidth(EDGE_PICK_WIDTH if self.selection.mode == "edge" else 1.6)
                 if path_overlay:
                     prop.SetOpacity(0.18)
                 else:
@@ -544,9 +494,7 @@ class ModelViewer(QVTKRenderWindowInteractor):
 
         for vertex_id, actor in self.vertex_actors.items():
             selected = vertex_id in self.selection.vertex_ids
-            actor.GetProperty().SetColor(
-                *(CURRENT_COLOR if selected else EDGE_SELECTED_COLOR)
-            )
+            actor.GetProperty().SetColor(*(CURRENT_COLOR if selected else EDGE_SELECTED_COLOR))
         self.render()
 
     def set_coordinate_frames(
@@ -566,18 +514,12 @@ class ModelViewer(QVTKRenderWindowInteractor):
             actor.SetXAxisLabelText(f"{frame.name}:X")
             actor.SetYAxisLabelText(f"{frame.name}:Y")
             actor.SetZAxisLabelText(f"{frame.name}:Z")
-            scale = float(frame.scale) * (
-                1.18 if frame.frame_id == active_frame_id else 1.0
-            )
+            scale = float(frame.scale) * (1.18 if frame.frame_id == active_frame_id else 1.0)
             actor.SetTotalLength(scale, scale, scale)
-            actor.SetCylinderRadius(
-                0.018 if frame.frame_id == active_frame_id else 0.012
-            )
+            actor.SetCylinderRadius(0.018 if frame.frame_id == active_frame_id else 0.012)
             actor.SetConeRadius(0.08)
             actor.SetUserMatrix(
-                _vtk_matrix_from_basis(
-                    frame.origin, frame.x_axis, frame.y_axis, frame.z_axis
-                )
+                _vtk_matrix_from_basis(frame.origin, frame.x_axis, frame.y_axis, frame.z_axis)
             )
             actor.SetPickable(False)
             self.renderer.AddActor(actor)
@@ -646,9 +588,7 @@ class ModelViewer(QVTKRenderWindowInteractor):
     def set_model_transform(self, matrix: Iterable[Iterable[float]]) -> None:
         values = np.asarray(tuple(tuple(row) for row in matrix), dtype=float)
         if not _is_rigid_matrix(values):
-            raise ValueError(
-                "model transform must be a finite right-handed rigid 4x4 matrix"
-            )
+            raise ValueError("model transform must be a finite right-handed rigid 4x4 matrix")
         self._model_transform = values
         vtk_matrix = _vtk_matrix(values)
         for actor in (
@@ -702,9 +642,7 @@ class ModelViewer(QVTKRenderWindowInteractor):
         focal = camera.GetFocalPoint()
         distance = max(camera.GetDistance(), 1.0)
         direction, up = directions[view]
-        camera.SetPosition(
-            *(focal[index] + direction[index] * distance for index in range(3))
-        )
+        camera.SetPosition(*(focal[index] + direction[index] * distance for index in range(3)))
         camera.SetViewUp(*up)
         camera.OrthogonalizeViewUp()
         self.renderer.ResetCameraClippingRange()
@@ -824,7 +762,7 @@ class ModelViewer(QVTKRenderWindowInteractor):
             if position.shape == (3,) and np.isfinite(position).all():
                 homogeneous = np.append(position, 1.0)
                 source = np.linalg.inv(self._model_transform) @ homogeneous
-                position_source = tuple(float(value) for value in source[:3])
+                position_source = vector3(source[:3])
             hit = PickHit(record.kind, record.object_id, position_source)
             if self.pick_callback is not None:
                 self.pick_callback(hit)
@@ -843,15 +781,13 @@ class ModelViewer(QVTKRenderWindowInteractor):
         self.refresh_path_preview()
 
     def _apply_pick(self, kind: str, entity_id: str) -> None:
-        selected: set[str] = getattr(self.selection, f"{kind}_ids")
-        if self.pick_request.multiple:
-            if entity_id in selected:
-                selected.remove(entity_id)
-            else:
-                selected.add(entity_id)
-        else:
-            selected.clear()
-            selected.add(entity_id)
+        if not apply_pick_selection(
+            self.selection,
+            self.pick_request,
+            kind,
+            entity_id,
+        ):
+            return
         self.refresh_selection()
         if self.selection_callback:
             self.selection_callback(kind, entity_id)
@@ -871,9 +807,7 @@ class ModelViewer(QVTKRenderWindowInteractor):
         position = camera.GetPosition()
         scale = max(camera.GetDistance(), 1.0)
         offset = (dx * scale, dy * scale, 0.0)
-        camera.SetFocalPoint(
-            focal[0] + offset[0], focal[1] + offset[1], focal[2] + offset[2]
-        )
+        camera.SetFocalPoint(focal[0] + offset[0], focal[1] + offset[1], focal[2] + offset[2])
         camera.SetPosition(
             position[0] + offset[0], position[1] + offset[1], position[2] + offset[2]
         )
@@ -887,21 +821,9 @@ class ModelViewer(QVTKRenderWindowInteractor):
             self.pose_actor = None
 
     def _segment_visible(self, segment) -> bool:
-        settings = self.preview_settings
-        if segment.layer < settings.layer_min or segment.layer > settings.layer_max:
-            return False
-        if segment.move_type == "extrude":
-            return (
-                settings.show_extrusion
-                and segment.extrusion_role in settings.visible_roles
-            )
-        if segment.move_type == "travel":
-            return settings.show_travel
-        return settings.show_travel and segment.has_spatial_length
+        return segment_visible(segment, self.preview_settings)
 
-    def _segment_phase(
-        self, segment: GCodePathSegment, current_global_step: int | None
-    ) -> str:
+    def _segment_phase(self, segment: GCodePathSegment, current_global_step: int | None) -> str:
         if current_global_step is None:
             return "completed"
         if segment.step_index == current_global_step:
@@ -918,24 +840,16 @@ class ModelViewer(QVTKRenderWindowInteractor):
     ) -> None:
         stride = _render_stride(
             len(segments),
-            (
-                INTERACTIVE_LINE_SEGMENT_LIMIT
-                if interactive
-                else STATIC_SOLID_SEGMENT_LIMIT
-            ),
+            (INTERACTIVE_LINE_SEGMENT_LIMIT if interactive else STATIC_SOLID_SEGMENT_LIMIT),
         )
         grouped: dict[
             tuple[str, str],
             tuple[
                 tuple[float, float, float],
-                list[
-                    tuple[tuple[float, float, float], tuple[float, float, float], str]
-                ],
+                list[tuple[tuple[float, float, float], tuple[float, float, float], str]],
             ],
         ] = {}
-        current_lines: list[
-            tuple[tuple[float, float, float], tuple[float, float, float], str]
-        ] = []
+        current_lines: list[tuple[tuple[float, float, float], tuple[float, float, float], str]] = []
         for index, segment in enumerate(segments):
             phase = self._segment_phase(segment, current_global_step)
             if phase == "current":
@@ -979,15 +893,11 @@ class ModelViewer(QVTKRenderWindowInteractor):
             tuple[str, str],
             tuple[
                 tuple[float, float, float],
-                list[
-                    tuple[tuple[float, float, float], tuple[float, float, float], str]
-                ],
+                list[tuple[tuple[float, float, float], tuple[float, float, float], str]],
             ],
         ] = {}
         current_segments: list[GCodePathSegment] = []
-        current_lines: list[
-            tuple[tuple[float, float, float], tuple[float, float, float], str]
-        ] = []
+        current_lines: list[tuple[tuple[float, float, float], tuple[float, float, float], str]] = []
 
         for index, segment in enumerate(segments):
             phase = self._segment_phase(segment, current_global_step)
@@ -995,20 +905,18 @@ class ModelViewer(QVTKRenderWindowInteractor):
                 if segment.move_type == "extrude":
                     current_segments.append(segment)
                 else:
-                    current_lines.append(
-                        (segment.start, segment.end, segment.move_type)
-                    )
+                    current_lines.append((segment.start, segment.end, segment.move_type))
                 continue
             if stride > 1 and index % stride != 0:
                 continue
             if segment.move_type == "extrude":
-                solid_groups.setdefault(
-                    (segment.color_key(), phase), (segment.color(), [])
-                )[1].append(segment)
+                solid_groups.setdefault((segment.color_key(), phase), (segment.color(), []))[
+                    1
+                ].append(segment)
             else:
-                line_groups.setdefault(
-                    (segment.color_key(), phase), (segment.color(), [])
-                )[1].append((segment.start, segment.end, segment.move_type))
+                line_groups.setdefault((segment.color_key(), phase), (segment.color(), []))[
+                    1
+                ].append((segment.start, segment.end, segment.move_type))
             self.drawn_path_segment_count += 1
 
         for (_color_key, phase), (color, group_segments) in solid_groups.items():
@@ -1085,9 +993,7 @@ class ModelViewer(QVTKRenderWindowInteractor):
         points.SetDataTypeToFloat()
         quads = vtk.vtkCellArray()
         controller_semantics = (
-            self.gcode_preview.controller_semantics
-            if self.gcode_preview is not None
-            else None
+            self.gcode_preview.controller_semantics if self.gcode_preview is not None else None
         )
         for segment in segments:
             frame = _bead_frame(
@@ -1200,132 +1106,6 @@ class ModelViewer(QVTKRenderWindowInteractor):
         self.GetRenderWindow().Render()
 
 
-def _nozzle_axis_from_rotary(
-    rotary: dict[str, float],
-    *,
-    controller_semantics: str | None = None,
-    coordinate_transform: str | None = None,
-) -> tuple[float, float, float]:
-    """Return the fixed machine-head axis in the segment's preview space."""
-
-    reconstruction = reconstruct_preview_pose(
-        (0.0, 0.0, 0.0),
-        rotary,
-        controller_semantics=controller_semantics,
-    )
-    if (
-        coordinate_transform is not None
-        and reconstruction.coordinate_transform != coordinate_transform
-    ):
-        return (0.0, 0.0, -1.0)
-    return reconstruction.nozzle_axis
-
-
-def _preview_pose_for_segment(
-    segment: GCodePathSegment,
-    *,
-    controller_semantics: str | None = None,
-) -> tuple[tuple[float, float, float], tuple[float, float, float]]:
-    """Return a segment endpoint and nozzle axis expressed in one coordinate space."""
-
-    if segment.machine_end is None:
-        return (
-            segment.end,
-            _nozzle_axis_from_rotary(
-                segment.rotary_end,
-                controller_semantics=controller_semantics,
-                coordinate_transform=segment.coordinate_transform,
-            ),
-        )
-    reconstruction = reconstruct_preview_pose(
-        segment.machine_end,
-        segment.rotary_end,
-        controller_semantics=controller_semantics,
-    )
-    if reconstruction.coordinate_transform != segment.coordinate_transform:
-        return segment.end, (0.0, 0.0, -1.0)
-    return reconstruction.point, reconstruction.nozzle_axis
-
-
-def _bead_frame(
-    start: tuple[float, float, float],
-    end: tuple[float, float, float],
-    rotary: dict[str, float],
-    *,
-    controller_semantics: str | None = None,
-    coordinate_transform: str | None = None,
-) -> (
-    tuple[
-        tuple[float, float, float],
-        tuple[float, float, float],
-        tuple[float, float, float],
-    ]
-    | None
-):
-    tangent = _normalize(tuple(end[index] - start[index] for index in range(3)))
-    if tangent is None:
-        return None
-    nozzle = _normalize(
-        _nozzle_axis_from_rotary(
-            rotary,
-            controller_semantics=controller_semantics,
-            coordinate_transform=coordinate_transform,
-        )
-    ) or (0.0, 0.0, -1.0)
-    width_axis = _normalize(_cross(nozzle, tangent))
-    if width_axis is None:
-        width_axis = _normalize(_cross((0.0, 0.0, 1.0), tangent))
-    if width_axis is None:
-        width_axis = _normalize(_cross((1.0, 0.0, 0.0), tangent))
-    if width_axis is None:
-        return None
-    height_axis = _normalize(_cross(tangent, width_axis))
-    if height_axis is None:
-        return None
-    if _dot(height_axis, nozzle) < 0:
-        height_axis = tuple(-value for value in height_axis)
-    return tangent, width_axis, height_axis
-
-
-def _render_stride(count: int, limit: int) -> int:
-    if count <= 0 or limit <= 0:
-        return 1
-    return max(1, math.ceil(count / limit))
-
-
-def _normalize(vector: tuple[float, float, float]) -> tuple[float, float, float] | None:
-    length = math.sqrt(sum(value * value for value in vector))
-    if length <= 1e-12:
-        return None
-    return tuple(value / length for value in vector)
-
-
-def _cross(
-    left: tuple[float, float, float],
-    right: tuple[float, float, float],
-) -> tuple[float, float, float]:
-    return (
-        left[1] * right[2] - left[2] * right[1],
-        left[2] * right[0] - left[0] * right[2],
-        left[0] * right[1] - left[1] * right[0],
-    )
-
-
-def _dot(left: tuple[float, float, float], right: tuple[float, float, float]) -> float:
-    return sum(left[index] * right[index] for index in range(3))
-
-
-def _is_rigid_matrix(values: np.ndarray, tolerance: float = 1e-7) -> bool:
-    if values.shape != (4, 4) or not np.isfinite(values).all():
-        return False
-    if not np.allclose(values[3], (0.0, 0.0, 0.0, 1.0), atol=tolerance, rtol=0.0):
-        return False
-    rotation = values[:3, :3]
-    if not np.allclose(rotation.T @ rotation, np.eye(3), atol=tolerance, rtol=0.0):
-        return False
-    return bool(abs(np.linalg.det(rotation) - 1.0) <= tolerance)
-
-
 def _vtk_matrix(values: Iterable[Iterable[float]]) -> vtk.vtkMatrix4x4:
     array = np.asarray(tuple(tuple(row) for row in values), dtype=float)
     if array.shape != (4, 4) or not np.isfinite(array).all():
@@ -1349,21 +1129,13 @@ def _vtk_matrix_from_basis(
     values[:3, 2] = z_axis
     values[:3, 3] = origin
     if not _is_rigid_matrix(values, tolerance=1e-6):
-        raise ValueError(
-            "coordinate frame overlay must define a right-handed orthonormal basis"
-        )
+        raise ValueError("coordinate frame overlay must define a right-handed orthonormal basis")
     return _vtk_matrix(values)
-
-
-VtkModelViewer = ModelViewer
 
 
 def _select_model_viewer_class():
     requested = os.environ.get("FIVE_AXIS_RENDER_BACKEND", "opengl").lower()
-    if (
-        requested == "vtk"
-        or os.environ.get("QT_QPA_PLATFORM", "").lower() == "offscreen"
-    ):
+    if requested == "vtk" or os.environ.get("QT_QPA_PLATFORM", "").lower() == "offscreen":
         return VtkModelViewer
     try:
         from .opengl_viewer import OPENGL_AVAILABLE, OpenGLModelViewer

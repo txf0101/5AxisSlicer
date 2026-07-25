@@ -12,7 +12,9 @@ from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from five_axis_slicer import project_io
+from test_step_loader import make_two_body_step
+
+from five_axis_slicer import project_io, project_storage
 from five_axis_slicer.gcode_preview import PreviewSettings, load_gcode, parse_gcode
 from five_axis_slicer.manufacturing.coordinates import (
     CoordinateFrameDefinition,
@@ -26,11 +28,11 @@ from five_axis_slicer.manufacturing.machine import (
 from five_axis_slicer.manufacturing.preview_kinematics import (
     GENERIC_XYZAC_AC_SEMANTICS,
 )
+from five_axis_slicer.manufacturing.references import geometry_reference
 from five_axis_slicer.manufacturing.resources import (
     ResourceSnapshot,
     canonical_content_hash,
 )
-from five_axis_slicer.manufacturing.references import geometry_reference
 from five_axis_slicer.manufacturing.setup import (
     BUILD_CS_NODE,
     MODEL_CS_NODE,
@@ -49,7 +51,6 @@ from five_axis_slicer.project_io import (
 )
 from five_axis_slicer.step_loader import file_sha256, load_step
 from five_axis_slicer.tube_controller import TubeSetupController
-from test_step_loader import make_two_body_step
 
 
 class ProjectIoTests(unittest.TestCase):
@@ -336,9 +337,7 @@ class ProjectIoTests(unittest.TestCase):
                         if field_name == "id":
                             tampered["model"][collection_name][0]["id"] += "_changed"
                         else:
-                            original = tampered["model"][collection_name][0][
-                                "signature"
-                            ]
+                            original = tampered["model"][collection_name][0]["signature"]
                             tampered["model"][collection_name][0]["signature"] = (
                                 "0" * 64 if original != "0" * 64 else "1" * 64
                             )
@@ -601,9 +600,7 @@ class ProjectIoTests(unittest.TestCase):
             saved_payload = json.loads(project_json.read_text(encoding="utf-8"))
             self.assertEqual(backup_payload["version"], 1)
             self.assertEqual(saved_payload["version"], PROJECT_VERSION)
-            self.assertEqual(
-                saved_payload["created_at"], original_payload["created_at"]
-            )
+            self.assertEqual(saved_payload["created_at"], original_payload["created_at"])
 
     def test_future_version_and_corrupt_json_are_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -635,6 +632,17 @@ class ProjectIoTests(unittest.TestCase):
             self.assertEqual(second["workbench"], {"workbench": "tube"})
             self.assertEqual(list(project_dir.glob(".project.json.*.tmp")), [])
 
+    def test_project_save_lock_rejects_a_second_writer(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            project_dir = Path(tmp)
+            with project_storage.project_save_lock(project_dir):
+                with self.assertRaisesRegex(
+                    project_storage.StorageIntegrityError,
+                    "already being saved",
+                ):
+                    with project_storage.project_save_lock(project_dir, timeout_seconds=0.0):
+                        self.fail("a second writer acquired the project lock")
+
     def test_failed_resave_keeps_previous_manifest_and_embedded_files_loadable(
         self,
     ) -> None:
@@ -662,12 +670,8 @@ class ProjectIoTests(unittest.TestCase):
                 )
                 manifest_before = project_json.read_bytes()
                 old_payload = json.loads(manifest_before)
-                old_embedded_step = (
-                    project_json.parent / old_payload["source"]["project_path"]
-                )
-                old_embedded_gcode = (
-                    project_json.parent / old_payload["gcode"]["project_path"]
-                )
+                old_embedded_step = project_json.parent / old_payload["source"]["project_path"]
+                old_embedded_gcode = project_json.parent / old_payload["gcode"]["project_path"]
                 old_step_bytes = old_embedded_step.read_bytes()
                 old_gcode_bytes = old_embedded_gcode.read_bytes()
 
@@ -1007,9 +1011,9 @@ class ProjectIoTests(unittest.TestCase):
                 setup=controller.setup,
             )
             payload = json.loads(project_json.read_text(encoding="utf-8"))
-            payload["setups"][0]["coordinate_systems"]["model"]["origin_reference"][
-                "confirmed"
-            ] = "false"
+            payload["setups"][0]["coordinate_systems"]["model"]["origin_reference"]["confirmed"] = (
+                "false"
+            )
             project_json.write_text(
                 json.dumps(payload, ensure_ascii=False, indent=2),
                 encoding="utf-8",
@@ -1044,6 +1048,7 @@ class ProjectIoTests(unittest.TestCase):
                         for left, right in zip(
                             model.edge_map[edge_id].axis_direction,
                             face.normal,
+                            strict=False,
                         )
                     )
                 )
@@ -1086,12 +1091,8 @@ class ProjectIoTests(unittest.TestCase):
                 )
                 controller.begin_coordinate_draft(node)
                 controller.set_origin_reference(node, frame.origin_reference)
-                controller.set_direction_reference(
-                    node, "z", frame.z_direction_reference
-                )
-                controller.set_direction_reference(
-                    node, "x", frame.x_direction_reference
-                )
+                controller.set_direction_reference(node, "z", frame.z_direction_reference)
+                controller.set_direction_reference(node, "x", frame.x_direction_reference)
                 controller.apply_coordinate_draft(node)
             controller.select_machine(CARTESIAN_REFERENCE)
             controller.begin_placement_draft(mount_datum_id="build_plate_mount")
@@ -1105,9 +1106,9 @@ class ProjectIoTests(unittest.TestCase):
                 setup=controller.setup,
             )
             payload = json.loads(project_json.read_text(encoding="utf-8"))
-            payload["setups"][0]["coordinate_systems"]["model"]["origin_reference"][
-                "geometry"
-            ]["signature"]["kernel_signature"] = "forged"
+            payload["setups"][0]["coordinate_systems"]["model"]["origin_reference"]["geometry"][
+                "signature"
+            ]["kernel_signature"] = "forged"
             project_json.write_text(
                 json.dumps(payload, ensure_ascii=False, indent=2),
                 encoding="utf-8",
