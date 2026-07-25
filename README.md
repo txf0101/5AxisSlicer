@@ -17,19 +17,22 @@
 
 ## 环境
 
-项目名与论文环境命名采用 `5AxisSclicer`。当前这台机器已存在的可用 conda 解释器路径为：
+项目支持 Python 3.10 至 3.12。建议使用独立虚拟环境并以 editable 模式安装：
 
 ```powershell
-C:\Users\Tang Xufeng\.conda\envs\5AxisSlicer\python.exe
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e .
 ```
 
-`scripts/run_app.ps1` 默认指向该现有路径。若后续新建了名为 `5AxisSclicer` 的环境，可用 `-Python` 参数指定解释器。
-
-安装依赖：
+开发工具由 `pyproject.toml` 的 `dev` extra 统一维护；完整测试另需用于生成 STEP 测试件的 `cad-tests` extra：
 
 ```powershell
-& "C:\Users\Tang Xufeng\.conda\envs\5AxisSlicer\python.exe" -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m pip install -e ".[dev,cad-tests]"
 ```
+
+应用运行时直接使用 `cadquery-ocp`，兼容 NumPy 1.26 至 2.2。`cad-tests` 会引入 CadQuery 及其 NLopt 依赖，干净环境中的解析器可能选择 NumPy 2.x；只运行应用时无需安装该 extra。
+
+`scripts/run_app.ps1` 默认调用当前 `PATH` 中的 `python`。可用 `-Python` 传入虚拟环境或 conda 解释器的完整路径。
 
 ## 快速启动
 
@@ -73,6 +76,13 @@ C:\Users\Tang Xufeng\.conda\envs\5AxisSlicer\python.exe
 
 GUI 启动后默认监听 `127.0.0.1:8765`。
 
+非 loopback 监听需要显式传入 `-AllowRemoteAutomation`，并在进程环境中提供至少 32 字符的 `FIVE_AXIS_SLICER_AUTOMATION_TOKEN`。`scripts/automation_client.py` 会自动读取该变量。令牌不写入命令行、项目文件或日志；远程入口应限制在受信网络并配置主机防火墙。
+
+```powershell
+$env:FIVE_AXIS_SLICER_AUTOMATION_TOKEN = "<由密码管理器提供的随机令牌>"
+.\scripts\run_app.ps1 -BindHost "0.0.0.0" -AllowRemoteAutomation -Port 8765
+```
+
 ```powershell
 curl http://127.0.0.1:8765/health
 curl http://127.0.0.1:8765/state
@@ -114,8 +124,20 @@ python scripts\automation_client.py /selection/set --payload64 eyJib2R5X2lkcyI6W
 推荐验证命令：
 
 ```powershell
-& "C:\Users\Tang Xufeng\.conda\envs\5AxisSlicer\python.exe" -m compileall src tests
-& "C:\Users\Tang Xufeng\.conda\envs\5AxisSlicer\python.exe" -m unittest discover -s tests
+python scripts\check_quality.py
+python -X faulthandler -m pytest -q
+python -m build
+python -m twine check dist\*
+```
+
+`check_quality.py` 统一执行 Ruff、Mypy 和上下文预算检查。常规模块的预算为 1,000 行，类为 500 行，函数为 60 行，圈复杂度为 15；`pyproject.toml` 记录现存超限对象的精确上限。新代码不得扩大这些上限，完成拆分后应同步下调对应豁免。`python scripts\check_context_budget.py --print-baseline` 可输出当前审计值。
+
+原生预览索引是可选加速层。发布原生 wheel 时显式开启构建开关：
+
+```powershell
+$env:FIVE_AXIS_BUILD_NATIVE = "1"
+python -m build --wheel
+Remove-Item Env:FIVE_AXIS_BUILD_NATIVE
 ```
 
 真实 GUI 冒烟测试：
