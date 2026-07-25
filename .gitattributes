@@ -1,0 +1,17 @@
+* text=auto eol=lf
+
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+*.docx binary
+*.fig binary
+*.jpg binary
+*.jpeg binary
+*.pdf binary
+*.png binary
+*.stp binary
+*.step binary
+*.stl binary
+*.tif binary
+*.tiff binary

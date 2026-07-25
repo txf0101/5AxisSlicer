@@ -1,27 +1,30 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 from setuptools import setup
 
-try:
+
+def native_build() -> tuple[list[object], dict[str, object]]:
+    """Return native build hooks only when the caller explicitly opts in."""
+    if os.environ.get("FIVE_AXIS_BUILD_NATIVE") != "1":
+        return [], {}
+
     from pybind11.setup_helpers import Pybind11Extension, build_ext
-except Exception:  # pragma: no cover - editable installs without C++ tools can still use Python modules.
-    Pybind11Extension = None
-    build_ext = None
 
-
-ext_modules = []
-cmdclass = {}
-if Pybind11Extension is not None:
-    ext_modules.append(
-        Pybind11Extension(
-            "five_axis_slicer_native",
-            [str(Path("native") / "five_axis_slicer_native.cpp")],
-            cxx_std=17,
-        )
+    warning_flags = ["/W4"] if os.name == "nt" else ["-Wall", "-Wextra", "-Wpedantic"]
+    extension = Pybind11Extension(
+        "five_axis_slicer_native",
+        [str(Path("native") / "five_axis_slicer_native.cpp")],
+        cxx_std=17,
+        extra_compile_args=warning_flags,
     )
-    cmdclass["build_ext"] = build_ext
+    return [extension], {"build_ext": build_ext}
 
 
-setup(ext_modules=ext_modules, cmdclass=cmdclass)
+extensions, commands = native_build()
+setup(
+    ext_modules=extensions,
+    cmdclass=commands,
+)

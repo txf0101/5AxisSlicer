@@ -1,25 +1,21 @@
 param(
-    [string]$Python = "C:\Users\Tang Xufeng\.conda\envs\5AxisSlicer\python.exe",
+    [string]$Python = "python",
     [string]$Model = "",
     [string]$GCode = "",
+    [string]$BindHost = "127.0.0.1",
     [switch]$Demo,
     [switch]$Results,
+    [switch]$AllowRemoteAutomation,
     [int]$Port = 8765
 )
 
 $repo = Split-Path -Parent $PSScriptRoot
-$argsList = @("$repo\run_app.py", "--port", "$Port")
-if ($Demo) {
-    $argsList += @("--demo")
-}
-if ($Results) {
-    $argsList += @("--results")
-}
-if ($Model -ne "") {
-    $argsList += @("--model", $Model)
-}
-if ($GCode -ne "") {
-    $argsList += @("--gcode", $GCode)
-}
+$arguments = @((Join-Path $repo "run_app.py"), "--host", $BindHost, "--port", $Port)
+if ($Demo) { $arguments += "--demo" }
+if ($Results) { $arguments += "--results" }
+if ($AllowRemoteAutomation) { $arguments += "--allow-remote-automation" }
+if ($Model) { $arguments += @("--model", $Model) }
+if ($GCode) { $arguments += @("--gcode", $GCode) }
 
-& $Python @argsList
+& $Python @arguments
+exit $LASTEXITCODE

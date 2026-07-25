@@ -1,0 +1,105 @@
+name: quality
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows-regression:
+    runs-on: windows-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12"]
+    env:
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - run: python -m pip install --upgrade pip setuptools
+      - run: python -m pip install -e ".[dev,cad-tests]"
+      - run: python -m pip check
+      - run: python scripts/check_quality.py
+      - name: PowerShell analysis
+        if: matrix.python-version == '3.12'
+        uses: microsoft/psscriptanalyzer-action@6b2948b1944407914a58661c49941824d149734f # v1.1
+        with:
+          path: scripts
+          includeDefaultRules: true
+          recurse: true
+          severity: '"Error", "Warning"'
+          enableExit: true
+      - run: python -X faulthandler -m pytest -q
+
+  linux-static-domain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: python -m pip install --upgrade pip setuptools
+      - run: python -m pip install -e ".[dev,cad-tests]"
+      - run: python -m pip check
+      - run: python scripts/check_quality.py
+      - name: Domain tests
+        run: >-
+          python -m pytest -q
+          tests/test_gcode_preview.py
+          tests/test_geometry_rebinding.py
+          tests/test_machine_profiles.py
+          tests/test_manufacturing_coordinates.py
+          tests/test_manufacturing_resources.py
+          tests/test_manufacturing_resource_library.py
+          tests/test_manufacturing_setup.py
+          tests/test_preview_index.py
+          tests/test_preview_kinematics.py
+          tests/test_project_io.py
+          tests/test_step_loader.py
+          tests/test_step_topology.py
+          tests/test_tube_controller.py
+      - run: python -m build
+      - run: python -m twine check dist/*
+      # OCP 7.8 fixes VTK at 9.3.1; these three advisories require an OCP upgrade.
+      - name: Dependency audit
+        run: >-
+          python -m pip_audit --local --skip-editable
+          --ignore-vuln PYSEC-2025-224
+          --ignore-vuln PYSEC-2025-225
+          --ignore-vuln PYSEC-2025-226
+
+  windows-native-smoke:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    env:
+      FIVE_AXIS_BUILD_NATIVE: "1"
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: python -m pip install --upgrade pip setuptools
+      - run: python -m pip install -e ".[dev,cad-tests]"
+      - name: Verify native extension
+        run: >-
+          python -c "from five_axis_slicer.native_preview_index import
+          NATIVE_INDEX_AVAILABLE, build_preview_index;
+          assert NATIVE_INDEX_AVAILABLE;
+          assert build_preview_index([0, 1], [0], 0, 1).source == 'native'"
+      - run: python -m pytest -q tests/test_preview_index.py
