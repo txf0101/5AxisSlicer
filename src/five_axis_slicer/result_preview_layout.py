@@ -107,15 +107,12 @@ def _build_source_card(page: Any, parent: QWidget) -> _Card:
     layout.addWidget(page.source_card_title)
     page.model_source_title, page.model_source_value = _source_row(card)
     page.gcode_source_title, page.gcode_source_value = _source_row(card)
-    page.reference_source_title, page.reference_source_value = _source_row(card)
     for title, value in (
         (page.model_source_title, page.model_source_value),
         (page.gcode_source_title, page.gcode_source_value),
     ):
         layout.addWidget(title)
         layout.addWidget(value)
-    page.reference_source_title.hide()
-    page.reference_source_value.hide()
     page.demo_button = QPushButton(card)
     page.demo_button.setObjectName("primaryButton")
     page.open_gcode_button = QPushButton(card)
@@ -320,7 +317,6 @@ def build_right_column(page: Any) -> QWidget:
         _build_statistics_card(page, content),
         _build_thumbnail_card(page, content),
         _build_context_card(page, content),
-        _build_export_card(page, content),
     ):
         layout.addWidget(card)
     layout.addStretch(1)
@@ -477,40 +473,6 @@ def _build_jump_row(page: Any, card: _Card) -> QHBoxLayout:
     layout.addWidget(page.jump_edit)
     layout.addWidget(page.jump_button)
     return layout
-
-
-def _build_export_card(page: Any, parent: QWidget) -> _Card:
-    card = _Card(parent)
-    layout = QVBoxLayout(card)
-    layout.setContentsMargins(12, 11, 12, 11)
-    layout.setSpacing(6)
-    page.export_title = _card_title(card)
-    page.export_description = _WrappingLabel(parent=card)
-    page.export_description.setObjectName("mutedNote")
-    layout.addWidget(page.export_title)
-    layout.addWidget(page.export_description)
-    page.export_preset_value = _WrappingLabel(parent=card)
-    page.export_preset_value.setObjectName("exportPreset")
-    layout.addWidget(page.export_preset_value)
-    audit = _WrappingLabel("3840 × 2160 px  ·  300 dpi  ·  sRGB  ·  JSON", card)
-    audit.setObjectName("mutedNote")
-    layout.addWidget(audit)
-    page.output_label = QLabel(card)
-    page.output_label.setObjectName("formLabel")
-    layout.addWidget(page.output_label)
-    page.output_path_value = _MiddleElidingPathLabel(card)
-    page.output_path_value.setObjectName("pathValue")
-    output_path = str(page._output_directory)
-    page.output_path_value.set_source_text(output_path, tooltip=output_path)
-    page.choose_output_button = QPushButton(card)
-    layout.addWidget(page.output_path_value)
-    layout.addWidget(page.choose_output_button)
-    page.export_current_button = QPushButton(card)
-    page.export_current_button.setObjectName("primaryButton")
-    page.export_both_button = QPushButton(card)
-    layout.addWidget(page.export_current_button)
-    layout.addWidget(page.export_both_button)
-    return card
 
 
 def _source_row(parent: QWidget) -> tuple[QLabel, _MiddleElidingPathLabel]:

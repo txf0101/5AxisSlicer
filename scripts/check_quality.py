@@ -57,7 +57,6 @@ MIGRATED_FILES = (
     "src/five_axis_slicer/viewer.py",
     "src/five_axis_slicer/viewer_common.py",
     "tests/test_automation.py",
-    "tests/test_paper_export.py",
     "tests/test_project_io.py",
     "tests/test_source_update_workflow.py",
     "tests/test_tube_controller.py",

@@ -83,8 +83,8 @@ class ViewerProtocol(Protocol):
 
 
 @runtime_checkable
-class PaperRenderCapability(Protocol):
-    """Optional high-resolution scene capture used by formal paper export."""
+class SceneCaptureCapability(Protocol):
+    """Optional offscreen capture used by thumbnails and render benchmarks."""
 
     def render_scene_image(self, width: int, height: int) -> QImage: ...
 

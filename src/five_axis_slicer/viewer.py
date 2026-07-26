@@ -32,8 +32,8 @@ from .models import (
     SelectionState,
 )
 from .viewer_common import (
-    PaperRenderCapability,
     PickCallback,
+    SceneCaptureCapability,
     SelectionCallback,
     ViewerProtocol,
     apply_pick_selection,
@@ -62,7 +62,7 @@ _render_stride = _viewer_common.render_stride
 
 __all__ = [
     "ModelViewer",
-    "PaperRenderCapability",
+    "SceneCaptureCapability",
     "ViewerProtocol",
     "VtkModelViewer",
     "_bead_frame",
@@ -661,11 +661,7 @@ class VtkModelViewer(QVTKRenderWindowInteractor):
     def capabilities(self) -> dict[str, object]:
         return {
             "backend": self.backend,
-            "quality_mode": self.quality_mode,
-            "paper_quality_active": False,
-            "quality_modes": ["interactive", "paper"],
-            "offscreen_export": True,
-            "full_timeline_paper_path": False,
+            "offscreen_capture": True,
         }
 
     def render_scene_image(self, width: int, height: int) -> QImage:

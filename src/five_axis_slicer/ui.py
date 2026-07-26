@@ -49,8 +49,6 @@ from .manufacturing.preview_kinematics import (
 )
 from .manufacturing.setup import ManufacturingSetup
 from .models import CadModel
-from .package_assets import IMPELLER_FOUR_PANEL_REFERENCE
-from .paper_export import audit_source_file, export_paper_preview
 from .project_io import (
     ProjectFormatError,
     ProjectLoadCancelled,
@@ -69,7 +67,6 @@ from .viewer import ModelViewer
 ROOT = Path(__file__).resolve().parents[2]
 DEMO_STEP = ROOT / "example" / "叶轮" / "叶轮.stp"
 DEMO_GCODE = ROOT / "example" / "叶轮" / "叶轮完整.gcode"
-REFERENCE_IMAGE = IMPELLER_FOUR_PANEL_REFERENCE
 
 
 @dataclass(frozen=True, slots=True)
@@ -181,13 +178,6 @@ class MainWindow(QMainWindow):
         self._close_pending = False
         self._result_viewer_factory = result_viewer_factory
         self._model_viewer_factory = model_viewer_factory
-        self._result_export_sequence = 0
-        self._result_export_state: dict[str, Any] = {
-            "status": "idle",
-            "job_id": None,
-            "outputs": [],
-            "error": "",
-        }
         self._result_load_metrics: dict[str, Any] = {}
         self.localized_groups: list[tuple[QGroupBox, str]] = []
         self.localized_labels: list[tuple[QLabel, str]] = []
@@ -229,9 +219,6 @@ class MainWindow(QMainWindow):
         self.statusBar().showMessage(tr(self.language, "http", url=self.automation.url))
 
     def closeEvent(self, event) -> None:  # noqa: N802 - Qt API
-        if self._block_ui_during_result_export():
-            event.ignore()
-            return
         load_stopped = self.load_coordinator.shutdown(timeout_ms=100)
         if not load_stopped:
             self._close_pending = True
@@ -254,8 +241,6 @@ class MainWindow(QMainWindow):
         QTimer.singleShot(100, self._retry_close_after_result_loader)
 
     def open_model_dialog(self) -> None:
-        if self._block_ui_during_result_export():
-            return
         path, _ = QFileDialog.getOpenFileName(
             self,
             tr(self.language, "open_step"),
@@ -266,8 +251,6 @@ class MainWindow(QMainWindow):
             self.start_model_load(path, prompt_for_unknown_unit=True)
 
     def open_project_dialog(self) -> None:
-        if self._block_ui_during_result_export():
-            return
         path, _ = QFileDialog.getOpenFileName(
             self,
             tr(self.language, "open_project"),
@@ -278,8 +261,6 @@ class MainWindow(QMainWindow):
             self.open_project(path, wait=False, show_dialog=True)
 
     def open_gcode_dialog(self) -> None:
-        if self._block_ui_during_result_export():
-            return
         path, _ = QFileDialog.getOpenFileName(
             self,
             tr(self.language, "open_gcode"),
@@ -290,8 +271,6 @@ class MainWindow(QMainWindow):
             self.start_gcode_load(path)
 
     def open_result_model_dialog(self) -> None:
-        if self._block_ui_during_result_export():
-            return
         path, _ = QFileDialog.getOpenFileName(
             self,
             tr(self.language, "dialog_open_step_title"),
@@ -302,8 +281,6 @@ class MainWindow(QMainWindow):
             self.start_result_load(model_path=path)
 
     def open_result_gcode_dialog(self) -> None:
-        if self._block_ui_during_result_export():
-            return
         path, _ = QFileDialog.getOpenFileName(
             self,
             tr(self.language, "dialog_open_gcode_title"),
@@ -333,8 +310,6 @@ class MainWindow(QMainWindow):
         model_path: str | Path | None = None,
         gcode_path: str | Path | None = None,
     ) -> dict[str, Any]:
-        if self._result_export_state["status"] in {"queued", "running"}:
-            raise RuntimeError(tr(self.language, "error_load_while_exporting"))
         if model_path is None and gcode_path is None:
             raise RuntimeError(tr(self.language, "no_project_content"))
         self._result_request_sequence += 1
@@ -435,7 +410,6 @@ class MainWindow(QMainWindow):
     ) -> dict[str, Any]:
         """Load STEP outside the Qt GUI thread and commit it atomically."""
 
-        self._require_result_export_idle()
         canonical_intent = str(intent).strip().lower()
         if canonical_intent not in {"import", "source_update"}:
             raise ValueError("model load intent must be 'import' or 'source_update'")
@@ -814,222 +788,6 @@ class MainWindow(QMainWindow):
             if key != "started_perf_counter"
         }
 
-    def queue_result_export(
-        self,
-        *,
-        mode: str = "current",
-        output_directory: str | Path | None = None,
-        strict: bool = True,
-        analysis_section: str = "top",
-    ) -> dict[str, Any]:
-        if self._result_export_state["status"] in {"queued", "running"}:
-            raise RuntimeError(tr(self.language, "error_export_already_running"))
-        if self.result_loader.busy or self.result_page.state.status == "loading":
-            raise RuntimeError(tr(self.language, "error_export_while_loading"))
-        normalized = mode.strip().lower()
-        if normalized == "current":
-            languages = [self.language]
-        elif normalized in {"both", "all"}:
-            languages = ["zh", "en"]
-        elif normalized in {"zh", "en"}:
-            languages = [normalized]
-        else:
-            raise ValueError(f"Unsupported export language mode: {mode}")
-        if self.result_page.model is None and self.result_page.preview is None:
-            raise RuntimeError(tr(self.language, "no_project_content"))
-        target = Path(output_directory or self.result_page.output_directory).expanduser().resolve()
-        self.result_page.set_output_directory(target)
-        self._result_export_sequence += 1
-        job_id = self._result_export_sequence
-        self._result_export_state = {
-            "status": "queued",
-            "job_id": job_id,
-            "languages": list(languages),
-            "analysis_section": analysis_section,
-            "output_directory": str(target),
-            "outputs": [],
-            "error": "",
-        }
-        self.result_page.set_export_interaction_locked(True)
-        QTimer.singleShot(
-            0,
-            lambda: self._perform_result_export(
-                job_id,
-                languages,
-                target,
-                strict=strict,
-                analysis_section=analysis_section,
-            ),
-        )
-        return {
-            "accepted": True,
-            "job_id": job_id,
-            "export": dict(self._result_export_state),
-        }
-
-    def _result_export_active(self) -> bool:
-        return self._result_export_state.get("status") in {"queued", "running"}
-
-    def _block_ui_during_result_export(self) -> bool:
-        if not self._result_export_active():
-            return False
-        self.statusBar().showMessage(tr(self.language, "error_export_already_running"))
-        if hasattr(self, "result_page"):
-            self._sync_result_actions()
-        return True
-
-    def _require_result_export_idle(self) -> None:
-        if self._result_export_active():
-            raise RuntimeError(tr(self.language, "error_export_already_running"))
-
-    def _perform_result_export(
-        self,
-        job_id: int,
-        languages: list[str],
-        output_directory: Path,
-        *,
-        strict: bool,
-        analysis_section: str,
-    ) -> None:
-        if self._result_export_state.get("job_id") != job_id:
-            return
-        export_started = time.perf_counter()
-        self._result_export_state["status"] = "running"
-        original_language = self.language
-        state = self.result_page.state
-        original_quality = state.quality_mode
-        original_visibility = {
-            "show_model": state.show_model,
-            "show_extrusion": state.show_extrusion,
-            "show_travel": state.show_travel,
-            "show_pose_samples": state.show_pose_samples,
-            "show_start_end": state.show_start_end,
-            "show_axes": state.show_axes,
-            "show_orientation_cube": state.show_orientation_cube,
-        }
-        outputs: list[dict[str, Any]] = []
-        interaction_locked = True
-        try:
-            output_directory.mkdir(parents=True, exist_ok=True)
-            self._show_results(force=True)
-            self.result_page.focus_analysis_section(analysis_section)
-            quality_started = time.perf_counter()
-            self.result_page.set_quality_mode("paper")
-            self._result_export_state["paper_quality_prepare_seconds"] = round(
-                time.perf_counter() - quality_started,
-                6,
-            )
-            self.result_page.set_visibility(
-                show_model=True,
-                show_extrusion=True,
-                show_travel=False,
-                show_pose_samples=False,
-                show_start_end=True,
-                show_axes=True,
-                show_orientation_cube=True,
-            )
-            if hasattr(self.result_page.viewer, "set_standard_view"):
-                self.result_page.viewer.set_standard_view("isometric")
-            representative_line = self.result_page.show_representative_instruction()
-            self.result_page.set_export_interaction_locked(True)
-
-            sources: dict[str, Path] = {}
-            if state.active_model_path is not None:
-                sources["step_model"] = state.active_model_path
-            if state.active_gcode_path is not None:
-                sources["gcode"] = state.active_gcode_path
-            if REFERENCE_IMAGE.exists():
-                sources["visual_reference"] = REFERENCE_IMAGE
-            source_audits = self.result_page.source_audits
-            if REFERENCE_IMAGE.exists():
-                source_audits["visual_reference"] = audit_source_file(
-                    "visual_reference",
-                    REFERENCE_IMAGE,
-                ).to_json()
-            statistics = self.result_page.statistics_json()
-            display_items = {
-                "model": True,
-                "positive_extrusion": True,
-                "travel": False,
-                "pose_samples": False,
-                "start_end_points": True,
-                "part_xyz_axes": True,
-                "orientation_cube": True,
-            }
-            render_parameters = {
-                "coordinate_formula": "P_part = Rz(-C) × Rx(-A) × P_machine",
-                "polyline_continuity_tolerance_mm": 0.02,
-                "quality_mode": "paper",
-                "representative_gcode_line": representative_line,
-                "source_data_policy": "imported_gcode",
-                "analysis_section": analysis_section,
-                "visual_depth_offset_changes_coordinates": False,
-            }
-
-            for language in languages:
-                language_started = time.perf_counter()
-                self.language = language
-                self.retranslate()
-                QApplication.processEvents(QEventLoop.ExcludeUserInputEvents)
-                output_path = output_directory / f"impeller_result_preview_{language}_3840x2160.png"
-                # The status bar belongs to the exported application frame.
-                # Keep it on a stable ready state instead of embedding a
-                # transient "exporting" notification in the paper figure.
-                self.statusBar().showMessage(tr(self.language, "status_ready"))
-                result = export_paper_preview(
-                    self,
-                    self.result_page.viewer,
-                    output_path,
-                    language=language,
-                    sources=sources,
-                    source_audits=source_audits,
-                    statistics=statistics,
-                    display_items=display_items,
-                    viewport_widget=self.result_page.viewer,
-                    overlay_widgets=(
-                        self.result_page.viewer_canvas.tool_rail,
-                        self.result_page.viewer_canvas.orientation_cube,
-                        self.result_page.viewer_canvas.axis_triad,
-                        self.result_page.viewer_canvas.legend,
-                    ),
-                    render_parameters=render_parameters,
-                    allow_scene_fallback=not strict,
-                    strict=strict,
-                )
-                output_payload = result.to_json()
-                output_payload["elapsed_seconds"] = round(
-                    time.perf_counter() - language_started,
-                    6,
-                )
-                outputs.append(output_payload)
-            self._result_export_state.update(
-                status="complete",
-                outputs=outputs,
-                error="",
-                total_elapsed_seconds=round(time.perf_counter() - export_started, 6),
-            )
-            self.statusBar().showMessage(
-                tr(self.language, "paper_export_complete", path=output_directory)
-            )
-        except Exception as exc:
-            self._result_export_state.update(
-                status="error",
-                outputs=outputs,
-                error=str(exc),
-                total_elapsed_seconds=round(time.perf_counter() - export_started, 6),
-            )
-            self.statusBar().showMessage(tr(self.language, "paper_export_failed", message=str(exc)))
-        finally:
-            try:
-                self.language = original_language
-                self.retranslate()
-                self.result_page.set_visibility(**original_visibility)
-                self.result_page.set_quality_mode(original_quality)
-            finally:
-                if interaction_locked:
-                    self.result_page.set_export_interaction_locked(False)
-                self._sync_result_actions()
-
     def open_model(
         self,
         path: str | Path,
@@ -1154,7 +912,6 @@ class MainWindow(QMainWindow):
     ) -> dict[str, Any]:
         """Queue project verification and embedded STEP parsing on a worker."""
 
-        self._require_result_export_idle()
         self._project_request_sequence += 1
         request = LoadRequest(
             request_id=f"project-{self._project_request_sequence}",
@@ -1390,7 +1147,6 @@ class MainWindow(QMainWindow):
         model_path: str | Path | None = None,
         show_dialog: bool = True,
     ) -> dict[str, Any]:
-        self._require_result_export_idle()
         self._gcode_request_sequence += 1
         request = LoadRequest(
             request_id=f"gcode-{self._gcode_request_sequence}",
@@ -1539,7 +1295,6 @@ class MainWindow(QMainWindow):
         self.statusBar().showMessage("G-code loading cancelled")
 
     def load_demo(self) -> None:
-        self._require_result_export_idle()
         if DEMO_GCODE.exists():
             self.open_gcode(
                 DEMO_GCODE,
@@ -1550,8 +1305,6 @@ class MainWindow(QMainWindow):
         self.preview_tabs.setCurrentWidget(self.preview_tab)
 
     def save_project_dialog(self) -> None:
-        if self._block_ui_during_result_export():
-            return
         directory = QFileDialog.getExistingDirectory(self, tr(self.language, "save"), "")
         if not directory:
             return
@@ -1580,7 +1333,6 @@ class MainWindow(QMainWindow):
         *,
         draft_resolution: str | None = None,
     ) -> dict[str, Any]:
-        self._require_result_export_idle()
         if self.model is None and self.gcode_preview is None:
             raise RuntimeError(tr(self.language, "no_project_content"))
         controller = self.tube_page.controller
@@ -1678,11 +1430,9 @@ class MainWindow(QMainWindow):
             "tube": self.tube_page.state_json(),
             "results": self.result_page.state_json(),
             "result_load_metrics": self._public_load_metrics(),
-            "result_export": dict(self._result_export_state),
         }
 
     def enter_workbench(self, key: str) -> None:
-        self._require_result_export_idle()
         if key not in {workbench.key for workbench in WORKBENCHES}:
             raise RuntimeError(f"Unknown workbench: {key}")
         self.current_workbench_key = key
@@ -1723,8 +1473,6 @@ class MainWindow(QMainWindow):
     def set_language(self, language: str) -> None:
         if language not in {"zh", "en"}:
             raise ValueError(f"Unsupported UI language: {language}")
-        if self._block_ui_during_result_export():
-            return
         self.language = language
         self.settings.setValue("language", language)
         self.retranslate()
@@ -1884,8 +1632,6 @@ class MainWindow(QMainWindow):
         self.result_page = ResultPreviewPage(
             viewer_factory=self._result_viewer_factory, parent=self
         )
-        if REFERENCE_IMAGE.exists():
-            self.result_page.set_reference_image(REFERENCE_IMAGE)
         self.result_page.back_requested.connect(self._show_home)
         self.result_page.load_demo_requested.connect(self._load_results_demo_from_ui)
         self.result_page.open_gcode_requested.connect(self.open_result_gcode_dialog)
@@ -1894,9 +1640,6 @@ class MainWindow(QMainWindow):
         self.result_page.cancel_loading_requested.connect(self.cancel_result_load)
         self.result_page.quality_changed.connect(lambda _mode: self._sync_result_actions())
         self.result_page.display_state_changed.connect(lambda _state: self._sync_result_actions())
-        self.result_page.export_requested.connect(
-            lambda mode: self.queue_result_export(mode=mode, strict=True)
-        )
         self.stack.addWidget(self.home_page)
         self.stack.addWidget(self.session_page)
         self.stack.addWidget(self.tube_page)
@@ -2476,20 +2219,14 @@ class MainWindow(QMainWindow):
         self.setStyleSheet(APP_STYLE)
 
     def _show_home(self) -> None:
-        if self._block_ui_during_result_export():
-            return
         self.stack.setCurrentWidget(self.home_page)
 
     def _show_session(self) -> None:
-        if self._block_ui_during_result_export():
-            return
         self.stack.setCurrentWidget(
             self.tube_page if self.current_workbench_key == "tube" else self.session_page
         )
 
-    def _show_results(self, *, force: bool = False) -> None:
-        if not force and self._block_ui_during_result_export():
-            return
+    def _show_results(self) -> None:
         self.stack.setCurrentWidget(self.result_page)
         self._update_context_actions()
 
@@ -2509,32 +2246,24 @@ class MainWindow(QMainWindow):
         return "workbench"
 
     def _open_model_from_shell(self) -> None:
-        if self._block_ui_during_result_export():
-            return
         if self.stack.currentWidget() in {self.session_page, self.tube_page}:
             self.open_model_dialog()
         else:
             self.open_result_model_dialog()
 
     def _open_gcode_from_shell(self) -> None:
-        if self._block_ui_during_result_export():
-            return
         if self.stack.currentWidget() is self.session_page:
             self.open_gcode_dialog()
         else:
             self.open_result_gcode_dialog()
 
     def _load_results_demo_from_ui(self) -> None:
-        if self._block_ui_during_result_export():
-            return
         try:
             self.load_results_demo()
         except Exception as exc:
             self.show_error(str(exc))
 
     def _slice_results_from_ui(self) -> None:
-        if self._block_ui_during_result_export():
-            return
         try:
             self.slice_results()
         except Exception as exc:
@@ -2548,15 +2277,11 @@ class MainWindow(QMainWindow):
         return self.viewer
 
     def _fit_active_view(self) -> None:
-        if self._block_ui_during_result_export():
-            return
         viewer = self._active_viewer()
         if hasattr(viewer, "fit_view"):
             viewer.fit_view()
 
     def _home_active_view(self) -> None:
-        if self._block_ui_during_result_export():
-            return
         viewer = self._active_viewer()
         if hasattr(viewer, "home_view"):
             viewer.home_view()
@@ -2564,29 +2289,23 @@ class MainWindow(QMainWindow):
             viewer.set_standard_view("isometric")
 
     def _set_active_standard_view(self, view: str) -> None:
-        if self._block_ui_during_result_export():
-            return
         viewer = self._active_viewer()
         if hasattr(viewer, "set_standard_view"):
             viewer.set_standard_view(view)
 
     def _set_result_visibility(self, attribute: str, checked: bool) -> None:
-        if not hasattr(self, "result_page") or self._block_ui_during_result_export():
+        if not hasattr(self, "result_page"):
             return
         self.result_page.set_visibility(**{attribute: checked})
 
     def _set_result_quality_mode(self, mode: str) -> None:
-        if self._block_ui_during_result_export():
-            return
         self.result_page.set_quality_mode(mode)
 
     def _focus_result_gcode_search(self) -> None:
-        if not self._block_ui_during_result_export():
-            self.result_page.focus_gcode_search()
+        self.result_page.focus_gcode_search()
 
     def _focus_result_gcode_jump(self) -> None:
-        if not self._block_ui_during_result_export():
-            self.result_page.focus_gcode_jump()
+        self.result_page.focus_gcode_jump()
 
     def _update_context_actions(self) -> None:
         if not hasattr(self, "result_page"):
@@ -2636,8 +2355,6 @@ class MainWindow(QMainWindow):
             action.blockSignals(False)
 
     def _show_result_help(self) -> None:
-        if self._block_ui_during_result_export():
-            return
         message = (
             f"{tr(self.language, 'result_preview_subtitle')}\n\n"
             f"{tr(self.language, 'statistics_coordinate_formula')}"
@@ -2645,8 +2362,6 @@ class MainWindow(QMainWindow):
         QMessageBox.information(self, tr(self.language, "action_user_guide"), message)
 
     def _show_about(self) -> None:
-        if self._block_ui_during_result_export():
-            return
         QMessageBox.about(
             self,
             tr(self.language, "action_about"),

@@ -17,19 +17,19 @@ from five_axis_slicer.gcode_preview import (  # noqa: E402
 from five_axis_slicer.models import PickRequest, SelectionState  # noqa: E402
 from five_axis_slicer.opengl_viewer import OpenGLModelViewer  # noqa: E402
 from five_axis_slicer.viewer_common import (  # noqa: E402
-    PaperRenderCapability,
+    SceneCaptureCapability,
     ViewerProtocol,
     apply_pick_selection,
     representative_path_segment,
 )
 
 
-def test_viewer_protocols_expose_common_and_paper_capabilities() -> None:
+def test_viewer_protocols_expose_common_and_scene_capture_capabilities() -> None:
     app = QApplication.instance() or QApplication([])
     viewer = OpenGLModelViewer()
     try:
         assert isinstance(viewer, ViewerProtocol)
-        assert isinstance(viewer, PaperRenderCapability)
+        assert isinstance(viewer, SceneCaptureCapability)
     finally:
         viewer.deleteLater()
         app.processEvents()

@@ -47,7 +47,6 @@ class AutomationRouter:
             "/results/perf": self._results_perf,
             "/results/quality": self._results_quality,
             "/results/focus": self._results_focus,
-            "/results/export": self._results_export,
             "/results/cancel": self._results_cancel,
             "/preview/state": self._preview_state,
             "/preview/perf": self._preview_perf,
@@ -161,32 +160,19 @@ class AutomationRouter:
         return {
             "results": self.window.result_page.state_json(),
             "load_metrics": self.window._public_load_metrics(),
-            "export": dict(self.window._result_export_state),
         }
 
     def _results_perf(self, _payload: Payload) -> Response:
         return {"results_perf": self.window.benchmark_result_render()}
 
     def _results_quality(self, payload: Payload) -> Response:
-        if self.window._result_export_active():
-            raise RuntimeError(tr(self.window.language, "error_export_already_running"))
         self.window.result_page.set_quality_mode(str(payload.get("mode", "interactive")))
         self.window._sync_result_actions()
         return {"results": self.window.result_page.state_json()}
 
     def _results_focus(self, payload: Payload) -> Response:
-        if self.window._result_export_active():
-            raise RuntimeError(tr(self.window.language, "error_export_already_running"))
         self.window.result_page.focus_analysis_section(str(payload.get("section", "top")))
         return {"results": self.window.result_page.state_json()}
-
-    def _results_export(self, payload: Payload) -> Response:
-        return self.window.queue_result_export(
-            mode=str(payload.get("language", payload.get("mode", "current"))),
-            output_directory=payload.get("output_directory"),
-            strict=bool(payload.get("strict", True)),
-            analysis_section=str(payload.get("analysis_section", "top")),
-        )
 
     def _results_cancel(self, _payload: Payload) -> Response:
         self.window.cancel_result_load()

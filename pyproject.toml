@@ -52,9 +52,6 @@ five-axis-slicer = "five_axis_slicer.app:main"
 [tool.setuptools.packages.find]
 where = ["src"]
 
-[tool.setuptools.package-data]
-five_axis_slicer = ["assets/*.png"]
-
 [tool.setuptools_scm]
 fallback_version = "2.0.0"
 
@@ -69,7 +66,6 @@ select = ["E4", "E7", "E9", "F"]
 [tool.ruff.lint.per-file-ignores]
 "scripts/*.py" = ["E402"]
 "tests/*.py" = ["E402"]
-"src/five_axis_slicer/paper_export.py" = ["E402"]
 "src/five_axis_slicer/result_preview.py" = ["E402"]
 
 [tool.ruff.format]
@@ -92,7 +88,6 @@ warn_unused_configs = true
 module = [
     "five_axis_slicer.gcode_source",
     "five_axis_slicer.opengl_viewer",
-    "five_axis_slicer.paper_export",
     "five_axis_slicer.result_preview",
     "five_axis_slicer.result_state",
     "five_axis_slicer.ui",
@@ -133,9 +128,8 @@ complexity = 15
 "manufacturing/setup.py" = { complexity = 16 }
 "opengl_scene.py" = { function_lines = 86, complexity = 20 }
 "opengl_viewer.py" = { module_lines = 1866, class_lines = 1587, function_lines = 86, complexity = 17 }
-"paper_export.py" = { module_lines = 1311, function_lines = 210, complexity = 31 }
-"result_preview.py" = { module_lines = 1757, class_lines = 1281 }
+"result_preview.py" = { module_lines = 1658, class_lines = 1187 }
 "tube_controller.py" = { module_lines = 1184, class_lines = 962 }
 "tube_ui.py" = { module_lines = 1651, class_lines = 1372 }
-"ui.py" = { module_lines = 3094, class_lines = 2951, function_lines = 148 }
+"ui.py" = { module_lines = 2806, class_lines = 2666, function_lines = 148 }
 "viewer.py" = { module_lines = 1150, class_lines = 1006, function_lines = 88, complexity = 16 }

@@ -99,22 +99,22 @@ QToolButton:disabled, QPushButton:disabled {
     border-color: @BORDER@;
     color: @DISABLED_TEXT@;
 }
-#primaryButton, #slicePreviewButton, #paperExportButton {
+#primaryButton, #slicePreviewButton {
     background-color: @PRIMARY@;
     border-color: @PRIMARY@;
     color: @PANEL@;
     font-weight: 600;
     padding: 8px 14px;
 }
-#primaryButton:hover, #slicePreviewButton:hover, #paperExportButton:hover {
+#primaryButton:hover, #slicePreviewButton:hover {
     background-color: @PRIMARY_HOVER@;
     border-color: @PRIMARY_HOVER@;
 }
-#primaryButton:pressed, #slicePreviewButton:pressed, #paperExportButton:pressed {
+#primaryButton:pressed, #slicePreviewButton:pressed {
     background-color: @PRIMARY_PRESSED@;
     border-color: @PRIMARY_PRESSED@;
 }
-#primaryButton:disabled, #slicePreviewButton:disabled, #paperExportButton:disabled {
+#primaryButton:disabled, #slicePreviewButton:disabled {
     background-color: @DISABLED_BACKGROUND@;
     border-color: @BORDER@;
     color: @DISABLED_TEXT@;
@@ -144,7 +144,7 @@ QToolButton:disabled, QPushButton:disabled {
     border-color: @PRIMARY@;
 }
 #glassPanel, #progressPanel, #resultPreviewPanel, #sourcePanel,
-#viewerPanel, #detailsPanel, #paperExportPanel, #codePanel, #thumbnailPanel {
+#viewerPanel, #detailsPanel, #codePanel, #thumbnailPanel {
     background-color: @PANEL@;
     border: 1px solid @BORDER@;
     border-radius: 8px;

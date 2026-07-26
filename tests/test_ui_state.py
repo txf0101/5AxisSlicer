@@ -6,7 +6,6 @@ import sys
 import tempfile
 import time
 import unittest
-from unittest import mock
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
@@ -79,7 +78,7 @@ class ResultViewerStub(QWidget):
         return {"position": [120.0, -120.0, 90.0], "focal_point": [0.0, 0.0, 20.0]}
 
     def capabilities(self) -> dict[str, object]:
-        return {"backend": "test", "offscreen_export": True}
+        return {"backend": "test", "offscreen_capture": True}
 
     def render_scene_image(self, width: int, height: int) -> QImage:
         image = QImage(width, height, QImage.Format_RGB888)
@@ -171,11 +170,9 @@ class UiStateTests(unittest.TestCase):
         paths = {
             page.model_source_value: Path(f"{long_stem}.step").resolve(),
             page.gcode_source_value: Path(f"{long_stem}.gcode").resolve(),
-            page.reference_source_value: Path(f"{long_stem}.png").resolve(),
         }
         page.set_selected_model_path(paths[page.model_source_value])
         page.set_selected_gcode_path(paths[page.gcode_source_value])
-        page.set_reference_image(paths[page.reference_source_value])
         window.show_results_page()
         window.show()
 
@@ -234,81 +231,16 @@ class UiStateTests(unittest.TestCase):
             finally:
                 window.result_page.shutdown()
 
-    def test_result_load_and_export_jobs_are_mutually_exclusive(self) -> None:
+    def test_result_export_endpoint_and_public_state_are_absent(self) -> None:
         window = MainWindow(http_port=0, result_viewer_factory=ResultViewerStub)
         self.addCleanup(window.close)
 
-        window._result_export_state["status"] = "running"
-        with self.assertRaisesRegex(RuntimeError, "正在导出"):
-            window.start_result_load(gcode_path=Path("pending.gcode"))
-
-        window._result_export_state["status"] = "idle"
-        window.result_page.state.status = "loading"
-        with self.assertRaisesRegex(RuntimeError, "仍在加载"):
-            window.queue_result_export(mode="zh")
-
-    def test_result_export_lock_preserves_shell_and_result_interaction_state(
-        self,
-    ) -> None:
-        window = MainWindow(http_port=0, result_viewer_factory=ResultViewerStub)
-        self.addCleanup(window.close)
-        window._show_results()
-        original_page = window.stack.currentWidget()
-        original_language = window.language
-        original_model_visibility = window.result_page.state.show_model
-        original_quality = window.result_page.state.quality_mode
-        window._result_export_state["status"] = "running"
-        window.result_page.set_export_interaction_locked(True)
-
-        try:
-            window.language_actions["en"].trigger()
-            window.result_visibility_actions["show_model"].trigger()
-            window.quality_actions["paper"].trigger()
-            window._set_active_standard_view("front")
-            window._show_home()
-            window._show_session()
-            window.load_results_demo_action.trigger()
-
-            self.assertEqual(window.language, original_language)
-            self.assertEqual(
-                window.result_page.state.show_model, original_model_visibility
-            )
-            self.assertEqual(window.result_page.state.quality_mode, original_quality)
-            self.assertTrue(window.result_visibility_actions["show_model"].isChecked())
-            self.assertTrue(window.quality_actions["interactive"].isChecked())
-            self.assertTrue(window.language_actions["zh"].isChecked())
-            self.assertEqual(window.result_page.viewer.standard_view_calls, [])
-            self.assertIs(window.stack.currentWidget(), original_page)
-            self.assertFalse(window.result_loader.busy)
-
-            with self.assertRaisesRegex(RuntimeError, "正在执行"):
-                window.handle_automation("/results/quality", {"mode": "paper"})
-            with self.assertRaisesRegex(RuntimeError, "正在执行"):
-                window.handle_automation("/results/focus", {"section": "code"})
-            with self.assertRaisesRegex(RuntimeError, "正在导出"):
-                window.load_results_demo()
-            with self.assertRaisesRegex(RuntimeError, "正在执行"):
-                window.save_project_to(Path("unused-project-directory"))
-
-            with (
-                mock.patch(
-                    "five_axis_slicer.ui.QFileDialog.getOpenFileName"
-                ) as open_dialog,
-                mock.patch(
-                    "five_axis_slicer.ui.QFileDialog.getExistingDirectory"
-                ) as directory_dialog,
-            ):
-                window.open_model_dialog()
-                window.open_gcode_dialog()
-                window.open_result_model_dialog()
-                window.open_result_gcode_dialog()
-                window.save_project_dialog()
-
-            open_dialog.assert_not_called()
-            directory_dialog.assert_not_called()
-        finally:
-            window._result_export_state["status"] = "idle"
-            window.result_page.set_export_interaction_locked(False)
+        with self.assertRaisesRegex(RuntimeError, "Unknown endpoint"):
+            window.handle_automation("/results/export", {})
+        result_state = window.handle_automation("/results/state", {})
+        self.assertNotIn("export", result_state)
+        self.assertNotIn("output_directory", result_state["results"])
+        self.assertNotIn("result_export", window.current_state())
 
     def test_preview_visibility_endpoint_updates_settings(self) -> None:
         window = MainWindow(http_port=0)

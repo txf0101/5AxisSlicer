@@ -2,9 +2,9 @@ from __future__ import annotations
 
 """Interactive slicing-result page used by the desktop application shell.
 
-The page intentionally owns presentation state only.  File dialogs, project
-navigation, background worker lifetime, and paper-image composition stay in
-their dedicated application modules.  A viewer factory can be injected so Qt
+The page intentionally owns presentation state only. File dialogs, project
+navigation, and background worker lifetime stay in dedicated application
+modules. A viewer factory can be injected so Qt
 integration tests do not need to create a VTK or OpenGL context.
 """
 
@@ -54,9 +54,7 @@ try:  # Importing data modules remains possible in headless/minimal installs.
         QTextCursor,
     )
     from PyQt5.QtWidgets import (
-        QApplication,
         QDoubleSpinBox,
-        QFileDialog,
         QFrame,
         QHBoxLayout,
         QLabel,
@@ -76,8 +74,6 @@ except ImportError:  # pragma: no cover - exercised only without the GUI extra.
     QT_AVAILABLE = False
 
 
-ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_OUTPUT_DIRECTORY = ROOT / "outputs" / "paper_preview_acceptance"
 CONTEXT_RADIUS = 20
 PLAYBACK_INTERVAL_MS = 80
 
@@ -372,7 +368,7 @@ if QT_AVAILABLE:
                 child.raise_()
 
     class GCodeSyntaxHighlighter(QSyntaxHighlighter):
-        """Highlight the five G-code word groups used by the paper figure."""
+        """Highlight the motion words shown in the G-code context pane."""
 
         _WORD_PATTERN = re.compile(
             r"(?<![A-Za-z])(?P<axis>[FXYZACE])\s*[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?",
@@ -455,41 +451,6 @@ if QT_AVAILABLE:
     class ResultPreviewPage(QWidget):
         """Three-column slicing-result page with atomic load presentation."""
 
-        _EXPORT_BLOCKED_EVENT_TYPES = frozenset(
-            {
-                QEvent.MouseButtonPress,
-                QEvent.MouseButtonRelease,
-                QEvent.MouseButtonDblClick,
-                QEvent.MouseMove,
-                QEvent.Enter,
-                QEvent.Leave,
-                QEvent.HoverEnter,
-                QEvent.HoverMove,
-                QEvent.HoverLeave,
-                QEvent.Wheel,
-                QEvent.KeyPress,
-                QEvent.KeyRelease,
-                QEvent.Shortcut,
-                QEvent.ShortcutOverride,
-                QEvent.ContextMenu,
-                QEvent.InputMethod,
-                QEvent.TouchBegin,
-                QEvent.TouchUpdate,
-                QEvent.TouchEnd,
-                QEvent.TouchCancel,
-                QEvent.TabletPress,
-                QEvent.TabletMove,
-                QEvent.TabletRelease,
-                QEvent.Gesture,
-                QEvent.GestureOverride,
-                QEvent.NativeGesture,
-                QEvent.DragEnter,
-                QEvent.DragMove,
-                QEvent.DragLeave,
-                QEvent.Drop,
-            }
-        )
-
         back_requested = pyqtSignal()
         load_demo_requested = pyqtSignal()
         open_gcode_requested = pyqtSignal()
@@ -500,8 +461,6 @@ if QT_AVAILABLE:
         quality_changed = pyqtSignal(str)
         stage_changed = pyqtSignal(str)
         display_state_changed = pyqtSignal(object)
-        export_requested = pyqtSignal(str)
-        output_directory_changed = pyqtSignal(str)
 
         def __init__(
             self,
@@ -516,7 +475,6 @@ if QT_AVAILABLE:
             self._preview: Any | None = None
             self._source_index: GCodeSourceIndex | None = None
             self._source_audits: dict[str, dict[str, Any]] = {}
-            self._reference_image_path: Path | None = None
             self._owns_source_index = False
             self._search_token = 0
             self._search_tasks: set[_IndexTask] = set()
@@ -529,8 +487,6 @@ if QT_AVAILABLE:
             self._playback_tick = 0
             self._thumbnail_image = QImage()
             self._thread_pool = QThreadPool.globalInstance()
-            self._output_directory = DEFAULT_OUTPUT_DIRECTORY
-            self._export_interaction_locked = False
 
             factory = viewer_factory or _default_viewer_factory
             self.viewer = factory(self)
@@ -542,9 +498,6 @@ if QT_AVAILABLE:
             self._playback_timer.timeout.connect(self._advance_playback)
 
             self._build_ui()
-            self._event_filter_application = QApplication.instance()
-            if self._event_filter_application is not None:
-                self._event_filter_application.installEventFilter(self)
             self._connect_controls()
             self._load_parameters_into_editors()
             self._apply_state_to_controls()
@@ -679,12 +632,6 @@ if QT_AVAILABLE:
             self._queue_representative_line()
             self._sync_slice_button()
 
-        def set_reference_image(self, path: str | Path | None) -> None:
-            self._reference_image_path = (
-                None if path in (None, "") else Path(path).expanduser().resolve()
-            )
-            self._update_sources()
-
         def set_selected_model_path(self, path: str | Path | None) -> None:
             self.state.selected_model_path = (
                 None if path in (None, "") else Path(path).expanduser().resolve()
@@ -764,14 +711,13 @@ if QT_AVAILABLE:
             return line
 
         def focus_analysis_section(self, section: str) -> None:
-            """Scroll the analysis column to a stable section for review/export."""
+            """Scroll the analysis column to a stable review section."""
 
             targets = {
                 "top": self.status_card_title,
                 "statistics": self.statistics_title,
                 "thumbnail": self.thumbnail_title,
                 "gcode": self.context_title,
-                "export": self.export_title,
             }
             key = str(section).strip().lower()
             if key not in targets:
@@ -844,7 +790,6 @@ if QT_AVAILABLE:
                     "stages": [stage.to_json() for stage in self._source_index.stages],
                     "current_line": self._current_line,
                 }
-            payload["output_directory"] = str(self._output_directory)
             payload["viewer"] = {
                 "capabilities": self._viewer_capabilities(),
                 "camera": self._viewer_camera_state(),
@@ -856,29 +801,6 @@ if QT_AVAILABLE:
 
         def current_state(self) -> dict[str, Any]:
             return self.state_json()
-
-        @property
-        def output_directory(self) -> Path:
-            return self._output_directory
-
-        def set_output_directory(self, path: str | Path) -> None:
-            self._output_directory = Path(path).expanduser().resolve()
-            output_path = str(self._output_directory)
-            self.output_path_value.set_source_text(output_path, tooltip=output_path)
-            self.output_directory_changed.emit(str(self._output_directory))
-
-        def set_export_interaction_locked(self, locked: bool) -> None:
-            self._export_interaction_locked = bool(locked)
-
-        def eventFilter(self, watched: QObject, event: QEvent) -> bool:  # noqa: N802 - Qt API
-            if (
-                self._export_interaction_locked
-                and isinstance(watched, QWidget)
-                and (watched is self or self.isAncestorOf(watched))
-                and event.type() in self._EXPORT_BLOCKED_EVENT_TYPES
-            ):
-                return True
-            return super().eventFilter(watched, event)
 
         def capture_thumbnail(self) -> QImage:
             if (
@@ -900,9 +822,6 @@ if QT_AVAILABLE:
         def shutdown(self) -> None:
             self._stop_playback()
             self._search_token += 1
-            if self._event_filter_application is not None:
-                self._event_filter_application.removeEventFilter(self)
-                self._event_filter_application = None
             if self._source_index is not None and self._owns_source_index:
                 self._source_index.close()
             self._source_index = None
@@ -956,11 +875,6 @@ if QT_AVAILABLE:
             self.search_next_button.clicked.connect(lambda: self._start_search(True))
             self.jump_edit.returnPressed.connect(self._jump_to_line)
             self.jump_button.clicked.connect(self._jump_to_line)
-            self.choose_output_button.clicked.connect(self._choose_output_directory)
-            self.export_current_button.clicked.connect(
-                lambda: self.export_requested.emit("current")
-            )
-            self.export_both_button.clicked.connect(lambda: self.export_requested.emit("both"))
 
         # ------------------------------------------------------------------
         # State presentation and controls
@@ -996,7 +910,6 @@ if QT_AVAILABLE:
                 self.gcode_source_value,
                 self.state.active_gcode_path or self.state.selected_gcode_path,
             )
-            self._set_path_label(self.reference_source_value, self._reference_image_path)
             self._sync_slice_button()
 
         def _set_path_label(self, label: _MiddleElidingPathLabel, path: Path | None) -> None:
@@ -1621,17 +1534,6 @@ if QT_AVAILABLE:
                     f"{tr(self.language, 'gcode_window_range', start=start, end=end)}"
                 )
 
-        def _choose_output_directory(self) -> None:
-            if self._export_interaction_locked:
-                return
-            selected = QFileDialog.getExistingDirectory(
-                self,
-                tr(self.language, "dialog_select_output_title"),
-                str(self._output_directory),
-            )
-            if selected:
-                self.set_output_directory(selected)
-
         def _update_thumbnail_label(self) -> None:
             if self._thumbnail_image.isNull():
                 if hasattr(self, "thumbnail_label"):
@@ -1748,7 +1650,6 @@ else:
 
 __all__ = [
     "CONTEXT_RADIUS",
-    "DEFAULT_OUTPUT_DIRECTORY",
     "GCodeSyntaxHighlighter",
     "PreparedLoadCommit",
     "QT_AVAILABLE",

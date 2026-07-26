@@ -518,15 +518,7 @@ class OpenGLModelViewer(QOpenGLWidget):
     def capabilities(self) -> dict[str, object]:
         return {
             "backend": self.backend,
-            "quality_mode": self.quality_mode,
-            "paper_quality_active": (
-                self.quality_mode == "paper"
-                and not self._interaction_preview
-                and not self._progress_dragging
-            ),
-            "quality_modes": ["interactive", "paper"],
-            "offscreen_export": True,
-            "full_timeline_paper_path": True,
+            "offscreen_capture": True,
             "standard_views": [
                 "isometric",
                 "front",

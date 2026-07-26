@@ -6,14 +6,12 @@ import sys
 import tempfile
 from types import SimpleNamespace
 import unittest
-from unittest import mock
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from PyQt5.QtCore import QRect, Qt
 from PyQt5.QtGui import QImage
-from PyQt5.QtTest import QTest
 from PyQt5.QtWidgets import QApplication, QLabel, QWidget
 
 from five_axis_slicer.gcode_preview import parse_gcode
@@ -110,7 +108,7 @@ class _FakeViewer(QWidget):
         return image
 
     def capabilities(self) -> dict[str, object]:
-        return {"backend": self.backend, "offscreen_export": True}
+        return {"backend": self.backend, "offscreen_capture": True}
 
     def camera_state(self) -> dict[str, object]:
         return {"position": [1.0, 1.0, 1.0]}
@@ -215,9 +213,6 @@ class ResultPreviewPageTests(unittest.TestCase):
             page.reset_parameters_button,
             page.cancel_button,
             page.jump_button,
-            page.choose_output_button,
-            page.export_current_button,
-            page.export_both_button,
             page.viewer_canvas.fit_button,
             page.viewer_canvas.home_button,
         )
@@ -231,7 +226,6 @@ class ResultPreviewPageTests(unittest.TestCase):
             page.statistics_title,
             page.thumbnail_title,
             page.context_title,
-            page.export_title,
             *page.statistic_values.values(),
         )
         for language in ("zh", "en"):
@@ -300,41 +294,22 @@ class ResultPreviewPageTests(unittest.TestCase):
                     "previewonly",
                 ):
                     self.assertNotIn(forbidden.replace(" ", "").casefold(), visible_copy)
-                self.assertFalse(page.reference_source_value.isVisible())
                 self.assertEqual(page.left_column.horizontalScrollBar().maximum(), 0)
                 self.assertEqual(page.right_column.horizontalScrollBar().maximum(), 0)
 
-    def test_export_lock_blocks_user_input_without_changing_widget_render(self) -> None:
+    def test_export_controls_are_absent(self) -> None:
         page = self.make_page()
-        page.resize(1200, 800)
-        page.show()
-        page.demo_button.setFocus()
-        self.app.processEvents()
-        page.grab()
-        self.app.processEvents()
-        before_lock = page.grab().toImage()
-        demo_requests: list[bool] = []
-        page.load_demo_requested.connect(lambda: demo_requests.append(True))
-        quality_index = page.quality_combo.currentIndex()
-
-        page.set_export_interaction_locked(True)
-        self.app.processEvents()
-        while_locked = page.grab().toImage()
-        QTest.mouseClick(page.demo_button, Qt.LeftButton)
-        QTest.keyClick(page.quality_combo, Qt.Key_Down)
-        with mock.patch(
-            "five_axis_slicer.result_preview.QFileDialog.getExistingDirectory"
-        ) as directory_dialog:
-            page._choose_output_directory()
-
-        self.assertEqual(while_locked, before_lock)
-        self.assertEqual(demo_requests, [])
-        self.assertEqual(page.quality_combo.currentIndex(), quality_index)
-        directory_dialog.assert_not_called()
-
-        page.set_export_interaction_locked(False)
-        QTest.mouseClick(page.demo_button, Qt.LeftButton)
-        self.assertEqual(demo_requests, [True])
+        for name in (
+            "export_title",
+            "export_description",
+            "export_preset_value",
+            "output_label",
+            "output_path_value",
+            "choose_output_button",
+            "export_current_button",
+            "export_both_button",
+        ):
+            self.assertFalse(hasattr(page, name), name)
 
     def test_source_markers_drive_stage_navigation_and_context_window(self) -> None:
         source = """;LAYER_CHANGE

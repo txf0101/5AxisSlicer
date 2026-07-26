@@ -18,7 +18,6 @@ _SOURCE_TEXT = (
     ("source_card_title", "result_current_source"),
     ("model_source_title", "result_model_source"),
     ("gcode_source_title", "result_gcode_source"),
-    ("reference_source_title", "result_reference_image"),
     ("demo_button", "result_load_impeller_demo"),
     ("open_gcode_button", "result_open_existing_gcode"),
     ("open_step_button", "result_open_step"),
@@ -46,13 +45,6 @@ _ANALYSIS_TEXT = (
     ("thumbnail_note", "result_thumbnail_fixed_camera"),
     ("context_title", "gcode_context"),
     ("jump_button", "gcode_jump_go"),
-    ("export_title", "paper_export"),
-    ("export_description", "paper_export_description"),
-    ("export_preset_value", "paper_export_preset_4k"),
-    ("output_label", "paper_export_output_folder"),
-    ("choose_output_button", "paper_export_choose_folder"),
-    ("export_current_button", "paper_export_current"),
-    ("export_both_button", "paper_export_both_languages"),
 )
 
 _TOOLTIPS = (
@@ -71,8 +63,6 @@ _TOOLTIPS = (
     ("next_stage_button", "result_progress_next"),
     ("progress_slider", "tooltip_progress"),
     ("quality_combo", "tooltip_quality_mode"),
-    ("export_current_button", "tooltip_paper_export"),
-    ("export_both_button", "tooltip_paper_export"),
 )
 
 

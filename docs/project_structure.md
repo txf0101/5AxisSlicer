@@ -1,6 +1,6 @@
 # 项目结构说明
 
-本说明对应 2026-07-25 工作区源码。结构核对范围为 `pyproject.toml`、`.github/`、`src/`、`scripts/`、`tests/`、`native/`、`example/` 和 `docs/reviews/`。`圭臬/开发目标文档.docx` 保持只读；已核对时间为 2026-07-06 13:45:16，大小为 492214 字节。
+本说明对应 2026-07-26 工作区源码。结构核对范围为 `pyproject.toml`、`.github/`、`src/`、`scripts/`、`tests/`、`native/`、`example/` 和 `docs/reviews/`。`圭臬/开发目标文档.docx` 保持只读；已核对时间为 2026-07-06 13:45:16，大小为 492214 字节。
 
 ## 1 根目录与工程配置
 
@@ -64,14 +64,13 @@ Python 包位于 `src/five_axis_slicer/`，采用 `src` layout。
 - `project_assets.py`：项目内 STEP/G-code 权威副本验证与加载。
 - `project_storage.py`：路径边界、跨进程保存锁、临时文件发布、原子替换和 fsync。
 
-### 2.5 成果预览与导出
+### 2.5 成果预览
 
 - `result_state.py`：成果页状态、不可变加载请求和加载结果。
 - `result_preview.py`：成果页交互协调。
 - `result_preview_layout.py`：三栏 Qt 控件构建和布局。
 - `result_preview_text.py`：成果页双语文本绑定。
 - `result_commit.py`：加载结果校验、原子呈现提交和失败回滚。
-- `paper_export.py`：论文图合成、PNG/JSON 合同、跨进程锁和成对提交。
 
 ### 2.6 Viewer 后端
 
@@ -93,9 +92,8 @@ Python 包位于 `src/five_axis_slicer/`，采用 `src` layout。
 - `tube_ui.py`：Qt 页面、树、编辑控件、问题跳转和用户事件编排。
 - `tube_ui_presenter.py`：Qt 无关的坐标拾取解析、Source CS 到显示坐标的变换和 Viewer 展示快照。
 
-### 2.8 包资源
+### 2.8 通用控件
 
-- `package_assets.py`、`assets/`：随 wheel 和 sdist 发布的只读资源定位。
 - `selection_list.py`：通用 body/edge 多选控件。
 
 ## 3 工程脚本
@@ -105,7 +103,6 @@ Python 包位于 `src/five_axis_slicer/`，采用 `src` layout。
 - `scripts/automation_client.py`：HTTP 自动化客户端。
 - `scripts/desktop_click_smoke.py`、`scripts/desktop_workbench_smoke.py`：真实桌面交互冒烟测试。
 - `scripts/generate_sample_step.py`、`scripts/inspect_step_models.py`：STEP 样本生成与批量检查。
-- `scripts/build_four_panel_paper_figure.py`：论文面板与审计 sidecar 导出。
 
 ## 4 测试分组
 
@@ -114,7 +111,7 @@ Python 包位于 `src/five_axis_slicer/`，采用 `src` layout。
 - `test_project_io.py`、`test_project_background_load.py`：原子保存、项目内资产、迁移、路径安全和取消。
 - `test_step_loader.py`、`test_step_topology.py`、`test_geometry_rebinding.py`、`test_source_update_workflow.py`：STEP 拓扑、单位、签名和显式源更新。
 - `test_manufacturing_*.py`、`test_machine_profiles.py`：坐标数学、机床、资源和 Setup 门禁。
-- `test_result_backend.py`、`test_result_preview.py`、`test_paper_export.py`、`test_paper_panel_export.py`：成果加载、页面布局和论文导出事务。
+- `test_result_backend.py`、`test_result_preview.py`：成果加载、完整路径质量和页面布局。
 - `test_viewer_common.py`、`test_viewer_geometry.py`、`test_viewer_overlays.py`、`test_opengl_viewer.py`：共享 Viewer 算法与覆盖层。
 - `test_tube_controller.py`、`test_tube_resource_library_ui.py`、`test_tube_resource_selection.py`、`test_tube_ui.py`：Tube 状态传播、资源审计、显式喷嘴字段和 Qt 编辑流程。
 - `test_opengl_tube_viewer.py`、`test_vtk_tube_offscreen_smoke.py`：Tube 双后端拾取、坐标架、打印板和装夹显示一致性。
