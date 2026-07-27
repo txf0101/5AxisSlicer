@@ -119,6 +119,24 @@ def test_nozzle_interface_hover_opens_the_native_tooltip(
     assert QToolTip.text() == page.nozzle_interface.toolTip()
 
 
+def test_nozzle_length_accepts_typing_over_unset_label(
+    app: QApplication,
+    page: TubeSetupPage,
+) -> None:
+    page.editor_stack.setCurrentWidget(page.nozzle_editor)
+    page.show()
+    app.processEvents()
+
+    QTest.mouseClick(page.nozzle_length.lineEdit(), Qt.LeftButton)
+    app.processEvents()
+    QTest.keyClicks(page.nozzle_length.lineEdit(), "12.5")
+    assert page.nozzle_length.lineEdit().text() == "12.5"
+    QTest.keyClick(page.nozzle_length.lineEdit(), Qt.Key_Return)
+    app.processEvents()
+
+    assert page.nozzle_length.value() == 12.5
+
+
 def test_representative_setup_fields_expose_consistent_help(page: TubeSetupPage) -> None:
     widgets = (
         page.machine_combo,

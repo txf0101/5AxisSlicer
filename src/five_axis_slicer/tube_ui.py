@@ -82,6 +82,7 @@ from .tube_ui_text import (
 from .tube_ui_text import (
     TUBE_TEXT as _TEXT,
 )
+from .ui_controls import OptionalDoubleSpinBox
 from .viewer import ModelViewer
 
 _NODE_ORDER = (
@@ -477,7 +478,7 @@ class TubeSetupPage(QWidget):
 
     @staticmethod
     def _spin(low: float, high: float, value: float, decimals: int) -> QDoubleSpinBox:
-        spin = QDoubleSpinBox()
+        spin = OptionalDoubleSpinBox()
         spin.setRange(low, high)
         spin.setDecimals(decimals)
         spin.setValue(value)
