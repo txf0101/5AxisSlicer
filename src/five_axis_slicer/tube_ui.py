@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import math
 from collections.abc import Callable, Mapping
-from dataclasses import replace
 from typing import Any
 from uuid import uuid4
 
@@ -68,9 +67,15 @@ from .models import (
 )
 from .step_loader import geometry_candidates
 from .tube_controller import BodyRole, DraftNotFoundError, TubeSetupController
-from .tube_resource_selection import configured_nozzle_copy
+from .tube_drafts import CoordinateFrameDraft
+from .tube_resource_selection import (
+    NozzleEditorError,
+    configured_nozzle_copy,
+    nozzle_editor_profile,
+)
 from .tube_ui_text import (
     TUBE_CONTROL_TEXT,
+    apply_tube_help,
     setup_tree_node,
     tube_language,
 )
@@ -88,6 +93,12 @@ _NODE_ORDER = (
     BUILD_CS_NODE,
     PLACEMENT_NODE,
 )
+_COORDINATE_DEFAULTS = {
+    "origin": (0.0, 0.0, 0.0),
+    "z": (0.0, 0.0, 1.0),
+    "x": (1.0, 0.0, 0.0),
+}
+_RESOURCE_KINDS = frozenset(("machine", "nozzle", "material"))
 
 
 class TubeSetupPage(QWidget):
@@ -318,7 +329,7 @@ class TubeSetupPage(QWidget):
             )
         form = QFormLayout()
         self.nozzle_interface = QLineEdit()
-        self.nozzle_length = self._spin(0.0, 1000.0, 18.0, 3)
+        self.nozzle_length = self._spin(0.0, 1000.0, 0.0, 6)
         self.nozzle_collision = QCheckBox()
         self.nozzle_interface_label = QLabel()
         self.nozzle_length_label = QLabel()
@@ -328,6 +339,7 @@ class TubeSetupPage(QWidget):
         self.nozzle_apply_button = QPushButton()
         self.nozzle_apply_button.setObjectName("primaryButton")
         self.nozzle_apply_button.clicked.connect(self._apply_nozzle)
+        self.nozzle_combo.currentIndexChanged.connect(lambda _index: _sync_nozzle_editor(self))
         layout.addWidget(self.nozzle_help)
         layout.addWidget(self.nozzle_combo)
         layout.addLayout(form)
@@ -351,7 +363,7 @@ class TubeSetupPage(QWidget):
         self.material_apply_button = QPushButton()
         self.material_apply_button.setObjectName("primaryButton")
         self.material_apply_button.clicked.connect(self._apply_material)
-        self.material_combo.currentIndexChanged.connect(self._update_material_detail)
+        self.material_combo.currentIndexChanged.connect(lambda _index: _sync_material_editor(self))
         layout.addWidget(self.material_help)
         layout.addWidget(self.material_combo)
         layout.addWidget(self.material_detail)
@@ -367,11 +379,7 @@ class TubeSetupPage(QWidget):
         self.coordinate_inputs: dict[
             str, tuple[QComboBox, tuple[QDoubleSpinBox, ...], QPushButton, QLabel]
         ] = {}
-        for component, defaults in (
-            ("origin", (0.0, 0.0, 0.0)),
-            ("z", (0.0, 0.0, 1.0)),
-            ("x", (1.0, 0.0, 0.0)),
-        ):
+        for component, defaults in _COORDINATE_DEFAULTS.items():
             self._add_coordinate_group(layout, component, defaults)
         buttons = QHBoxLayout()
         self.coordinate_apply_button = QPushButton()
@@ -412,6 +420,7 @@ class TubeSetupPage(QWidget):
         grid.addWidget(title, 0, 0, 1, 4)
         grid.addWidget(combo, 1, 0, 1, 4)
         for index, spin in enumerate(values):
+            spin.setPrefix(f"{'XYZ'[index]} ")
             grid.addWidget(spin, 2, index)
         grid.addWidget(pick, 3, 0)
         grid.addWidget(confirm, 3, 1, 1, 2)
@@ -437,6 +446,7 @@ class TubeSetupPage(QWidget):
         self.mount_label = QLabel()
         form.addRow(self.mount_label, self.mount_combo)
         self.placement_spins: dict[str, QDoubleSpinBox] = {}
+        self.placement_labels: dict[str, QLabel] = {}
         for key in ("dx", "dy", "dz", "rx", "ry", "rz"):
             spin = self._spin(-100000.0, 100000.0, 0.0, 4)
             if key.startswith("r"):
@@ -445,8 +455,9 @@ class TubeSetupPage(QWidget):
             else:
                 spin.setSuffix(" mm")
             self.placement_spins[key] = spin
+            self.placement_labels[key] = QLabel(key.upper())
             spin.valueChanged.connect(self._placement_adjustment_changed)
-            form.addRow(QLabel(key.upper()), spin)
+            form.addRow(self.placement_labels[key], spin)
         buttons = QHBoxLayout()
         self.placement_apply_button = QPushButton()
         self.placement_apply_button.setObjectName("primaryButton")
@@ -473,7 +484,12 @@ class TubeSetupPage(QWidget):
         spin.setKeyboardTracking(False)
         return spin
 
-    def _reload_resource_catalogs(self, *, populate_widgets: bool = True) -> None:
+    def _reload_resource_catalogs(
+        self,
+        *,
+        populate_widgets: bool = True,
+        follow_setup: frozenset[str] = frozenset(),
+    ) -> None:
         """Load selectable resources and retain divergent project snapshots."""
 
         catalogs: dict[str, dict[str, Any]] = {
@@ -520,9 +536,13 @@ class TubeSetupPage(QWidget):
         self._material_profiles = dict(catalogs["material"])
         self._resource_origins = origins
         if populate_widgets and hasattr(self, "machine_combo"):
-            self._populate_resource_combos()
+            self._populate_resource_combos(follow_setup=follow_setup)
 
-    def _populate_resource_combos(self) -> None:
+    def _populate_resource_combos(
+        self,
+        *,
+        follow_setup: frozenset[str] = frozenset(),
+    ) -> None:
         for kind, combo, profiles in (
             ("machine", self.machine_combo, self._machine_profiles),
             ("nozzle", self.nozzle_combo, self._nozzle_profiles),
@@ -534,7 +554,9 @@ class TubeSetupPage(QWidget):
             for key, profile in profiles.items():
                 combo.addItem(self._resource_choice_label(kind, key, profile), key)
             selected_key = self._selected_resource_key(kind, profiles)
-            target_key = selected_key if selected_key is not None else previous_key
+            target_key = selected_key if kind in follow_setup else previous_key
+            if target_key not in profiles:
+                target_key = selected_key
             index = combo.findData(target_key)
             combo.setCurrentIndex(index if index >= 0 else (0 if combo.count() else -1))
             combo.blockSignals(False)
@@ -571,6 +593,8 @@ class TubeSetupPage(QWidget):
 
         self.controller.refresh_resource_library()
         self._reload_resource_catalogs()
+        _sync_nozzle_editor(self)
+        _sync_material_editor(self)
         self.refresh()
 
     def set_language(self, language: str) -> None:
@@ -600,7 +624,7 @@ class TubeSetupPage(QWidget):
         self._populate_resource_combos()
         self._retranslate_part_roles()
         self._rebuild_tree()
-        self._populate_coordinate_candidates()
+        self._populate_coordinate_candidates(preserve_selection=True)
         self.refresh()
 
     def _t(self, key: str) -> str:
@@ -640,7 +664,9 @@ class TubeSetupPage(QWidget):
             if hasattr(self.viewer, "set_pick_request"):
                 self.viewer.set_pick_request(PickRequest("body", multiple=True))
             self.set_view_mode("model")
-        self._reload_resource_catalogs()
+        self._reload_resource_catalogs(follow_setup=_RESOURCE_KINDS)
+        _sync_nozzle_editor(self)
+        _sync_material_editor(self)
         self._populate_part_table()
         self._populate_coordinate_candidates()
         self.refresh()
@@ -779,6 +805,7 @@ class TubeSetupPage(QWidget):
             self.part_table.setItem(row, 1, kind_item)
             self.part_table.setCellWidget(row, 2, combo)
             self._role_combos[body.body_id] = combo
+        apply_tube_help(self)
 
     def _retranslate_part_roles(self) -> None:
         for combo in self._role_combos.values():
@@ -807,7 +834,7 @@ class TubeSetupPage(QWidget):
         try:
             profile = self._machine_profiles[str(self.machine_combo.currentData())]
             self.controller.select_machine(profile)
-            self._reload_resource_catalogs()
+            self._reload_resource_catalogs(follow_setup=frozenset(("machine",)))
             self._populate_mounts()
             self.refresh()
         except Exception as exc:
@@ -826,32 +853,20 @@ class TubeSetupPage(QWidget):
     def _apply_nozzle(self) -> None:
         try:
             template = self._nozzle_profiles[str(self.nozzle_combo.currentData())]
-            profile: NozzleProfile = template
-            interface = self.nozzle_interface.text().strip()
-            length = self.nozzle_length.value()
-            if interface or self.nozzle_collision.isChecked():
-                editable = template.editable_copy(
-                    str(uuid4()),
-                    display_name=f"{template.display_name} · project profile",
-                )
-                radius = max(2.0, template.orifice_diameter_mm * 3.0)
-                envelope = (
-                    ((radius * 0.45, 0.0), (radius, length))
-                    if self.nozzle_collision.isChecked()
-                    else ()
-                )
-                profile = replace(
-                    editable,
-                    interface=interface or None,
-                    length_mm=length if length > 0.0 else None,
-                    construction_material="project-defined",
-                    flow_category="standard",
-                    outer_profile_rz_mm=envelope,
-                )
+            profile = nozzle_editor_profile(
+                template,
+                interface=self.nozzle_interface.text(),
+                length_mm=self.nozzle_length.value(),
+                use_collision_envelope=self.nozzle_collision.isChecked(),
+            )
+            if profile is not template:
                 self.controller.save_user_resource(profile)
             self.controller.select_nozzle(profile)
-            self._reload_resource_catalogs()
+            self._reload_resource_catalogs(follow_setup=frozenset(("nozzle",)))
+            _sync_nozzle_editor(self)
             self.refresh()
+        except NozzleEditorError as exc:
+            self._report_error(ValueError(self._t(exc.code)))
         except Exception as exc:
             self._report_error(exc)
 
@@ -866,7 +881,8 @@ class TubeSetupPage(QWidget):
                 )
                 self.controller.save_user_resource(profile)
             self.controller.select_material(profile)
-            self._reload_resource_catalogs()
+            self._reload_resource_catalogs(follow_setup=frozenset(("material",)))
+            _sync_material_editor(self)
             self.refresh()
         except Exception as exc:
             self._report_error(exc)
@@ -901,14 +917,17 @@ class TubeSetupPage(QWidget):
         self._sync_coordinate_controls_from_draft(draft)
         self.refresh()
 
-    def _populate_coordinate_candidates(self) -> None:
+    def _populate_coordinate_candidates(self, *, preserve_selection: bool = False) -> None:
         if not hasattr(self, "coordinate_inputs"):
             return
-        origin_combo = self.coordinate_inputs["origin"][0]
-        direction_combos = (
-            self.coordinate_inputs["z"][0],
-            self.coordinate_inputs["x"][0],
+        combos = {key: controls[0] for key, controls in self.coordinate_inputs.items()}
+        selected = (
+            {key: _coordinate_candidate_key(combo.currentData()) for key, combo in combos.items()}
+            if preserve_selection
+            else {}
         )
+        origin_combo = combos["origin"]
+        direction_combos = (combos["z"], combos["x"])
         for combo in (origin_combo, *direction_combos):
             combo.blockSignals(True)
             combo.clear()
@@ -930,9 +949,19 @@ class TubeSetupPage(QWidget):
                     f"{candidate['kind']} · {candidate['entity_id']}",
                     dict(candidate),
                 )
-        for combo in (origin_combo, *direction_combos):
-            combo.setCurrentIndex(0)
+        for component, combo in combos.items():
+            target = selected.get(component)
+            index = next(
+                (
+                    item
+                    for item in range(combo.count())
+                    if _coordinate_candidate_key(combo.itemData(item)) == target
+                ),
+                0,
+            )
+            combo.setCurrentIndex(index)
             combo.blockSignals(False)
+        apply_tube_help(self)
 
     def _coordinate_candidate_changed(self, component: str) -> None:
         if self._updating_coordinate_controls:
@@ -964,30 +993,23 @@ class TubeSetupPage(QWidget):
         self._updating_coordinate_controls = True
         try:
             for component, reference in references.items():
-                if reference is None:
-                    continue
                 combo, values, _pick, _title = self.coordinate_inputs[component]
-                target_kind = reference.reference_type
-                target_id = None if reference.geometry is None else reference.geometry.object_id
-                if target_kind == "face_pick":
-                    target_kind = "pick_face"
-                    target_id = None
-                elif target_kind == "two_points":
-                    target_kind = "pick_two_vertices"
-                    target_id = None
                 selected_index = 0
-                for index in range(combo.count()):
-                    data = combo.itemData(index)
-                    if not isinstance(data, Mapping):
-                        continue
-                    if str(data.get("kind", "")) != target_kind:
-                        continue
-                    candidate_id = data.get("entity_id")
-                    if target_id is None or str(candidate_id) == target_id:
-                        selected_index = index
-                        break
+                resolved = _COORDINATE_DEFAULTS[component]
+                if reference is not None:
+                    target_kind = reference.reference_type
+                    target_id = None if reference.geometry is None else reference.geometry.object_id
+                    if target_kind == "face_pick":
+                        target_kind = "pick_face"
+                        target_id = None
+                    elif target_kind == "two_points":
+                        target_kind = "pick_two_vertices"
+                        target_id = None
+                    selected_index = _coordinate_reference_index(combo, target_kind, target_id)
+                    resolved = presenter.reference_display_value(
+                        self.controller, draft.node, reference
+                    )
                 combo.setCurrentIndex(selected_index)
-                resolved = presenter.reference_display_value(self.controller, draft.node, reference)
                 for spin, value in zip(values, resolved, strict=False):
                     spin.setValue(float(value))
         finally:
@@ -1060,6 +1082,8 @@ class TubeSetupPage(QWidget):
 
     def _apply_coordinate(self) -> None:
         try:
+            if self._coordinate_control_dirty:
+                raise ValueError(self._t("coordinate_reconfirm_error"))
             frame = self.controller.apply_coordinate_draft(self._coordinate_node)
             self.coordinate_feedback.setText(f"Applied {frame.name} · revision {frame.revision}")
             self.refresh()
@@ -1071,6 +1095,7 @@ class TubeSetupPage(QWidget):
             self.controller.cancel_draft(self._coordinate_node)
         except DraftNotFoundError:
             pass
+        _restore_coordinate_editor(self)
         self.coordinate_feedback.clear()
         self.refresh()
 
@@ -1343,7 +1368,11 @@ class TubeSetupPage(QWidget):
             self._select_material_resource(key, identifier, options)
         else:
             raise ValueError(f"unsupported resource kind: {kind}")
-        self._reload_resource_catalogs()
+        self._reload_resource_catalogs(follow_setup=frozenset((kind,)))
+        if kind == "nozzle":
+            _sync_nozzle_editor(self)
+        elif kind == "material":
+            _sync_material_editor(self)
         self.refresh()
 
     def _select_machine_resource(self, key: str, identifier: str) -> None:
@@ -1445,10 +1474,51 @@ class TubeSetupPage(QWidget):
         self.refresh()
 
 
+def _coordinate_candidate_key(value: Any) -> tuple[str, str]:
+    if not isinstance(value, Mapping):
+        return "", ""
+    return str(value.get("kind", "")), str(value.get("entity_id", ""))
+
+
+def _coordinate_reference_index(combo: QComboBox, kind: str, object_id: str | None) -> int:
+    for index in range(combo.count()):
+        candidate_kind, candidate_id = _coordinate_candidate_key(combo.itemData(index))
+        if candidate_kind == kind and (object_id is None or candidate_id == object_id):
+            return index
+    return 0
+
+
+def _restore_coordinate_editor(page: TubeSetupPage) -> None:
+    applied = (
+        page.controller.setup.model_coordinate_system
+        if page._coordinate_node == MODEL_CS_NODE
+        else page.controller.setup.build_coordinate_system
+    )
+    page._populate_coordinate_candidates()
+    page._sync_coordinate_controls_from_draft(
+        CoordinateFrameDraft.from_applied(page._coordinate_node, applied)
+    )
+
+
 def _resource_profile_id(
     profile: MachineProfile | NozzleProfile | MaterialProfile,
 ) -> str:
     return profile.profile_id if isinstance(profile, MachineProfile) else profile.resource_id
+
+
+def _sync_nozzle_editor(page: TubeSetupPage) -> None:
+    profile = page._nozzle_profiles.get(str(page.nozzle_combo.currentData()))
+    if profile is None:
+        return
+    page.nozzle_interface.setText(profile.interface or "")
+    page.nozzle_length.setValue(profile.length_mm or 0.0)
+    page.nozzle_collision.setChecked(bool(profile.outer_profile_rz_mm))
+
+
+def _sync_material_editor(page: TubeSetupPage) -> None:
+    profile = page._material_profiles.get(str(page.material_combo.currentData()))
+    page.material_review.setChecked(bool(profile and profile.review_confirmed))
+    page._update_material_detail()
 
 
 def _profile_from_snapshot(

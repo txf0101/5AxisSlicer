@@ -110,6 +110,41 @@ class OpenGLTubeViewerTests(unittest.TestCase):
         self.assertIsNotNone(after)
         np.testing.assert_allclose(after, before, atol=1e-5)
 
+    def test_standard_views_follow_world_axes(self) -> None:
+        viewer = self.make_viewer()
+        expected = {
+            "front": (0.0, -1.0, 0.0),
+            "back": (0.0, 1.0, 0.0),
+            "left": (-1.0, 0.0, 0.0),
+            "right": (1.0, 0.0, 0.0),
+            "top": (0.0, 0.0, 1.0),
+            "bottom": (0.0, 0.0, -1.0),
+        }
+
+        for view, direction in expected.items():
+            viewer.set_standard_view(view)
+            eye, target, _up = viewer._camera_vectors()
+            np.testing.assert_allclose((eye - target) / viewer._distance, direction, atol=1e-7)
+
+    def test_camera_commands_match_vtk_signs_and_clamp_poles(self) -> None:
+        viewer = self.make_viewer()
+        viewer.set_standard_view("back")
+        viewer.camera_command("azimuth", 10.0)
+        eye, target, _up = viewer._camera_vectors()
+        self.assertLess(float((eye - target)[0]), 0.0)
+
+        viewer.set_standard_view("back")
+        viewer.camera_command("elevation", 10.0)
+        eye, target, _up = viewer._camera_vectors()
+        self.assertGreater(float((eye - target)[2]), 0.0)
+
+        viewer.set_standard_view("top")
+        viewer.camera_command("elevation", 10.0)
+        self.assertAlmostEqual(math.degrees(viewer._pitch), 1.0)
+        viewer.set_standard_view("bottom")
+        viewer.camera_command("elevation", -10.0)
+        self.assertAlmostEqual(math.degrees(viewer._pitch), 179.0)
+
     def test_static_pick_buffers_keep_entity_identity_for_every_topology_kind(
         self,
     ) -> None:

@@ -22,6 +22,8 @@ from types import MappingProxyType
 from typing import Any, Mapping, Sequence
 from uuid import NAMESPACE_URL, uuid5
 
+from .nozzle_envelope import is_consistent_outer_profile, normalise_outer_profile
+
 from .json_contract import parse_json_bool, require_bool
 
 
@@ -336,7 +338,7 @@ class MaterialRecommendations:
 
 @dataclass(frozen=True, slots=True)
 class NozzleProfile:
-    """Nozzle identity, compatibility, and axisymmetric collision envelope."""
+    """Nozzle identity and R-Z envelope, with tip Z=0 and +Z toward the mount."""
 
     resource_id: str
     display_name: str
@@ -355,15 +357,11 @@ class NozzleProfile:
 
     def __post_init__(self) -> None:
         # Make direct construction with lists just as immutable as JSON loading.
-        try:
-            profile = tuple(
-                (float(point[0]), float(point[1])) for point in self.outer_profile_rz_mm
-            )
-        except (TypeError, ValueError, IndexError) as exc:
-            raise TypeError(
-                "outer_profile_rz_mm must contain (radius, z) pairs"
-            ) from exc
-        object.__setattr__(self, "outer_profile_rz_mm", profile)
+        object.__setattr__(
+            self,
+            "outer_profile_rz_mm",
+            normalise_outer_profile(self.outer_profile_rz_mm),
+        )
         object.__setattr__(
             self,
             "is_builtin",
@@ -420,9 +418,10 @@ class NozzleProfile:
                     "nozzle.outer_profile_missing", _ERROR, "outer_profile_rz_mm"
                 )
             )
-        elif len(self.outer_profile_rz_mm) < 2 or any(
-            not math.isfinite(radius) or not math.isfinite(z) or radius < 0.0
-            for radius, z in self.outer_profile_rz_mm
+        elif not is_consistent_outer_profile(
+            self.outer_profile_rz_mm,
+            self.length_mm,
+            self.orifice_diameter_mm,
         ):
             issues.append(
                 ResourceValidationIssue(
@@ -439,8 +438,7 @@ class NozzleProfile:
                     "temperature_limit_c",
                 )
             )
-        if self.source is not None:
-            issues.extend(self.source.validate())
+        issues.extend(self.source.validate() if self.source is not None else ())
         return tuple(issues)
 
     @property

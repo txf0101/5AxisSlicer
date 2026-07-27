@@ -25,6 +25,7 @@ from five_axis_slicer.manufacturing.resources import (
 from five_axis_slicer.manufacturing.setup import (
     BUILD_CS_NODE,
     MATERIAL_NODE,
+    NOZZLE_NODE,
     ManufacturingObjectAssignments,
     ManufacturingSetup,
     NodeState,
@@ -43,7 +44,7 @@ def complete_nozzle() -> NozzleProfile:
         length_mm=12.5,
         construction_material="brass",
         flow_category="standard",
-        outer_profile_rz_mm=((0.2, 0.0), (3.0, 6.0), (4.0, 12.5)),
+        outer_profile_rz_mm=((0.3, 0.0), (3.0, 6.0), (4.0, 12.5)),
     )
 
 
@@ -216,6 +217,23 @@ class ManufacturingSetupTests(unittest.TestCase):
         report_payload = restored.validation_report().to_json()
         restored_report = SetupValidationReport.from_json(report_payload)
         self.assertEqual(restored_report.to_json(), report_payload)
+
+    def test_legacy_inconsistent_nozzle_snapshot_fails_closed_after_round_trip(self) -> None:
+        nozzle = replace(
+            complete_nozzle(),
+            outer_profile_rz_mm=((0.3, 0.0), (3.0, 12.0)),
+        )
+        setup = replace(
+            complete_setup(),
+            nozzle=ResourceSnapshot.capture("nozzle", nozzle),
+        )
+
+        restored = ManufacturingSetup.from_json(json.loads(json.dumps(setup.to_json())))
+        report = restored.validation_report()
+
+        self.assertIs(report.state_for(NOZZLE_NODE), NodeState.INVALID)
+        self.assertFalse(report.setup_ready)
+        self.assertIn("SETUP_NOZZLE_INVALID", {issue.code for issue in report.issues})
 
     def test_assignment_roles_must_be_disjoint(self) -> None:
         with self.assertRaisesRegex(

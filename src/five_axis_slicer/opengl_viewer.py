@@ -123,7 +123,11 @@ from .viewer_common import (
     update_preview_visibility,
     vector3,
 )
-from .viewer_interaction import BambuNavigationMixin, OpenGLCameraNavigation
+from .viewer_interaction import (
+    BambuNavigationMixin,
+    OpenGLCameraNavigation,
+    z_up_orbit_direction,
+)
 
 AXIS_X_COLOR = _scene.AXIS_X_COLOR
 AXIS_Y_COLOR = _scene.AXIS_Y_COLOR
@@ -487,12 +491,12 @@ class OpenGLModelViewer(BambuNavigationMixin, QOpenGLWidget):
             self.home_view()
             return
         views = {
-            "front": (0.0, -90.0, (0.0, 0.0, 1.0)),
+            "front": (180.0, 90.0, (0.0, 0.0, 1.0)),
             "back": (0.0, 90.0, (0.0, 0.0, 1.0)),
-            "left": (-90.0, 0.0, (0.0, 0.0, 1.0)),
-            "right": (90.0, 0.0, (0.0, 0.0, 1.0)),
+            "left": (-90.0, 90.0, (0.0, 0.0, 1.0)),
+            "right": (90.0, 90.0, (0.0, 0.0, 1.0)),
             "top": (0.0, 0.0, (0.0, 1.0, 0.0)),
-            "bottom": (180.0, 0.0, (0.0, 1.0, 0.0)),
+            "bottom": (0.0, 180.0, (0.0, 1.0, 0.0)),
         }
         if view not in views:
             raise ValueError(f"Unknown standard view: {view}")
@@ -754,12 +758,12 @@ class OpenGLModelViewer(BambuNavigationMixin, QOpenGLWidget):
             return
         if command == "azimuth":
             self._view_up = np.array([0.0, 0.0, 1.0], dtype=np.float32)
-            self._yaw += math.radians(value)
+            self._yaw -= math.radians(value)
         elif command == "elevation":
             self._view_up = np.array([0.0, 0.0, 1.0], dtype=np.float32)
             self._pitch = max(
-                math.radians(-85.0),
-                min(math.radians(85.0), self._pitch + math.radians(value)),
+                math.radians(1.0),
+                min(math.radians(179.0), self._pitch - math.radians(value)),
             )
         elif command == "zoom":
             self._distance = max(1.0, self._distance / max(value, 1e-6))
@@ -1747,14 +1751,7 @@ class OpenGLModelViewer(BambuNavigationMixin, QOpenGLWidget):
 
     def _camera_vectors(self) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
         target = self._center + self._pan
-        direction = np.array(
-            [
-                math.cos(self._pitch) * math.sin(self._yaw),
-                math.sin(self._pitch),
-                math.cos(self._pitch) * math.cos(self._yaw),
-            ],
-            dtype=np.float32,
-        )
+        direction = z_up_orbit_direction(self._yaw, self._pitch)
         eye = target + direction * self._distance
         return eye, target, self._view_up
 

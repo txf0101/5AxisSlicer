@@ -41,7 +41,7 @@ Python 包位于 `src/five_axis_slicer/`，采用 `src` layout。
 - `models.py`：CAD 拓扑描述、选择状态、统一 Pick 类型和 Viewer 覆盖层数据。
 - `manufacturing/coordinates.py`：列向量、右手系、毫米/弧度刚体变换，三参考坐标定义及局部六自由度微调。
 - `manufacturing/machine.py`：机床轴链、安装位、打印板、配置校验和正运动学。
-- `manufacturing/resources.py`、`manufacturing/library.py`：机床、喷嘴、材料 Profile，内置模板、用户库和项目冻结快照。
+- `manufacturing/resources.py`、`manufacturing/library.py`：机床、喷嘴、材料 Profile，内置模板、用户库和项目冻结快照；`manufacturing/nozzle_envelope.py` 集中处理喷嘴 R–Z 外形的严格解析与物理一致性。
 - `manufacturing/references.py`：几何引用服务的稳定兼容门面，仅重导出公共入口。
 - `manufacturing/reference_descriptors.py`：拓扑索引、几何签名构造及点和方向解析。
 - `manufacturing/reference_rebind.py`：源更新后的容差比较、唯一重绑定、歧义处理和问题去重。
@@ -93,7 +93,7 @@ Python 包位于 `src/five_axis_slicer/`，采用 `src` layout。
 - `tube_resource_selection.py`：自动化资源构造边界；完整喷嘴要求调用方提供明确的物理字段。
 - `tube_serialization.py`：Setup、Operation 与项目资源镜像的 JSON 编解码边界。
 - `tube_ui.py`：Qt 页面、树、编辑控件、问题跳转和用户事件编排。
-- `tube_ui_text.py`：Tube 双语文案、静态控件绑定和坐标入口节点顺序。
+- `tube_ui_text.py`：Tube 双语标签、原生悬停/状态栏/无障碍说明、控件绑定和坐标入口节点顺序。
 - `tube_ui_presenter.py`：Qt 无关的坐标拾取解析、Source CS 到显示坐标的变换和 Viewer 展示快照。
 
 ### 2.8 通用控件

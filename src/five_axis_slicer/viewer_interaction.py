@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass
 from collections.abc import Callable
+from dataclasses import dataclass
 from typing import Any, Literal, Protocol, cast
 
 import numpy as np
@@ -54,7 +54,11 @@ class OpenGLCameraNavigation:
         host = self.host
         host._view_up = np.asarray((0.0, 0.0, 1.0), dtype=np.float32)
         host._yaw += dx * 0.01
-        host._pitch = max(math.radians(-85.0), min(math.radians(85.0), host._pitch + dy * 0.01))
+        # The legacy `_pitch` field stores zenith: 0 points along world +Z.
+        host._pitch = max(
+            math.radians(1.0),
+            min(math.radians(179.0), host._pitch - dy * 0.01),
+        )
         host.update()
 
     def pan(self, dx: int, dy: int) -> None:
@@ -226,6 +230,20 @@ def wheel_zoom_factor(delta: int) -> float | None:
     if delta == 0:
         return None
     return min(10.0, max(0.1, 1.12 ** (float(delta) / 120.0)))
+
+
+def z_up_orbit_direction(azimuth_rad: float, zenith_rad: float) -> np.ndarray:
+    """Return a unit orbit direction with azimuth around world +Z."""
+
+    radial = math.sin(zenith_rad)
+    return np.asarray(
+        (
+            radial * math.sin(azimuth_rad),
+            radial * math.cos(azimuth_rad),
+            math.cos(zenith_rad),
+        ),
+        dtype=np.float32,
+    )
 
 
 class BambuNavigationMixin:

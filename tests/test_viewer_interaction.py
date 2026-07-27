@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import math
 import os
 import sys
 from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import Mock
 
 import pytest
 
@@ -17,10 +20,76 @@ from five_axis_slicer.viewer_interaction import (  # noqa: E402
     BambuNavigationMixin,
     DragAction,
     DragUpdate,
+    OpenGLCameraNavigation,
     PointerButton,
     PointerGesture,
+    VtkCameraNavigation,
     wheel_zoom_factor,
+    z_up_orbit_direction,
 )
+
+
+@pytest.mark.parametrize("yaw_degrees", (0.0, 90.0, 180.0, 270.0))
+def test_opengl_downward_drag_raises_z_up_orbit_at_every_azimuth(
+    yaw_degrees: float,
+) -> None:
+    initial_pitch = math.radians(55.0)
+    yaw = math.radians(yaw_degrees)
+    host = SimpleNamespace(
+        _pitch=initial_pitch,
+        _yaw=yaw,
+        _view_up=None,
+        update=Mock(),
+    )
+    navigation = OpenGLCameraNavigation(host)
+    initial_height = z_up_orbit_direction(yaw, initial_pitch)[2]
+
+    navigation.rotate(0, 10)
+
+    assert host._pitch == pytest.approx(initial_pitch - 0.1)
+    assert z_up_orbit_direction(yaw, host._pitch)[2] > initial_height
+    host.update.assert_called_once_with()
+
+    navigation.rotate(0, -10)
+    assert host._pitch == pytest.approx(initial_pitch)
+
+
+def test_vtk_downward_drag_uses_positive_elevation() -> None:
+    camera = Mock()
+    renderer = Mock()
+    renderer.GetActiveCamera.return_value = camera
+    widget = SimpleNamespace(width=lambda: 800, height=lambda: 400)
+    render = Mock()
+    navigation = VtkCameraNavigation(renderer, widget, lambda: 1.0, render)
+
+    navigation.rotate(8, 10)
+
+    camera.Azimuth.assert_called_once_with(-4.0)
+    camera.Elevation.assert_called_once_with(10.0)
+    camera.OrthogonalizeViewUp.assert_called_once_with()
+    renderer.ResetCameraClippingRange.assert_called_once_with()
+    render.assert_called_once_with()
+
+
+@pytest.mark.parametrize(
+    ("azimuth", "zenith", "expected"),
+    (
+        (180.0, 90.0, (0.0, -1.0, 0.0)),
+        (0.0, 90.0, (0.0, 1.0, 0.0)),
+        (-90.0, 90.0, (-1.0, 0.0, 0.0)),
+        (90.0, 90.0, (1.0, 0.0, 0.0)),
+        (0.0, 0.0, (0.0, 0.0, 1.0)),
+        (0.0, 180.0, (0.0, 0.0, -1.0)),
+    ),
+)
+def test_z_up_orbit_preserves_standard_view_directions(
+    azimuth: float,
+    zenith: float,
+    expected: tuple[float, float, float],
+) -> None:
+    direction = z_up_orbit_direction(math.radians(azimuth), math.radians(zenith))
+
+    assert direction == pytest.approx(expected, abs=1.0e-7)
 
 
 def test_drag_threshold_uses_displacement_from_press_point() -> None:
