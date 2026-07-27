@@ -2,6 +2,8 @@
 
 5AxisSclicer V2.0 以 Workbench 为入口。当前有两条可交互主线：`Imported NC Review` 用于已有 NC/G-code 的空间路径、层范围和路径类型预览；Tube Workbench 已完成第一阶段 Setup 与坐标闭环，可定义 Part、Machine、Nozzle、Material、Model CS、Build CS 和 Placement，并保存、重开项目。
 
+管状坐标设置的完整入口和操作步骤见[中文图文指南](docs/guides/tube_coordinate_setup_zh.md)。当前只有管状工作台接入坐标编辑器；其他工作台继续使用通用 Operation Session。
+
 当前范围：
 
 - Workbench 首页展示 Planar、Curve、Freeform、Rotary、Tube、Research 六类工作台。
@@ -59,6 +61,10 @@ python -m venv .venv
 - `example/叶轮/叶轮.stp`
 - `example/叶轮/叶轮完整.gcode`
 
+### STEP 导入后的坐标入口
+
+STEP 在平面、曲面、自由曲面、回转工作台或通用操作会话中载入后，点击左侧“进入管状设置（定义坐标）”。当前模型会直接带入管状工作台。也可返回“工作台”并选择“管状工作台”。模型坐标系、构建坐标系和装夹定位只在该页面中提供。
+
 ## 快捷键
 
 - `Ctrl+O` 打开 STEP/STP
@@ -71,6 +77,18 @@ python -m venv .venv
 - 方向键旋转视图
 - `Shift+方向键` 平移视图
 - `Ctrl++` / `Ctrl+-` 缩放
+
+### Bambu 式预览鼠标操作
+
+| 鼠标操作 | 结果 |
+| --- | --- |
+| 左键短按几何 | 按当前拾取类型选择 |
+| 左键短按空白处 | 清空选择 |
+| 左键拖动 | 旋转视图 |
+| 中键或右键拖动 | 沿屏幕平面平移视图 |
+| 滚轮 | 围绕鼠标指针所在的焦平面位置缩放 |
+
+拖动越过系统阈值后，松开不会触发拾取。当前鼠标手势只处理相机与几何选择，尚未提供对象拖拽、Gizmo、框选和右键菜单。
 
 ## HTTP 自动化接口
 

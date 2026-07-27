@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import time
 from collections.abc import Callable, Mapping
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -62,80 +61,13 @@ from .step_loader import StepLoadCancelled, StepLoadError
 from .styles import APP_STYLE
 from .tube_controller import PendingDraftError, TubeSetupController
 from .tube_ui import TubeSetupPage
+from .ui_controls import action_button
 from .viewer import ModelViewer
+from .workbenches import WORKBENCHES, WorkbenchInfo
 
 ROOT = Path(__file__).resolve().parents[2]
 DEMO_STEP = ROOT / "example" / "叶轮" / "叶轮.stp"
 DEMO_GCODE = ROOT / "example" / "叶轮" / "叶轮完整.gcode"
-
-
-@dataclass(frozen=True, slots=True)
-class WorkbenchInfo:
-    key: str
-    title_zh: str
-    title_en: str
-    summary_zh: str
-    summary_en: str
-    status_zh: str
-    status_en: str
-
-
-WORKBENCHES: tuple[WorkbenchInfo, ...] = (
-    WorkbenchInfo(
-        "planar",
-        "Planar Workbench",
-        "Planar Workbench",
-        "平面沉积、基体打印、层状填充和薄壁轮廓。",
-        "Planar deposition, base build, layer fill, and thin-wall contours.",
-        "Preview",
-        "Preview",
-    ),
-    WorkbenchInfo(
-        "curve",
-        "Curve Workbench",
-        "Curve Workbench",
-        "沿 STEP 边线和空间曲线生成单道或多道沉积路径。",
-        "Single-pass or multi-pass deposition along STEP edges and spatial curves.",
-        "P0",
-        "P0",
-    ),
-    WorkbenchInfo(
-        "freeform",
-        "Freeform Workbench",
-        "Freeform Workbench",
-        "面向曲面贴合、曲面加强和导电线路沉积。",
-        "Conformal coating, surface reinforcement, and conductive traces.",
-        "Preview",
-        "Preview",
-    ),
-    WorkbenchInfo(
-        "rotary",
-        "Rotary Workbench",
-        "Rotary Workbench",
-        "圆柱、回转件和轴类零件的旋转沉积。",
-        "Rotary deposition for cylinders, turned parts, and shaft-like parts.",
-        "Locked",
-        "Locked",
-    ),
-    WorkbenchInfo(
-        "tube",
-        "Tube Workbench",
-        "Tube Workbench",
-        "弯管、流道和中心线驱动结构的路径预处理。",
-        "Preprocessing for tubes, channels, and centerline-driven structures.",
-        "Setup",
-        "Setup",
-    ),
-    WorkbenchInfo(
-        "research",
-        "Research Workbench",
-        "Research Workbench",
-        "锥面层、标量场曲面切片和强度导向路径研究。",
-        "Conical layers, scalar-field surface slicing, and research paths.",
-        "R&D",
-        "R&D",
-    ),
-)
 
 
 class MainWindow(QMainWindow):
@@ -1446,6 +1378,8 @@ class MainWindow(QMainWindow):
             self.current_operation = "imported_nc_review"
         self._update_operation_combo()
         self._show_session()
+        if key == "tube":
+            self.tube_page.activate_coordinate_entry()
         self._update_workbench_texts()
         self._update_checks()
 
@@ -1498,6 +1432,7 @@ class MainWindow(QMainWindow):
         self.save_button.setText(tr(self.language, "save"))
         self.clear_button.setText(tr(self.language, "clear"))
         self.language_button.setText(tr(self.language, "language"))
+        self.tube_coordinate_button.setText(tr(self.language, "tube_coordinate_entry"))
         self.operation_label.setText(tr(self.language, "operation"))
         self.model_file_title.setText(tr(self.language, "model_file"))
         self.gcode_file_title.setText(tr(self.language, "gcode_file"))
@@ -1903,18 +1838,13 @@ class MainWindow(QMainWindow):
         self.operation_label = QLabel()
         self.operation_combo = QComboBox()
         self.operation_combo.currentIndexChanged.connect(self._on_operation_changed)
-        self.back_button = QPushButton()
-        self.open_button = QPushButton()
-        self.open_gcode_button = QPushButton()
-        self.save_button = QPushButton()
-        self.clear_button = QPushButton()
-        self.language_button = QPushButton()
-        self.back_button.clicked.connect(self._show_home)
-        self.open_button.clicked.connect(self.open_model_dialog)
-        self.open_gcode_button.clicked.connect(self.open_gcode_dialog)
-        self.save_button.clicked.connect(self.save_project_dialog)
-        self.clear_button.clicked.connect(self.clear_selection)
-        self.language_button.clicked.connect(self.toggle_language)
+        self.tube_coordinate_button = action_button(self.enter_workbench, "tube", primary=True)
+        self.back_button = action_button(self._show_home)
+        self.open_button = action_button(self.open_model_dialog)
+        self.open_gcode_button = action_button(self.open_gcode_dialog)
+        self.save_button = action_button(self.save_project_dialog)
+        self.clear_button = action_button(self.clear_selection)
+        self.language_button = action_button(self.toggle_language)
 
         self.model_file_title = QLabel()
         self.gcode_file_title = QLabel()
@@ -1930,6 +1860,7 @@ class MainWindow(QMainWindow):
         layout.addSpacing(8)
         layout.addWidget(self.operation_label)
         layout.addWidget(self.operation_combo)
+        layout.addWidget(self.tube_coordinate_button)
         layout.addSpacing(10)
         for button in (
             self.back_button,
@@ -2374,7 +2305,7 @@ class MainWindow(QMainWindow):
             self.current_operation = str(data)
         self._update_checks()
 
-    def _on_viewer_selection(self, _kind: str, _obj_id: str) -> None:
+    def _on_viewer_selection(self, _kind: str | None, _obj_id: str | None) -> None:
         self.refresh_lists()
 
     def _on_body_list_selection_changed(self) -> None:
@@ -2630,6 +2561,7 @@ class MainWindow(QMainWindow):
         self.operation_combo.blockSignals(False)
 
     def _update_file_labels(self) -> None:
+        self.tube_coordinate_button.setVisible(self.model is not None)
         self.model_file_label.setText(
             tr(self.language, "file_none") if self.model is None else str(self.model.source_path)
         )

@@ -1,6 +1,6 @@
 # 项目结构说明
 
-本说明对应 2026-07-26 工作区源码。结构核对范围为 `pyproject.toml`、`.github/`、`src/`、`scripts/`、`tests/`、`native/`、`example/` 和 `docs/reviews/`。`圭臬/开发目标文档.docx` 保持只读；已核对时间为 2026-07-06 13:45:16，大小为 492214 字节。
+本说明对应 2026-07-27 工作区源码。结构核对范围为 `pyproject.toml`、`.github/`、`src/`、`scripts/`、`tests/`、`native/`、`example/` 和 `docs/reviews/`。`圭臬/开发目标文档.docx` 保持只读；已核对时间为 2026-07-06 13:45:16，大小为 492214 字节。
 
 ## 1 根目录与工程配置
 
@@ -29,6 +29,8 @@ Python 包位于 `src/five_axis_slicer/`，采用 `src` layout。
 - `background_load.py`：STEP、G-code、项目和成果页共享的可取消后台加载协调器。
 - `model_commit.py`：异步编辑基线检查及主线程可见状态事务，统一回滚 Model、G-code、Setup、双 Viewer 和 Tube 坐标编辑上下文。
 - `localization.py`、`styles.py`、`theme.py`：双语文本、QSS 与视觉 token。
+- `workbenches.py`：工作台目录的稳定双语元数据。
+- `ui_controls.py`：应用壳使用的小型 Qt 控件工厂。
 
 ### 2.2 CAD 与制造领域
 
@@ -75,6 +77,7 @@ Python 包位于 `src/five_axis_slicer/`，采用 `src` layout。
 ### 2.6 Viewer 后端
 
 - `viewer_common.py`：OpenGL/VTK 共用协议、坐标安全检查和预览几何算法。
+- `viewer_interaction.py`：双后端共用的指针状态机，以及 OpenGL、VTK 相机适配器。
 - `viewer_overlays.py`：方向立方体、坐标轴和叠加层绘制辅助。
 - `viewer.py`：VTK 后端与后端选择入口。
 - `opengl_viewer.py`：QOpenGLWidget 生命周期、交互和 GPU 提交。
@@ -90,6 +93,7 @@ Python 包位于 `src/five_axis_slicer/`，采用 `src` layout。
 - `tube_resource_selection.py`：自动化资源构造边界；完整喷嘴要求调用方提供明确的物理字段。
 - `tube_serialization.py`：Setup、Operation 与项目资源镜像的 JSON 编解码边界。
 - `tube_ui.py`：Qt 页面、树、编辑控件、问题跳转和用户事件编排。
+- `tube_ui_text.py`：Tube 双语文案、静态控件绑定和坐标入口节点顺序。
 - `tube_ui_presenter.py`：Qt 无关的坐标拾取解析、Source CS 到显示坐标的变换和 Viewer 展示快照。
 
 ### 2.8 通用控件
@@ -113,6 +117,7 @@ Python 包位于 `src/five_axis_slicer/`，采用 `src` layout。
 - `test_manufacturing_*.py`、`test_machine_profiles.py`：坐标数学、机床、资源和 Setup 门禁。
 - `test_result_backend.py`、`test_result_preview.py`：成果加载、完整路径质量和页面布局。
 - `test_viewer_common.py`、`test_viewer_geometry.py`、`test_viewer_overlays.py`、`test_opengl_viewer.py`：共享 Viewer 算法与覆盖层。
+- `test_viewer_interaction.py`：点击、拖动、滚轮、多键与中断清理状态机。
 - `test_tube_controller.py`、`test_tube_resource_library_ui.py`、`test_tube_resource_selection.py`、`test_tube_ui.py`：Tube 状态传播、资源审计、显式喷嘴字段和 Qt 编辑流程。
 - `test_opengl_tube_viewer.py`、`test_vtk_tube_offscreen_smoke.py`：Tube 双后端拾取、坐标架、打印板和装夹显示一致性。
 

@@ -28,6 +28,7 @@ from five_axis_slicer.manufacturing.setup import (
     BUILD_CS_NODE,
     MACHINE_NODE,
     MODEL_CS_NODE,
+    PART_NODE,
     PLACEMENT_NODE,
     ManufacturingSetup,
     NodeState,
@@ -271,14 +272,90 @@ class TubeUiTests(unittest.TestCase):
         self.assertEqual(window.current_state()["page"], "tube")
         self.assertEqual(window.tube_page.tree.objectName(), "tubeOperationTree")
         self.assertIn(
-            "Manufacturing Setup 1",
+            "制造设置 1",
             window.tube_page.tree.topLevelItem(0).child(1).text(0),
         )
+        self.assertEqual(window.tube_page.title_label.text(), "管状工作台")
+        self.assertEqual(window.tube_page.coordinate_apply_button.text(), "应用")
+        self.assertEqual(window.tube_page.coordinate_cancel_button.text(), "取消")
         self.assertLessEqual(window.tube_page.minimumSizeHint().width(), 1600)
 
         window.set_language("en")
         self.assertEqual(window.tube_page.open_button.text(), "Open STEP")
         self.assertEqual(window.tube_page.issue_title.text(), "Issues")
+        self.assertEqual(window.tube_page.coordinate_apply_button.text(), "Apply")
+
+    def test_workbench_cards_and_part_roles_follow_language(self) -> None:
+        window = self._loaded_tube_window()
+        page = window.tube_page
+
+        self.assertIn("平面工作台", window.workbench_buttons["planar"].text())
+        self.assertIn("[预览]", window.workbench_buttons["planar"].text())
+        self.assertIn("回转工作台", window.workbench_buttons["rotary"].text())
+        self.assertIn("[锁定]", window.workbench_buttons["rotary"].text())
+        self.assertIn("研究工作台", window.workbench_buttons["research"].text())
+        self.assertIn("[研发]", window.workbench_buttons["research"].text())
+
+        combo = next(iter(page._role_combos.values()))
+        self.assertEqual(
+            [combo.itemText(i) for i in range(combo.count())], ["零件", "忽略", "未分配"]
+        )
+        self.assertEqual(
+            [combo.itemData(i) for i in range(combo.count())],
+            ["part", "ignore", "unassigned"],
+        )
+        combo.setCurrentIndex(combo.findData("ignore"))
+
+        window.set_language("en")
+        combo = next(iter(page._role_combos.values()))
+        self.assertEqual(
+            [combo.itemText(i) for i in range(combo.count())], ["Part", "Ignore", "Unassigned"]
+        )
+        self.assertEqual(
+            [combo.itemData(i) for i in range(combo.count())],
+            ["part", "ignore", "unassigned"],
+        )
+        self.assertEqual(combo.currentData(), "ignore")
+
+    def test_loaded_step_offers_coordinate_entry_without_reimport(self) -> None:
+        if self.pipe2 is None:
+            self.skipTest("pipe2 STEP fixture is unavailable")
+        window = self._window()
+        window.open_model(self.pipe2, show_dialog=False)
+        model = window.model
+        controller = window.tube_page.controller
+        window.resize(1600, 900)
+        window.show()
+        self.app.processEvents()
+
+        self.assertIs(window.stack.currentWidget(), window.session_page)
+        self.assertTrue(window.tube_coordinate_button.isVisible())
+        self.assertEqual(
+            window.tube_coordinate_button.text(),
+            "进入管状设置（定义坐标）",
+        )
+
+        QTest.mouseClick(window.tube_coordinate_button, Qt.LeftButton)
+        self.app.processEvents()
+
+        self.assertIs(window.stack.currentWidget(), window.tube_page)
+        self.assertIs(window.model, model)
+        self.assertIs(window.tube_page.viewer.model, model)
+        self.assertIs(window.tube_page.controller, controller)
+        self.assertEqual(window.current_workbench_key, "tube")
+        self.assertEqual(
+            window.tube_page.tree.currentItem().data(0, Qt.UserRole),
+            PART_NODE,
+        )
+
+        window.tube_page.tree.setCurrentItem(window.tube_page._tree_items["model"])
+        window.enter_workbench("curve")
+        window.enter_workbench("tube")
+        self.assertEqual(
+            window.tube_page.tree.currentItem().data(0, Qt.UserRole),
+            PART_NODE,
+        )
+        self.assertIs(window.tube_page.editor_stack.currentWidget(), window.tube_page.part_editor)
 
     def test_replacing_controller_without_model_clears_viewer_state(self) -> None:
         window = self._loaded_tube_window()

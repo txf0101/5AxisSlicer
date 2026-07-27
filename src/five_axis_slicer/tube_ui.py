@@ -69,6 +69,14 @@ from .models import (
 from .step_loader import geometry_candidates
 from .tube_controller import BodyRole, DraftNotFoundError, TubeSetupController
 from .tube_resource_selection import configured_nozzle_copy
+from .tube_ui_text import (
+    TUBE_CONTROL_TEXT,
+    setup_tree_node,
+    tube_language,
+)
+from .tube_ui_text import (
+    TUBE_TEXT as _TEXT,
+)
 from .viewer import ModelViewer
 
 _NODE_ORDER = (
@@ -80,147 +88,6 @@ _NODE_ORDER = (
     BUILD_CS_NODE,
     PLACEMENT_NODE,
 )
-
-_TEXT: dict[str, dict[str, str]] = {
-    "zh": {
-        "title": "Tube Workbench",
-        "subtitle": "管状薄壁分块定向切片：制造 Setup 与坐标闭环",
-        "back": "工作台",
-        "open": "打开 STEP",
-        "update_source": "从原文件更新",
-        "save": "保存项目",
-        "create_operation": "创建 Tube Thin-Wall Indexed",
-        "project": "Project",
-        "model": "Model",
-        "setup": "Manufacturing Setup 1",
-        "operations": "Operations",
-        "part": "Part",
-        "machine": "Machine",
-        "nozzle": "Nozzle",
-        "material": "Material",
-        "model_cs": "Model CS",
-        "build_cs": "Build CS",
-        "placement": "Placement",
-        "operation": "Tube Thin-Wall Indexed",
-        "model_view": "模型视图",
-        "machine_view": "机床视图",
-        "editor_empty": "从左侧树选择 Setup 节点。",
-        "part_help": "一个 Part 可包含多个封闭 solid；未分配和 Ignore 不参与后续计算。",
-        "body": "实体",
-        "kind": "类型",
-        "role": "角色",
-        "confirm": "确认",
-        "apply": "Apply",
-        "cancel": "Cancel",
-        "flip": "Flip",
-        "resource_help": "内置资源是只读模板，项目保存冻结快照。",
-        "resource_origin_builtin": "内置",
-        "resource_origin_user": "用户库",
-        "resource_origin_snapshot": "项目快照",
-        "resource_status_diverged": "已分叉",
-        "resource_status_missing": "库中缺失",
-        "select_machine": "选择 Machine Profile",
-        "select_nozzle": "选择喷嘴身份模板",
-        "select_material": "选择 Cura 材料模板",
-        "interface": "安装接口",
-        "length": "总长 (mm)",
-        "collision_profile": "生成临时轴对称碰撞外形",
-        "review": "已核对来源中的材料单点建议值",
-        "coordinate_help_model": "数值输入基于 Source CS。原点、Z 和 X 需要逐项确认。",
-        "coordinate_help_build": "数值输入默认基于 Model CS，保存时换算到 Source CS。",
-        "origin": "原点",
-        "z_direction": "Z 方向",
-        "x_direction": "X 方向",
-        "pick": "拾取",
-        "numeric": "数值输入",
-        "pick_vertex": "拾取顶点",
-        "pick_face": "拾取面上点",
-        "pick_line": "拾取直边",
-        "pick_axis_face": "拾取平面/圆柱/圆锥面",
-        "pick_two_vertices": "拾取两个顶点",
-        "placement_help": "Build CS 与打印板安装位配对；微调顺序为平移、Rx、Ry、Rz。",
-        "mount": "打印板安装位",
-        "coordinates_valid": "Coordinates Valid",
-        "setup_ready": "Setup Ready",
-        "issues": "问题列表",
-        "no_issues": "当前没有问题。",
-        "ready_warning": "Ready with Warnings",
-        "status_missing": "Missing",
-        "status_draft": "Draft",
-        "status_valid": "Valid",
-        "status_dirty": "Dirty",
-        "status_invalid": "Invalid",
-    },
-    "en": {
-        "title": "Tube Workbench",
-        "subtitle": "Indexed tube thin-wall slicing: manufacturing Setup and coordinate closure",
-        "back": "Workbench",
-        "open": "Open STEP",
-        "update_source": "Update from Source",
-        "save": "Save Project",
-        "create_operation": "Create Tube Thin-Wall Indexed",
-        "project": "Project",
-        "model": "Model",
-        "setup": "Manufacturing Setup 1",
-        "operations": "Operations",
-        "part": "Part",
-        "machine": "Machine",
-        "nozzle": "Nozzle",
-        "material": "Material",
-        "model_cs": "Model CS",
-        "build_cs": "Build CS",
-        "placement": "Placement",
-        "operation": "Tube Thin-Wall Indexed",
-        "model_view": "Model View",
-        "machine_view": "Machine View",
-        "editor_empty": "Select a Setup node in the tree.",
-        "part_help": "One Part may contain several closed solids. Unassigned and Ignore bodies are excluded.",
-        "body": "Body",
-        "kind": "Kind",
-        "role": "Role",
-        "confirm": "Confirm",
-        "apply": "Apply",
-        "cancel": "Cancel",
-        "flip": "Flip",
-        "resource_help": "Built-in resources are read-only templates; projects store frozen snapshots.",
-        "resource_origin_builtin": "Built-in",
-        "resource_origin_user": "User library",
-        "resource_origin_snapshot": "Project snapshot",
-        "resource_status_diverged": "Diverged",
-        "resource_status_missing": "Missing from library",
-        "select_machine": "Select Machine Profile",
-        "select_nozzle": "Select nozzle identity template",
-        "select_material": "Select Cura material template",
-        "interface": "Mount interface",
-        "length": "Overall length (mm)",
-        "collision_profile": "Create a temporary axisymmetric collision envelope",
-        "review": "Pinned material recommendations reviewed",
-        "coordinate_help_model": "Numeric values use Source CS. Confirm origin, Z, and X separately.",
-        "coordinate_help_build": "Numeric values use Model CS by default and are persisted in Source CS.",
-        "origin": "Origin",
-        "z_direction": "Z direction",
-        "x_direction": "X direction",
-        "pick": "Pick",
-        "numeric": "Numeric",
-        "pick_vertex": "Pick vertex",
-        "pick_face": "Pick point on face",
-        "pick_line": "Pick straight edge",
-        "pick_axis_face": "Pick plane/cylinder/cone face",
-        "pick_two_vertices": "Pick two vertices",
-        "placement_help": "Pair Build CS to a plate mount; adjustment order is translate, Rx, Ry, Rz.",
-        "mount": "Build-plate mount",
-        "coordinates_valid": "Coordinates Valid",
-        "setup_ready": "Setup Ready",
-        "issues": "Issues",
-        "no_issues": "No current issues.",
-        "ready_warning": "Ready with Warnings",
-        "status_missing": "Missing",
-        "status_draft": "Draft",
-        "status_valid": "Valid",
-        "status_dirty": "Dirty",
-        "status_invalid": "Invalid",
-    },
-}
 
 
 class TubeSetupPage(QWidget):
@@ -334,7 +201,7 @@ class TubeSetupPage(QWidget):
         self.tree = QTreeWidget()
         self.tree.setObjectName("tubeOperationTree")
         self.tree.setHeaderHidden(True)
-        self.tree.itemSelectionChanged.connect(self._on_tree_selection)
+        self.tree.itemSelectionChanged.connect(self.activate_selected_editor)
         layout.addWidget(self.tree, 1)
         self.coordinate_status = QLabel()
         self.coordinate_status.setObjectName("valueText")
@@ -707,33 +574,11 @@ class TubeSetupPage(QWidget):
         self.refresh()
 
     def set_language(self, language: str) -> None:
-        if language not in _TEXT:
-            raise ValueError(f"unsupported Tube UI language: {language}")
-        self.language = language
+        self.language = tube_language(language)
         t = self._t
-        self.title_label.setText(t("title"))
-        self.subtitle_label.setText(t("subtitle"))
-        self.back_button.setText(t("back"))
-        self.open_button.setText(t("open"))
-        self.update_source_button.setText(t("update_source"))
-        self.save_button.setText(t("save"))
-        self.create_operation_button.setText(t("create_operation"))
-        self.model_view_button.setText(t("model_view"))
-        self.machine_view_button.setText(t("machine_view"))
-        self.empty_editor.setText(t("editor_empty"))
-        self.part_help.setText(t("part_help"))
+        for control, key in TUBE_CONTROL_TEXT:
+            getattr(self, control).setText(t(key))
         self.part_table.setHorizontalHeaderLabels((t("body"), t("kind"), t("role")))
-        self.part_confirm_button.setText(t("confirm"))
-        self.machine_help.setText(t("resource_help"))
-        self.machine_apply_button.setText(t("apply"))
-        self.nozzle_help.setText(t("resource_help"))
-        self.nozzle_interface_label.setText(t("interface"))
-        self.nozzle_length_label.setText(t("length"))
-        self.nozzle_collision.setText(t("collision_profile"))
-        self.nozzle_apply_button.setText(t("apply"))
-        self.material_help.setText(t("resource_help"))
-        self.material_review.setText(t("review"))
-        self.material_apply_button.setText(t("apply"))
         self.coordinate_help.setText(
             t(
                 "coordinate_help_model"
@@ -752,14 +597,8 @@ class TubeSetupPage(QWidget):
             getattr(self, f"{component}_confirm_button").setText(t("confirm"))
             if component != "origin":
                 getattr(self, f"{component}_flip_button").setText(t("flip"))
-        self.coordinate_apply_button.setText(t("apply"))
-        self.coordinate_cancel_button.setText(t("cancel"))
-        self.placement_help.setText(t("placement_help"))
-        self.mount_label.setText(t("mount"))
-        self.placement_apply_button.setText(t("apply"))
-        self.placement_cancel_button.setText(t("cancel"))
-        self.issue_title.setText(t("issues"))
         self._populate_resource_combos()
+        self._retranslate_part_roles()
         self._rebuild_tree()
         self._populate_coordinate_candidates()
         self.refresh()
@@ -837,8 +676,8 @@ class TubeSetupPage(QWidget):
         project.setExpanded(True)
         setup.setExpanded(True)
         operations.setExpanded(True)
-        if selected in self._tree_items:
-            self.tree.setCurrentItem(self._tree_items[selected])
+        selected = setup_tree_node(selected, self._tree_items, self.controller.validation_report())
+        self.tree.setCurrentItem(self._tree_items[selected])
         self.tree.blockSignals(False)
 
     def refresh(self) -> None:
@@ -880,7 +719,7 @@ class TubeSetupPage(QWidget):
         self._refresh_overlays()
         self.state_changed.emit(self.controller.state_json())
 
-    def _on_tree_selection(self) -> None:
+    def activate_selected_editor(self) -> None:
         item = self.tree.currentItem()
         if item is None:
             return
@@ -911,6 +750,10 @@ class TubeSetupPage(QWidget):
         elif node == MATERIAL_NODE:
             self._update_material_detail()
 
+    def activate_coordinate_entry(self) -> None:
+        self.refresh()
+        self.activate_selected_editor()
+
     def _populate_part_table(self) -> None:
         roles = self.controller.body_roles()
         candidates = self.controller.body_candidates
@@ -928,7 +771,7 @@ class TubeSetupPage(QWidget):
                 else (BodyRole.IGNORE, BodyRole.UNASSIGNED)
             )
             for role in available:
-                combo.addItem(role.value.title(), role.value)
+                combo.addItem(self._t(f"role_{role.value}"), role.value)
             current = roles.get(body.body_id, BodyRole.UNASSIGNED)
             index = combo.findData(current.value)
             combo.setCurrentIndex(max(0, index))
@@ -936,6 +779,11 @@ class TubeSetupPage(QWidget):
             self.part_table.setItem(row, 1, kind_item)
             self.part_table.setCellWidget(row, 2, combo)
             self._role_combos[body.body_id] = combo
+
+    def _retranslate_part_roles(self) -> None:
+        for combo in self._role_combos.values():
+            for index in range(combo.count()):
+                combo.setItemText(index, self._t(f"role_{combo.itemData(index)}"))
 
     def _confirm_part(self) -> None:
         try:

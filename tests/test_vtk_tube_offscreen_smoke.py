@@ -23,6 +23,7 @@ _VTK_TUBE_SMOKE_SCRIPT = textwrap.dedent(
     import sys
 
     import numpy as np
+    from PyQt5.QtCore import QPoint
     from PyQt5.QtWidgets import QApplication
 
     from five_axis_slicer.models import (
@@ -54,6 +55,7 @@ _VTK_TUBE_SMOKE_SCRIPT = textwrap.dedent(
 
     app = QApplication.instance() or QApplication([])
     viewer = VtkModelViewer()
+    viewer.resize(640, 480)
     render_window = viewer.GetRenderWindow()
     render_window.SetOffScreenRendering(1)
     render_window.SetSize(640, 480)
@@ -181,6 +183,30 @@ _VTK_TUBE_SMOKE_SCRIPT = textwrap.dedent(
         viewer.fit_view()
         render_window.Render()
         app.processEvents()
+
+        camera = viewer.renderer.GetActiveCamera()
+        anchor = QPoint(470, 190)
+        anchor_before = viewer._vtk_camera.focal_plane_point(anchor)
+        viewer._view_zoom(1.12, anchor)
+        anchor_after = viewer._vtk_camera.focal_plane_point(anchor)
+        np.testing.assert_allclose(anchor_after, anchor_before, atol=1.0e-8)
+
+        forward = np.asarray(camera.GetDirectionOfProjection())
+        right = np.cross(forward, np.asarray(camera.GetViewUp()))
+        right /= np.linalg.norm(right)
+        focal_before = np.asarray(camera.GetFocalPoint())
+        viewer._view_pan(24, 0)
+        pan_offset = np.asarray(camera.GetFocalPoint()) - focal_before
+        assert np.dot(pan_offset, right) < 0.0
+        assert abs(np.dot(pan_offset, forward)) < 1.0e-8
+
+        viewer.set_selection(body_ids=[model.bodies[0].body_id])
+        for actor in viewer.actor_records:
+            actor.SetPickable(False)
+        viewer._view_left_click(QPoint(320, 240))
+        assert not viewer.selection.body_ids
+        assert selection_events[-1] == (None, None)
+
         print(
             json.dumps(
                 {
@@ -217,9 +243,7 @@ class VtkTubeOffscreenSmokeTests(unittest.TestCase):
         self,
     ) -> None:
         step_files = list((ROOT / "example" / "pipe2").glob("*.stp"))
-        self.assertEqual(
-            len(step_files), 1, "pipe2 must contain one STEP golden source"
-        )
+        self.assertEqual(len(step_files), 1, "pipe2 must contain one STEP golden source")
         environment = os.environ.copy()
         # Standard VTK wheels still need a native OpenGL context even when the
         # render window's offscreen flag is enabled.

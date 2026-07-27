@@ -10,7 +10,7 @@ from dataclasses import dataclass
 
 import numpy as np
 import vtk
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import QPoint, Qt
 from PyQt5.QtGui import QImage
 from vtk.util.numpy_support import vtk_to_numpy
 from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
@@ -50,6 +50,7 @@ from .viewer_common import (
     update_preview_visibility,
     vector3,
 )
+from .viewer_interaction import BambuNavigationMixin, VtkCameraNavigation
 
 _bead_frame = _viewer_common.bead_frame
 _cross = _viewer_common.cross3
@@ -98,7 +99,7 @@ class ActorRecord:
     object_id: str
 
 
-class VtkModelViewer(QVTKRenderWindowInteractor):
+class VtkModelViewer(BambuNavigationMixin, QVTKRenderWindowInteractor):
     backend = "vtk"
 
     def __init__(self, parent=None) -> None:
@@ -107,7 +108,10 @@ class VtkModelViewer(QVTKRenderWindowInteractor):
         self.renderer.SetBackground(*BG_COLOR)
         self.GetRenderWindow().AddRenderer(self.renderer)
         self.interactor = self.GetRenderWindow().GetInteractor()
-        self.interactor.SetInteractorStyle(vtk.vtkInteractorStyleTrackballCamera())
+        self._vtk_camera = VtkCameraNavigation(
+            self.renderer, self, self._getPixelRatio, self.render
+        )
+        self._init_view_navigation(self._vtk_camera)
 
         self.model: CadModel | None = None
         self.selection = SelectionState()
@@ -137,9 +141,6 @@ class VtkModelViewer(QVTKRenderWindowInteractor):
 
         self.picker = vtk.vtkCellPicker()
         self.picker.SetTolerance(0.006)
-        self.interactor.AddObserver("LeftButtonPressEvent", self._on_left_button)
-        self.interactor.AddObserver("StartInteractionEvent", self._on_interaction_start)
-        self.interactor.AddObserver("EndInteractionEvent", self._on_interaction_end)
 
     def set_selection_callback(self, callback: SelectionCallback) -> None:
         self.selection_callback = callback
@@ -741,36 +742,39 @@ class VtkModelViewer(QVTKRenderWindowInteractor):
             return
         super().keyPressEvent(event)
 
-    def _on_left_button(self, obj, event) -> None:
-        x, y = self.interactor.GetEventPosition()
+    def _view_left_click(self, pos: QPoint) -> None:
+        x, y = self._vtk_camera.display_point(pos)
         self.picker.Pick(x, y, 0, self.renderer)
         actor = self.picker.GetActor()
         record = self.actor_records.get(actor)
         request = self.pick_request
-        if (
+        allowed = (
             record is not None
             and record.kind == request.kind
             and (request.allowed_ids is None or record.object_id in request.allowed_ids)
-        ):
-            self._apply_pick(record.kind, record.object_id)
-            position = np.asarray(self.picker.GetPickPosition(), dtype=float)
-            position_source: tuple[float, float, float] | None = None
-            if position.shape == (3,) and np.isfinite(position).all():
-                homogeneous = np.append(position, 1.0)
-                source = np.linalg.inv(self._model_transform) @ homogeneous
-                position_source = vector3(source[:3])
-            hit = PickHit(record.kind, record.object_id, position_source)
-            if self.pick_callback is not None:
-                self.pick_callback(hit)
-        self.interactor.GetInteractorStyle().OnLeftButtonDown()
+        )
+        if not allowed or record is None:
+            self.clear_selection()
+            if self.selection_callback is not None:
+                self.selection_callback(None, None)
+            return
 
-    def _on_interaction_start(self, _obj, _event) -> None:
+        self._apply_pick(record.kind, record.object_id)
+        position = np.asarray(self.picker.GetPickPosition(), dtype=float)
+        position_source: tuple[float, float, float] | None = None
+        if position.shape == (3,) and np.isfinite(position).all():
+            homogeneous = np.append(position, 1.0)
+            position_source = vector3((np.linalg.inv(self._model_transform) @ homogeneous)[:3])
+        if self.pick_callback is not None:
+            self.pick_callback(PickHit(record.kind, record.object_id, position_source))
+
+    def _view_interaction_started(self) -> None:
         if self.gcode_preview is None or self._interaction_preview:
             return
         self._interaction_preview = True
         self.refresh_path_preview()
 
-    def _on_interaction_end(self, _obj, _event) -> None:
+    def _view_interaction_finished(self) -> None:
         if self.gcode_preview is None or not self._interaction_preview:
             return
         self._interaction_preview = False

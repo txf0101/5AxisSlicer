@@ -11,6 +11,7 @@ import numpy as np
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+from PyQt5.QtCore import QPoint  # noqa: E402
 from PyQt5.QtWidgets import QApplication  # noqa: E402
 
 from five_axis_slicer.models import (  # noqa: E402
@@ -84,6 +85,30 @@ class OpenGLTubeViewerTests(unittest.TestCase):
         viewer._apply_pick(PickHit("body", "body_b"))
         viewer._apply_pick(PickHit("body", "body_a"))
         self.assertEqual(viewer.selection.body_ids, {"body_b"})
+
+    def test_empty_left_click_clears_selection_and_notifies(self) -> None:
+        viewer = self.make_viewer()
+        events: list[tuple[str | None, str | None]] = []
+        viewer.selection.body_ids.add("body_a")
+        viewer.set_selection_callback(lambda kind, entity_id: events.append((kind, entity_id)))
+
+        viewer._view_left_click(QPoint(10, 10))
+
+        self.assertFalse(viewer.selection.body_ids)
+        self.assertEqual(events, [(None, None)])
+
+    def test_cursor_anchored_zoom_preserves_target_plane_point(self) -> None:
+        viewer = self.make_viewer()
+        viewer.resize(800, 600)
+        cursor = QPoint(620, 240)
+        before = viewer._opengl_camera.target_plane_point(cursor)
+
+        viewer._view_zoom(1.12, cursor)
+        after = viewer._opengl_camera.target_plane_point(cursor)
+
+        self.assertIsNotNone(before)
+        self.assertIsNotNone(after)
+        np.testing.assert_allclose(after, before, atol=1e-5)
 
     def test_static_pick_buffers_keep_entity_identity_for_every_topology_kind(
         self,

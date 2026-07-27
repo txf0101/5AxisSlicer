@@ -25,7 +25,7 @@ from .models import (
     SelectionState,
 )
 
-SelectionCallback = Callable[[str, str], None]
+SelectionCallback = Callable[[str | None, str | None], None]
 PickCallback = Callable[[PickHit], None]
 PICK_KINDS = frozenset({"body", "face", "edge", "vertex"})
 

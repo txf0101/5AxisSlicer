@@ -123,6 +123,7 @@ from .viewer_common import (
     update_preview_visibility,
     vector3,
 )
+from .viewer_interaction import BambuNavigationMixin, OpenGLCameraNavigation
 
 AXIS_X_COLOR = _scene.AXIS_X_COLOR
 AXIS_Y_COLOR = _scene.AXIS_Y_COLOR
@@ -218,7 +219,7 @@ class _Buffer:
         return int(self.vertices.nbytes + self.colors.nbytes + ranges)
 
 
-class OpenGLModelViewer(QOpenGLWidget):
+class OpenGLModelViewer(BambuNavigationMixin, QOpenGLWidget):
     backend = "opengl"
 
     def __init__(self, parent=None) -> None:
@@ -279,9 +280,8 @@ class OpenGLModelViewer(QOpenGLWidget):
         self._yaw = math.radians(35.0)
         self._pitch = math.radians(55.0)
         self._view_up = np.array([0.0, 0.0, 1.0], dtype=np.float32)
-        self._last_mouse: QPoint | None = None
-        self._mouse_moved = False
-
+        self._opengl_camera = OpenGLCameraNavigation(self)
+        self._init_view_navigation(self._opengl_camera)
         self._frame_ms: deque[float] = deque(maxlen=120)
         self._last_progress_ms = 0.0
         self._last_gpu_draw_count = 0
@@ -982,48 +982,25 @@ class OpenGLModelViewer(QOpenGLWidget):
             self._last_memory_bytes = sum(buffer.nbytes for buffer in self._buffers.values())
             self._frame_ms.append((time.perf_counter() - started) * 1000.0)
 
-    def mousePressEvent(self, event) -> None:  # noqa: N802 - Qt API
-        self._last_mouse = event.pos()
-        self._mouse_moved = False
-        if event.button() == Qt.LeftButton and self.gcode_preview is not None:
-            self._settle_timer.stop()
-            self._interaction_preview = True
-            self.refresh_path_preview()
-
-    def mouseMoveEvent(self, event) -> None:  # noqa: N802 - Qt API
-        if self._last_mouse is None:
+    def _view_left_click(self, pos: QPoint) -> None:
+        hit = self._pick(pos)
+        if hit is not None:
+            self._apply_pick(hit)
             return
-        delta = event.pos() - self._last_mouse
-        if abs(delta.x()) + abs(delta.y()) > 1:
-            self._mouse_moved = True
-        if event.buttons() & Qt.LeftButton:
-            self._view_up = np.array([0.0, 0.0, 1.0], dtype=np.float32)
-            self._yaw += delta.x() * 0.01
-            self._pitch = max(
-                math.radians(-85.0),
-                min(math.radians(85.0), self._pitch + delta.y() * 0.01),
-            )
-            self.update()
-        elif event.buttons() & Qt.RightButton:
-            self._pan[0] += delta.x() * self._radius / max(self.width(), 1)
-            self._pan[1] -= delta.y() * self._radius / max(self.height(), 1)
-            self.update()
-        self._last_mouse = event.pos()
+        self.clear_selection()
+        if self.selection_callback is not None:
+            self.selection_callback(None, None)
 
-    def mouseReleaseEvent(self, event) -> None:  # noqa: N802 - Qt API
-        if event.button() == Qt.LeftButton and not self._mouse_moved:
-            hit = self._pick(event.pos())
-            if hit is not None:
-                self._apply_pick(hit)
+    def _view_interaction_started(self) -> None:
+        if self.gcode_preview is None:
+            return
+        self._settle_timer.stop()
+        self._interaction_preview = True
+        self.refresh_path_preview()
+
+    def _view_interaction_finished(self) -> None:
         if self.gcode_preview is not None:
             self._settle_timer.start(150)
-        self._last_mouse = None
-        self._mouse_moved = False
-
-    def wheelEvent(self, event) -> None:  # noqa: N802 - Qt API
-        delta = event.angleDelta().y()
-        factor = 1.12 if delta > 0 else 0.89
-        self.camera_command("zoom", factor)
 
     def keyPressEvent(self, event) -> None:  # noqa: N802 - Qt API
         modifiers = event.modifiers()
