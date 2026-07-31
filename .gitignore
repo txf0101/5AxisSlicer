@@ -29,3 +29,6 @@ example/**/*.3dm
 example/**/*.m
 example/**/*_stats*.txt
 **/~$*.docx
+
+# This STEP copy is the authoritative source for the reopenable pipe2 demo.
+!example/pipe2/tube_setup_coordinate_demo/source/116e99fd43492bd1f4f519c80c93cd1f7cd0bf2cb6861b3e123148e4031a0d4b.stp

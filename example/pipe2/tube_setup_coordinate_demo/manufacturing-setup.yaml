@@ -1,0 +1,408 @@
+format: five-axis-slicer.manufacturing-setup
+schema_version: 1
+units:
+  length: mm
+  script_angle: deg
+coordinate_convention: source_mm_right_handed_column_vector
+part_policy: preserve_current
+metadata:
+  revision: 1
+  content_sha256: 836014f756526cc92187b0e003d238dfb520487f85211f061cc098a702fc4d31
+  base_project_setup_sha256: 836014f756526cc92187b0e003d238dfb520487f85211f061cc098a702fc4d31
+setup:
+  name: Manufacturing Setup 1
+  resources:
+    machine:
+      schema_version: 1
+      resource_type: machine
+      resource_id: builtin.machine.generic_xyzac_reference.v1
+      profile_version: 1
+      payload:
+        build_surfaces:
+          - depth_mm: null
+            diameter_mm: 250.0
+            id: xyzac_plate
+            name: XYZAC reference rotary table
+            shape: circle
+            thickness_mm: 10.0
+            width_mm: null
+        id: builtin.machine.generic_xyzac_reference.v1
+        joints:
+          - T_parent_from_child_zero:
+              T_target_from_source:
+                -   - 1.0
+                    - 0.0
+                    - 0.0
+                    - 0.0
+                -   - 0.0
+                    - 1.0
+                    - 0.0
+                    - 0.0
+                -   - 0.0
+                    - 0.0
+                    - 1.0
+                    - 0.0
+                -   - 0.0
+                    - 0.0
+                    - 0.0
+                    - 1.0
+              source_frame: x_carriage
+              target_frame: machine
+            axis_direction:
+              - 1.0
+              - 0.0
+              - 0.0
+            child_link_id: x_carriage
+            id: X
+            joint_type: linear
+            max_acceleration: 1000.0
+            max_velocity: 300.0
+            motion_side: tool
+            name: X linear axis
+            parent_link_id: machine
+            post_axis_map:
+              offset: 0.0
+              output_unit: mm
+              scale: 1.0
+              word: X
+            rotation_center_mm:
+              - 0.0
+              - 0.0
+              - 0.0
+            soft_limit_max: 500.0
+            soft_limit_min: 0.0
+            zero_offset: 0.0
+          - T_parent_from_child_zero:
+              T_target_from_source:
+                -   - 1.0
+                    - 0.0
+                    - 0.0
+                    - 0.0
+                -   - 0.0
+                    - 1.0
+                    - 0.0
+                    - 0.0
+                -   - 0.0
+                    - 0.0
+                    - 1.0
+                    - 0.0
+                -   - 0.0
+                    - 0.0
+                    - 0.0
+                    - 1.0
+              source_frame: y_carriage
+              target_frame: x_carriage
+            axis_direction:
+              - 0.0
+              - 1.0
+              - 0.0
+            child_link_id: y_carriage
+            id: Y
+            joint_type: linear
+            max_acceleration: 1000.0
+            max_velocity: 300.0
+            motion_side: tool
+            name: Y linear axis
+            parent_link_id: x_carriage
+            post_axis_map:
+              offset: 0.0
+              output_unit: mm
+              scale: 1.0
+              word: Y
+            rotation_center_mm:
+              - 0.0
+              - 0.0
+              - 0.0
+            soft_limit_max: 500.0
+            soft_limit_min: 0.0
+            zero_offset: 0.0
+          - T_parent_from_child_zero:
+              T_target_from_source:
+                -   - 1.0
+                    - 0.0
+                    - 0.0
+                    - 0.0
+                -   - 0.0
+                    - 1.0
+                    - 0.0
+                    - 0.0
+                -   - 0.0
+                    - 0.0
+                    - 1.0
+                    - 0.0
+                -   - 0.0
+                    - 0.0
+                    - 0.0
+                    - 1.0
+              source_frame: tool
+              target_frame: y_carriage
+            axis_direction:
+              - 0.0
+              - 0.0
+              - 1.0
+            child_link_id: tool
+            id: Z
+            joint_type: linear
+            max_acceleration: 1000.0
+            max_velocity: 300.0
+            motion_side: tool
+            name: Z linear axis
+            parent_link_id: y_carriage
+            post_axis_map:
+              offset: 0.0
+              output_unit: mm
+              scale: 1.0
+              word: Z
+            rotation_center_mm:
+              - 0.0
+              - 0.0
+              - 0.0
+            soft_limit_max: 500.0
+            soft_limit_min: 0.0
+            zero_offset: 0.0
+          - T_parent_from_child_zero:
+              T_target_from_source:
+                -   - 1.0
+                    - 0.0
+                    - 0.0
+                    - 0.0
+                -   - 0.0
+                    - 1.0
+                    - 0.0
+                    - 0.0
+                -   - 0.0
+                    - 0.0
+                    - 1.0
+                    - 0.0
+                -   - 0.0
+                    - 0.0
+                    - 0.0
+                    - 1.0
+              source_frame: a_cradle
+              target_frame: machine
+            axis_direction:
+              - 1.0
+              - 0.0
+              - 0.0
+            child_link_id: a_cradle
+            id: A
+            joint_type: rotary
+            max_acceleration: 2.0943951023931953
+            max_velocity: 1.0471975511965976
+            motion_side: workpiece
+            name: A rotary axis
+            parent_link_id: machine
+            post_axis_map:
+              offset: 0.0
+              output_unit: deg
+              scale: 1.0
+              word: A
+            rotation_center_mm:
+              - 0.0
+              - 0.0
+              - 0.0
+            soft_limit_max: 2.0943951023931953
+            soft_limit_min: -2.0943951023931953
+            zero_offset: 0.0
+          - T_parent_from_child_zero:
+              T_target_from_source:
+                -   - 1.0
+                    - 0.0
+                    - 0.0
+                    - 0.0
+                -   - 0.0
+                    - 1.0
+                    - 0.0
+                    - 0.0
+                -   - 0.0
+                    - 0.0
+                    - 1.0
+                    - 0.0
+                -   - 0.0
+                    - 0.0
+                    - 0.0
+                    - 1.0
+              source_frame: c_table
+              target_frame: a_cradle
+            axis_direction:
+              - 0.0
+              - 0.0
+              - 1.0
+            child_link_id: c_table
+            id: C
+            joint_type: rotary
+            max_acceleration: 4.1887902047863905
+            max_velocity: 2.0943951023931953
+            motion_side: workpiece
+            name: C rotary axis
+            parent_link_id: a_cradle
+            post_axis_map:
+              offset: 0.0
+              output_unit: deg
+              scale: 1.0
+              word: C
+            rotation_center_mm:
+              - 0.0
+              - 0.0
+              - 0.0
+            soft_limit_max: 6.283185307179586
+            soft_limit_min: -6.283185307179586
+            zero_offset: 0.0
+        manufacturer: 5AxisSclicer
+        model: Generic XYZAC reference template
+        mount_datums:
+          - T_parent_from_mount:
+              T_target_from_source:
+                -   - 1.0
+                    - 0.0
+                    - 0.0
+                    - 0.0
+                -   - 0.0
+                    - 1.0
+                    - 0.0
+                    - 0.0
+                -   - 0.0
+                    - 0.0
+                    - 1.0
+                    - 0.0
+                -   - 0.0
+                    - 0.0
+                    - 0.0
+                    - 1.0
+              source_frame: build_plate_mount
+              target_frame: c_table
+            build_surface_id: xyzac_plate
+            id: build_plate_mount
+            name: Rotary table center
+            parent_link_id: c_table
+        name: Generic XYZAC Reference
+        reference_only: true
+        root_link_id: machine
+        source_uri: builtin://machine/generic-xyzac-reference/v1
+        tool_link_id: tool
+        version: 1
+        workpiece_link_id: c_table
+      content_hash: 55012737d9233059c07dd457ed1330b33ba91d47cdec26637ca43556cf527404
+    nozzle:
+      schema_version: 1
+      resource_type: nozzle
+      resource_id: 5a49b082-4998-5a77-9dec-4feb36119234
+      profile_version: 1
+      payload:
+        construction_material: null
+        display_name: Generic 0.4 mm nozzle identity · project profile
+        filament_diameter_mm: 1.75
+        flow_category: null
+        interface: M6×1
+        is_builtin: false
+        length_mm: 12.5
+        orifice_diameter_mm: 0.4
+        outer_profile_rz_mm:
+          -   - 0.9
+              - 0.0
+          -   - 2.0
+              - 12.5
+        profile_version: 1
+        resource_id: 5a49b082-4998-5a77-9dec-4feb36119234
+        schema_version: 1
+        source: null
+        temperature_limit_c: null
+        wear_resistance_rating: null
+      content_hash: 200f9203ad2ddca9b8047f5676535d5ed7ca1f478ea479bedbaf559bdfe5eac4
+    material:
+      schema_version: 1
+      resource_type: material
+      resource_id: a8db2617-6622-5f99-abb3-0c1a6a183421
+      profile_version: 1
+      payload:
+        brand: Generic
+        density_g_cm3: 1.24
+        display_name: Cura Generic PLA 1.75 mm · project profile
+        filament_diameter_mm: 1.75
+        form: filament
+        guid: 0ff92885-617b-4144-a03c-9989872454bc
+        is_builtin: false
+        material: PLA
+        process: FFF/FDM
+        profile_version: 1
+        recommendations:
+          build_plate_temperature_c: 60.0
+          nozzle_temperature_c: 200.0
+        resource_id: a8db2617-6622-5f99-abb3-0c1a6a183421
+        review_confirmed: true
+        review_required: true
+        schema_version: 1
+        source:
+          file_path: generic_pla_175.xml.fdm_material
+          revision: 886e7ad927463493cc9c64f427b1ae2cf4ce12c1
+          sha256: 5bc7c562e14cb10c15323bca26f1afddedcf6e18166c92adf4d638611907a4be
+          title: 'Ultimaker fdm_materials: Generic PLA 1.75 mm'
+          url:
+            https://github.com/Ultimaker/fdm_materials/blob/886e7ad927463493cc9c64f427b1ae2cf4ce12c1/generic_pla_175.xml.fdm_material
+        upstream_version: 13
+      content_hash: 2a8adf1314e0ca7e6c66a8da3706ee024fabb41cd52064e0a9c46b48e657d9ee
+  coordinate_systems:
+    model:
+      name: Model CS
+      origin_in_source_mm:
+        - 0.0
+        - 0.0
+        - 0.0
+      z_direction_in_source:
+        - 0.0
+        - 0.0
+        - 1.0
+      x_direction_in_source:
+        - 1.0
+        - 0.0
+        - 0.0
+      provenance:
+        origin: numeric
+        z_direction: numeric
+        x_direction: numeric
+        geometry_resolved: false
+    build:
+      name: Build CS
+      origin_in_source_mm:
+        - 0.0
+        - 0.0
+        - 0.0
+      z_direction_in_source:
+        - 0.0
+        - 0.0
+        - 1.0
+      x_direction_in_source:
+        - 1.0
+        - 0.0
+        - 0.0
+      provenance:
+        origin: numeric
+        z_direction: numeric
+        x_direction: numeric
+        geometry_resolved: false
+  placement:
+    mount_datum_id: build_plate_mount
+    reference:
+      translation_mm:
+        - 0.0
+        - 0.0
+        - 0.0
+      quaternion_xyzw:
+        - 0.0
+        - 0.0
+        - 0.0
+        - 1.0
+    adjustment:
+      translation_mm:
+        - 0.0
+        - 0.0
+        - 0.0
+      quaternion_xyzw:
+        - 0.0
+        - 0.0
+        - 0.0
+        - 1.0
+operations:
+  - operation_type: tube_thin_wall_indexed
+    name: Tube Thin-Wall Indexed · Pipe2 Demo
+    enabled: true
