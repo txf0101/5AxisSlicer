@@ -38,7 +38,7 @@ _IDENTITY_4: Matrix4 = (
 def _finite_float(value: Any, *, name: str) -> float:
     try:
         result = float(value)
-    except (TypeError, ValueError) as exc:
+    except (OverflowError, TypeError, ValueError) as exc:
         raise ValueError(f"{name} must be a finite number") from exc
     if not math.isfinite(result):
         raise ValueError(f"{name} must be a finite number")
@@ -53,8 +53,7 @@ def _vector3(value: Iterable[Any], *, name: str) -> Vector3:
     if len(values) != 3:
         raise ValueError(f"{name} must contain exactly three numbers")
     return tuple(
-        _finite_float(component, name=f"{name}[{index}]")
-        for index, component in enumerate(values)
+        _finite_float(component, name=f"{name}[{index}]") for index, component in enumerate(values)
     )  # type: ignore[return-value]
 
 
@@ -107,19 +106,15 @@ def _scale(vector: Vector3, factor: float) -> Vector3:
 
 def _matrix_multiply(left: Matrix4, right: Matrix4) -> Matrix4:
     return tuple(
-        tuple(sum(left[i][k] * right[k][j] for k in range(4)) for j in range(4))
-        for i in range(4)
+        tuple(sum(left[i][k] * right[k][j] for k in range(4)) for j in range(4)) for i in range(4)
     )  # type: ignore[return-value]
 
 
 def _determinant3(rotation: Sequence[Sequence[float]]) -> float:
     return (
-        rotation[0][0]
-        * (rotation[1][1] * rotation[2][2] - rotation[1][2] * rotation[2][1])
-        - rotation[0][1]
-        * (rotation[1][0] * rotation[2][2] - rotation[1][2] * rotation[2][0])
-        + rotation[0][2]
-        * (rotation[1][0] * rotation[2][1] - rotation[1][1] * rotation[2][0])
+        rotation[0][0] * (rotation[1][1] * rotation[2][2] - rotation[1][2] * rotation[2][1])
+        - rotation[0][1] * (rotation[1][0] * rotation[2][2] - rotation[1][2] * rotation[2][0])
+        + rotation[0][2] * (rotation[1][0] * rotation[2][1] - rotation[1][1] * rotation[2][0])
     )
 
 
@@ -135,8 +130,7 @@ def _validate_rigid_matrix(matrix: Matrix4) -> None:
     for row_index in range(3):
         for other_index in range(3):
             product = sum(
-                rotation[row_index][axis] * rotation[other_index][axis]
-                for axis in range(3)
+                rotation[row_index][axis] * rotation[other_index][axis] for axis in range(3)
             )
             expected = 1.0 if row_index == other_index else 0.0
             if abs(product - expected) > _RIGID_TOLERANCE:
@@ -155,15 +149,11 @@ def _freeze_json(value: Any, *, name: str = "value") -> Any:
     if isinstance(value, float):
         return _finite_float(value, name=name)
     if isinstance(value, Mapping):
-        frozen = {
-            str(key): _freeze_json(item, name=f"{name}.{key}")
-            for key, item in value.items()
-        }
+        frozen = {str(key): _freeze_json(item, name=f"{name}.{key}") for key, item in value.items()}
         return MappingProxyType(frozen)
     if isinstance(value, (list, tuple)):
         return tuple(
-            _freeze_json(item, name=f"{name}[{index}]")
-            for index, item in enumerate(value)
+            _freeze_json(item, name=f"{name}[{index}]") for index, item in enumerate(value)
         )
     raise ValueError(f"{name} contains a value that is not JSON-compatible")
 
@@ -200,9 +190,7 @@ class RigidTransform:
     @property
     def rotation(self) -> Matrix3:
         matrix = self.T_target_from_source
-        return tuple(
-            tuple(matrix[row][column] for column in range(3)) for row in range(3)
-        )  # type: ignore[return-value]
+        return tuple(tuple(matrix[row][column] for column in range(3)) for row in range(3))  # type: ignore[return-value]
 
     @property
     def translation(self) -> Vector3:
@@ -232,8 +220,7 @@ class RigidTransform:
             Matrix3,
             tuple(
                 tuple(
-                    _finite_float(value, name=f"rotation[{i}][{j}]")
-                    for j, value in enumerate(row)
+                    _finite_float(value, name=f"rotation[{i}][{j}]") for j, value in enumerate(row)
                 )
                 for i, row in enumerate(rows)
             ),
@@ -326,9 +313,7 @@ class RigidTransform:
         raw_x = _vector3(x_direction_in_source, name="x_direction_in_source")
         projected_x = _subtract(raw_x, _scale(z_axis, _dot(raw_x, z_axis)))
         if _norm(projected_x) <= _EPSILON:
-            raise ValueError(
-                "x_direction_in_source and z_direction_in_source are collinear"
-            )
+            raise ValueError("x_direction_in_source and z_direction_in_source are collinear")
         x_axis = _normalise(projected_x, name="projected x direction")
         y_axis = _normalise(_cross(z_axis, x_axis), name="calculated y direction")
         rotation: Matrix3 = (x_axis, y_axis, z_axis)
@@ -362,11 +347,7 @@ class RigidTransform:
 
         if not isinstance(right, RigidTransform):
             raise TypeError("right must be a RigidTransform")
-        if (
-            self.source_frame
-            and right.target_frame
-            and self.source_frame != right.target_frame
-        ):
+        if self.source_frame and right.target_frame and self.source_frame != right.target_frame:
             raise ValueError(
                 "transform frame mismatch: "
                 f"{right.target_frame!r} cannot feed {self.source_frame!r}"
@@ -384,10 +365,7 @@ class RigidTransform:
         x, y, z = _vector3(point, name="point")
         matrix = self.matrix
         return tuple(
-            matrix[row][0] * x
-            + matrix[row][1] * y
-            + matrix[row][2] * z
-            + matrix[row][3]
+            matrix[row][0] * x + matrix[row][1] * y + matrix[row][2] * z + matrix[row][3]
             for row in range(3)
         )  # type: ignore[return-value]
 
@@ -395,8 +373,7 @@ class RigidTransform:
         x, y, z = _vector3(vector, name="vector")
         matrix = self.matrix
         return tuple(
-            matrix[row][0] * x + matrix[row][1] * y + matrix[row][2] * z
-            for row in range(3)
+            matrix[row][0] * x + matrix[row][1] * y + matrix[row][2] * z for row in range(3)
         )  # type: ignore[return-value]
 
     def almost_equal(self, other: RigidTransform, *, tolerance: float = 1.0e-9) -> bool:
@@ -519,9 +496,7 @@ class LocalAdjustment:
         try:
             raw_quaternion = tuple(self.quaternion_xyzw)
         except TypeError as exc:
-            raise ValueError(
-                "quaternion_xyzw must contain four finite numbers"
-            ) from exc
+            raise ValueError("quaternion_xyzw must contain four finite numbers") from exc
         if len(raw_quaternion) != 4:
             raise ValueError("quaternion_xyzw must contain four finite numbers")
         quaternion = tuple(
@@ -532,8 +507,7 @@ class LocalAdjustment:
         if length <= _EPSILON:
             raise ValueError("quaternion_xyzw must be non-zero")
         normalised = tuple(
-            0.0 if abs(value / length) <= _EPSILON else value / length
-            for value in quaternion
+            0.0 if abs(value / length) <= _EPSILON else value / length for value in quaternion
         )
         # q and -q encode the same rotation.  Canonicalise lexicographically
         # from w, then x/y/z so exact 180-degree rotations (w == 0) also have
@@ -562,10 +536,7 @@ class LocalAdjustment:
         rotation_angles = _vector3(rotation_xyz_rad, name="rotation_xyz_rad")
         rotation_matrix = _rotation_xyz_matrix(rotation_angles)
         quaternion = _quaternion_from_rotation(
-            tuple(
-                tuple(rotation_matrix[row][column] for column in range(3))
-                for row in range(3)
-            )
+            tuple(tuple(rotation_matrix[row][column] for column in range(3)) for row in range(3))
         )
         return cls(_vector3(translation_mm, name="translation_mm"), quaternion)
 
@@ -659,17 +630,11 @@ class GeometryReference:
             raise ValueError(f"unsupported geometry_type: {geometry_type!r}")
         if not isinstance(self.signature, Mapping):
             raise ValueError("signature must be an object")
-        parent_body_id = (
-            None if self.parent_body_id is None else str(self.parent_body_id).strip()
-        )
-        assembly_name = (
-            None if self.assembly_name is None else str(self.assembly_name).strip()
-        )
+        parent_body_id = None if self.parent_body_id is None else str(self.parent_body_id).strip()
+        assembly_name = None if self.assembly_name is None else str(self.assembly_name).strip()
         object.__setattr__(self, "object_id", object_id)
         object.__setattr__(self, "geometry_type", geometry_type)
-        object.__setattr__(
-            self, "signature", _freeze_json(self.signature, name="signature")
-        )
+        object.__setattr__(self, "signature", _freeze_json(self.signature, name="signature"))
         object.__setattr__(self, "parent_body_id", parent_body_id or None)
         object.__setattr__(self, "assembly_name", assembly_name or None)
 
@@ -696,13 +661,9 @@ class GeometryReference:
             raise ValueError("geometry reference payload must be an object")
         return cls(
             object_id=str(
-                payload.get(
-                    "object_id", payload.get("stable_id", payload.get("id", ""))
-                )
+                payload.get("object_id", payload.get("stable_id", payload.get("id", "")))
             ),
-            geometry_type=str(
-                payload.get("geometry_type", payload.get("topology_type", ""))
-            ),
+            geometry_type=str(payload.get("geometry_type", payload.get("topology_type", ""))),
             signature=payload.get("signature", {}),
             parent_body_id=payload.get("parent_body_id"),
             assembly_name=payload.get("assembly_name"),
@@ -742,9 +703,7 @@ class PointReference:
             else _vector3(self.point_in_source_mm, name="point_in_source_mm")
         )
         parameter = (
-            None
-            if self.parameter is None
-            else _finite_float(self.parameter, name="parameter")
+            None if self.parameter is None else _finite_float(self.parameter, name="parameter")
         )
         if reference_type == "numeric" and point is None:
             raise ValueError("numeric point reference requires point_in_source_mm")
@@ -773,9 +732,7 @@ class PointReference:
         return {
             "reference_type": self.reference_type,
             "point_in_source_mm": (
-                None
-                if self.point_in_source_mm is None
-                else list(self.point_in_source_mm)
+                None if self.point_in_source_mm is None else list(self.point_in_source_mm)
             ),
             "geometry": None if self.geometry is None else self.geometry.to_json(),
             "parameter": self.parameter,
@@ -791,9 +748,7 @@ class PointReference:
             reference_type=str(payload.get("reference_type", payload.get("kind", ""))),
             point_in_source_mm=payload.get("point_in_source_mm"),
             geometry=(
-                None
-                if geometry_payload is None
-                else GeometryReference.from_json(geometry_payload)
+                None if geometry_payload is None else GeometryReference.from_json(geometry_payload)
             ),
             parameter=payload.get("parameter"),
             confirmed=parse_json_bool(
@@ -826,9 +781,7 @@ class DirectionReference:
     def __post_init__(self) -> None:
         reference_type = str(self.reference_type).strip().lower()
         if reference_type not in _DIRECTION_REFERENCE_TYPES:
-            raise ValueError(
-                f"unsupported direction reference_type: {reference_type!r}"
-            )
+            raise ValueError(f"unsupported direction reference_type: {reference_type!r}")
         direction = (
             None
             if self.direction_in_source is None
@@ -837,16 +790,12 @@ class DirectionReference:
         first_point = (
             None
             if self.first_point_in_source_mm is None
-            else _vector3(
-                self.first_point_in_source_mm, name="first_point_in_source_mm"
-            )
+            else _vector3(self.first_point_in_source_mm, name="first_point_in_source_mm")
         )
         second_point = (
             None
             if self.second_point_in_source_mm is None
-            else _vector3(
-                self.second_point_in_source_mm, name="second_point_in_source_mm"
-            )
+            else _vector3(self.second_point_in_source_mm, name="second_point_in_source_mm")
         )
         if direction is not None and _norm(direction) <= _EPSILON:
             raise ValueError("direction_in_source must be non-zero")
@@ -855,9 +804,7 @@ class DirectionReference:
         if reference_type == "two_points":
             has_points = first_point is not None and second_point is not None
             if direction is None and not has_points:
-                raise ValueError(
-                    "two_points direction requires two resolved points or a direction"
-                )
+                raise ValueError("two_points direction requires two resolved points or a direction")
             if has_points and _norm(_subtract(second_point, first_point)) <= _EPSILON:  # type: ignore[arg-type]
                 raise ValueError("two_points direction requires distinct points")
         elif reference_type != "numeric" and self.geometry is None:
@@ -902,15 +849,11 @@ class DirectionReference:
         return {
             "reference_type": self.reference_type,
             "direction_in_source": (
-                None
-                if self.direction_in_source is None
-                else list(self.direction_in_source)
+                None if self.direction_in_source is None else list(self.direction_in_source)
             ),
             "geometry": None if self.geometry is None else self.geometry.to_json(),
             "secondary_geometry": (
-                None
-                if self.secondary_geometry is None
-                else self.secondary_geometry.to_json()
+                None if self.secondary_geometry is None else self.secondary_geometry.to_json()
             ),
             "first_point_in_source_mm": (
                 None
@@ -936,9 +879,7 @@ class DirectionReference:
             reference_type=str(payload.get("reference_type", payload.get("kind", ""))),
             direction_in_source=payload.get("direction_in_source"),
             geometry=(
-                None
-                if geometry_payload is None
-                else GeometryReference.from_json(geometry_payload)
+                None if geometry_payload is None else GeometryReference.from_json(geometry_payload)
             ),
             secondary_geometry=(
                 None
@@ -1076,28 +1017,18 @@ class CoordinateFrameDefinition:
         )
         missing = [key for key in required if key not in payload]
         if missing:
-            raise ValueError(
-                f"coordinate frame payload is missing {', '.join(missing)}"
-            )
+            raise ValueError(f"coordinate frame payload is missing {', '.join(missing)}")
         frame = cls(
             frame_id=str(payload.get("frame_id", "")),
             name=str(payload.get("name", "")),
             origin_reference=PointReference.from_json(payload["origin_reference"]),
-            z_direction_reference=DirectionReference.from_json(
-                payload["z_direction_reference"]
-            ),
-            x_direction_reference=DirectionReference.from_json(
-                payload["x_direction_reference"]
-            ),
-            T_target_from_source=RigidTransform.from_json(
-                payload["T_target_from_source"]
-            ),
+            z_direction_reference=DirectionReference.from_json(payload["z_direction_reference"]),
+            x_direction_reference=DirectionReference.from_json(payload["x_direction_reference"]),
+            T_target_from_source=RigidTransform.from_json(payload["T_target_from_source"]),
             revision=int(payload.get("revision", 1)),
         )
         if frame.is_confirmed and not frame.is_valid:
-            raise ValueError(
-                "coordinate frame references do not match its rigid transform"
-            )
+            raise ValueError("coordinate frame references do not match its rigid transform")
         return frame
 
 

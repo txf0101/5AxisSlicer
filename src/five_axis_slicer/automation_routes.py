@@ -15,6 +15,7 @@ from typing import Any
 from PyQt5.QtCore import QTimer
 
 from .localization import tr
+from .tube_script_service import command_result_json
 
 Payload = dict[str, Any]
 Response = dict[str, Any]
@@ -77,8 +78,9 @@ class AutomationRouter:
         tube_handler = self._tube_routes.get(path)
         if tube_handler is not None:
             result = tube_handler(payload)
-            self.window.tube_page.refresh()
-            return result or {"tube": self.window.tube_page.state_json()}
+            if result:
+                return result
+            return {"tube": self.window.tube_page.state_json()}
         raise RuntimeError(f"Unknown endpoint: {path}")
 
     def _health(self, _payload: Payload) -> Response:
@@ -251,7 +253,9 @@ class AutomationRouter:
         return self.window.current_state()
 
     def _tube_state(self, _payload: Payload) -> Response:
-        return {"tube": self.window.tube_page.state_json()}
+        state = self.window.tube_page.state_json()
+        state["commands"] = self.window.tube_script_service.state_json()
+        return {"tube": state}
 
     def _tube_source_update(self, payload: Payload) -> Response:
         return self.window.update_model_from_original_source(
@@ -262,52 +266,99 @@ class AutomationRouter:
         )
 
     def _tube_operation_create(self, payload: Payload) -> Response:
-        self.window.tube_page.controller.create_operation(operation_id=payload.get("operation_id"))
-        return {}
+        kwargs = {key: payload[key] for key in ("operation_id", "name") if key in payload}
+        return self._tube_command("create_operation", payload, **kwargs)
 
     def _tube_part_confirm(self, payload: Payload) -> Response:
-        self.window.tube_page.controller.confirm_assignments(
-            payload.get("part_body_ids", ()),
+        return self._tube_command(
+            "confirm_part",
+            payload,
+            part_body_ids=payload.get("part_body_ids"),
             ignored_body_ids=payload.get("ignored_body_ids", ()),
-            unassigned_body_ids=payload.get("unassigned_body_ids"),
         )
-        return {}
 
     def _tube_resource_select(self, payload: Payload) -> Response:
         kind = str(payload["kind"]).strip().lower()
         identifier = str(payload["identifier"])
-        options = {
-            key: value for key, value in payload.items() if key not in {"kind", "identifier"}
-        }
-        self.window.tube_page.select_builtin_resource(kind, identifier, **options)
-        return {}
+        resource_id = self.window.tube_script_service.resolve_resource_id(kind, identifier)
+        if kind == "nozzle" and payload.get("complete"):
+            fields = {
+                key: payload[key]
+                for key in (
+                    "interface",
+                    "length_mm",
+                    "construction_material",
+                    "flow_category",
+                    "temperature_limit_c",
+                    "wear_resistance_rating",
+                    "outer_profile_rz_mm",
+                )
+                if key in payload
+            }
+            return self._tube_command("set_complete_nozzle", payload, resource_id, fields)
+        kwargs: dict[str, Any] = {}
+        if kind == "material" and "review_confirmed" in payload:
+            kwargs["review_confirmed"] = payload["review_confirmed"]
+        if kind == "nozzle":
+            for key in ("interface", "length_mm", "use_collision_envelope"):
+                if key in payload:
+                    kwargs[key] = payload[key]
+        return self._tube_command(f"set_{kind}", payload, resource_id, **kwargs)
 
     def _tube_coordinate_apply(self, payload: Payload) -> Response:
-        self.window.tube_page.apply_numeric_coordinate(
-            str(payload["node"]),
-            automation_vector(payload, "origin", (0.0, 0.0, 0.0)),
-            automation_vector(payload, "z_direction", (0.0, 0.0, 1.0)),
-            automation_vector(payload, "x_direction", (1.0, 0.0, 0.0)),
-            flip_z=bool(payload.get("flip_z", False)),
-            flip_x=bool(payload.get("flip_x", False)),
+        node = str(payload["node"]).strip().lower()
+        if node not in {"model_cs", "build_cs"}:
+            raise ValueError(f"unsupported coordinate node: {node!r}")
+        z_direction = automation_vector(payload, "z_direction", (0.0, 0.0, 1.0))
+        x_direction = automation_vector(payload, "x_direction", (1.0, 0.0, 0.0))
+        if bool(payload.get("flip_z", False)):
+            z_direction = (-z_direction[0], -z_direction[1], -z_direction[2])
+        if bool(payload.get("flip_x", False)):
+            x_direction = (-x_direction[0], -x_direction[1], -x_direction[2])
+        return self._tube_command(
+            "set_model_cs" if node == "model_cs" else "set_build_cs",
+            payload,
+            origin=automation_vector(payload, "origin", (0.0, 0.0, 0.0)),
+            z=z_direction,
+            x=x_direction,
+            input_frame=payload.get("input_frame", "source" if node == "model_cs" else "model"),
         )
-        return {}
 
     def _tube_placement_apply(self, payload: Payload) -> Response:
-        self.window.tube_page.apply_placement(
+        return self._tube_command(
+            "set_placement",
+            payload,
             str(payload["mount_datum_id"]),
-            automation_vector(payload, "translation_mm", (0.0, 0.0, 0.0)),
-            automation_vector(payload, "rotation_xyz_deg", (0.0, 0.0, 0.0)),
+            translation_mm=automation_vector(payload, "translation_mm", (0.0, 0.0, 0.0)),
+            rotation_xyz_deg=automation_vector(payload, "rotation_xyz_deg", (0.0, 0.0, 0.0)),
         )
-        return {}
 
-    def _tube_draft_discard(self, _payload: Payload) -> Response:
-        self.window.tube_page.controller.discard_all_drafts()
-        return {}
+    def _tube_draft_discard(self, payload: Payload) -> Response:
+        return self._tube_command("discard_all_drafts", payload)
 
     def _tube_view(self, payload: Payload) -> Response:
         self.window.tube_page.set_view_mode(str(payload.get("mode", "model")))
         return {}
+
+    def _tube_command(
+        self,
+        name: str,
+        payload: Payload,
+        *args: Any,
+        **kwargs: Any,
+    ) -> Response:
+        result = self.window.tube_script_service.execute_command(
+            name,
+            *args,
+            command_origin="http",
+            command_id=payload.get("command_id"),
+            expected_revision=payload.get("expected_revision"),
+            **kwargs,
+        )
+        return {
+            "command": command_result_json(result),
+            "tube": self.window.tube_page.state_json(),
+        }
 
 
 def automation_vector(

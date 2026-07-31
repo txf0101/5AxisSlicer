@@ -34,10 +34,8 @@ from .manufacturing.references import (
     DEFAULT_REBIND_TOLERANCE,
     CadModelRebindResult,
     RebindTolerance,
-    rebind_cad_model_state,
-)
-from .manufacturing.references import (
     geometry_reference as build_geometry_reference,
+    rebind_cad_model_state,
 )
 from .manufacturing.resources import (
     MaterialProfile,
@@ -60,6 +58,7 @@ from .manufacturing.setup import (
     ValidationIssue,
 )
 from .models import CadModel
+from .tube_controller_state import TubeControllerStateBoundary
 from .tube_drafts import (
     BodyCandidate,
     BodyRole,
@@ -87,8 +86,6 @@ from .tube_serialization import (
 from .tube_validation import (
     TubeValidationContext,
     merge_issues,
-)
-from .tube_validation import (
     validation_report as build_validation_report,
 )
 
@@ -101,7 +98,7 @@ _COORDINATE_NODES = frozenset({MODEL_CS_NODE, BUILD_CS_NODE})
 _DRAFT_NODES = _COORDINATE_NODES | {PLACEMENT_NODE}
 
 
-class TubeSetupController:
+class TubeSetupController(TubeControllerStateBoundary):
     """State owner for one first-release Tube Setup.
 
     Loaded project data may contain multiple operations for forward
@@ -1068,7 +1065,7 @@ class TubeSetupController:
 def _vector3(values: Sequence[float], name: str) -> tuple[float, float, float]:
     try:
         vector = tuple(float(value) for value in values)
-    except (TypeError, ValueError) as exc:
+    except (OverflowError, TypeError, ValueError) as exc:
         raise ValueError(f"{name} must contain three numbers") from exc
     if len(vector) != 3:
         raise ValueError(f"{name} must contain three numbers")

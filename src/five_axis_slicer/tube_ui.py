@@ -5,7 +5,6 @@ from __future__ import annotations
 import math
 from collections.abc import Callable, Mapping
 from typing import Any
-from uuid import uuid4
 
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QColor
@@ -22,6 +21,8 @@ from PyQt5.QtWidgets import (
     QLineEdit,
     QListWidget,
     QPushButton,
+    QScrollArea,
+    QSizePolicy,
     QStackedWidget,
     QTableWidget,
     QTableWidgetItem,
@@ -32,6 +33,7 @@ from PyQt5.QtWidgets import (
 )
 
 from . import tube_ui_presenter as presenter
+from .command_kernel import CommandInvocation, CommandResult
 from .manufacturing.coordinates import (
     CoordinateFrameDefinition,
     DirectionReference,
@@ -67,20 +69,15 @@ from .models import (
 )
 from .step_loader import geometry_candidates
 from .tube_controller import BodyRole, DraftNotFoundError, TubeSetupController
+from .tube_commands import TubeCommandProvider
 from .tube_drafts import CoordinateFrameDraft
-from .tube_resource_selection import (
-    NozzleEditorError,
-    configured_nozzle_copy,
-    nozzle_editor_profile,
-)
+from .tube_resource_selection import NozzleEditorError
 from .tube_ui_text import (
     TUBE_CONTROL_TEXT,
+    TUBE_TEXT as _TEXT,
     apply_tube_help,
     setup_tree_node,
     tube_language,
-)
-from .tube_ui_text import (
-    TUBE_TEXT as _TEXT,
 )
 from .ui_controls import OptionalDoubleSpinBox
 from .viewer import ModelViewer
@@ -100,6 +97,8 @@ _COORDINATE_DEFAULTS = {
     "x": (1.0, 0.0, 0.0),
 }
 _RESOURCE_KINDS = frozenset(("machine", "nozzle", "material"))
+CommandExecutor = Callable[[CommandInvocation], CommandResult]
+_DIRECT_COMMANDS = TubeCommandProvider()
 
 
 class TubeSetupPage(QWidget):
@@ -126,8 +125,10 @@ class TubeSetupPage(QWidget):
             default_user_resource_library_root()
         )
         self.controller = TubeSetupController(resource_library=self.resource_library)
+        self._command_executor: CommandExecutor | None = None
         factory = viewer_factory or ModelViewer
         self.viewer = factory(self)
+        self.viewer.setMinimumHeight(420)
         if hasattr(self.viewer, "set_pick_callback"):
             self.viewer.set_pick_callback(self._on_pick_hit)
         self._view_mode = "model"
@@ -172,7 +173,7 @@ class TubeSetupPage(QWidget):
         self.issue_title.setObjectName("panelTitle")
         self.issue_list = QListWidget()
         self.issue_list.setObjectName("tubeIssueList")
-        self.issue_list.setMaximumHeight(150)
+        self.issue_list.setMaximumHeight(45)
         self.issue_list.itemActivated.connect(self._jump_to_issue)
         issue_layout.addWidget(self.issue_title)
         issue_layout.addWidget(self.issue_list)
@@ -268,8 +269,14 @@ class TubeSetupPage(QWidget):
             self.placement_editor,
         ):
             self.editor_stack.addWidget(editor)
+        self.editor_scroll = QScrollArea()
+        self.editor_scroll.setWidgetResizable(True)
+        self.editor_scroll.setFrameShape(QFrame.NoFrame)
+        self.editor_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.editor_stack.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Preferred)
+        self.editor_scroll.setWidget(self.editor_stack)
         layout.addWidget(self.editor_title)
-        layout.addWidget(self.editor_stack, 1)
+        layout.addWidget(self.editor_scroll, 1)
         return panel
 
     def _help_label(self) -> QLabel:
@@ -672,6 +679,20 @@ class TubeSetupPage(QWidget):
         self._populate_coordinate_candidates()
         self.refresh()
 
+    def set_command_executor(self, callback: CommandExecutor | None) -> None:
+        """Route applied Setup changes through the application command boundary."""
+        self._command_executor = callback
+
+    def _execute_command(
+        self, name: str, *args: Any, command_origin: str = "gui", **kwargs: Any
+    ) -> Any:
+        invocation = CommandInvocation(name, args, kwargs, origin=command_origin)
+        if self._command_executor is not None:
+            return self._command_executor(invocation).payload
+        outcome = _DIRECT_COMMANDS.invoke(self.controller, invocation)  # type: ignore[arg-type]
+        self.refresh()
+        return outcome.payload
+
     def _rebuild_tree(self) -> None:
         selected = self.tree.currentItem().data(0, Qt.UserRole) if self.tree.currentItem() else None
         self.tree.blockSignals(True)
@@ -816,28 +837,33 @@ class TubeSetupPage(QWidget):
     def _confirm_part(self) -> None:
         try:
             roles = {body_id: combo.currentData() for body_id, combo in self._role_combos.items()}
-            self.controller.confirm_body_roles(roles)
+            self._execute_command(
+                "confirm_part",
+                part_body_ids=tuple(
+                    key for key, role in roles.items() if role == BodyRole.PART.value
+                ),
+                ignored_body_ids=tuple(
+                    key for key, role in roles.items() if role == BodyRole.IGNORE.value
+                ),
+            )
             part_ids = self.controller.setup.assignments.part_body_ids
             if hasattr(self.viewer, "set_selection"):
                 self.viewer.set_selection(body_ids=list(part_ids))
-            self.refresh()
         except Exception as exc:
             self._report_error(exc)
 
     def _create_operation(self) -> None:
         try:
-            self.controller.create_operation()
-            self.refresh()
+            self._execute_command("create_operation")
         except Exception as exc:
             self._report_error(exc)
 
     def _apply_machine(self) -> None:
         try:
             profile = self._machine_profiles[str(self.machine_combo.currentData())]
-            self.controller.select_machine(profile)
+            self._execute_command("set_machine", _resource_profile_id(profile))
             self._reload_resource_catalogs(follow_setup=frozenset(("machine",)))
             self._populate_mounts()
-            self.refresh()
         except Exception as exc:
             self._report_error(exc)
 
@@ -854,18 +880,15 @@ class TubeSetupPage(QWidget):
     def _apply_nozzle(self) -> None:
         try:
             template = self._nozzle_profiles[str(self.nozzle_combo.currentData())]
-            profile = nozzle_editor_profile(
-                template,
+            self._execute_command(
+                "set_nozzle",
+                _resource_profile_id(template),
                 interface=self.nozzle_interface.text(),
                 length_mm=self.nozzle_length.value(),
                 use_collision_envelope=self.nozzle_collision.isChecked(),
             )
-            if profile is not template:
-                self.controller.save_user_resource(profile)
-            self.controller.select_nozzle(profile)
             self._reload_resource_catalogs(follow_setup=frozenset(("nozzle",)))
             _sync_nozzle_editor(self)
-            self.refresh()
         except NozzleEditorError as exc:
             self._report_error(ValueError(self._t(exc.code)))
         except Exception as exc:
@@ -874,17 +897,13 @@ class TubeSetupPage(QWidget):
     def _apply_material(self) -> None:
         try:
             template = self._material_profiles[str(self.material_combo.currentData())]
-            profile: MaterialProfile = template
-            if self.material_review.isChecked():
-                profile = template.reviewed_copy(
-                    str(uuid4()),
-                    display_name=f"{template.display_name} · reviewed",
-                )
-                self.controller.save_user_resource(profile)
-            self.controller.select_material(profile)
+            self._execute_command(
+                "set_material",
+                _resource_profile_id(template),
+                review_confirmed=self.material_review.isChecked(),
+            )
             self._reload_resource_catalogs(follow_setup=frozenset(("material",)))
             _sync_material_editor(self)
-            self.refresh()
         except Exception as exc:
             self._report_error(exc)
 
@@ -1085,9 +1104,15 @@ class TubeSetupPage(QWidget):
         try:
             if self._coordinate_control_dirty:
                 raise ValueError(self._t("coordinate_reconfirm_error"))
-            frame = self.controller.apply_coordinate_draft(self._coordinate_node)
+            self._execute_command("apply_coordinate_draft", node=self._coordinate_node)
+            frame = (
+                self.controller.setup.model_coordinate_system
+                if self._coordinate_node == MODEL_CS_NODE
+                else self.controller.setup.build_coordinate_system
+            )
+            if frame is None:  # pragma: no cover - provider contract guard
+                raise RuntimeError("coordinate command did not publish an applied frame")
             self.coordinate_feedback.setText(f"Applied {frame.name} · revision {frame.revision}")
-            self.refresh()
         except Exception as exc:
             self._report_error(exc, self.coordinate_feedback)
 
@@ -1261,6 +1286,7 @@ class TubeSetupPage(QWidget):
             self._report_error(exc, self.placement_feedback)
 
     def _apply_placement(self) -> None:
+        previous_mode = self._view_mode
         try:
             try:
                 self.controller.placement_draft()
@@ -1274,14 +1300,17 @@ class TubeSetupPage(QWidget):
                 math.radians(self.placement_spins[key].value()) for key in ("rx", "ry", "rz")
             )
             self.controller.set_placement_adjustment(translation, rotation)
-            transform = self.controller.apply_placement_draft()
+            self._set_view_mode_state("machine")
+            self._execute_command("apply_placement_draft")
+            transform = self.controller.setup.T_mount_from_build
+            if transform is None:  # pragma: no cover - provider contract guard
+                raise RuntimeError("placement command did not publish a transform")
             self.placement_feedback.setText(
                 f"Applied T_mount_from_build · ({transform.translation[0]:.3f}, "
                 f"{transform.translation[1]:.3f}, {transform.translation[2]:.3f}) mm"
             )
-            self.set_view_mode("machine")
-            self.refresh()
         except Exception as exc:
+            self._set_view_mode_state(previous_mode)
             self._report_error(exc, self.placement_feedback)
 
     def _cancel_placement(self) -> None:
@@ -1293,12 +1322,15 @@ class TubeSetupPage(QWidget):
         self.refresh()
 
     def set_view_mode(self, mode: str) -> None:
+        self._set_view_mode_state(mode)
+        self._refresh_overlays()
+
+    def _set_view_mode_state(self, mode: str) -> None:
         if mode not in {"model", "machine"}:
             raise ValueError(f"unsupported Tube view mode: {mode}")
         self._view_mode = mode
         self.model_view_button.setEnabled(mode != "model")
         self.machine_view_button.setEnabled(mode != "machine")
-        self._refresh_overlays()
 
     def _refresh_overlays(self) -> None:
         presentation = presenter.viewer_presentation(
@@ -1322,18 +1354,19 @@ class TubeSetupPage(QWidget):
         if item is None:
             return
         payload = item.data(Qt.UserRole)
-        if not isinstance(payload, Mapping):
-            return
-        context = payload.get("context", {})
-        node = context.get("node") if isinstance(context, Mapping) else None
-        if node in self._tree_items:
-            self.tree.setCurrentItem(self._tree_items[str(node)])
+        if isinstance(payload, Mapping):
+            context = payload.get("context", {})
+            if isinstance(context, Mapping):
+                self.select_setup_node(str(context.get("node", "")))
+
+    def select_setup_node(self, node: str) -> bool:
+        item = self._tree_items.get(str(node))
+        if item is not None:
+            self.tree.setCurrentItem(item)
+        return item is not None
 
     def _report_error(self, error: Exception, target: QLabel | None = None) -> None:
-        message = str(error)
-        if target is not None:
-            target.setText(message)
-        self.error_raised.emit(message)
+        _publish_error(self, error, target)
 
     def state_json(self) -> dict[str, Any]:
         state = self.controller.state_json()
@@ -1361,81 +1394,34 @@ class TubeSetupPage(QWidget):
         """Automation-safe adapter for the combined resource catalog."""
 
         key = str(identifier).strip().lower()
-        if kind == "machine":
-            self._select_machine_resource(key, identifier)
-        elif kind == "nozzle":
-            self._select_nozzle_resource(key, identifier, options)
-        elif kind == "material":
-            self._select_material_resource(key, identifier, options)
-        else:
+        if kind not in _RESOURCE_KINDS:
             raise ValueError(f"unsupported resource kind: {kind}")
+        profiles = getattr(self, f"_{kind}_profiles")
+        profile = next((item for item in profiles.values() if _resource_matches(item, key)), None)
+        if profile is None:
+            raise KeyError(identifier)
+        resource_id = _resource_profile_id(profile)
+        if kind == "nozzle" and options.get("complete"):
+            self._execute_command(
+                "set_complete_nozzle",
+                resource_id,
+                dict(options),
+                command_origin="automation",
+            )
+        elif kind == "material":
+            self._execute_command(
+                "set_material",
+                resource_id,
+                command_origin="automation",
+                review_confirmed=options.get("review_confirmed"),
+            )
+        else:
+            self._execute_command(f"set_{kind}", resource_id, command_origin="automation")
         self._reload_resource_catalogs(follow_setup=frozenset((kind,)))
         if kind == "nozzle":
             _sync_nozzle_editor(self)
         elif kind == "material":
             _sync_material_editor(self)
-        self.refresh()
-
-    def _select_machine_resource(self, key: str, identifier: str) -> None:
-        profile = next(
-            (
-                item
-                for item in self._machine_profiles.values()
-                if key in {item.profile_id.lower(), item.name.lower()}
-                or key in item.profile_id.lower()
-            ),
-            None,
-        )
-        if profile is None:
-            raise KeyError(identifier)
-        self.controller.select_machine(profile)
-        self._populate_mounts()
-
-    def _select_nozzle_resource(
-        self,
-        key: str,
-        identifier: str,
-        options: Mapping[str, Any],
-    ) -> None:
-        profile = next(
-            (
-                item
-                for item in self._nozzle_profiles.values()
-                if key in {item.resource_id.lower(), f"{item.orifice_diameter_mm:g}"}
-                or key in item.display_name.lower()
-            ),
-            None,
-        )
-        if profile is None:
-            raise KeyError(identifier)
-        if options.get("complete"):
-            profile = configured_nozzle_copy(profile, options)
-            if options.get("persist_user_copy"):
-                self.controller.save_user_resource(profile)
-        self.controller.select_nozzle(profile)
-
-    def _select_material_resource(
-        self,
-        key: str,
-        identifier: str,
-        options: Mapping[str, Any],
-    ) -> None:
-        profile = next(
-            (
-                item
-                for item in self._material_profiles.values()
-                if key in {item.resource_id.lower(), item.material.lower()}
-                or key in item.display_name.lower()
-            ),
-            None,
-        )
-        if profile is None:
-            raise KeyError(identifier)
-        if options.get("review_confirmed"):
-            profile = profile.reviewed_copy(str(uuid4()))
-            if options.get("persist_user_copy"):
-                self.controller.save_user_resource(profile)
-        self.controller.select_material(profile)
 
     def apply_numeric_coordinate(
         self,
@@ -1447,16 +1433,25 @@ class TubeSetupPage(QWidget):
         flip_z: bool = False,
         flip_x: bool = False,
     ) -> CoordinateFrameDefinition:
-        self.controller.begin_coordinate_draft(node)
-        self.controller.set_numeric_origin(node, origin, confirmed=True)
-        self.controller.set_numeric_direction(node, "z", z_direction, confirmed=True)
-        self.controller.set_numeric_direction(node, "x", x_direction, confirmed=True)
-        if flip_z:
-            self.controller.flip_direction(node, "z")
-        if flip_x:
-            self.controller.flip_direction(node, "x")
-        frame = self.controller.apply_coordinate_draft(node)
-        self.refresh()
+        canonical = str(node).strip().lower()
+        if canonical not in {MODEL_CS_NODE, BUILD_CS_NODE}:
+            raise ValueError(f"unsupported coordinate node: {node!r}")
+        z = tuple(-value for value in z_direction) if flip_z else z_direction
+        x = tuple(-value for value in x_direction) if flip_x else x_direction
+        self._execute_command(
+            "set_model_cs" if canonical == MODEL_CS_NODE else "set_build_cs",
+            command_origin="automation",
+            origin=origin,
+            z=z,
+            x=x,
+        )
+        frame = (
+            self.controller.setup.model_coordinate_system
+            if canonical == MODEL_CS_NODE
+            else self.controller.setup.build_coordinate_system
+        )
+        if frame is None:  # pragma: no cover - provider contract guard
+            raise RuntimeError("coordinate command did not publish an applied frame")
         return frame
 
     def apply_placement(
@@ -1465,14 +1460,19 @@ class TubeSetupPage(QWidget):
         translation_mm: tuple[float, float, float] = (0.0, 0.0, 0.0),
         rotation_xyz_deg: tuple[float, float, float] = (0.0, 0.0, 0.0),
     ) -> None:
-        self.controller.begin_placement_draft(mount_datum_id=mount_datum_id)
-        self.controller.set_placement_adjustment(
-            translation_mm,
-            tuple(math.radians(value) for value in rotation_xyz_deg),
-        )
-        self.controller.apply_placement_draft()
-        self.set_view_mode("machine")
-        self.refresh()
+        previous_mode = self._view_mode
+        self._set_view_mode_state("machine")
+        try:
+            self._execute_command(
+                "set_placement",
+                mount_datum_id,
+                command_origin="automation",
+                translation_mm=translation_mm,
+                rotation_xyz_deg=rotation_xyz_deg,
+            )
+        except Exception:
+            self._set_view_mode_state(previous_mode)
+            raise
 
 
 def _coordinate_candidate_key(value: Any) -> tuple[str, str]:
@@ -1505,6 +1505,31 @@ def _resource_profile_id(
     profile: MachineProfile | NozzleProfile | MaterialProfile,
 ) -> str:
     return profile.profile_id if isinstance(profile, MachineProfile) else profile.resource_id
+
+
+def _resource_matches(
+    profile: MachineProfile | NozzleProfile | MaterialProfile,
+    key: str,
+) -> bool:
+    labels = [_resource_profile_id(profile).lower()]
+    if isinstance(profile, MachineProfile):
+        labels.append(profile.name.lower())
+    elif isinstance(profile, NozzleProfile):
+        labels.extend((f"{profile.orifice_diameter_mm:g}", profile.display_name.lower()))
+    else:
+        labels.extend((profile.material.lower(), profile.display_name.lower()))
+    return bool(key) and any(key in label for label in labels)
+
+
+def _publish_error(
+    page: TubeSetupPage,
+    error: Exception,
+    target: QLabel | None,
+) -> None:
+    message = str(error)
+    if target is not None:
+        target.setText(message)
+    page.error_raised.emit(message)
 
 
 def _sync_nozzle_editor(page: TubeSetupPage) -> None:

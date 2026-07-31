@@ -2,7 +2,7 @@
 
 5AxisSclicer V2.0 以 Workbench 为入口。当前有两条可交互主线：`Imported NC Review` 用于已有 NC/G-code 的空间路径、层范围和路径类型预览；Tube Workbench 已完成第一阶段 Setup 与坐标闭环，可定义 Part、Machine、Nozzle、Material、Model CS、Build CS 和 Placement，并保存、重开项目。
 
-管状坐标设置的完整入口和操作步骤见[中文图文指南](docs/guides/tube_coordinate_setup_zh.md)。当前只有管状工作台接入坐标编辑器；其他工作台继续使用通用 Operation Session。
+管状坐标设置的完整入口和操作步骤见[中文图文指南](docs/guides/tube_coordinate_setup_zh.md)，底部控制台与 YAML 工作文件见[设置脚本说明](docs/guides/tube_setup_script_console_zh.md)。当前只有管状工作台接入坐标编辑器；其他工作台继续使用通用 Operation Session。
 
 当前范围：
 

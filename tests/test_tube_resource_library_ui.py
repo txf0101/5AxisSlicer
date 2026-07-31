@@ -15,6 +15,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from PyQt5.QtWidgets import QApplication, QWidget  # noqa: E402
 
+from five_axis_slicer.command_kernel import CommandKernel  # noqa: E402
 from five_axis_slicer.manufacturing.library import (  # noqa: E402
     ResourceLibraryError,
     UserResourceLibrary,
@@ -30,6 +31,8 @@ from five_axis_slicer.manufacturing.resources import (  # noqa: E402
 )
 from five_axis_slicer.manufacturing.setup import NodeState  # noqa: E402
 from five_axis_slicer.tube_controller import TubeSetupController  # noqa: E402
+from five_axis_slicer.tube_commands import TubeCommandProvider  # noqa: E402
+from five_axis_slicer.tube_drafts import BodyCandidate  # noqa: E402
 from five_axis_slicer.tube_ui import TubeSetupPage  # noqa: E402
 
 
@@ -90,9 +93,7 @@ class ResourceLibraryControllerTests(unittest.TestCase):
             self.assertIn(builtin, nozzle_catalog)
             self.assertIs(library.resolve("nozzle", builtin.resource_id), builtin)
             self.assertEqual(
-                library.audit_snapshot(
-                    ResourceSnapshot.capture("nozzle", builtin)
-                ).status,
+                library.audit_snapshot(ResourceSnapshot.capture("nozzle", builtin)).status,
                 "match",
             )
 
@@ -174,7 +175,7 @@ class ResourceLibraryUiTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.app = QApplication.instance() or QApplication([])
 
-    def test_page_lists_user_resources_and_saves_an_edited_builtin_copy(self) -> None:
+    def test_page_lists_user_resources_and_keeps_editor_copies_in_project(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             library = UserResourceLibrary(tmp)
             user_nozzle = complete_nozzle()
@@ -183,9 +184,7 @@ class ResourceLibraryUiTests(unittest.TestCase):
                 profile_id="shop-cartesian",
                 name="Shop Cartesian",
             )
-            user_material = get_builtin_material_profile("PETG").reviewed_copy(
-                "shop-petg"
-            )
+            user_material = get_builtin_material_profile("PETG").reviewed_copy("shop-petg")
             library.save(user_nozzle)
             library.save(user_machine)
             library.save(user_material)
@@ -195,21 +194,15 @@ class ResourceLibraryUiTests(unittest.TestCase):
             )
             self.addCleanup(page.close)
 
-            self.assertGreaterEqual(
-                page.nozzle_combo.findData(user_nozzle.resource_id), 0
-            )
-            self.assertGreaterEqual(
-                page.machine_combo.findData(user_machine.profile_id), 0
-            )
+            self.assertGreaterEqual(page.nozzle_combo.findData(user_nozzle.resource_id), 0)
+            self.assertGreaterEqual(page.machine_combo.findData(user_machine.profile_id), 0)
             self.assertGreaterEqual(
                 page.material_combo.findData(user_material.resource_id),
                 0,
             )
             self.assertIn(
                 "用户库",
-                page.nozzle_combo.itemText(
-                    page.nozzle_combo.findData(user_nozzle.resource_id)
-                ),
+                page.nozzle_combo.itemText(page.nozzle_combo.findData(user_nozzle.resource_id)),
             )
 
             builtin_key = next(
@@ -226,10 +219,10 @@ class ResourceLibraryUiTests(unittest.TestCase):
             selected = page.controller.setup.nozzle
             assert selected is not None
             self.assertNotEqual(selected.resource_id, builtin_key)
-            self.assertEqual(len(library.profiles("nozzle")), 2)
+            self.assertEqual(len(library.profiles("nozzle")), 1)
             self.assertEqual(
                 library.audit_snapshot(selected).status,
-                "match",
+                "missing",
             )
             self.assertTrue(get_builtin_nozzle_profile(0.4).is_builtin)
 
@@ -238,18 +231,82 @@ class ResourceLibraryUiTests(unittest.TestCase):
                 for key, profile in page._material_profiles.items()
                 if profile.is_builtin and profile.material == "PLA"
             )
-            page.material_combo.setCurrentIndex(
-                page.material_combo.findData(builtin_material_key)
-            )
+            page.material_combo.setCurrentIndex(page.material_combo.findData(builtin_material_key))
             page.material_review.setChecked(True)
             page._apply_material()
             selected_material = page.controller.setup.material
             assert selected_material is not None
             self.assertNotEqual(selected_material.resource_id, builtin_material_key)
-            self.assertEqual(len(library.profiles("material")), 2)
+            self.assertEqual(len(library.profiles("material")), 1)
             self.assertEqual(
                 library.audit_snapshot(selected_material).status,
-                "match",
+                "missing",
+            )
+
+    def test_applied_page_actions_use_injected_command_executor(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            library = UserResourceLibrary(tmp)
+            controller = TubeSetupController(
+                body_catalog=(
+                    BodyCandidate("solid-1", "Tube", "solid"),
+                    BodyCandidate("sheet-1", "Reference", "shell"),
+                ),
+                resource_library=library,
+            )
+            page = TubeSetupPage(viewer_factory=ViewerStub, resource_library=library)
+            self.addCleanup(page.close)
+            page.set_controller(controller, None)
+            kernel = CommandKernel(controller, TubeCommandProvider())
+            invocations = []
+
+            def execute(invocation):
+                invocations.append(invocation)
+                return kernel.execute(invocation)
+
+            page.set_command_executor(execute)
+            page._role_combos["solid-1"].setCurrentIndex(
+                page._role_combos["solid-1"].findData("part")
+            )
+            page._role_combos["sheet-1"].setCurrentIndex(
+                page._role_combos["sheet-1"].findData("ignore")
+            )
+            page._confirm_part()
+            page._create_operation()
+            page._apply_machine()
+            page._apply_nozzle()
+            page.material_review.setChecked(True)
+            page._apply_material()
+            for node in ("model_cs", "build_cs"):
+                page.apply_numeric_coordinate(node, (0, 0, 0), (0, 0, 1), (1, 0, 0))
+            page.apply_placement("build_plate_mount")
+
+            page._coordinate_node = "model_cs"
+            controller.begin_coordinate_draft("model_cs")
+            controller.set_numeric_origin("model_cs", (0, 0, 0), confirmed=True)
+            controller.set_numeric_direction("model_cs", "z", (0, 0, 1), confirmed=True)
+            controller.set_numeric_direction("model_cs", "x", (1, 0, 0), confirmed=True)
+            page._apply_coordinate()
+            controller.begin_placement_draft(mount_datum_id="build_plate_mount")
+            page._apply_placement()
+
+            self.assertEqual(
+                [item.name for item in invocations],
+                [
+                    "confirm_part",
+                    "create_operation",
+                    "set_machine",
+                    "set_nozzle",
+                    "set_material",
+                    "set_model_cs",
+                    "set_build_cs",
+                    "set_placement",
+                    "apply_coordinate_draft",
+                    "apply_placement_draft",
+                ],
+            )
+            self.assertEqual(
+                [item.origin for item in invocations[5:8]],
+                ["automation", "automation", "automation"],
             )
 
     def test_damaged_user_entry_does_not_block_page_startup(self) -> None:
@@ -269,9 +326,7 @@ class ResourceLibraryUiTests(unittest.TestCase):
             self.assertGreaterEqual(page.nozzle_combo.count(), 3)
             issues = page.controller.validation_report().issues
             diagnostic = next(
-                issue
-                for issue in issues
-                if issue.code == "RESOURCE_LIBRARY_ENTRY_INVALID"
+                issue for issue in issues if issue.code == "RESOURCE_LIBRARY_ENTRY_INVALID"
             )
             self.assertEqual(diagnostic.context["entry_name"], "broken.json")
             self.assertEqual(diagnostic.severity.value, "warning")
@@ -299,9 +354,7 @@ class ResourceLibraryUiTests(unittest.TestCase):
             self.assertIn("已分叉", page.nozzle_combo.currentText())
             self.assertGreaterEqual(page.nozzle_combo.findData(nozzle.resource_id), 0)
             self.assertEqual(page.controller.setup.nozzle, frozen)
-            issue_codes = {
-                issue.code for issue in page.controller.validation_report().issues
-            }
+            issue_codes = {issue.code for issue in page.controller.validation_report().issues}
             self.assertIn("RESOURCE_LIBRARY_DIVERGED", issue_codes)
 
 

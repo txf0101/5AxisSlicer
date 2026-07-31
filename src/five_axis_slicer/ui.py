@@ -5,7 +5,7 @@ from collections.abc import Callable, Mapping
 from pathlib import Path
 from typing import Any
 
-from PyQt5.QtCore import QEventLoop, QSettings, Qt, QTimer
+from PyQt5.QtCore import QSettings, Qt, QTimer
 from PyQt5.QtWidgets import (
     QAction,
     QActionGroup,
@@ -54,12 +54,15 @@ from .project_io import (
     ProjectLoaded,
     save_project,
 )
+from .qt_load_wait import wait_for_loader_outcome
 from .result_preview import ResultCommitError, ResultPreviewPage
 from .result_state import LoadRequest, LoadResult
+from .script_console import install_script_console
 from .selection_list import SelectionList, SelectionRow
 from .step_loader import StepLoadCancelled, StepLoadError
 from .styles import APP_STYLE
 from .tube_controller import PendingDraftError, TubeSetupController
+from .tube_script_service import ProjectOpenCancelled, TubeScriptService
 from .tube_ui import TubeSetupPage
 from .ui_controls import action_button
 from .viewer import ModelViewer
@@ -113,7 +116,6 @@ class MainWindow(QMainWindow):
         self._result_load_metrics: dict[str, Any] = {}
         self.localized_groups: list[tuple[QGroupBox, str]] = []
         self.localized_labels: list[tuple[QLabel, str]] = []
-
         self.viewer = (model_viewer_factory or ModelViewer)(self)
         self.viewer.set_selection_callback(self._on_viewer_selection)
         self.progress_timer = QTimer(self)
@@ -141,7 +143,6 @@ class MainWindow(QMainWindow):
             allow_remote=http_allow_remote,
             token=http_token,
         )
-
         self._build_ui()
         self._bind_shortcuts()
         self._apply_style()
@@ -159,6 +160,7 @@ class MainWindow(QMainWindow):
             QTimer.singleShot(100, self._retry_close_after_result_loader)
             return
         self._close_pending = False
+        self.script_console_manager.save_state()
         self.result_page.shutdown()
         self.automation.stop()
         super().closeEvent(event)
@@ -390,70 +392,6 @@ class MainWindow(QMainWindow):
         if self._is_load_active("model"):
             self.load_coordinator.cancel()
 
-    def _wait_for_loader_outcome(
-        self,
-        loader: ResultLoadCoordinator,
-        outcomes: dict[object, dict[str, Any]],
-        request_id: object,
-        *,
-        timeout_ms: int,
-        timeout_message: str,
-        cancel: Callable[[], None],
-    ) -> dict[str, Any]:
-        """Dispatch Qt events until a request and its worker are both settled."""
-
-        outcome = outcomes[request_id]
-        if outcome["status"] != "loading" and not loader.busy:
-            return outcome
-
-        loop = QEventLoop()
-        timed_out = {"value": False}
-
-        def settled() -> bool:
-            request_finished = outcomes[request_id]["status"] != "loading"
-            request_released = loader.active_request_id != request_id or not loader.busy
-            return bool(request_finished and request_released)
-
-        def finish_if_settled(*_args: object) -> None:
-            if settled():
-                loop.quit()
-
-        def expire() -> None:
-            timed_out["value"] = True
-            loop.quit()
-
-        timeout = QTimer()
-        timeout.setSingleShot(True)
-        timeout.timeout.connect(expire)
-        lifecycle_signals = (
-            loader.completed,
-            loader.failed,
-            loader.cancelled,
-            loader.busy_changed,
-        )
-        for signal in lifecycle_signals:
-            signal.connect(finish_if_settled)
-        try:
-            timeout.start(max(1, int(timeout_ms)))
-            finish_if_settled()
-            if not settled():
-                loop.exec()
-        finally:
-            timeout.stop()
-            timeout.timeout.disconnect(expire)
-            for signal in lifecycle_signals:
-                signal.disconnect(finish_if_settled)
-
-        if timed_out["value"] and not settled():
-            outcomes[request_id].update(
-                status="cancelled",
-                message=timeout_message,
-            )
-            if loader.busy:
-                cancel()
-            raise TimeoutError(timeout_message)
-        return outcomes[request_id]
-
     def _wait_for_model_load(
         self,
         request_id: object,
@@ -468,7 +406,7 @@ class MainWindow(QMainWindow):
         timers whose callbacks retain already-finished nested event loops.
         """
 
-        outcome = self._wait_for_loader_outcome(
+        outcome = wait_for_loader_outcome(
             self.model_loader,
             self._model_load_outcomes,
             request_id,
@@ -531,6 +469,7 @@ class MainWindow(QMainWindow):
                     outcome.get("draft_resolution"),
                 ):
                     self._commit_source_update(result.model)
+                self.tube_script_service.synchronize_external_controller(write_config=True)
             else:
                 self._commit_model(result.model)
             if outcome is not None:
@@ -745,8 +684,9 @@ class MainWindow(QMainWindow):
         """Publish one fully loaded CAD model to both workbench viewers."""
 
         with model_commit.publication_transaction(self):
-            previous_source = self.tube_page.controller.state_json()["source"]["hash"]
-            previous_operations = self.tube_page.controller.operations
+            previous_controller = self.tube_page.controller
+            previous_source = previous_controller.state_json()["source"]["hash"]
+            previous_operations = previous_controller.operations
             self.model = model
             self._original_step_path = Path(model.source_path).expanduser().resolve()
             self.viewer.load_model(model)
@@ -758,6 +698,8 @@ class MainWindow(QMainWindow):
             else:
                 controller = TubeSetupController(model)
             self.tube_page.set_controller(controller, model)
+            if controller is not previous_controller:
+                self.last_project_dir = None
             model_commit.refresh_publication_ui(self)
             self._show_session()
             message = tr(
@@ -769,6 +711,10 @@ class MainWindow(QMainWindow):
             if len(model.solid_bodies) == 1:
                 message += " | " + tr(self.language, "status_single_body")
             self.statusBar().showMessage(message)
+        if controller is previous_controller:
+            self.tube_script_service.synchronize_external_controller(write_config=False)
+        else:
+            self.tube_script_service.bind_new_controller(controller)
 
     def update_model_from_original_source(
         self,
@@ -924,7 +870,7 @@ class MainWindow(QMainWindow):
         *,
         timeout_ms: int,
     ) -> dict[str, Any]:
-        outcome = self._wait_for_loader_outcome(
+        outcome = wait_for_loader_outcome(
             self.project_loader,
             self._project_load_outcomes,
             request_id,
@@ -962,7 +908,10 @@ class MainWindow(QMainWindow):
         try:
             if not isinstance(result.project, ProjectLoaded):
                 raise RuntimeError("project worker returned no verified project")
-            state = self._commit_loaded_project(result.project)
+            state = self._commit_loaded_project(
+                result.project,
+                interactive=bool(self._project_load_show_errors.get(request_id, False)),
+            )
             outcome.update(
                 status="ready",
                 phase="commit",
@@ -972,6 +921,9 @@ class MainWindow(QMainWindow):
                 length_unit_override=result.length_unit_override,
             )
             self.statusBar().showMessage(f"Project loaded: {result.project.project_json}")
+        except ProjectOpenCancelled as exc:
+            outcome.update(status="cancelled", message=str(exc), state=None)
+            self.statusBar().showMessage(str(exc))
         except Exception as exc:
             message = str(exc)
             outcome.update(status="error", message=message, state=None)
@@ -999,7 +951,12 @@ class MainWindow(QMainWindow):
         self._project_load_show_errors.pop(request_id, None)
         self.statusBar().showMessage("Project loading cancelled")
 
-    def _commit_loaded_project(self, loaded: ProjectLoaded) -> dict[str, Any]:
+    def _commit_loaded_project(
+        self,
+        loaded: ProjectLoaded,
+        *,
+        interactive: bool = False,
+    ) -> dict[str, Any]:
         """Publish one fully verified worker result on the Qt main thread."""
 
         if len(loaded.setups) > 1:
@@ -1017,6 +974,11 @@ class MainWindow(QMainWindow):
             loaded.model,
             setup=setup,
             operations=loaded.operations,
+        )
+        self.tube_script_service.prepare_project_controller(
+            controller,
+            loaded.project_directory,
+            interactive=interactive,
         )
         source_payload = loaded.payload.get("source")
         original_path = (
@@ -1064,12 +1026,14 @@ class MainWindow(QMainWindow):
             self.last_project_dir = loaded.project_directory
             model_commit.refresh_publication_ui(self)
             self._show_session()
+        config_recovered = self.tube_script_service.bind_prepared_project(controller)
+        if not config_recovered:
             controller.mark_saved()
-            state = self.current_state()
-            state["project"] = {
-                "path": str(loaded.project_json),
-                "migrated_from_v1": loaded.migrated_from_v1,
-            }
+        state = self.current_state()
+        state["project"] = {
+            "path": str(loaded.project_json),
+            "migrated_from_v1": loaded.migrated_from_v1,
+        }
         return state
 
     def start_gcode_load(
@@ -1118,7 +1082,7 @@ class MainWindow(QMainWindow):
             model_path=model_path,
             show_dialog=show_dialog,
         )
-        outcome = self._wait_for_loader_outcome(
+        outcome = wait_for_loader_outcome(
             self.gcode_loader,
             self._gcode_load_outcomes,
             accepted["request_id"],
@@ -1287,8 +1251,12 @@ class MainWindow(QMainWindow):
             )
         self.last_project_dir = Path(directory)
         controller.mark_saved()
-        self.statusBar().showMessage(tr(self.language, "status_saved", path=path))
-        return {"project_json": str(path)}
+        config_warning = self.tube_script_service.project_saved(directory)
+        if config_warning is None:
+            self.statusBar().showMessage(tr(self.language, "status_saved", path=path))
+        else:
+            self.statusBar().showMessage(config_warning)
+        return {"project_json": str(path), "config_warning": config_warning}
 
     def refresh_lists(self) -> None:
         if self.model is None:
@@ -1352,6 +1320,8 @@ class MainWindow(QMainWindow):
         selection_viewer = (
             self.tube_page.viewer if self.current_workbench_key == "tube" else self.viewer
         )
+        tube_state = self.tube_page.state_json()
+        tube_state["commands"] = self.tube_script_service.state_json()
         return {
             "language": self.language,
             "page": self._current_page_name(),
@@ -1359,7 +1329,7 @@ class MainWindow(QMainWindow):
             "model": model_state,
             "selection": selection_viewer.selection.to_json(),
             "preview": self.viewer.preview_state(),
-            "tube": self.tube_page.state_json(),
+            "tube": tube_state,
             "results": self.result_page.state_json(),
             "result_load_metrics": self._public_load_metrics(),
         }
@@ -1422,6 +1392,8 @@ class MainWindow(QMainWindow):
         self.fit_action.setText(tr(self.language, "fit"))
         self.home_view_action.setText(tr(self.language, "home_view"))
         self.language_action.setText(tr(self.language, "language"))
+        self.script_console_manager.set_language(self.language)
+        self.tube_script_service.retranslate()
         self._retranslate_menus()
         self.home_title.setText(tr(self.language, "home_title"))
         self.home_subtitle.setText(tr(self.language, "home_subtitle"))
@@ -1581,6 +1553,8 @@ class MainWindow(QMainWindow):
         self.stack.addWidget(self.result_page)
         self.stack.currentChanged.connect(lambda _index: self._update_context_actions())
         self.setCentralWidget(self.stack)
+        self.script_console_manager = install_script_console(self)
+        self.tube_script_service = TubeScriptService(self, self.script_console_manager.dock)
         self.setStatusBar(QStatusBar(self))
         self.setMinimumSize(1600, 900)
         self.resize(1600, 900)
@@ -2137,13 +2111,14 @@ class MainWindow(QMainWindow):
         self.clear_action.setShortcut("Esc")
         self.fit_action.setShortcut("F")
         self.home_view_action.setShortcut("H")
-        zoom_in = QAction(self)
-        zoom_in.setShortcut("Ctrl++")
-        zoom_in.triggered.connect(lambda: self.viewer.camera_command("zoom", 1.15))
-        zoom_out = QAction(self)
-        zoom_out.setShortcut("Ctrl+-")
-        zoom_out.triggered.connect(lambda: self.viewer.camera_command("zoom", 0.87))
-        self.addActions([zoom_in, zoom_out])
+        self.zoom_in_action = QAction(self)
+        self.zoom_in_action.setShortcut("Ctrl++")
+        self.zoom_in_action.triggered.connect(lambda: self.viewer.camera_command("zoom", 1.15))
+        self.zoom_out_action = QAction(self)
+        self.zoom_out_action.setShortcut("Ctrl+-")
+        self.zoom_out_action.triggered.connect(lambda: self.viewer.camera_command("zoom", 0.87))
+        self.addActions([self.zoom_in_action, self.zoom_out_action])
+        self.script_console_manager.add_guarded_actions((self.zoom_in_action, self.zoom_out_action))
 
     def _apply_style(self) -> None:
         QApplication.setStyle("Fusion")

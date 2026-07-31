@@ -13,3 +13,7 @@ prune outputs
 prune tests
 prune tmp
 prune 圭臬
+
+recursive-include docs/formats *.md
+recursive-include docs/guides *.md
+recursive-include schemas *.json

@@ -1,0 +1,295 @@
+"""Parse the Tube console's small, non-executable command language.
+
+The parser inspects Python syntax trees but never evaluates them.  Keeping the
+accepted grammar here prevents console input from reaching Python objects,
+imports, files, processes, or the network.
+"""
+
+from __future__ import annotations
+
+import ast
+import io
+import math
+import tokenize
+from dataclasses import dataclass
+from typing import NoReturn
+
+MAX_SOURCE_BYTES = 256 * 1024
+MAX_CALLS = 500
+MAX_DEPTH = 32
+
+_ENGLISH_METHODS = frozenset(
+    {
+        "help",
+        "state",
+        "issues",
+        "validate",
+        "create_operation",
+        "set_operation",
+        "confirm_part",
+        "set_machine",
+        "set_nozzle",
+        "set_material",
+        "set_model_cs",
+        "set_build_cs",
+        "set_placement",
+        "undo",
+        "redo",
+    }
+)
+_CHINESE_METHODS = {
+    "帮助": "help",
+    "状态": "state",
+    "问题": "issues",
+    "校验": "validate",
+    "创建操作": "create_operation",
+    "设置操作": "set_operation",
+    "确认零件": "confirm_part",
+    "设置机床": "set_machine",
+    "设置喷嘴": "set_nozzle",
+    "设置材料": "set_material",
+    "设置模型坐标": "set_model_cs",
+    "设置构建坐标": "set_build_cs",
+    "设置装夹": "set_placement",
+    "撤销": "undo",
+    "重做": "redo",
+}
+_TRANSACTION_METHODS = _ENGLISH_METHODS - {
+    "help",
+    "state",
+    "issues",
+    "validate",
+    "undo",
+    "redo",
+}
+
+
+@dataclass(frozen=True, slots=True)
+class ScriptCall:
+    name: str
+    args: tuple[object, ...]
+    kwargs: dict[str, object]
+    line: int
+    column: int
+
+
+@dataclass(frozen=True, slots=True)
+class ScriptGroup:
+    calls: tuple[ScriptCall, ...]
+    atomic: bool
+
+
+class ScriptParseError(ValueError):
+    """A stable, user-facing rejection from the restricted grammar."""
+
+    def __init__(self, code: str, message: str, line: int, column: int) -> None:
+        self.code = code
+        self.message = message
+        self.line = line
+        self.column = column
+        super().__init__(f"{code} at {line}:{column}: {message}")
+
+
+class _Parser:
+    def __init__(self, source: str) -> None:
+        self.source = source
+        self.lines = source.splitlines()
+        self.call_count = 0
+
+    def parse(self) -> tuple[ScriptGroup, ...]:
+        tree = self._syntax_tree()
+        self._reject_semicolons()
+        self._check_ast_depth(tree)
+        return tuple(self._statement(statement) for statement in tree.body)
+
+    def _syntax_tree(self) -> ast.Module:
+        try:
+            return ast.parse(self.source, mode="exec")
+        except SyntaxError as error:
+            raise ScriptParseError(
+                "E_SCRIPT_SYNTAX",
+                error.msg,
+                error.lineno or 1,
+                error.offset or 1,
+            ) from None
+        except (RecursionError, ValueError) as error:
+            raise ScriptParseError("E_SCRIPT_SYNTAX", str(error), 1, 1) from None
+
+    def _reject_semicolons(self) -> None:
+        tokens = tokenize.generate_tokens(io.StringIO(self.source).readline)
+        for token in tokens:
+            if token.type == tokenize.OP and token.string == ";":
+                line, zero_based_column = token.start
+                self._fail(
+                    "E_SCRIPT_FORBIDDEN",
+                    "Semicolon-separated statements are not allowed",
+                    line,
+                    zero_based_column + 1,
+                )
+
+    def _check_ast_depth(self, root: ast.AST) -> None:
+        pending = [(root, 1)]
+        while pending:
+            node, depth = pending.pop()
+            if depth > MAX_DEPTH:
+                self._fail_at(node, "E_SCRIPT_FORBIDDEN", "Script nesting exceeds 32 levels")
+            pending.extend((child, depth + 1) for child in ast.iter_child_nodes(node))
+
+    def _statement(self, statement: ast.stmt) -> ScriptGroup:
+        if isinstance(statement, ast.Expr) and isinstance(statement.value, ast.Call):
+            return ScriptGroup((self._command(statement.value),), atomic=False)
+        if isinstance(statement, ast.With):
+            return self._transaction(statement)
+        self._fail_at(statement, "E_SCRIPT_FORBIDDEN", "Only Tube command calls are allowed")
+
+    def _transaction(self, statement: ast.With) -> ScriptGroup:
+        if len(statement.items) != 1 or statement.items[0].optional_vars is not None:
+            self._fail_at(statement, "E_SCRIPT_FORBIDDEN", "Transaction must have one context")
+        context = statement.items[0].context_expr
+        if not isinstance(context, ast.Call) or not self._is_transaction_call(context):
+            self._fail_at(context, "E_SCRIPT_FORBIDDEN", "Invalid transaction context")
+        if context.args or context.keywords:
+            self._fail_at(context, "E_ARGUMENT_INVALID", "Transaction accepts no arguments")
+
+        calls: list[ScriptCall] = []
+        for child in statement.body:
+            if not isinstance(child, ast.Expr) or not isinstance(child.value, ast.Call):
+                self._fail_at(
+                    child,
+                    "E_SCRIPT_FORBIDDEN",
+                    "Transactions contain modifying Tube calls only",
+                )
+            call = self._command(child.value)
+            if call.name not in _TRANSACTION_METHODS:
+                self._fail_at(
+                    child,
+                    "E_SCRIPT_FORBIDDEN",
+                    "Queries, undo, redo, and nested transactions are not allowed here",
+                )
+            calls.append(call)
+        return ScriptGroup(tuple(calls), atomic=True)
+
+    def _command(self, call: ast.Call) -> ScriptCall:
+        namespace, method = self._qualified_name(call)
+        if self._is_transaction_call(call):
+            self._fail_at(call, "E_SCRIPT_FORBIDDEN", "Transaction is valid only in a with block")
+        canonical = self._canonical_method(namespace, method, call)
+        self.call_count += 1
+        if self.call_count > MAX_CALLS:
+            self._fail_at(call, "E_SCRIPT_FORBIDDEN", "Script exceeds 500 command calls")
+
+        args = tuple(self._literal(argument, 1) for argument in call.args)
+        kwargs: dict[str, object] = {}
+        for keyword in call.keywords:
+            if keyword.arg is None:
+                self._fail_at(keyword.value, "E_ARGUMENT_INVALID", "Star arguments are not allowed")
+            if keyword.arg in kwargs:
+                self._fail_at(keyword.value, "E_ARGUMENT_INVALID", "Duplicate keyword argument")
+            kwargs[keyword.arg] = self._literal(keyword.value, 1)
+        line, column = self._location(call)
+        return ScriptCall(canonical, args, kwargs, line, column)
+
+    def _qualified_name(self, call: ast.Call) -> tuple[str, str]:
+        function = call.func
+        if not isinstance(function, ast.Attribute) or not isinstance(function.value, ast.Name):
+            self._fail_at(call, "E_SCRIPT_FORBIDDEN", "Command must use tube or 管状 directly")
+        namespace = function.value.id
+        method = function.attr
+        if "__" in namespace or "__" in method:
+            self._fail_at(function, "E_SCRIPT_FORBIDDEN", "Dunder access is not allowed")
+        if namespace not in {"tube", "管状"}:
+            self._fail_at(function, "E_SCRIPT_FORBIDDEN", "Unknown command namespace")
+        return namespace, method
+
+    def _canonical_method(self, namespace: str, method: str, node: ast.AST) -> str:
+        if namespace == "tube" and method in _ENGLISH_METHODS:
+            return method
+        if namespace == "管状" and method in _CHINESE_METHODS:
+            return _CHINESE_METHODS[method]
+        self._fail_at(node, "E_COMMAND_UNKNOWN", f"Unknown Tube command: {method}")
+
+    def _is_transaction_call(self, call: ast.Call) -> bool:
+        function = call.func
+        if not isinstance(function, ast.Attribute) or not isinstance(function.value, ast.Name):
+            return False
+        return (function.value.id, function.attr) in {
+            ("tube", "transaction"),
+            ("管状", "事务"),
+        }
+
+    def _literal(self, node: ast.AST, depth: int) -> object:
+        if depth > MAX_DEPTH:
+            self._fail_at(node, "E_ARGUMENT_INVALID", "Argument nesting exceeds 32 levels")
+        if isinstance(node, ast.Constant):
+            return self._constant(node)
+        if isinstance(node, ast.UnaryOp) and isinstance(node.op, ast.USub):
+            value = node.operand.value if isinstance(node.operand, ast.Constant) else None
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                self._fail_at(node, "E_ARGUMENT_INVALID", "Minus requires a finite number")
+            if isinstance(value, float) and not math.isfinite(value):
+                self._fail_at(node, "E_ARGUMENT_INVALID", "Minus requires a finite number")
+            return -value
+        if isinstance(node, (ast.Tuple, ast.List)):
+            values = [self._literal(item, depth + 1) for item in node.elts]
+            return tuple(values) if isinstance(node, ast.Tuple) else values
+        if isinstance(node, ast.Dict):
+            return self._dictionary(node, depth)
+        self._fail_at(node, "E_ARGUMENT_INVALID", "Argument must be a literal value")
+
+    def _constant(self, node: ast.Constant) -> object:
+        value = node.value
+        if value is None or isinstance(value, (str, bool, int)):
+            return value
+        if isinstance(value, float) and math.isfinite(value):
+            return value
+        self._fail_at(node, "E_ARGUMENT_INVALID", "Argument must be finite JSON-like data")
+
+    def _dictionary(self, node: ast.Dict, depth: int) -> dict[str, object]:
+        result: dict[str, object] = {}
+        for key_node, value_node in zip(node.keys, node.values, strict=True):
+            if key_node is None:
+                self._fail_at(
+                    value_node, "E_ARGUMENT_INVALID", "Dictionary unpacking is not allowed"
+                )
+            key = self._literal(key_node, depth + 1)
+            if not isinstance(key, str):
+                self._fail_at(key_node, "E_ARGUMENT_INVALID", "Dictionary keys must be strings")
+            if key in result:
+                self._fail_at(key_node, "E_ARGUMENT_INVALID", "Duplicate dictionary key")
+            result[key] = self._literal(value_node, depth + 1)
+        return result
+
+    def _location(self, node: ast.AST) -> tuple[int, int]:
+        line = getattr(node, "lineno", 1)
+        byte_column = getattr(node, "col_offset", 0)
+        if not 1 <= line <= len(self.lines):
+            return line, byte_column + 1
+        raw_prefix = self.lines[line - 1].encode("utf-8")[:byte_column]
+        return line, len(raw_prefix.decode("utf-8")) + 1
+
+    def _fail_at(self, node: ast.AST, code: str, message: str) -> NoReturn:
+        line, column = self._location(node)
+        self._fail(code, message, line, column)
+
+    @staticmethod
+    def _fail(code: str, message: str, line: int, column: int) -> NoReturn:
+        raise ScriptParseError(code, message, line, column)
+
+
+def parse_script(source: str) -> tuple[ScriptGroup, ...]:
+    """Parse console text into canonical calls without executing user input."""
+
+    if not isinstance(source, str):
+        raise ScriptParseError("E_ARGUMENT_INVALID", "Script source must be text", 1, 1)
+    try:
+        source_size = len(source.encode("utf-8"))
+    except UnicodeEncodeError:
+        raise ScriptParseError(
+            "E_ARGUMENT_INVALID", "Script must be valid UTF-8 text", 1, 1
+        ) from None
+    if source_size > MAX_SOURCE_BYTES:
+        raise ScriptParseError("E_SCRIPT_FORBIDDEN", "Script exceeds 256 KiB", 1, 1)
+    return _Parser(source).parse()
+
+
+__all__ = ["ScriptCall", "ScriptGroup", "ScriptParseError", "parse_script"]

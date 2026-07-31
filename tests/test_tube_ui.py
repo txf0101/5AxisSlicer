@@ -19,6 +19,7 @@ from PyQt5.QtTest import QTest
 from PyQt5.QtWidgets import QApplication, QWidget
 
 from five_axis_slicer import background_load, model_commit
+from five_axis_slicer.command_kernel import CommandError
 from five_axis_slicer.gcode_preview import PreviewSettings, load_gcode
 from five_axis_slicer.manufacturing.coordinates import RigidTransform
 from five_axis_slicer.manufacturing.preview_kinematics import (
@@ -205,6 +206,65 @@ class TubeUiTests(unittest.TestCase):
         window.show()
         self.app.processEvents()
         return window
+
+    def test_http_tube_mutation_reports_shared_revision_conflicts(self) -> None:
+        window = self._window()
+
+        created = window.handle_automation(
+            "/tube/operation/create",
+            {"command_id": "http-1", "expected_revision": 0},
+        )
+
+        self.assertEqual(created["command"]["revision"], 1)
+        self.assertEqual(created["command"]["command_id"], "http-1")
+        self.assertEqual(created["command"]["changed_fields"], ["operations"])
+        self.assertEqual(created["command"]["affected_nodes"], ["operation"])
+        self.assertEqual(window.tube_script_service.kernel.revision, 1)
+        with self.assertRaises(CommandError) as raised:
+            window.handle_automation(
+                "/tube/part/confirm",
+                {"command_id": "http-stale", "expected_revision": 0},
+            )
+        self.assertEqual(raised.exception.code, "E_REVISION_CONFLICT")
+        self.assertEqual(raised.exception.command_id, "http-stale")
+
+    def test_command_adapters_publish_one_full_refresh(self) -> None:
+        window = self._window()
+        page = window.tube_page
+        refresh = mock.Mock(wraps=page.refresh)
+        page.refresh = refresh
+
+        page._create_operation()
+        self.assertEqual(refresh.call_count, 1)
+        refresh.reset_mock()
+
+        page._apply_machine()
+        self.assertEqual(refresh.call_count, 1)
+        self.assertIsNotNone(page.controller.setup.machine)
+        self.assertGreater(page.mount_combo.count(), 0)
+        refresh.reset_mock()
+
+        for node in (MODEL_CS_NODE, BUILD_CS_NODE):
+            page.apply_numeric_coordinate(node, (0, 0, 0), (0, 0, 1), (1, 0, 0))
+            self.assertEqual(refresh.call_count, 1)
+            refresh.reset_mock()
+        self.assertIsNotNone(page.controller.setup.build_coordinate_system)
+
+        page.apply_placement("build_plate_mount")
+        self.assertEqual(refresh.call_count, 1)
+        self.assertEqual(page._view_mode, "machine")
+        self.assertFalse(page.machine_view_button.isEnabled())
+        self.assertIsNotNone(page.controller.setup.T_mount_from_build)
+        self.assertIsNotNone(page.viewer.model_transform)
+
+    def test_script_console_default_height_keeps_viewer_usable(self) -> None:
+        window = self._loaded_tube_window()
+        for _ in range(4):
+            self.app.processEvents()
+
+        self.assertGreaterEqual(window.script_console.height(), 170)
+        self.assertLessEqual(window.script_console.height(), 230)
+        self.assertGreaterEqual(window.tube_page.viewer.height(), 420)
 
     def _select_tube_node(self, window: MainWindow, node: str) -> None:
         page = window.tube_page
@@ -778,11 +838,78 @@ class TubeUiTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             project_dir = Path(tmp) / "pipe2-project"
             saved = window.save_project_to(project_dir)
+            self.assertTrue((project_dir / "manufacturing-setup.yaml").is_file())
+            self.assertIsNone(saved["config_warning"])
             reopened = window.open_project(saved["project_json"])
 
         self.assertEqual(reopened["workbench"]["workbench"], "tube")
         self.assertTrue(reopened["tube"]["coordinates_valid"])
         self.assertEqual(window.tube_page.controller.setup.to_json(), before)
+
+    def test_pipe2_script_transaction_reaches_ready_and_reopens_with_yaml(self) -> None:
+        if self.pipe2 is None:
+            self.skipTest("pipe2 STEP fixture is unavailable")
+        window = self._window()
+        window.open_model(self.pipe2, show_dialog=False)
+        window.enter_workbench("tube")
+        controller = window.tube_page.controller
+        machine = next(
+            profile
+            for profile in controller.available_resource_profiles("machine")
+            if "generic_xyzac" in profile.profile_id
+        )
+        nozzle = next(
+            profile
+            for profile in controller.available_resource_profiles("nozzle")
+            if math.isclose(profile.orifice_diameter_mm, 0.4)
+        )
+        material = next(
+            profile
+            for profile in controller.available_resource_profiles("material")
+            if profile.material == "PLA"
+        )
+        revision_before = window.tube_script_service.kernel.revision
+        script = f"""
+with tube.transaction():
+    tube.create_operation()
+    tube.confirm_part()
+    tube.set_machine({json.dumps(machine.profile_id)})
+    tube.set_nozzle(
+        {json.dumps(nozzle.resource_id)},
+        interface="M6×1",
+        length_mm=12.5,
+        use_collision_envelope=True,
+    )
+    tube.set_material({json.dumps(material.resource_id)}, review_confirmed=True)
+    tube.set_model_cs()
+    tube.set_build_cs()
+    tube.set_placement("build_plate_mount")
+"""
+
+        output = window.tube_script_service.execute_script(script)
+
+        self.assertNotIn("[E_", output)
+        self.assertEqual(window.tube_script_service.kernel.revision, revision_before + 1)
+        self.assertTrue(controller.coordinates_valid)
+        self.assertTrue(controller.setup_ready)
+        self.assertEqual(
+            set(controller.setup.assignments.part_body_ids),
+            {body.body_id for body in window.model.solid_bodies},
+        )
+
+        with tempfile.TemporaryDirectory() as tmp:
+            project = Path(tmp) / "pipe2-script-project"
+            saved = window.save_project_to(project)
+            yaml_before = (project / "manufacturing-setup.yaml").read_bytes()
+            reopened = window.open_project(saved["project_json"])
+
+        self.assertTrue(reopened["tube"]["coordinates_valid"])
+        self.assertTrue(reopened["tube"]["setup_ready"])
+        self.assertEqual(
+            window.tube_script_service.config.state_json()["status"],
+            "synced",
+        )
+        self.assertGreater(len(yaml_before), 0)
 
     def test_project_open_endpoint_replaces_or_clears_gcode_state(self) -> None:
         if self.pipe2 is None:
