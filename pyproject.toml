@@ -74,6 +74,8 @@ select = ["E4", "E7", "E9", "F"]
 "scripts/*.py" = ["E402"]
 "tests/*.py" = ["E402"]
 "src/five_axis_slicer/result_preview.py" = ["E402"]
+# This file is restricted command text; its host names are checked by the DSL parser.
+"example/pipe2/tube_setup_coordinate_demo/setup_demo.py" = ["F821"]
 
 [tool.ruff.format]
 line-ending = "lf"

@@ -34,9 +34,9 @@ from .manufacturing.references import (
     DEFAULT_REBIND_TOLERANCE,
     CadModelRebindResult,
     RebindTolerance,
-    geometry_reference as build_geometry_reference,
     rebind_cad_model_state,
 )
+from .manufacturing.references import geometry_reference as build_geometry_reference
 from .manufacturing.resources import (
     MaterialProfile,
     NozzleProfile,
@@ -86,8 +86,8 @@ from .tube_serialization import (
 from .tube_validation import (
     TubeValidationContext,
     merge_issues,
-    validation_report as build_validation_report,
 )
+from .tube_validation import validation_report as build_validation_report
 
 TUBE_OPERATION_TYPE = "tube_thin_wall_indexed"
 TUBE_OPERATION_NAME = "Tube Thin-Wall Indexed"

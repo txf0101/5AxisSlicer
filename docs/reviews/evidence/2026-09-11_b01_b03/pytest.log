@@ -1,0 +1,170 @@
+........................................................................ [ 17%]
+........................................................................ [ 35%]
+.........s.............s................................................ [ 53%]
+..............................s......................................... [ 71%]
+........................................................................ [ 88%]
+........F.F..................................                            [100%]
+================================== FAILURES ===================================
+______ UiStateTests.test_result_menus_and_language_preference_are_global ______
+
+self = <test_ui_state.UiStateTests testMethod=test_result_menus_and_language_preference_are_global>
+
+    def test_result_menus_and_language_preference_are_global(self) -> None:
+        window = MainWindow(http_port=0, result_viewer_factory=ResultViewerStub)
+        self.addCleanup(window.close)
+        self.assertEqual(
+            [action.text() for action in window.menuBar().actions()],
+            ["�ļ�", "ģ��", "��Ƭ", "Ԥ��", "G-code", "����", "����"],
+        )
+    
+        window.set_language("en")
+        self.assertEqual(
+            [action.text() for action in window.menuBar().actions()],
+            ["File", "Model", "Slice", "Preview", "G-code", "Tools", "Help"],
+        )
+        second = MainWindow(http_port=0, result_viewer_factory=ResultViewerStub)
+        self.addCleanup(second.close)
+>       self.assertEqual(second.language, "en")
+E       AssertionError: 'zh' != 'en'
+E       - zh
+E       + en
+
+tests\test_ui_state.py:161: AssertionError
+---------------------------- Captured stderr call -----------------------------
+2026-09-11 12:30:57.435 ( 149.628s) [109638EFB7C223A2]vtkWin32OpenGLRenderWin:746    ERR| vtkWin32OpenGLRenderWindow (000002E3A0C406C0): failed to get valid pixel format.
+2026-09-11 12:30:57.450 ( 149.643s) [109638EFB7C223A2]vtkOpenGLRenderWindow.c:701    ERR| vtkWin32OpenGLRenderWindow (000002E3A0C406C0): GLEW could not be initialized: Missing GL version
+2026-09-11 12:30:57.464 ( 149.657s) [109638EFB7C223A2]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-11 12:30:57.481 ( 149.674s) [109638EFB7C223A2]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-11 12:30:57.498 ( 149.691s) [109638EFB7C223A2]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-11 12:30:57.515 ( 149.708s) [109638EFB7C223A2]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-11 12:30:57.530 ( 149.723s) [109638EFB7C223A2]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-11 12:30:57.546 ( 149.739s) [109638EFB7C223A2]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-11 12:30:57.565 ( 149.758s) [109638EFB7C223A2]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-11 12:30:57.582 ( 149.775s) [109638EFB7C223A2]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-11 12:30:57.593 ( 149.786s) [109638EFB7C223A2]   vtkShaderProgram.cxx:437    ERR| vtkShaderProgram (000002E3BB9CE110): 1: #version 150
+2: #ifndef GL_ES
+3: #define highp
+4: #define mediump
+5: #define lowp
+6: #endif // GL_ES
+7: #define attribute in
+8: #define varying out
+9: 
+10: in vec4 ndCoordIn;
+11: in vec2 texCoordIn;
+12: out vec2 texCoord;
+13: void main()
+14: {
+15:   gl_Position = ndCoordIn;
+16:   texCoord = texCoordIn;
+17:   //VTK::TCoord::Flip
+18: }
+
+2026-09-11 12:30:57.647 ( 149.839s) [109638EFB7C223A2]   vtkShaderProgram.cxx:438    ERR| vtkShaderProgram (000002E3BB9CE110): Could not create shader object.
+2026-09-11 12:30:57.652 ( 149.845s) [109638EFB7C223A2]vtkOpenGLVertexArrayObj:255    ERR| vtkOpenGLVertexArrayObject (000002E3AE4D0D60): attempt to add attribute without a program for attribute ndCoordIn
+2026-09-11 12:30:57.661 ( 149.854s) [109638EFB7C223A2]vtkOpenGLQuadHelper.cxx:60    WARN| Error binding ndCoords to VAO.
+2026-09-11 12:30:57.668 ( 149.861s) [109638EFB7C223A2]vtkOpenGLRenderWindow.c:1260   ERR| vtkWin32OpenGLRenderWindow (000002E3A0C406C0): Couldn't build the shader program for depth blits
+2026-09-11 12:31:06.621 ( 158.812s) [109638EFB7C223A2]vtkWin32OpenGLRenderWin:746    ERR| vtkWin32OpenGLRenderWindow (000002E3A109A9F0): failed to get valid pixel format.
+2026-09-11 12:31:06.631 ( 158.821s) [109638EFB7C223A2]vtkOpenGLRenderWindow.c:701    ERR| vtkWin32OpenGLRenderWindow (000002E3A109A9F0): GLEW could not be initialized: Missing GL version
+2026-09-11 12:31:06.639 ( 158.829s) [109638EFB7C223A2]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-11 12:31:06.646 ( 158.837s) [109638EFB7C223A2]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-11 12:31:06.657 ( 158.848s) [109638EFB7C223A2]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-11 12:31:06.669 ( 158.859s) [109638EFB7C223A2]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-11 12:31:06.677 ( 158.868s) [109638EFB7C223A2]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-11 12:31:06.689 ( 158.880s) [109638EFB7C223A2]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-11 12:31:06.699 ( 158.889s) [109638EFB7C223A2]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-11 12:31:06.705 ( 158.896s) [109638EFB7C223A2]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-11 12:31:06.714 ( 158.904s) [109638EFB7C223A2]   vtkShaderProgram.cxx:437    ERR| vtkShaderProgram (000002E3BB9DAD10): 1: #version 150
+2: #ifndef GL_ES
+3: #define highp
+4: #define mediump
+5: #define lowp
+6: #endif // GL_ES
+7: #define attribute in
+8: #define varying out
+9: 
+10: in vec4 ndCoordIn;
+11: in vec2 texCoordIn;
+12: out vec2 texCoord;
+13: void main()
+14: {
+15:   gl_Position = ndCoordIn;
+16:   texCoord = texCoordIn;
+17:   //VTK::TCoord::Flip
+18: }
+
+2026-09-11 12:31:06.787 ( 158.978s) [109638EFB7C223A2]   vtkShaderProgram.cxx:438    ERR| vtkShaderProgram (000002E3BB9DAD10): Could not create shader object.
+2026-09-11 12:31:06.796 ( 158.987s) [109638EFB7C223A2]vtkOpenGLVertexArrayObj:255    ERR| vtkOpenGLVertexArrayObject (000002E3BC3DC2B0): attempt to add attribute without a program for attribute ndCoordIn
+2026-09-11 12:31:06.806 ( 158.996s) [109638EFB7C223A2]vtkOpenGLQuadHelper.cxx:60    WARN| Error binding ndCoords to VAO.
+2026-09-11 12:31:06.812 ( 159.002s) [109638EFB7C223A2]vtkOpenGLRenderWindow.c:1260   ERR| vtkWin32OpenGLRenderWindow (000002E3A109A9F0): Couldn't build the shader program for depth blits
+_ UiStateTests.test_results_open_endpoint_commits_background_gcode_atomically _
+
+self = <test_ui_state.UiStateTests testMethod=test_results_open_endpoint_commits_background_gcode_atomically>
+
+    def test_results_open_endpoint_commits_background_gcode_atomically(self) -> None:
+        window = MainWindow(http_port=0, result_viewer_factory=ResultViewerStub)
+        self.addCleanup(window.close)
+        with tempfile.TemporaryDirectory() as tmpdir:
+            source = Path(tmpdir) / "result.gcode"
+            source.write_text(
+                ";LAYER_CHANGE\n"
+                "G1 X0 Y0 Z0.2 F3000\n"
+                "G1 X1 Y0 Z0.2 A10 C-4 E0.3 F1200\n",
+                encoding="utf-8",
+            )
+            accepted = window.handle_automation("/results/open", {"path": str(source)})
+            self.assertTrue(accepted["accepted"])
+            deadline = time.monotonic() + 5.0
+            while (
+                window.result_page.state.status == "loading"
+                and time.monotonic() < deadline
+            ):
+                self.app.processEvents()
+                time.sleep(0.005)
+            try:
+>               self.assertIn(window.result_page.state.status, {"ready", "warning"})
+E               AssertionError: 'loading' not found in {'ready', 'warning'}
+
+tests\test_ui_state.py:218: AssertionError
+---------------------------- Captured stderr call -----------------------------
+2026-09-11 12:31:30.113 ( 182.298s) [109638EFB7C223A2]vtkWin32OpenGLRenderWin:746    ERR| vtkWin32OpenGLRenderWindow (000002E3BD50ACF0): failed to get valid pixel format.
+2026-09-11 12:31:30.122 ( 182.307s) [109638EFB7C223A2]vtkOpenGLRenderWindow.c:701    ERR| vtkWin32OpenGLRenderWindow (000002E3BD50ACF0): GLEW could not be initialized: Missing GL version
+2026-09-11 12:31:30.130 ( 182.315s) [109638EFB7C223A2]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-11 12:31:30.140 ( 182.325s) [109638EFB7C223A2]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-11 12:31:30.147 ( 182.333s) [109638EFB7C223A2]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-11 12:31:30.154 ( 182.340s) [109638EFB7C223A2]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-11 12:31:30.162 ( 182.347s) [109638EFB7C223A2]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-11 12:31:30.173 ( 182.359s) [109638EFB7C223A2]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-11 12:31:30.181 ( 182.366s) [109638EFB7C223A2]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-11 12:31:30.186 ( 182.372s) [109638EFB7C223A2]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-11 12:31:30.193 ( 182.378s) [109638EFB7C223A2]   vtkShaderProgram.cxx:437    ERR| vtkShaderProgram (000002E3BB9B2C60): 1: #version 150
+2: #ifndef GL_ES
+3: #define highp
+4: #define mediump
+5: #define lowp
+6: #endif // GL_ES
+7: #define attribute in
+8: #define varying out
+9: 
+10: in vec4 ndCoordIn;
+11: in vec2 texCoordIn;
+12: out vec2 texCoord;
+13: void main()
+14: {
+15:   gl_Position = ndCoordIn;
+16:   texCoord = texCoordIn;
+17:   //VTK::TCoord::Flip
+18: }
+
+2026-09-11 12:31:30.246 ( 182.431s) [109638EFB7C223A2]   vtkShaderProgram.cxx:438    ERR| vtkShaderProgram (000002E3BB9B2C60): Could not create shader object.
+2026-09-11 12:31:30.253 ( 182.438s) [109638EFB7C223A2]vtkOpenGLVertexArrayObj:255    ERR| vtkOpenGLVertexArrayObject (000002E3AF809410): attempt to add attribute without a program for attribute ndCoordIn
+2026-09-11 12:31:30.258 ( 182.444s) [109638EFB7C223A2]vtkOpenGLQuadHelper.cxx:60    WARN| Error binding ndCoords to VAO.
+2026-09-11 12:31:30.266 ( 182.451s) [109638EFB7C223A2]vtkOpenGLRenderWindow.c:1260   ERR| vtkWin32OpenGLRenderWindow (000002E3BD50ACF0): Couldn't build the shader program for depth blits
+- generated xml file: F:\����Ŀ������\5AxisSclicer_V2.0\tmp\b01_b03_acceptance\pytest.xml -
+=========================== short test summary info ===========================
+SKIPPED [1] tests\test_project_io.py:779: file symlink unavailable: [WinError 1314] �ͻ���û���������Ȩ��: 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmp3mg7pu5z\\outside.step' -> 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmp3mg7pu5z\\project\\source\\187f578f0763e14056a86d66446c8a75f47976bba406a3735baef07e7573ee1a.step'
+SKIPPED [1] tests\test_project_io.py:807: directory symlink unavailable: [WinError 1314] �ͻ���û���������Ȩ��: 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmp23qrjr2t\\outside-source' -> 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmp23qrjr2t\\project\\source'
+SKIPPED [1] tests\test_setup_config.py:302: file symlink unavailable: [WinError 1314] �ͻ���û���������Ȩ��: 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmppxxsbbq2\\target.yaml' -> 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmppxxsbbq2\\manufacturing-setup.yaml'
+FAILED tests/test_ui_state.py::UiStateTests::test_result_menus_and_language_preference_are_global
+FAILED tests/test_ui_state.py::UiStateTests::test_results_open_endpoint_commits_background_gcode_atomically
+2 failed, 400 passed, 3 skipped in 206.18s (0:03:26)

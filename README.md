@@ -4,6 +4,8 @@
 
 管状坐标设置的完整入口和操作步骤见[中文图文指南](docs/guides/tube_coordinate_setup_zh.md)，底部控制台与 YAML 工作文件见[设置脚本说明](docs/guides/tube_setup_script_console_zh.md)。当前只有管状工作台接入坐标编辑器；其他工作台继续使用通用 Operation Session。
 
+六个工作台的算法开发按[开发计划](docs/planning/development_plan.md)推进，优先完成管状工作台。每轮任务状态、验收证据和下一步更新到[进度台账主表](docs/planning/progress_tracker.md#主表)；NX 与公开项目资料见[参考资料](docs/planning/reference_research.md)，全部开发文档从[文档索引](docs/README.md)进入。
+
 当前范围：
 
 - Workbench 首页展示 Planar、Curve、Freeform、Rotary、Tube、Research 六类工作台。

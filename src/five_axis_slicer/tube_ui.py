@@ -68,16 +68,18 @@ from .models import (
     PickRequest,
 )
 from .step_loader import geometry_candidates
-from .tube_controller import BodyRole, DraftNotFoundError, TubeSetupController
 from .tube_commands import TubeCommandProvider
+from .tube_controller import BodyRole, DraftNotFoundError, TubeSetupController
 from .tube_drafts import CoordinateFrameDraft
 from .tube_resource_selection import NozzleEditorError
 from .tube_ui_text import (
     TUBE_CONTROL_TEXT,
-    TUBE_TEXT as _TEXT,
     apply_tube_help,
     setup_tree_node,
     tube_language,
+)
+from .tube_ui_text import (
+    TUBE_TEXT as _TEXT,
 )
 from .ui_controls import OptionalDoubleSpinBox
 from .viewer import ModelViewer
