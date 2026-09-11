@@ -18,11 +18,15 @@
 - [T08—T12 Tube Workbench 阶段审查](reviews/2026-09-11_t08_t12_tube_workbench_review.md)：三种 Tube 操作、生成/回读、来源边界、质量门禁、UI 证据和未验证的真实机床限制。
 - [T08—T12 正式验收证据](reviews/evidence/2026-09-11_t08_t12/manifest.json)：JUnit、首次 targeted 失败与串行通过、三尺寸 UI、pipe2 六件套及 SHA-256。
 - [T08—T12 来源与实现边界](planning/reference_research.md#8-t08t12-新实现的可核对来源边界)：RMF、G-code 语义、时间参数化、FCL/OCCT 参考及 Generic XYZAC 离线资格边界。
+- [图文使用手册体系复盘](reviews/2026-09-11_user_manual_framework_review.md)：手册范围、图片依据、检查结果和待补成功流程。
 
 以上计划采用 2026-09-10 用户确定的“管状优先”和“自用、暂无开源计划”。旧目标中的开发顺序与定位在本阶段按最新决定执行，原始资料保留。
 
 ## 当前软件与使用说明
 
+- [图文使用手册索引与交付要求](guides/README.md)：当前手册入口、图片要求和后续各工作台的手册门槛。
+- [Tube 工作台完整图文手册](guides/tube_workbench_zh.md)：三种操作、生成、检查、预览、导出及错误处理。
+- [G-code 可视化图文手册](guides/gcode_preview_zh.md)：普通 Preview、成果页、分色、层范围与五轴回读边界。
 - [根目录 README](../README.md)：启动、当前能力、自动化接口和验证入口。
 - [项目结构](project_structure.md)：现有模块及职责；该文档有自身的核查日期。
 - [管状坐标设置图文指南](guides/tube_coordinate_setup_zh.md)。

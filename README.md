@@ -1,12 +1,12 @@
 # 5AxisSclicer V2.0
 
-5AxisSclicer V2.0 以 Workbench 为入口。当前有两条可交互主线：`Imported NC Review` 用于已有 NC/G-code 的空间路径、层范围和路径类型预览；Tube Workbench 已完成第一阶段 Setup 与坐标闭环，可定义 Part、Machine、Nozzle、Material、Model CS、Build CS 和 Placement，并保存、重开项目。
+5AxisSclicer V2.0 以 Workbench 为入口。当前有两条可交互主线：`Imported NC Review` 用于已有 NC/G-code 的空间路径、层范围和路径类型预览；Tube Workbench 已完成 T01—T12，可配置 Setup，使用 Indexed、Buildup、Continuous 三种操作生成、检查、后处理、回读和导出离线结果，并保存、重开项目。
 
-管状坐标设置的完整入口和操作步骤见[中文图文指南](docs/guides/tube_coordinate_setup_zh.md)，底部控制台与 YAML 工作文件见[设置脚本说明](docs/guides/tube_setup_script_console_zh.md)。当前只有管状工作台接入坐标编辑器；其他工作台继续使用通用 Operation Session。
+使用者可从[图文使用手册索引](docs/guides/README.md)进入。Tube 的完整流程见[Tube 工作台手册](docs/guides/tube_workbench_zh.md)，坐标设置见[管状坐标设置](docs/guides/tube_coordinate_setup_zh.md)，G-code 阅读见[G-code 可视化手册](docs/guides/gcode_preview_zh.md)，底部控制台与 YAML 工作文件见[设置脚本说明](docs/guides/tube_setup_script_console_zh.md)。当前只有管状工作台接入完整制造 Setup 和生成闭环；其他工作台继续使用通用 Operation Session。
 
 六个工作台的算法开发按[开发计划](docs/planning/development_plan.md)推进，优先完成管状工作台。每轮任务状态、验收证据和下一步更新到[进度台账主表](docs/planning/progress_tracker.md#主表)；NX 与公开项目资料见[参考资料](docs/planning/reference_research.md)，全部开发文档从[文档索引](docs/README.md)进入。
 
-Tube Indexed 的 T01—T07 参考实现已经聚拢到本仓库：可编辑管体/入口/出口/基体及工艺参数，识别直管与圆弧管中心线，按楔角和几何误差分区，使用 OCCT 生成薄壁截交路径，生成安全转位事件，求解 Generic XYZAC 轴轨迹，并输出几何、喷嘴、基体、夹具、IPW 与运动扫掠检查报告。完整的“生成按钮 → 后处理 NC → 回读”产品流程属于 T08，当前尚未宣称完成。
+Tube 的 T01—T12 实现已经聚拢到本仓库：Indexed 支持受限圆管的分块切层和安全转位，Buildup 支持多道加厚和可选平面底座工序，Continuous 支持沿单支管中心线的连续螺旋。三种操作共用生成、检查、参考 XYZAC 求解、NC 后处理、回读、导出和结果过期状态。Generic XYZAC 仍是离线参考机型，尚未取得真实机床资格。
 
 管状算法主要学习了相邻 `5AxisSlicer` 工程中的 Fractal Cortex 多方向分块、逐块切层和安全转位流程。Fractal Cortex 由 Fractal Robotics 开发，README 标注 Copyright (C) 2025 Daniel Brogan，许可证为 GPLv3。本项目当前仅内部传阅、暂无公开计划；新实现按 V2.0 的 B-Rep、路径、运动学和验证契约重写。固定 commit、逐文件 SHA-256、方法映射和许可证边界见[Tube Indexed 参考来源登记](docs/planning/tube_reference_provenance.md)。
 
