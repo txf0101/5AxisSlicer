@@ -19,6 +19,7 @@
 - [T08—T12 正式验收证据](reviews/evidence/2026-09-11_t08_t12/manifest.json)：JUnit、首次 targeted 失败与串行通过、三尺寸 UI、pipe2 六件套及 SHA-256。
 - [T08—T12 来源与实现边界](planning/reference_research.md#8-t08t12-新实现的可核对来源边界)：RMF、G-code 语义、时间参数化、FCL/OCCT 参考及 Generic XYZAC 离线资格边界。
 - [图文使用手册体系复盘](reviews/2026-09-11_user_manual_framework_review.md)：手册范围、图片依据、检查结果和待补成功流程。
+- [工作台开发复用 Skill 建立复盘](reviews/2026-09-11_workbench_development_skill_review.md)：Tube 经验提炼、Skill 结构、调用登记方式、校验和文件指纹。
 
 以上计划采用 2026-09-10 用户确定的“管状优先”和“自用、暂无开源计划”。旧目标中的开发顺序与定位在本阶段按最新决定执行，原始资料保留。
 

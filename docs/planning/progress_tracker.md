@@ -20,6 +20,16 @@
 - 每个工作台阶段标记完成前，必须同步完成该模块的图文使用手册。手册应包含真实界面总览、参数、正常结果、典型错误和恢复、输出及能力边界；统一入口见[使用手册索引](../guides/README.md)。
 - 不按对话次数自动增加百分比。本表由每轮实际工作更新，没有后台自动轮询、定时任务或未经核验的状态同步。
 
+## Skill 调用记录
+
+实施或收尾 P/C/F/R/X/I 及后续 Tube 工作台任务时，先调用 `five-axis-workbench-development`；进入测试、Qt/VTK 回归、失败诊断或阶段验收时再调用 `five-axis-slicer-validation`。每次只登记实际加载并影响工作的 Skill，详细判断放入对应复盘。
+
+| 日期 | 任务 | Skill | 本轮用途 | 证据 |
+| --- | --- | --- | --- | --- |
+| 2026-09-11 | DOC-SKILL | `skill-creator` | 把 Tube T01—T12 方法提炼为可发现、可校验的个人 Skill | [Skill 建立复盘](../reviews/2026-09-11_workbench_development_skill_review.md) |
+| 2026-09-11 | DOC-SKILL | `five-axis-workbench-development` | 自检开发闭环、阶段门槛和调用登记规则；尚未启动 P01 | [Skill 建立复盘](../reviews/2026-09-11_workbench_development_skill_review.md) |
+| 2026-09-11 | DOC-SKILL | `five-axis-slicer-validation` | 划分开发与验证职责，并采用“纯 Skill/文档修改不跑全仓”的验证边界 | [Skill 建立复盘](../reviews/2026-09-11_workbench_development_skill_review.md) |
+
 ## 主表
 
 | 编号 | 阶段与交付 | 依赖 | 状态 | 完成判据 | 证据或阻塞 | 下一步 | 更新日期 |
@@ -122,6 +132,7 @@
 
 | 日期 | 变更依据 | 变更内容 | 影响 |
 | --- | --- | --- | --- |
+| 2026-09-11 | 用户要求把本轮开发经验整理为后续工作台可调用的 Skill，并在日志和台账记录调用 | 新建个人 Skill `five-axis-workbench-development` 及阶段门槛参考；项目 `AGENTS.md` 增加入口；台账增加实际调用记录 | P/C/F/R/X/I 开发复用同一闭环；验证仍由 `five-axis-slicer-validation` 管理；P01 状态保持未开始 |
 | 2026-09-11 | 用户要求各模块制作形象、图文并茂的使用手册 | 建立手册索引、图片规则和阶段门槛；先补齐已完成 Tube 与 G-code 预览，后续五个工作台在各自阶段验收前同步交付手册 | 图文手册成为后续 P06/C05/F06/R05/X06 与 I03/I04 的完成条件，不为尚未实现功能编写伪操作说明 |
 | 2026-09-11 | 用户要求完成 T01—T07，并明确管状算法参考相邻项目后在当前项目重写聚拢 | 完成受限 Tube Indexed 的输入、中心线、切层、薄壁路径、转位、Generic XYZAC 与离线检查；记录 Fractal Cortex 来源、commit、SHA-256 和内部传阅边界；完成三档分辨率 UI 审查；质量门禁通过，全仓 430 passed、3 skipped、130 subtests passed | T01—T07 登记为已完成；下一项为 T08；不扩大为完整 Tube 工作台、NC 闭环或真实机床资格 |
 | 2026-09-11 | 用户要求完成 T08—T12 并归档阶段证据 | 完成 Indexed 生成/后处理/回读、Buildup 多工序、Continuous RMF/螺旋/运动、三操作集成及 UI/脚本/HTTP 阶段验收；质量门禁全通过，专项 98 passed、1 skipped、2 subtests，全仓 465 passed、3 skipped、130 subtests；首次 targeted 回归失败后串行重跑通过；1366x768/1600x900/1920x1080 UI summary 无碰撞且文字全适配；pipe2 1171 points readback passed | T08—T12 登记为已完成；下一项为 P01；Generic XYZAC 仍仅离线参考，真实机床资格与现场试切未验证 |
