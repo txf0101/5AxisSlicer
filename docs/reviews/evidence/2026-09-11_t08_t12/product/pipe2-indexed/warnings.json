@@ -1,0 +1,34 @@
+{
+  "collision_samples_checked": 5513,
+  "issues": [],
+  "metrics": [
+    {
+      "limit": 0.025,
+      "name": "maximum_radial_error",
+      "passed": true,
+      "unit": "mm",
+      "value": 0.021809879988353487
+    },
+    {
+      "limit": 0.01,
+      "name": "maximum_layer_spacing_error",
+      "passed": true,
+      "unit": "mm",
+      "value": 0.0
+    },
+    {
+      "limit": 0.046006331115617805,
+      "name": "maximum_wedge_height_error",
+      "passed": true,
+      "unit": "mm",
+      "value": 0.046006331115617805
+    }
+  ],
+  "motion_sample_error_mm": 0.25,
+  "ready_for_export": true,
+  "report_id": "pipe2-indexed-indexed-v1-validation-v1",
+  "schema_version": 1,
+  "status": "ready",
+  "toolpath_id": "pipe2-indexed-indexed-v1",
+  "trajectory_id": "pipe2-indexed-indexed-v1-xyzac-v1"
+}

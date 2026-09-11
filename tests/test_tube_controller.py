@@ -109,26 +109,31 @@ class TubeControllerTests(unittest.TestCase):
         self.assertEqual(assignments.part_body_ids, ("solid-base", "solid-tube"))
         self.assertEqual(assignments.unassigned_body_ids, ("sheet-guide",))
 
-    def test_one_interactive_operation_and_multi_operation_round_trip(self) -> None:
+    def test_three_interactive_operations_and_round_trip(self) -> None:
         controller = TubeSetupController(cad_model())
         operation = controller.create_operation(operation_id="tube-1")
 
-        self.assertEqual(AVAILABLE_TUBE_OPERATION_TYPES, ("tube_thin_wall_indexed",))
+        self.assertEqual(
+            AVAILABLE_TUBE_OPERATION_TYPES,
+            ("tube_thin_wall_indexed", "tube_buildup", "tube_continuous"),
+        )
         self.assertEqual(operation.name, "Tube Thin-Wall Indexed")
+        controller.create_operation("tube_buildup", operation_id="tube-2")
+        controller.create_operation("tube_continuous", operation_id="tube-3")
         with self.assertRaises(OperationLimitError):
             controller.create_operation()
 
         payload = controller.to_json()
-        payload["operations"].append(
-            TubeOperationDefinition("tube-2", controller.setup.setup_id).to_json()
-        )
         restored = TubeSetupController.from_json(
             json.loads(json.dumps(payload)),
             cad_model=cad_model(),
         )
-        self.assertEqual([item.operation_id for item in restored.operations], ["tube-1", "tube-2"])
+        self.assertEqual(
+            [item.operation_id for item in restored.operations],
+            ["tube-1", "tube-2", "tube-3"],
+        )
         self.assertFalse(restored.can_create_operation)
-        self.assertIn(
+        self.assertNotIn(
             "TUBE_OPERATION_COUNT_UNSUPPORTED",
             {issue.code for issue in restored.validation_report().issues},
         )

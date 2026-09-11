@@ -32,7 +32,7 @@ NX-03 的直接短引文为 “By splitting tubes into wedges with constant bead
 
 | 编号 | 项目与实际许可证 | 适用工作台 | 已核对的入口与可学习内容 | 本项目采用方式及边界 |
 | --- | --- | --- | --- | --- |
-| OS-01 | [Fractal Cortex](https://github.com/fractalrobotics/Fractal-Cortex)，[GPLv3](https://github.com/fractalrobotics/Fractal-Cortex/blob/main/LICENSE) | Tube Indexed、Planar、连接与输出 | `fractal-cortex/slicing_functions.py` 的 `all_5_axis_calculations`、`create_chunkList`、`align_mesh_base_to_xy`、`checkForBedNozzleCollisions`、`write_5_axis_gcode`；管接头 STL/G-code 示例 | 学习手动分割面、多方向分块、坐标和路径顺序，独立实现管状算法。不推定其具有自动中心线、连续螺旋或本项目机型的安全保证 |
+| OS-01 | [Fractal Cortex](https://github.com/fractalrobotics/Fractal-Cortex)，[GPLv3](https://github.com/fractalrobotics/Fractal-Cortex/blob/main/LICENSE)；Fractal Robotics；README 标注 Copyright (C) 2025 Daniel Brogan | Tube Indexed、Planar、连接与输出 | `fractal-cortex/slicing_functions.py` 的 `all_5_axis_calculations`、`create_chunkList`、`align_mesh_base_to_xy`、`checkForBedNozzleCollisions`、`write_5_axis_gcode`；管接头 STL/G-code 示例 | T01—T07 已学习手动分割面、多方向分块、坐标和路径顺序，并按当前 B-Rep、Toolpath、XYZAC 与检查契约重写。固定版本和逐文件哈希见[来源登记](tube_reference_provenance.md) |
 | OS-02 | [MAGE Slicer](https://github.com/gear2nd-droid/MageSlicer)，[PolyForm Shield 1.0.0](https://github.com/gear2nd-droid/MageSlicer/blob/main/LICENSE.txt) | Freeform、Tube 曲面、Research | `OCCTProxy/SliceObjects.cpp` 的 `calcLayer`、`calcPoints`、`calcBottomPoints`、`calcPeelerLayer`；`SliceTools.cpp` 的曲面、UV/XYZ 填充；`example/BendingPipe` | 研究 Sandwich/Bottom/Peeler、NURBS 与中间 CSV。许可证含 Noncompete；默认不移植其源码。机床后处理和碰撞位于独立 MAGE Simulator；自动体积分解在 README 中列为后续功能 |
 | OS-03 | [Open5x](https://github.com/FreddieHong19/Open5x)，[MIT](https://github.com/FreddieHong19/Open5x/blob/main/LICENSE) | Curve、Freeform、Rotary、Tube 的公共姿态与运动 | 原版 `Grasshopper_Definition/Open5x_Gcode_0503.gh`、旋转平台与 `Duet2_Configuration`；[上游说明](https://github.com/FreddieHong19/Open5x/blob/main/Grasshopper_Definition/README.md) | 点与法向、轴运动、挤出和进给的参考，可评估组件复用并保留通知。本地 Python port 是既往本地补充，reference replay 不能证明上游自动几何切片 |
 | OS-04 | [PrusaSlicer](https://github.com/prusa3d/PrusaSlicer)，[AGPLv3](https://github.com/prusa3d/PrusaSlicer/blob/master/LICENSE) | Planar、参数、作业状态、预览与输出 | 本轮目录树为 `src/libslic3r/src/libslic3r/` 下的 `TriangleMeshSlicer.cpp`、`PerimeterGenerator.cpp`、`Fill/FillRectilinear.cpp`、`PrintObject.cpp`、`GCode.cpp` | 对照流程与可观察行为，独立实现本项目所需平面核心；不直接推定连续五轴与管状能力 |
@@ -46,8 +46,8 @@ PrusaSlicer 等上游目录可能继续变化，实际实施时固定所读版�
 
 | 对象 | 本地目录或文件 | 可用于本计划的内容 |
 | --- | --- | --- |
-| Fractal 原始参考 | [本地 Fractal Cortex](../../../5AxisSlicer/Fractal-Cortex-main/Fractal-Cortex-main/README.md) | 管接头分块示例和通用多方向切片流程 |
-| V1.0 复现工程 | [5AxisSlicer README](../../../5AxisSlicer/README.md)；`src/five_axis_slicer/core/{slicer,legacy_engine,gcode,settings}.py` | 了解历史复现边界与连接方式；本轮只定位，不视为可直接迁入 V2.0 |
+| Fractal 原始参考 | [本地 Fractal Cortex](../../../5AxisSlicer/Fractal-Cortex-main/Fractal-Cortex-main/README.md)；commit `db29bacc5615fce206b05dc49bd6c52ab92d5351` | 管接头分块示例和通用多方向切片流程；完整指纹见[来源登记](tube_reference_provenance.md) |
+| V1.0 复现工程 | [5AxisSlicer README](../../../5AxisSlicer/README.md)；`src/five_axis_slicer/core/legacy_engine.py`；`Open5X/five_axis_slicer/fractal.py` | T01—T07 用于了解历史行为、接口和失败边界；新代码已聚拢到 V2.0 且运行时不依赖相邻目录 |
 | MAGE | [本地 MAGE README](../../../5AxisCutting/MageSlicer-main/MageSlicer-main/README.md) | NURBS 切片与 BendingPipe 工程 |
 | Open5x 与本地移植 | [本地 Open5x](../../../5AxisSlicer/Open5X/Open5x-main/Grasshopper_Definition/README.md) | Python port 与上游 Grasshopper 的范围区别 |
 | 当前目标 | [开发目标文档](../../圭臬/开发目标文档.docx) | 19 个原操作、统一前处理、ToolpathPoint 和最终交付目标 |
@@ -58,15 +58,15 @@ PrusaSlicer 等上游目录可能继续变化，实际实施时固定所读版�
 
 ## 5 当前源码证据
 
-以下均为本轮静态核查，不代表执行验证。
+以下表格记录本轮静态核查的源码入口；T01—T07 的执行验证见[实施审查](../reviews/2026-09-11_t01_t07_indexed_tube_review.md)和[证据清单](../reviews/evidence/2026-09-11_t01_t07/manifest.json)。
 
 | 当前事实 | 源码入口 | 对计划的影响 |
 | --- | --- | --- |
 | 六工作台目录存在 | [workbenches.py](../../src/five_axis_slicer/workbenches.py) | 保留入口，逐项接真实生成器 |
 | 成果页动作读取已有 G-code | [ui.py](../../src/five_axis_slicer/ui.py) 中 `slice_results`；[result_state.py](../../src/five_axis_slicer/result_state.py) 中 `parameters_affect_toolpath` | T08 必须接入真实生成并区分来源 |
-| Tube Operation 仅有定义外壳 | [setup.py](../../src/five_axis_slicer/manufacturing/setup.py) 中 `TubeOperationDefinition` | T01 增参数、引用、生成阶段状态 |
-| 圆柱/环面及邻接信息可复用 | [models.py](../../src/five_axis_slicer/models.py)、[step_topology.py](../../src/five_axis_slicer/step_topology.py) | T02 从现有 OCP 几何建立管识别 |
-| 已有 FK 与注册轴链 | [machine.py](../../src/five_axis_slicer/manufacturing/machine.py) | T06 单独增加目标姿态到轴位的 IK |
+| Tube Operation 已含四个几何角色和九项工艺参数 | [setup.py](../../src/five_axis_slicer/manufacturing/setup.py) 中 `TubeOperationDefinition` | T01 已接入 UI、脚本、HTTP、Dirty 和项目 JSON |
+| 圆柱/环面中心线及精确截交已实现 | [geometry.py](../../src/five_axis_slicer/algorithms/tube/geometry.py)、[section.py](../../src/five_axis_slicer/algorithms/tube/section.py) | T02—T04 支持单支恒定圆截面直管/圆弧管和手动 edge 链 |
+| Generic XYZAC 参考 IK 与检查已实现 | [xyzac.py](../../src/five_axis_slicer/kinematics/xyzac.py)、[indexed_tube.py](../../src/five_axis_slicer/validation/indexed_tube.py) | T06—T07 提供 FK 回代、轴限制、保守碰撞与 IPW 近似；不构成实机资格 |
 | 已有命令事务 | [command_kernel.py](../../src/five_axis_slicer/command_kernel.py) | 避免 GUI/脚本/HTTP 分别实现生成参数校验 |
 
 ## 6 研究算法与连续标架的直接依据
@@ -86,3 +86,15 @@ Conical Buildup 的第一版采用独立解析几何基线。对指定轴建立�
 网页 HTML、文本、GitHub README/LICENSE/目录树及文件指纹暂存 `tmp/planning_research/nx/` 和 `tmp/planning_research/opensource/`；本轮原目标抽取与基线指纹保存在 `tmp/planning_research/`。这些是可再生成的临时资料，正式判断与精确 URL 已集中到本文，不将临时目录作为唯一来源。
 
 本轮没有复现开源算法、测定其精度/速度、核验真实机床或阅读付费 NX 文档。实际算法任务开始后，针对当项方法继续读取必要数学/源码并固定版本。研究工作台的应力场样例、算法误差阈值和实际性能仍需在 X01 等任务中建立，不能由此次资料检索直接给出完成结论。
+
+## 8 T08—T12 新实现的可核对来源边界
+
+T08—T12 的实现是本项目独立复写，受本地 Fractal/V1 项目启发，但运行时不依赖相邻目录；当前代码在本项目内部使用，仍保留下列来源说明。来源用于核对术语、公开算法思路或接口语义，不等同于移植源码、上游认证或实机资格。
+
+| 主题 | 可核对来源与实现边界 |
+| --- | --- |
+| RMF（T10） | Wang 等，*Computation of rotation minimizing frames*，DOI [10.1145/1330511.1330513](https://doi.org/10.1145/1330511.1330513)；同时核对 [Microsoft Research PDF/摘要页](https://www.microsoft.com/en-us/research/publication/computation-rotation-minimizing-frames/)。本地仅独立复写 double-reflection 标架计算及退化处理；来源只支持几何低扭转标架，不保证机床轴位、速度或碰撞。 |
+| G-code 基础语义（T08/T09） | [LinuxCNC G-code 页面](https://www.linuxcnc.org/docs/html/gcode/g-code.html)用于核对 G0/G1、G90/G91 的公开语义。M82 属 Marlin/RepRap 语义，依据 [Marlin M082](https://marlinfw.org/docs/gcode/M082.html)，不能称为 LinuxCNC 定义；项目解析器仍按显式控制器配置和离线边界处理。 |
+| 时间参数化（T11） | [MoveIt 时间参数化教程](https://moveit.picknik.ai/main/doc/examples/time_parameterization/time_parameterization_tutorial.html)用于 TOTG 与 Ruckig 的术语和限制：TOTG 可能偏离原路径，需复查碰撞；Ruckig 用于 jerk 约束。这里是离线轨迹参考，不构成控制器后处理或实机认证。 |
+| 碰撞/截交（T09/T12） | [FCL](https://github.com/flexible-collision-library/fcl)是碰撞检测参考；[OCCT BRepAlgoAPI_Section](https://dev.opencascade.org/doc/refman/html/class_b_rep_algo_a_p_i___section.html)是 B-Rep 截交 API 参考。本项目按自身几何与检查契约独立调用/复写，结果仍属于离线检查。 |
+| 轴与资格边界（T08—T12） | Generic XYZAC 仅作离线参考（含 IK/FK、轴限位、扫掠和检查），不代表具体控制器、后处理器或实机资格。Generic XYZAC 离线参考和本地 Fractal/V1 经验均不能替代注册控制器语义、碰撞复核和现场试切。 |

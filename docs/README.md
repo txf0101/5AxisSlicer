@@ -5,8 +5,19 @@
 - [开发进度台账](planning/progress_tracker.md)：任务主表；每轮更新依赖、状态、验收证据、下一步和日期。
 - [开发计划](planning/development_plan.md)：管状优先，六个工作台、20 种操作、当前 UI 接入、算法接口和完成条件。
 - [参考资料检索](planning/reference_research.md)：NX 官方资料、公开参考项目、研究论文与当前源码依据。
+- [A01-A03 管状算法基线、样例与 Toolpath 契约](planning/tube_algorithm_contract.md)：环境、支持范围、样例真值、生成路径和结果清单契约。
+- [A02 样例来源登记](planning/example_source_inventory.md)：当前示例文件的来源状态、哈希和后续真值计划。
 - [本次计划编制复盘](reviews/2026-09-10_six_workbench_plan_review.md)：范围判断、用户决策、验证和局限。
 - [B01–B03 基础能力验收](reviews/2026-09-11_b01_b03_acceptance_review.md)：当前回归、pipe2 流程、环境限制及可核对证据。
+- [分阶段模型与 token 预算复盘](reviews/2026-09-11_model_token_budget_review.md)：44 项待办的模型分工、悲观上限、风险储备与节省规则。
+- [A01-A03 契约实施复盘](reviews/2026-09-11_a01_a03_contract_review.md)：本轮契约、外部资料处理、验证和局限。
+- [A01-A03 正式验收证据](reviews/evidence/2026-09-11_a01_a03/manifest.json)：源码、输入和 JUnit 指纹及本轮门禁摘要。
+- [T01—T07 Tube Indexed 实施审查](reviews/2026-09-11_t01_t07_indexed_tube_review.md)：实现范围、参考来源、本轮验证结果及 T08、真实机床边界。
+- [T01—T07 正式验收证据](reviews/evidence/2026-09-11_t01_t07/manifest.json)：当前源码、pipe2、解析夹具、JUnit 和质量门禁指纹。
+- [T01—T07 UI 审查](reviews/2026-09-11_t01_t07_ui_audit.md)：三种窗口尺寸的中英截图、修复项和最终 UI 回归边界。
+- [T08—T12 Tube Workbench 阶段审查](reviews/2026-09-11_t08_t12_tube_workbench_review.md)：三种 Tube 操作、生成/回读、来源边界、质量门禁、UI 证据和未验证的真实机床限制。
+- [T08—T12 正式验收证据](reviews/evidence/2026-09-11_t08_t12/manifest.json)：JUnit、首次 targeted 失败与串行通过、三尺寸 UI、pipe2 六件套及 SHA-256。
+- [T08—T12 来源与实现边界](planning/reference_research.md#8-t08t12-新实现的可核对来源边界)：RMF、G-code 语义、时间参数化、FCL/OCCT 参考及 Generic XYZAC 离线资格边界。
 
 以上计划采用 2026-09-10 用户确定的“管状优先”和“自用、暂无开源计划”。旧目标中的开发顺序与定位在本阶段按最新决定执行，原始资料保留。
 

@@ -63,6 +63,10 @@ class AutomationRouter:
             "/tube/state": self._tube_state,
             "/tube/source/update": self._tube_source_update,
             "/tube/operation/create": self._tube_operation_create,
+            "/tube/operation/set": self._tube_operation_set,
+            "/tube/operation/generate": self._tube_operation_generate,
+            "/tube/operation/export": self._tube_operation_export,
+            "/tube/generation/state": self._tube_generation_state,
             "/tube/part/confirm": self._tube_part_confirm,
             "/tube/resource/select": self._tube_resource_select,
             "/tube/coordinate/apply": self._tube_coordinate_apply,
@@ -266,8 +270,58 @@ class AutomationRouter:
         )
 
     def _tube_operation_create(self, payload: Payload) -> Response:
-        kwargs = {key: payload[key] for key in ("operation_id", "name") if key in payload}
+        kwargs = {
+            key: payload[key]
+            for key in ("operation_type", "operation_id", "name")
+            if key in payload
+        }
         return self._tube_command("create_operation", payload, **kwargs)
+
+    def _tube_operation_set(self, payload: Payload) -> Response:
+        allowed = (
+            "operation_id",
+            "name",
+            "enabled",
+            "tube_body_id",
+            "entry_port_id",
+            "exit_port_id",
+            "substrate_body_id",
+            "manual_centerline_edge_ids",
+            "bead_width_mm",
+            "layer_height_mm",
+            "max_wedge_angle_deg",
+            "max_bead_height_error_mm",
+            "safe_clearance_mm",
+            "retract_length_mm",
+            "deposition_feedrate_mm_min",
+            "travel_feedrate_mm_min",
+            "contour_chord_error_mm",
+            "maximum_pass_spacing_mm",
+            "include_planar_base",
+            "base_order",
+            "seam_angle_deg",
+        )
+        return self._tube_command(
+            "set_operation",
+            payload,
+            **{key: payload[key] for key in allowed if key in payload},
+        )
+
+    def _tube_operation_generate(self, payload: Payload) -> Response:
+        return self._tube_command(
+            "generate_operation", payload, operation_id=payload.get("operation_id")
+        )
+
+    def _tube_operation_export(self, payload: Payload) -> Response:
+        return self._tube_command(
+            "export_operation",
+            payload,
+            operation_id=str(payload["operation_id"]),
+            destination=str(payload["destination"]),
+        )
+
+    def _tube_generation_state(self, _payload: Payload) -> Response:
+        return {"products": self.window.tube_page.controller.state_json().get("products", [])}
 
     def _tube_part_confirm(self, payload: Payload) -> Response:
         return self._tube_command(
@@ -342,13 +396,13 @@ class AutomationRouter:
 
     def _tube_command(
         self,
-        name: str,
+        command_name: str,
         payload: Payload,
         *args: Any,
         **kwargs: Any,
     ) -> Response:
         result = self.window.tube_script_service.execute_command(
-            name,
+            command_name,
             *args,
             command_origin="http",
             command_id=payload.get("command_id"),

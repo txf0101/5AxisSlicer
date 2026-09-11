@@ -76,6 +76,13 @@ from .tube_drafts import (
     normalise_mount_transform,
     numeric_input_frame,
 )
+from .tube_generation_service import TubeGenerationControllerMixin
+from .tube_operation_service import (
+    TubeOperationControllerMixin,
+    create_tube_operation,
+    group_body_roles,
+    rebind_operation_geometry,
+)
 from .tube_resource_context import TubeResourceContext
 from .tube_serialization import (
     TUBE_CONTROLLER_SCHEMA_VERSION,
@@ -89,21 +96,31 @@ from .tube_validation import (
 )
 from .tube_validation import validation_report as build_validation_report
 
-TUBE_OPERATION_TYPE = "tube_thin_wall_indexed"
+TUBE_OPERATION_TYPE = "tube_thin_wall_indexed"  # Backward-compatible default.
 TUBE_OPERATION_NAME = "Tube Thin-Wall Indexed"
-AVAILABLE_TUBE_OPERATION_TYPES = (TUBE_OPERATION_TYPE,)
-MAX_INTERACTIVE_OPERATIONS = 1
+AVAILABLE_TUBE_OPERATION_TYPES = (
+    TUBE_OPERATION_TYPE,
+    "tube_buildup",
+    "tube_continuous",
+)
+MAX_INTERACTIVE_OPERATIONS = 3
+_OPERATION_NAMES = {
+    "tube_thin_wall_indexed": "Tube Thin-Wall Indexed",
+    "tube_buildup": "Tube Buildup",
+    "tube_continuous": "Tube Continuous",
+}
 
 _COORDINATE_NODES = frozenset({MODEL_CS_NODE, BUILD_CS_NODE})
 _DRAFT_NODES = _COORDINATE_NODES | {PLACEMENT_NODE}
 
 
-class TubeSetupController(TubeControllerStateBoundary):
+class TubeSetupController(
+    TubeGenerationControllerMixin, TubeOperationControllerMixin, TubeControllerStateBoundary
+):
     """State owner for one first-release Tube Setup.
 
-    Loaded project data may contain multiple operations for forward
-    compatibility.  Interactive creation remains limited to one operation in
-    this release, and only ``tube_thin_wall_indexed`` is advertised.
+    A Tube Setup has at most three interactive operations: indexed, buildup,
+    and continuous.  Existing single-operation calls still target that entry.
     """
 
     def __init__(
@@ -114,6 +131,7 @@ class TubeSetupController(TubeControllerStateBoundary):
         operations: Iterable[TubeOperationDefinition] = (),
         body_catalog: Iterable[BodyCandidate] = (),
         resource_library: UserResourceLibrary | None = None,
+        product_states: Iterable[Any] = (),
     ) -> None:
         self._setup = setup if setup is not None else ManufacturingSetup()
         if not isinstance(self._setup, ManufacturingSetup):
@@ -138,6 +156,7 @@ class TubeSetupController(TubeControllerStateBoundary):
         self._drafts: dict[str, CoordinateFrameDraft | PlacementDraft] = {}
         self._resources = TubeResourceContext(resource_library)
         self._modified = False
+        self._initialise_product_state(product_states)
 
         if cad_model is not None:
             self.attach_cad_model(cad_model, mark_modified=False)
@@ -294,8 +313,15 @@ class TubeSetupController(TubeControllerStateBoundary):
             self._setup.build_coordinate_system,
             tolerance=tolerance,
         )
+        rebound_operations = rebind_operation_geometry(
+            self._operations,
+            source_model,
+            model,
+            tolerance=tolerance,
+        )
 
         self._apply_rebind_result(result)
+        self._operations = rebound_operations
         self._attach_cad_authority(model)
         self._mark_operations_dirty("source_geometry_updated")
         self._modified = True
@@ -432,16 +458,7 @@ class TubeSetupController(TubeControllerStateBoundary):
     ) -> ManufacturingObjectAssignments:
         """Convenience adapter for tree editors that expose one role per body."""
 
-        if not isinstance(roles, Mapping):
-            raise TypeError("roles must be a mapping")
-        grouped: dict[BodyRole, list[str]] = {role: [] for role in BodyRole}
-        for raw_id, raw_role in roles.items():
-            body_id = str(raw_id).strip()
-            try:
-                role = raw_role if isinstance(raw_role, BodyRole) else BodyRole(str(raw_role))
-            except ValueError as exc:
-                raise ValueError(f"unsupported body role: {raw_role!r}") from exc
-            grouped[role].append(body_id)
+        grouped = group_body_roles(roles)
         return self.confirm_assignments(
             grouped[BodyRole.PART],
             ignored_body_ids=grouped[BodyRole.IGNORE],
@@ -454,31 +471,16 @@ class TubeSetupController(TubeControllerStateBoundary):
         operation_type: str = TUBE_OPERATION_TYPE,
         *,
         operation_id: str | None = None,
-        name: str = TUBE_OPERATION_NAME,
+        name: str | None = None,
     ) -> TubeOperationDefinition:
-        canonical_type = str(operation_type).strip().lower()
-        if canonical_type not in AVAILABLE_TUBE_OPERATION_TYPES:
-            raise ValueError(f"unsupported Tube operation type: {operation_type!r}")
-        if not self.can_create_operation:
-            raise OperationLimitError(
-                "the first Tube workbench release supports one interactive operation"
-            )
-        identifier = (
-            _next_operation_id(self._operations)
-            if operation_id is None
-            else str(operation_id).strip()
-        )
-        if not identifier:
-            raise ValueError("operation_id must not be empty")
-        if any(item.operation_id == identifier for item in self._operations):
-            raise ValueError(f"duplicate operation_id: {identifier}")
-        operation = TubeOperationDefinition(
-            operation_id=identifier,
-            setup_id=self._setup.setup_id,
-            name=name,
-            operation_type=canonical_type,
-            state=NodeState.DIRTY,
-            dirty_reasons=("operation_created",),
+        operation = create_tube_operation(
+            self._operations,
+            self._setup.setup_id,
+            operation_type,
+            operation_id,
+            _OPERATION_NAMES.get(operation_type, TUBE_OPERATION_NAME) if name is None else name,
+            available_types=AVAILABLE_TUBE_OPERATION_TYPES,
+            operation_limit=MAX_INTERACTIVE_OPERATIONS,
         )
         self._operations += (operation,)
         self._modified = True
@@ -1005,7 +1007,7 @@ class TubeSetupController(TubeControllerStateBoundary):
         )
         return build_validation_report(
             context,
-            operation_type=TUBE_OPERATION_TYPE,
+            operation_types=AVAILABLE_TUBE_OPERATION_TYPES,
             operation_limit=MAX_INTERACTIVE_OPERATIONS,
         )
 
@@ -1025,13 +1027,19 @@ class TubeSetupController(TubeControllerStateBoundary):
             operation_types=AVAILABLE_TUBE_OPERATION_TYPES,
             operation_limit=MAX_INTERACTIVE_OPERATIONS,
             modified=self._modified,
+            product_states=self._product_states,
         )
 
     def to_json(self, *, allow_drafts: bool = False) -> dict[str, Any]:
         """Return the project-format fragment owned by this controller."""
 
         return controller_project_json(
-            self._setup, self._operations, self.draft_nodes, allow_drafts=allow_drafts
+            self._setup,
+            self._operations,
+            self.body_candidates,
+            self.draft_nodes,
+            self._product_states,
+            allow_drafts=allow_drafts,
         )
 
     @classmethod
@@ -1049,6 +1057,7 @@ class TubeSetupController(TubeControllerStateBoundary):
             operations=data.operations,
             body_catalog=data.body_catalog,
             resource_library=resource_library,
+            product_states=data.product_states,
         )
 
     def _mark_operations_dirty(self, reason: str) -> None:
@@ -1060,6 +1069,8 @@ class TubeSetupController(TubeControllerStateBoundary):
             )
             for operation in self._operations
         )
+        for operation in self._operations:
+            self._mark_product_stale(operation)
 
 
 def _vector3(values: Sequence[float], name: str) -> tuple[float, float, float]:
@@ -1140,14 +1151,6 @@ def _ensure_unique_operation_ids(
     identifiers = [operation.operation_id for operation in operations]
     if len(set(identifiers)) != len(identifiers):
         raise ValueError("operations contain duplicate IDs")
-
-
-def _next_operation_id(operations: Sequence[TubeOperationDefinition]) -> str:
-    known = {operation.operation_id for operation in operations}
-    index = 1
-    while f"tube-operation-{index}" in known:
-        index += 1
-    return f"tube-operation-{index}"
 
 
 def _frame_semantics(frame: CoordinateFrameDefinition) -> dict[str, Any]:

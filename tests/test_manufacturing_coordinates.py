@@ -46,9 +46,7 @@ class RigidTransformTests(unittest.TestCase):
             combined.inverse().transform_point((2, 1, 0)),
             (1, 0, 0),
         )
-        self.assertTrue(
-            (combined.inverse() @ combined).almost_equal(RigidTransform.identity("a"))
-        )
+        self.assertTrue((combined.inverse() @ combined).almost_equal(RigidTransform.identity("a")))
 
     def test_from_frame_projects_x_and_constructs_right_handed_basis(self) -> None:
         transform = RigidTransform.from_frame(
@@ -66,9 +64,7 @@ class RigidTransformTests(unittest.TestCase):
 
     def test_rejects_collinear_nonfinite_and_nonrigid_input(self) -> None:
         with self.assertRaisesRegex(ValueError, "collinear"):
-            RigidTransform.from_frame(
-                (0, 0, 0), (0, 0, 2), (0, 0, 1), target_frame="model"
-            )
+            RigidTransform.from_frame((0, 0, 0), (0, 0, 2), (0, 0, 1), target_frame="model")
         with self.assertRaisesRegex(ValueError, "finite"):
             RigidTransform.from_translation((math.nan, 0, 0))
         with self.assertRaisesRegex(ValueError, "orthonormal"):

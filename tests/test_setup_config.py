@@ -120,6 +120,37 @@ def _operation() -> TubeOperationDefinition:
 
 
 class SetupConfigRoundTripTests(unittest.TestCase):
+    def test_three_operation_types_round_trip_and_receive_stable_ids(self) -> None:
+        operations = (
+            replace(_operation(), operation_id="indexed"),
+            replace(
+                _operation(),
+                operation_id="buildup",
+                name="Buildup",
+                operation_type="tube_buildup",
+            ),
+            replace(
+                _operation(),
+                operation_id="continuous",
+                name="Continuous",
+                operation_type="tube_continuous",
+            ),
+        )
+        loaded = load_setup_config(dump_setup_config(export_setup_config(_setup(), operations)))
+        current = ManufacturingSetup(setup_id="current")
+        _setup_result, restored = loaded.apply_to_domain(
+            current, (), new_operation_id="tube-operation-1"
+        )
+
+        self.assertEqual(
+            [item.operation_type for item in restored],
+            ["tube_thin_wall_indexed", "tube_buildup", "tube_continuous"],
+        )
+        self.assertEqual(
+            [item.operation_id for item in restored],
+            ["tube-operation-1", "tube-operation-1-2", "tube-operation-1-3"],
+        )
+
     def test_export_is_portable_and_apply_preserves_project_identities(self) -> None:
         source_setup = _setup()
         config = export_setup_config(source_setup, (_operation(),))
@@ -288,7 +319,9 @@ class SetupConfigSecurityTests(unittest.TestCase):
         self.assertRejected("root: " + "[" * 33 + "0" + "]" * 33, "nesting")
         self.assertRejected("\n".join("- 0" for _ in range(50_001)), "50000 nodes")
         document = export_setup_config(_setup(), (_operation(),)).to_document()
-        document["operations"].append(dict(document["operations"][0]))
+        document["operations"].extend(
+            dict(document["operations"][0]) for _index in range(3)
+        )
         with self.assertRaisesRegex(SetupConfigError, "too long"):
             dump_setup_config(document)
 

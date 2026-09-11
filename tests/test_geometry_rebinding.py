@@ -41,9 +41,7 @@ from five_axis_slicer.models import (  # noqa: E402
 from five_axis_slicer.tube_controller import TubeSetupController  # noqa: E402
 
 
-def _translated(
-    point: tuple[float, float, float], delta: float
-) -> tuple[float, float, float]:
+def _translated(point: tuple[float, float, float], delta: float) -> tuple[float, float, float]:
     return tuple(value + delta for value in point)  # type: ignore[return-value]
 
 
@@ -256,9 +254,7 @@ class GeometryRebindingTests(unittest.TestCase):
         controller = TubeSetupController(source)
         controller.confirm_assignments(("old-body",))
         controller.create_operation(operation_id="tube-1")
-        apply_coordinate_frame(
-            controller, coordinate_frame(source, legacy_hash_only=True)
-        )
+        apply_coordinate_frame(controller, coordinate_frame(source, legacy_hash_only=True))
 
         result = controller.update_cad_model(target)
 
@@ -272,12 +268,8 @@ class GeometryRebindingTests(unittest.TestCase):
         self.assertEqual(rebound.x_direction_reference.geometry.object_id, "new-edge")
         self.assertEqual(rebound.origin_reference.resolved_point, (5.0e-7,) * 3)
         self.assertTrue(rebound.is_valid)
-        self.assertIs(
-            controller.validation_report().state_for(PART_NODE), NodeState.VALID
-        )
-        self.assertIs(
-            controller.validation_report().state_for(MODEL_CS_NODE), NodeState.VALID
-        )
+        self.assertIs(controller.validation_report().state_for(PART_NODE), NodeState.VALID)
+        self.assertIs(controller.validation_report().state_for(MODEL_CS_NODE), NodeState.VALID)
         self.assertIn("source_geometry_updated", controller.operations[0].dirty_reasons)
 
     def test_missing_matches_keep_auditable_references_and_invalidate_nodes(
@@ -327,12 +319,8 @@ class GeometryRebindingTests(unittest.TestCase):
         codes = {issue.code for issue in result.issues}
         self.assertIn("PART_BODY_REBIND_AMBIGUOUS", codes)
         self.assertIn("GEOMETRY_REFERENCE_REBIND_AMBIGUOUS", codes)
-        self.assertIs(
-            controller.validation_report().state_for(PART_NODE), NodeState.INVALID
-        )
-        self.assertIs(
-            controller.validation_report().state_for(MODEL_CS_NODE), NodeState.INVALID
-        )
+        self.assertIs(controller.validation_report().state_for(PART_NODE), NodeState.INVALID)
+        self.assertIs(controller.validation_report().state_for(MODEL_CS_NODE), NodeState.INVALID)
 
     def test_controller_rejects_tampered_geometry_authority_and_resolved_values(
         self,
@@ -355,9 +343,7 @@ class GeometryRebindingTests(unittest.TestCase):
 
         def signature_tamper() -> CoordinateFrameDefinition:
             payload = json.loads(json.dumps(applied.to_json()))
-            payload["origin_reference"]["geometry"]["signature"]["descriptor"][
-                "point_mm"
-            ][0] = 99.0
+            payload["origin_reference"]["geometry"]["signature"]["descriptor"]["point_mm"][0] = 99.0
             return CoordinateFrameDefinition.from_json(payload)
 
         def geometry_type_tamper() -> CoordinateFrameDefinition:
@@ -403,9 +389,7 @@ class GeometryRebindingTests(unittest.TestCase):
             forged_x = DirectionReference(
                 "two_points",
                 geometry=geometry_reference(model, first.vertex_id, "vertex"),
-                secondary_geometry=geometry_reference(
-                    model, second.vertex_id, "vertex"
-                ),
+                secondary_geometry=geometry_reference(model, second.vertex_id, "vertex"),
                 first_point_in_source_mm=(1.0, 0.0, 0.0),
                 second_point_in_source_mm=second.point,
                 confirmed=True,

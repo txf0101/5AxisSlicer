@@ -39,9 +39,7 @@ G1 X10 Y10 E0.4 A12 C-3
             controller_semantics=GENERIC_XYZAC_AC_SEMANTICS,
         )
 
-        extrusions = [
-            segment for segment in preview.segments if segment.move_type == "extrude"
-        ]
+        extrusions = [segment for segment in preview.segments if segment.move_type == "extrude"]
         self.assertEqual(
             [segment.extrusion_role for segment in extrusions],
             ["external_perimeter", "internal_infill"],
@@ -70,9 +68,7 @@ G1 X2 Y0 E0.1
             controller_semantics=GENERIC_XYZAC_AC_SEMANTICS,
         )
 
-        extrusions = [
-            segment for segment in preview.segments if segment.move_type == "extrude"
-        ]
+        extrusions = [segment for segment in preview.segments if segment.move_type == "extrude"]
         self.assertEqual(extrusions[0].width, 0.4)
         self.assertEqual(extrusions[0].height, 0.2)
         self.assertEqual(extrusions[1].width, 0.55)
@@ -259,9 +255,7 @@ G1 X2.5 Y0 E4.25
             ["nc_preview.rotary_words_unsupported"],
         )
         self.assertEqual(
-            preview.summary()["validation_issues"][0]["context"][
-                "unsupported_rotary_words"
-            ],
+            preview.summary()["validation_issues"][0]["context"]["unsupported_rotary_words"],
             ["B"],
         )
 
@@ -315,9 +309,7 @@ G1 X2.5 Y0 E4.25
             {segment.coordinate_transform for segment in preview.segments},
             {"machine_xyz"},
         )
-        self.assertTrue(
-            all(segment.end == segment.machine_end for segment in preview.segments)
-        )
+        self.assertTrue(all(segment.end == segment.machine_end for segment in preview.segments))
         self.assertEqual(
             [issue.code for issue in preview.validation_issues],
             ["nc_preview.rotary_words_unsupported"],

@@ -27,6 +27,7 @@ from PyQt5.QtWidgets import (
     QMainWindow,
     QMenu,
     QPlainTextEdit,
+    QSizePolicy,
     QStackedWidget,
     QStyle,
     QTextBrowser,
@@ -196,6 +197,7 @@ class ScriptConsoleDock(QDockWidget):
         self._completion: Callable[[str], Sequence[str]] | None = None
         self._revision = 0
         self._collapsed = False
+        self._compact = False
         self._expanded_height = 190
         self._history = self._load_history()
         self._history_index = len(self._history)
@@ -270,6 +272,38 @@ class ScriptConsoleDock(QDockWidget):
     def collapsed(self) -> bool:
         return self._collapsed
 
+    @property
+    def compact(self) -> bool:
+        return self._compact
+
+    def set_compact(self, compact: bool) -> None:
+        """Temporarily collapse the dock when the main window is short."""
+
+        compact = bool(compact) and not self._collapsed
+        if compact == self._compact:
+            return
+        self._compact = compact
+        if compact:
+            title_height = self.style().pixelMetric(QStyle.PM_TitleBarHeight) + 4
+            parent = self.parentWidget()
+            self.setMinimumWidth(parent.minimumWidth() if parent is not None else 0)
+            self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+            self.widget().hide()
+            self.setMinimumHeight(title_height)
+            self.setMaximumHeight(title_height)
+            self._release_focus()
+            return
+        self.setMaximumHeight(524_287)
+        self.setMinimumWidth(0)
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        self.widget().show()
+        self.setMinimumHeight(self._expanded_height)
+
+    def _release_focus(self) -> None:
+        focused = QApplication.focusWidget()
+        if focused is self or (focused is not None and self.isAncestorOf(focused)):
+            focused.clearFocus()
+
     def set_expanded_height(self, height: int) -> None:
         self._expanded_height = max(190, int(height))
         if not self._collapsed:
@@ -281,6 +315,8 @@ class ScriptConsoleDock(QDockWidget):
 
     def set_collapsed(self, collapsed: bool) -> None:
         collapsed = bool(collapsed)
+        if self._compact:
+            self._compact = False
         if collapsed == self._collapsed and self.widget().isVisible() != collapsed:
             return
         if collapsed:
@@ -466,12 +502,14 @@ class ScriptConsoleManager(QObject):
         tools_menu: QMenu,
         settings: QSettings,
         guarded_actions: Sequence[QAction] = (),
+        compact_height: int | None = None,
     ) -> None:
         super().__init__(window)
         self._window = window
         self._stack = stack
         self._tube_page = tube_page
         self._settings = settings
+        self._compact_height = compact_height
         self._height_restored = False
         self._guarded_actions = tuple(guarded_actions)
         self._guarded_action_states: dict[QAction, bool] | None = None
@@ -516,6 +554,8 @@ class ScriptConsoleManager(QObject):
     def eventFilter(self, watched: QObject, event: QEvent) -> bool:  # noqa: N802 - Qt API
         if watched is self._window and event.type() == QEvent.Show:
             QTimer.singleShot(0, self._restore_height)
+        elif watched is self._window and event.type() == QEvent.Resize:
+            QTimer.singleShot(0, self._sync_compact_mode)
         return super().eventFilter(watched, event)
 
     def _application_focus_changed(
@@ -561,6 +601,7 @@ class ScriptConsoleManager(QObject):
 
     def _page_changed(self, _index: int) -> None:
         self._sync_visibility()
+        self._sync_compact_mode()
 
     def _set_preference(self, enabled: bool) -> None:
         self._settings.setValue("script_console/visible", bool(enabled))
@@ -589,6 +630,15 @@ class ScriptConsoleManager(QObject):
             self._set_shortcut_guard(self._owns_focus(QApplication.focusWidget()))
             QTimer.singleShot(0, self._restore_height)
 
+    def _sync_compact_mode(self) -> None:
+        compact = (
+            self._compact_height is not None
+            and self._window.height() < self._compact_height
+            and self._stack.currentWidget() is self._tube_page
+            and self.dock.isVisible()
+        )
+        self.dock.set_compact(compact)
+
     def _restore_height(self) -> None:
         if self._height_restored or not self.dock.isVisible():
             return
@@ -596,6 +646,7 @@ class ScriptConsoleManager(QObject):
         self.dock.set_expanded_height(height)
         self._window.resizeDocks([self.dock], [height], Qt.Vertical)
         QTimer.singleShot(0, self.dock.release_expanded_height)
+        self._sync_compact_mode()
         self._height_restored = True
 
 
@@ -618,6 +669,7 @@ def install_script_console(window: Any) -> ScriptConsoleManager:
         window.tools_menu,
         window.settings,
         (window.clear_action, window.fit_action, window.home_view_action),
+        compact_height=820,
     )
     window.script_console = manager.dock
     window.script_console_action = manager.action

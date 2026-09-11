@@ -103,9 +103,7 @@ class CacheResilienceTests(unittest.TestCase):
             ):
                 preview = load_gcode(
                     source,
-                    progress_callback=lambda fraction, phase: progress.append(
-                        (fraction, phase)
-                    ),
+                    progress_callback=lambda fraction, phase: progress.append((fraction, phase)),
                 )
 
             self.assertEqual(preview.summary()["segment_count"], 1)
@@ -136,9 +134,7 @@ class CacheResilienceTests(unittest.TestCase):
             try:
                 application_cache_dir.cache_clear()
                 with (
-                    patch.object(
-                        gcode_source, "_qt_cache_location", return_value=user_cache
-                    ),
+                    patch.object(gcode_source, "_qt_cache_location", return_value=user_cache),
                     patch("pathlib.Path.cwd", return_value=working_directory),
                 ):
                     source_cache = application_cache_dir("gcode_source_index")
@@ -163,27 +159,20 @@ class CacheResilienceTests(unittest.TestCase):
             real_temporary_file = tempfile.TemporaryFile
 
             def probe(*args: object, **kwargs: object):
-                if (
-                    Path(kwargs["dir"])
-                    == qt_cache / "5AxisSclicer_V2.0" / "fallback_test"
-                ):
+                if Path(kwargs["dir"]) == qt_cache / "5AxisSclicer_V2.0" / "fallback_test":
                     raise PermissionError("profile cache is read-only")
                 return real_temporary_file(*args, **kwargs)
 
             try:
                 application_cache_dir.cache_clear()
                 with (
-                    patch.object(
-                        gcode_source, "_qt_cache_location", return_value=qt_cache
-                    ),
+                    patch.object(gcode_source, "_qt_cache_location", return_value=qt_cache),
                     patch.object(
                         gcode_source.tempfile,
                         "gettempdir",
                         return_value=str(temporary_root),
                     ),
-                    patch.object(
-                        gcode_source.tempfile, "TemporaryFile", side_effect=probe
-                    ),
+                    patch.object(gcode_source.tempfile, "TemporaryFile", side_effect=probe),
                 ):
                     selected = application_cache_dir("fallback_test")
             finally:

@@ -20,7 +20,9 @@ class SelectionListTests(unittest.TestCase):
 
     def test_rebuilds_rows_and_reads_selected_ids(self) -> None:
         widget = SelectionList()
-        widget.set_rows([("body_001", "body_001  Solid 1"), ("body_002", "body_002  Solid 2")], {"body_002"})
+        widget.set_rows(
+            [("body_001", "body_001  Solid 1"), ("body_002", "body_002  Solid 2")], {"body_002"}
+        )
 
         self.assertEqual(widget.count(), 2)
         self.assertEqual(widget.selected_ids(), ["body_002"])

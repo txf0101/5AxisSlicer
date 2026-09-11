@@ -1556,7 +1556,7 @@ class MainWindow(QMainWindow):
         self.script_console_manager = install_script_console(self)
         self.tube_script_service = TubeScriptService(self, self.script_console_manager.dock)
         self.setStatusBar(QStatusBar(self))
-        self.setMinimumSize(1600, 900)
+        self.setMinimumSize(1280, 720)
         self.resize(1600, 900)
 
     def _build_actions(self) -> None:

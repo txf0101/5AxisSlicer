@@ -179,9 +179,7 @@ class UserResourceLibrary:
             if identifier != envelope["resource_id"]:
                 raise ResourceLibraryError(f"profile identity mismatch in {path}")
             if identifier in seen:
-                raise ResourceLibraryError(
-                    f"duplicate {canonical_type} resource ID: {identifier}"
-                )
+                raise ResourceLibraryError(f"duplicate {canonical_type} resource ID: {identifier}")
             seen.add(identifier)
             profiles.append(profile)
         return tuple(sorted(profiles, key=lambda item: _profile_payload(item)[1]))
@@ -285,8 +283,7 @@ class UserResourceLibrary:
                 diagnostics.append(
                     ResourceLibraryDiagnostic(
                         canonical_type,
-                        hashlib.sha256(identifier.encode("utf-8")).hexdigest()
-                        + ".json",
+                        hashlib.sha256(identifier.encode("utf-8")).hexdigest() + ".json",
                         "builtin_identity_shadowed",
                         f"user resource shadows immutable built-in ID: {identifier}",
                         identifier,
@@ -326,9 +323,7 @@ class UserResourceLibrary:
                 snapshot.content_hash,
             )
         current = ResourceSnapshot.capture(canonical_type, profile)
-        status = (
-            "match" if current.content_hash == snapshot.content_hash else "diverged"
-        )
+        status = "match" if current.content_hash == snapshot.content_hash else "diverged"
         return ResourceSnapshotAudit(
             canonical_type,
             snapshot.resource_id,
@@ -377,9 +372,7 @@ def _profile_payload(profile: ResourceProfile) -> tuple[str, str, dict[str, Any]
         resource_type = "material"
         resource_id = profile.resource_id
     else:
-        raise TypeError(
-            "profile must be MachineProfile, NozzleProfile, or MaterialProfile"
-        )
+        raise TypeError("profile must be MachineProfile, NozzleProfile, or MaterialProfile")
     payload = profile.to_json()
     if not isinstance(payload, dict):
         raise ResourceLibraryError("profile serialization must return an object")
@@ -419,9 +412,7 @@ def _read_envelope(path: Path) -> dict[str, Any]:
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
-        raise ResourceLibraryError(
-            f"cannot read resource library entry: {path}"
-        ) from exc
+        raise ResourceLibraryError(f"cannot read resource library entry: {path}") from exc
     if not isinstance(payload, dict):
         raise ResourceLibraryError(f"resource library entry must be an object: {path}")
     version = payload.get("schema_version")
@@ -433,9 +424,7 @@ def _read_envelope(path: Path) -> dict[str, Any]:
             f"{RESOURCE_LIBRARY_SCHEMA_VERSION}: {path}"
         )
     if version != RESOURCE_LIBRARY_SCHEMA_VERSION:
-        raise ResourceLibraryError(
-            f"unsupported resource library schema {version}: {path}"
-        )
+        raise ResourceLibraryError(f"unsupported resource library schema {version}: {path}")
     resource_type = _resource_type(payload.get("resource_type"))
     resource_id = _resource_id(payload.get("resource_id"))
     profile = payload.get("profile")

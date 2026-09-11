@@ -200,18 +200,13 @@ class UiStateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir:
             source = Path(tmpdir) / "result.gcode"
             source.write_text(
-                ";LAYER_CHANGE\n"
-                "G1 X0 Y0 Z0.2 F3000\n"
-                "G1 X1 Y0 Z0.2 A10 C-4 E0.3 F1200\n",
+                ";LAYER_CHANGE\nG1 X0 Y0 Z0.2 F3000\nG1 X1 Y0 Z0.2 A10 C-4 E0.3 F1200\n",
                 encoding="utf-8",
             )
             accepted = window.handle_automation("/results/open", {"path": str(source)})
             self.assertTrue(accepted["accepted"])
             deadline = time.monotonic() + 5.0
-            while (
-                window.result_page.state.status == "loading"
-                and time.monotonic() < deadline
-            ):
+            while window.result_page.state.status == "loading" and time.monotonic() < deadline:
                 self.app.processEvents()
                 time.sleep(0.005)
             try:
@@ -223,9 +218,7 @@ class UiStateTests(unittest.TestCase):
                 self.assertEqual(source_audit["path"], str(source.resolve()))
                 self.assertEqual(source_audit["size_bytes"], source.stat().st_size)
                 self.assertEqual(len(source_audit["sha256"]), 64)
-                quality = window.handle_automation(
-                    "/results/quality", {"mode": "paper"}
-                )
+                quality = window.handle_automation("/results/quality", {"mode": "paper"})
                 self.assertEqual(quality["results"]["display"]["quality_mode"], "paper")
                 self.assertEqual(window.result_page.viewer.quality_mode, "paper")
             finally:

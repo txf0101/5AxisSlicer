@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "task_ids": ["A01", "A02", "A03"],
+  "date": "2026-09-11",
+  "head_before_acceptance": "550d5f03c8551cad955b52750c73c1b0c4aa9878",
+  "environment": {
+    "python": "tmp/pytest9/Scripts/python.exe",
+    "python_version": "3.12.7",
+    "pytest_version": "9.1.1",
+    "preflight_issues": [],
+    "qsettings_writable": true
+  },
+  "inputs": [
+    {
+      "path": "example/pipe2/弯管新.stp",
+      "size_bytes": 15504,
+      "sha256": "116e99fd43492bd1f4f519c80c93cd1f7cd0bf2cb6861b3e123148e4031a0d4b"
+    },
+    {
+      "path": "example/pipe2/弯管.gcode",
+      "size_bytes": 21912192,
+      "sha256": "4d6630c01f63d6f802ae6955752fa41b35abfea23509c661fcd855f7064ff70a"
+    },
+    {
+      "path": "example/pipe2/tube_setup_coordinate_demo/manufacturing-setup.yaml",
+      "size_bytes": 11684,
+      "sha256": "7b1551bb7824a35e5220f8a9bf96c45f091b5694d3482d248b805551f32d4e90"
+    },
+    {
+      "path": "tests/fixtures/analytic_tube_truth.json",
+      "size_bytes": 1538,
+      "sha256": "e3d02045c104aadfd86a54ca3f4089a2dd019d6bf737663e772ef9c97f1159e8"
+    }
+  ],
+  "implementation": [
+    {
+      "path": "src/five_axis_slicer/manufacturing/toolpath.py",
+      "size_bytes": 25081,
+      "sha256": "a9de0ef32a8c5824fbf5d8f2999be855a427568e6f7aeb671b879fc06b4257d6"
+    },
+    {
+      "path": "tests/test_toolpath_contract.py",
+      "size_bytes": 7047,
+      "sha256": "5c479bc49f59754d15337fff43404fcf64e742efce26673607c4f25d9ea04822"
+    }
+  ],
+  "checks": [
+    {
+      "name": "toolpath_contract",
+      "result": "6 passed in 0.41s",
+      "junit": "toolpath_contract_pytest.xml",
+      "junit_sha256": "68c436dc6beb95618ffdc9513081b0ff314ca06f56c19b4d7cafef5e94f8e06a"
+    },
+    {
+      "name": "quality",
+      "result": "ruff, migrated ruff, security ruff, format, context budget and mypy passed; mypy checked 74 source files"
+    },
+    {
+      "name": "full_pytest",
+      "result": "408 passed, 3 skipped, 130 subtests passed in 178.78s",
+      "junit": "full_pytest.xml",
+      "junit_sha256": "8c20a17fc72e2b2b94b3a8eda6eff40448101f2ceaed655d02377d2d635839b1",
+      "skipped_boundary": "Three Windows symlink tests skipped because WinError 1314 prevents symlink creation."
+    }
+  ],
+  "decision": {
+    "status": "completed",
+    "next_task": "T01",
+    "excluded_scope": [
+      "centerline recognition",
+      "slicing",
+      "machine-axis trajectory",
+      "collision checking",
+      "postprocessing",
+      "desktop end-to-end workflow",
+      "physical machine qualification"
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "task": "T08-T12",
+  "date": "2026-09-11",
+  "status": "accepted",
+  "verification": {
+    "quality_gate": "Ruff/format/context-budget/mypy passed for 92 files",
+    "targeted_pass": "98 passed, 1 skipped, 2 subtests",
+    "full_pass": "465 passed, 3 skipped, 130 subtests",
+    "skips": "All three skips are Windows WinError 1314 symbolic-link permission boundaries",
+    "first_targeted_run": "pytest-targeted.xml retained the 1366x768 button-row overlap failure; the layout fix passed in pytest-targeted-pass.xml",
+    "final_tube_ui": "30 passed, 2 subtests"
+  },
+  "files": [
+    {"path":"pytest-targeted.xml","sha256":"09A8F6AC20F4C79881175655EC62FA52E46972B24232C1EAE1416231EFA76975"},
+    {"path":"pytest-targeted-pass.xml","sha256":"C5004221FFADAF74BEC678BA21D5913CBE7FB771957F2B0C45471677D863F83A"},
+    {"path":"pytest-full.xml","sha256":"CFD182BCA71ADB40DCEA8C10FD8E3E6A824E1026D4D60F9FF3176900725216E1"},
+    {"path":"pytest-tube-ui-final.xml","sha256":"6F672C29681E7A356A90771531F66965C961F0019B2B2EB7A53BEF8AB1C1B0DF"},
+    {"path":"ui/summary.json","sha256":"5C00B4FDDC8BFBE241D5777BE8C7C48E048B767594713B5605C5224FFF86EF5F"},
+    {"path":"ui/01-zh-1366x768-indexed.png","sha256":"E49DA3559CDCB0CFDB8D3FC716CCB0AC8D769BA85E38FD0D15056D14DD0C88D5"},
+    {"path":"ui/02-zh-1600x900-buildup.png","sha256":"9AB8571D63F038D7D111738683FDBA72C245178F6C2FFE71A12DFE6D9365E574"},
+    {"path":"ui/03-en-1920x1080-continuous.png","sha256":"B2A4731E83461ED1ED8528D4713E722993BCEE4AF9313E110DA6E896D08BC4B7"},
+    {"path":"product/pipe2-indexed/manifest.json","sha256":"99A2446352BDCAE3B32A35767C4F4AE664A651B3D79F9CE944AB9A9EBBB1D9F1"},
+    {"path":"product/pipe2-indexed/main.gcode","sha256":"779B95B37281BD263F8034BB1A38C7246FF143F9DA68DD93A402E392CA6A1216"},
+    {"path":"product/pipe2-indexed/machine_axes.csv","sha256":"8162BD055E0DFB24BDA0E48AE42C3736DC5C744A3C50B0473CEF70D8F5F15ACB"},
+    {"path":"product/pipe2-indexed/preview.json","sha256":"69ABDA340F8FAB25D9E3DFFFF950039C29D8E44188F74C0324530A1532A48A52"},
+    {"path":"product/pipe2-indexed/toolpath.json","sha256":"035F875C68F6490C302098CDF447273EFB57E62733C71850551796D864F10D2B"},
+    {"path":"product/pipe2-indexed/warnings.json","sha256":"9DEA9DFD4D03611CE94E793B708D2D3C4F4A5CFEC9C82423EC0BA1465ED7DCCC"}
+  ],
+  "limits": ["Generic XYZAC is offline reference only", "No real machine qualification or site trial"]
+}

@@ -11,21 +11,15 @@ _FACE_TEXT_RECT = QRectF(0.0, 0.0, 100.0, 100.0)
 def _orientation_faces() -> list[tuple[QPolygonF, str]]:
     return [
         (
-            QPolygonF(
-                [QPointF(56, 15), QPointF(91, 32), QPointF(56, 50), QPointF(21, 32)]
-            ),
+            QPolygonF([QPointF(56, 15), QPointF(91, 32), QPointF(56, 50), QPointF(21, 32)]),
             "top",
         ),
         (
-            QPolygonF(
-                [QPointF(21, 32), QPointF(56, 50), QPointF(56, 88), QPointF(21, 69)]
-            ),
+            QPolygonF([QPointF(21, 32), QPointF(56, 50), QPointF(56, 88), QPointF(21, 69)]),
             "front",
         ),
         (
-            QPolygonF(
-                [QPointF(56, 50), QPointF(91, 32), QPointF(91, 69), QPointF(56, 88)]
-            ),
+            QPolygonF([QPointF(56, 50), QPointF(91, 32), QPointF(91, 69), QPointF(56, 88)]),
             "right",
         ),
     ]

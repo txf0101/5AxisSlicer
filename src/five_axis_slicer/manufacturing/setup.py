@@ -14,9 +14,19 @@ from enum import Enum
 from types import MappingProxyType
 from typing import Any
 
-from .coordinates import CoordinateFrameDefinition, LocalAdjustment, RigidTransform
+from .coordinates import (
+    CoordinateFrameDefinition,
+    LocalAdjustment,
+    RigidTransform,
+)
 from .json_contract import parse_json_bool, require_bool
 from .resources import ResourceSnapshot
+from .tube_parameters import (
+    TubeBuildupOperationConfig,
+    TubeContinuousOperationConfig,
+    TubeGeometrySelection,
+    TubeProcessParameters,
+)
 
 
 class NodeState(str, Enum):
@@ -69,6 +79,12 @@ _MISSING_ISSUES = {
     BUILD_CS_NODE: "BUILD_CS_MISSING",
     PLACEMENT_NODE: "PLACEMENT_MISSING",
 }
+_TUBE_OPERATION_TYPES = frozenset({"tube_thin_wall_indexed", "tube_buildup", "tube_continuous"})
+_BUILDUP_CONFIG_KEYS = (
+    "maximum_pass_spacing_mm",
+    "include_planar_base",
+    "base_order",
+)
 _INVALID_ISSUES = {
     PART_NODE: "SETUP_PART_INVALID",
     MACHINE_NODE: "SETUP_MACHINE_INVALID",
@@ -345,7 +361,7 @@ class ManufacturingObjectAssignments:
 
 @dataclass(frozen=True, slots=True)
 class TubeOperationDefinition:
-    """Persisted operation shell for the first Tube workbench slice."""
+    """Persisted definition for one supported Tube operation."""
 
     operation_id: str
     setup_id: str
@@ -354,25 +370,36 @@ class TubeOperationDefinition:
     state: NodeState = NodeState.DIRTY
     dirty_reasons: tuple[str, ...] = ()
     enabled: bool = True
+    geometry: TubeGeometrySelection = field(default_factory=TubeGeometrySelection)
+    parameters: TubeProcessParameters = field(default_factory=TubeProcessParameters)
+    type_config: TubeBuildupOperationConfig | TubeContinuousOperationConfig | None = None
 
     def __post_init__(self) -> None:
         operation_id = _clean_identifier(self.operation_id, name="operation_id")
         setup_id = _clean_identifier(self.setup_id, name="setup_id")
         name = _clean_identifier(self.name, name="name")
         operation_type = str(self.operation_type).strip().lower()
-        if operation_type != "tube_thin_wall_indexed":
+        if operation_type not in _TUBE_OPERATION_TYPES:
             raise ValueError(f"unsupported Tube operation_type: {operation_type!r}")
         try:
             state = self.state if isinstance(self.state, NodeState) else NodeState(str(self.state))
         except ValueError as exc:
             raise ValueError(f"unsupported operation state: {self.state!r}") from exc
         reasons = _unique_identifiers(self.dirty_reasons, name="dirty_reasons")
+        if not isinstance(self.geometry, TubeGeometrySelection):
+            raise TypeError("geometry must be TubeGeometrySelection")
+        if not isinstance(self.parameters, TubeProcessParameters):
+            raise TypeError("parameters must be TubeProcessParameters")
+        config = _normalise_operation_config(operation_type, self.type_config)
+        if name == "Tube Thin-Wall Indexed" and operation_type != "tube_thin_wall_indexed":
+            name = _operation_default_name(operation_type)
         object.__setattr__(self, "operation_id", operation_id)
         object.__setattr__(self, "setup_id", setup_id)
         object.__setattr__(self, "name", name)
         object.__setattr__(self, "operation_type", operation_type)
         object.__setattr__(self, "state", state)
         object.__setattr__(self, "dirty_reasons", reasons)
+        object.__setattr__(self, "type_config", config)
         object.__setattr__(
             self,
             "enabled",
@@ -395,17 +422,31 @@ class TubeOperationDefinition:
             "state": self.state.value,
             "dirty_reasons": list(self.dirty_reasons),
             "enabled": self.enabled,
+            "geometry": self.geometry.to_json(),
+            "parameters": self.parameters.to_json(),
+            "type_config": None if self.type_config is None else self.type_config.to_json(),
         }
 
     @classmethod
     def from_json(cls, payload: Mapping[str, Any]) -> TubeOperationDefinition:
         if not isinstance(payload, Mapping):
             raise ValueError("Tube operation payload must be an object")
+        operation_type = str(payload.get("operation_type", "tube_thin_wall_indexed"))
+        raw_config = payload.get("type_config")
+        # Accept the initial T09/T11 flat fields as a short-lived migration path.
+        if raw_config is None and operation_type == "tube_buildup":
+            raw_config = {key: payload[key] for key in _BUILDUP_CONFIG_KEYS if key in payload}
+        if (
+            raw_config is None
+            and operation_type == "tube_continuous"
+            and "seam_angle_deg" in payload
+        ):
+            raw_config = {"seam_angle_deg": payload["seam_angle_deg"]}
         return cls(
             operation_id=str(payload.get("operation_id", "")),
             setup_id=str(payload.get("setup_id", "")),
-            name=str(payload.get("name", "Tube Thin-Wall Indexed")),
-            operation_type=str(payload.get("operation_type", "tube_thin_wall_indexed")),
+            name=str(payload.get("name", _operation_default_name(operation_type))),
+            operation_type=operation_type,
             state=NodeState(str(payload.get("state", NodeState.DIRTY.value))),
             dirty_reasons=tuple(payload.get("dirty_reasons", ())),
             enabled=parse_json_bool(
@@ -414,7 +455,59 @@ class TubeOperationDefinition:
                 default=True,
                 field_name="tube_operation.enabled",
             ),
+            geometry=TubeGeometrySelection.from_json(payload.get("geometry", {})),
+            parameters=TubeProcessParameters.from_json(payload.get("parameters", {})),
+            type_config=_operation_config_from_json(operation_type, raw_config),
         )
+
+
+def _operation_default_name(operation_type: str) -> str:
+    return {
+        "tube_thin_wall_indexed": "Tube Thin-Wall Indexed",
+        "tube_buildup": "Tube Buildup",
+        "tube_continuous": "Tube Continuous",
+    }.get(str(operation_type).strip().lower(), "Tube Thin-Wall Indexed")
+
+
+def _normalise_operation_config(
+    operation_type: str,
+    config: TubeBuildupOperationConfig | TubeContinuousOperationConfig | None,
+) -> TubeBuildupOperationConfig | TubeContinuousOperationConfig | None:
+    if operation_type == "tube_thin_wall_indexed":
+        if config is not None:
+            raise ValueError("tube_thin_wall_indexed does not accept a type_config")
+        return None
+    if operation_type == "tube_buildup":
+        if config is None:
+            return TubeBuildupOperationConfig()
+        if not isinstance(config, TubeBuildupOperationConfig):
+            raise TypeError("tube_buildup requires TubeBuildupOperationConfig")
+        return config
+    if operation_type == "tube_continuous":
+        if config is None:
+            return TubeContinuousOperationConfig()
+        if not isinstance(config, TubeContinuousOperationConfig):
+            raise TypeError("tube_continuous requires TubeContinuousOperationConfig")
+        return config
+    raise AssertionError(operation_type)  # guarded by __post_init__
+
+
+def _operation_config_from_json(
+    operation_type: str,
+    payload: Any,
+) -> TubeBuildupOperationConfig | TubeContinuousOperationConfig | None:
+    canonical = str(operation_type).strip().lower()
+    if canonical == "tube_thin_wall_indexed":
+        if payload not in (None, {}):
+            raise ValueError("tube_thin_wall_indexed does not accept a type_config")
+        return None
+    if payload is None:
+        return None
+    if canonical == "tube_buildup":
+        return TubeBuildupOperationConfig.from_json(payload)
+    if canonical == "tube_continuous":
+        return TubeContinuousOperationConfig.from_json(payload)
+    return None
 
 
 @dataclass(frozen=True, slots=True)
@@ -879,6 +972,10 @@ __all__ = [
     "PART_NODE",
     "PLACEMENT_NODE",
     "SetupValidationReport",
+    "TubeGeometrySelection",
+    "TubeBuildupOperationConfig",
+    "TubeContinuousOperationConfig",
     "TubeOperationDefinition",
+    "TubeProcessParameters",
     "ValidationIssue",
 ]

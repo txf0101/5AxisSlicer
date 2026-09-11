@@ -33,7 +33,9 @@ def build_preview_index(
     timeline_array = np.asarray(timeline_layers, dtype=np.int32)
     segment_steps = np.asarray(segment_step_indices, dtype=np.int32)
     if NATIVE_INDEX_AVAILABLE and _native is not None:
-        packed = _native.build_preview_index(timeline_array, segment_steps, int(layer_min), int(layer_max))
+        packed = _native.build_preview_index(
+            timeline_array, segment_steps, int(layer_min), int(layer_max)
+        )
         return PackedPreviewIndex(
             layer_prefix_counts=np.asarray(packed["layer_prefix_counts"], dtype=np.int32),
             timeline_indices=np.asarray(packed["timeline_indices"], dtype=np.int32),
@@ -41,7 +43,9 @@ def build_preview_index(
             segment_indices=np.asarray(packed["segment_indices"], dtype=np.int32),
             source="native",
         )
-    return _build_preview_index_python(timeline_array, segment_steps, int(layer_min), int(layer_max))
+    return _build_preview_index_python(
+        timeline_array, segment_steps, int(layer_min), int(layer_max)
+    )
 
 
 def _build_preview_index_python(

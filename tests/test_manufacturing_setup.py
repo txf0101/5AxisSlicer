@@ -109,9 +109,7 @@ class ManufacturingSetupTests(unittest.TestCase):
         self.assertTrue(report.coordinates_valid)
         self.assertFalse(report.setup_ready)
         self.assertIs(report.state_for(MATERIAL_NODE), NodeState.DRAFT)
-        self.assertIn(
-            "MATERIAL_REVIEW_REQUIRED", {issue.code for issue in report.issues}
-        )
+        self.assertIn("MATERIAL_REVIEW_REQUIRED", {issue.code for issue in report.issues})
 
     def test_build_change_marks_placement_dirty_until_reapplied(self) -> None:
         setup = complete_setup().with_build_coordinate_system(coordinate_frame("build"))
@@ -236,9 +234,7 @@ class ManufacturingSetupTests(unittest.TestCase):
         self.assertIn("SETUP_NOZZLE_INVALID", {issue.code for issue in report.issues})
 
     def test_assignment_roles_must_be_disjoint(self) -> None:
-        with self.assertRaisesRegex(
-            ValueError, "both part_body_ids and ignored_body_ids"
-        ):
+        with self.assertRaisesRegex(ValueError, "both part_body_ids and ignored_body_ids"):
             ManufacturingObjectAssignments(
                 part_body_ids=("body-001",),
                 ignored_body_ids=("body-001",),
@@ -246,9 +242,7 @@ class ManufacturingSetupTests(unittest.TestCase):
 
     def test_operation_round_trip_and_dirty_reason_deduplication(self) -> None:
         operation = TubeOperationDefinition("operation-1", "setup-1")
-        operation = operation.mark_dirty("model_cs_changed").mark_dirty(
-            "model_cs_changed"
-        )
+        operation = operation.mark_dirty("model_cs_changed").mark_dirty("model_cs_changed")
 
         self.assertEqual(operation.dirty_reasons, ("model_cs_changed",))
         restored = TubeOperationDefinition.from_json(operation.to_json())
@@ -262,13 +256,9 @@ class ManufacturingSetupTests(unittest.TestCase):
         with self.assertRaisesRegex(TypeError, "must be a boolean"):
             TubeOperationDefinition.from_json(operation_payload)
 
-        default_operation_payload = TubeOperationDefinition(
-            "operation-1", "setup-1"
-        ).to_json()
+        default_operation_payload = TubeOperationDefinition("operation-1", "setup-1").to_json()
         default_operation_payload.pop("enabled")
-        self.assertTrue(
-            TubeOperationDefinition.from_json(default_operation_payload).enabled
-        )
+        self.assertTrue(TubeOperationDefinition.from_json(default_operation_payload).enabled)
 
         report_payload = complete_setup().validation_report().to_json()
         for field_name, forged_value in (

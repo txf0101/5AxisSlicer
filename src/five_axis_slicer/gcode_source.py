@@ -189,7 +189,9 @@ class GCodeSourceIndex:
             raw = self._line_bytes(number).strip().upper()
             if not raw.startswith((b"G0", b"G1")):
                 continue
-            if all(re.search(rb"(?:^|[ \t])" + word + rb"[-+.]?\d", raw) for word in _FIVE_AXIS_WORDS):
+            if all(
+                re.search(rb"(?:^|[ \t])" + word + rb"[-+.]?\d", raw) for word in _FIVE_AXIS_WORDS
+            ):
                 return number
         return None
 
@@ -355,11 +357,15 @@ class GCodeSourceIndex:
         temp_offsets: Path | None = None
         temp_metadata: Path | None = None
         try:
-            with tempfile.NamedTemporaryFile(dir=self._cache_dir, suffix=".npy", delete=False) as stream:
+            with tempfile.NamedTemporaryFile(
+                dir=self._cache_dir, suffix=".npy", delete=False
+            ) as stream:
                 temp_offsets = Path(stream.name)
                 np.save(stream, offsets, allow_pickle=False)
             self._raise_if_cancelled()
-            metadata = {"markers": [{"line": line, "ordinal": ordinal} for line, ordinal in markers]}
+            metadata = {
+                "markers": [{"line": line, "ordinal": ordinal} for line, ordinal in markers]
+            }
             with tempfile.NamedTemporaryFile(
                 dir=self._cache_dir,
                 suffix=".json",

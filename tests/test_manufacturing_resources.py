@@ -29,10 +29,7 @@ from five_axis_slicer.manufacturing.resources import (  # noqa: E402
 class NozzleProfileTests(unittest.TestCase):
     def test_builtin_identity_templates_are_immutable_and_incomplete(self) -> None:
         self.assertEqual(
-            [
-                profile.orifice_diameter_mm
-                for profile in BUILTIN_NOZZLE_PROFILES.values()
-            ],
+            [profile.orifice_diameter_mm for profile in BUILTIN_NOZZLE_PROFILES.values()],
             [0.4, 0.6, 0.8],
         )
         for profile in BUILTIN_NOZZLE_PROFILES.values():

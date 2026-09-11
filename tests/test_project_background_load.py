@@ -115,9 +115,7 @@ class ProjectBackgroundLoadTests(unittest.TestCase):
                 "five_axis_slicer.project_io.load_step",
                 side_effect=cancellable_step,
             ):
-                coordinator.start(
-                    LoadRequest("project-cancel", project_path=project_json)
-                )
+                coordinator.start(LoadRequest("project-cancel", project_path=project_json))
                 self._wait_until(entered.is_set)
                 coordinator.cancel()
                 self._wait_until(lambda: not coordinator.busy)

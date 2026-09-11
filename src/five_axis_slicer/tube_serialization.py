@@ -13,6 +13,7 @@ from .manufacturing.setup import (
     SetupValidationReport,
     TubeOperationDefinition,
 )
+from .postprocessing.tube_product import TubeProductState
 from .tube_drafts import (
     BodyCandidate,
     CoordinateFrameDraft,
@@ -28,12 +29,15 @@ class TubeControllerData:
     setup: ManufacturingSetup
     operations: tuple[TubeOperationDefinition, ...]
     body_catalog: tuple[BodyCandidate, ...]
+    product_states: tuple[TubeProductState, ...] = ()
 
 
 def controller_project_json(
     setup: ManufacturingSetup,
     operations: tuple[TubeOperationDefinition, ...],
+    body_catalog: tuple[BodyCandidate, ...],
     draft_nodes: tuple[str, ...],
+    product_states: Mapping[str, TubeProductState],
     *,
     allow_drafts: bool,
 ) -> dict[str, Any]:
@@ -43,6 +47,8 @@ def controller_project_json(
         "schema_version": TUBE_CONTROLLER_SCHEMA_VERSION,
         "setups": [setup.to_json()],
         "operations": [operation.to_json() for operation in operations],
+        "body_catalog": [candidate.to_json() for candidate in body_catalog],
+        "product_states": [item.to_json() for item in product_states.values()],
     }
 
 
@@ -62,14 +68,18 @@ def parse_controller_project(payload: Mapping[str, Any]) -> TubeControllerData:
         raise ValueError("TubeSetupController requires exactly one Setup")
     raw_operations = payload.get("operations", ())
     raw_catalog = payload.get("body_catalog", ())
+    raw_product_states = payload.get("product_states", ())
     if not isinstance(raw_operations, list | tuple):
         raise ValueError("operations must be an array")
     if not isinstance(raw_catalog, list | tuple):
         raise ValueError("body_catalog must be an array")
+    if not isinstance(raw_product_states, list | tuple):
+        raise ValueError("product_states must be an array")
     return TubeControllerData(
         ManufacturingSetup.from_json(raw_setups[0]),
         tuple(TubeOperationDefinition.from_json(item) for item in raw_operations),
         tuple(BodyCandidate.from_json(item) for item in raw_catalog),
+        tuple(TubeProductState.from_json(item) for item in raw_product_states),
     )
 
 
@@ -110,6 +120,7 @@ def controller_state_json(
     operation_types: tuple[str, ...],
     operation_limit: int,
     modified: bool,
+    product_states: Mapping[str, TubeProductState],
 ) -> dict[str, Any]:
     return {
         "schema_version": TUBE_CONTROLLER_SCHEMA_VERSION,
@@ -138,6 +149,7 @@ def controller_state_json(
             "applied": setup.T_mount_from_build is not None,
         },
         "operations": [operation.to_json() for operation in operations],
+        "products": [item.to_json() for item in product_states.values()],
         "drafts": {node: draft.to_json() for node, draft in sorted(drafts.items())},
         "validation": report.to_json(),
         "coordinates_valid": report.coordinates_valid,

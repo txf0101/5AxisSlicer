@@ -232,8 +232,12 @@ class ResultPreviewPageTests(unittest.TestCase):
             with self.subTest(language=language):
                 page.retranslate(language)
                 self.app.processEvents()
-                self.assertGreaterEqual(page.title_label.font().pixelSize(), UI_TYPOGRAPHY.page_title_px)
-                self.assertGreaterEqual(page.context_title.font().pixelSize(), UI_TYPOGRAPHY.card_title_px)
+                self.assertGreaterEqual(
+                    page.title_label.font().pixelSize(), UI_TYPOGRAPHY.page_title_px
+                )
+                self.assertGreaterEqual(
+                    page.context_title.font().pixelSize(), UI_TYPOGRAPHY.card_title_px
+                )
                 self.assertGreaterEqual(page.code_view.font().pixelSize(), UI_TYPOGRAPHY.code_px)
                 for button in buttons:
                     if not button.isVisible():
@@ -242,11 +246,15 @@ class ResultPreviewPageTests(unittest.TestCase):
                     self.assertGreaterEqual(button.contentsRect().width(), required, button.text())
                 for checkbox in page.visibility_checks:
                     required = checkbox.fontMetrics().horizontalAdvance(checkbox.text()) + 34
-                    self.assertGreaterEqual(checkbox.contentsRect().width(), required, checkbox.text())
+                    self.assertGreaterEqual(
+                        checkbox.contentsRect().width(), required, checkbox.text()
+                    )
                 for label in single_line_labels:
                     if label.text() and not label.wordWrap():
                         required = label.fontMetrics().horizontalAdvance(label.text())
-                        self.assertGreaterEqual(label.contentsRect().width(), required, label.text())
+                        self.assertGreaterEqual(
+                            label.contentsRect().width(), required, label.text()
+                        )
                 for label in page.findChildren(QLabel):
                     if not label.isVisible() or not label.wordWrap() or not label.text():
                         continue
@@ -328,8 +336,7 @@ G1 X3 Y0 Z0.4 A90 C-40 E0.2 F1200
             page.set_gcode(parse_gcode(source), index, owns_index=True)
 
             stage_ids = [
-                page.stage_combo.itemData(row)["id"]
-                for row in range(page.stage_combo.count())
+                page.stage_combo.itemData(row)["id"] for row in range(page.stage_combo.count())
             ]
             self.assertEqual(stage_ids, ["all", "base", "blade_1", "blade_2"])
             self.assertEqual(page.statistic_values["blade_stages"].text(), "2")
@@ -476,7 +483,9 @@ G1 X2 Y0 Z0.3 A90 C-60 E0.3 F1200
             page.shutdown()
             self.app.processEvents()
 
-    def test_prepare_failure_does_not_touch_viewer_or_state_and_closes_candidate_index(self) -> None:
+    def test_prepare_failure_does_not_touch_viewer_or_state_and_closes_candidate_index(
+        self,
+    ) -> None:
         source = ";LAYER_CHANGE\nG1 X0 Y0 Z0.2 E0.1\n"
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)

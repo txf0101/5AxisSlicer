@@ -31,12 +31,8 @@ class StepTopologyTests(unittest.TestCase):
         self.assertTrue(all(vertex.edge_ids for vertex in model.vertices))
         self.assertEqual(len({face.signature for face in model.faces}), 6)
         candidates = geometry_candidates(model)
-        self.assertTrue(
-            any(item["kind"] == "line_edge" for item in candidates["directions"])
-        )
-        self.assertTrue(
-            any(item["kind"] == "plane_normal" for item in candidates["directions"])
-        )
+        self.assertTrue(any(item["kind"] == "line_edge" for item in candidates["directions"]))
+        self.assertTrue(any(item["kind"] == "plane_normal" for item in candidates["directions"]))
 
     def test_pipe2_is_the_coordinate_setup_golden_source(self) -> None:
         root = Path(__file__).resolve().parents[1]
@@ -50,12 +46,8 @@ class StepTopologyTests(unittest.TestCase):
         self.assertAlmostEqual(model.solid_bodies[0].bounds.minimum[2], 0.0, places=5)
         self.assertAlmostEqual(model.solid_bodies[0].bounds.maximum[2], 5.0, places=5)
         candidates = geometry_candidates(model)
-        self.assertTrue(
-            any(item["kind"] == "face_centroid" for item in candidates["origins"])
-        )
-        self.assertTrue(
-            any(item["kind"] == "surface_axis" for item in candidates["directions"])
-        )
+        self.assertTrue(any(item["kind"] == "face_centroid" for item in candidates["origins"]))
+        self.assertTrue(any(item["kind"] == "surface_axis" for item in candidates["directions"]))
 
     def test_curved_edges_expose_exact_reference_kinds(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -64,12 +56,8 @@ class StepTopologyTests(unittest.TestCase):
             model = load_step(path)
 
         candidates = geometry_candidates(model)
-        circle_centres = [
-            item for item in candidates["origins"] if item["kind"] == "circle_center"
-        ]
-        arc_midpoints = [
-            item for item in candidates["origins"] if item["kind"] == "arc_midpoint"
-        ]
+        circle_centres = [item for item in candidates["origins"] if item["kind"] == "circle_center"]
+        arc_midpoints = [item for item in candidates["origins"] if item["kind"] == "arc_midpoint"]
         self.assertTrue(circle_centres)
         self.assertTrue(arc_midpoints)
         self.assertTrue(all(len(item["point"]) == 3 for item in arc_midpoints))

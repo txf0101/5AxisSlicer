@@ -28,6 +28,8 @@ class TubeControllerCheckpoint:
     operations: tuple[TubeOperationDefinition, ...]
     drafts: Mapping[str, Draft] = field(default_factory=dict)
     modified: bool = False
+    product_states: Mapping[str, object] = field(default_factory=dict)
+    product_results: Mapping[str, object] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         if not isinstance(self.setup, ManufacturingSetup):
@@ -46,9 +48,17 @@ class TubeControllerCheckpoint:
         object.__setattr__(self, "operations", operations)
         object.__setattr__(self, "drafts", MappingProxyType(drafts))
         object.__setattr__(self, "modified", bool(self.modified))
+        object.__setattr__(self, "product_states", MappingProxyType(dict(self.product_states)))
+        object.__setattr__(self, "product_results", MappingProxyType(dict(self.product_results)))
 
     def without_drafts(self) -> TubeControllerCheckpoint:
-        return TubeControllerCheckpoint(self.setup, self.operations, modified=self.modified)
+        return TubeControllerCheckpoint(
+            self.setup,
+            self.operations,
+            modified=self.modified,
+            product_states=self.product_states,
+            product_results=self.product_results,
+        )
 
 
 class TubeControllerStateBoundary:
@@ -61,6 +71,8 @@ class TubeControllerStateBoundary:
             current._operations,
             current._drafts,
             current._modified,
+            current._product_states,
+            current._product_results,
         )
 
     def command_applied_token(self) -> tuple[object, ...]:
@@ -83,6 +95,8 @@ class TubeControllerStateBoundary:
         current._operations = checkpoint.operations
         current._drafts = dict(checkpoint.drafts)
         current._modified = checkpoint.modified
+        current._product_states = dict(checkpoint.product_states)
+        current._product_results = dict(checkpoint.product_results)
         current.refresh_resource_library()
 
     def fork(self: _Controller) -> _Controller:
@@ -92,6 +106,8 @@ class TubeControllerStateBoundary:
         candidate = copy(current)
         candidate._body_catalog = dict(current._body_catalog)
         candidate._drafts = dict(current._drafts)
+        candidate._product_states = dict(current._product_states)
+        candidate._product_results = dict(current._product_results)
         candidate._resources = TubeResourceContext(current.resource_library)
         candidate.refresh_resource_library()
         return cast(_Controller, candidate)
@@ -109,6 +125,8 @@ class TubeControllerStateBoundary:
         current._operations = proposed._operations
         current._drafts = dict(proposed._drafts)
         current._modified = proposed._modified
+        current._product_states = dict(proposed._product_states)
+        current._product_results = dict(proposed._product_results)
         current._resources = proposed._resources
 
 

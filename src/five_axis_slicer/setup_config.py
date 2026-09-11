@@ -2,7 +2,7 @@
 
 ``project.json`` remains the complete project authority.  This module exposes
 only portable Setup values: frozen resources, resolved Source-CS coordinates,
-placement, and one Tube operation.  Geometry identities, Part assignments,
+placement, and up to three Tube operations.  Geometry identities, Part assignments,
 drafts, issues, and derived states stay in the project domain.
 
 YAML is treated as untrusted input.  Parsing accepts a deliberately small
@@ -60,6 +60,10 @@ MAX_CONFIG_DEPTH: Final = 32
 MAX_CONFIG_NODES: Final = 50_000
 COORDINATE_CONVENTION: Final = "source_mm_right_handed_column_vector"
 PART_POLICY: Final = "preserve_current"
+PORTABLE_OPERATION_TYPES: Final = frozenset(
+    {"tube_thin_wall_indexed", "tube_buildup", "tube_continuous"}
+)
+MAX_PORTABLE_OPERATIONS: Final = 3
 
 _SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 _POINT_PROVENANCE = frozenset(
@@ -309,7 +313,7 @@ class PortableTubeOperation:
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "name", _text(self.name, "operation name"))
-        if self.operation_type != "tube_thin_wall_indexed":
+        if self.operation_type not in PORTABLE_OPERATION_TYPES:
             raise SetupConfigError("unsupported Tube operation type")
         if type(self.enabled) is not bool:
             raise SetupConfigError("operation enabled must be a boolean")
@@ -367,8 +371,8 @@ class SetupConfig:
             value = getattr(self, field_name)
             if value is not None and not _SHA256_RE.fullmatch(value):
                 raise SetupConfigError(f"{field_name} must be a lowercase SHA-256 value")
-        if len(self.operations) > 1:
-            raise SetupConfigError("schema v1 permits at most one Tube operation")
+        if len(self.operations) > MAX_PORTABLE_OPERATIONS:
+            raise SetupConfigError("setup configuration permits at most three Tube operations")
         _validate_resources(self.machine, self.nozzle, self.material)
         _validate_placement(self.machine, self.build_coordinate_system, self.placement)
 
@@ -440,15 +444,18 @@ class SetupConfig:
         setup = self.apply_to_setup(current_setup)
         if not self.operations:
             return setup, ()
-        if len(current_operations) > 1:
-            raise SetupConfigError("current Tube state contains more than one operation")
-        operation_id = (
-            current_operations[0].operation_id if current_operations else new_operation_id
+        if len(current_operations) > MAX_PORTABLE_OPERATIONS:
+            raise SetupConfigError("current Tube state contains more than three operations")
+        operation_ids = [item.operation_id for item in current_operations[: len(self.operations)]]
+        if len(operation_ids) < len(self.operations) and new_operation_id is None:
+            raise SetupConfigError("new_operation_id is required when configuration adds operations")
+        while len(operation_ids) < len(self.operations):
+            operation_ids.append(_next_portable_operation_id(new_operation_id, operation_ids))
+        operations = tuple(
+            portable.to_domain(operation_id, setup.setup_id)
+            for portable, operation_id in zip(self.operations, operation_ids, strict=True)
         )
-        if operation_id is None:
-            raise SetupConfigError("new_operation_id is required when no operation exists")
-        operation = self.operations[0].to_domain(operation_id, setup.setup_id)
-        return setup, (operation,)
+        return setup, operations
 
     def to_document(self) -> dict[str, Any]:
         def resource(value: ResourceSnapshot | None) -> dict[str, Any] | None:
@@ -520,6 +527,19 @@ def _validate_placement(
     profile = MachineProfile.from_json(machine.payload)
     if placement.mount_datum_id not in profile.mount_map:
         raise SetupConfigError("placement mount does not belong to Machine")
+
+
+def _next_portable_operation_id(base: str | None, used: Sequence[str]) -> str:
+    if base is None:
+        raise SetupConfigError("new_operation_id is required when configuration adds operations")
+    candidate = str(base).strip()
+    if not candidate:
+        raise SetupConfigError("new_operation_id must not be empty")
+    suffix = 2
+    while candidate in used:
+        candidate = f"{base}-{suffix}"
+        suffix += 1
+    return candidate
 
 
 def export_setup_config(

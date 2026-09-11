@@ -61,14 +61,12 @@ class OpenGLPaperPathTests(unittest.TestCase):
         colors = np.ones((4, 4), dtype=np.float32)
         styles = np.asarray([1, 1, 0, 0], dtype=np.uint8)
 
-        vertices, vertex_colors, draw_starts, draw_counts = (
-            _build_continuous_line_strips(
-                starts,
-                ends,
-                colors,
-                styles,
-                tolerance=0.02,
-            )
+        vertices, vertex_colors, draw_starts, draw_counts = _build_continuous_line_strips(
+            starts,
+            ends,
+            colors,
+            styles,
+            tolerance=0.02,
         )
 
         self.assertEqual(draw_starts.tolist(), [0, 3])
@@ -169,9 +167,7 @@ class OpenGLPaperPathTests(unittest.TestCase):
         viewer.model = object()  # type: ignore[assignment]
         viewer.selection.body_ids.add("body_001")
         viewer.selection.edge_ids.add("edge_001")
-        viewer._edge_segments.append(
-            _EdgeSegment("edge_001", (0.0, 0.0, 0.0), (1.0, 0.0, 0.0))
-        )
+        viewer._edge_segments.append(_EdgeSegment("edge_001", (0.0, 0.0, 0.0), (1.0, 0.0, 0.0)))
         viewer._pick_id_to_edge[1] = "edge_001"
         for key in ("model", "edge", "edge_selected", "edge_pick"):
             viewer._set_buffer(
@@ -243,9 +239,7 @@ class VtkClearModelContractTests(unittest.TestCase):
             def __init__(self) -> None:
                 self.removed: list[object] = []
 
-            def RemoveActor(
-                self, actor: object
-            ) -> None:  # noqa: N802 - VTK API spelling
+            def RemoveActor(self, actor: object) -> None:  # noqa: N802 - VTK API spelling
                 self.removed.append(actor)
 
         class ViewerStub:
@@ -300,9 +294,7 @@ class VtkClearModelContractTests(unittest.TestCase):
                 self.removed: list[object] = []
                 self.reset_count = 0
 
-            def RemoveActor(
-                self, actor: object
-            ) -> None:  # noqa: N802 - VTK API spelling
+            def RemoveActor(self, actor: object) -> None:  # noqa: N802 - VTK API spelling
                 self.removed.append(actor)
 
             def ResetCameraClippingRange(self) -> None:  # noqa: N802 - VTK API spelling

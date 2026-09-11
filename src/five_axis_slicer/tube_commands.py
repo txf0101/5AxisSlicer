@@ -25,18 +25,31 @@ from .manufacturing.resources import (
     NozzleProfile,
     canonical_content_hash,
 )
-from .manufacturing.setup import BUILD_CS_NODE, MODEL_CS_NODE, PLACEMENT_NODE
+from .manufacturing.setup import (
+    BUILD_CS_NODE,
+    MODEL_CS_NODE,
+    PLACEMENT_NODE,
+    TubeOperationDefinition,
+)
+from .manufacturing.tube_parameters import (
+    TubeBuildupOperationConfig,
+    TubeContinuousOperationConfig,
+)
+from .postprocessing.indexed_tube import GenerationCancelled
+from .setup_config import SetupConfig
+from .setup_config_session import apply_setup_config
 from .tube_controller import TubeSetupController
 from .tube_drafts import OperationLimitError, TubeControllerError
 from .tube_resource_selection import configured_nozzle_copy, nozzle_editor_profile
-from .setup_config import SetupConfig
-from .setup_config_session import apply_setup_config
 
 _QUERY_COMMANDS = frozenset({"help", "state", "issues", "validate"})
 _MUTATION_COMMANDS = frozenset(
     {
         "create_operation",
         "set_operation",
+        "generate_operation",
+        "cancel_generation",
+        "export_operation",
         "confirm_part",
         "set_machine",
         "set_nozzle",
@@ -78,6 +91,9 @@ _ALIASES = {
     "校验": "validate",
     "创建操作": "create_operation",
     "设置操作": "set_operation",
+    "生成操作": "generate_operation",
+    "取消生成": "cancel_generation",
+    "导出操作": "export_operation",
     "确认零件": "confirm_part",
     "设置机床": "set_machine",
     "设置喷嘴": "set_nozzle",
@@ -95,6 +111,9 @@ _PUBLIC_COMMANDS = (
     "validate",
     "create_operation",
     "set_operation",
+    "generate_operation",
+    "cancel_generation",
+    "export_operation",
     "confirm_part",
     "set_machine",
     "set_nozzle",
@@ -106,8 +125,19 @@ _PUBLIC_COMMANDS = (
     "redo",
 )
 _HELP = {
-    "create_operation": "create_operation(operation_id=None, name=None)",
-    "set_operation": "set_operation(name=None, enabled=None)",
+    "create_operation": "create_operation(operation_type='tube_thin_wall_indexed', operation_id=None, name=None)",
+    "set_operation": (
+        "set_operation(operation_id=None, name=None, enabled=None, tube_body_id=None, entry_port_id=None, "
+        "exit_port_id=None, substrate_body_id=None, manual_centerline_edge_ids=None, "
+        "bead_width_mm=None, layer_height_mm=None, max_wedge_angle_deg=None, "
+        "max_bead_height_error_mm=None, safe_clearance_mm=None, retract_length_mm=None, "
+        "deposition_feedrate_mm_min=None, travel_feedrate_mm_min=None, "
+        "contour_chord_error_mm=None, maximum_pass_spacing_mm=None, include_planar_base=None, "
+        "base_order=None, seam_angle_deg=None)"
+    ),
+    "generate_operation": "generate_operation(operation_id=None)",
+    "cancel_generation": "cancel_generation()",
+    "export_operation": "export_operation(operation_id, destination)",
     "confirm_part": "confirm_part(part_body_ids=None, ignored_body_ids=())",
     "set_machine": "set_machine(resource_id)",
     "set_nozzle": (
@@ -118,6 +148,23 @@ _HELP = {
     "set_build_cs": "set_build_cs(origin, z, x, input_frame='model')",
     "set_placement": ("set_placement(mount_id, translation_mm=(0,0,0), rotation_xyz_deg=(0,0,0))"),
 }
+_OPERATION_GEOMETRY_FIELDS = (
+    "tube_body_id",
+    "entry_port_id",
+    "exit_port_id",
+    "substrate_body_id",
+)
+_OPERATION_PARAMETER_FIELDS = (
+    "bead_width_mm",
+    "layer_height_mm",
+    "max_wedge_angle_deg",
+    "max_bead_height_error_mm",
+    "safe_clearance_mm",
+    "retract_length_mm",
+    "deposition_feedrate_mm_min",
+    "travel_feedrate_mm_min",
+    "contour_chord_error_mm",
+)
 
 
 class TubeCommandProvider:
@@ -211,10 +258,11 @@ class TubeCommandProvider:
     @staticmethod
     def _command_create_operation(
         controller: TubeSetupController,
+        operation_type: str = "tube_thin_wall_indexed",
         operation_id: str | None = None,
         name: str | None = None,
     ) -> CommandOutcome:
-        options: dict[str, Any] = {"operation_id": operation_id}
+        options: dict[str, Any] = {"operation_type": operation_type, "operation_id": operation_id}
         if name is not None:
             options["name"] = name
         operation = controller.create_operation(**options)
@@ -227,35 +275,77 @@ class TubeCommandProvider:
     @staticmethod
     def _command_set_operation(
         controller: TubeSetupController,
+        operation_id: str | None = None,
         name: str | None = None,
         enabled: bool | None = None,
+        tube_body_id: str | None = None,
+        entry_port_id: str | None = None,
+        exit_port_id: str | None = None,
+        substrate_body_id: str | None = None,
+        manual_centerline_edge_ids: Any = None,
+        bead_width_mm: float | None = None,
+        layer_height_mm: float | None = None,
+        max_wedge_angle_deg: float | None = None,
+        max_bead_height_error_mm: float | None = None,
+        safe_clearance_mm: float | None = None,
+        retract_length_mm: float | None = None,
+        deposition_feedrate_mm_min: float | None = None,
+        travel_feedrate_mm_min: float | None = None,
+        contour_chord_error_mm: float | None = None,
+        maximum_pass_spacing_mm: float | None = None,
+        include_planar_base: bool | None = None,
+        base_order: str | None = None,
+        seam_angle_deg: float | None = None,
     ) -> CommandOutcome:
-        if len(controller.operations) != 1:
-            raise CommandError(
-                "E_DOMAIN_VALIDATION",
-                "set_operation requires exactly one Tube operation",
-                command="set_operation",
-            )
-        current = controller.operations[0]
-        updated = replace(
-            current,
-            name=current.name if name is None else name,
-            enabled=current.enabled if enabled is None else enabled,
-        )
-        if updated != current:
-            checkpoint = controller.command_checkpoint()
-            controller.restore_command_checkpoint(
-                replace(checkpoint, operations=(updated,), modified=True)
-            )
-        fields = tuple(
-            field
-            for field, value in (
-                ("operations[0].name", name),
-                ("operations[0].enabled", enabled),
-            )
-            if value is not None
-        )
+        payload = dict(locals())
+        payload.pop("controller")
+        updated = _set_operation_from_payload(controller, payload)
+        fields = _operation_changed_fields(payload)
         return CommandOutcome(updated.to_json(), ("operation",), changed_fields=fields)
+
+    @staticmethod
+    def _command_generate_operation(
+        controller: TubeSetupController,
+        operation_id: str | None = None,
+    ) -> CommandOutcome:
+        try:
+            result = controller.generate_operation(operation_id)
+        except GenerationCancelled as exc:
+            return CommandOutcome(
+                {"status": "cancelled", "message": str(exc)},
+                ("operation",),
+                changed_fields=(),
+                project_only=True,
+                record_history=False,
+            )
+        except Exception as exc:
+            return CommandOutcome(
+                {"status": "error", "message": str(exc)},
+                ("operation",),
+                changed_fields=("products",),
+                project_only=True,
+                record_history=False,
+            )
+        return CommandOutcome(
+            {"status": "ready", "result": result.to_json()},
+            ("operation",),
+            changed_fields=("products",),
+            project_only=True,
+        )
+
+    @staticmethod
+    def _command_cancel_generation(controller: TubeSetupController) -> CommandOutcome:
+        controller.cancel_generation()
+        return CommandOutcome({"cancel_requested": True}, ("operation",), record_history=False)
+
+    @staticmethod
+    def _command_export_operation(
+        controller: TubeSetupController,
+        operation_id: str,
+        destination: str,
+    ) -> CommandOutcome:
+        path = controller.export_operation_product(operation_id, destination)
+        return CommandOutcome({"destination": str(path)}, ("operation",), record_history=False)
 
     @staticmethod
     def _command_confirm_part(
@@ -599,6 +689,154 @@ def _set_coordinate(
         ) from exc
 
 
+def _set_operation_from_payload(
+    controller: TubeSetupController,
+    payload: dict[str, Any],
+) -> TubeOperationDefinition:
+    current = _operation_from_id(controller, payload["operation_id"])
+    updated = replace(
+        current,
+        name=current.name if payload["name"] is None else payload["name"],
+        enabled=current.enabled if payload["enabled"] is None else payload["enabled"],
+    )
+    _publish_operation(controller, updated, current)
+    configured_fields = (*_OPERATION_GEOMETRY_FIELDS, *_OPERATION_PARAMETER_FIELDS)
+    updated = _with_type_config(updated, payload)
+    _publish_operation(controller, updated, _operation_from_id(controller, current.operation_id))
+    manual = payload["manual_centerline_edge_ids"]
+    if manual is None and not _has_operation_values(payload, configured_fields):
+        return updated
+    geometry = updated.geometry
+    current_ids = (
+        geometry.tube_body,
+        geometry.entry_port,
+        geometry.exit_port,
+        geometry.substrate_body,
+    )
+    required_ids = tuple(
+        payload[key] or (None if reference is None else reference.object_id)
+        for key, reference in zip(_OPERATION_GEOMETRY_FIELDS, current_ids, strict=True)
+    )
+    if any(value is None for value in required_ids):
+        raise ValueError("all Tube geometry roles are required when configuring operation")
+    parameters = replace(
+        updated.parameters,
+        **{key: payload[key] for key in _OPERATION_PARAMETER_FIELDS if payload[key] is not None},
+    )
+    return controller.configure_operation(
+        operation_id=current.operation_id,
+        tube_body_id=str(required_ids[0]),
+        entry_port_id=str(required_ids[1]),
+        exit_port_id=str(required_ids[2]),
+        substrate_body_id=str(required_ids[3]),
+        manual_centerline_edge_ids=(
+            tuple(item.object_id for item in geometry.manual_centerline_edges)
+            if manual is None
+            else tuple(manual)
+        ),
+        parameters=parameters,
+    )
+
+
+def _publish_operation(
+    controller: TubeSetupController,
+    updated: TubeOperationDefinition,
+    current: TubeOperationDefinition,
+) -> None:
+    if updated == current:
+        return
+    checkpoint = controller.command_checkpoint()
+    operations = tuple(
+        updated if item.operation_id == current.operation_id else item
+        for item in checkpoint.operations
+    )
+    controller.restore_command_checkpoint(replace(checkpoint, operations=operations, modified=True))
+    controller._mark_product_stale(updated)
+
+
+def _operation_changed_fields(payload: dict[str, Any]) -> tuple[str, ...]:
+    fields = []
+    operation_id = payload["operation_id"]
+    target = "operations" if operation_id is None else f"operations[{operation_id}]"
+    if payload["name"] is not None:
+        fields.append(f"{target}.name")
+    if payload["enabled"] is not None:
+        fields.append(f"{target}.enabled")
+    if payload["manual_centerline_edge_ids"] is not None or any(
+        payload[key] is not None for key in _OPERATION_GEOMETRY_FIELDS
+    ):
+        fields.append(f"{target}.geometry")
+    if any(payload[key] is not None for key in _OPERATION_PARAMETER_FIELDS):
+        fields.append(f"{target}.parameters")
+    if any(
+        payload[key] is not None
+        for key in (
+            "maximum_pass_spacing_mm",
+            "include_planar_base",
+            "base_order",
+            "seam_angle_deg",
+        )
+    ):
+        fields.append(f"{target}.type_config")
+    return tuple(fields)
+
+
+def _operation_from_id(
+    controller: TubeSetupController,
+    operation_id: str | None,
+) -> TubeOperationDefinition:
+    if operation_id is None:
+        if len(controller.operations) == 1:
+            return controller.operations[0]
+        raise CommandError(
+            "E_DOMAIN_VALIDATION",
+            "operation_id is required when more than one Tube operation exists",
+            command="set_operation",
+        )
+    identifier = str(operation_id).strip()
+    for operation in controller.operations:
+        if operation.operation_id == identifier:
+            return operation
+    raise CommandError(
+        "E_DOMAIN_VALIDATION",
+        f"unknown operation_id: {identifier}",
+        command="set_operation",
+    )
+
+
+def _with_type_config(
+    operation: TubeOperationDefinition,
+    payload: dict[str, Any],
+) -> TubeOperationDefinition:
+    if operation.operation_type == "tube_buildup":
+        if payload["seam_angle_deg"] is not None:
+            raise ValueError("seam_angle_deg applies only to tube_continuous")
+        config = operation.type_config
+        assert isinstance(config, TubeBuildupOperationConfig)
+        changes = {
+            key: payload[key]
+            for key in ("maximum_pass_spacing_mm", "include_planar_base", "base_order")
+            if payload[key] is not None
+        }
+        return replace(operation, type_config=replace(config, **changes))
+    if operation.operation_type == "tube_continuous":
+        if any(
+            payload[key] is not None
+            for key in ("maximum_pass_spacing_mm", "include_planar_base", "base_order")
+        ):
+            raise ValueError("Buildup configuration applies only to tube_buildup")
+        config = operation.type_config
+        assert isinstance(config, TubeContinuousOperationConfig)
+        if payload["seam_angle_deg"] is not None:
+            return replace(
+                operation, type_config=replace(config, seam_angle_deg=payload["seam_angle_deg"])
+            )
+    special = ("maximum_pass_spacing_mm", "include_planar_base", "base_order", "seam_angle_deg")
+    if any(payload[key] is not None for key in special):
+        raise ValueError(f"type-specific parameters do not apply to {operation.operation_type}")
+    return operation
+
+
 def _finite_vector3(value: Any, field_name: str) -> tuple[float, float, float]:
     if isinstance(value, str):
         raise TypeError(f"{field_name} must contain three numbers")
@@ -643,6 +881,10 @@ def _nozzle_changed_fields(
     return ("setup.resources.nozzle", "operations") + tuple(
         field for field, value in optional if value is not None
     )
+
+
+def _has_operation_values(payload: dict[str, Any], fields: tuple[str, ...]) -> bool:
+    return any(payload[key] is not None for key in fields)
 
 
 __all__ = ["TubeCommandProvider"]

@@ -44,7 +44,7 @@
     },
     "operations": {
       "type": "array",
-      "maxItems": 1,
+      "maxItems": 3,
       "items": {"$ref": "#/$defs/operation"}
     }
   },
@@ -278,7 +278,9 @@
       "type": "object",
       "required": ["operation_type", "name", "enabled"],
       "properties": {
-        "operation_type": {"const": "tube_thin_wall_indexed"},
+        "operation_type": {
+          "enum": ["tube_thin_wall_indexed", "tube_buildup", "tube_continuous"]
+        },
         "name": {
           "type": "string",
           "minLength": 1,

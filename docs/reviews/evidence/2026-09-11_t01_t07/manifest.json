@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-11T20:50:45+08:00",
+  "scope": "T01-T07 Tube Indexed",
+  "repository": {
+    "head": "550d5f03c8551cad955b52750c73c1b0c4aa9878",
+    "branch": "main",
+    "state": "uncommitted working tree; includes pre-existing A01-A03 work"
+  },
+  "environment": {
+    "python": "tmp/pytest9/Scripts/python.exe",
+    "python_version": "3.12.7",
+    "preflight_issues": [],
+    "ruff_version": "0.12.12",
+    "mypy_version": "1.11.2"
+  },
+  "validation": [
+    {
+      "command": "tmp/pytest9/Scripts/python.exe scripts/check_quality.py",
+      "result": "passed: Ruff, migrated Ruff, security Ruff, format, context budget, mypy; 86 source files checked by mypy"
+    },
+    {
+      "command": "tmp/pytest9/Scripts/python.exe -m pytest tests/test_tube_indexed_pipeline.py -q",
+      "result": "19 passed in 3.12s",
+      "junit": "pytest_tube_indexed.xml"
+    },
+    {
+      "command": "pre-UI-audit: tmp/pytest9/Scripts/python.exe -m pytest tests/test_tube_ui.py -q",
+      "result": "29 passed, 2 subtests passed in 75.06s",
+      "junit": "pytest_tube_ui.xml"
+    },
+    {
+      "command": "tmp/pytest9/Scripts/python.exe -m pytest tests/test_script_console.py tests/test_tube_ui.py tests/test_ui_state.py -q",
+      "result": "49 passed, 6 subtests passed in 170.33s; includes final English feedback localization fix",
+      "junit": "pytest_ui_final.xml"
+    },
+    {
+      "command": "targeted controller, automation, project IO, rebind, source update, toolpath, setup, coordinates, machine, resources and preview pytest suite",
+      "result": "158 passed, 2 skipped, 85 subtests passed in 21.88s",
+      "junit": "pytest_related.xml"
+    },
+    {
+      "command": "tmp/pytest9/Scripts/python.exe -m pytest -q",
+      "result": "430 passed, 3 skipped, 130 subtests passed in 308.59s; JUnit: 563 tests, 0 failures, 0 errors",
+      "junit": "pytest_full.xml"
+    }
+  ],
+  "input_hashes_sha256": {
+    "example/pipe2/弯管新.stp": "116e99fd43492bd1f4f519c80c93cd1f7cd0bf2cb6861b3e123148e4031a0d4b",
+    "tests/fixtures/analytic_tube_truth.json": "e3d02045c104aadfd86a54ca3f4089a2dd019d6bf737663e772ef9c97f1159e8"
+  },
+  "implementation_hashes_sha256": {
+    "src/five_axis_slicer/manufacturing/tube_parameters.py": "7d2ee2a5cff08c4b8a207a7f7a423ed04f4bae13676873aa927b51d43797d1bf",
+    "src/five_axis_slicer/manufacturing/setup.py": "ef91ee0709c26d8549c8f9667a973e1e3d1933509b657c76edb57c28367d0e18",
+    "src/five_axis_slicer/tube_controller.py": "cd36473d28db412bba7f9a7db3eea94b58a7f972bb36f56a455d26c364e549ad",
+    "src/five_axis_slicer/tube_operation_service.py": "547c6cae012aa420796c998cf3c62aee79cf44dc9ce9c69a15c33c71d48e1b47",
+    "src/five_axis_slicer/tube_commands.py": "388d03fd9a08594cc5885e42a6a97c9fff66f1976178f0d360f126b426d94154",
+    "src/five_axis_slicer/tube_serialization.py": "154c6a716ec6778ba933938ddf6fccb799b7e3a87abafb094b47b62b3f7cbd03",
+    "src/five_axis_slicer/tube_ui.py": "eb2b69a07fcd3c4fd19d365fb189c67ffd66fccdc2dc4e1a260371e738e4ed1b",
+    "src/five_axis_slicer/tube_operation_ui.py": "b0461eafa27774d9abd5aa0a49e2be86cb87b2fe4b2922d5f8ec20f30ca4cff1",
+    "src/five_axis_slicer/ui.py": "1c941561dd169edf72848470056e7392c58f8d6aebfb252d080fdae651ad9c44",
+    "src/five_axis_slicer/script_console.py": "3280342307013f48e8e7ee13a8b11f949158e9d6bc7692adb63d9122a3ec1d15",
+    "src/five_axis_slicer/automation_routes.py": "8d5aa34593ca1d4f5363b34064b271b8970c1c81bca9503942293d0fb77fc5e2",
+    "src/five_axis_slicer/algorithms/tube/geometry.py": "395aacb43720583e5ec7e09e35524acdb989e31a9fd0d42806552510b940f5cd",
+    "src/five_axis_slicer/algorithms/tube/indexed.py": "bbbe0241fcf91a9ac34e859502fab64a22876e8e2a3f5559dbcf29d5121924df",
+    "src/five_axis_slicer/algorithms/tube/section.py": "eaddd307562ac77497273e55838e7c359a17cec3c19de80d544e22e0d10cf489",
+    "src/five_axis_slicer/kinematics/xyzac.py": "6c7b70df76f3acc68faaa691e87f3b74049ae6abac945ca301b382aece3a3582",
+    "src/five_axis_slicer/validation/indexed_tube.py": "2edd83abfc276f6e9645b29871a56dbbd3279bd07dce980998cd43647964cc89"
+  },
+  "test_hashes_sha256": {
+    "tests/test_tube_indexed_pipeline.py": "919add69edae6660189d758535ed343083715a0d991ed2fa3d99dfd3a877624f",
+    "tests/test_tube_ui.py": "ffd886cc2cd2fb2688c6d35b1c75e787032477eb765ab774d5909c0a3323e060"
+  },
+  "evidence_hashes_sha256": {
+    "quality_summary.md": "7c270d7babaed95a4daef5b29ee0220997eebebda19417fc896b26b6c304800c",
+    "pytest_tube_indexed.xml": "51dfbb719194cea663961720a6b53e9ce108f68ce84cffac9f08b747755c56a2",
+    "pytest_tube_ui.xml": "bdc8c084b3c61bffc367cd328470553a943b563b9f66ed3f20a13b567d487eeb",
+    "pytest_related.xml": "478b42f6e07c0c179ff3a2d675006fe70b847cdaf9c0cbe463a1df4325d3a07a",
+    "pytest_full.xml": "ac228414bd11991a5d629e177f36ffb887ae7aebc9451455788c9326d7a72646",
+    "pytest_ui_final.xml": "e14585b849cd87a4e234e78bbdf1540e6b8aa2e60f796f6b0934b1b1d5c0615c",
+    "ui/01-zh-1600x900.png": "74ea0b05810af66339be2308e5db4adc3724f43a7d23b176d7f8e5a28f1e24e4",
+    "ui/02-zh-1366x768-bottom.png": "c38b8b2b50d58345d22d2bb5c7f133dd55caa23af19858d0a4230722053f7dde",
+    "ui/03-en-1920x1080.png": "63b7c6f5239933e0911afcc5da2004d49a82a61cc4880add1a36f0d49b767bd9",
+    "ui/summary.json": "869807922d9feec7813f08ca905ac48974030c5d968d3432a114d19518e747eb"
+  },
+  "reference": {
+    "project": "fractalrobotics/Fractal-Cortex",
+    "local_commit": "db29bacc5615fce206b05dc49bd6c52ab92d5351",
+    "license": "GPL-3.0",
+    "slicing_functions_sha256": "87a502cd8d1224d65b5119293eee062624c743355b30a068dea650c6785fba02",
+    "usage": "method and workflow study followed by project-local reimplementation"
+  },
+  "limits": [
+    "T08 Generate-to-NC-to-readback workflow is not complete",
+    "T09 multi-pass buildup and T10-T11 continuous Tube work are not complete",
+    "no real-machine qualification or safety certification is claimed"
+  ]
+}

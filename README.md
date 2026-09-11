@@ -6,18 +6,25 @@
 
 六个工作台的算法开发按[开发计划](docs/planning/development_plan.md)推进，优先完成管状工作台。每轮任务状态、验收证据和下一步更新到[进度台账主表](docs/planning/progress_tracker.md#主表)；NX 与公开项目资料见[参考资料](docs/planning/reference_research.md)，全部开发文档从[文档索引](docs/README.md)进入。
 
+Tube Indexed 的 T01—T07 参考实现已经聚拢到本仓库：可编辑管体/入口/出口/基体及工艺参数，识别直管与圆弧管中心线，按楔角和几何误差分区，使用 OCCT 生成薄壁截交路径，生成安全转位事件，求解 Generic XYZAC 轴轨迹，并输出几何、喷嘴、基体、夹具、IPW 与运动扫掠检查报告。完整的“生成按钮 → 后处理 NC → 回读”产品流程属于 T08，当前尚未宣称完成。
+
+管状算法主要学习了相邻 `5AxisSlicer` 工程中的 Fractal Cortex 多方向分块、逐块切层和安全转位流程。Fractal Cortex 由 Fractal Robotics 开发，README 标注 Copyright (C) 2025 Daniel Brogan，许可证为 GPLv3。本项目当前仅内部传阅、暂无公开计划；新实现按 V2.0 的 B-Rep、路径、运动学和验证契约重写。固定 commit、逐文件 SHA-256、方法映射和许可证边界见[Tube Indexed 参考来源登记](docs/planning/tube_reference_provenance.md)。
+
 当前范围：
 
 - Workbench 首页展示 Planar、Curve、Freeform、Rotary、Tube、Research 六类工作台。
 - Operation Session 包含 Objects、Print、Material、Machine、Preview、Checks 六个页签。
 - Objects 页保留 STEP/STP 的 body 列表选择和 edge 空间点选。
 - Tube Workbench 显式创建 `Tube Thin-Wall Indexed` 操作，Part 可包含多个封闭 solid；sheet、Ignore 和未分配实体保留显示且不进入后续制造计算。
+- Tube Operation 编辑器可指定管体、入口圆边、出口圆边和既有基体，并编辑道宽、层高、最大楔角、道高误差、安全间隙、回抽、沉积/空移进给和轮廓弦高误差。
 - Tube 坐标编辑采用原点、Z 方向、X 方向三参考定义，支持几何拾取、数值输入、方向翻转、Draft、Apply/Cancel 和六自由度装夹微调。
 - Machine、Nozzle、Material 使用内置模板、用户资源库和项目冻结快照；参考机型会产生 Warning，资源不完整或材料未审核会阻止 Setup Ready。
 - Preview 页叠加半透明 STEP 模型和 G-code 路径，支持 Feature Type 图例、层范围、travel/extrusion 显隐、五轴姿态抽样和路径段属性面板；默认优先显示正挤出路径，空走和姿态抽样可在面板中打开。
 - G-code 分色采用路径段数据结构中的 `move_type` 与 `extrusion_role` 字段，再由颜色映射表决定渲染颜色。`;TYPE:`、`;LAYER_CHANGE`、`;Layer` 等注释只作为解析线索。
 - A/C 五轴 G-code 仅在调用方显式确认已注册的控制器语义后，采用 `P_part = Rz(-C) * Rx(-A) * P_machine` 反算工件坐标。未确认语义、非零 B、U/V/W 或运动学诊断会让整份文件统一保留 Machine XYZ；纯 E 回抽和 prime 只进入运动类型统计，不写入路径线。
-- 当前解析链路读取已有 G-code；完整五轴路径生成与机床运动仿真列入后续算法阶段。
+- T08—T12 已补齐生成/后处理/回读、RMF、时间参数化与离线检查相关实现；其算法为本项目独立复写，受本地 Fractal/V1 项目启发，运行不依赖相邻目录。Generic XYZAC 仅为离线参考，不能作为实机资格。
+
+T08—T12 的公开来源、术语边界和控制器语义限制见[参考资料检索](docs/planning/reference_research.md)；其中 M82 按 Marlin/RepRap 语义处理，不称为 LinuxCNC 定义。
 
 ## 环境
 
@@ -118,6 +125,7 @@ curl -Method POST http://127.0.0.1:8765/selection/set -Body '{"body_ids":["body_
 curl -Method POST http://127.0.0.1:8765/selection/mode -Body '{"mode":"face"}' -ContentType 'application/json'
 curl -Method POST http://127.0.0.1:8765/selection/set -Body '{"face_ids":["face_001_001"],"vertex_ids":[]}' -ContentType 'application/json'
 curl http://127.0.0.1:8765/tube/state
+curl -Method POST http://127.0.0.1:8765/tube/operation/set -Body '{"tube_body_id":"body_002","entry_port_id":"body_002_edge_0003","exit_port_id":"body_002_edge_0014","substrate_body_id":"body_001","layer_height_mm":0.25}' -ContentType 'application/json'
 curl -Method POST http://127.0.0.1:8765/project/save -Body '{"directory":"C:\\tmp\\five_axis_project"}' -ContentType 'application/json'
 ```
 

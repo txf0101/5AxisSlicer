@@ -49,16 +49,8 @@ class ResultStateAndProjectTests(unittest.TestCase):
 
         formatter = string.Formatter()
         for key in TRANSLATIONS["zh"]:
-            zh_fields = {
-                name
-                for _, name, _, _ in formatter.parse(TRANSLATIONS["zh"][key])
-                if name
-            }
-            en_fields = {
-                name
-                for _, name, _, _ in formatter.parse(TRANSLATIONS["en"][key])
-                if name
-            }
+            zh_fields = {name for _, name, _, _ in formatter.parse(TRANSLATIONS["zh"][key]) if name}
+            en_fields = {name for _, name, _, _ in formatter.parse(TRANSLATIONS["en"][key]) if name}
             self.assertEqual(zh_fields, en_fields, key)
             self.assertTrue(TRANSLATIONS["zh"][key].strip(), key)
             self.assertTrue(TRANSLATIONS["en"][key].strip(), key)
@@ -102,9 +94,7 @@ class ResultStateAndProjectTests(unittest.TestCase):
             top_layers=6,
             bottom_layers=4,
         )
-        state = ResultPreviewState(
-            parameters=parameters, quality_mode="paper", show_travel=True
-        )
+        state = ResultPreviewState(parameters=parameters, quality_mode="paper", show_travel=True)
 
         with patch("five_axis_slicer.gcode_preview.parse_gcode") as parse_mock:
             payload = state.to_json()
@@ -122,9 +112,7 @@ class ResultStateAndProjectTests(unittest.TestCase):
         self.assertEqual(restored.parameters, parameters)
         self.assertEqual(project_payload["version"], PROJECT_VERSION)
         self.assertEqual(project_payload["result_preview"]["schema_version"], 1)
-        self.assertFalse(
-            project_payload["result_preview"]["parameters_affect_toolpath"]
-        )
+        self.assertFalse(project_payload["result_preview"]["parameters_affect_toolpath"])
         self.assertNotIn(
             "language",
             json.dumps(project_payload["result_preview"], ensure_ascii=False),
@@ -149,13 +137,9 @@ class ResultStateAndProjectTests(unittest.TestCase):
             new_path.touch()
             state = ResultPreviewState(active_gcode_path=old_path, status="ready")
 
-            self.assertFalse(
-                state.commit_load(LoadResult("orphan", gcode_path=new_path))
-            )
+            self.assertFalse(state.commit_load(LoadResult("orphan", gcode_path=new_path)))
             state.begin_load(LoadRequest("new", gcode_path=new_path))
-            self.assertFalse(
-                state.commit_load(LoadResult("stale", gcode_path=old_path))
-            )
+            self.assertFalse(state.commit_load(LoadResult("stale", gcode_path=old_path)))
             self.assertFalse(state.fail_load("stale", "stale failure"))
             self.assertEqual(state.active_gcode_path, old_path.resolve())
             self.assertEqual(state.status, "loading")
@@ -206,10 +190,7 @@ class GCodeSourceIndexTests(unittest.TestCase):
                 self.assertEqual(index.search("needle", start_line=4, forward=False), 7)
                 self.assertEqual(index.representative_five_axis_line(), 4)
                 self.assertEqual(
-                    [
-                        (stage.stage_id, stage.start_line, stage.end_line)
-                        for stage in index.stages
-                    ],
+                    [(stage.stage_id, stage.start_line, stage.end_line) for stage in index.stages],
                     [("base", 1, 2), ("blade_1", 3, 5), ("blade_2", 6, 9)],
                 )
             self.assertTrue(progress)
@@ -249,9 +230,7 @@ class PreviewCacheTests(unittest.TestCase):
 
     @staticmethod
     def _cache_stem_factory(cache_root: Path):
-        def cache_stem(
-            _source_path: Path, version: str = gcode_preview.CACHE_VERSION
-        ) -> Path:
+        def cache_stem(_source_path: Path, version: str = gcode_preview.CACHE_VERSION) -> Path:
             return cache_root / version
 
         return cache_stem
@@ -309,9 +288,7 @@ class PreviewCacheTests(unittest.TestCase):
                         raise OSError("simulated manifest replace failure")
                     real_replace(source_path, target_path)
 
-                with patch.object(
-                    gcode_preview.os, "replace", side_effect=fail_manifest_replace
-                ):
+                with patch.object(gcode_preview.os, "replace", side_effect=fail_manifest_replace):
                     with self.assertRaisesRegex(OSError, "manifest replace"):
                         gcode_preview._write_preview_cache(preview)
 
@@ -340,9 +317,7 @@ class PreviewCacheTests(unittest.TestCase):
                 patch.object(gcode_preview.np, "savez", side_effect=save_then_cancel),
             ):
                 with self.assertRaises(GCodeLoadCancelled):
-                    gcode_preview._write_preview_cache(
-                        preview, cancel_check=lambda: cancelled
-                    )
+                    gcode_preview._write_preview_cache(preview, cancel_check=lambda: cancelled)
 
             self.assertTrue(cache_root.exists())
             self.assertEqual(list(cache_root.iterdir()), [])
@@ -382,9 +357,7 @@ class BackgroundLoadTests(unittest.TestCase):
             )
             with (
                 patch.object(background_load, "load_gcode", return_value=preview),
-                patch.object(
-                    background_load, "GCodeSourceIndex", return_value=source_index
-                ),
+                patch.object(background_load, "GCodeSourceIndex", return_value=source_index),
             ):
                 coordinator.start(LoadRequest("success", gcode_path=source))
                 self._wait_until(lambda: not coordinator.busy)
@@ -421,9 +394,7 @@ class BackgroundLoadTests(unittest.TestCase):
             completed: list[LoadResult] = []
             coordinator.cancelled.connect(cancelled.append)
             coordinator.completed.connect(completed.append)
-            with patch.object(
-                background_load, "load_gcode", side_effect=cancellable_load
-            ):
+            with patch.object(background_load, "load_gcode", side_effect=cancellable_load):
                 coordinator.start(LoadRequest("cancel", gcode_path=source))
                 self._wait_until(entered.is_set)
                 coordinator.cancel()
@@ -462,9 +433,7 @@ class BackgroundLoadTests(unittest.TestCase):
             completed: list[LoadResult] = []
             coordinator.cancelled.connect(cancelled.append)
             coordinator.completed.connect(completed.append)
-            with patch.object(
-                background_load, "load_step", side_effect=cancellable_step
-            ):
+            with patch.object(background_load, "load_step", side_effect=cancellable_step):
                 coordinator.start(LoadRequest("step-cancel", model_path=source))
                 self._wait_until(entered.is_set)
                 coordinator.cancel()
@@ -491,9 +460,7 @@ class BackgroundLoadTests(unittest.TestCase):
             completed: list[LoadResult] = []
             coordinator.cancelled.connect(cancelled.append)
             coordinator.completed.connect(completed.append)
-            with patch.object(
-                background_load, "file_sha256", side_effect=cancellable_hash
-            ):
+            with patch.object(background_load, "file_sha256", side_effect=cancellable_hash):
                 coordinator.start(LoadRequest("hash-cancel", gcode_path=source))
                 self._wait_until(entered.is_set)
                 coordinator.cancel()
@@ -525,9 +492,7 @@ class BackgroundLoadTests(unittest.TestCase):
             completed: list[LoadResult] = []
             coordinator.cancelled.connect(cancelled.append)
             coordinator.completed.connect(completed.append)
-            with patch.object(
-                background_load, "load_gcode", side_effect=cancellable_load
-            ):
+            with patch.object(background_load, "load_gcode", side_effect=cancellable_load):
                 coordinator.start(LoadRequest("old", gcode_path=old_source))
                 self._wait_until(entered.is_set)
                 coordinator.start(LoadRequest("new", gcode_path=new_source))
@@ -577,9 +542,7 @@ class BackgroundLoadTests(unittest.TestCase):
                     "load_gcode",
                     side_effect=lambda *_a, **_kw: object(),
                 ),
-                patch.object(
-                    background_load, "GCodeSourceIndex", side_effect=make_index
-                ),
+                patch.object(background_load, "GCodeSourceIndex", side_effect=make_index),
                 patch.object(background_load, "LoadResult", side_effect=gated_result),
             ):
                 coordinator.start(LoadRequest("old", gcode_path=old_source))
@@ -617,9 +580,7 @@ class BackgroundLoadTests(unittest.TestCase):
             busy_states: list[bool] = []
             coordinator.busy_changed.connect(busy_states.append)
             try:
-                with patch.object(
-                    background_load, "load_step", side_effect=blocking_step
-                ):
+                with patch.object(background_load, "load_step", side_effect=blocking_step):
                     coordinator.start(LoadRequest("step", model_path=source))
                     self._wait_until(entered.is_set)
 

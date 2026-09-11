@@ -75,9 +75,7 @@ class ControllerAxisSemantics:
     def supported_rotary_words(self) -> frozenset[str]:
         return frozenset(self.controller_word_map)
 
-    def joint_positions(
-        self, controller_values: Mapping[str, float]
-    ) -> dict[str, float]:
+    def joint_positions(self, controller_values: Mapping[str, float]) -> dict[str, float]:
         """Decode controller values into the profile's internal joint units."""
 
         positions: dict[str, float] = {}
@@ -124,9 +122,7 @@ class PreviewKinematicsRegistry:
         entries: dict[str, ControllerAxisSemantics] = {}
         for entry in semantics:
             if entry.semantics_id in entries:
-                raise ValueError(
-                    f"duplicate controller semantics: {entry.semantics_id}"
-                )
+                raise ValueError(f"duplicate controller semantics: {entry.semantics_id}")
             entries[entry.semantics_id] = entry
         self._entries = MappingProxyType(entries)
 
@@ -147,9 +143,7 @@ GENERIC_XYZAC_SEMANTICS = ControllerAxisSemantics(
     transform_name=AC_INVERSE_TRANSFORM,
 )
 
-DEFAULT_PREVIEW_KINEMATICS_REGISTRY = PreviewKinematicsRegistry(
-    (GENERIC_XYZAC_SEMANTICS,)
-)
+DEFAULT_PREVIEW_KINEMATICS_REGISTRY = PreviewKinematicsRegistry((GENERIC_XYZAC_SEMANTICS,))
 
 
 def reconstruct_preview_pose(
@@ -197,9 +191,7 @@ def reconstruct_preview_motion(
     start_values, start_issue = _normalise_rotary_values(rotary_start)
     end_values, end_issue = _normalise_rotary_values(rotary_end)
     if start_issue is not None or end_issue is not None:
-        return _raw_motion(
-            start, end, nozzle_axis, _unique_issues(start_issue, end_issue)
-        )
+        return _raw_motion(start, end, nozzle_axis, _unique_issues(start_issue, end_issue))
 
     present_words = set(start_values) | set(end_values)
     active_words = {
@@ -308,9 +300,7 @@ def _normalise_rotary_values(
                 context={
                     "word": word,
                     "value": repr(raw_value),
-                    "reason": (
-                        "duplicate word" if word in result else "invalid word or value"
-                    ),
+                    "reason": ("duplicate word" if word in result else "invalid word or value"),
                 },
             )
             return result, issue
@@ -334,9 +324,7 @@ def _raw_motion(
     )
 
 
-def _vector3(
-    value: tuple[float, float, float], name: str
-) -> tuple[float, float, float]:
+def _vector3(value: tuple[float, float, float], name: str) -> tuple[float, float, float]:
     try:
         result = tuple(float(component) for component in value)
     except (TypeError, ValueError) as exc:
@@ -346,9 +334,7 @@ def _vector3(
     return result  # type: ignore[return-value]
 
 
-def _unit_vector3(
-    value: tuple[float, float, float], name: str
-) -> tuple[float, float, float]:
+def _unit_vector3(value: tuple[float, float, float], name: str) -> tuple[float, float, float]:
     vector = _vector3(value, name)
     length = math.sqrt(sum(component * component for component in vector))
     if length <= _ZERO_TOLERANCE:

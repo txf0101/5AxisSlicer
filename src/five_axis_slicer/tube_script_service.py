@@ -51,6 +51,9 @@ _ZH_ALIASES = {
     "validate": "校验",
     "create_operation": "创建操作",
     "set_operation": "设置操作",
+    "generate_operation": "生成操作",
+    "cancel_generation": "取消生成",
+    "export_operation": "导出操作",
     "confirm_part": "确认零件",
     "set_machine": "设置机床",
     "set_nozzle": "设置喷嘴",
@@ -287,7 +290,7 @@ class TubeScriptService:
 
     def execute_command(
         self,
-        name: str,
+        command_name: str,
         *args: Any,
         command_origin: str,
         command_id: str | None = None,
@@ -296,7 +299,7 @@ class TubeScriptService:
     ) -> CommandResult:
         return self.execute_invocation(
             CommandInvocation(
-                name,
+                command_name,
                 args,
                 kwargs,
                 origin=command_origin,

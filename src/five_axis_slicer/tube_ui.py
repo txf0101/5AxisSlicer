@@ -32,6 +32,7 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
+from . import tube_operation_ui
 from . import tube_ui_presenter as presenter
 from .command_kernel import CommandInvocation, CommandResult
 from .manufacturing.coordinates import (
@@ -103,9 +104,16 @@ CommandExecutor = Callable[[CommandInvocation], CommandResult]
 _DIRECT_COMMANDS = TubeCommandProvider()
 
 
-class TubeSetupPage(QWidget):
-    """Operation-tree page backed by :class:`TubeSetupController`."""
+def _make_spin(low: float, high: float, value: float, decimals: int) -> QDoubleSpinBox:
+    spin = OptionalDoubleSpinBox()
+    spin.setRange(low, high)
+    spin.setDecimals(decimals)
+    spin.setValue(value)
+    spin.setKeyboardTracking(False)
+    return spin
 
+
+class TubeSetupPage(QWidget):
     back_requested = pyqtSignal()
     open_step_requested = pyqtSignal()
     update_source_requested = pyqtSignal()
@@ -130,7 +138,7 @@ class TubeSetupPage(QWidget):
         self._command_executor: CommandExecutor | None = None
         factory = viewer_factory or ModelViewer
         self.viewer = factory(self)
-        self.viewer.setMinimumHeight(420)
+        self.viewer.setMinimumHeight(280)
         if hasattr(self.viewer, "set_pick_callback"):
             self.viewer.set_pick_callback(self._on_pick_hit)
         self._view_mode = "model"
@@ -141,6 +149,8 @@ class TubeSetupPage(QWidget):
             "directions": [],
         }
         self._coordinate_node = MODEL_CS_NODE
+        self._selected_operation_id: str | None = None
+        self._selected_operation_type = "tube_thin_wall_indexed"
         self._coordinate_control_dirty: set[str] = set()
         self._updating_coordinate_controls = False
         self._updating_placement_controls = False
@@ -195,11 +205,12 @@ class TubeSetupPage(QWidget):
         layout.addWidget(self.subtitle_label)
 
         buttons = QGridLayout()
-        self.back_button = QPushButton()
-        self.open_button = QPushButton()
+        self.back_button, self.open_button = QPushButton(), QPushButton()
         self.update_source_button = QPushButton()
         self.save_button = QPushButton()
         self.create_operation_button = QPushButton()
+        self.operation_type_combo = QComboBox()
+        self.update_source_button.setMinimumWidth(180)
         self.create_operation_button.setObjectName("primaryButton")
         self.back_button.clicked.connect(self.back_requested)
         self.open_button.clicked.connect(self.open_step_requested)
@@ -208,8 +219,13 @@ class TubeSetupPage(QWidget):
         self.create_operation_button.clicked.connect(self._create_operation)
         buttons.addWidget(self.back_button, 0, 0)
         buttons.addWidget(self.open_button, 0, 1)
-        buttons.addWidget(self.update_source_button, 1, 0, 1, 2)
-        buttons.addWidget(self.save_button, 2, 0, 1, 2)
+        buttons.addWidget(self.update_source_button, 1, 0)
+        buttons.addWidget(self.save_button, 1, 1)
+        for operation_type in self.controller.available_operation_types:
+            self.operation_type_combo.addItem(
+                self._t(f"operation_type_{operation_type}"), operation_type
+            )
+        buttons.addWidget(self.operation_type_combo, 2, 0, 1, 2)
         buttons.addWidget(self.create_operation_button, 3, 0, 1, 2)
         layout.addLayout(buttons)
 
@@ -234,8 +250,9 @@ class TubeSetupPage(QWidget):
         toolbar.setObjectName("progressPanel")
         toolbar_layout = QHBoxLayout(toolbar)
         toolbar_layout.setContentsMargins(8, 6, 8, 6)
-        self.model_view_button = QPushButton()
-        self.machine_view_button = QPushButton()
+        self.model_view_button, self.machine_view_button = QPushButton(), QPushButton()
+        self.model_view_button.setMinimumWidth(128)
+        self.machine_view_button.setMinimumWidth(128)
         self.model_view_button.clicked.connect(lambda: self.set_view_mode("model"))
         self.machine_view_button.clicked.connect(lambda: self.set_view_mode("machine"))
         toolbar_layout.addWidget(self.model_view_button)
@@ -261,6 +278,7 @@ class TubeSetupPage(QWidget):
         self.material_editor = self._build_material_editor()
         self.coordinate_editor = self._build_coordinate_editor()
         self.placement_editor = self._build_placement_editor()
+        self.operation_editor = tube_operation_ui.build_editor(self)
         for editor in (
             self.empty_editor,
             self.part_editor,
@@ -269,6 +287,7 @@ class TubeSetupPage(QWidget):
             self.material_editor,
             self.coordinate_editor,
             self.placement_editor,
+            self.operation_editor,
         ):
             self.editor_stack.addWidget(editor)
         self.editor_scroll = QScrollArea()
@@ -279,18 +298,13 @@ class TubeSetupPage(QWidget):
         self.editor_scroll.setWidget(self.editor_stack)
         layout.addWidget(self.editor_title)
         layout.addWidget(self.editor_scroll, 1)
+        _add_operation_footer(self, layout)
         return panel
-
-    def _help_label(self) -> QLabel:
-        label = QLabel()
-        label.setObjectName("mutedText")
-        label.setWordWrap(True)
-        return label
 
     def _build_part_editor(self) -> QWidget:
         page = QWidget()
         layout = QVBoxLayout(page)
-        self.part_help = self._help_label()
+        self.part_help = _help_label()
         self.part_table = QTableWidget(0, 3)
         self.part_table.setObjectName("tubePartTable")
         self.part_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
@@ -307,7 +321,7 @@ class TubeSetupPage(QWidget):
     def _build_machine_editor(self) -> QWidget:
         page = QWidget()
         layout = QVBoxLayout(page)
-        self.machine_help = self._help_label()
+        self.machine_help = _help_label()
         self.machine_combo = QComboBox()
         for key, profile in self._machine_profiles.items():
             self.machine_combo.addItem(
@@ -330,7 +344,7 @@ class TubeSetupPage(QWidget):
     def _build_nozzle_editor(self) -> QWidget:
         page = QWidget()
         layout = QVBoxLayout(page)
-        self.nozzle_help = self._help_label()
+        self.nozzle_help = _help_label()
         self.nozzle_combo = QComboBox()
         for key, profile in self._nozzle_profiles.items():
             self.nozzle_combo.addItem(
@@ -339,7 +353,7 @@ class TubeSetupPage(QWidget):
             )
         form = QFormLayout()
         self.nozzle_interface = QLineEdit()
-        self.nozzle_length = self._spin(0.0, 1000.0, 0.0, 6)
+        self.nozzle_length = _make_spin(0.0, 1000.0, 0.0, 6)
         self.nozzle_collision = QCheckBox()
         self.nozzle_interface_label = QLabel()
         self.nozzle_length_label = QLabel()
@@ -360,7 +374,7 @@ class TubeSetupPage(QWidget):
     def _build_material_editor(self) -> QWidget:
         page = QWidget()
         layout = QVBoxLayout(page)
-        self.material_help = self._help_label()
+        self.material_help = _help_label()
         self.material_combo = QComboBox()
         for key, profile in self._material_profiles.items():
             self.material_combo.addItem(
@@ -385,7 +399,7 @@ class TubeSetupPage(QWidget):
     def _build_coordinate_editor(self) -> QWidget:
         page = QWidget()
         layout = QVBoxLayout(page)
-        self.coordinate_help = self._help_label()
+        self.coordinate_help = _help_label()
         self.coordinate_inputs: dict[
             str, tuple[QComboBox, tuple[QDoubleSpinBox, ...], QPushButton, QLabel]
         ] = {}
@@ -419,7 +433,7 @@ class TubeSetupPage(QWidget):
         title = QLabel()
         title.setObjectName("valueText")
         combo = QComboBox()
-        values = tuple(self._spin(-1.0e6, 1.0e6, value, 6) for value in defaults)
+        values = tuple(_make_spin(-1.0e6, 1.0e6, value, 6) for value in defaults)
         pick, confirm, flip = QPushButton(), QPushButton(), QPushButton()
         pick.clicked.connect(lambda _checked=False: self._start_pick(component))
         confirm.clicked.connect(
@@ -449,7 +463,7 @@ class TubeSetupPage(QWidget):
     def _build_placement_editor(self) -> QWidget:
         page = QWidget()
         layout = QVBoxLayout(page)
-        self.placement_help = self._help_label()
+        self.placement_help = _help_label()
         form = QFormLayout()
         self.mount_combo = QComboBox()
         self.mount_combo.currentIndexChanged.connect(self._placement_mount_changed)
@@ -458,7 +472,7 @@ class TubeSetupPage(QWidget):
         self.placement_spins: dict[str, QDoubleSpinBox] = {}
         self.placement_labels: dict[str, QLabel] = {}
         for key in ("dx", "dy", "dz", "rx", "ry", "rz"):
-            spin = self._spin(-100000.0, 100000.0, 0.0, 4)
+            spin = _make_spin(-100000.0, 100000.0, 0.0, 4)
             if key.startswith("r"):
                 spin.setRange(-360.0, 360.0)
                 spin.setSuffix("°")
@@ -484,15 +498,6 @@ class TubeSetupPage(QWidget):
         layout.addWidget(self.placement_feedback)
         layout.addStretch(1)
         return page
-
-    @staticmethod
-    def _spin(low: float, high: float, value: float, decimals: int) -> QDoubleSpinBox:
-        spin = OptionalDoubleSpinBox()
-        spin.setRange(low, high)
-        spin.setDecimals(decimals)
-        spin.setValue(value)
-        spin.setKeyboardTracking(False)
-        return spin
 
     def _reload_resource_catalogs(
         self,
@@ -612,6 +617,10 @@ class TubeSetupPage(QWidget):
         t = self._t
         for control, key in TUBE_CONTROL_TEXT:
             getattr(self, control).setText(t(key))
+        for index in range(self.operation_type_combo.count()):
+            operation_type = self.operation_type_combo.itemData(index)
+            self.operation_type_combo.setItemText(index, t(f"operation_type_{operation_type}"))
+        tube_operation_ui.retranslate(self, t)
         self.part_table.setHorizontalHeaderLabels((t("body"), t("kind"), t("role")))
         self.coordinate_help.setText(
             t(
@@ -720,13 +729,21 @@ class TubeSetupPage(QWidget):
             self._tree_items[node] = item
         for operation in self.controller.operations:
             item = QTreeWidgetItem((operation.name,))
-            item.setData(0, Qt.UserRole, OPERATION_NODE)
+            operation_node = f"operation:{operation.operation_id}"
+            item.setData(0, Qt.UserRole, operation_node)
             operations.addChild(item)
+            self._tree_items[operation_node] = item
         self._tree_items[OPERATION_NODE] = operations
         project.setExpanded(True)
         setup.setExpanded(True)
         operations.setExpanded(True)
-        selected = setup_tree_node(selected, self._tree_items, self.controller.validation_report())
+        selected = (
+            selected
+            if isinstance(selected, str)
+            and selected.startswith("operation:")
+            and selected in self._tree_items
+            else setup_tree_node(selected, self._tree_items, self.controller.validation_report())
+        )
         self.tree.setCurrentItem(self._tree_items[selected])
         self.tree.blockSignals(False)
 
@@ -737,12 +754,11 @@ class TubeSetupPage(QWidget):
             if node not in report.node_states:
                 continue
             state = report.node_states[node]
-            base = (
-                self._t(node) if node in _TEXT[self.language] else item.text(0).split("  [", 1)[0]
-            )
+            base = self._t("operations") if node == OPERATION_NODE else self._t(node)
             item.setText(0, f"{base}  [{self._t('status_' + state.value)}]")
             item.setForeground(0, _state_color(state))
         self.create_operation_button.setEnabled(self.controller.can_create_operation)
+        self.operation_type_combo.setEnabled(self.controller.can_create_operation)
         self.update_source_button.setEnabled(self.model is not None)
         self.coordinate_status.setText(
             f"{self._t('coordinates_valid')}: {'✓' if report.coordinates_valid else '—'}"
@@ -782,10 +798,19 @@ class TubeSetupPage(QWidget):
             MODEL_CS_NODE: self.coordinate_editor,
             BUILD_CS_NODE: self.coordinate_editor,
             PLACEMENT_NODE: self.placement_editor,
+            "operation": self.operation_editor,
         }
-        editor = editors.get(node, self.empty_editor)
+        is_operation = isinstance(node, str) and node.startswith("operation:")
+        editor = editors.get("operation" if is_operation else node, self.empty_editor)
         self.editor_stack.setCurrentWidget(editor)
-        self.editor_title.setText(self._t(node) if node in _TEXT[self.language] else "")
+        _set_operation_footer_visible(self, is_operation)
+        self.editor_title.setText(
+            self._t("operation")
+            if is_operation
+            else self._t(node)
+            if node in _TEXT[self.language]
+            else ""
+        )
         if node == PART_NODE:
             self._populate_part_table()
             self.set_view_mode("model")
@@ -799,6 +824,8 @@ class TubeSetupPage(QWidget):
             self._update_machine_detail()
         elif node == MATERIAL_NODE:
             self._update_material_detail()
+        elif is_operation:
+            tube_operation_ui.populate_editor(self, node.removeprefix("operation:"))
 
     def activate_coordinate_entry(self) -> None:
         self.refresh()
@@ -856,7 +883,10 @@ class TubeSetupPage(QWidget):
 
     def _create_operation(self) -> None:
         try:
-            self._execute_command("create_operation")
+            self._execute_command(
+                "create_operation",
+                operation_type=self.operation_type_combo.currentData(),
+            )
         except Exception as exc:
             self._report_error(exc)
 
@@ -1456,25 +1486,47 @@ class TubeSetupPage(QWidget):
             raise RuntimeError("coordinate command did not publish an applied frame")
         return frame
 
-    def apply_placement(
-        self,
-        mount_datum_id: str,
-        translation_mm: tuple[float, float, float] = (0.0, 0.0, 0.0),
-        rotation_xyz_deg: tuple[float, float, float] = (0.0, 0.0, 0.0),
-    ) -> None:
-        previous_mode = self._view_mode
-        self._set_view_mode_state("machine")
-        try:
-            self._execute_command(
-                "set_placement",
-                mount_datum_id,
-                command_origin="automation",
-                translation_mm=translation_mm,
-                rotation_xyz_deg=rotation_xyz_deg,
-            )
-        except Exception:
-            self._set_view_mode_state(previous_mode)
-            raise
+
+def _apply_placement(
+    self: TubeSetupPage,
+    mount_datum_id: str,
+    translation_mm: tuple[float, float, float] = (0.0, 0.0, 0.0),
+    rotation_xyz_deg: tuple[float, float, float] = (0.0, 0.0, 0.0),
+) -> None:
+    previous_mode = self._view_mode
+    self._set_view_mode_state("machine")
+    try:
+        self._execute_command(
+            "set_placement",
+            mount_datum_id,
+            command_origin="automation",
+            translation_mm=translation_mm,
+            rotation_xyz_deg=rotation_xyz_deg,
+        )
+    except Exception:
+        self._set_view_mode_state(previous_mode)
+        raise
+
+
+TubeSetupPage.apply_placement = _apply_placement
+
+
+def _help_label() -> QLabel:
+    label = QLabel()
+    label.setObjectName("mutedText")
+    label.setWordWrap(True)
+    return label
+
+
+def _add_operation_footer(page: TubeSetupPage, layout: QVBoxLayout) -> None:
+    layout.addWidget(page.operation_feedback)
+    layout.addWidget(page.operation_apply_button)
+    _set_operation_footer_visible(page, False)
+
+
+def _set_operation_footer_visible(page: TubeSetupPage, visible: bool) -> None:
+    page.operation_feedback.setVisible(visible)
+    page.operation_apply_button.setVisible(visible)
 
 
 def _coordinate_candidate_key(value: Any) -> tuple[str, str]:

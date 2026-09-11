@@ -257,9 +257,7 @@ class MachineKinematicsTests(unittest.TestCase):
             self.assertAlmostEqual(actual_value, expected_value, places=places)
 
     def test_cartesian_chain_composes_parent_to_child_translations(self) -> None:
-        transforms = CARTESIAN_REFERENCE.forward_kinematics(
-            {"X": 10.0, "Y": 20.0, "Z": 30.0}
-        )
+        transforms = CARTESIAN_REFERENCE.forward_kinematics({"X": 10.0, "Y": 20.0, "Z": 30.0})
 
         self.assertVectorAlmostEqual(
             transforms["tool"].transform_point((0.0, 0.0, 0.0)),
@@ -279,9 +277,7 @@ class MachineKinematicsTests(unittest.TestCase):
     def test_xyzac_uses_a_then_c_workpiece_chain(self) -> None:
         a_angle = math.radians(35.0)
         c_angle = math.radians(20.0)
-        actual = GENERIC_XYZAC_REFERENCE.link_transform(
-            "c_table", {"A": a_angle, "C": c_angle}
-        )
+        actual = GENERIC_XYZAC_REFERENCE.link_transform("c_table", {"A": a_angle, "C": c_angle})
         expected = RigidTransform.from_axis_angle((1.0, 0.0, 0.0), a_angle) @ (
             RigidTransform.from_axis_angle((0.0, 0.0, 1.0), c_angle)
         )
@@ -296,9 +292,7 @@ class MachineKinematicsTests(unittest.TestCase):
             "c_table", {"A": a_angle, "C": 0.0}
         )
 
-        direction_in_workpiece = machine_from_table.inverse().transform_vector(
-            (0.0, 0.0, -1.0)
-        )
+        direction_in_workpiece = machine_from_table.inverse().transform_vector((0.0, 0.0, -1.0))
 
         self.assertVectorAlmostEqual(
             direction_in_workpiece,

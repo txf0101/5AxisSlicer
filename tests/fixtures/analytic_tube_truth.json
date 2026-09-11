@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "units": {
+    "length": "mm",
+    "angle": "deg"
+  },
+  "cases": {
+    "straight_tube": {
+      "parameters": {
+        "outer_radius_mm": 16.0,
+        "inner_radius_mm": 15.0,
+        "length_mm": 100.0,
+        "axis": [0.0, 0.0, 1.0],
+        "start_point_mm": [0.0, 0.0, 0.0]
+      },
+      "expected": {
+        "end_point_mm": [0.0, 0.0, 100.0],
+        "centerline_length_mm": 100.0,
+        "constant_outer_radius_mm": 16.0,
+        "constant_inner_radius_mm": 15.0
+      },
+      "provenance": {
+        "derived_from": "analytic_parameters",
+        "formula": "P(s) = start + s * axis, 0 <= s <= length",
+        "independent_of": "historical_gcode"
+      }
+    },
+    "circular_arc_tube": {
+      "parameters": {
+        "outer_radius_mm": 16.0,
+        "inner_radius_mm": 15.0,
+        "centerline_radius_mm": 35.0,
+        "sweep_angle_deg": 90.0,
+        "center_mm": [0.0, 0.0, 0.0],
+        "plane_normal": [0.0, 0.0, 1.0]
+      },
+      "expected": {
+        "start_point_mm": [35.0, 0.0, 0.0],
+        "end_point_mm": [0.0, 35.0, 0.0],
+        "start_tangent": [0.0, 1.0, 0.0],
+        "end_tangent": [-1.0, 0.0, 0.0],
+        "centerline_length_mm": 54.97787143782138,
+        "constant_outer_radius_mm": 16.0,
+        "constant_inner_radius_mm": 15.0
+      },
+      "provenance": {
+        "derived_from": "analytic_parameters",
+        "formula": "P(theta) = center + R * (cos(theta), sin(theta), 0), 0 <= theta <= pi/2",
+        "independent_of": "historical_gcode"
+      }
+    }
+  }
+}

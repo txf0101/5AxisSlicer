@@ -71,10 +71,7 @@ def _normalise_json(value: Any, path: str = "$") -> Any:
             normalised[key] = _normalise_json(value[key], f"{path}.{key}")
         return normalised
     if isinstance(value, Sequence) and not isinstance(value, (str, bytes, bytearray)):
-        return [
-            _normalise_json(item, f"{path}[{index}]")
-            for index, item in enumerate(value)
-        ]
+        return [_normalise_json(item, f"{path}[{index}]") for index, item in enumerate(value)]
     raise TypeError(f"{path} contains unsupported value type {type(value).__name__}")
 
 
@@ -100,9 +97,7 @@ def canonical_content_hash(value: Any) -> str:
 def _freeze_json(value: Any) -> Any:
     normalised = _normalise_json(value)
     if isinstance(normalised, dict):
-        return MappingProxyType(
-            {key: _freeze_json(item) for key, item in normalised.items()}
-        )
+        return MappingProxyType({key: _freeze_json(item) for key, item in normalised.items()})
     if isinstance(normalised, list):
         return tuple(_freeze_json(item) for item in normalised)
     return normalised
@@ -165,18 +160,14 @@ def _is_positive_number(value: Any) -> bool:
 
 
 def _snapshot_identity(payload: Mapping[str, Any]) -> tuple[str, int]:
-    id_values = [
-        payload[key] for key in ("resource_id", "id", "profile_id") if key in payload
-    ]
+    id_values = [payload[key] for key in ("resource_id", "id", "profile_id") if key in payload]
     if not id_values:
         raise TypeError("profile payload must contain resource_id or id")
     resource_id = _require_string(id_values[0], "resource_id")
     if any(value != resource_id for value in id_values[1:]):
         raise ResourceIntegrityError("profile payload contains conflicting identifiers")
 
-    version_values = [
-        payload[key] for key in ("profile_version", "version") if key in payload
-    ]
+    version_values = [payload[key] for key in ("profile_version", "version") if key in payload]
     if not version_values:
         raise TypeError("profile payload must contain profile_version or version")
     profile_version = _require_int(version_values[0], "profile_version")
@@ -237,9 +228,7 @@ class SourceReference:
     file_path: str
     sha256: str
 
-    def validate(
-        self, field_prefix: str = "source"
-    ) -> tuple[ResourceValidationIssue, ...]:
+    def validate(self, field_prefix: str = "source") -> tuple[ResourceValidationIssue, ...]:
         issues: list[ResourceValidationIssue] = []
         for field_name, value in (
             ("title", self.title),
@@ -255,9 +244,7 @@ class SourceReference:
                         f"{field_prefix}.{field_name}",
                     )
                 )
-        if not isinstance(self.sha256, str) or not _SHA256_RE.fullmatch(
-            self.sha256.lower()
-        ):
+        if not isinstance(self.sha256, str) or not _SHA256_RE.fullmatch(self.sha256.lower()):
             issues.append(
                 ResourceValidationIssue(
                     "resource.source_hash_invalid",
@@ -371,22 +358,16 @@ class NozzleProfile:
     def validate(self) -> tuple[ResourceValidationIssue, ...]:
         issues: list[ResourceValidationIssue] = []
         if not isinstance(self.resource_id, str) or not self.resource_id.strip():
-            issues.append(
-                ResourceValidationIssue("resource.id_missing", _ERROR, "resource_id")
-            )
+            issues.append(ResourceValidationIssue("resource.id_missing", _ERROR, "resource_id"))
         if not isinstance(self.display_name, str) or not self.display_name.strip():
-            issues.append(
-                ResourceValidationIssue("resource.name_missing", _ERROR, "display_name")
-            )
+            issues.append(ResourceValidationIssue("resource.name_missing", _ERROR, "display_name"))
         if (
             not isinstance(self.profile_version, int)
             or isinstance(self.profile_version, bool)
             or self.profile_version < 1
         ):
             issues.append(
-                ResourceValidationIssue(
-                    "resource.version_invalid", _ERROR, "profile_version"
-                )
+                ResourceValidationIssue("resource.version_invalid", _ERROR, "profile_version")
             )
         if not _is_positive_number(self.orifice_diameter_mm):
             issues.append(
@@ -401,17 +382,11 @@ class NozzleProfile:
                 )
             )
         if self.interface is None or not self.interface.strip():
-            issues.append(
-                ResourceValidationIssue("nozzle.interface_missing", _ERROR, "interface")
-            )
+            issues.append(ResourceValidationIssue("nozzle.interface_missing", _ERROR, "interface"))
         if self.length_mm is None:
-            issues.append(
-                ResourceValidationIssue("nozzle.length_missing", _ERROR, "length_mm")
-            )
+            issues.append(ResourceValidationIssue("nozzle.length_missing", _ERROR, "length_mm"))
         elif not _is_positive_number(self.length_mm):
-            issues.append(
-                ResourceValidationIssue("nozzle.length_invalid", _ERROR, "length_mm")
-            )
+            issues.append(ResourceValidationIssue("nozzle.length_invalid", _ERROR, "length_mm"))
         if not self.outer_profile_rz_mm:
             issues.append(
                 ResourceValidationIssue(
@@ -508,9 +483,7 @@ class NozzleProfile:
                 or isinstance(raw_point, (str, bytes, bytearray))
                 or len(raw_point) != 2
             ):
-                raise TypeError(
-                    f"nozzle_profile.outer_profile_rz_mm[{index}] must have two values"
-                )
+                raise TypeError(f"nozzle_profile.outer_profile_rz_mm[{index}] must have two values")
             points.append(
                 (
                     _require_float(raw_point[0], f"outer_profile_rz_mm[{index}][0]"),
@@ -521,9 +494,7 @@ class NozzleProfile:
         return cls(
             resource_id=_require_string(payload.get("resource_id"), "resource_id"),
             display_name=_require_string(payload.get("display_name"), "display_name"),
-            profile_version=_require_int(
-                payload.get("profile_version"), "profile_version"
-            ),
+            profile_version=_require_int(payload.get("profile_version"), "profile_version"),
             orifice_diameter_mm=_require_float(
                 payload.get("orifice_diameter_mm"), "orifice_diameter_mm"
             ),
@@ -535,9 +506,7 @@ class NozzleProfile:
             construction_material=_optional_string(
                 payload.get("construction_material"), "construction_material"
             ),
-            flow_category=_optional_string(
-                payload.get("flow_category"), "flow_category"
-            ),
+            flow_category=_optional_string(payload.get("flow_category"), "flow_category"),
             temperature_limit_c=_optional_float(
                 payload.get("temperature_limit_c"), "temperature_limit_c"
             ),
@@ -548,9 +517,7 @@ class NozzleProfile:
             source=(
                 None
                 if source_payload is None
-                else SourceReference.from_json(
-                    _require_mapping(source_payload, "source")
-                )
+                else SourceReference.from_json(_require_mapping(source_payload, "source"))
             ),
             is_builtin=parse_json_bool(
                 payload,
@@ -607,9 +574,7 @@ class MaterialProfile:
         ):
             if not isinstance(value, str) or not value.strip():
                 issues.append(
-                    ResourceValidationIssue(
-                        f"material.{field_name}_missing", _ERROR, field_name
-                    )
+                    ResourceValidationIssue(f"material.{field_name}_missing", _ERROR, field_name)
                 )
         if (
             not isinstance(self.profile_version, int)
@@ -617,9 +582,7 @@ class MaterialProfile:
             or self.profile_version < 1
         ):
             issues.append(
-                ResourceValidationIssue(
-                    "resource.version_invalid", _ERROR, "profile_version"
-                )
+                ResourceValidationIssue("resource.version_invalid", _ERROR, "profile_version")
             )
         if (
             not isinstance(self.upstream_version, int)
@@ -641,17 +604,13 @@ class MaterialProfile:
             )
         if not _is_positive_number(self.density_g_cm3):
             issues.append(
-                ResourceValidationIssue(
-                    "material.density_invalid", _ERROR, "density_g_cm3"
-                )
+                ResourceValidationIssue("material.density_invalid", _ERROR, "density_g_cm3")
             )
         issues.extend(self.recommendations.validate())
         issues.extend(self.source.validate())
         if self.review_required and not self.review_confirmed:
             issues.append(
-                ResourceValidationIssue(
-                    "material.review_required", _ERROR, "review_confirmed"
-                )
+                ResourceValidationIssue("material.review_required", _ERROR, "review_confirmed")
             )
         return tuple(issues)
 
@@ -714,15 +673,11 @@ class MaterialProfile:
         return cls(
             resource_id=_require_string(payload.get("resource_id"), "resource_id"),
             display_name=_require_string(payload.get("display_name"), "display_name"),
-            profile_version=_require_int(
-                payload.get("profile_version"), "profile_version"
-            ),
+            profile_version=_require_int(payload.get("profile_version"), "profile_version"),
             brand=_require_string(payload.get("brand"), "brand"),
             material=_require_string(payload.get("material"), "material"),
             guid=_require_string(payload.get("guid"), "guid"),
-            upstream_version=_require_int(
-                payload.get("upstream_version"), "upstream_version"
-            ),
+            upstream_version=_require_int(payload.get("upstream_version"), "upstream_version"),
             filament_diameter_mm=_require_float(
                 payload.get("filament_diameter_mm"), "filament_diameter_mm"
             ),
@@ -732,9 +687,7 @@ class MaterialProfile:
             recommendations=MaterialRecommendations.from_json(
                 _require_mapping(payload.get("recommendations"), "recommendations")
             ),
-            source=SourceReference.from_json(
-                _require_mapping(payload.get("source"), "source")
-            ),
+            source=SourceReference.from_json(_require_mapping(payload.get("source"), "source")),
             review_required=parse_json_bool(
                 payload,
                 "review_required",
@@ -771,9 +724,7 @@ class ResourceSnapshot:
         if not isinstance(self.resource_type, str) or not _RESOURCE_TYPE_RE.fullmatch(
             self.resource_type
         ):
-            raise ValueError(
-                "resource_type must use lowercase letters, digits, and underscores"
-            )
+            raise ValueError("resource_type must use lowercase letters, digits, and underscores")
         if not isinstance(self.resource_id, str) or not self.resource_id.strip():
             raise ValueError("resource_id cannot be blank")
         if (
@@ -783,9 +734,7 @@ class ResourceSnapshot:
         ):
             raise ValueError("profile_version must be a positive integer")
         if self.schema_version != RESOURCE_SCHEMA_VERSION:
-            raise ValueError(
-                f"unsupported resource snapshot schema {self.schema_version}"
-            )
+            raise ValueError(f"unsupported resource snapshot schema {self.schema_version}")
         if not isinstance(self.content_hash, str) or not _SHA256_RE.fullmatch(
             self.content_hash.lower()
         ):
@@ -808,13 +757,9 @@ class ResourceSnapshot:
             )
         embedded_id, embedded_version = _snapshot_identity(frozen_payload)
         if embedded_id != self.resource_id:
-            raise ResourceIntegrityError(
-                "snapshot resource_id differs from its payload"
-            )
+            raise ResourceIntegrityError("snapshot resource_id differs from its payload")
         if embedded_version != self.profile_version:
-            raise ResourceIntegrityError(
-                "snapshot profile_version differs from its payload"
-            )
+            raise ResourceIntegrityError("snapshot profile_version differs from its payload")
 
     @classmethod
     def capture(cls, resource_type: str, profile: Any) -> "ResourceSnapshot":
@@ -878,9 +823,7 @@ class ResourceSnapshot:
             profile_version=_require_int(
                 payload.get("profile_version"), "resource_snapshot.profile_version"
             ),
-            payload=_require_mapping(
-                payload.get("payload"), "resource_snapshot.payload"
-            ),
+            payload=_require_mapping(payload.get("payload"), "resource_snapshot.payload"),
             content_hash=_require_string(
                 payload.get("content_hash"), "resource_snapshot.content_hash"
             ),

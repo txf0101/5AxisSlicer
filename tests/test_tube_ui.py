@@ -257,6 +257,121 @@ class TubeUiTests(unittest.TestCase):
         self.assertIsNotNone(page.controller.setup.T_mount_from_build)
         self.assertIsNotNone(page.viewer.model_transform)
 
+    def test_operation_editor_applies_roles_parameters_and_highlights_geometry(self) -> None:
+        window = self._loaded_tube_window()
+        page = window.tube_page
+        page._create_operation()
+        operations_item = page.tree.topLevelItem(0).child(2)
+        operation_item = operations_item.child(0)
+        page.tree.setCurrentItem(operation_item)
+        self.app.processEvents()
+
+        role_ids = {
+            "tube_body_id": "body_002",
+            "entry_port_id": "body_002_edge_0003",
+            "exit_port_id": "body_002_edge_0014",
+            "substrate_body_id": "body_001",
+        }
+        for key, object_id in role_ids.items():
+            combo = page._operation_geometry_combos[key]
+            index = combo.findData(object_id)
+            self.assertGreaterEqual(index, 0, f"missing operation choice: {object_id}")
+            combo.setCurrentIndex(index)
+        page._operation_parameter_spins["layer_height_mm"].setValue(0.25)
+
+        self.assertEqual(page.viewer.selection.body_ids, {"body_001", "body_002"})
+        self.assertEqual(
+            page.viewer.selection.edge_ids,
+            {"body_002_edge_0003", "body_002_edge_0014"},
+        )
+        QTest.mouseClick(page.operation_apply_button, Qt.LeftButton)
+        self.app.processEvents()
+
+        operation = page.controller.operations[0]
+        self.assertTrue(operation.geometry.is_complete)
+        self.assertEqual(operation.parameters.layer_height_mm, 0.25)
+        self.assertIn("operation_geometry_changed", operation.dirty_reasons)
+        self.assertIn("operation_parameters_changed", operation.dirty_reasons)
+        window.set_language("en")
+        self.assertEqual(
+            page.operation_feedback.text(),
+            "Operation geometry roles and process parameters applied.",
+        )
+
+    def test_operation_editor_keeps_apply_visible_at_laptop_size(self) -> None:
+        window = self._loaded_tube_window()
+        page = window.tube_page
+        page._create_operation()
+        operation_item = page.tree.topLevelItem(0).child(2).child(0)
+        page.tree.setCurrentItem(operation_item)
+        window.resize(1366, 768)
+        self.app.processEvents()
+
+        self.assertEqual((window.width(), window.height()), (1366, 768))
+        self.assertTrue(window.script_console_manager.dock.compact)
+        self.assertGreaterEqual(window.script_console_manager.dock.width(), window.minimumWidth())
+        self.assertTrue(page.operation_apply_button.isVisibleTo(window))
+        self.assertTrue(page.operation_apply_button.isEnabled())
+        self.assertGreater(page.editor_scroll.verticalScrollBar().maximum(), 0)
+        self.assertEqual(
+            page.tree.topLevelItem(0).child(2).text(0),
+            "操作  [待更新]",
+        )
+
+        button_top_left = page.operation_apply_button.mapTo(
+            window, page.operation_apply_button.rect().topLeft()
+        )
+        issue_top_left = page.issue_list.mapTo(window, page.issue_list.rect().topLeft())
+        self.assertLess(
+            button_top_left.y() + page.operation_apply_button.height(),
+            issue_top_left.y(),
+        )
+        actions = (
+            page.back_button,
+            page.open_button,
+            page.update_source_button,
+            page.save_button,
+            page.create_operation_button,
+        )
+        action_rects = [
+            button.rect().translated(button.mapTo(window, button.rect().topLeft()))
+            for button in actions
+        ]
+        for index, first in enumerate(action_rects):
+            for second in action_rects[index + 1 :]:
+                self.assertFalse(first.intersects(second))
+
+    def test_http_operation_set_uses_shared_revision_and_round_trips(self) -> None:
+        window = self._loaded_tube_window()
+        service = window.tube_script_service
+        created = window.handle_automation(
+            "/tube/operation/create",
+            {"expected_revision": service.kernel.revision},
+        )
+        updated = window.handle_automation(
+            "/tube/operation/set",
+            {
+                "expected_revision": created["command"]["revision"],
+                "tube_body_id": "body_002",
+                "entry_port_id": "body_002_edge_0003",
+                "exit_port_id": "body_002_edge_0014",
+                "substrate_body_id": "body_001",
+                "layer_height_mm": 0.3,
+            },
+        )
+
+        operation = updated["command"]["payload"]
+        self.assertEqual(operation["geometry"]["tube_body"]["object_id"], "body_002")
+        self.assertEqual(operation["parameters"]["layer_height_mm"], 0.3)
+        restored = TubeSetupController.from_json(
+            page_json := window.tube_page.controller.to_json(),
+            cad_model=window.model,
+        )
+        self.assertEqual(restored.operations[0].to_json(), operation)
+        self.assertEqual(
+            len(page_json["body_catalog"]), len(window.tube_page.controller.body_candidates)
+        )
+
     def test_script_console_default_height_keeps_viewer_usable(self) -> None:
         window = self._loaded_tube_window()
         for _ in range(4):

@@ -41,7 +41,7 @@ class TubeValidationContext:
 def validation_report(
     context: TubeValidationContext,
     *,
-    operation_type: str,
+    operation_types: Sequence[str],
     operation_limit: int,
 ) -> SetupValidationReport:
     invalid_nodes, domain_issues = domain_validation(context)
@@ -56,7 +56,7 @@ def validation_report(
     operation_issues = _operation_issues(
         context,
         states,
-        operation_type=operation_type,
+        operation_types=operation_types,
         operation_limit=operation_limit,
     )
     issues = merge_issues(base.issues, operation_issues)
@@ -123,7 +123,7 @@ def _operation_issues(
     context: TubeValidationContext,
     states: dict[str, NodeState],
     *,
-    operation_type: str,
+    operation_types: Sequence[str],
     operation_limit: int,
 ) -> tuple[ValidationIssue, ...]:
     if not context.operations:
@@ -133,7 +133,7 @@ def _operation_issues(
                 "TUBE_OPERATION_MISSING",
                 IssueSeverity.WARNING,
                 context.setup.setup_id,
-                {"supported_type": operation_type},
+                {"supported_types": list(operation_types)},
             ),
         )
     states[OPERATION_NODE] = aggregate_operation_state(context.operations)

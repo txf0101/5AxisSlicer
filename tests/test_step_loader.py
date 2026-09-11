@@ -62,9 +62,7 @@ def make_free_face_step(directory: Path, *, direct_face_root: bool) -> Path:
 
     STEPControl_Controller.Init_s()
     previous_unit = Interface_Static.CVal_s("write.step.unit") or "MM"
-    path = directory / (
-        "direct_free_face.step" if direct_face_root else "open_shell_face.step"
-    )
+    path = directory / ("direct_free_face.step" if direct_face_root else "open_shell_face.step")
     face = BRepBuilderAPI_MakeFace(
         gp_Pln(gp_Pnt(0.0, 0.0, 0.0), gp_Dir(0.0, 0.0, 1.0)),
         0.0,
