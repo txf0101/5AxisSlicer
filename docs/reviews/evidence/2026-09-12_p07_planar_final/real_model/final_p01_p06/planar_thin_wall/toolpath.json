@@ -1,0 +1,233 @@
+{
+  "coordinate_frame": "workpiece_build",
+  "events": [
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 1
+      },
+      "duration_s": null,
+      "event_id": "event-0000001",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_thin_wall",
+      "region_id": "region-0001",
+      "stage_id": "planar_thin_wall"
+    }
+  ],
+  "operation_id": "p06-planar_thin_wall",
+  "points": [
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_thin_wall",
+      "point_id": "point-0000001",
+      "point_type": "approach",
+      "position": [
+        4.784314659702262,
+        -9.27846090760633,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar_thin_wall",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.5969150952687805,
+        -0.8023044117043497,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.17324895884585248,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_thin_wall",
+      "point_id": "point-0000002",
+      "point_type": "deposition",
+      "position": [
+        5.071578322965287,
+        -9.664567585398588,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar_thin_wall",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.5969150952687805,
+        -0.8023044117043497,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 17.610706673975436,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_thin_wall",
+      "point_id": "point-0000003",
+      "point_type": "deposition",
+      "position": [
+        34.2719141545409,
+        -48.91214985679952,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar_thin_wall",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.5969164721198674,
+        -0.8023033873242539,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2239964864322828,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_thin_wall",
+      "point_id": "point-0000004",
+      "point_type": "deposition",
+      "position": [
+        36.99973784103427,
+        -46.88263967744324,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar_thin_wall",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.8023033873242589,
+        0.5969164721198605,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 17.78395601096374,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_thin_wall",
+      "point_id": "point-0000005",
+      "point_type": "deposition",
+      "position": [
+        7.512137795048873,
+        -7.248949829079185,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar_thin_wall",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -0.5969164571713012,
+        0.8023033984460382,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2239965204678172,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_thin_wall",
+      "point_id": "point-0000006",
+      "point_type": "deposition",
+      "position": [
+        4.784314659702262,
+        -9.27846090760633,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar_thin_wall",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -0.8023032029122508,
+        -0.5969167199842401,
+        0.0
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "toolpath_id": "p06-planar_thin_wall-planar_thin_wall-v1",
+  "units": {
+    "angle": "rad",
+    "feedrate": "mm_min",
+    "length": "mm",
+    "material_volume": "mm3"
+  }
+}

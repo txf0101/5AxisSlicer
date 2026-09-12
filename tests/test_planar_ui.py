@@ -8,6 +8,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import cadquery as cq
 import pytest
+from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtWidgets import QApplication
 
 from five_axis_slicer.manufacturing.coordinates import (
@@ -125,7 +126,7 @@ def test_p03_p05_gui_generate_and_export_enable(operation_type: str) -> None:
 
     result = page.controller.product_result(page.controller.operations[-1].operation_id)
     assert result is not None and result.exportable
-    assert page.export_button.isEnabled()
+    assert page.export_button.isEnabled(), page.state_json()
     assert page.viewer.visible_path_segment_count > 0
 
 
@@ -172,6 +173,111 @@ def test_generate_emits_the_generated_preview_toolpath() -> None:
     operation_id = page.controller.operations[0].operation_id
     assert str(page.viewer.gcode_preview.source_path) == f"<generated:{operation_id}>"
     assert page.viewer.visible_path_segment_count > 0
+
+
+def test_existing_operations_can_be_selected_and_previewed_independently() -> None:
+    page = PlanarPage(controller=_path_controller(), viewer_factory=TubeViewerStub)
+    page.create_button.click()
+    region_id = page.controller.operations[-1].operation_id
+    page.first_layer_spin.setValue(0.0)
+    page.last_layer_spin.setValue(0.0)
+    page.apply_button.click()
+    page.generate_button.click()
+
+    page.operation_type_combo.setCurrentIndex(page.operation_type_combo.findData("planar_offset"))
+    page.create_button.click()
+    zigzag_id = page.controller.operations[-1].operation_id
+    page.first_layer_spin.setValue(0.0)
+    page.last_layer_spin.setValue(0.0)
+    page.feedrate_spin.setValue(100.0)
+    page.travel_feedrate_spin.setValue(100.0)
+    page.apply_button.click()
+    page.generate_button.click()
+
+    page.operation_instance_combo.setCurrentIndex(page.operation_instance_combo.findData(region_id))
+    _app().processEvents()
+    assert page.state_json()["ui"]["selected_operation_id"] == region_id
+    assert str(page.viewer.gcode_preview.source_path) == f"<generated:{region_id}>"
+
+    page.operation_instance_combo.setCurrentIndex(page.operation_instance_combo.findData(zigzag_id))
+    _app().processEvents()
+    assert page.state_json()["ui"]["selected_operation_id"] == zigzag_id
+    assert str(page.viewer.gcode_preview.source_path) == f"<generated:{zigzag_id}>"
+    selected = page.controller.operation(zigzag_id)
+    product = page.controller.product_state(zigzag_id)
+    result = page.controller.product_result(zigzag_id)
+    assert page.export_button.isEnabled(), (
+        selected.operation_type,
+        product,
+        None if result is None else result.exportable,
+        page._last_generation_error,
+        page.status_label.text(),
+    )
+
+
+def test_qt_cancel_button_preserves_the_previous_generated_result() -> None:
+    page = PlanarPage(controller=_path_controller(), viewer_factory=TubeViewerStub)
+    page.operation_type_combo.setCurrentIndex(page.operation_type_combo.findData("planar_offset"))
+    page.create_button.click()
+    page.first_layer_spin.setValue(0.0)
+    page.last_layer_spin.setValue(0.0)
+    page.feedrate_spin.setValue(100.0)
+    page.travel_feedrate_spin.setValue(100.0)
+    page.apply_button.click()
+    page.generate_button.click()
+    operation_id = page.controller.operations[-1].operation_id
+    previous = page.controller.product_result(operation_id)
+
+    QTimer.singleShot(0, page.cancel_button.click)
+    page.generate_button.click()
+
+    assert page.controller.product_result(operation_id) is previous
+    assert page.controller.product_state(operation_id).status in {"ready", "warning"}
+    assert page.export_button.isEnabled()
+
+
+def test_all_planar_operation_types_survive_reopen_and_remain_selectable() -> None:
+    page = PlanarPage(controller=_path_controller(), viewer_factory=TubeViewerStub)
+    operation_types = tuple(page.controller.available_operation_types)
+    for operation_type in operation_types:
+        page.operation_type_combo.setCurrentIndex(
+            page.operation_type_combo.findData(operation_type)
+        )
+        page.create_button.click()
+
+    assert page.operation_instance_combo.count() == len(operation_types) == 6
+    assert {item.operation_type for item in page.controller.operations} == set(operation_types)
+    payload = page.controller.to_json()
+    restored = PlanarController.from_json(payload, cad_model=page.controller.cad_model)
+    page.set_controller(restored)
+
+    assert page.operation_instance_combo.count() == 6
+    for operation in restored.operations:
+        page.operation_instance_combo.setCurrentIndex(
+            page.operation_instance_combo.findData(operation.operation_id)
+        )
+        assert page.state_json()["ui"]["selected_operation_id"] == operation.operation_id
+
+
+def test_issue_list_activation_exposes_a_locatable_problem_and_help_is_bilingual() -> None:
+    page = PlanarPage(controller=_controller(), viewer_factory=TubeViewerStub)
+    page.resize(1366, 768)
+    page.show()
+    _app().processEvents()
+    assert all(label.width() > 0 and label.text() for label in page._labels.values())
+    assert page.issue_list.horizontalScrollBar().maximum() == 0
+    assert page.issue_list.count() > 0
+    item = page.issue_list.item(0)
+    assert page.issue_list.fontMetrics().horizontalAdvance(item.text()) <= 250
+    assert item.data(Qt.UserRole)["code"] in item.toolTip()
+    page.issue_list.setCurrentItem(item)
+    page.issue_list.itemActivated.emit(item)
+    assert item.data(Qt.UserRole)["code"] in page.status_label.text()
+    assert "mm" in page.help_label.text()
+
+    page.set_language("en")
+    assert "Existing operation" in page._labels["operation_instance"].text()
+    assert "Stale" in page.help_label.text()
 
 
 def test_invalid_generation_is_disabled_and_english_text_is_applied() -> None:

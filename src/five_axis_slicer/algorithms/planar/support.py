@@ -254,15 +254,18 @@ def generate_support_toolpath(
         _checkpoint(cancelled)
         for regions, interface in ((layer.body_regions, False), (layer.interface_regions, True)):
             spacing = parameters.interface_spacing_mm if interface else parameters.line_spacing_mm
+            role = "support_interface" if interface else "support_material"
             for region in regions:
                 _checkpoint(cancelled)
                 stage = "planar_support_interface" if interface else "planar_support"
                 stages[(layer.layer_id, region.region_id)] = stage
-                _add_support_region(builder, layer, region, parameters, spacing, index, cancelled)
+                _add_support_region(
+                    builder, layer, region, parameters, spacing, role, index, cancelled
+                )
     return _stage_toolpath(operation_id, builder, stages)
 
 
-def _add_support_region(builder, layer, region, parameters, spacing, index, cancelled):
+def _add_support_region(builder, layer, region, parameters, spacing, role, index, cancelled):
     source_layer = PlanarSliceLayer(layer.layer_id, layer.z_mm, (region,))
     inset = offset_shape(layer_shape(source_layer), -0.5 * parameters.bead_width_mm)
     clipped = shape_regions(inset, layer.z_mm, region.region_id)
@@ -283,7 +286,10 @@ def _add_support_region(builder, layer, region, parameters, spacing, index, canc
             _checkpoint(cancelled)
             points = tuple((point[1], point[0]) if vertical else point for point in segment)
             builder._add_path(
-                source_layer, region, points if path_index % 2 == 0 else points[::-1], "support"
+                source_layer,
+                region,
+                points if path_index % 2 == 0 else points[::-1],
+                role,
             )
             count += 1
     if count == 0:

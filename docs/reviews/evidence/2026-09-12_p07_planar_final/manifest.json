@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "task": "P07 and Planar P01-P07 final acceptance",
+  "date": "2026-09-12",
+  "branch": "codex/p07-planar-workbench-final",
+  "start_commit": "d1e0a03a220f9ef27b595568d94eb03c313e0c92",
+  "final_commit": "the Git commit containing this manifest; resolve with git rev-parse HEAD",
+  "scope": "buildplate-only vertical Lines/Grid support plus current Planar Region, Zigzag, Offset, Thin Wall and Spiral acceptance",
+  "environment": {
+    "python": "tmp/pytest9/Scripts/python.exe",
+    "python_version": "3.12.7",
+    "pytest_version": "9.1.1",
+    "preflight_exit_code": 0,
+    "preflight_log": "environment/preflight_final.log",
+    "preflight_sha256": "60b855e6c090c5fa8f5e3ae6018bb3d4123a5be0cbafcf05a4903bea8e8c7d95"
+  },
+  "final_tests": [
+    {
+      "name": "P07 targeted",
+      "command": "tmp/pytest9/Scripts/python.exe -X faulthandler -m pytest -q -ra --basetemp=tmp/p07_target_final_05 --junitxml=tests/p07_target_final_05.xml <10 explicit P07/product/UI/readback files>",
+      "exit_code": 0,
+      "result": "150 passed",
+      "junit": "tests/p07_target_final_05.xml",
+      "junit_sha256": "51b0ec8d8d7d31e9de5d418115d67f259815b2390b0f01991178d15531ccc363"
+    },
+    {
+      "name": "all Planar",
+      "command": "tmp/pytest9/Scripts/python.exe -X faulthandler -m pytest -q -ra --basetemp=tmp/planar_final_05 --junitxml=tests/planar_final_05.xml tests/test_planar*.py",
+      "exit_code": 0,
+      "result": "223 passed",
+      "junit": "tests/planar_final_05.xml",
+      "junit_sha256": "3d0d93c854694d934e886d65cf9096753dd650519dd7f7da4a221d26d37c117c"
+    },
+    {
+      "name": "full repository",
+      "command": "tmp/pytest9/Scripts/python.exe -X faulthandler -m pytest -q -ra --basetemp=tmp/full_final_p07_02 --junitxml=tests/full_final_02.xml",
+      "exit_code": 0,
+      "result": "753 passed, 3 skipped, 130 subtests passed",
+      "skip_boundary": "three Windows symlink privilege cases; skipped, not counted as passed",
+      "junit": "tests/full_final_02.xml",
+      "junit_sha256": "ded1bbc89a2fd609d235c88c3dadf38412d4d8b398c6dd2bc70377122c24a2c7"
+    },
+    {
+      "name": "official quality gate",
+      "command": "tmp/pytest9/Scripts/python.exe -X utf8 scripts/check_quality.py",
+      "exit_code": 0,
+      "result": "Ruff, migrated Ruff, security Ruff, format, context budget and mypy passed; mypy checked 120 source files",
+      "log": "quality/check_quality_final_02.log",
+      "log_sha256": "dd774e0b71ef187bed67d58d05a14dbbbcfea5ce5182220b092f25892edd6393"
+    }
+  ],
+  "failure_and_recovery": [
+    "initial P07 pytest command exited 4 because PowerShell split a dynamic JUnit path; no tests ran",
+    "initial Planar pytest command exited 4 because a quoted glob was not expanded; corrected explicit file discovery passed",
+    "affected suite exposed three fixture/UI selection failures; the real operation-selector refresh bug was fixed and the final affected suite passed",
+    "one Windows os.replace WinError 5 occurred with a reused temporary directory; the same case passed with a fresh basetemp",
+    "quality attempt 1 failed only the context budget at AutomationRouter.__init__ 61/60 and PlanarPage 629/500; structural extraction passed attempt 2"
+  ],
+  "independent_truth": [
+    "overhang threshold sensitivity: 14 versus 10 square millimetres",
+    "XY gap, Z gap and body/interface layer assignment",
+    "Lines: 15 segments, 30 points, 39.0 mm, 15.60 cubic millimetres",
+    "Grid: 14 segments, 28 points, 39.4 mm, 15.76 cubic millimetres",
+    "narrow region: 2.6 mm and 1.04 cubic millimetres",
+    "disappearing region rejects the whole path",
+    "no-support, buildplate-unreachable, invalid-parameter and degenerate-region failures are covered by P07 tests"
+  ],
+  "real_cases": {
+    "analytic_floating_beam": {
+      "status": "exportable warning",
+      "segments": 33,
+      "body_segments": 12,
+      "interface_segments": 21,
+      "material_volume_mm3": 61.86,
+      "readback": "66/66 passed",
+      "summary": "real_model/final_p07_complex_success/summary.json"
+    },
+    "complex_step_success": {
+      "input": "example/三叶扇/Supportless_sample.stp",
+      "input_sha256": "291155b64dace255937bbcddb496da4f11f8319a2fe6b9d32aa29a340686befc",
+      "body": "body_002",
+      "status": "exportable warning",
+      "toolpath_points": 9662,
+      "material_volume_mm3": 5663.310163058916,
+      "readback": "9662/9662 passed",
+      "summary": "real_model/final_p07_complex_success/summary.json",
+      "summary_sha256": "b1cac3ccab00373575fbf9f577d4d1acf11ee4016b5dabd39727543640707e0d"
+    },
+    "strict_step_failure": {
+      "input": "example/扇叶/风扇扇叶(1).STEP",
+      "input_sha256": "294b882a7231d6b0fcfaf4aa8c6355422b212590f443158ea0a624fec2b901ef",
+      "body": "body_001",
+      "status": "error; not exported",
+      "diagnostic": "planar.section_endpoint_gap_exceeds_limit at Z=57 mm; correction 0.00100791389 mm exceeds 0.001 mm",
+      "summary": "real_model/final_p07_strict_failure/summary.json",
+      "summary_sha256": "9a75b1adf38b8d6a5b48afcfbcc5fa62d950a89d356ffc7d80b609ebe45c5686"
+    },
+    "p01_p06_current_step": {
+      "input": "example/三叶扇/Supportless_sample.stp body_002",
+      "results": "Zigzag 142, Offset 16, Thin Wall 6, Spiral 129 points; all six-file bundles and readback passed",
+      "summary": "real_model/final_p01_p06/summary.json",
+      "summary_sha256": "f9654f312e03c85c7df24654ae356e2b9045328afd74fed32e1ed714a415a03d"
+    }
+  },
+  "complex_step_six_file_bundle": {
+    "directory": "real_model/final_p07_complex_success/existing_fan_product",
+    "files_sha256": {
+      "main.gcode": "6b3f37f9f2e1f5bc023870e672fd913118d63d3dfc4efe113989f19e19fc2ea4",
+      "toolpath.json": "98b6351cacb22203fc25d2950316db2fa0127ddff2f47c8e195864d80cfc3742",
+      "machine_axes.csv": "5502b7bde4ff4c76fd04ae4cdc398c61dfe9e719057242b06c0f5262a703734f",
+      "warnings.json": "614c0e9d2fc339a0bcabbe934e33b06c447894458df40e70fa6ffbe9de020aa8",
+      "preview.json": "d8e903ba61d469652f4ed5e351da21600b918aa8dac1fd287d947d139650a34d",
+      "manifest.json": "245c556acc8493198d28952f1fe25ef40d0047a5b54f3d08428dfd955f5d001d"
+    }
+  },
+  "ui": {
+    "capture_kind": "Qt widget grab with the project OpenGL viewer",
+    "vtk_boundary": "VTK is not the Planar page backend and was not used for these captures",
+    "desktop_boundary": "not human-like desktop clicking",
+    "p02_cases": 3,
+    "p06_cases": 8,
+    "p07_cases": 9,
+    "stable_directory": "../../../guides/assets/planar/current_p01_p07",
+    "p02_summary_sha256": "bc7a60c94eb00606372ba3d99e96e7c5c1d19ea4231975ff22801a54090557f1",
+    "p06_summary_sha256": "ff8899446a360a0f7ec8f03e27a144d39d961fb19e5d0baa145ce8cdce66ab02",
+    "p07_summary_sha256": "317110e7a847115b48f8e50d0d7536ef1a02e52dc24c6b07a894d6ea48049837"
+  },
+  "source_sha256": {
+    "src/five_axis_slicer/algorithms/planar/support.py": "a13354e8f7d898c41fee0f41514c1f8bdf1ddbba05fb12ef8e33e33e54c487f9",
+    "src/five_axis_slicer/planar_controller.py": "cc08fb7d9f2fac8d41fe3f07ee97f805920721925e9cc64944693aa0f435b0fb",
+    "src/five_axis_slicer/planar_ui.py": "99acd9b0ed30cca8db075f167ca356078cfa780721b1ba96558114ec167dcb04",
+    "src/five_axis_slicer/automation_routes.py": "1843c25dee40b6a037067da9a4ca10f0c899a3c9e5300dfbf1b44394f901b613",
+    "src/five_axis_slicer/manufacturing/toolpath.py": "2b09175b67d12d781281d33ae504c48baf5d4b8615b3321debab03ab26afde72",
+    "tests/test_planar_support_truth.py": "a1390f0335737f7dd92ee662921b678da96e7dd4952dbbb488044cbfb8b4720b"
+  },
+  "license_boundary": "PrusaSlicer and CuraEngine are AGPLv3; only pinned public observable behavior was consulted. No upstream source, tests or internal data structures were copied, translated or rewritten.",
+  "unverified": [
+    "real controller semantics",
+    "real machine calibration",
+    "fixture and complete nozzle sweep collision qualification",
+    "combined part/support layer scheduling",
+    "material compatibility, strength and support removability",
+    "thermal behaviour and physical trial deposition"
+  ]
+}

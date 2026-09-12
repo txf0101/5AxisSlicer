@@ -28,7 +28,8 @@
 - [P01—P06 平面算法与工作台复盘](reviews/2026-09-12_planar_algorithm_foundation_review.md)：区域、填充、偏置、薄壁、螺旋、产品接入与阶段验收；P07 使用说明见下方手册。
 - [Planar 工作台图文手册](guides/planar_workbench_zh.md)：P01—P07 的五操作参数、正常流程、错误恢复、导出、保存重开、截图与能力边界。
 - [P07 Planar Grid/Lines 支撑实施复盘](reviews/2026-09-12_p07_planar_support_review.md)：clean-room 来源边界、支撑领域链、代码审查修复、解析真值、UI、测试、质量门禁和实机限制。
-- [Planar P01—P06 阶段完成总结](planning/planar_handoff.md)：四操作的真实 STEP、六件套、回读、UI 证据和离线参考边界；下一项为 C01。
+- [P07 与 Planar P01—P07 当前验收证据](reviews/evidence/2026-09-12_p07_planar_final/manifest.json)：最终源码、独立真值、真实 STEP、六件套、UI、JUnit、质量门禁及逐文件 SHA-256。
+- [Planar P01—P06 历史阶段交接](planning/planar_handoff.md)：P07 加入前的四操作真实 STEP、六件套、回读和 UI 证据；当前状态以 P01—P07 最终证据和进度台账为准。
 - [多对话工作台开发启动提示词](planning/workbench_multi_chat_prompts.md)：P07、Curve、Rotary、Freeform、Research 与最终集成的可复制任务提示词及统一完成条件。
 - [多对话工作台提示词编制复盘](reviews/2026-09-12_multi_chat_workbench_prompt_review.md)：依赖、工作树、多 Agent、完整验收和 Planar Support 计数边界。
 

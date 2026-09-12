@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "F:\【项目和任务】\5AxisSclicer_V2.0\scripts\planar_p06_real_model_evidence.py", line 198, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "F:\【项目和任务】\5AxisSclicer_V2.0\scripts\planar_p06_real_model_evidence.py", line 152, in main
+    result = controller.generate_operation(operation.operation_id)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\【项目和任务】\5AxisSclicer_V2.0\src\five_axis_slicer\planar_controller.py", line 258, in generate_operation
+    validate_planar_generation_inputs(self._setup, self._cad_model, operation)
+  File "F:\【项目和任务】\5AxisSclicer_V2.0\src\five_axis_slicer\planar_generation_context.py", line 134, in validate_planar_generation_inputs
+    raise ValueError(
+ValueError: Planar path Generate requires a valid applied Setup and reviewed resources
+SCRIPT_EXIT_CODE=1

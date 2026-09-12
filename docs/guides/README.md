@@ -40,7 +40,7 @@ Planar P01—P07 已完成，手册记录五种路径操作（含 Planar Support
 
 | 阶段 | 计划手册 | 最少配图 |
 | --- | --- | --- |
-| Planar | 区域选择、Zigzag、Offset、Thin Wall、Spiral | 区域/孔岛、四类参数、路径检查、失败示例 |
+| Planar | Region、Zigzag、Offset、Thin Wall、Spiral、Planar Support | 区域/孔岛、五种制造操作、主体/interface、路径检查、失败与恢复 |
 | Curve | 边链与法向、Buildup、Multi-pass、Offset | 边链顺序、法向、三类结果、自交或断链错误 |
 | Freeform | 曲面区域、Coating、Thin Wall、Buildup | UV/边界、投影结果、姿态、接缝与多解错误 |
 | Rotary | 回转坐标、Spiral、Thin Wall、Around Part | 回转轴、周期接缝、三类路径、轴限问题 |

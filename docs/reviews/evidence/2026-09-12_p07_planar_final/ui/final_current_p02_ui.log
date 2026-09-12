@@ -1,0 +1,339 @@
+{
+  "model": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\三叶扇\\Supportless_sample.stp",
+  "body": "body_002",
+  "z_mm": 60.0,
+  "capture_kind": "Qt widget grab with project model viewer",
+  "desktop_automation_boundary": "Computer Use could not enumerate the Windows application; these are direct Qt render captures, not evidence of a human-like desktop click-through.",
+  "cases": [
+    {
+      "language": "zh",
+      "requested_size": [
+        1366,
+        768
+      ],
+      "rendered_size": [
+        1366,
+        768
+      ],
+      "screenshot": "01_planar_zh_1366x768.png",
+      "viewer_backend": "opengl",
+      "standard_view": "isometric",
+      "model_visible": true,
+      "preview_source": "<generated:p02-ui-real-model>",
+      "visible_path_segment_count": 73,
+      "buttons": {
+        "返回": {
+          "text": "返回",
+          "x": 965,
+          "y": 46,
+          "width": 174,
+          "height": 34,
+          "text_width": 36,
+          "available_text_width": 162,
+          "text_fits": true
+        },
+        "打开 STEP": {
+          "text": "打开 STEP",
+          "x": 1148,
+          "y": 46,
+          "width": 173,
+          "height": 34,
+          "text_width": 81,
+          "available_text_width": 161,
+          "text_fits": true
+        },
+        "新建操作": {
+          "text": "新建操作",
+          "x": 965,
+          "y": 977,
+          "width": 174,
+          "height": 34,
+          "text_width": 72,
+          "available_text_width": 162,
+          "text_fits": true
+        },
+        "应用": {
+          "text": "应用",
+          "x": 1148,
+          "y": 977,
+          "width": 173,
+          "height": 34,
+          "text_width": 36,
+          "available_text_width": 161,
+          "text_fits": true
+        },
+        "生成预览": {
+          "text": "生成预览",
+          "x": 965,
+          "y": 1020,
+          "width": 174,
+          "height": 34,
+          "text_width": 72,
+          "available_text_width": 162,
+          "text_fits": true
+        },
+        "导出结果": {
+          "text": "导出结果",
+          "x": 1148,
+          "y": 1020,
+          "width": 173,
+          "height": 34,
+          "text_width": 72,
+          "available_text_width": 161,
+          "text_fits": true
+        },
+        "取消生成": {
+          "text": "取消生成",
+          "x": 965,
+          "y": 1063,
+          "width": 356,
+          "height": 34,
+          "text_width": 72,
+          "available_text_width": 344,
+          "text_fits": true
+        },
+        "撤销": {
+          "text": "撤销",
+          "x": 965,
+          "y": 1106,
+          "width": 174,
+          "height": 34,
+          "text_width": 36,
+          "available_text_width": 162,
+          "text_fits": true
+        },
+        "重做": {
+          "text": "重做",
+          "x": 1148,
+          "y": 1106,
+          "width": 173,
+          "height": 34,
+          "text_width": 36,
+          "available_text_width": 161,
+          "text_fits": true
+        }
+      },
+      "collisions": []
+    },
+    {
+      "language": "zh",
+      "requested_size": [
+        1600,
+        900
+      ],
+      "rendered_size": [
+        1600,
+        900
+      ],
+      "screenshot": "02_planar_zh_1600x900_generated.png",
+      "viewer_backend": "opengl",
+      "standard_view": "top",
+      "model_visible": false,
+      "preview_source": "<generated:p02-ui-real-model>",
+      "visible_path_segment_count": 73,
+      "buttons": {
+        "返回": {
+          "text": "返回",
+          "x": 1199,
+          "y": 46,
+          "width": 174,
+          "height": 34,
+          "text_width": 36,
+          "available_text_width": 162,
+          "text_fits": true
+        },
+        "打开 STEP": {
+          "text": "打开 STEP",
+          "x": 1382,
+          "y": 46,
+          "width": 173,
+          "height": 34,
+          "text_width": 81,
+          "available_text_width": 161,
+          "text_fits": true
+        },
+        "新建操作": {
+          "text": "新建操作",
+          "x": 1199,
+          "y": 977,
+          "width": 174,
+          "height": 34,
+          "text_width": 72,
+          "available_text_width": 162,
+          "text_fits": true
+        },
+        "应用": {
+          "text": "应用",
+          "x": 1382,
+          "y": 977,
+          "width": 173,
+          "height": 34,
+          "text_width": 36,
+          "available_text_width": 161,
+          "text_fits": true
+        },
+        "生成预览": {
+          "text": "生成预览",
+          "x": 1199,
+          "y": 1020,
+          "width": 174,
+          "height": 34,
+          "text_width": 72,
+          "available_text_width": 162,
+          "text_fits": true
+        },
+        "导出结果": {
+          "text": "导出结果",
+          "x": 1382,
+          "y": 1020,
+          "width": 173,
+          "height": 34,
+          "text_width": 72,
+          "available_text_width": 161,
+          "text_fits": true
+        },
+        "取消生成": {
+          "text": "取消生成",
+          "x": 1199,
+          "y": 1063,
+          "width": 356,
+          "height": 34,
+          "text_width": 72,
+          "available_text_width": 344,
+          "text_fits": true
+        },
+        "撤销": {
+          "text": "撤销",
+          "x": 1199,
+          "y": 1106,
+          "width": 174,
+          "height": 34,
+          "text_width": 36,
+          "available_text_width": 162,
+          "text_fits": true
+        },
+        "重做": {
+          "text": "重做",
+          "x": 1382,
+          "y": 1106,
+          "width": 173,
+          "height": 34,
+          "text_width": 36,
+          "available_text_width": 161,
+          "text_fits": true
+        }
+      },
+      "collisions": []
+    },
+    {
+      "language": "en",
+      "requested_size": [
+        1920,
+        1080
+      ],
+      "rendered_size": [
+        1920,
+        1080
+      ],
+      "screenshot": "03_planar_en_1920x1080.png",
+      "viewer_backend": "opengl",
+      "standard_view": "isometric",
+      "model_visible": true,
+      "preview_source": "<generated:p02-ui-real-model>",
+      "visible_path_segment_count": 73,
+      "buttons": {
+        "Back": {
+          "text": "Back",
+          "x": 1519,
+          "y": 46,
+          "width": 174,
+          "height": 34,
+          "text_width": 36,
+          "available_text_width": 162,
+          "text_fits": true
+        },
+        "Open STEP": {
+          "text": "Open STEP",
+          "x": 1702,
+          "y": 46,
+          "width": 173,
+          "height": 34,
+          "text_width": 81,
+          "available_text_width": 161,
+          "text_fits": true
+        },
+        "Create operation": {
+          "text": "Create operation",
+          "x": 1519,
+          "y": 1112,
+          "width": 174,
+          "height": 34,
+          "text_width": 144,
+          "available_text_width": 162,
+          "text_fits": true
+        },
+        "Apply": {
+          "text": "Apply",
+          "x": 1702,
+          "y": 1112,
+          "width": 173,
+          "height": 34,
+          "text_width": 45,
+          "available_text_width": 161,
+          "text_fits": true
+        },
+        "Generate preview": {
+          "text": "Generate preview",
+          "x": 1519,
+          "y": 1155,
+          "width": 174,
+          "height": 34,
+          "text_width": 144,
+          "available_text_width": 162,
+          "text_fits": true
+        },
+        "Export result": {
+          "text": "Export result",
+          "x": 1702,
+          "y": 1155,
+          "width": 173,
+          "height": 34,
+          "text_width": 117,
+          "available_text_width": 161,
+          "text_fits": true
+        },
+        "Cancel generation": {
+          "text": "Cancel generation",
+          "x": 1519,
+          "y": 1198,
+          "width": 356,
+          "height": 34,
+          "text_width": 153,
+          "available_text_width": 344,
+          "text_fits": true
+        },
+        "Undo": {
+          "text": "Undo",
+          "x": 1519,
+          "y": 1241,
+          "width": 174,
+          "height": 34,
+          "text_width": 36,
+          "available_text_width": 162,
+          "text_fits": true
+        },
+        "Redo": {
+          "text": "Redo",
+          "x": 1702,
+          "y": 1241,
+          "width": 173,
+          "height": 34,
+          "text_width": 36,
+          "available_text_width": 161,
+          "text_fits": true
+        }
+      },
+      "collisions": []
+    }
+  ]
+}

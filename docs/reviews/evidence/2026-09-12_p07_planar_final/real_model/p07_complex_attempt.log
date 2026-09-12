@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "F:\【项目和任务】\5AxisSclicer_V2.0\scripts\planar_p07_real_model_evidence.py", line 431, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "F:\【项目和任务】\5AxisSclicer_V2.0\scripts\planar_p07_real_model_evidence.py", line 397, in main
+    "analytic_case": _run_analytic(output),
+                     ^^^^^^^^^^^^^^^^^^^^^
+  File "F:\【项目和任务】\5AxisSclicer_V2.0\scripts\planar_p07_real_model_evidence.py", line 290, in _run_analytic
+    "independent_truth": _check_analytic_truth(result),
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\【项目和任务】\5AxisSclicer_V2.0\scripts\planar_p07_real_model_evidence.py", line 221, in _check_analytic_truth
+    raise RuntimeError(
+RuntimeError: Unexpected support provenance at (8.0, 2.8, 0.5): planar_support/support_material
+SCRIPT_EXIT_CODE=1

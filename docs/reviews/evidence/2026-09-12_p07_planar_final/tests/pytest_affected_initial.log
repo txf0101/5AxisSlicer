@@ -1,0 +1,124 @@
+........F.........................FF.................................... [ 62%]
+............................................                             [100%]
+================================== FAILURES ===================================
+____________ test_planar_routes_use_the_shared_command_entrypoint _____________
+
+    def test_planar_routes_use_the_shared_command_entrypoint():
+        window = _Window()
+        router = AutomationRouter(window)
+    
+        state = router.dispatch("/planar/state", {})
+        created = router.dispatch(
+            "/planar/operation/create",
+            {"operation_type": "planar_region", "operation_id": "op-1", "name": "Floor"},
+        )
+        updated = router.dispatch(
+            "/planar/operation/set",
+            {
+                "operation_id": "op-1",
+                "name": "Floor 2",
+                "enabled": False,
+                "body_id": "body",
+                "offset_pass_count": 5,
+                "wall_thickness_mm": 1.2,
+                "thin_wall_max_passes": 2,
+                "spiral_samples_per_contour": 80,
+            },
+        )
+    
+        assert state["planar"]["operations"] == []
+        assert created["command"]["payload"]["operation_id"] == "op-1"
+        assert updated["command"]["payload"]["name"] == "Floor 2"
+        assert updated["command"]["payload"]["enabled"] is False
+        assert window.planar_page.controller.operations[0].name == "Floor 2"
+        parameters = window.planar_page.controller.operations[0].parameters
+        assert parameters.offset_pass_count == 5
+        assert parameters.wall_thickness_mm == 1.2
+        assert parameters.thin_wall_max_passes == 2
+        assert parameters.spiral_samples_per_contour == 80
+    
+>       assert router.dispatch("/planar/issues", {})["command"]["payload"] == []
+E       AssertionError: assert ({'code': 'SE...ssing'}}, ...) == []
+E         
+E         Left contains 7 more items, first extra item: {'code': 'SETUP_PART_MISSING', 'severity': 'error', 'object_id': 'setup-1', 'context': {'node': 'part', 'state': 'missing'}}
+E         Use -v to get more diff
+
+tests\test_planar_automation.py:63: AssertionError
+____ test_existing_operations_can_be_selected_and_previewed_independently _____
+
+    def test_existing_operations_can_be_selected_and_previewed_independently() -> None:
+        page = PlanarPage(controller=_path_controller(), viewer_factory=TubeViewerStub)
+        page.create_button.click()
+        region_id = page.controller.operations[-1].operation_id
+        page.first_layer_spin.setValue(0.0)
+        page.last_layer_spin.setValue(0.0)
+        page.apply_button.click()
+        page.generate_button.click()
+    
+        page.operation_type_combo.setCurrentIndex(
+            page.operation_type_combo.findData("planar_zigzag")
+        )
+        page.create_button.click()
+        zigzag_id = page.controller.operations[-1].operation_id
+        page.first_layer_spin.setValue(0.0)
+        page.last_layer_spin.setValue(0.0)
+        page.feedrate_spin.setValue(100.0)
+        page.travel_feedrate_spin.setValue(100.0)
+        page.apply_button.click()
+        page.generate_button.click()
+    
+        page.operation_instance_combo.setCurrentIndex(
+            page.operation_instance_combo.findData(region_id)
+        )
+        _app().processEvents()
+        assert page.state_json()["ui"]["selected_operation_id"] == region_id
+        assert str(page.viewer.gcode_preview.source_path) == f"<generated:{region_id}>"
+    
+        page.operation_instance_combo.setCurrentIndex(
+            page.operation_instance_combo.findData(zigzag_id)
+        )
+        _app().processEvents()
+        assert page.state_json()["ui"]["selected_operation_id"] == zigzag_id
+        assert str(page.viewer.gcode_preview.source_path) == f"<generated:{zigzag_id}>"
+>       assert page.export_button.isEnabled()
+E       assert False
+E        +  where False = <built-in method isEnabled of QPushButton object at 0x000001C34F8F0DD0>()
+E        +    where <built-in method isEnabled of QPushButton object at 0x000001C34F8F0DD0> = <PyQt5.QtWidgets.QPushButton object at 0x000001C34F8F0DD0>.isEnabled
+E        +      where <PyQt5.QtWidgets.QPushButton object at 0x000001C34F8F0DD0> = <five_axis_slicer.planar_ui.PlanarPage object at 0x000001C34F792BA0>.export_button
+
+tests\test_planar_ui.py:212: AssertionError
+________ test_qt_cancel_button_preserves_the_previous_generated_result ________
+
+    def test_qt_cancel_button_preserves_the_previous_generated_result() -> None:
+        page = PlanarPage(controller=_path_controller(), viewer_factory=TubeViewerStub)
+        page.operation_type_combo.setCurrentIndex(
+            page.operation_type_combo.findData("planar_zigzag")
+        )
+        page.create_button.click()
+        page.first_layer_spin.setValue(0.0)
+        page.last_layer_spin.setValue(0.0)
+        page.feedrate_spin.setValue(100.0)
+        page.travel_feedrate_spin.setValue(100.0)
+        page.apply_button.click()
+        page.generate_button.click()
+        operation_id = page.controller.operations[-1].operation_id
+        previous = page.controller.product_result(operation_id)
+    
+        QTimer.singleShot(0, page.cancel_button.click)
+        page.generate_button.click()
+    
+        assert page.controller.product_result(operation_id) is previous
+>       assert page.controller.product_state(operation_id).status in {"ready", "warning"}
+E       AssertionError: assert 'error' in {'ready', 'warning'}
+E        +  where 'error' = PlanarProductState(operation_id='planar-operation-1', parameter_semantic_sha256='1b94982d392c1da1322aa2ecb18dd37cb45f9...2a5bcad68a17a87da30a45612a76ba3ae093c5a0c53e016e09c2e4b6474', 'generation_context_version': 'planar-build-context-v2'}).status
+E        +    where PlanarProductState(operation_id='planar-operation-1', parameter_semantic_sha256='1b94982d392c1da1322aa2ecb18dd37cb45f9...2a5bcad68a17a87da30a45612a76ba3ae093c5a0c53e016e09c2e4b6474', 'generation_context_version': 'planar-build-context-v2'}) = product_state('planar-operation-1')
+E        +      where product_state = <five_axis_slicer.planar_controller.PlanarController object at 0x000001C34FD0EF30>.product_state
+E        +        where <five_axis_slicer.planar_controller.PlanarController object at 0x000001C34FD0EF30> = <five_axis_slicer.planar_ui.PlanarPage object at 0x000001C34F8F31D0>.controller
+
+tests\test_planar_ui.py:234: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_planar_automation.py::test_planar_routes_use_the_shared_command_entrypoint
+FAILED tests/test_planar_ui.py::test_existing_operations_can_be_selected_and_previewed_independently
+FAILED tests/test_planar_ui.py::test_qt_cancel_button_preserves_the_previous_generated_result
+3 failed, 113 passed in 20.35s
+PYTEST_EXIT_CODE=1

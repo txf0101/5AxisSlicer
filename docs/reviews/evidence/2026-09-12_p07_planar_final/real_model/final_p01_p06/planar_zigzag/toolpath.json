@@ -1,0 +1,6625 @@
+{
+  "coordinate_frame": "workpiece_build",
+  "events": [
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 1
+      },
+      "duration_s": null,
+      "event_id": "event-0000001",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 6
+      },
+      "duration_s": null,
+      "event_id": "event-0000002",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 7
+      },
+      "duration_s": null,
+      "event_id": "event-0000003",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 8
+      },
+      "duration_s": null,
+      "event_id": "event-0000004",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 9
+      },
+      "duration_s": null,
+      "event_id": "event-0000005",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 10
+      },
+      "duration_s": null,
+      "event_id": "event-0000006",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 11
+      },
+      "duration_s": null,
+      "event_id": "event-0000007",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 12
+      },
+      "duration_s": null,
+      "event_id": "event-0000008",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 13
+      },
+      "duration_s": null,
+      "event_id": "event-0000009",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 14
+      },
+      "duration_s": null,
+      "event_id": "event-0000010",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 15
+      },
+      "duration_s": null,
+      "event_id": "event-0000011",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 16
+      },
+      "duration_s": null,
+      "event_id": "event-0000012",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 17
+      },
+      "duration_s": null,
+      "event_id": "event-0000013",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 18
+      },
+      "duration_s": null,
+      "event_id": "event-0000014",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 19
+      },
+      "duration_s": null,
+      "event_id": "event-0000015",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 20
+      },
+      "duration_s": null,
+      "event_id": "event-0000016",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 21
+      },
+      "duration_s": null,
+      "event_id": "event-0000017",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 22
+      },
+      "duration_s": null,
+      "event_id": "event-0000018",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 23
+      },
+      "duration_s": null,
+      "event_id": "event-0000019",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 24
+      },
+      "duration_s": null,
+      "event_id": "event-0000020",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 25
+      },
+      "duration_s": null,
+      "event_id": "event-0000021",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 26
+      },
+      "duration_s": null,
+      "event_id": "event-0000022",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 27
+      },
+      "duration_s": null,
+      "event_id": "event-0000023",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 28
+      },
+      "duration_s": null,
+      "event_id": "event-0000024",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 29
+      },
+      "duration_s": null,
+      "event_id": "event-0000025",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 30
+      },
+      "duration_s": null,
+      "event_id": "event-0000026",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 31
+      },
+      "duration_s": null,
+      "event_id": "event-0000027",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 32
+      },
+      "duration_s": null,
+      "event_id": "event-0000028",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 33
+      },
+      "duration_s": null,
+      "event_id": "event-0000029",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 34
+      },
+      "duration_s": null,
+      "event_id": "event-0000030",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 35
+      },
+      "duration_s": null,
+      "event_id": "event-0000031",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 36
+      },
+      "duration_s": null,
+      "event_id": "event-0000032",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 37
+      },
+      "duration_s": null,
+      "event_id": "event-0000033",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 38
+      },
+      "duration_s": null,
+      "event_id": "event-0000034",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 39
+      },
+      "duration_s": null,
+      "event_id": "event-0000035",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 40
+      },
+      "duration_s": null,
+      "event_id": "event-0000036",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 41
+      },
+      "duration_s": null,
+      "event_id": "event-0000037",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 42
+      },
+      "duration_s": null,
+      "event_id": "event-0000038",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 43
+      },
+      "duration_s": null,
+      "event_id": "event-0000039",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 44
+      },
+      "duration_s": null,
+      "event_id": "event-0000040",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 45
+      },
+      "duration_s": null,
+      "event_id": "event-0000041",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 46
+      },
+      "duration_s": null,
+      "event_id": "event-0000042",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 47
+      },
+      "duration_s": null,
+      "event_id": "event-0000043",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 48
+      },
+      "duration_s": null,
+      "event_id": "event-0000044",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 49
+      },
+      "duration_s": null,
+      "event_id": "event-0000045",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 50
+      },
+      "duration_s": null,
+      "event_id": "event-0000046",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 51
+      },
+      "duration_s": null,
+      "event_id": "event-0000047",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 52
+      },
+      "duration_s": null,
+      "event_id": "event-0000048",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 53
+      },
+      "duration_s": null,
+      "event_id": "event-0000049",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 54
+      },
+      "duration_s": null,
+      "event_id": "event-0000050",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 55
+      },
+      "duration_s": null,
+      "event_id": "event-0000051",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 56
+      },
+      "duration_s": null,
+      "event_id": "event-0000052",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 57
+      },
+      "duration_s": null,
+      "event_id": "event-0000053",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 58
+      },
+      "duration_s": null,
+      "event_id": "event-0000054",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 59
+      },
+      "duration_s": null,
+      "event_id": "event-0000055",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 60
+      },
+      "duration_s": null,
+      "event_id": "event-0000056",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 61
+      },
+      "duration_s": null,
+      "event_id": "event-0000057",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 62
+      },
+      "duration_s": null,
+      "event_id": "event-0000058",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 63
+      },
+      "duration_s": null,
+      "event_id": "event-0000059",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 64
+      },
+      "duration_s": null,
+      "event_id": "event-0000060",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 65
+      },
+      "duration_s": null,
+      "event_id": "event-0000061",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 66
+      },
+      "duration_s": null,
+      "event_id": "event-0000062",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 67
+      },
+      "duration_s": null,
+      "event_id": "event-0000063",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 68
+      },
+      "duration_s": null,
+      "event_id": "event-0000064",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 69
+      },
+      "duration_s": null,
+      "event_id": "event-0000065",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 70
+      },
+      "duration_s": null,
+      "event_id": "event-0000066",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 71
+      },
+      "duration_s": null,
+      "event_id": "event-0000067",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 72
+      },
+      "duration_s": null,
+      "event_id": "event-0000068",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 73
+      },
+      "duration_s": null,
+      "event_id": "event-0000069",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 74
+      },
+      "duration_s": null,
+      "event_id": "event-0000070",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 75
+      },
+      "duration_s": null,
+      "event_id": "event-0000071",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 76
+      },
+      "duration_s": null,
+      "event_id": "event-0000072",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 77
+      },
+      "duration_s": null,
+      "event_id": "event-0000073",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 78
+      },
+      "duration_s": null,
+      "event_id": "event-0000074",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 79
+      },
+      "duration_s": null,
+      "event_id": "event-0000075",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 80
+      },
+      "duration_s": null,
+      "event_id": "event-0000076",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 81
+      },
+      "duration_s": null,
+      "event_id": "event-0000077",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 82
+      },
+      "duration_s": null,
+      "event_id": "event-0000078",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 83
+      },
+      "duration_s": null,
+      "event_id": "event-0000079",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 84
+      },
+      "duration_s": null,
+      "event_id": "event-0000080",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 85
+      },
+      "duration_s": null,
+      "event_id": "event-0000081",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 86
+      },
+      "duration_s": null,
+      "event_id": "event-0000082",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 87
+      },
+      "duration_s": null,
+      "event_id": "event-0000083",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 88
+      },
+      "duration_s": null,
+      "event_id": "event-0000084",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 89
+      },
+      "duration_s": null,
+      "event_id": "event-0000085",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 90
+      },
+      "duration_s": null,
+      "event_id": "event-0000086",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 91
+      },
+      "duration_s": null,
+      "event_id": "event-0000087",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 92
+      },
+      "duration_s": null,
+      "event_id": "event-0000088",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 93
+      },
+      "duration_s": null,
+      "event_id": "event-0000089",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 94
+      },
+      "duration_s": null,
+      "event_id": "event-0000090",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 95
+      },
+      "duration_s": null,
+      "event_id": "event-0000091",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 96
+      },
+      "duration_s": null,
+      "event_id": "event-0000092",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 97
+      },
+      "duration_s": null,
+      "event_id": "event-0000093",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 98
+      },
+      "duration_s": null,
+      "event_id": "event-0000094",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 99
+      },
+      "duration_s": null,
+      "event_id": "event-0000095",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 100
+      },
+      "duration_s": null,
+      "event_id": "event-0000096",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 101
+      },
+      "duration_s": null,
+      "event_id": "event-0000097",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 102
+      },
+      "duration_s": null,
+      "event_id": "event-0000098",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 103
+      },
+      "duration_s": null,
+      "event_id": "event-0000099",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 104
+      },
+      "duration_s": null,
+      "event_id": "event-0000100",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 105
+      },
+      "duration_s": null,
+      "event_id": "event-0000101",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 106
+      },
+      "duration_s": null,
+      "event_id": "event-0000102",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 107
+      },
+      "duration_s": null,
+      "event_id": "event-0000103",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 108
+      },
+      "duration_s": null,
+      "event_id": "event-0000104",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 109
+      },
+      "duration_s": null,
+      "event_id": "event-0000105",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 110
+      },
+      "duration_s": null,
+      "event_id": "event-0000106",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 111
+      },
+      "duration_s": null,
+      "event_id": "event-0000107",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 112
+      },
+      "duration_s": null,
+      "event_id": "event-0000108",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 113
+      },
+      "duration_s": null,
+      "event_id": "event-0000109",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 114
+      },
+      "duration_s": null,
+      "event_id": "event-0000110",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 115
+      },
+      "duration_s": null,
+      "event_id": "event-0000111",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 116
+      },
+      "duration_s": null,
+      "event_id": "event-0000112",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 117
+      },
+      "duration_s": null,
+      "event_id": "event-0000113",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 118
+      },
+      "duration_s": null,
+      "event_id": "event-0000114",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 119
+      },
+      "duration_s": null,
+      "event_id": "event-0000115",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 120
+      },
+      "duration_s": null,
+      "event_id": "event-0000116",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 121
+      },
+      "duration_s": null,
+      "event_id": "event-0000117",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 122
+      },
+      "duration_s": null,
+      "event_id": "event-0000118",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 123
+      },
+      "duration_s": null,
+      "event_id": "event-0000119",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 124
+      },
+      "duration_s": null,
+      "event_id": "event-0000120",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 125
+      },
+      "duration_s": null,
+      "event_id": "event-0000121",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 126
+      },
+      "duration_s": null,
+      "event_id": "event-0000122",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 127
+      },
+      "duration_s": null,
+      "event_id": "event-0000123",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 128
+      },
+      "duration_s": null,
+      "event_id": "event-0000124",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 129
+      },
+      "duration_s": null,
+      "event_id": "event-0000125",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 130
+      },
+      "duration_s": null,
+      "event_id": "event-0000126",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 131
+      },
+      "duration_s": null,
+      "event_id": "event-0000127",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 132
+      },
+      "duration_s": null,
+      "event_id": "event-0000128",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 133
+      },
+      "duration_s": null,
+      "event_id": "event-0000129",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 134
+      },
+      "duration_s": null,
+      "event_id": "event-0000130",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 135
+      },
+      "duration_s": null,
+      "event_id": "event-0000131",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 136
+      },
+      "duration_s": null,
+      "event_id": "event-0000132",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 137
+      },
+      "duration_s": null,
+      "event_id": "event-0000133",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 138
+      },
+      "duration_s": null,
+      "event_id": "event-0000134",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 139
+      },
+      "duration_s": null,
+      "event_id": "event-0000135",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 140
+      },
+      "duration_s": null,
+      "event_id": "event-0000136",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 141
+      },
+      "duration_s": null,
+      "event_id": "event-0000137",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_zigzag",
+      "region_id": "region-0001",
+      "stage_id": "planar"
+    }
+  ],
+  "operation_id": "p06-planar_zigzag",
+  "points": [
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000001",
+      "point_type": "approach",
+      "position": [
+        4.784314659702262,
+        -9.27846090760633,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.5969150952687805,
+        -0.8023044117043497,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "skin",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.17324895884585248,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000002",
+      "point_type": "deposition",
+      "position": [
+        5.071578322965287,
+        -9.664567585398588,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.5969150952687805,
+        -0.8023044117043497,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "skin",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 17.610706673975436,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000003",
+      "point_type": "deposition",
+      "position": [
+        34.2719141545409,
+        -48.91214985679952,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.5969164721198674,
+        -0.8023033873242539,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "skin",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2239964864322828,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000004",
+      "point_type": "deposition",
+      "position": [
+        36.99973784103427,
+        -46.88263967744324,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.8023033873242589,
+        0.5969164721198605,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "skin",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 17.78395601096374,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000005",
+      "point_type": "deposition",
+      "position": [
+        7.512137795048873,
+        -7.248949829079185,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -0.5969164571713012,
+        0.8023033984460382,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "skin",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2239965204678172,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000006",
+      "point_type": "deposition",
+      "position": [
+        4.784314659702262,
+        -9.27846090760633,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -0.8023032029122508,
+        -0.5969167199842401,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000007",
+      "point_type": "travel",
+      "position": [
+        5.402591627616239,
+        -9.192383898966284,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.1453557185160272,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000008",
+      "point_type": "deposition",
+      "position": [
+        8.58413529016076,
+        -9.192383898966284,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000009",
+      "point_type": "travel",
+      "position": [
+        9.030537341576832,
+        -9.792383898966285,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563783481191826,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000010",
+      "point_type": "deposition",
+      "position": [
+        5.540597485690213,
+        -9.792383898966285,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000011",
+      "point_type": "travel",
+      "position": [
+        5.986999543727604,
+        -10.39238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563783457355053,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000012",
+      "point_type": "deposition",
+      "position": [
+        9.476939392992897,
+        -10.39238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000013",
+      "point_type": "travel",
+      "position": [
+        9.923341444408969,
+        -10.992383898966281,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563783433518283,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000014",
+      "point_type": "deposition",
+      "position": [
+        6.433401601765001,
+        -10.992383898966281,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000015",
+      "point_type": "travel",
+      "position": [
+        6.8798036598023975,
+        -11.592383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563783409681515,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000016",
+      "point_type": "deposition",
+      "position": [
+        10.369743495825041,
+        -11.592383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000017",
+      "point_type": "travel",
+      "position": [
+        10.816145547241113,
+        -12.192383898966284,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563783385844747,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000018",
+      "point_type": "deposition",
+      "position": [
+        7.326205717839795,
+        -12.192383898966284,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000019",
+      "point_type": "travel",
+      "position": [
+        7.772607775877191,
+        -12.792383898966285,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.256378336200798,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000020",
+      "point_type": "deposition",
+      "position": [
+        11.262547598657186,
+        -12.792383898966285,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000021",
+      "point_type": "travel",
+      "position": [
+        11.708949650073254,
+        -13.39238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563783338171222,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000022",
+      "point_type": "deposition",
+      "position": [
+        8.219009833914582,
+        -13.39238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000023",
+      "point_type": "travel",
+      "position": [
+        8.66541189195198,
+        -13.992383898966281,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.256378331433445,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000024",
+      "point_type": "deposition",
+      "position": [
+        12.155351701489327,
+        -13.992383898966281,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000025",
+      "point_type": "travel",
+      "position": [
+        12.601753752905395,
+        -14.592383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.256378329049767,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000026",
+      "point_type": "deposition",
+      "position": [
+        9.111813949989376,
+        -14.592383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000027",
+      "point_type": "travel",
+      "position": [
+        9.558216008026772,
+        -15.192383898966284,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563783266660904,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000028",
+      "point_type": "deposition",
+      "position": [
+        13.048155804321468,
+        -15.192383898966284,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000029",
+      "point_type": "travel",
+      "position": [
+        13.494557855737543,
+        -15.792383898966285,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563783242824151,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000030",
+      "point_type": "deposition",
+      "position": [
+        10.004618066064168,
+        -15.792383898966285,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000031",
+      "point_type": "travel",
+      "position": [
+        10.45102012410156,
+        -16.39238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.256378321898737,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000032",
+      "point_type": "deposition",
+      "position": [
+        13.940959907153609,
+        -16.39238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000033",
+      "point_type": "travel",
+      "position": [
+        14.38736195856968,
+        -16.99238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.256378319515061,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000034",
+      "point_type": "deposition",
+      "position": [
+        10.897422182138955,
+        -16.99238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000035",
+      "point_type": "travel",
+      "position": [
+        11.343824240176353,
+        -17.592383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563783171313838,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000036",
+      "point_type": "deposition",
+      "position": [
+        14.833764009985753,
+        -17.592383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000037",
+      "point_type": "travel",
+      "position": [
+        15.280166061401825,
+        -18.192383898966284,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563783147477074,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000038",
+      "point_type": "deposition",
+      "position": [
+        11.79022629821375,
+        -18.192383898966284,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000039",
+      "point_type": "travel",
+      "position": [
+        12.236628356251142,
+        -18.792383898966282,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563783123640306,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000040",
+      "point_type": "deposition",
+      "position": [
+        15.726568112817894,
+        -18.792383898966282,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000041",
+      "point_type": "travel",
+      "position": [
+        16.17297016423397,
+        -19.392383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563783099803552,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000042",
+      "point_type": "deposition",
+      "position": [
+        12.683030414288538,
+        -19.392383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000043",
+      "point_type": "travel",
+      "position": [
+        13.129432472325934,
+        -19.99238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563783075966775,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000044",
+      "point_type": "deposition",
+      "position": [
+        16.61937221565004,
+        -19.99238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000045",
+      "point_type": "travel",
+      "position": [
+        17.065774267066107,
+        -20.592383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563783052129993,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000046",
+      "point_type": "deposition",
+      "position": [
+        13.57583453036333,
+        -20.592383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000047",
+      "point_type": "travel",
+      "position": [
+        14.022236588400723,
+        -21.19238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563783028293243,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000048",
+      "point_type": "deposition",
+      "position": [
+        17.51217631848218,
+        -21.19238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000049",
+      "point_type": "travel",
+      "position": [
+        17.95857836989825,
+        -21.792383898966282,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563783004456475,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000050",
+      "point_type": "deposition",
+      "position": [
+        14.46863864643812,
+        -21.792383898966282,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000051",
+      "point_type": "travel",
+      "position": [
+        14.915040704475516,
+        -22.392383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782980619709,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000052",
+      "point_type": "deposition",
+      "position": [
+        18.404980421314324,
+        -22.392383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000053",
+      "point_type": "travel",
+      "position": [
+        18.851382472730396,
+        -22.99238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782956782943,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000054",
+      "point_type": "deposition",
+      "position": [
+        15.361442762512912,
+        -22.99238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000055",
+      "point_type": "travel",
+      "position": [
+        15.807844820550308,
+        -23.592383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782932946164,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000056",
+      "point_type": "deposition",
+      "position": [
+        19.297784524146465,
+        -23.592383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000057",
+      "point_type": "travel",
+      "position": [
+        19.744186575562534,
+        -24.19238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782909109398,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000058",
+      "point_type": "deposition",
+      "position": [
+        16.2542468785877,
+        -24.19238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000059",
+      "point_type": "travel",
+      "position": [
+        16.700648936625097,
+        -24.792383898966282,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782885272645,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000060",
+      "point_type": "deposition",
+      "position": [
+        20.19058862697861,
+        -24.792383898966282,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000061",
+      "point_type": "travel",
+      "position": [
+        20.63699067839468,
+        -25.392383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782861435877,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000062",
+      "point_type": "deposition",
+      "position": [
+        17.147050994662493,
+        -25.392383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000063",
+      "point_type": "travel",
+      "position": [
+        17.593453052699886,
+        -25.99238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.25637828375991,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000064",
+      "point_type": "deposition",
+      "position": [
+        21.083392729810747,
+        -25.99238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000065",
+      "point_type": "travel",
+      "position": [
+        21.529794781226823,
+        -26.592383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782813762345,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000066",
+      "point_type": "deposition",
+      "position": [
+        18.03985511073728,
+        -26.592383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000067",
+      "point_type": "travel",
+      "position": [
+        18.486257168774678,
+        -27.19238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782789925568,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000068",
+      "point_type": "deposition",
+      "position": [
+        21.97619683264289,
+        -27.19238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000069",
+      "point_type": "travel",
+      "position": [
+        22.422598884058964,
+        -27.792383898966282,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.25637827660888,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000070",
+      "point_type": "deposition",
+      "position": [
+        18.932659226812074,
+        -27.792383898966282,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000071",
+      "point_type": "travel",
+      "position": [
+        19.379061284849474,
+        -28.392383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782742252023,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000072",
+      "point_type": "deposition",
+      "position": [
+        22.869000935475036,
+        -28.392383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000073",
+      "point_type": "travel",
+      "position": [
+        23.315402986891108,
+        -28.99238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782718415282,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000074",
+      "point_type": "deposition",
+      "position": [
+        19.825463342886863,
+        -28.99238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000075",
+      "point_type": "travel",
+      "position": [
+        20.27186540092426,
+        -29.592383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782694578502,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000076",
+      "point_type": "deposition",
+      "position": [
+        23.761805038307177,
+        -29.592383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000077",
+      "point_type": "travel",
+      "position": [
+        24.208207089723246,
+        -30.19238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782670741723,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000078",
+      "point_type": "deposition",
+      "position": [
+        20.718267458961655,
+        -30.19238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000079",
+      "point_type": "travel",
+      "position": [
+        21.164669516999055,
+        -30.792383898966282,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782646904957,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000080",
+      "point_type": "deposition",
+      "position": [
+        24.65460914113932,
+        -30.792383898966282,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000081",
+      "point_type": "travel",
+      "position": [
+        25.10101119255539,
+        -31.392383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782623068178,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000082",
+      "point_type": "deposition",
+      "position": [
+        21.61107157503645,
+        -31.392383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000083",
+      "point_type": "travel",
+      "position": [
+        22.05747363307384,
+        -31.99238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.256378259923144,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000084",
+      "point_type": "deposition",
+      "position": [
+        25.547413243971462,
+        -31.99238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000085",
+      "point_type": "travel",
+      "position": [
+        25.993815295387535,
+        -32.59238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.256378257539467,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000086",
+      "point_type": "deposition",
+      "position": [
+        22.503875691111237,
+        -32.59238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000087",
+      "point_type": "travel",
+      "position": [
+        22.950277749148636,
+        -33.192383898966284,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782551557894,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000088",
+      "point_type": "deposition",
+      "position": [
+        26.440217346803607,
+        -33.192383898966284,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000089",
+      "point_type": "travel",
+      "position": [
+        26.886619398219672,
+        -33.79238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782527721126,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000090",
+      "point_type": "deposition",
+      "position": [
+        23.396679807186025,
+        -33.79238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000091",
+      "point_type": "travel",
+      "position": [
+        23.84308186522342,
+        -34.39238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782503884362,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000092",
+      "point_type": "deposition",
+      "position": [
+        27.333021449635744,
+        -34.39238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000093",
+      "point_type": "travel",
+      "position": [
+        27.779423501051816,
+        -34.99238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782480047594,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000094",
+      "point_type": "deposition",
+      "position": [
+        24.289483923260818,
+        -34.99238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000095",
+      "point_type": "travel",
+      "position": [
+        24.735885981298217,
+        -35.59238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782456210817,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000096",
+      "point_type": "deposition",
+      "position": [
+        28.22582555246789,
+        -35.59238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000097",
+      "point_type": "travel",
+      "position": [
+        28.672227603883965,
+        -36.192383898966284,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782432374075,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000098",
+      "point_type": "deposition",
+      "position": [
+        25.18228803933561,
+        -36.192383898966284,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000099",
+      "point_type": "travel",
+      "position": [
+        25.628690097373003,
+        -36.79238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782408537294,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000100",
+      "point_type": "deposition",
+      "position": [
+        29.11862965530003,
+        -36.79238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000101",
+      "point_type": "travel",
+      "position": [
+        29.565031706716102,
+        -37.39238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.256378238470053,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000102",
+      "point_type": "deposition",
+      "position": [
+        26.0750921554104,
+        -37.39238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000103",
+      "point_type": "travel",
+      "position": [
+        26.521494213447795,
+        -37.99238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782360863762,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000104",
+      "point_type": "deposition",
+      "position": [
+        30.011433758132174,
+        -37.99238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000105",
+      "point_type": "travel",
+      "position": [
+        30.457835809548246,
+        -38.59238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782337026999,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000106",
+      "point_type": "deposition",
+      "position": [
+        26.96789627148519,
+        -38.59238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000107",
+      "point_type": "travel",
+      "position": [
+        27.414298329522587,
+        -39.192383898966284,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.256378231319023,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000108",
+      "point_type": "deposition",
+      "position": [
+        30.90423786096432,
+        -39.192383898966284,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000109",
+      "point_type": "travel",
+      "position": [
+        31.350639912380387,
+        -39.79238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782289353465,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000110",
+      "point_type": "deposition",
+      "position": [
+        27.86070038755998,
+        -39.79238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000111",
+      "point_type": "travel",
+      "position": [
+        28.307102445597376,
+        -40.39238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782265516699,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000112",
+      "point_type": "deposition",
+      "position": [
+        31.79704196379646,
+        -40.39238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000113",
+      "point_type": "travel",
+      "position": [
+        32.24344401521253,
+        -40.99238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782241679933,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000114",
+      "point_type": "deposition",
+      "position": [
+        28.753504503634773,
+        -40.99238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000115",
+      "point_type": "travel",
+      "position": [
+        29.19990656167217,
+        -41.59238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782217843167,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000116",
+      "point_type": "deposition",
+      "position": [
+        32.689846066628604,
+        -41.59238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000117",
+      "point_type": "travel",
+      "position": [
+        33.136248118044676,
+        -42.192383898966284,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.25637821940064,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000118",
+      "point_type": "deposition",
+      "position": [
+        29.646308619709565,
+        -42.192383898966284,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000119",
+      "point_type": "travel",
+      "position": [
+        30.092710677746954,
+        -42.79238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782170169633,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000120",
+      "point_type": "deposition",
+      "position": [
+        33.58265016946074,
+        -42.79238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000121",
+      "point_type": "travel",
+      "position": [
+        34.029052220876814,
+        -43.39238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782146332856,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000122",
+      "point_type": "deposition",
+      "position": [
+        30.539112735784354,
+        -43.39238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000123",
+      "point_type": "travel",
+      "position": [
+        30.98551479382175,
+        -43.99238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782122496088,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000124",
+      "point_type": "deposition",
+      "position": [
+        34.475454272292886,
+        -43.99238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000125",
+      "point_type": "travel",
+      "position": [
+        34.92185632370896,
+        -44.59238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782098659324,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000126",
+      "point_type": "deposition",
+      "position": [
+        31.431916851859146,
+        -44.59238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000127",
+      "point_type": "travel",
+      "position": [
+        31.878318909896542,
+        -45.192383898966284,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782074822556,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000128",
+      "point_type": "deposition",
+      "position": [
+        35.36825837512503,
+        -45.192383898966284,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000129",
+      "point_type": "travel",
+      "position": [
+        35.814660426541096,
+        -45.79238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.256378205098578,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000130",
+      "point_type": "deposition",
+      "position": [
+        32.324720967933935,
+        -45.79238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000131",
+      "point_type": "travel",
+      "position": [
+        32.77112302597133,
+        -46.39238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2563782027149024,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000132",
+      "point_type": "deposition",
+      "position": [
+        36.26106247795717,
+        -46.39238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000133",
+      "point_type": "travel",
+      "position": [
+        36.349649966445874,
+        -46.99238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.1275649576773727,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000134",
+      "point_type": "deposition",
+      "position": [
+        33.21752508400873,
+        -46.99238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000135",
+      "point_type": "travel",
+      "position": [
+        33.66392714204613,
+        -47.59238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.6765389746064195,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000136",
+      "point_type": "deposition",
+      "position": [
+        35.543202071508404,
+        -47.59238389896628,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000137",
+      "point_type": "travel",
+      "position": [
+        34.73675417657094,
+        -48.192383898966284,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.22551299153547147,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000138",
+      "point_type": "deposition",
+      "position": [
+        34.11032920008352,
+        -48.192383898966284,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000139",
+      "point_type": "travel",
+      "position": [
+        8.137733238744683,
+        -8.592383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.6943299251133187,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000140",
+      "point_type": "deposition",
+      "position": [
+        6.209039002318798,
+        -8.592383898966283,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000141",
+      "point_type": "travel",
+      "position": [
+        7.0154863770213565,
+        -7.992383898966281,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.2433041317106117,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_zigzag",
+      "point_id": "point-0000142",
+      "point_type": "deposition",
+      "position": [
+        7.691331187328611,
+        -7.992383898966281,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "toolpath_id": "p06-planar_zigzag-zigzag-v3",
+  "units": {
+    "angle": "rad",
+    "feedrate": "mm_min",
+    "length": "mm",
+    "material_volume": "mm3"
+  }
+}

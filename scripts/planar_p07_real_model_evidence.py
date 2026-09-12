@@ -217,7 +217,12 @@ def _check_analytic_truth(result) -> dict[str, object]:
         expected_stage = (
             "planar_support" if midpoint[2] <= 1.0 + 1.0e-9 else ("planar_support_interface")
         )
-        if current.stage_id != expected_stage or current.extrusion_role != "support":
+        expected_role = (
+            "support_material"
+            if expected_stage == "planar_support"
+            else "support_interface"
+        )
+        if current.stage_id != expected_stage or current.extrusion_role != expected_role:
             raise RuntimeError(
                 f"Unexpected support provenance at {midpoint}: "
                 f"{current.stage_id}/{current.extrusion_role}"

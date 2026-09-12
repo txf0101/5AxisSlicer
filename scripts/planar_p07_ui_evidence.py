@@ -151,7 +151,8 @@ def _capture(page: PlanarPage, output: Path, filename: str, case: dict[str, obje
     if hasattr(page.viewer, "fit_view"):
         page.viewer.fit_view()
     scroll_bar = page.editor_scroll.verticalScrollBar()
-    scroll_bar.setValue(scroll_bar.maximum())
+    scroll_position = str(case.get("editor_scroll_position", "bottom"))
+    scroll_bar.setValue(0 if scroll_position == "top" else scroll_bar.maximum())
     QApplication.processEvents()
     path = output / filename
     if not page.grab().save(str(path)):
@@ -212,6 +213,19 @@ def _ready_cases(app, model, body_id: str, output: Path) -> list[dict]:
                 case,
             )
         )
+        if index <= 2:
+            records.append(
+                _capture(
+                    page,
+                    output,
+                    f"00_support_{pattern}_{language}_{width}x{height}_parameters.png",
+                    {
+                        **case,
+                        "kind": "ready_parameters",
+                        "editor_scroll_position": "top",
+                    },
+                )
+            )
         page.close()
     return records
 

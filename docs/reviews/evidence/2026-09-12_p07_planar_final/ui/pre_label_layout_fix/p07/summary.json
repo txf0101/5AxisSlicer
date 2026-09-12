@@ -1,0 +1,1390 @@
+{
+  "capture_kind": "Qt widget grab with the project OpenGL viewer",
+  "cases": [
+    {
+      "buttons": {
+        "取消生成": {
+          "available_text_width": 344,
+          "height": 34,
+          "text": "取消生成",
+          "text_fits": true,
+          "text_width": 72,
+          "width": 356,
+          "x": 965,
+          "y": 273
+        },
+        "导出结果": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "导出结果",
+          "text_fits": true,
+          "text_width": 72,
+          "width": 173,
+          "x": 1148,
+          "y": 230
+        },
+        "应用": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "应用",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 173,
+          "x": 1148,
+          "y": 187
+        },
+        "打开 STEP": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "打开 STEP",
+          "text_fits": true,
+          "text_width": 81,
+          "width": 173,
+          "x": 1148,
+          "y": -2304
+        },
+        "撤销": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "撤销",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 174,
+          "x": 965,
+          "y": 316
+        },
+        "新建操作": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "新建操作",
+          "text_fits": true,
+          "text_width": 72,
+          "width": 174,
+          "x": 965,
+          "y": 187
+        },
+        "生成预览": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "生成预览",
+          "text_fits": true,
+          "text_width": 72,
+          "width": 174,
+          "x": 965,
+          "y": 230
+        },
+        "返回": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "返回",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 174,
+          "x": 965,
+          "y": -2304
+        },
+        "重做": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "重做",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 173,
+          "x": 1148,
+          "y": 316
+        }
+      },
+      "clipped_visible_buttons": {},
+      "collisions": [],
+      "editor_scroll": [
+        2350,
+        2350
+      ],
+      "expected_state": "ready_or_warning",
+      "export_enabled": true,
+      "generate_enabled": true,
+      "height": 768,
+      "horizontal_scroll_max": 0,
+      "issues_text": "警告 — MACHINE_REFERENCE_ONLY: 当前为内置参考机型，仅用于离线检查。 (builtin.machine.generic_xyzac_reference.v1)\n警告 — xyzac.rotary_singularity: 路径经过参考机型的回转奇异姿态，请核对轴姿态与连续性。 (point-0000001)\n警告 — planar.support_joint_schedule_unverified: 当前为独立支撑路径，尚未验证零件与支撑的联合逐层次序和完整喷嘴扫掠。 (body_001)",
+      "kind": "ready",
+      "language": "zh",
+      "model_visible": true,
+      "path_segment_count": 33,
+      "pattern": "grid",
+      "preview_source": "<generated:planar-operation-1>",
+      "product": {
+        "operation_id": "planar-operation-1",
+        "operation_type": "planar_support",
+        "parameter_semantic_sha256": "79d7d2e16704211e22235c5fea6dd8c950e82fab9529340a74356ce973036b38",
+        "product_status": "warning",
+        "readback_passed": true,
+        "result_exportable": true,
+        "result_retained": true,
+        "toolpath_point_count": 66
+      },
+      "rendered_size": [
+        1366,
+        768
+      ],
+      "screenshot": "01_support_grid_zh_1366x768_ready.png",
+      "status_text": "路径已生成并完成 G-code 回读，存在警告。请核对下方原因。",
+      "support_controls": {
+        "interface_layers": 2,
+        "interface_spacing_mm": 0.6,
+        "labels": {
+          "support_angle": "支撑悬垂角 (deg)",
+          "support_interface_spacing": "接触层间距 (mm)",
+          "support_interfaces": "支撑接触层数",
+          "support_pattern": "支撑图案",
+          "support_spacing": "支撑线间距 (mm)",
+          "support_xy_gap": "支撑 XY 间隙 (mm)",
+          "support_z_gap": "支撑 Z 间隙 (mm)"
+        },
+        "line_spacing_mm": 1.0,
+        "overhang_angle_deg": 45.0,
+        "pattern": "grid",
+        "pattern_text": "网格",
+        "xy_gap_mm": 0.0,
+        "z_gap_mm": 0.0
+      },
+      "view": "isometric",
+      "viewer_backend": "opengl",
+      "width": 1366
+    },
+    {
+      "buttons": {
+        "取消生成": {
+          "available_text_width": 344,
+          "height": 34,
+          "text": "取消生成",
+          "text_fits": true,
+          "text_width": 72,
+          "width": 356,
+          "x": 965,
+          "y": 2623
+        },
+        "导出结果": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "导出结果",
+          "text_fits": true,
+          "text_width": 72,
+          "width": 173,
+          "x": 1148,
+          "y": 2580
+        },
+        "应用": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "应用",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 173,
+          "x": 1148,
+          "y": 2537
+        },
+        "打开 STEP": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "打开 STEP",
+          "text_fits": true,
+          "text_width": 81,
+          "width": 173,
+          "x": 1148,
+          "y": 46
+        },
+        "撤销": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "撤销",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 174,
+          "x": 965,
+          "y": 2666
+        },
+        "新建操作": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "新建操作",
+          "text_fits": true,
+          "text_width": 72,
+          "width": 174,
+          "x": 965,
+          "y": 2537
+        },
+        "生成预览": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "生成预览",
+          "text_fits": true,
+          "text_width": 72,
+          "width": 174,
+          "x": 965,
+          "y": 2580
+        },
+        "返回": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "返回",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 174,
+          "x": 965,
+          "y": 46
+        },
+        "重做": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "重做",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 173,
+          "x": 1148,
+          "y": 2666
+        }
+      },
+      "clipped_visible_buttons": {},
+      "collisions": [],
+      "editor_scroll": [
+        0,
+        2350
+      ],
+      "editor_scroll_position": "top",
+      "expected_state": "ready_or_warning",
+      "export_enabled": true,
+      "generate_enabled": true,
+      "height": 768,
+      "horizontal_scroll_max": 0,
+      "issues_text": "警告 — MACHINE_REFERENCE_ONLY: 当前为内置参考机型，仅用于离线检查。 (builtin.machine.generic_xyzac_reference.v1)\n警告 — xyzac.rotary_singularity: 路径经过参考机型的回转奇异姿态，请核对轴姿态与连续性。 (point-0000001)\n警告 — planar.support_joint_schedule_unverified: 当前为独立支撑路径，尚未验证零件与支撑的联合逐层次序和完整喷嘴扫掠。 (body_001)",
+      "kind": "ready_parameters",
+      "language": "zh",
+      "model_visible": true,
+      "path_segment_count": 33,
+      "pattern": "grid",
+      "preview_source": "<generated:planar-operation-1>",
+      "product": {
+        "operation_id": "planar-operation-1",
+        "operation_type": "planar_support",
+        "parameter_semantic_sha256": "79d7d2e16704211e22235c5fea6dd8c950e82fab9529340a74356ce973036b38",
+        "product_status": "warning",
+        "readback_passed": true,
+        "result_exportable": true,
+        "result_retained": true,
+        "toolpath_point_count": 66
+      },
+      "rendered_size": [
+        1366,
+        768
+      ],
+      "screenshot": "00_support_grid_zh_1366x768_parameters.png",
+      "status_text": "路径已生成并完成 G-code 回读，存在警告。请核对下方原因。",
+      "support_controls": {
+        "interface_layers": 2,
+        "interface_spacing_mm": 0.6,
+        "labels": {
+          "support_angle": "支撑悬垂角 (deg)",
+          "support_interface_spacing": "接触层间距 (mm)",
+          "support_interfaces": "支撑接触层数",
+          "support_pattern": "支撑图案",
+          "support_spacing": "支撑线间距 (mm)",
+          "support_xy_gap": "支撑 XY 间隙 (mm)",
+          "support_z_gap": "支撑 Z 间隙 (mm)"
+        },
+        "line_spacing_mm": 1.0,
+        "overhang_angle_deg": 45.0,
+        "pattern": "grid",
+        "pattern_text": "网格",
+        "xy_gap_mm": 0.0,
+        "z_gap_mm": 0.0
+      },
+      "view": "isometric",
+      "viewer_backend": "opengl",
+      "width": 1366
+    },
+    {
+      "buttons": {
+        "Apply": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "Apply",
+          "text_fits": true,
+          "text_width": 45,
+          "width": 173,
+          "x": 1382,
+          "y": 214
+        },
+        "Back": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "Back",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 174,
+          "x": 1199,
+          "y": -1569
+        },
+        "Cancel generation": {
+          "available_text_width": 344,
+          "height": 34,
+          "text": "Cancel generation",
+          "text_fits": true,
+          "text_width": 153,
+          "width": 356,
+          "x": 1199,
+          "y": 300
+        },
+        "Create operation": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "Create operation",
+          "text_fits": true,
+          "text_width": 144,
+          "width": 174,
+          "x": 1199,
+          "y": 214
+        },
+        "Export result": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "Export result",
+          "text_fits": true,
+          "text_width": 117,
+          "width": 173,
+          "x": 1382,
+          "y": 257
+        },
+        "Generate preview": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "Generate preview",
+          "text_fits": true,
+          "text_width": 144,
+          "width": 174,
+          "x": 1199,
+          "y": 257
+        },
+        "Open STEP": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "Open STEP",
+          "text_fits": true,
+          "text_width": 81,
+          "width": 173,
+          "x": 1382,
+          "y": -1569
+        },
+        "Redo": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "Redo",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 173,
+          "x": 1382,
+          "y": 343
+        },
+        "Undo": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "Undo",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 174,
+          "x": 1199,
+          "y": 343
+        }
+      },
+      "clipped_visible_buttons": {},
+      "collisions": [],
+      "editor_scroll": [
+        1615,
+        1615
+      ],
+      "expected_state": "ready_or_warning",
+      "export_enabled": true,
+      "generate_enabled": true,
+      "height": 900,
+      "horizontal_scroll_max": 0,
+      "issues_text": "Warning — MACHINE_REFERENCE_ONLY: The selected built-in reference machine is for offline checks only. (builtin.machine.generic_xyzac_reference.v1)\nWarning — xyzac.rotary_singularity: The path reaches a rotary singularity of the reference machine; review axis orientation and continuity. (point-0000001)\nWarning — planar.support_joint_schedule_unverified: This is an independent support path; combined part/support layer order and full nozzle sweep remain unverified. (body_001)",
+      "kind": "ready",
+      "language": "en",
+      "model_visible": false,
+      "path_segment_count": 28,
+      "pattern": "lines",
+      "preview_source": "<generated:planar-operation-1>",
+      "product": {
+        "operation_id": "planar-operation-1",
+        "operation_type": "planar_support",
+        "parameter_semantic_sha256": "7a278370d063a71d970719f0f426bc66c6f39b0ed794aff0fed3e0289c7c190d",
+        "product_status": "warning",
+        "readback_passed": true,
+        "result_exportable": true,
+        "result_retained": true,
+        "toolpath_point_count": 56
+      },
+      "rendered_size": [
+        1600,
+        900
+      ],
+      "screenshot": "02_support_lines_en_1600x900_ready.png",
+      "status_text": "Toolpath generated and G-code readback passed, with warnings. Review the reasons below.",
+      "support_controls": {
+        "interface_layers": 2,
+        "interface_spacing_mm": 0.6,
+        "labels": {
+          "support_angle": "Support overhang angle (deg)",
+          "support_interface_spacing": "Interface spacing (mm)",
+          "support_interfaces": "Support interface layers",
+          "support_pattern": "Support pattern",
+          "support_spacing": "Support line spacing (mm)",
+          "support_xy_gap": "Support XY gap (mm)",
+          "support_z_gap": "Support Z gap (mm)"
+        },
+        "line_spacing_mm": 1.0,
+        "overhang_angle_deg": 45.0,
+        "pattern": "lines",
+        "pattern_text": "Lines",
+        "xy_gap_mm": 0.0,
+        "z_gap_mm": 0.0
+      },
+      "view": "top",
+      "viewer_backend": "opengl",
+      "width": 1600
+    },
+    {
+      "buttons": {
+        "Apply": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "Apply",
+          "text_fits": true,
+          "text_width": 45,
+          "width": 173,
+          "x": 1382,
+          "y": 1829
+        },
+        "Back": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "Back",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 174,
+          "x": 1199,
+          "y": 46
+        },
+        "Cancel generation": {
+          "available_text_width": 344,
+          "height": 34,
+          "text": "Cancel generation",
+          "text_fits": true,
+          "text_width": 153,
+          "width": 356,
+          "x": 1199,
+          "y": 1915
+        },
+        "Create operation": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "Create operation",
+          "text_fits": true,
+          "text_width": 144,
+          "width": 174,
+          "x": 1199,
+          "y": 1829
+        },
+        "Export result": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "Export result",
+          "text_fits": true,
+          "text_width": 117,
+          "width": 173,
+          "x": 1382,
+          "y": 1872
+        },
+        "Generate preview": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "Generate preview",
+          "text_fits": true,
+          "text_width": 144,
+          "width": 174,
+          "x": 1199,
+          "y": 1872
+        },
+        "Open STEP": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "Open STEP",
+          "text_fits": true,
+          "text_width": 81,
+          "width": 173,
+          "x": 1382,
+          "y": 46
+        },
+        "Redo": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "Redo",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 173,
+          "x": 1382,
+          "y": 1958
+        },
+        "Undo": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "Undo",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 174,
+          "x": 1199,
+          "y": 1958
+        }
+      },
+      "clipped_visible_buttons": {},
+      "collisions": [],
+      "editor_scroll": [
+        0,
+        1615
+      ],
+      "editor_scroll_position": "top",
+      "expected_state": "ready_or_warning",
+      "export_enabled": true,
+      "generate_enabled": true,
+      "height": 900,
+      "horizontal_scroll_max": 0,
+      "issues_text": "Warning — MACHINE_REFERENCE_ONLY: The selected built-in reference machine is for offline checks only. (builtin.machine.generic_xyzac_reference.v1)\nWarning — xyzac.rotary_singularity: The path reaches a rotary singularity of the reference machine; review axis orientation and continuity. (point-0000001)\nWarning — planar.support_joint_schedule_unverified: This is an independent support path; combined part/support layer order and full nozzle sweep remain unverified. (body_001)",
+      "kind": "ready_parameters",
+      "language": "en",
+      "model_visible": false,
+      "path_segment_count": 28,
+      "pattern": "lines",
+      "preview_source": "<generated:planar-operation-1>",
+      "product": {
+        "operation_id": "planar-operation-1",
+        "operation_type": "planar_support",
+        "parameter_semantic_sha256": "7a278370d063a71d970719f0f426bc66c6f39b0ed794aff0fed3e0289c7c190d",
+        "product_status": "warning",
+        "readback_passed": true,
+        "result_exportable": true,
+        "result_retained": true,
+        "toolpath_point_count": 56
+      },
+      "rendered_size": [
+        1600,
+        900
+      ],
+      "screenshot": "00_support_lines_en_1600x900_parameters.png",
+      "status_text": "Toolpath generated and G-code readback passed, with warnings. Review the reasons below.",
+      "support_controls": {
+        "interface_layers": 2,
+        "interface_spacing_mm": 0.6,
+        "labels": {
+          "support_angle": "Support overhang angle (deg)",
+          "support_interface_spacing": "Interface spacing (mm)",
+          "support_interfaces": "Support interface layers",
+          "support_pattern": "Support pattern",
+          "support_spacing": "Support line spacing (mm)",
+          "support_xy_gap": "Support XY gap (mm)",
+          "support_z_gap": "Support Z gap (mm)"
+        },
+        "line_spacing_mm": 1.0,
+        "overhang_angle_deg": 45.0,
+        "pattern": "lines",
+        "pattern_text": "Lines",
+        "xy_gap_mm": 0.0,
+        "z_gap_mm": 0.0
+      },
+      "view": "top",
+      "viewer_backend": "opengl",
+      "width": 1600
+    },
+    {
+      "buttons": {
+        "Apply": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "Apply",
+          "text_fits": true,
+          "text_width": 45,
+          "width": 173,
+          "x": 1702,
+          "y": 394
+        },
+        "Back": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "Back",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 174,
+          "x": 1519,
+          "y": -1389
+        },
+        "Cancel generation": {
+          "available_text_width": 344,
+          "height": 34,
+          "text": "Cancel generation",
+          "text_fits": true,
+          "text_width": 153,
+          "width": 356,
+          "x": 1519,
+          "y": 480
+        },
+        "Create operation": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "Create operation",
+          "text_fits": true,
+          "text_width": 144,
+          "width": 174,
+          "x": 1519,
+          "y": 394
+        },
+        "Export result": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "Export result",
+          "text_fits": true,
+          "text_width": 117,
+          "width": 173,
+          "x": 1702,
+          "y": 437
+        },
+        "Generate preview": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "Generate preview",
+          "text_fits": true,
+          "text_width": 144,
+          "width": 174,
+          "x": 1519,
+          "y": 437
+        },
+        "Open STEP": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "Open STEP",
+          "text_fits": true,
+          "text_width": 81,
+          "width": 173,
+          "x": 1702,
+          "y": -1389
+        },
+        "Redo": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "Redo",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 173,
+          "x": 1702,
+          "y": 523
+        },
+        "Undo": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "Undo",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 174,
+          "x": 1519,
+          "y": 523
+        }
+      },
+      "clipped_visible_buttons": {},
+      "collisions": [],
+      "editor_scroll": [
+        1435,
+        1435
+      ],
+      "expected_state": "ready_or_warning",
+      "export_enabled": true,
+      "generate_enabled": true,
+      "height": 1080,
+      "horizontal_scroll_max": 0,
+      "issues_text": "Warning — MACHINE_REFERENCE_ONLY: The selected built-in reference machine is for offline checks only. (builtin.machine.generic_xyzac_reference.v1)\nWarning — xyzac.rotary_singularity: The path reaches a rotary singularity of the reference machine; review axis orientation and continuity. (point-0000001)\nWarning — planar.support_joint_schedule_unverified: This is an independent support path; combined part/support layer order and full nozzle sweep remain unverified. (body_001)",
+      "kind": "ready",
+      "language": "en",
+      "model_visible": true,
+      "path_segment_count": 33,
+      "pattern": "grid",
+      "preview_source": "<generated:planar-operation-1>",
+      "product": {
+        "operation_id": "planar-operation-1",
+        "operation_type": "planar_support",
+        "parameter_semantic_sha256": "79d7d2e16704211e22235c5fea6dd8c950e82fab9529340a74356ce973036b38",
+        "product_status": "warning",
+        "readback_passed": true,
+        "result_exportable": true,
+        "result_retained": true,
+        "toolpath_point_count": 66
+      },
+      "rendered_size": [
+        1920,
+        1080
+      ],
+      "screenshot": "03_support_grid_en_1920x1080_ready.png",
+      "status_text": "Toolpath generated and G-code readback passed, with warnings. Review the reasons below.",
+      "support_controls": {
+        "interface_layers": 2,
+        "interface_spacing_mm": 0.6,
+        "labels": {
+          "support_angle": "Support overhang angle (deg)",
+          "support_interface_spacing": "Interface spacing (mm)",
+          "support_interfaces": "Support interface layers",
+          "support_pattern": "Support pattern",
+          "support_spacing": "Support line spacing (mm)",
+          "support_xy_gap": "Support XY gap (mm)",
+          "support_z_gap": "Support Z gap (mm)"
+        },
+        "line_spacing_mm": 1.0,
+        "overhang_angle_deg": 45.0,
+        "pattern": "grid",
+        "pattern_text": "Grid",
+        "xy_gap_mm": 0.0,
+        "z_gap_mm": 0.0
+      },
+      "view": "isometric",
+      "viewer_backend": "opengl",
+      "width": 1920
+    },
+    {
+      "buttons": {
+        "Apply": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "Apply",
+          "text_fits": true,
+          "text_width": 45,
+          "width": 173,
+          "x": 1148,
+          "y": 166
+        },
+        "Back": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "Back",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 174,
+          "x": 965,
+          "y": -1617
+        },
+        "Cancel generation": {
+          "available_text_width": 344,
+          "height": 34,
+          "text": "Cancel generation",
+          "text_fits": true,
+          "text_width": 153,
+          "width": 356,
+          "x": 965,
+          "y": 252
+        },
+        "Create operation": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "Create operation",
+          "text_fits": true,
+          "text_width": 144,
+          "width": 174,
+          "x": 965,
+          "y": 166
+        },
+        "Export result": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "Export result",
+          "text_fits": true,
+          "text_width": 117,
+          "width": 173,
+          "x": 1148,
+          "y": 209
+        },
+        "Generate preview": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "Generate preview",
+          "text_fits": true,
+          "text_width": 144,
+          "width": 174,
+          "x": 965,
+          "y": 209
+        },
+        "Open STEP": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "Open STEP",
+          "text_fits": true,
+          "text_width": 81,
+          "width": 173,
+          "x": 1148,
+          "y": -1617
+        },
+        "Redo": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "Redo",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 173,
+          "x": 1148,
+          "y": 295
+        },
+        "Undo": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "Undo",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 174,
+          "x": 965,
+          "y": 295
+        }
+      },
+      "clipped_visible_buttons": {},
+      "collisions": [],
+      "editor_scroll": [
+        1663,
+        1663
+      ],
+      "expected_state": "visible_error_command_rolled_back",
+      "export_enabled": false,
+      "generate_enabled": true,
+      "height": 768,
+      "horizontal_scroll_max": 0,
+      "issues_text": "Warning — MACHINE_REFERENCE_ONLY: The selected built-in reference machine is for offline checks only. (builtin.machine.generic_xyzac_reference.v1)\nplanar.support_region_too_narrow: The support region is too narrow for a printable bead.",
+      "kind": "error",
+      "language": "en",
+      "model_visible": true,
+      "path_segment_count": 0,
+      "pattern": "grid",
+      "preview_source": "",
+      "product": {
+        "operation_id": "planar-operation-1",
+        "operation_type": "planar_support",
+        "parameter_semantic_sha256": "5793c32afd1f242bb2666b76d5b3404a8de25cc57c2cc2bf5468e868b27a6a73",
+        "product_status": null,
+        "readback_passed": false,
+        "result_exportable": false,
+        "result_retained": false,
+        "toolpath_point_count": 0
+      },
+      "rendered_size": [
+        1366,
+        768
+      ],
+      "screenshot": "04_support_error_en_1366x768.png",
+      "status_text": "Generation or validation failed. Export is blocked. Review the defects below, correct them and generate again.\nplanar.support_region_too_narrow: The support region is too narrow for a printable bead.",
+      "support_controls": {
+        "interface_layers": 2,
+        "interface_spacing_mm": 0.6,
+        "labels": {
+          "support_angle": "Support overhang angle (deg)",
+          "support_interface_spacing": "Interface spacing (mm)",
+          "support_interfaces": "Support interface layers",
+          "support_pattern": "Support pattern",
+          "support_spacing": "Support line spacing (mm)",
+          "support_xy_gap": "Support XY gap (mm)",
+          "support_z_gap": "Support Z gap (mm)"
+        },
+        "line_spacing_mm": 1.0,
+        "overhang_angle_deg": 45.0,
+        "pattern": "grid",
+        "pattern_text": "Grid",
+        "xy_gap_mm": 0.0,
+        "z_gap_mm": 0.0
+      },
+      "transaction_boundary": "The GUI command is atomic: the controller candidate carrying Error is rolled back, while the real diagnostic remains visible and export stays disabled.",
+      "trigger": "20 mm bead cannot fit the analytic 8 x 6 mm support domain",
+      "view": "isometric",
+      "viewer_backend": "opengl",
+      "width": 1366
+    },
+    {
+      "buttons": {
+        "取消生成": {
+          "available_text_width": 344,
+          "height": 34,
+          "text": "取消生成",
+          "text_fits": true,
+          "text_width": 72,
+          "width": 356,
+          "x": 1199,
+          "y": 405
+        },
+        "导出结果": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "导出结果",
+          "text_fits": true,
+          "text_width": 72,
+          "width": 173,
+          "x": 1382,
+          "y": 362
+        },
+        "应用": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "应用",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 173,
+          "x": 1382,
+          "y": 319
+        },
+        "打开 STEP": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "打开 STEP",
+          "text_fits": true,
+          "text_width": 81,
+          "width": 173,
+          "x": 1382,
+          "y": -2172
+        },
+        "撤销": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "撤销",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 174,
+          "x": 1199,
+          "y": 448
+        },
+        "新建操作": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "新建操作",
+          "text_fits": true,
+          "text_width": 72,
+          "width": 174,
+          "x": 1199,
+          "y": 319
+        },
+        "生成预览": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "生成预览",
+          "text_fits": true,
+          "text_width": 72,
+          "width": 174,
+          "x": 1199,
+          "y": 362
+        },
+        "返回": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "返回",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 174,
+          "x": 1199,
+          "y": -2172
+        },
+        "重做": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "重做",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 173,
+          "x": 1382,
+          "y": 448
+        }
+      },
+      "clipped_visible_buttons": {},
+      "collisions": [],
+      "editor_scroll": [
+        2218,
+        2218
+      ],
+      "expected_state": "ready_or_warning",
+      "export_enabled": true,
+      "generate_enabled": true,
+      "height": 900,
+      "horizontal_scroll_max": 0,
+      "issues_text": "警告 — MACHINE_REFERENCE_ONLY: 当前为内置参考机型，仅用于离线检查。 (builtin.machine.generic_xyzac_reference.v1)\n警告 — xyzac.rotary_singularity: 路径经过参考机型的回转奇异姿态，请核对轴姿态与连续性。 (point-0000001)\n警告 — planar.support_joint_schedule_unverified: 当前为独立支撑路径，尚未验证零件与支撑的联合逐层次序和完整喷嘴扫掠。 (body_001)",
+      "kind": "recovered",
+      "language": "zh",
+      "model_visible": false,
+      "path_segment_count": 33,
+      "pattern": "grid",
+      "preview_source": "<generated:planar-operation-1>",
+      "product": {
+        "operation_id": "planar-operation-1",
+        "operation_type": "planar_support",
+        "parameter_semantic_sha256": "79d7d2e16704211e22235c5fea6dd8c950e82fab9529340a74356ce973036b38",
+        "product_status": "warning",
+        "readback_passed": true,
+        "result_exportable": true,
+        "result_retained": true,
+        "toolpath_point_count": 66
+      },
+      "recovered_from": "error",
+      "rendered_size": [
+        1600,
+        900
+      ],
+      "repair": "restore bead width to 0.6 mm, Apply, then Generate",
+      "screenshot": "05_support_error_recovered_zh_1600x900.png",
+      "status_text": "路径已生成并完成 G-code 回读，存在警告。请核对下方原因。",
+      "support_controls": {
+        "interface_layers": 2,
+        "interface_spacing_mm": 0.6,
+        "labels": {
+          "support_angle": "支撑悬垂角 (deg)",
+          "support_interface_spacing": "接触层间距 (mm)",
+          "support_interfaces": "支撑接触层数",
+          "support_pattern": "支撑图案",
+          "support_spacing": "支撑线间距 (mm)",
+          "support_xy_gap": "支撑 XY 间隙 (mm)",
+          "support_z_gap": "支撑 Z 间隙 (mm)"
+        },
+        "line_spacing_mm": 1.0,
+        "overhang_angle_deg": 45.0,
+        "pattern": "grid",
+        "pattern_text": "网格",
+        "xy_gap_mm": 0.0,
+        "z_gap_mm": 0.0
+      },
+      "view": "top",
+      "viewer_backend": "opengl",
+      "width": 1600
+    },
+    {
+      "buttons": {
+        "Apply": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "Apply",
+          "text_fits": true,
+          "text_width": 45,
+          "width": 173,
+          "x": 1702,
+          "y": 415
+        },
+        "Back": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "Back",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 174,
+          "x": 1519,
+          "y": -1368
+        },
+        "Cancel generation": {
+          "available_text_width": 344,
+          "height": 34,
+          "text": "Cancel generation",
+          "text_fits": true,
+          "text_width": 153,
+          "width": 356,
+          "x": 1519,
+          "y": 501
+        },
+        "Create operation": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "Create operation",
+          "text_fits": true,
+          "text_width": 144,
+          "width": 174,
+          "x": 1519,
+          "y": 415
+        },
+        "Export result": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "Export result",
+          "text_fits": true,
+          "text_width": 117,
+          "width": 173,
+          "x": 1702,
+          "y": 458
+        },
+        "Generate preview": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "Generate preview",
+          "text_fits": true,
+          "text_width": 144,
+          "width": 174,
+          "x": 1519,
+          "y": 458
+        },
+        "Open STEP": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "Open STEP",
+          "text_fits": true,
+          "text_width": 81,
+          "width": 173,
+          "x": 1702,
+          "y": -1368
+        },
+        "Redo": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "Redo",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 173,
+          "x": 1702,
+          "y": 544
+        },
+        "Undo": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "Undo",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 174,
+          "x": 1519,
+          "y": 544
+        }
+      },
+      "clipped_visible_buttons": {},
+      "collisions": [],
+      "editor_scroll": [
+        1414,
+        1414
+      ],
+      "expected_state": "stale",
+      "export_enabled": false,
+      "generate_enabled": true,
+      "height": 1080,
+      "horizontal_scroll_max": 0,
+      "issues_text": "Warning — MACHINE_REFERENCE_ONLY: The selected built-in reference machine is for offline checks only. (builtin.machine.generic_xyzac_reference.v1)\nWarning — xyzac.rotary_singularity: The path reaches a rotary singularity of the reference machine; review axis orientation and continuity. (point-0000001)\nWarning — planar.support_joint_schedule_unverified: This is an independent support path; combined part/support layer order and full nozzle sweep remain unverified. (body_001)",
+      "kind": "stale",
+      "language": "en",
+      "model_visible": true,
+      "path_segment_count": 28,
+      "pattern": "lines",
+      "preview_source": "<generated:planar-operation-1>",
+      "product": {
+        "operation_id": "planar-operation-1",
+        "operation_type": "planar_support",
+        "parameter_semantic_sha256": "c7bfe336bec0a3814e824a80f052f26b7d0996176a90c43e0340a32b6b726ddc",
+        "product_status": "stale",
+        "readback_passed": true,
+        "result_exportable": true,
+        "result_retained": true,
+        "toolpath_point_count": 56
+      },
+      "rendered_size": [
+        1920,
+        1080
+      ],
+      "screenshot": "06_support_stale_en_1920x1080.png",
+      "status_text": "Inputs changed; the existing result is stale. Generate again.",
+      "support_controls": {
+        "interface_layers": 2,
+        "interface_spacing_mm": 0.6,
+        "labels": {
+          "support_angle": "Support overhang angle (deg)",
+          "support_interface_spacing": "Interface spacing (mm)",
+          "support_interfaces": "Support interface layers",
+          "support_pattern": "Support pattern",
+          "support_spacing": "Support line spacing (mm)",
+          "support_xy_gap": "Support XY gap (mm)",
+          "support_z_gap": "Support Z gap (mm)"
+        },
+        "line_spacing_mm": 1.2,
+        "overhang_angle_deg": 45.0,
+        "pattern": "lines",
+        "pattern_text": "Lines",
+        "xy_gap_mm": 0.0,
+        "z_gap_mm": 0.0
+      },
+      "trigger": "support line spacing changed from 1.0 mm to 1.2 mm",
+      "view": "top",
+      "viewer_backend": "opengl",
+      "width": 1920
+    },
+    {
+      "buttons": {
+        "取消生成": {
+          "available_text_width": 344,
+          "height": 34,
+          "text": "取消生成",
+          "text_fits": true,
+          "text_width": 72,
+          "width": 356,
+          "x": 1199,
+          "y": 405
+        },
+        "导出结果": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "导出结果",
+          "text_fits": true,
+          "text_width": 72,
+          "width": 173,
+          "x": 1382,
+          "y": 362
+        },
+        "应用": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "应用",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 173,
+          "x": 1382,
+          "y": 319
+        },
+        "打开 STEP": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "打开 STEP",
+          "text_fits": true,
+          "text_width": 81,
+          "width": 173,
+          "x": 1382,
+          "y": -2172
+        },
+        "撤销": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "撤销",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 174,
+          "x": 1199,
+          "y": 448
+        },
+        "新建操作": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "新建操作",
+          "text_fits": true,
+          "text_width": 72,
+          "width": 174,
+          "x": 1199,
+          "y": 319
+        },
+        "生成预览": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "生成预览",
+          "text_fits": true,
+          "text_width": 72,
+          "width": 174,
+          "x": 1199,
+          "y": 362
+        },
+        "返回": {
+          "available_text_width": 162,
+          "height": 34,
+          "text": "返回",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 174,
+          "x": 1199,
+          "y": -2172
+        },
+        "重做": {
+          "available_text_width": 161,
+          "height": 34,
+          "text": "重做",
+          "text_fits": true,
+          "text_width": 36,
+          "width": 173,
+          "x": 1382,
+          "y": 448
+        }
+      },
+      "clipped_visible_buttons": {},
+      "collisions": [],
+      "editor_scroll": [
+        2218,
+        2218
+      ],
+      "expected_state": "ready_or_warning",
+      "export_enabled": true,
+      "generate_enabled": true,
+      "height": 900,
+      "horizontal_scroll_max": 0,
+      "issues_text": "警告 — MACHINE_REFERENCE_ONLY: 当前为内置参考机型，仅用于离线检查。 (builtin.machine.generic_xyzac_reference.v1)\n警告 — xyzac.rotary_singularity: 路径经过参考机型的回转奇异姿态，请核对轴姿态与连续性。 (point-0000001)\n警告 — planar.support_joint_schedule_unverified: 当前为独立支撑路径，尚未验证零件与支撑的联合逐层次序和完整喷嘴扫掠。 (body_001)",
+      "kind": "recovered",
+      "language": "zh",
+      "model_visible": false,
+      "path_segment_count": 26,
+      "pattern": "lines",
+      "preview_source": "<generated:planar-operation-1>",
+      "product": {
+        "operation_id": "planar-operation-1",
+        "operation_type": "planar_support",
+        "parameter_semantic_sha256": "c7bfe336bec0a3814e824a80f052f26b7d0996176a90c43e0340a32b6b726ddc",
+        "product_status": "warning",
+        "readback_passed": true,
+        "result_exportable": true,
+        "result_retained": true,
+        "toolpath_point_count": 52
+      },
+      "recovered_from": "stale",
+      "rendered_size": [
+        1600,
+        900
+      ],
+      "repair": "Generate the changed operation again",
+      "screenshot": "07_support_stale_recovered_zh_1600x900.png",
+      "status_text": "路径已生成并完成 G-code 回读，存在警告。请核对下方原因。",
+      "support_controls": {
+        "interface_layers": 2,
+        "interface_spacing_mm": 0.6,
+        "labels": {
+          "support_angle": "支撑悬垂角 (deg)",
+          "support_interface_spacing": "接触层间距 (mm)",
+          "support_interfaces": "支撑接触层数",
+          "support_pattern": "支撑图案",
+          "support_spacing": "支撑线间距 (mm)",
+          "support_xy_gap": "支撑 XY 间隙 (mm)",
+          "support_z_gap": "支撑 Z 间隙 (mm)"
+        },
+        "line_spacing_mm": 1.2,
+        "overhang_angle_deg": 45.0,
+        "pattern": "lines",
+        "pattern_text": "线形",
+        "xy_gap_mm": 0.0,
+        "z_gap_mm": 0.0
+      },
+      "view": "isometric",
+      "viewer_backend": "opengl",
+      "width": 1600
+    }
+  ],
+  "desktop_automation_boundary": "Direct Qt render captures; they are not human-like desktop click-through evidence.",
+  "model": {
+    "analytic_bounds_mm": {
+      "maximum": [
+        12.0,
+        8.0,
+        3.2
+      ],
+      "minimum": [
+        4.0,
+        2.0,
+        2.2
+      ]
+    },
+    "path": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\docs\\guides\\assets\\planar\\final_2026-09-12\\p07\\input\\analytic_floating_beam.step",
+    "selected_body": "body_001",
+    "sha256": "bc54d8659c4059a5e4ddbec05d05559481ff5b369b548804c0e1dc3118f90b22"
+  },
+  "schema_version": 1,
+  "source_sha256": {
+    "F:\\【项目和任务】\\5AxisSclicer_V2.0\\scripts\\planar_p07_ui_evidence.py": "811f7f2be0c46b862bf8df6516ecd6211879294b03a60cb87fbd33ea274c3afd",
+    "F:\\【项目和任务】\\5AxisSclicer_V2.0\\src\\five_axis_slicer\\algorithms\\planar\\support.py": "a13354e8f7d898c41fee0f41514c1f8bdf1ddbba05fb12ef8e33e33e54c487f9",
+    "F:\\【项目和任务】\\5AxisSclicer_V2.0\\src\\five_axis_slicer\\planar_ui.py": "6eb146f7c461fd220958de14c696692a8d8f831317eaffb9f07c8227a4640ce4",
+    "F:\\【项目和任务】\\5AxisSclicer_V2.0\\src\\five_axis_slicer\\postprocessing\\planar_product.py": "a4b4043598dbe61c2d17e480107d9ce2e0930f50127730b38fcc3e4c4482a2bc"
+  },
+  "task": "P07"
+}

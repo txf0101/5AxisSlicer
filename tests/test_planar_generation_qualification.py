@@ -50,11 +50,14 @@ def test_legacy_v1_state_keeps_preview_payload_but_requires_regeneration(ready, 
         restored.export_operation_product(destination="must-not-exist")
 
 
-def test_current_v2_state_reopens_ready_with_identical_context(ready):
+def test_current_v2_state_reopens_stale_without_runtime_product(ready):
     state = ready.product_state(_operation().operation_id)
     assert state.result_payload["generation_context_version"] == PLANAR_CONTEXT_VERSION
     restored = PlanarController.from_json(ready.to_json(), cad_model=_model())
-    assert restored.product_state(_operation().operation_id) == state
+    reopened = restored.product_state(_operation().operation_id)
+    assert reopened.status == "stale"
+    assert reopened.result_payload == state.result_payload
+    assert restored.product_result(_operation().operation_id) is None
 
 
 @pytest.mark.parametrize("change", ["placement", "nozzle", "material", "build", "parameters"])

@@ -78,7 +78,9 @@ def _setup(model, body_id: str) -> ManufacturingSetup:
         ),
         machine=ResourceSnapshot.capture("machine", _machine()),
         nozzle=ResourceSnapshot.capture("nozzle", _nozzle()),
-        material=ResourceSnapshot.capture("material", GENERIC_PLA_175),
+        material=ResourceSnapshot.capture(
+            "material", GENERIC_PLA_175.reviewed_copy("p06-evidence-pla")
+        ),
         model_coordinate_system=_frame("model"),
         build_coordinate_system=_frame("build"),
         mount_datum_id="build_plate_mount",

@@ -53,6 +53,7 @@ class PlanarControllerCheckpoint:
     setup: ManufacturingSetup
     operations: tuple[PlanarOperationDefinition, ...]
     product_states: tuple[PlanarProductState, ...]
+    product_results: tuple[tuple[str, PlanarRegionProductResult | PlanarZigzagProductResult], ...]
     modified: bool
 
     def without_drafts(self) -> "PlanarControllerCheckpoint":
@@ -400,6 +401,7 @@ class PlanarController:
             self._setup,
             self._operations,
             tuple(self._product_states.values()),
+            tuple(sorted(self._product_results.items())),
             self._modified,
         )
 
@@ -409,7 +411,7 @@ class PlanarController:
         self._setup = checkpoint.setup
         self._operations = checkpoint.operations
         self._product_states = {item.operation_id: item for item in checkpoint.product_states}
-        self._product_results = {}
+        self._product_results = dict(checkpoint.product_results)
         self._modified = checkpoint.modified
 
     def command_applied_token(self) -> tuple[object, ...]:
@@ -432,6 +434,11 @@ class PlanarController:
         )
         candidate._modified = self._modified
         candidate._product_results = dict(self._product_results)
+        # Generation is executed on a command candidate.  The cancellation
+        # token and optional UI event pump are task-control state, not project
+        # state, so every fork involved in the same command must share them.
+        candidate._generation_cancelled = self._generation_cancelled
+        candidate._generation_event_pump = self._generation_event_pump
         return candidate
 
     def publish_from(self, candidate: "PlanarController") -> None:
@@ -474,12 +481,21 @@ class PlanarController:
             raise ValueError("operations must be an array")
         if not isinstance(product_states, list | tuple):
             raise ValueError("product_states must be an array")
-        return cls(
+        controller = cls(
             cad_model,
             setup=ManufacturingSetup.from_json(setups[0]),
             operations=tuple(PlanarOperationDefinition.from_json(item) for item in operations),
             product_states=tuple(PlanarProductState.from_json(item) for item in product_states),
         )
+        # Runtime products contain the Toolpath, G-code and viewer payload and
+        # are intentionally not serialized in the project document.  A saved
+        # qualification can remain as inspectable evidence, but it cannot be
+        # advertised as Ready without the runtime product needed for export.
+        controller._product_states = {
+            key: replace(value, status="stale") if value.status in {"ready", "warning"} else value
+            for key, value in controller._product_states.items()
+        }
+        return controller
 
     def _mark_product_stale(self, operation: PlanarOperationDefinition) -> None:
         state = self._product_states.get(operation.operation_id)

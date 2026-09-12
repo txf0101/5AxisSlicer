@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="3" time="3.623" timestamp="2026-09-12T19:12:13.297879+08:00" hostname="BelongtoTXF"><testcase classname="tests.test_planar_automation" name="test_planar_routes_use_the_shared_command_entrypoint" time="0.006"><failure message="KeyError: 'setup_id'">def test_planar_routes_use_the_shared_command_entrypoint():
+        window = _Window()
+        router = AutomationRouter(window)
+    
+        state = router.dispatch("/planar/state", {})
+        created = router.dispatch(
+            "/planar/operation/create",
+            {"operation_type": "planar_region", "operation_id": "op-1", "name": "Floor"},
+        )
+        updated = router.dispatch(
+            "/planar/operation/set",
+            {
+                "operation_id": "op-1",
+                "name": "Floor 2",
+                "enabled": False,
+                "body_id": "body",
+                "offset_pass_count": 5,
+                "wall_thickness_mm": 1.2,
+                "thin_wall_max_passes": 2,
+                "spiral_samples_per_contour": 80,
+            },
+        )
+    
+        assert state["planar"]["operations"] == []
+        assert created["command"]["payload"]["operation_id"] == "op-1"
+        assert updated["command"]["payload"]["name"] == "Floor 2"
+        assert updated["command"]["payload"]["enabled"] is False
+        assert window.planar_page.controller.operations[0].name == "Floor 2"
+        parameters = window.planar_page.controller.operations[0].parameters
+        assert parameters.offset_pass_count == 5
+        assert parameters.wall_thickness_mm == 1.2
+        assert parameters.thin_wall_max_passes == 2
+        assert parameters.spiral_samples_per_contour == 80
+    
+        issues = router.dispatch("/planar/issues", {})["command"]["payload"]
+        assert {item["code"] for item in issues} &gt;= {"SETUP_PART_MISSING"}
+&gt;       assert router.dispatch("/planar/validate", {})["command"]["payload"]["setup_id"]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'setup_id'
+
+tests\test_planar_automation.py:65: KeyError</failure></testcase><testcase classname="tests.test_planar_ui" name="test_existing_operations_can_be_selected_and_previewed_independently" time="0.063"><failure message="assert False&#10; +  where False = &lt;built-in method isEnabled of QPushButton object at 0x0000023BC52436E0&gt;()&#10; +    where &lt;built-in method isEnabled of QPushButton object at 0x0000023BC52436E0&gt; = &lt;PyQt5.QtWidgets.QPushButton object at 0x0000023BC52436E0&gt;.isEnabled&#10; +      where &lt;PyQt5.QtWidgets.QPushButton object at 0x0000023BC52436E0&gt; = &lt;five_axis_slicer.planar_ui.PlanarPage object at 0x0000023BC52415B0&gt;.export_button">def test_existing_operations_can_be_selected_and_previewed_independently() -&gt; None:
+        page = PlanarPage(controller=_path_controller(), viewer_factory=TubeViewerStub)
+        page.create_button.click()
+        region_id = page.controller.operations[-1].operation_id
+        page.first_layer_spin.setValue(0.0)
+        page.last_layer_spin.setValue(0.0)
+        page.apply_button.click()
+        page.generate_button.click()
+    
+        page.operation_type_combo.setCurrentIndex(
+            page.operation_type_combo.findData("planar_offset")
+        )
+        page.create_button.click()
+        zigzag_id = page.controller.operations[-1].operation_id
+        page.first_layer_spin.setValue(0.0)
+        page.last_layer_spin.setValue(0.0)
+        page.feedrate_spin.setValue(100.0)
+        page.travel_feedrate_spin.setValue(100.0)
+        page.apply_button.click()
+        page.generate_button.click()
+    
+        page.operation_instance_combo.setCurrentIndex(
+            page.operation_instance_combo.findData(region_id)
+        )
+        _app().processEvents()
+        assert page.state_json()["ui"]["selected_operation_id"] == region_id
+        assert str(page.viewer.gcode_preview.source_path) == f"&lt;generated:{region_id}&gt;"
+    
+        page.operation_instance_combo.setCurrentIndex(
+            page.operation_instance_combo.findData(zigzag_id)
+        )
+        _app().processEvents()
+        assert page.state_json()["ui"]["selected_operation_id"] == zigzag_id
+        assert str(page.viewer.gcode_preview.source_path) == f"&lt;generated:{zigzag_id}&gt;"
+&gt;       assert page.export_button.isEnabled()
+E       assert False
+E        +  where False = &lt;built-in method isEnabled of QPushButton object at 0x0000023BC52436E0&gt;()
+E        +    where &lt;built-in method isEnabled of QPushButton object at 0x0000023BC52436E0&gt; = &lt;PyQt5.QtWidgets.QPushButton object at 0x0000023BC52436E0&gt;.isEnabled
+E        +      where &lt;PyQt5.QtWidgets.QPushButton object at 0x0000023BC52436E0&gt; = &lt;five_axis_slicer.planar_ui.PlanarPage object at 0x0000023BC52415B0&gt;.export_button
+
+tests\test_planar_ui.py:212: AssertionError</failure></testcase><testcase classname="tests.test_planar_ui" name="test_qt_cancel_button_preserves_the_previous_generated_result" time="0.145" /></testsuite></testsuites>

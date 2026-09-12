@@ -1,5 +1,6 @@
 from dataclasses import replace
 import hashlib
+import json
 import math
 from pathlib import Path
 import sys
@@ -130,7 +131,17 @@ def test_support_product_matches_analytic_domain_and_exports_p07_bundle(tmp_path
     assert stages == {"planar_support", "planar_support_interface"}
     assert {
         point.extrusion_role for point in result.toolpath.points if point.point_type == "deposition"
-    } == {"support"}
+    } == {"support_material", "support_interface"}
+    assert all(
+        point.extrusion_role == "none"
+        for point in result.toolpath.points
+        if point.point_type != "deposition"
+    )
+    assert {
+        segment.extrusion_role
+        for segment in result.toolpath.to_preview_segments()
+        if segment.move_type == "extrude"
+    } == {"support_material", "support_interface"}
 
     # Independent truth for this floating rectangle: support occupies the
     # same XY projection below the object, with its centreline inset by half
@@ -151,6 +162,10 @@ def test_support_product_matches_analytic_domain_and_exports_p07_bundle(tmp_path
             "planar_support" if middle[2] <= 1.0 + 1.0e-9 else "planar_support_interface"
         )
         assert current.stage_id == expected_stage
+        expected_role = (
+            "support_material" if expected_stage == "planar_support" else "support_interface"
+        )
+        assert current.extrusion_role == expected_role
         measured_volume += math.dist(previous.position, current.position) * 0.6 * 0.5
     assert sum(point.material_volume_mm3 for point in result.toolpath.points) == pytest.approx(
         measured_volume
@@ -159,6 +174,18 @@ def test_support_product_matches_analytic_domain_and_exports_p07_bundle(tmp_path
     destination = export_planar_product(result, tmp_path / "p07-output")
     assert {item.name for item in destination.iterdir()} == SIX_FILE_BUNDLE
     assert model.source_hash in (destination / "manifest.json").read_text(encoding="utf-8")
+    toolpath_payload = json.loads((destination / "toolpath.json").read_text(encoding="utf-8"))
+    assert {
+        point["extrusion_role"]
+        for point in toolpath_payload["points"]
+        if point["point_type"] == "deposition"
+    } == {"support_material", "support_interface"}
+    preview_payload = json.loads((destination / "preview.json").read_text(encoding="utf-8"))
+    assert {
+        segment["extrusion_role"]
+        for segment in preview_payload["segments"]
+        if segment["move_type"] == "extrude"
+    } == {"support_material", "support_interface"}
 
 
 def test_controller_creates_generates_and_exports_support_then_marks_it_stale(

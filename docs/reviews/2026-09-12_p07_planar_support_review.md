@@ -12,7 +12,7 @@ Prusa 官方 Support 文档用于核对 `Supports on build plate only`、悬垂�
 
 `algorithms/planar/support.py` 保留显式空层，计算悬垂接触域、XY 膨胀障碍和按层高向上量化的 Z gap，再将候选柱逐层与上一层平台连通域求交。输出按 `planar_support` 和 `planar_support_interface` 标记 body/interface，并使用共享 `GeneratedToolpath` 的 deposition、travel、retract、prime 语义。参数校验覆盖角度、非负间隙、主体/界面线距、0—100 个界面层及 Lines/Grid 图案。
 
-产品链沿用 Planar 的 `Geometry → SlicePlan → Toolpath → Generic XYZAC 参考轨迹 → ValidationReport → G-code → readback`，当前产物算法版本为 `planar-support-product-v3`。输入、名称、启用状态、Setup 或支撑参数变化会使旧结果 Stale；Error 阻止 G-code 和导出；取消生成保留上一份有效结果。GUI、受限脚本与 HTTP 经同一 `PlanarCommandService` 修改操作，项目保存重开保留支撑类型及全部参数。可导出结果包含 `main.gcode`、`toolpath.json`、`machine_axes.csv`、`warnings.json`、`preview.json` 和 `manifest.json` 六件套。
+产品链沿用 Planar 的 `Geometry → SlicePlan → Toolpath → Generic XYZAC 参考轨迹 → ValidationReport → G-code → readback`，当前产物算法版本为 `planar-support-product-v3`。输入、名称、启用状态、Setup 或支撑参数变化会使旧结果 Stale；Error 阻止 G-code 和导出；取消生成保留上一份有效结果。GUI、受限脚本与 HTTP 经同一 `PlanarCommandService` 修改操作，HTTP 已覆盖 issues、validate、cancel、undo 和 redo。项目保存重开保留操作、引用、参数和资格摘要；运行时 Toolpath/G-code 不序列化，所以原 Ready/Warning 在重开后转为 Stale，必须重新生成。可导出结果包含 `main.gcode`、`toolpath.json`、`machine_axes.csv`、`warnings.json`、`preview.json` 和 `manifest.json` 六件套。
 
 ## 代码审查后的修复
 
@@ -29,15 +29,17 @@ Prusa 官方 Support 文档用于核对 `Supports on build plate only`、悬垂�
 
 这些修复均由回归测试覆盖，包括附着悬臂的非零 XY gap、部分/全部不可达、取消、首层平台约束、界面层上下界、输入替换和 UI 长文本。
 
+最终复核还修复了多操作 UI 始终选中最后一个操作、活动生成候选未共享取消 token、撤销丢失运行时结果、重开误报 Ready、主体/interface Viewer 角色未区分、HTTP 缺少问题与事务入口等缺口。Viewer 直接读取共享 Toolpath：`support_material` 为浅绿色，`support_interface` 为深绿色；`toolpath.json` 和 `preview.json` 保留两种角色。当前通用 G-code marker 不编码 extrusion role，独立回读核对点身份、类型、坐标、进给、挤出量和顺序；该边界没有被转写成角色级 G-code 资格。
+
 ## 解析真值、导出与回读
 
-解析输入为悬空矩形梁 `X=4..12 mm、Y=2..8 mm、Z=2.2..3.2 mm`。层高和首层均为 0.5 mm，请求 Z=0.5—3.0 mm；零件下方四个空截层被显式保留。Grid 支撑得到 33 条沉积段，其中 body 12 条、interface 21 条；独立复算材料体积为 61.86 mm³，与结果记录一致，沉积域最大越界为 0。Toolpath 与轨迹均为 66 点，G-code 独立回读为 66/66，坐标、挤出、进给和顺序无不匹配。六件套齐全，并记录输入、源码和各产物 SHA-256。证据见[真实模型摘要](evidence/2026-09-12_p07_planar_support/real_model/summary.json)。
+解析输入为悬空矩形梁 `X=4..12 mm、Y=2..8 mm、Z=2.2..3.2 mm`。层高和首层均为 0.5 mm，请求 Z=0.5—3.0 mm；零件下方四个空截层被显式保留。Grid 支撑得到 33 条沉积段，其中 body 12 条、interface 21 条；独立复算材料体积为 61.86 mm³，与结果记录一致，沉积域最大越界为 0。Toolpath 与轨迹均为 66 点，G-code 独立回读为 66/66。独立手算测试还固定了 Lines 为 15 段、30 点、39.0 mm、15.60 mm³；Grid 为 14 段、28 点、39.4 mm、15.76 mm³；窄区为 2.6 mm、1.04 mm³，消失区完整拒绝。阈值敏感性、XY/Z gap、主体/interface 分层、路径方向、间距、顺序和材料量均不复制实现公式。
 
-同一证据脚本还尝试了仓库现有风扇 `example/扇叶/风扇扇叶(1).STEP`。该模型在 Build Z=57 mm 的截面端点恢复中需要 0.00100791389 mm 修正，超过 0.001 mm 上限，报告 `planar.section_endpoint_gap_exceeds_limit`；产品进入 Error，未生成或导出 P07 六件套。因此解析悬空梁证明的是受限几何的支撑闭环，不能转写成现有复杂风扇已成功支撑。
+仓库真实复杂 STEP `example/三叶扇/Supportless_sample.stp` 的 `body_002` 在 Z=0.5—60.0 mm、层高 0.5 mm 下成功生成 9,662 点，材料量 5,663.310163 mm³，9,662/9,662 回读通过并导出六件套。另一个风扇 `example/扇叶/风扇扇叶(1).STEP` 在 Build Z=57 mm 需要 0.00100791389 mm 端点修正，超过 0.001 mm 上限，报告 `planar.section_endpoint_gap_exceeds_limit`，进入 Error 且未导出。两者与解析梁见[当前真实模型证据](evidence/2026-09-12_p07_planar_final/real_model/)。
 
 ## UI 证据
 
-[UI 摘要](evidence/2026-09-12_p07_planar_support/ui/summary.json)包含 7 个 Qt/OpenGL 控件抓图案例：中文与英文，1366×768、1600×900、1920×1080 三种窗口尺寸，覆盖 Grid/Lines Ready、过窄 Error 及恢复、参数变化 Stale 及重新生成。全部案例 `horizontal_scroll_max=0`、`collisions=[]`，可见按钮无文字裁切；英文长诊断在窄窗口中正常换行；正常与恢复结果可导出，Error/Stale 禁止导出。该证据是直接 Qt 控件渲染和项目 OpenGL 查看器截图，不属于真人桌面点击流程，也不代表实机操作。
+[当前 UI 摘要](../guides/assets/planar/current_p01_p07/p07/summary.json)包含 9 个 Qt/OpenGL 控件抓图案例：中文与英文，1366×768、1600×900、1920×1080 三种窗口尺寸，覆盖顶部参数、Grid/Lines Warning、过窄 Error 及恢复、参数变化 Stale 及重新生成。参数标签、单位、帮助、按钮和紧凑问题索引均可见；全部案例 `horizontal_scroll_max=0`、`collisions=[]`，可见按钮无文字裁切。该证据是 Qt widget grab 加项目 OpenGL Viewer，不是真人桌面点击；Planar 页面不使用 VTK 后端。
 
 ## 性能补充观察
 
@@ -47,9 +49,9 @@ Prusa 官方 Support 文档用于核对 `Supports on build plate only`、悬垂�
 
 ## 测试与质量门禁
 
-串行验证使用项目已核验的 `tmp/pytest9/Scripts/python.exe`。最终源码下全部 Planar 测试为 **211 passed**；全仓为 **741 passed、3 skipped、130 subtests passed**。3 个 skip 是既有 Windows 符号链接权限覆盖，不计为通过。JUnit 位于 [`tests/`](evidence/2026-09-12_p07_planar_support/tests/)。
+串行验证使用项目已核验的 `tmp/pytest9/Scripts/python.exe`（Python 3.12.7、pytest 9.1.1）。最终源码下 P07 目标集合为 **150 passed**，全部 Planar 为 **223 passed**，全仓为 **753 passed、3 skipped、130 subtests passed**。3 个 skip 是既有 Windows 符号链接权限覆盖，不计为通过。JUnit 和日志位于[当前 tests 目录](evidence/2026-09-12_p07_planar_final/tests/)。
 
-最终质量检查首次发现共享的自有机型 UI 证据脚本存在 10 项 Ruff 格式问题；只做等价格式整理后重新运行官方 `scripts/check_quality.py`，退出码为 0。Ruff、Migrated Ruff、Security Ruff、format、context budget 均通过，mypy 检查 **120 个源码文件**无问题。最终日志见 [`quality/check_quality.log`](evidence/2026-09-12_p07_planar_support/quality/check_quality.log)。
+首次命令包装曾因 PowerShell 拆分动态 JUnit 路径、未展开带引号 glob 而以 exit 4 结束，均无测试执行；受影响集合曾以 113 passed、3 failed 暴露测试夹具和 UI 操作选择问题，Windows `os.replace` 还出现一次 WinError 5，换新临时目录后通过。最终质量首次发现 `AutomationRouter.__init__` 61 行和 `PlanarPage` 629 行超过上下文预算；提取 Planar 基类/交互子类并压缩一行路由注释后，`scripts/check_quality.py` exit 0，Ruff、Security Ruff、format、context budget 和 mypy 120 个源码文件全部通过。日志位于[quality 目录](evidence/2026-09-12_p07_planar_final/quality/)。
 
 ## 尚未验证的边界
 

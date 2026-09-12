@@ -26,8 +26,7 @@ class AutomationRouter:
     """Dispatch the public HTTP contract against one live application window."""
 
     def __init__(self, window: Any) -> None:
-        # MainWindow is intentionally duck-typed here to avoid a UI/router
-        # import cycle.  Endpoint tests exercise this narrow adapter boundary.
+        # Duck typing avoids a UI/router import cycle; endpoint tests cover the adapter.
         self.window = window
         self._routes: dict[str, Route] = {
             "/health": self._health,
@@ -76,11 +75,15 @@ class AutomationRouter:
         }
         self._planar_routes: dict[str, Route] = {
             "/planar/state": self._planar_state,
+            "/planar/issues": self._planar_issues,
+            "/planar/validate": self._planar_validate,
             "/planar/operation/create": self._planar_operation_create,
             "/planar/operation/set": self._planar_operation_set,
             "/planar/operation/generate": self._planar_operation_generate,
             "/planar/operation/export": self._planar_operation_export,
             "/planar/generation/cancel": self._planar_generation_cancel,
+            "/planar/undo": self._planar_undo,
+            "/planar/redo": self._planar_redo,
         }
 
     def dispatch(self, path: str, payload: Payload) -> Response:
@@ -428,6 +431,12 @@ class AutomationRouter:
     def _planar_state(self, _payload: Payload) -> Response:
         return {"planar": self.window.planar_page.state_json()}
 
+    def _planar_issues(self, _payload: Payload) -> Response:
+        return self._planar_command("issues")
+
+    def _planar_validate(self, _payload: Payload) -> Response:
+        return self._planar_command("validate")
+
     def _planar_operation_create(self, payload: Payload) -> Response:
         allowed = ("operation_type", "operation_id", "name")
         return self._planar_command(
@@ -480,6 +489,12 @@ class AutomationRouter:
 
     def _planar_generation_cancel(self, _payload: Payload) -> Response:
         return self._planar_command("cancel_generation")
+
+    def _planar_undo(self, _payload: Payload) -> Response:
+        return self._planar_command("undo")
+
+    def _planar_redo(self, _payload: Payload) -> Response:
+        return self._planar_command("redo")
 
     def _planar_command(self, command_name: str, **kwargs: Any) -> Response:
         result = self.window.planar_command_service.execute_command(

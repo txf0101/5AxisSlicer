@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="3.337" timestamp="2026-09-12T19:13:10.619659+08:00" hostname="BelongtoTXF"><testcase classname="tests.test_planar_automation" name="test_planar_routes_use_the_shared_command_entrypoint" time="0.006" /><testcase classname="tests.test_planar_ui" name="test_existing_operations_can_be_selected_and_previewed_independently" time="0.061"><failure message="AssertionError: {'schema_version': 1, 'setup_id': 'setup-1', 'capabilities': {'available_operation_types': ['planar_offset', 'planar_r...', 'planar_zigzag'], 'max_interactive_operations': 6, 'product_generation_available': True}, 'cad_attached': True, ...}&#10;assert False&#10; +  where False = &lt;built-in method isEnabled of QPushButton object at 0x0000026F6964B770&gt;()&#10; +    where &lt;built-in method isEnabled of QPushButton object at 0x0000026F6964B770&gt; = &lt;PyQt5.QtWidgets.QPushButton object at 0x0000026F6964B770&gt;.isEnabled&#10; +      where &lt;PyQt5.QtWidgets.QPushButton object at 0x0000026F6964B770&gt; = &lt;five_axis_slicer.planar_ui.PlanarPage object at 0x0000026F696492E0&gt;.export_button">def test_existing_operations_can_be_selected_and_previewed_independently() -&gt; None:
+        page = PlanarPage(controller=_path_controller(), viewer_factory=TubeViewerStub)
+        page.create_button.click()
+        region_id = page.controller.operations[-1].operation_id
+        page.first_layer_spin.setValue(0.0)
+        page.last_layer_spin.setValue(0.0)
+        page.apply_button.click()
+        page.generate_button.click()
+    
+        page.operation_type_combo.setCurrentIndex(
+            page.operation_type_combo.findData("planar_offset")
+        )
+        page.create_button.click()
+        zigzag_id = page.controller.operations[-1].operation_id
+        page.first_layer_spin.setValue(0.0)
+        page.last_layer_spin.setValue(0.0)
+        page.feedrate_spin.setValue(100.0)
+        page.travel_feedrate_spin.setValue(100.0)
+        page.apply_button.click()
+        page.generate_button.click()
+    
+        page.operation_instance_combo.setCurrentIndex(
+            page.operation_instance_combo.findData(region_id)
+        )
+        _app().processEvents()
+        assert page.state_json()["ui"]["selected_operation_id"] == region_id
+        assert str(page.viewer.gcode_preview.source_path) == f"&lt;generated:{region_id}&gt;"
+    
+        page.operation_instance_combo.setCurrentIndex(
+            page.operation_instance_combo.findData(zigzag_id)
+        )
+        _app().processEvents()
+        assert page.state_json()["ui"]["selected_operation_id"] == zigzag_id
+        assert str(page.viewer.gcode_preview.source_path) == f"&lt;generated:{zigzag_id}&gt;"
+&gt;       assert page.export_button.isEnabled(), page.state_json()
+E       AssertionError: {'schema_version': 1, 'setup_id': 'setup-1', 'capabilities': {'available_operation_types': ['planar_offset', 'planar_r...', 'planar_zigzag'], 'max_interactive_operations': 6, 'product_generation_available': True}, 'cad_attached': True, ...}
+E       assert False
+E        +  where False = &lt;built-in method isEnabled of QPushButton object at 0x0000026F6964B770&gt;()
+E        +    where &lt;built-in method isEnabled of QPushButton object at 0x0000026F6964B770&gt; = &lt;PyQt5.QtWidgets.QPushButton object at 0x0000026F6964B770&gt;.isEnabled
+E        +      where &lt;PyQt5.QtWidgets.QPushButton object at 0x0000026F6964B770&gt; = &lt;five_axis_slicer.planar_ui.PlanarPage object at 0x0000026F696492E0&gt;.export_button
+
+tests\test_planar_ui.py:212: AssertionError</failure></testcase></testsuite></testsuites>

@@ -16,6 +16,7 @@ from five_axis_slicer.algorithms.planar import (
     generate_support_plan,
     generate_support_toolpath,
 )
+from five_axis_slicer.manufacturing.toolpath import GeneratedToolpath
 from five_axis_slicer.postprocessing.indexed_tube import GenerationCancelled
 
 
@@ -84,9 +85,22 @@ def test_floating_holed_island_generates_hole_preserving_plate_columns_and_paths
         "planar_support",
         "planar_support_interface",
     }
-    assert {point.extrusion_role for point in path.points if point.point_type == "deposition"} == {
-        "support"
+    deposition_roles = {
+        point.extrusion_role for point in path.points if point.point_type == "deposition"
     }
+    assert deposition_roles == {"support_material", "support_interface"}
+    assert all(
+        point.extrusion_role == "none" for point in path.points if point.point_type != "deposition"
+    )
+    restored = GeneratedToolpath.from_json(path.to_json())
+    assert [point.extrusion_role for point in restored.points] == [
+        point.extrusion_role for point in path.points
+    ]
+    assert {
+        segment.extrusion_role
+        for segment in restored.to_preview_segments()
+        if segment.move_type == "extrude"
+    } == deposition_roles
     previous = None
     measured_volume = 0
     directions = {}

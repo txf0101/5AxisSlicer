@@ -8,13 +8,17 @@
 
 Zigzag 现检查实际道宽包络与逐区域材料量。三叶扇全高 Z=56.3→95.9、层高/道宽 0.6、间距 0.65 mm 的离线对照为 7475 点，回读通过，采样未覆盖约 5.98%，属于稀疏填充。相同模型间距 0.6 mm 的密排有 5 层过填，禁止导出。pipe2 的 0.6 mm 密排也被阻断；0.4 mm 道宽/层高与 0.5 mm 间距对照可导出，但不代表实心资格。
 
-Spiral 使用中间 Z 的真实实体有限采样；支撑检查完整运动段与目标 CAD，但零件/支撑联合逐层调度和完整喷嘴扫掠仍未验证。完整参数、可用六件套、失败定位和最新界面见 [AUD-02 修复复盘](../reviews/2026-09-12_algorithm_audit_fixes.md)。下方 P06/P07 历史截图与数值保留各自产生时的版本含义，不能替代 v3 当前资格。
+Spiral 使用中间 Z 的真实实体有限采样；支撑检查完整运动段与目标 CAD，但零件/支撑联合逐层调度和完整喷嘴扫掠仍未验证。下文数值和图片均由本轮 v3 当前源码重新生成；更早的截图只保存在复盘 evidence 中，不再作为当前功能证据。
 
 ## 入口、前置条件与范围
 
 从 Workbench 首页选择“平面切片 / Planar Slicing”，或在导入 STEP/STP 后进入该工作台。需要有效 STEP 实体、Setup、Model CS、Build CS、Machine、Nozzle 和 Placement。内部长度单位为 mm，进给为 mm/min；截层使用 Workpiece Build-XY 语义。
 
 可复现实例为 `example/三叶扇/Supportless_sample.stp` 的 `body_002`。P06 证据使用首层 `Z=60 mm`、层高 `0.6 mm`、道宽 `0.6 mm`、进给 `100 mm/min`。Zigzag、Offset 和 Thin Wall 为单层；Spiral 使用 `Z=60.0` 到 `60.6 mm` 两个相邻层。
+
+工作台包含一个预览操作和五个制造操作。`Planar Region` 只显示分层区域、孔和岛，不生成 NC，也不导出六件套；`Planar Zigzag`、`Planar Offset`、`Planar Thin Wall`、`Planar Spiral` 和 `Planar Support` 都进入共享 Toolpath、MachineAxisTrajectory、ValidationReport、后处理与 G-code 回读链。新建类型和现有操作使用两个独立选择框，可在一个项目中切换多个操作及其 Viewer 结果。
+
+![Planar Zigzag 当前中文总览](assets/planar/current_p01_p07/p02/01_planar_zh_1366x768.png)
 
 ## 创建操作与参数
 
@@ -41,6 +45,15 @@ Spiral 使用中间 Z 的真实实体有限采样；支撑检查完整运动段�
 | 支撑界面间距 / Interface spacing | mm | Support | 界面层 hatch 的线间距；必须大于 0。 |
 | 支撑图案 / Support pattern | — | Support | `Lines`（线形）或 `Grid`（网格）；Grid 是相邻层交替正交的 Lines，不在同层重复交叉挤出。 |
 
+### Region 与五种制造操作
+
+- `Planar Region`：检查指定 Z 范围的截面、孔、岛和稳定实体引用。Viewer 可预览区域；该操作没有 MachineAxisTrajectory、G-code 或导出按钮资格。
+- `Planar Zigzag`：轮廓优先的往复填充，核对间距、方向、顺序、道宽包络、逐区域材料量与残余。
+- `Planar Offset`：从边界向内生成指定圈数的偏置路径；窄区部分消失为 Warning，全部消失为 Error。
+- `Planar Thin Wall`：处理开放/闭合薄壁和有限多道；壁厚不足或残余覆盖会给出可定位诊断。
+- `Planar Spiral`：受限于单岛无孔且至少两个相邻层，生成连续 Z 路径；多岛、孔或单层输入会拒绝。
+- `Planar Support`：从 buildplate 向上建立垂直 Lines/Grid 支撑，分开主体和 interface；范围见 P07 小节。
+
 ## 正常流程
 
 1. 打开 STEP，选择 body，确认 Setup 和资源均为有效状态。
@@ -48,13 +61,16 @@ Spiral 使用中间 Z 的真实实体有限采样；支撑检查完整运动段�
 3. 点击“生成预览 / Generate preview”。路径操作会生成共享 Toolpath、检查报告、Generic XYZAC 离线参考轨迹、G-code 和独立回读。
 4. 在三维预览中核对沉积路径、空移、层和模型的相对位置；再查看 Warning/Error 与导出按钮状态。
 5. 只有状态为 Ready 或允许导出的 Warning，且没有阻止性 Error 时，点击“导出结果 / Export result”。
-6. 用“保存项目 / Save project”保存并重新打开。确认操作类型、实体引用、参数和结果恢复；改动任一输入后，应先看到 Stale，再重新生成。
+6. 用“保存项目 / Save project”保存并重新打开。操作、稳定引用、参数和既有资格摘要会恢复；运行时 Toolpath/G-code 不写入项目文件，所以原 Ready/Warning 会在重开后显示 Stale，重新 Generate 后才能查看或导出当前结果。
+7. “撤销 / Undo”和“重做 / Redo”覆盖创建、编辑等领域命令；撤销参数修改会恢复上一份有效 Viewer/导出结果。问题列表是可定位索引，激活条目会显示完整 code/object，并尽量定位到对应层或路径点。
 
 ### P07：buildplate-only 垂直支撑
 
 选择 `Planar Support` 后，系统从首层构建平面向上投影可达的支撑柱，只保留与 buildplate 连通的竖直支撑；支撑主体和靠近模型的 interface 分开记录。悬垂判定使用 `Support overhang angle`，支撑 hatch 可选 `Lines` 或 `Grid`。该操作适合需要从平台起撑的悬垂区域，不提供从模型中途起撑、树状/自由形支撑或多材料支撑。
 
-正常操作：绑定一个有效 STEP body，将 `first_layer_z_mm` 设为与 `layer_height_mm` 相等，使首个沉积平面位于 Build Z=0 上方一层高，再设置末层 Z 和其余 P07 参数，点击“应用 / Apply”后“生成预览 / Generate preview”。在三维预览中分别检查 support 与 support interface，确认 Warning/Error、路径顺序和模型间隙，再按通用流程导出、保存和重开。支撑生成时间较长时可点击“取消生成 / Cancel generation”；取消后上一份有效 Ready 结果保留。
+正常操作：绑定一个有效 STEP body，将 `first_layer_z_mm` 设为与 `layer_height_mm` 相等，使首个沉积平面位于 Build Z=0 上方一层高，再设置末层 Z 和其余 P07 参数，点击“应用 / Apply”后“生成预览 / Generate preview”。在三维预览中分别检查浅绿色 `support_material` 主体和深绿色 `support_interface` 接触层，确认 Warning/Error、路径顺序和模型间隙，再按通用流程导出、保存和重开。支撑生成时间较长时可点击“取消生成 / Cancel generation”；取消命令通过同一领域服务触达活动生成，上一份有效结果和 Viewer 保留。
+
+![P07 中文参数与模型总览](assets/planar/current_p01_p07/p07/00_support_grid_zh_1366x768_parameters.png)
 
 以下情况应按问题列表处理：
 
@@ -66,6 +82,10 @@ Spiral 使用中间 Z 的真实实体有限采样；支撑检查完整运动段�
 - `planar.support_parameter_invalid` 表示角度、间隙、间距、界面层数或图案不在允许范围；按字段修正后 Apply。
 - 取消生成：长时间生成可安全取消；上一份有效 Ready 结果保留，确认输入后再重新生成。
 
+## 脚本与 HTTP
+
+受限脚本和 HTTP 与 GUI 使用同一个 `PlanarCommandService`。脚本命令包括 `planar.create_operation`、`planar.set_operation`、`planar.generate_operation`、`planar.export_operation`、`planar.cancel_generation`、`planar.issues`、`planar.validate`、`undo` 和 `redo`。HTTP 对应入口为 `/planar/operation/create`、`/planar/operation/set`、`/planar/operation/generate`、`/planar/operation/export`、`/planar/generation/cancel`、`/planar/issues`、`/planar/validate`、`/planar/undo` 和 `/planar/redo`。创建和设置请求携带 `operation_type`、`operation_id`、`body_id` 及允许的参数字段；生成、导出和取消仍遵守 Ready/Warning/Error/Stale 与事务回滚规则。
+
 ## P07 导出与能力边界
 
 允许导出的 P07 结果沿用六件套：`main.gcode`、`toolpath.json`、`machine_axes.csv`、`warnings.json`、`preview.json`、`manifest.json`，当前算法版本为 `planar-support-product-v3`。用 `toolpath.json` 检查 `planar_support`、`planar_support_interface` 等 stage/region 语义，用 `warnings.json` 判断是否存在未服务区域；`main.gcode` 的可视化仍应结合 G-code 预览页核对。
@@ -76,36 +96,38 @@ P07 只实现 buildplate-only 的垂直支撑和 Lines/Grid hatch。生成链会
 
 P07 的解析浮空梁保留了平台下方四个空模型层，并在其下生成主体与 Interface 路径。证据结果含 66 个 Toolpath 点、33 条沉积段，独立复算和记录材料体积均为 61.86 mm³，G-code 为 66/66 点回读通过，六件套齐全。Generic XYZAC 的回转奇异以 Warning 保留，所以这是可导出的 Warning，不写成无警告的 Ready。
 
-![P07 Grid 中文正常结果，1366×768](../reviews/evidence/2026-09-12_p07_planar_support/ui/01_support_grid_zh_1366x768_ready.png)
+![P07 Grid 中文正常结果，1366×768](assets/planar/current_p01_p07/p07/01_support_grid_zh_1366x768_ready.png)
 
-下图是道宽大于支撑域后的真实错误示例。长错误码完整换行，导出按钮禁用；恢复道宽后可重新生成，见 [中文恢复截图](../reviews/evidence/2026-09-12_p07_planar_support/ui/05_support_error_recovered_zh_1600x900.png)。
+![P07 Lines 英文正常结果，1600×900](assets/planar/current_p01_p07/p07/02_support_lines_en_1600x900_ready.png)
 
-![P07 过窄支撑错误，1366×768](../reviews/evidence/2026-09-12_p07_planar_support/ui/04_support_error_en_1366x768.png)
+下图是道宽大于支撑域后的真实错误示例。长错误码完整换行，导出按钮禁用；恢复道宽后可重新生成，见 [中文恢复截图](assets/planar/current_p01_p07/p07/05_support_error_recovered_zh_1600x900.png)。
 
-修改支撑线间距后旧结果进入 Stale、保留预览并禁止导出；[Stale 截图](../reviews/evidence/2026-09-12_p07_planar_support/ui/06_support_stale_en_1920x1080.png)及[重新生成后的恢复截图](../reviews/evidence/2026-09-12_p07_planar_support/ui/07_support_stale_recovered_zh_1600x900.png)记录了该流程。全部 7 个 P07 UI 案例覆盖中英文与 1366×768、1600×900、1920×1080，横向滚动、可见按钮裁切和控件碰撞均为 0。
+![P07 过窄支撑错误，1366×768](assets/planar/current_p01_p07/p07/04_support_error_en_1366x768.png)
 
-现有 `example/扇叶/风扇扇叶(1).STEP` 的 `body_001` 也已实测；它在 Z=57 mm 的截面端点恢复中需要 0.00100791389 mm 修正，超过 0.001 mm 上限，报告 `planar.section_endpoint_gap_exceeds_limit`，进入 Error 且未导出。这项结果说明当前 STEP 截面链仍有复杂轮廓边界，不作为 P07 成功证据。解析真值、六件套哈希、风扇结果和 UI 审计见 [P07 真实模型摘要](../reviews/evidence/2026-09-12_p07_planar_support/real_model/summary.json)与 [P07 UI 摘要](../reviews/evidence/2026-09-12_p07_planar_support/ui/summary.json)。
+修改支撑线间距后旧结果进入 Stale、保留预览并禁止导出；[Stale 截图](assets/planar/current_p01_p07/p07/06_support_stale_en_1920x1080.png)及[重新生成后的恢复截图](assets/planar/current_p01_p07/p07/07_support_stale_recovered_zh_1600x900.png)记录了该流程。全部 9 个 P07 UI 案例覆盖顶部参数、底部帮助/问题列表、中英文与 1366×768、1600×900、1920×1080，横向滚动、可见按钮裁切和控件碰撞均为 0。
+
+仓库真实复杂 STEP `Supportless_sample.stp` 的 `body_002` 已成功生成 9,662 点，材料量 5,663.310163 mm³，9,662/9,662 回读通过并导出六件套。另一个 `example/扇叶/风扇扇叶(1).STEP` 的 `body_001` 在 Z=57 mm 需要 0.00100791389 mm 端点修正，超过 0.001 mm 上限，进入 Error 且未导出。成功与严格拒绝结果见 [当前 P07 真实模型证据](../reviews/evidence/2026-09-12_p07_planar_final/real_model/)；当前 UI 摘要见 [稳定图片清单](assets/planar/current_p01_p07/p07/summary.json)。
 
 P06 真实 STEP 摘要如下。四项均生成六件套，G-code 回读的坐标、挤出、进给和顺序比对均通过；`Warning` 仍须按下节含义处理。
 
 | 操作 | 参数要点 | 路径点 | 结果摘要 |
 | --- | --- | ---: | --- |
-| Zigzag | 单层，间距 0.6 mm | 399 | 覆盖 200.0 mm²，残余 0，回读通过。 |
-| Offset | 单层，3 圈偏置 | 15 | 覆盖 181.2 mm²，残余 18.8 mm²，回读通过。 |
-| Thin Wall | 单层，壁厚 0.6 mm、最多 3 道 | 5 | 覆盖 63.2 mm²，残余 136.8 mm² Warning，回读通过。 |
+| Zigzag | 单层，间距 0.6 mm | 142 | 材料量 120.023964 mm³，回读通过。 |
+| Offset | 单层，3 圈偏置 | 16 | 材料量 108.863714 mm³，回读通过。 |
+| Thin Wall | 单层，壁厚 0.6 mm、最多 3 道 | 6 | 材料量 38.015905 mm³，残余覆盖 Warning，回读通过。 |
 | Spiral | 两层，Z=60.0–60.6 mm，64 点/轮廓 | 129 | 连续 Z 路径；离散层投影 Warning，回读通过。 |
 
-![Offset 中文正常结果，1366×768](../reviews/evidence/2026-09-12_p06_planar/ui/01_planar_offset_zh_1366x768.png)
+![Offset 中文正常结果，1366×768](assets/planar/current_p01_p07/p06/01_planar_offset_zh_1366x768.png)
 
-上图为 Offset 正常结果。英文等距视图见 [Offset 英文截图](../reviews/evidence/2026-09-12_p06_planar/ui/02_planar_offset_en_1600x900.png)。
+上图为 Offset 正常结果。英文等距视图见 [Offset 英文截图](assets/planar/current_p01_p07/p06/02_planar_offset_en_1600x900.png)。
 
-![Thin Wall 中文正常结果，1600×900](../reviews/evidence/2026-09-12_p06_planar/ui/03_planar_thin_wall_zh_1600x900.png)
+![Thin Wall 中文正常结果，1600×900](assets/planar/current_p01_p07/p06/03_planar_thin_wall_zh_1600x900.png)
 
-Thin Wall 的英文模型叠加视图见 [Thin Wall 英文截图](../reviews/evidence/2026-09-12_p06_planar/ui/04_planar_thin_wall_en_1920x1080.png)。残余覆盖 Warning 不等于失败，但表示当前参数与区域未完全覆盖，需审阅后再使用导出结果。
+Thin Wall 的英文模型叠加视图见 [Thin Wall 英文截图](assets/planar/current_p01_p07/p06/04_planar_thin_wall_en_1920x1080.png)。残余覆盖 Warning 不等于失败，但表示当前参数与区域未完全覆盖，需审阅后再使用导出结果。
 
-![Spiral 中文正常结果，1920×1080](../reviews/evidence/2026-09-12_p06_planar/ui/05_planar_spiral_zh_1920x1080.png)
+![Spiral 中文正常结果，1920×1080](assets/planar/current_p01_p07/p06/05_planar_spiral_zh_1920x1080.png)
 
-Spiral 的英文顶视图见 [Spiral 英文截图](../reviews/evidence/2026-09-12_p06_planar/ui/06_planar_spiral_en_1366x768.png)。它必须至少跨两个相邻层；单层输入会被拒绝。
+Spiral 的英文顶视图见 [Spiral 英文截图](assets/planar/current_p01_p07/p06/06_planar_spiral_en_1366x768.png)。它必须至少跨两个相邻层；单层输入会被拒绝。
 
 ## Warning、Error 与恢复
 
@@ -119,15 +141,15 @@ Spiral 的英文顶视图见 [Spiral 英文截图](../reviews/evidence/2026-09-1
 | Stale | 参数、实体引用、坐标或资源在生成后改变。 | 不使用旧结果导出，重新 Generate。 |
 | 取消生成 | 用户取消或后台任务中断。 | 上一份 Ready 结果保留；确认输入后重新生成。 |
 
-![Spiral 单层错误示例，1366×768](../reviews/evidence/2026-09-12_p06_planar/ui/07_planar_spiral_error_zh_1366x768.png)
+![Spiral 单层错误示例，1366×768](assets/planar/current_p01_p07/p06/07_planar_spiral_error_zh_1366x768.png)
 
 此图是错误示例，导出按钮被禁用。将末层改为相邻层后，生成与回读恢复成功：
 
-![Spiral 恢复后的英文结果，1600×900](../reviews/evidence/2026-09-12_p06_planar/ui/08_planar_spiral_recovered_en_1600x900.png)
+![Spiral 恢复后的英文结果，1600×900](assets/planar/current_p01_p07/p06/08_planar_spiral_recovered_en_1600x900.png)
 
 ## 导出与证据
 
-每次允许导出的路径操作生成六件套：`main.gcode`、`toolpath.json`、`machine_axes.csv`、`warnings.json`、`preview.json` 与 `manifest.json`。`toolpath.json` 保留 operation、layer、region、事件和材料语义；`machine_axes.csv` 仅为参考轴轨迹。真实 STEP 四操作的清单、SHA-256 和回读详情见 [P06 真实模型摘要](../reviews/evidence/2026-09-12_p06_planar/real_model/summary.json)。
+每次允许导出的路径操作生成六件套：`main.gcode`、`toolpath.json`、`machine_axes.csv`、`warnings.json`、`preview.json` 与 `manifest.json`。`toolpath.json` 保留 operation、layer、region、事件和材料语义；`machine_axes.csv` 仅为参考轴轨迹。真实 STEP 四操作的清单、SHA-256 和回读详情见 [当前 P01—P06 真实模型摘要](../reviews/evidence/2026-09-12_p07_planar_final/real_model/final_p01_p06/summary.json)。
 
 ## 能力边界
 

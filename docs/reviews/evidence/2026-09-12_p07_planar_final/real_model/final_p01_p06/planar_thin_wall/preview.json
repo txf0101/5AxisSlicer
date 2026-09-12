@@ -1,0 +1,100 @@
+{
+  "coordinate_frame": "workpiece_build",
+  "segments": [
+    {
+      "comment": "generated:planar_thin_wall:region-0001:thin_wall",
+      "delta_e": 0.17324895884585248,
+      "end": [
+        5.071578322965287,
+        -9.664567585398588,
+        60.0
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        4.784314659702262,
+        -9.27846090760633,
+        60.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_thin_wall:region-0001:thin_wall",
+      "delta_e": 17.610706673975436,
+      "end": [
+        34.2719141545409,
+        -48.91214985679952,
+        60.0
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        5.071578322965287,
+        -9.664567585398588,
+        60.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_thin_wall:region-0001:thin_wall",
+      "delta_e": 1.2239964864322828,
+      "end": [
+        36.99973784103427,
+        -46.88263967744324,
+        60.0
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        34.2719141545409,
+        -48.91214985679952,
+        60.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_thin_wall:region-0001:thin_wall",
+      "delta_e": 17.78395601096374,
+      "end": [
+        7.512137795048873,
+        -7.248949829079185,
+        60.0
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        36.99973784103427,
+        -46.88263967744324,
+        60.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_thin_wall:region-0001:thin_wall",
+      "delta_e": 1.2239965204678172,
+      "end": [
+        4.784314659702262,
+        -9.27846090760633,
+        60.0
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        7.512137795048873,
+        -7.248949829079185,
+        60.0
+      ],
+      "width": 0.6
+    }
+  ]
+}

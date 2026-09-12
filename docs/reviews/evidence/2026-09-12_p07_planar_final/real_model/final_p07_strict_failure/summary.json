@@ -1,0 +1,297 @@
+{
+  "analytic_case": {
+    "independent_truth": {
+      "deposition_segment_count": 33,
+      "independent_material_volume_mm3": 61.859999999999964,
+      "passed": true,
+      "recorded_material_volume_mm3": 61.86,
+      "stage_segment_counts": {
+        "planar_support": 12,
+        "planar_support_interface": 21
+      }
+    },
+    "input": {
+      "definition": {
+        "bounds_mm": {
+          "maximum": [
+            12.0,
+            8.0,
+            3.2
+          ],
+          "minimum": [
+            4.0,
+            2.0,
+            2.2
+          ]
+        },
+        "expected_empty_part_layers_mm": [
+          0.5,
+          1.0,
+          1.5,
+          2.0
+        ],
+        "expected_support_stage_by_z_mm": {
+          "0.5": "planar_support",
+          "1.0": "planar_support",
+          "1.5": "planar_support_interface",
+          "2.0": "planar_support_interface"
+        },
+        "kind": "floating_rectangular_beam",
+        "requested_layers_mm": [
+          0.5,
+          1.0,
+          1.5,
+          2.0,
+          2.5,
+          3.0
+        ]
+      },
+      "path": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\docs\\reviews\\evidence\\2026-09-12_p07_planar_final\\real_model\\final_p07_strict_failure\\input\\analytic_floating_beam.step",
+      "selected_body": "body_001",
+      "sha256": "5bd41c7a929654a5813bbf6ec8d0f5e4c5d361e9f80f42077e4a15ed0222263d"
+    },
+    "result": {
+      "artifacts_sha256": {
+        "machine_axes.csv": "a08f944b89c9e9507cdf708af9ac5ea2417a3cf04faad332f9ed88dc92dd9524",
+        "main.gcode": "5fd7c1f987141c471420ea2bfc35f0573d27470cc454487b1aed6623181c7952",
+        "manifest.json": "3b0b57ecda4cc7f2d3caa30c8fd546f7d689318099232cfe26918fc01913b322",
+        "preview.json": "f2cad9738eb328192543906d3bf4009c9c684391a1ddfb6c31646245ba913620",
+        "toolpath.json": "af63dc59dc0eb1b6b1682b41b3050daa46fd11d9a82ac50c22e247a2aafce8b2",
+        "warnings.json": "af8e360426daaf6340880088fe9541c09cf1790b5cfb22a8c7fe853518150b28"
+      },
+      "exportable": true,
+      "issues": [
+        {
+          "code": "xyzac.rotary_singularity",
+          "context": {
+            "count": 66,
+            "first_context": {
+              "retained_c_rad": 0.0
+            }
+          },
+          "object_id": "point-0000001",
+          "severity": "warning"
+        },
+        {
+          "code": "planar.support_joint_schedule_unverified",
+          "context": {
+            "already_printed_state_available": false,
+            "body_id": "body_001",
+            "full_nozzle_sweep_verified": false,
+            "joint_layer_schedule_verified": false,
+            "path_point_count": 66,
+            "scope": "independent_support_operation_with_target_cad_centreline_check",
+            "target_part_toolpath_included": false
+          },
+          "object_id": "",
+          "severity": "warning"
+        }
+      ],
+      "measurement": {
+        "absolute_volume_difference_mm3": 0.0,
+        "bead_outside_max_mm": 1.6653345369377348e-16,
+        "covered_area_mm2": 151.03999999999996,
+        "deposition_outside_max_mm": 0.0,
+        "geometric_region_area_mm2": 192.0,
+        "geometric_volume_mm3": 61.859999999999964,
+        "material_excess_mm3": 0.0,
+        "material_volume_mm3": 61.859999999999964,
+        "overlap_area_mm2": 24.479999999999997,
+        "region_volumes": [
+          [
+            "layer-00001",
+            "support-body-0001",
+            24.0,
+            11.099999999999998,
+            28.0
+          ],
+          [
+            "layer-00002",
+            "support-body-0001",
+            24.0,
+            11.340000000000003,
+            28.0
+          ],
+          [
+            "layer-00003",
+            "support-interface-0001",
+            24.0,
+            19.979999999999993,
+            28.0
+          ],
+          [
+            "layer-00004",
+            "support-interface-0001",
+            24.0,
+            19.44000000000001,
+            28.0
+          ]
+        ],
+        "residual_area_mm2": 40.96000000000001,
+        "sample_grid_mm": 0.19999999999999998,
+        "sampled_region_area_mm2": 191.99999999999997,
+        "target_solid_volume_mm3": 96.0,
+        "volume_difference_mm3": 0.0
+      },
+      "operation": {
+        "dirty_reasons": [
+          "operation_created",
+          "operation_geometry_changed",
+          "operation_parameters_changed"
+        ],
+        "enabled": true,
+        "geometry": {
+          "body": {
+            "assembly_name": "Open CASCADE STEP translator 7.8 1",
+            "geometry_type": "body",
+            "object_id": "body_001",
+            "parent_body_id": null,
+            "signature": {
+              "descriptor": {
+                "assembly_path": "Open CASCADE STEP translator 7.8 1",
+                "bounds_mm": {
+                  "maximum": [
+                    12.0000001,
+                    8.0000001,
+                    3.2000001
+                  ],
+                  "minimum": [
+                    3.9999999,
+                    1.9999999,
+                    2.1999999000000003
+                  ]
+                },
+                "centroid_mm": [
+                  8.0,
+                  5.000000000000001,
+                  2.700000000000001
+                ],
+                "dimensions_mm": [
+                  8.000000199999999,
+                  6.0000002,
+                  1.0000001999999997
+                ],
+                "kind": "solid",
+                "surface_area_mm2": 124.0,
+                "topology": {
+                  "curve_types": {
+                    "line": 12
+                  },
+                  "edge_count": 12,
+                  "face_count": 6,
+                  "surface_types": {
+                    "plane": 6
+                  },
+                  "vertex_count": 8,
+                  "vertex_edge_degrees": [
+                    3,
+                    3,
+                    3,
+                    3,
+                    3,
+                    3,
+                    3,
+                    3
+                  ]
+                },
+                "volume_mm3": 47.99999999999999
+              },
+              "geometry_type": "body",
+              "kernel_signature": "6039125740599de3f1b5daad6e7181555fa3fa97acb328b4ed6d24f4e858fb7a",
+              "parent_body": null,
+              "schema_version": 1
+            }
+          }
+        },
+        "name": "P07 Planar Support",
+        "operation_id": "p07-analytic-floating-beam",
+        "operation_type": "planar_support",
+        "parameters": {
+          "bead_width_mm": 0.6,
+          "feedrate_mm_min": 100.0,
+          "first_layer_z_mm": 0.5,
+          "last_layer_z_mm": 3.0,
+          "layer_height_mm": 0.5,
+          "line_spacing_mm": 0.6,
+          "offset_pass_count": 3,
+          "retract_length_mm": 1.0,
+          "spiral_samples_per_contour": 64,
+          "support_interface_layers": 2,
+          "support_interface_spacing_mm": 0.6,
+          "support_line_spacing_mm": 1.0,
+          "support_overhang_angle_deg": 45.0,
+          "support_pattern": "grid",
+          "support_xy_gap_mm": 0.0,
+          "support_z_gap_mm": 0.0,
+          "thin_wall_max_passes": 3,
+          "travel_feedrate_mm_min": 100.0,
+          "wall_thickness_mm": 0.6
+        },
+        "setup_id": "setup-1",
+        "state": "dirty"
+      },
+      "product_state": {
+        "operation_id": "p07-analytic-floating-beam",
+        "parameter_semantic_sha256": "be5dd8100ef5114170aa3c5a5ebfe240c38ff48706f4dcd0e0292b5f9ee1f2fa",
+        "status": "warning"
+      },
+      "readback": {
+        "coordinate_mismatches": [],
+        "expected_points": 66,
+        "extrusion_mismatches": [],
+        "feedrate_mismatches": [],
+        "order_mismatches": [],
+        "passed": true,
+        "read_points": 66,
+        "schema_version": 1
+      },
+      "stage_ids": [
+        "planar_support",
+        "planar_support_interface"
+      ],
+      "toolpath_point_count": 66,
+      "trajectory_sample_count": 66
+    }
+  },
+  "existing_fan_case": {
+    "exported": false,
+    "generation_error": "planar.section_endpoint_gap_exceeds_limit: z_mm=57, vertex=2, correction_mm=0.00100791389, limit_mm=0.001",
+    "input": {
+      "bounds_mm": [
+        [
+          8.332718716866937,
+          -50.46772956241904,
+          49.20207353733448
+        ],
+        [
+          83.90420222623231,
+          72.73904529370034,
+          58.89432898591723
+        ]
+      ],
+      "first_layer_z_mm": 0.5,
+      "last_layer_z_mm": 60.0,
+      "layer_height_mm": 0.5,
+      "path": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\扇叶\\风扇扇叶(1).STEP",
+      "selected_body": "body_001",
+      "sha256": "294b882a7231d6b0fcfaf4aa8c6355422b212590f443158ea0a624fec2b901ef"
+    },
+    "product_state": {
+      "operation_id": "p07-existing-fan",
+      "parameter_semantic_sha256": "3acd71155080d1b8ddbc3f585f6c326283bee5726d9de022040e38cd45735dff",
+      "status": "error"
+    }
+  },
+  "generic_xyzac_boundary": "Generic XYZAC is an offline reference only; controller semantics, real machine calibration, collision qualification and physical deposition were not verified.",
+  "implementation_boundary": "Clean-room implementation from public slicer behavior; no CuraEngine or PrusaSlicer AGPLv3 source was copied or translated.",
+  "schema_version": 1,
+  "scope": "buildplate-only Grid/Lines support",
+  "source_sha256": {
+    "F:\\【项目和任务】\\5AxisSclicer_V2.0\\scripts\\planar_p07_real_model_evidence.py": "fe55674ac1f4de89c003fa1981a776d54e45be63402164ca7f66739dabae76d8",
+    "F:\\【项目和任务】\\5AxisSclicer_V2.0\\src\\five_axis_slicer\\algorithms\\planar\\support.py": "a13354e8f7d898c41fee0f41514c1f8bdf1ddbba05fb12ef8e33e33e54c487f9",
+    "F:\\【项目和任务】\\5AxisSclicer_V2.0\\src\\five_axis_slicer\\algorithms\\planar\\support_geometry.py": "23f13e51c9e1fa79520bc6fc3c32ba9686bde5fda87a447b0b19dfcd391d676c",
+    "F:\\【项目和任务】\\5AxisSclicer_V2.0\\src\\five_axis_slicer\\postprocessing\\planar_product.py": "a4b4043598dbe61c2d17e480107d9ce2e0930f50127730b38fcc3e4c4482a2bc",
+    "F:\\【项目和任务】\\5AxisSclicer_V2.0\\src\\five_axis_slicer\\postprocessing\\planar_support_product.py": "78f078d1916d45fba14015cf65ef7050d638466e51838ca73158877cc598b655"
+  },
+  "task": "P07"
+}

@@ -41,6 +41,8 @@ _EXTRUSION_ROLES = frozenset(
         "skin",
         "infill",
         "support",
+        "support_material",
+        "support_interface",
         "custom",
     }
 )
@@ -61,6 +63,8 @@ _PREVIEW_EXTRUSION_ROLES = {
     "skin": "top_solid_infill",
     "infill": "internal_infill",
     "support": "support_material",
+    "support_material": "support_material",
+    "support_interface": "support_interface",
     "custom": "custom",
 }
 

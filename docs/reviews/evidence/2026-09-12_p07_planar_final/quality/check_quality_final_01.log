@@ -1,0 +1,11 @@
+==> Ruff
+All checks passed!
+==> Migrated Ruff
+All checks passed!
+==> Security Ruff
+All checks passed!
+==> Migrated format
+61 files already formatted
+==> Context budget
+function: automation_routes.py:AutomationRouter.__init__ is 61; budget is 60
+class: planar_ui.py:PlanarPage is 629; budget is 500

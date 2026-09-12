@@ -101,7 +101,9 @@ T08—T12 的实现是本项目独立复写，受本地 Fractal/V1 项目启发�
 
 ## 9 P07 支撑行为的公开来源边界
 
+P07 关闭时于 2026-09-12 重新固定上游版本。PrusaSlicer `master` 为 [`6f510128d7c2e543b62919b74bea7e876f564205`](https://github.com/prusa3d/PrusaSlicer/tree/6f510128d7c2e543b62919b74bea7e876f564205)，CuraEngine `main` 为 [`553d59ca44ae3a562034d6593c238c46783a1d32`](https://github.com/Ultimaker/CuraEngine/tree/553d59ca44ae3a562034d6593c238c46783a1d32)。本轮只读取官方 REST 元数据、许可证和公开帮助页；本机 Git 代理 `127.0.0.1:7890` 不可用，所以未以 `git ls-remote` 作为版本证据。Prusa Support material 页面 UTF-8 内容 SHA-256 为 `6D7CE83040917872165BA89B9F6CF07E87ECAAF23CFF3E22B28BDBF4E6FE6E65`。
+
 | 编号 | 公开来源与许可证 | 本轮实际核对的行为 | 本项目实现边界 |
 | --- | --- | --- | --- |
-| P07-01 | [Prusa Support material](https://help.prusa3d.com/article/support-material_1698)，Prusa 官方 Support 文档 | 已核对 `Supports on build plate only`、`Overhang threshold`、`Top contact Z distance`、`Top interface layers` 四项支撑参数及其公开说明 | 用于定义 P07 的可观察参数语义和验收边界；文档不公开本项目所需的完整几何、分区、接口生成或五轴路径算法 |
-| P07-02 | [PrusaSlicer](https://github.com/prusa3d/PrusaSlicer) [AGPLv3](https://github.com/prusa3d/PrusaSlicer/blob/master/LICENSE)；[CuraEngine](https://github.com/Ultimaker/CuraEngine) [AGPLv3](https://github.com/Ultimaker/CuraEngine/blob/main/LICENSE) | 两个公开项目的许可证均为 AGPLv3；本登记仅用于许可证和公开行为边界核对 | P07 采用 clean-room 独立实现：不复制或翻译 PrusaSlicer/CuraEngine 源码，不把未逐页读取的 Cura 页面或未核验的上游细节写成行为依据；本项目的支撑几何、状态契约和 Toolpath 输出需独立验证 |
+| P07-01 | [Prusa Support material](https://help.prusa3d.com/article/support-material_1698)，Prusa 官方 Support 文档；访问日 2026-09-12，内容哈希见上文 | 已核对 `Supports on build plate only`、`Overhang threshold`、`Top contact Z distance`、`Top interface layers` 四项支撑参数及其公开说明 | 用于定义 P07 的可观察参数语义和验收边界；文档不公开本项目所需的完整几何、分区、接口生成或五轴路径算法 |
+| P07-02 | 固定 [PrusaSlicer commit](https://github.com/prusa3d/PrusaSlicer/tree/6f510128d7c2e543b62919b74bea7e876f564205) 及其 [AGPLv3](https://github.com/prusa3d/PrusaSlicer/blob/6f510128d7c2e543b62919b74bea7e876f564205/LICENSE)；固定 [CuraEngine commit](https://github.com/Ultimaker/CuraEngine/tree/553d59ca44ae3a562034d6593c238c46783a1d32) 及其 [AGPLv3](https://github.com/Ultimaker/CuraEngine/blob/553d59ca44ae3a562034d6593c238c46783a1d32/LICENSE) | 两个公开项目的许可证均为 AGPLv3；本登记只用于许可证和公开可观察行为边界核对 | P07 采用 clean-room 独立实现：不复制、翻译或改写 PrusaSlicer/CuraEngine 源码、测试和内部数据结构；本项目的支撑几何、状态契约、独立真值和 Toolpath 输出均由本项目验证 |

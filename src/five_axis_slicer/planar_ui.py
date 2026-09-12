@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 from collections import Counter
+from collections.abc import Mapping
 from pathlib import Path
 from typing import Any, Callable
 
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import (
+    QApplication,
     QComboBox,
     QDoubleSpinBox,
     QFileDialog,
@@ -15,6 +17,7 @@ from PyQt5.QtWidgets import (
     QGridLayout,
     QHBoxLayout,
     QLabel,
+    QListWidget,
     QPushButton,
     QScrollArea,
     QSizePolicy,
@@ -41,7 +44,8 @@ _TEXT = {
         "title": "平面切片",
         "back": "返回",
         "open": "打开 STEP",
-        "operation": "操作类型",
+        "operation": "新建操作类型",
+        "operation_instance": "现有操作",
         "body": "实体",
         "first": "首层 Z (mm)",
         "layer": "层高 (mm)",
@@ -69,6 +73,11 @@ _TEXT = {
         "generate": "生成预览",
         "export": "导出结果",
         "cancel": "取消生成",
+        "undo": "撤销",
+        "redo": "重做",
+        "no_issues": "当前没有可定位问题。",
+        "issue_location": "问题位置",
+        "help": "帮助：先选择“新建操作类型”创建操作，再用“现有操作”切换、编辑、生成、查看或导出。长度单位为 mm，角度输入为 deg；修改已生成操作后结果会变为 Stale。",
         "no_cad": "请先打开 STEP 模型。",
         "coordinates": "Model CS 或 Build CS 无效，无法生成。",
         "unsupported": "该操作将在后续阶段实现；P01 仅支持区域截面预览。",
@@ -95,7 +104,8 @@ _TEXT = {
         "title": "Planar Slicing",
         "back": "Back",
         "open": "Open STEP",
-        "operation": "Operation type",
+        "operation": "New operation type",
+        "operation_instance": "Existing operation",
         "body": "Body",
         "first": "First layer Z (mm)",
         "layer": "Layer height (mm)",
@@ -123,6 +133,11 @@ _TEXT = {
         "generate": "Generate preview",
         "export": "Export result",
         "cancel": "Cancel generation",
+        "undo": "Undo",
+        "redo": "Redo",
+        "no_issues": "No locatable issues.",
+        "issue_location": "Issue location",
+        "help": "Help: choose New operation type to create, then use Existing operation to switch, edit, generate, inspect or export. Lengths use mm and the angle input uses deg; changing a generated operation makes its result Stale.",
         "no_cad": "Open a STEP model first.",
         "coordinates": "Model CS or Build CS is invalid; generation is unavailable.",
         "unsupported": "This operation is scheduled for a later stage; P01 supports region preview only.",
@@ -148,12 +163,25 @@ _TEXT = {
 }
 
 
-class PlanarPage(QWidget):
+class _PlanarPageView(QWidget):
     """A deliberately compact UI that routes every mutation through commands."""
 
     back_requested = pyqtSignal()
     open_step_requested = pyqtSignal()
     preview_ready = pyqtSignal(object)
+
+    def _create(self) -> None: ...
+    def _apply(self) -> None: ...
+    def _generate(self) -> None: ...
+    def _export(self) -> None: ...
+    def _cancel(self) -> None: ...
+    def _undo(self) -> None: ...
+    def _redo(self) -> None: ...
+    def _operation_selection_changed(self) -> None: ...
+    def _install_generation_event_pump(self) -> None: ...
+    def _show_selected_result(self, operation: Any, result: Any, *, emit: bool = False) -> None: ...
+    def _refresh_issue_list(self, setup_issues: Any, result: Any) -> None: ...
+    def _jump_to_issue(self) -> None: ...
 
     def __init__(
         self,
@@ -165,9 +193,13 @@ class PlanarPage(QWidget):
         super().__init__(parent)
         self.language = "zh"
         self._last_generation_error: str | None = None
+        self._selected_operation_id: str | None = None
+        self._viewer_operation_id: str | None = None
+        self._generation_in_progress = False
         self.controller = controller or PlanarController()
         self.viewer = (viewer_factory or ModelViewer)(self)
         self.commands = PlanarCommandService(self.controller)
+        self._install_generation_event_pump()
         self._build_ui()
         if self.controller.cad_model is not None and hasattr(self.viewer, "load_model"):
             self.viewer.load_model(self.controller.cad_model)
@@ -189,6 +221,12 @@ class PlanarPage(QWidget):
         editor_layout.setContentsMargins(8, 8, 8, 8)
         editor_layout.addLayout(self._build_editor_header())
         editor_layout.addLayout(self._build_parameter_form())
+        self.help_label = QLabel()
+        self.help_label.setObjectName("planarHelpText")
+        self.help_label.setWordWrap(True)
+        self.help_label.setTextFormat(Qt.PlainText)
+        self.help_label.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Preferred)
+        editor_layout.addWidget(self.help_label)
 
         actions = QGridLayout()
         self.create_button = QPushButton()
@@ -196,6 +234,8 @@ class PlanarPage(QWidget):
         self.generate_button = QPushButton()
         self.export_button = QPushButton()
         self.cancel_button = QPushButton()
+        self.undo_button = QPushButton()
+        self.redo_button = QPushButton()
         self._add_action_buttons(actions)
         editor_layout.addLayout(actions)
         self.status_label = QLabel()
@@ -206,6 +246,14 @@ class PlanarPage(QWidget):
             label.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Preferred)
         editor_layout.addWidget(self.status_label)
         editor_layout.addWidget(self.issues_label)
+        self.issue_list = QListWidget()
+        self.issue_list.setObjectName("planarIssueList")
+        self.issue_list.setMaximumHeight(84)
+        self.issue_list.setWordWrap(False)
+        self.issue_list.setTextElideMode(Qt.ElideNone)
+        self.issue_list.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.issue_list.itemActivated.connect(self._jump_to_issue)
+        editor_layout.addWidget(self.issue_list)
         editor_layout.addStretch(1)
         self.editor_scroll = QScrollArea(self)
         self.editor_scroll.setWidgetResizable(True)
@@ -239,6 +287,7 @@ class PlanarPage(QWidget):
         self.operation_type_combo.setCurrentIndex(
             max(0, self.operation_type_combo.findData("planar_region"))
         )
+        self.operation_instance_combo = QComboBox()
         self.body_combo = QComboBox()
         self.first_layer_spin = self._spin(0.2, -100000.0)
         self.layer_height_spin = self._spin(0.2, 0.000001)
@@ -274,11 +323,15 @@ class PlanarPage(QWidget):
         self.generate_button.clicked.connect(self._generate)
         self.export_button.clicked.connect(self._export)
         self.cancel_button.clicked.connect(self._cancel)
+        self.undo_button.clicked.connect(self._undo)
+        self.redo_button.clicked.connect(self._redo)
         self.operation_type_combo.currentIndexChanged.connect(self.refresh)
+        self.operation_instance_combo.currentIndexChanged.connect(self._operation_selection_changed)
 
     def _add_form_rows(self, form: QFormLayout) -> None:
         for key, widget in (
             ("operation", self.operation_type_combo),
+            ("operation_instance", self.operation_instance_combo),
             ("body", self.body_combo),
             ("first", self.first_layer_spin),
             ("layer", self.layer_height_spin),
@@ -302,7 +355,10 @@ class PlanarPage(QWidget):
         ):
             label = QLabel()
             label.setWordWrap(True)
-            label.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Preferred)
+            # Form labels must keep a real width in the 400 px editor panel.
+            # Ignored horizontal policy lets QFormLayout collapse them to zero
+            # when fields request all remaining space.
+            label.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
             widget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
             widget.setMinimumHeight(
                 max(widget.sizeHint().height(), widget.minimumSizeHint().height())
@@ -321,6 +377,8 @@ class PlanarPage(QWidget):
         ):
             actions.addWidget(button, index // 2, index % 2)
         actions.addWidget(self.cancel_button, 2, 0, 1, 2)
+        actions.addWidget(self.undo_button, 3, 0)
+        actions.addWidget(self.redo_button, 3, 1)
 
     @staticmethod
     def _spin(value: float, minimum: float) -> QDoubleSpinBox:
@@ -342,6 +400,9 @@ class PlanarPage(QWidget):
             raise TypeError("controller must be PlanarController")
         self.controller = controller
         self.commands = PlanarCommandService(controller)
+        self._selected_operation_id = None
+        self._viewer_operation_id = None
+        self._install_generation_event_pump()
         self._last_generation_error = None
         if controller.cad_model is not None and hasattr(self.viewer, "load_model"):
             self.viewer.load_model(controller.cad_model)
@@ -358,6 +419,9 @@ class PlanarPage(QWidget):
         self.generate_button.setText(t("generate"))
         self.export_button.setText(t("export"))
         self.cancel_button.setText(t("cancel"))
+        self.undo_button.setText(t("undo"))
+        self.redo_button.setText(t("redo"))
+        self.help_label.setText(t("help"))
         for key, label in self._labels.items():
             label.setText(t(key))
         self.support_pattern_combo.setItemText(
@@ -373,6 +437,7 @@ class PlanarPage(QWidget):
         state["ui"] = {
             "language": self.language,
             "selected_operation_type": self.operation_type_combo.currentData(),
+            "selected_operation_id": self._selected_operation_id,
             "selected_body_id": self.body_combo.currentText() or None,
             "generate_enabled": self.generate_button.isEnabled(),
             "export_enabled": self.export_button.isEnabled(),
@@ -381,6 +446,7 @@ class PlanarPage(QWidget):
         return state
 
     def refresh(self, *_ignored: Any) -> None:
+        self._refresh_operations()
         current_type = str(self.operation_type_combo.currentData() or "planar_region")
         self._refresh_bodies()
         operation = self._selected_operation()
@@ -388,12 +454,21 @@ class PlanarPage(QWidget):
             self._load_operation_controls(operation)
         effective_type = current_type if operation is None else operation.operation_type
         reason = self._generation_reason(effective_type, operation is not None)
-        self.generate_button.setEnabled(reason is None)
+        self.generate_button.setEnabled(reason is None and not self._generation_in_progress)
         self.generate_button.setToolTip(reason or "")
         self.apply_button.setEnabled(
-            self.controller.cad_model is not None and operation is not None
+            self.controller.cad_model is not None
+            and operation is not None
+            and not self._generation_in_progress
         )
-        self.cancel_button.setEnabled(self.controller.cad_model is not None)
+        self.create_button.setEnabled(not self._generation_in_progress)
+        self.cancel_button.setEnabled(self._generation_in_progress)
+        self.undo_button.setEnabled(
+            self.commands.kernel.can_undo and not self._generation_in_progress
+        )
+        self.redo_button.setEnabled(
+            self.commands.kernel.can_redo and not self._generation_in_progress
+        )
         product = (
             None if operation is None else self.controller.product_state(operation.operation_id)
         )
@@ -405,13 +480,27 @@ class PlanarPage(QWidget):
         self.issues_label.setText(
             product_issues_text(issues, product, self.language, self._last_generation_error)
         )
+        self._refresh_issue_list(issues, product_result)
+        self._show_selected_result(operation, product_result)
+
+    def _refresh_operations(self) -> None:
+        selected = self._selected_operation_id or self.operation_instance_combo.currentData()
+        self.operation_instance_combo.blockSignals(True)
+        self.operation_instance_combo.clear()
+        for operation in self.controller.operations:
+            self.operation_instance_combo.addItem(
+                f"{operation.name} · {operation.operation_type}", operation.operation_id
+            )
+        index = self.operation_instance_combo.findData(selected)
+        if index < 0 and self.operation_instance_combo.count():
+            index = self.operation_instance_combo.count() - 1
+        self.operation_instance_combo.setCurrentIndex(index)
+        self.operation_instance_combo.blockSignals(False)
+        self._selected_operation_id = (
+            None if index < 0 else str(self.operation_instance_combo.itemData(index))
+        )
 
     def _load_operation_controls(self, operation: Any) -> None:
-        operation_index = self.operation_type_combo.findData(operation.operation_type)
-        if operation_index >= 0 and operation_index != self.operation_type_combo.currentIndex():
-            self.operation_type_combo.blockSignals(True)
-            self.operation_type_combo.setCurrentIndex(operation_index)
-            self.operation_type_combo.blockSignals(False)
         parameters = operation.parameters
         for spin, value in (
             (self.first_layer_spin, parameters.first_layer_z_mm),
@@ -493,7 +582,13 @@ class PlanarPage(QWidget):
         self.body_combo.blockSignals(False)
 
     def _selected_operation(self):
-        return self.controller.operations[-1] if self.controller.operations else None
+        identifier = self._selected_operation_id
+        if identifier is None:
+            return None
+        return next(
+            (item for item in self.controller.operations if item.operation_id == identifier),
+            None,
+        )
 
     def _generation_reason(self, operation_type: str, has_operation: bool) -> str | None:
         if self.controller.cad_model is None:
@@ -537,11 +632,16 @@ class PlanarPage(QWidget):
             )
         return None
 
+
+class PlanarPage(_PlanarPageView):
+    """Command actions and result interaction for the Planar editor."""
+
     def _create(self) -> None:
         self._last_generation_error = None
-        self.commands.execute_command(
+        result = self.commands.execute_command(
             "create_operation", str(self.operation_type_combo.currentData()), origin="gui"
         )
+        self._selected_operation_id = str(result.payload["operation_id"])
         self.refresh()
 
     def _apply(self) -> None:
@@ -581,32 +681,25 @@ class PlanarPage(QWidget):
         operation = self._selected_operation()
         if operation is None or not self.generate_button.isEnabled():
             return
+        self._generation_in_progress = True
+        self.refresh()
         try:
-            self.commands.execute_command(
+            command_result = self.commands.execute_command(
                 "generate_operation", operation.operation_id, origin="gui"
             )
+            if command_result.payload.get("status") == "cancelled":
+                self._last_generation_error = None
+                return
         except CommandError as exc:
             self._last_generation_error = str(exc)
-            self.refresh()
             return
+        finally:
+            self._generation_in_progress = False
+            self.refresh()
         self._last_generation_error = None
         result = self.controller.product_result(operation.operation_id)
-        if result is not None:
-            if hasattr(self.viewer, "load_gcode_preview"):
-                # Display the generated Build-coordinate path over the CAD.
-                # Machine-coordinate G-code is verified independently by the
-                # product readback and may include a placement translation.
-                self.viewer.load_gcode_preview(
-                    _preview_from_generated_toolpath(result.preview_toolpath)
-                )
-            self.preview_ready.emit(result.preview_toolpath)
-            self.status_label.setText(
-                self._t("preview")
-                if operation.operation_type == "planar_region"
-                else self._t(
-                    "generated" if operation.operation_type == "planar_zigzag" else "generated_path"
-                )
-            )
+        self._viewer_operation_id = None
+        self._show_selected_result(operation, result, emit=True)
         self.refresh()
 
     def _export(self) -> None:
@@ -624,6 +717,95 @@ class PlanarPage(QWidget):
 
     def _cancel(self) -> None:
         self.commands.execute_command("cancel_generation", origin="gui")
+
+    def _undo(self) -> None:
+        if self.commands.kernel.can_undo:
+            self.commands.execute_command("undo", origin="gui")
+            self.refresh()
+
+    def _redo(self) -> None:
+        if self.commands.kernel.can_redo:
+            self.commands.execute_command("redo", origin="gui")
+            self.refresh()
+
+    def _operation_selection_changed(self) -> None:
+        selected = self.operation_instance_combo.currentData()
+        self._selected_operation_id = None if selected is None else str(selected)
+        self._last_generation_error = None
+        self._viewer_operation_id = None
+        self.refresh()
+
+    def _install_generation_event_pump(self) -> None:
+        self.controller.set_generation_event_pump(QApplication.processEvents)
+
+    def _show_selected_result(self, operation: Any, result: Any, *, emit: bool = False) -> None:
+        if operation is None or result is None:
+            return
+        if self._viewer_operation_id == operation.operation_id and not emit:
+            return
+        if hasattr(self.viewer, "load_gcode_preview"):
+            self.viewer.load_gcode_preview(
+                _preview_from_generated_toolpath(result.preview_toolpath)
+            )
+        self._viewer_operation_id = operation.operation_id
+        if emit:
+            self.preview_ready.emit(result.preview_toolpath)
+
+    def _refresh_issue_list(self, setup_issues: Any, result: Any) -> None:
+        self.issue_list.clear()
+        issues = list(setup_issues)
+        if result is not None and hasattr(result, "validation"):
+            issues.extend(result.validation.issues)
+        seen: set[tuple[str, str]] = set()
+        for issue_index, issue in enumerate(issues, 1):
+            key = (issue.code, issue.object_id)
+            if key in seen:
+                continue
+            seen.add(key)
+            marker = getattr(issue.severity, "value", str(issue.severity)).upper()
+            short_code = issue.code.rsplit(".", 1)[-1]
+            text = f"{marker[:1]}{issue_index}: {short_code}"
+            while self.issue_list.fontMetrics().horizontalAdvance(text) > 250 and "_" in short_code:
+                short_code = short_code.split("_", 1)[1]
+                text = f"{marker[:1]}{issue_index}: {short_code}"
+            tooltip = (
+                f"[{marker}] {issue.code} · {issue.object_id or self.controller.setup.setup_id}"
+            )
+            self.issue_list.addItem(text)
+            item = self.issue_list.item(self.issue_list.count() - 1)
+            item.setData(Qt.UserRole, issue.to_json())
+            item.setToolTip(tooltip)
+        if not issues:
+            self.issue_list.addItem(self._t("no_issues"))
+
+    def _jump_to_issue(self) -> None:
+        item = self.issue_list.currentItem()
+        if item is None:
+            return
+        payload = item.data(Qt.UserRole)
+        if not isinstance(payload, Mapping):
+            return
+        operation = self._selected_operation()
+        result = (
+            None if operation is None else self.controller.product_result(operation.operation_id)
+        )
+        object_id = str(payload.get("object_id", ""))
+        if result is not None and object_id:
+            for index, point in enumerate(result.preview_toolpath.points):
+                if point.point_id != object_id:
+                    continue
+                if hasattr(self.viewer, "set_preview_progress"):
+                    self.viewer.set_preview_progress(max(0, index - 1))
+                if point.layer_id.startswith("layer-") and hasattr(
+                    self.viewer, "set_preview_layers"
+                ):
+                    layer = int(point.layer_id.rsplit("-", 1)[-1])
+                    self.viewer.set_preview_layers(layer, layer)
+                break
+        self.status_label.setText(
+            f"{self.status_label.text()}\n{self._t('issue_location')}: "
+            f"{payload.get('code', '')} · {object_id or self.controller.setup.setup_id}"
+        )
 
     def _t(self, key: str) -> str:
         return _TEXT[self.language][key]

@@ -1,0 +1,625 @@
+{
+  "coordinate_frame": "workpiece_build",
+  "events": [
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 1
+      },
+      "duration_s": null,
+      "event_id": "event-0000001",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_offset",
+      "region_id": "region-0001",
+      "stage_id": "planar_offset"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 6
+      },
+      "duration_s": null,
+      "event_id": "event-0000002",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_offset",
+      "region_id": "region-0001",
+      "stage_id": "planar_offset"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 7
+      },
+      "duration_s": null,
+      "event_id": "event-0000003",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_offset",
+      "region_id": "region-0001",
+      "stage_id": "planar_offset"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 11
+      },
+      "duration_s": null,
+      "event_id": "event-0000004",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_offset",
+      "region_id": "region-0001",
+      "stage_id": "planar_offset"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 12
+      },
+      "duration_s": null,
+      "event_id": "event-0000005",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "p06-planar_offset",
+      "region_id": "region-0001",
+      "stage_id": "planar_offset"
+    }
+  ],
+  "operation_id": "p06-planar_offset",
+  "points": [
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_offset",
+      "point_id": "point-0000001",
+      "point_type": "approach",
+      "position": [
+        4.784314659702262,
+        -9.27846090760633,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar_offset",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.5969150952687805,
+        -0.8023044117043497,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.17324895884585248,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_offset",
+      "point_id": "point-0000002",
+      "point_type": "deposition",
+      "position": [
+        5.071578322965287,
+        -9.664567585398588,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar_offset",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.5969150952687805,
+        -0.8023044117043497,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 17.610706673975436,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_offset",
+      "point_id": "point-0000003",
+      "point_type": "deposition",
+      "position": [
+        34.2719141545409,
+        -48.91214985679952,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar_offset",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.5969164721198674,
+        -0.8023033873242539,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2239964864322828,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_offset",
+      "point_id": "point-0000004",
+      "point_type": "deposition",
+      "position": [
+        36.99973784103427,
+        -46.88263967744324,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar_offset",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.8023033873242589,
+        0.5969164721198605,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 17.78395601096374,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_offset",
+      "point_id": "point-0000005",
+      "point_type": "deposition",
+      "position": [
+        7.512137795048873,
+        -7.248949829079185,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar_offset",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -0.5969164571713012,
+        0.8023033984460382,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.2239965204678172,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_offset",
+      "point_id": "point-0000006",
+      "point_type": "deposition",
+      "position": [
+        4.784314659702262,
+        -9.27846090760633,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar_offset",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -0.8023032029122508,
+        -0.5969167199842401,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_offset",
+      "point_id": "point-0000007",
+      "point_type": "travel",
+      "position": [
+        5.623845802116545,
+        -9.401693400991078,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar_offset",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.5969164721198674,
+        -0.8023033873242539,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 17.351955699552185,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_offset",
+      "point_id": "point-0000008",
+      "point_type": "deposition",
+      "position": [
+        34.39514630366354,
+        -48.07261794113305,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar_offset",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.5969164721198674,
+        -0.8023033873242539,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.7919964864322834,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_offset",
+      "point_id": "point-0000009",
+      "point_type": "deposition",
+      "position": [
+        36.16020592536779,
+        -46.759407528320594,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar_offset",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.8023033873242573,
+        0.5969164721198628,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 17.351955944232373,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_offset",
+      "point_id": "point-0000010",
+      "point_type": "deposition",
+      "position": [
+        7.388905018116269,
+        -8.088482442879332,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar_offset",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -0.5969164721198673,
+        0.802303387324254,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.7919964864323241,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_offset",
+      "point_id": "point-0000011",
+      "point_type": "deposition",
+      "position": [
+        5.623845802116545,
+        -9.401693400991078,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar_offset",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -0.8023032029122481,
+        -0.5969167199842438,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_offset",
+      "point_id": "point-0000012",
+      "point_type": "travel",
+      "position": [
+        6.463377607135857,
+        -9.524925401395091,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar_offset",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.5969164721198674,
+        -0.8023033873242538,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 16.919955766283426,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_offset",
+      "point_id": "point-0000013",
+      "point_type": "deposition",
+      "position": [
+        34.518378452786166,
+        -47.23308602546658,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar_offset",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.5969164721198674,
+        -0.8023033873242538,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.35999648643228366,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_offset",
+      "point_id": "point-0000014",
+      "point_type": "deposition",
+      "position": [
+        35.32067400970132,
+        -46.636175379197965,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar_offset",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.8023033873242671,
+        0.5969164721198497,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 16.91995587750111,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_offset",
+      "point_id": "point-0000015",
+      "point_type": "deposition",
+      "position": [
+        7.265672979640833,
+        -8.928014507264464,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar_offset",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -0.5969164721198673,
+        0.802303387324254,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "infill",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.6,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.35999648643230403,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "p06-planar_offset",
+      "point_id": "point-0000016",
+      "point_type": "deposition",
+      "position": [
+        6.463377607135857,
+        -9.524925401395091,
+        60.0
+      ],
+      "region_id": "region-0001",
+      "stage_id": "planar_offset",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -0.8023032029122432,
+        -0.5969167199842504,
+        0.0
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "toolpath_id": "p06-planar_offset-planar_offset-v1",
+  "units": {
+    "angle": "rad",
+    "feedrate": "mm_min",
+    "length": "mm",
+    "material_volume": "mm3"
+  }
+}
