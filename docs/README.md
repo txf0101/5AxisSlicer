@@ -2,8 +2,10 @@
 
 ## 六个工作台算法开发
 
+- [AUD-02 缺陷修复、真实模型与 Skill 更新](reviews/2026-09-12_algorithm_audit_fixes.md)：最终合格输出、拒绝案例、回归及后续开发方法。
+
 - [当前完成情况与算法独立审查（AUD-01）](reviews/2026-09-12_project_algorithm_audit.md)：真实模型、坐标/道宽/截层/回读/空移反例及本轮验证边界。
-- [算法审查后的修改方案](planning/2026-09-12_algorithm_audit_fix_plan.md)：六步修复顺序、具体改动范围和验收矩阵；尚未实施。
+- [算法审查后的修改方案](planning/2026-09-12_algorithm_audit_fix_plan.md)：六步修复顺序、具体改动范围和验收矩阵；已实施，结果见下方 AUD-02。
 
 - [开发进度台账](planning/progress_tracker.md)：任务主表；每轮更新依赖、状态、验收证据、下一步和日期。
 - [开发计划](planning/development_plan.md)：管状优先，六个工作台、20 种操作、当前 UI 接入、算法接口和完成条件。

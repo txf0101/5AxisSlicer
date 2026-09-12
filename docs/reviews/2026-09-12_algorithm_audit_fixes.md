@@ -46,7 +46,7 @@
 
 实际使用 `five-axis-workbench-development`（含相关 stage gates）与 `five-axis-slicer-validation`。4名 GPT-6 分担 Tube、完整NC/状态、截层/支撑与根任务集成，Qt 和全仓测试串行。解释器为 `tmp/pytest9/Scripts/python.exe`，Python3.12.7；预检依赖与 QSettings 均通过，没有安装组件或修改系统权限。少量子任务遇到系统 pytest 临时目录 WinError5，改用项目内独占 `--basetemp` 后完成。
 
-本轮代码回归与质量结果将在最终日志完成后补入此处。已完成的专题包括 Tube 94 passed/6 subtests、完整NC 52 passed、Planar上下文27 passed、截层12 passed、支撑运动13 passed。专题集合存在交集，不相加作为总测试数。全仓首轮722 passed、1 failed、3 skipped、130 subtests；唯一失败为旧UI文案精确断言，更新后专项30 passed。首次失败、修复后日志和来源快照均保留。
+本轮全仓最终回归为 **729 passed、3 skipped、130 subtests passed**（389.20 s），见 `full_suite_final.log/xml`；质量门禁全绿，Mypy 120 个源码文件。最后的布局与 v3 复核为 Planar 209 passed、2 个 Windows 目录重命名 WinError 5；换用新独占临时目录后两项导出均通过（`planar_close`、`export_close` 日志/XML），未改产品逻辑。3 个符号链接用例因 Windows 权限跳过。已完成的专题包括 Tube 94 passed/6 subtests、完整NC 52 passed、Planar上下文27 passed、截层12 passed、支撑运动13 passed。专题集合存在交集，不相加作为总测试数。全仓首轮722 passed、1 failed、3 skipped、130 subtests；唯一失败为旧UI文案精确断言，更新后专项30 passed。首次失败、修复后日志和来源快照均保留。
 
 UI增加中英文 Error/Warning 原因、禁止导出及当前输入未就绪说明。真实 Qt/OpenGL 截图覆盖三尺寸、中英文、改参 Stale、材料超量 Error、重新生成恢复与有效Tube产品。初次截图发现英文长诊断压缩表单字段，随后增加滚动内容与字段自然高度约束，并重新渲染检查。最终图片见 [UI摘要](evidence/2026-09-12_audit_fixes/ui_final/summary.json)。
 
@@ -54,7 +54,11 @@ UI增加中英文 Error/Warning 原因、禁止导出及当前输入未就绪说
 
 Planar最终产品版本提升到v3，旧v1/v2及缺少新上下文的持久化资格失效。修复期间的早期v2六件套仅留作追踪；新结果需要从当前输入生成。Tube使用新生成上下文及旧状态迁移。所有旧AUD-01证据保持原样；本轮归档Python脚本另存`.py.txt`避免进入全仓代码扫描，路径变化见`archive_path_migrations.json`，字节哈希未变。
 
-同一工作区另有自有机型配置任务的改动，本轮保留其内容。该机型不能从本报告的Generic XYZAC数值推断资格；最终源码清单会把并行修改列出，以免将其误记为AUD-02实施。
+同一工作区另有自有机型配置任务的改动，本轮保留其内容。该机型不能从本报告的Generic XYZAC数值推断资格；最终源码清单记录完整提交基线及当前源码指纹，以免将其误记为AUD-02实施。
+
+## Skill 更新
+
+实际使用 `skill-creator` 更新个人 `five-axis-workbench-development/SKILL.md`，新增 `references/manufacturing-validation.md` 并在入口路由。后续工作台复用坐标链、完整 NC 反例、局部材料检查、整段/中间高度验证、旧资格失效及长诊断 UI 检查；Planar 的具体数值容差不作为通用门槛。`quick_validate.py` 返回 `Skill is valid!`。个人 Skill 位于仓库外，项目中保留[文件快照](evidence/2026-09-12_audit_fixes/skill_snapshot/)及源路径/哈希，随 main 提交。
 
 ## 复盘与后续
 

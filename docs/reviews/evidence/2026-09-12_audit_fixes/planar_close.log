@@ -1,0 +1,113 @@
+............................................................F........... [ 34%]
+........................................................................ [ 68%]
+..............................................................F....      [100%]
+================================== FAILURES ===================================
+__________ test_spiral_product_generates_continuous_z_and_six_files ___________
+
+tmp_path = WindowsPath('F:/【项目和任务】/5AxisSclicer_V2.0/tmp/aud02_close_pytest/test_spiral_product_generates_0')
+
+    def test_spiral_product_generates_continuous_z_and_six_files(tmp_path: Path) -> None:
+        result = generate_planar_path_product(
+            _model(), _operation(), _machine(), _nozzle(), RigidTransform.identity("build")
+        )
+        assert result.operation_type == "planar_spiral"
+        assert result.exportable and result.readback.passed
+        assert result.toolpath.events[-1].event_type == "finish"
+        assert result.toolpath.points[-1].position[2] == pytest.approx(1.0)
+        assert result.validation.measurement.volume_difference_mm3 == pytest.approx(0.0)
+        assert "; P05 POINT" in result.gcode
+>       destination = export_planar_product(result, tmp_path / "p05-output")
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_planar_path_products.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+result = PlanarZigzagProductResult(operation_type='planar_spiral', layers=(PlanarSliceLayer(layer_id='layer-00001', z_mm=0.5, r...ts=17, read_points=17, coordinate_mismatches=(), feedrate_mismatches=(), extrusion_mismatches=(), order_mismatches=()))
+destination = WindowsPath('F:/【项目和任务】/5AxisSclicer_V2.0/tmp/aud02_close_pytest/test_spiral_product_generates_0/p05-output')
+cancelled = None
+
+    def export_planar_product(
+        result: PlanarZigzagProductResult,
+        destination: str | Path,
+        *,
+        cancelled: Callable[[], bool] | None = None,
+    ) -> Path:
+        """Publish the six P02 artefacts while preserving a previous directory on failure."""
+    
+        if not result.exportable:
+            raise ValueError("validation Error or failed G-code readback blocks export")
+        target = Path(destination).resolve()
+        target.parent.mkdir(parents=True, exist_ok=True)
+        stage = Path(mkdtemp(prefix=f".{target.name}.stage-", dir=target.parent))
+        backup = target.with_name(f".{target.name}.previous")
+        try:
+            _checkpoint(cancelled)
+            _write_planar_artifacts(stage, result)
+            _checkpoint(cancelled)
+            if backup.exists():
+                shutil.rmtree(backup)
+            moved_old = False
+            if target.exists():
+                os.replace(target, backup)
+                moved_old = True
+            try:
+>               os.replace(stage, target)
+E               PermissionError: [WinError 5] 拒绝访问。: 'F:\\【项目和任务】\\5AxisSclicer_V2.0\\tmp\\aud02_close_pytest\\test_spiral_product_generates_0\\.p05-output.stage-3o_knjmy' -> 'F:\\【项目和任务】\\5AxisSclicer_V2.0\\tmp\\aud02_close_pytest\\test_spiral_product_generates_0\\p05-output'
+
+src\five_axis_slicer\postprocessing\planar_product.py:790: PermissionError
+________________ test_controller_zigzag_generation_and_export _________________
+
+tmp_path = WindowsPath('F:/【项目和任务】/5AxisSclicer_V2.0/tmp/aud02_close_pytest/test_controller_zigzag_generat0')
+
+    def test_controller_zigzag_generation_and_export(tmp_path: Path) -> None:
+        controller = PlanarController(_model(), setup=_setup(), operations=(_operation(),))
+    
+        result = controller.generate_operation("planar-zigzag-1")
+>       destination = controller.export_operation_product(
+            "planar-zigzag-1", str(tmp_path / "controller-output")
+        )
+
+tests\test_planar_zigzag_product.py:150: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\five_axis_slicer\planar_controller.py:295: in export_operation_product
+    return export_planar_product(result, destination, cancelled=cancelled)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+result = PlanarZigzagProductResult(operation_type='planar_zigzag', layers=(PlanarSliceLayer(layer_id='layer-00001', z_mm=0.5, r...ts=21, read_points=21, coordinate_mismatches=(), feedrate_mismatches=(), extrusion_mismatches=(), order_mismatches=()))
+destination = 'F:\\【项目和任务】\\5AxisSclicer_V2.0\\tmp\\aud02_close_pytest\\test_controller_zigzag_generat0\\controller-output'
+cancelled = None
+
+    def export_planar_product(
+        result: PlanarZigzagProductResult,
+        destination: str | Path,
+        *,
+        cancelled: Callable[[], bool] | None = None,
+    ) -> Path:
+        """Publish the six P02 artefacts while preserving a previous directory on failure."""
+    
+        if not result.exportable:
+            raise ValueError("validation Error or failed G-code readback blocks export")
+        target = Path(destination).resolve()
+        target.parent.mkdir(parents=True, exist_ok=True)
+        stage = Path(mkdtemp(prefix=f".{target.name}.stage-", dir=target.parent))
+        backup = target.with_name(f".{target.name}.previous")
+        try:
+            _checkpoint(cancelled)
+            _write_planar_artifacts(stage, result)
+            _checkpoint(cancelled)
+            if backup.exists():
+                shutil.rmtree(backup)
+            moved_old = False
+            if target.exists():
+                os.replace(target, backup)
+                moved_old = True
+            try:
+>               os.replace(stage, target)
+E               PermissionError: [WinError 5] 拒绝访问。: 'F:\\【项目和任务】\\5AxisSclicer_V2.0\\tmp\\aud02_close_pytest\\test_controller_zigzag_generat0\\.controller-output.stage-ypphniwx' -> 'F:\\【项目和任务】\\5AxisSclicer_V2.0\\tmp\\aud02_close_pytest\\test_controller_zigzag_generat0\\controller-output'
+
+src\five_axis_slicer\postprocessing\planar_product.py:790: PermissionError
+=========================== short test summary info ===========================
+FAILED tests/test_planar_path_products.py::test_spiral_product_generates_continuous_z_and_six_files
+FAILED tests/test_planar_zigzag_product.py::test_controller_zigzag_generation_and_export
+2 failed, 209 passed in 24.01s
