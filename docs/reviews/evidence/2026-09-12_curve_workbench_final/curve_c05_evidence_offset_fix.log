@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "F:\����Ŀ������\5AxisSclicer_V2.0\scripts\curve_c05_evidence.py", line 327, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "F:\����Ŀ������\5AxisSclicer_V2.0\scripts\curve_c05_evidence.py", line 321, in main
+    manifest = generate(args.output.resolve(), args.images.resolve())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\����Ŀ������\5AxisSclicer_V2.0\scripts\curve_c05_evidence.py", line 205, in generate
+    controller.export_operation_product(operation.operation_id, str(product_dir))
+  File "F:\����Ŀ������\5AxisSclicer_V2.0\src\five_axis_slicer\curve_controller.py", line 271, in export_operation_product
+    return export_curve_product(result, destination, cancelled=cancelled)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\����Ŀ������\5AxisSclicer_V2.0\src\five_axis_slicer\postprocessing\curve_product.py", line 342, in export_curve_product
+    os.replace(stage, target)
+PermissionError: [WinError 5] �ܾ����ʡ�: 'F:\\����Ŀ������\\5AxisSclicer_V2.0\\docs\\reviews\\evidence\\2026-09-12_curve_workbench_final\\products\\.curve_buildup.stage-f0bd3uow' -> 'F:\\����Ŀ������\\5AxisSclicer_V2.0\\docs\\reviews\\evidence\\2026-09-12_curve_workbench_final\\products\\curve_buildup'

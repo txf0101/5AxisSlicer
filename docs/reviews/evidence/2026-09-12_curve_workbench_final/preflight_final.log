@@ -1,0 +1,12 @@
+timestamp=2026-09-12T22:20:00+08:00
+cwd=F:\【项目和任务】\5AxisSclicer_V2.0
+branch=codex/curve-workbench-c01-c05
+head=25f7ac1ea4c29167ee81e315d3943b73330a69b0
+interpreter=F:\【项目和任务】\5AxisSclicer_V2.0\tmp\pytest9\Scripts\python.exe
+3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]
+numpy 2.2.6
+OCP 7.8.1.1
+Qt 5.15.2
+VTK 9.3.1
+pytest 9.1.1
+repository_basetemp_parent=F:\【项目和任务】\5AxisSclicer_V2.0\tmp

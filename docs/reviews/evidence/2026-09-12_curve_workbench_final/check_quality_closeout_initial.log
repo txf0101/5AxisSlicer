@@ -1,0 +1,13 @@
+==> Ruff
+All checks passed!
+==> Migrated Ruff
+All checks passed!
+==> Security Ruff
+All checks passed!
+==> Migrated format
+61 files already formatted
+==> Context budget
+==> Mypy
+src\five_axis_slicer\gcode_cache.py:314: error: Argument 24 to "savez" has incompatible type "**dict[str, ndarray[Any, Any]]"; expected "bool"  [arg-type]
+src\five_axis_slicer\opengl_scene.py:89: error: Incompatible types in assignment (expression has type "ndarray[tuple[int, ...], dtype[signedinteger[_64Bit]]]", variable has type "ndarray[tuple[int], dtype[signedinteger[_64Bit]]]")  [assignment]
+Found 2 errors in 2 files (checked 134 source files)

@@ -1,0 +1,13 @@
+==> Ruff
+All checks passed!
+==> Migrated Ruff
+All checks passed!
+==> Security Ruff
+All checks passed!
+==> Migrated format
+61 files already formatted
+==> Context budget
+==> Mypy
+src\five_axis_slicer\curve_generation_context.py:118: error: Argument 1 to "BoundingBox" has incompatible type "tuple[float, ...]"; expected "tuple[float, float, float]"  [arg-type]
+src\five_axis_slicer\curve_generation_context.py:119: error: Argument 2 to "BoundingBox" has incompatible type "tuple[float, ...]"; expected "tuple[float, float, float]"  [arg-type]
+Found 2 errors in 1 file (checked 134 source files)

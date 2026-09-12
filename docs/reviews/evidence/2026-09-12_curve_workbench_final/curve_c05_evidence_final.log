@@ -1,0 +1,109 @@
+2026-09-12 21:40:28.003 (   3.195s) [776CB633C5C7A997]vtkWin32OpenGLRenderWin:746    ERR| vtkWin32OpenGLRenderWindow (000001B64E30D880): failed to get valid pixel format.
+2026-09-12 21:40:28.051 (   3.244s) [776CB633C5C7A997]vtkOpenGLRenderWindow.c:701    ERR| vtkWin32OpenGLRenderWindow (000001B64E30D880): GLEW could not be initialized: Missing GL version
+2026-09-12 21:40:28.055 (   3.247s) [776CB633C5C7A997]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-12 21:40:28.058 (   3.250s) [776CB633C5C7A997]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-12 21:40:28.062 (   3.254s) [776CB633C5C7A997]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-12 21:40:28.066 (   3.259s) [776CB633C5C7A997]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-12 21:40:28.069 (   3.261s) [776CB633C5C7A997]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-12 21:40:28.072 (   3.265s) [776CB633C5C7A997]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-12 21:40:28.077 (   3.269s) [776CB633C5C7A997]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-12 21:40:28.081 (   3.273s) [776CB633C5C7A997]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-12 21:40:28.087 (   3.279s) [776CB633C5C7A997]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-12 21:40:28.093 (   3.285s) [776CB633C5C7A997]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-12 21:40:28.102 (   3.294s) [776CB633C5C7A997]     vtkOpenGLState.cxx:1787  WARN| Hardware does not support the number of textures defined.
+2026-09-12 21:40:28.108 (   3.301s) [776CB633C5C7A997]   vtkShaderProgram.cxx:437    ERR| vtkShaderProgram (000001B65006A840): 1: #version 150
+2: #ifndef GL_ES
+3: #define highp
+4: #define mediump
+5: #define lowp
+6: #endif // GL_ES
+7: #define attribute in
+8: #define varying out
+9: 
+10: 
+11: // SPDX-FileCopyrightText: Copyright (c) Ken Martin, Will Schroeder, Bill Lorensen
+12: // SPDX-License-Identifier: BSD-3-Clause
+13: 
+14: in vec4 vertexMC;
+15: 
+16: 
+17: 
+18: // frag position in VC
+19: out vec4 vertexVCVSOutput;
+20: 
+21: // optional normal declaration
+22: //VTK::Normal::Dec
+23: in vec3 normalMC;
+24: uniform mat3 normalMatrix;
+25: out vec3 normalVCVSOutput;
+26: 
+27: // extra lighting parameters
+28: //VTK::Light::Dec
+29: 
+30: // Texture coordinates
+31: //VTK::TCoord::Dec
+32: 
+33: // material property values
+34: //VTK::Color::Dec
+35: 
+36: // clipping plane vars
+37: //VTK::Clip::Dec
+38: 
+39: // camera and actor matrix values
+40: uniform mat4 MCDCMatrix;
+41: uniform mat4 MCVCMatrix;
+42: 
+43: // Apple Bug
+44: //VTK::PrimID::Dec
+45: 
+46: // Value raster
+47: //VTK::ValuePass::Dec
+48: 
+49: // picking support
+50: //VTK::Picking::Dec
+51: 
+52: // Surface with edges on GLES 3.0
+53: //VTK::EdgesGLES30::Dec
+54: 
+55: // PointSize on GLES 3.0
+56: //VTK::PointSizeGLES30::Dec
+57: 
+58: // LineWidth on GLES 3.0
+59: //VTK::LineWidthGLES30::Dec
+60: 
+61: void main()
+62: {
+63:   //VTK::PointSizeGLES30::Impl
+64: 
+65:   //VTK::CustomBegin::Impl
+66: 
+67:   //VTK::Color::Impl
+68: 
+69:   normalVCVSOutput = normalMatrix * normalMC;
+70: //VTK::Normal::Impl
+71: 
+72:   //VTK::TCoord::Impl
+73: 
+74:   //VTK::Clip::Impl
+75: 
+76:   //VTK::PrimID::Impl
+77: 
+78:   vertexVCVSOutput = MCVCMatrix * vertexMC;
+79:   gl_Position = MCDCMatrix * vertexMC;
+80: 
+81: 
+82:   //VTK::LineWidthGLES30::Impl
+83: 
+84:   //VTK::ValuePass::Impl
+85: 
+86:   //VTK::Light::Impl
+87: 
+88:   //VTK::Picking::Impl
+89: 
+90:   //VTK::CustomEnd::Impl
+91: 
+92:   //VTK::EdgesGLES30::Impl
+93: }
+
+2026-09-12 21:40:28.348 (   3.541s) [776CB633C5C7A997]   vtkShaderProgram.cxx:438    ERR| vtkShaderProgram (000001B65006A840): Could not create shader object.
+2026-09-12 21:40:28.355 (   3.547s) [776CB633C5C7A997]vtkOpenGLPolyDataMapper:2624   ERR| vtkOpenGLPolyDataMapper (000001B64E35B1F0): Could not set shader program

@@ -1,0 +1,7221 @@
+{
+  "coordinate_frame": "workpiece_build",
+  "events": [
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 1
+      },
+      "duration_s": null,
+      "event_id": "event-0000001",
+      "event_type": "prime",
+      "layer_id": "layer-0001",
+      "operation_id": "curve-operation-1",
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 70
+      },
+      "duration_s": null,
+      "event_id": "event-0000002",
+      "event_type": "retract",
+      "layer_id": "layer-0001",
+      "operation_id": "curve-operation-1",
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 71
+      },
+      "duration_s": null,
+      "event_id": "event-0000003",
+      "event_type": "prime",
+      "layer_id": "layer-0001",
+      "operation_id": "curve-operation-1",
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 140
+      },
+      "duration_s": null,
+      "event_id": "event-0000004",
+      "event_type": "retract",
+      "layer_id": "layer-0001",
+      "operation_id": "curve-operation-1",
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 141
+      },
+      "duration_s": null,
+      "event_id": "event-0000005",
+      "event_type": "prime",
+      "layer_id": "layer-0001",
+      "operation_id": "curve-operation-1",
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup"
+    }
+  ],
+  "operation_id": "curve-operation-1",
+  "points": [
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 1800.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.8899173521067818,
+        0.2891518141378296,
+        -0.352758181762034
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000001",
+      "point_type": "approach",
+      "position": [
+        4.15316421418435,
+        11.2681017667715,
+        42.176379090881
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.8899173521067818,
+        -0.2891518141378296,
+        0.352758181762034
+      ],
+      "tangent": [
+        0.32849926204707613,
+        -0.12912701389868933,
+        -0.9356358528381297
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47496125353568425,
+      "nozzle_axis": [
+        -0.8718542783279798,
+        0.33999393961477514,
+        -0.35252551451834274
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000002",
+      "point_type": "deposition",
+      "position": [
+        4.478215091866488,
+        11.14033024929933,
+        41.25056497105407
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.8718542783279798,
+        -0.33999393961477514,
+        0.35252551451834274
+      ],
+      "tangent": [
+        0.32849926204707613,
+        -0.12912701389868933,
+        -0.9356358528381297
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749603429107918,
+      "nozzle_axis": [
+        -0.851710461418617,
+        0.3886770114233029,
+        -0.35145336917027326
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000003",
+      "point_type": "deposition",
+      "position": [
+        4.807288743141176,
+        11.024075079956017,
+        40.324656265278584
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.851710461418617,
+        -0.3886770114233029,
+        0.35145336917027326
+      ],
+      "tangent": [
+        0.3325653498644152,
+        -0.11748871693751362,
+        -0.9357332362708594
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.474958206623977,
+      "nozzle_axis": [
+        -0.8296726213126391,
+        0.43514869486953334,
+        -0.34969837688721994
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000004",
+      "point_type": "deposition",
+      "position": [
+        5.1415111552827435,
+        10.918579749092162,
+        39.39930823860848
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.8296726213126391,
+        -0.43514869486953334,
+        0.34969837688721994
+      ],
+      "tangent": [
+        0.337770261868455,
+        -0.10661518868067504,
+        -0.9351708142044957
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749554623863443,
+      "nozzle_axis": [
+        -0.8059137656185572,
+        0.47939491233898057,
+        -0.34739533734639916
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000005",
+      "point_type": "deposition",
+      "position": [
+        5.482014135242039,
+        10.823085341061162,
+        38.4751707593555
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.8059137656185572,
+        -0.47939491233898057,
+        0.34739533734639916
+      ],
+      "tangent": [
+        0.34411948766580014,
+        -0.09650866130600316,
+        -0.9339528127810047
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749529079806049,
+      "nozzle_axis": [
+        -0.7805920228091286,
+        0.5214291245025288,
+        -0.34465600538403396
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000006",
+      "point_type": "deposition",
+      "position": [
+        5.82993338852418,
+        10.73683135643649,
+        37.55289452430154
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.7805920228091286,
+        -0.5214291245025288,
+        0.34465600538403396
+      ],
+      "tangent": [
+        0.3516164208478694,
+        -0.08717056348991453,
+        -0.9320768130637007
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749521386843596,
+      "nozzle_axis": [
+        -0.753851325838914,
+        0.561283071487219,
+        -0.34156916165366147
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000007",
+      "point_type": "deposition",
+      "position": [
+        6.18640681582542,
+        10.659056032898171,
+        36.63313611395915
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.753851325838914,
+        -0.561283071487219,
+        0.34156916165366147
+      ],
+      "tangent": [
+        0.360262079414087,
+        -0.07860193113732443,
+        -0.9295337382568325
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47495352160916726,
+      "nozzle_axis": [
+        -0.7258235316992696,
+        0.5989990410467857,
+        -0.3382016405291828
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000008",
+      "point_type": "deposition",
+      "position": [
+        6.552570890028307,
+        10.588996703876386,
+        35.716566912263616
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.7258235316992696,
+        -0.5989990410467857,
+        0.3382016405291828
+      ],
+      "tangent": [
+        0.3700546424456564,
+        -0.07080372373389625,
+        -0.9263079370867074
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749563471105573,
+      "nozzle_axis": [
+        -0.6966313682206281,
+        0.6346239582484909,
+        -0.33460001259425187
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000009",
+      "point_type": "deposition",
+      "position": [
+        6.929556394044265,
+        10.525889807337867,
+        34.80388151253912
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.6966313682206281,
+        -0.6346239582484909,
+        0.33460001259425187
+      ],
+      "tangent": [
+        0.3809887856610503,
+        -0.06377704082231846,
+        -0.9223773816960532
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749594713737019,
+      "nozzle_axis": [
+        -0.6663337978093624,
+        0.6682200302438832,
+        -0.3308795265316604
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000010",
+      "point_type": "deposition",
+      "position": [
+        7.318482442576944,
+        10.468938713863304,
+        33.89580598030414
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.6663337978093624,
+        -0.6682200302438832,
+        0.3308795265316604
+      ],
+      "tangent": [
+        0.39305354361235895,
+        -0.05755548950045387,
+        -0.917712524422616
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47496027633552895,
+      "nozzle_axis": [
+        -0.6351326852049272,
+        0.6998048980399408,
+        -0.3269244207208861
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000011",
+      "point_type": "deposition",
+      "position": [
+        7.720217894557879,
+        10.41696358460346,
+        32.993022173477286
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.6351326852049272,
+        -0.6998048980399408,
+        0.3269244207208861
+      ],
+      "tangent": [
+        0.4059981993412531,
+        -0.05252662862083448,
+        -0.9123630940680301
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749585185643359,
+      "nozzle_axis": [
+        -0.603254881676121,
+        0.7293982491178974,
+        -0.3225860225082219
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000012",
+      "point_type": "deposition",
+      "position": [
+        8.135200914400055,
+        10.368843906806902,
+        32.09603960284107
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.603254881676121,
+        -0.7293982491178974,
+        0.3225860225082219
+      ],
+      "tangent": [
+        0.41938788702294405,
+        -0.0486304475855385,
+        -0.9065036567968496
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47495519429734845,
+      "nozzle_axis": [
+        -0.5707624975702509,
+        0.7570622815618762,
+        -0.31794161917511843
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000013",
+      "point_type": "deposition",
+      "position": [
+        8.563827160350526,
+        10.323523454604256,
+        31.205356699399424
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.5707624975702509,
+        -0.7570622815618762,
+        0.31794161917511843
+      ],
+      "tangent": [
+        0.4331789619873503,
+        -0.045801829979883676,
+        -0.900143421495739
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749512777609753,
+      "nozzle_axis": [
+        -0.5377125430507033,
+        0.7828550959688182,
+        -0.3130544996667486
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000014",
+      "point_type": "deposition",
+      "position": [
+        9.006488778978456,
+        10.27994472986384,
+        30.321486869950963
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.5377125430507033,
+        -0.7828550959688182,
+        0.3130544996667486
+      ],
+      "tangent": [
+        0.4473671024595883,
+        -0.0440419656812195,
+        -0.8932653474169064
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749482343470738,
+      "nozzle_axis": [
+        -0.5041597380519262,
+        0.8068295498870701,
+        -0.30797570676344116
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000015",
+      "point_type": "deposition",
+      "position": [
+        9.463571753277261,
+        10.237048683235969,
+        29.444961442148585
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.5041597380519262,
+        -0.8068295498870701,
+        0.30797570676344116
+      ],
+      "tangent": [
+        0.46194471691223826,
+        -0.04335230850933385,
+        -0.8858485513132499
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47494525031585494,
+      "nozzle_axis": [
+        -0.4701591828586644,
+        0.8290327654113909,
+        -0.3027457954258239
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000016",
+      "point_type": "deposition",
+      "position": [
+        9.935450008997138,
+        10.193774943014432,
+        28.576337395502595
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.4701591828586644,
+        -0.8290327654113909,
+        0.3027457954258239
+      ],
+      "tangent": [
+        0.47690036397860575,
+        -0.04373429420027654,
+        -0.8778686429915794
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47495357192855625,
+      "nozzle_axis": [
+        -0.43576760986216023,
+        0.8495069129586923,
+        -0.29739636014990667
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000017",
+      "point_type": "deposition",
+      "position": [
+        10.422493449816935,
+        10.149061067874872,
+        27.716178628820032
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.43576760986216023,
+        -0.8495069129586923,
+        0.29739636014990667
+      ],
+      "tangent": [
+        0.49221832492854334,
+        -0.045188964428332715,
+        -0.8692980375558397
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47495442509328795,
+      "nozzle_axis": [
+        -0.4010472550860428,
+        0.8682886427251831,
+        -0.29195193457555624
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000018",
+      "point_type": "deposition",
+      "position": [
+        10.925032544483262,
+        10.101846197864173,
+        26.865113132139008
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.4010472550860428,
+        -0.8682886427251831,
+        0.29195193457555624
+      ],
+      "tangent": [
+        0.5078777093032831,
+        -0.04771644690052923,
+        -0.8601066056530661
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.474957010675775,
+      "nozzle_axis": [
+        -0.366124609545153,
+        0.8854033150020735,
+        -0.28638041146130827
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000019",
+      "point_type": "deposition",
+      "position": [
+        11.443294900841167,
+        10.051024560110664,
+        26.023733778682722
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.366124609545153,
+        -0.8854033150020735,
+        0.28638041146130827
+      ],
+      "tangent": [
+        0.5237651523405181,
+        -0.05136125075188582,
+        -0.8503129348157158
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749559787744323,
+      "nozzle_axis": [
+        -0.33140711125373895,
+        0.9008520903757089,
+        -0.2804190397889695
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000020",
+      "point_type": "deposition",
+      "position": [
+        11.977099603738962,
+        9.995608580032423,
+        25.192424402332115
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.33140711125373895,
+        -0.9008520903757089,
+        0.2804190397889695
+      ],
+      "tangent": [
+        0.5394736961772818,
+        -0.056004496471847506,
+        -0.8401378622034342
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47495337274773575,
+      "nozzle_axis": [
+        -0.2969587858890841,
+        0.9147029865930292,
+        -0.2741056836351153
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000021",
+      "point_type": "deposition",
+      "position": [
+        12.526192886351867,
+        9.934844496656414,
+        24.37151806191156
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.2969587858890841,
+        -0.9147029865930292,
+        0.2741056836351153
+      ],
+      "tangent": [
+        0.5549276850681144,
+        -0.06140973344761532,
+        -0.8296288983532556
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749502110976538,
+      "nozzle_axis": [
+        -0.2628099770736707,
+        0.9270246585210855,
+        -0.26749990363437803
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000022",
+      "point_type": "deposition",
+      "position": [
+        13.090318774134671,
+        9.867983391814086,
+        23.56135667861821
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.2628099770736707,
+        -0.9270246585210855,
+        0.26749990363437803
+      ],
+      "tangent": [
+        0.5701238146835382,
+        -0.06757198875677262,
+        -0.8187752208427813
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47494755359620094,
+      "nozzle_axis": [
+        -0.2289892124253474,
+        0.9378815769708015,
+        -0.26065703169410476
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000023",
+      "point_type": "deposition",
+      "position": [
+        13.669215105321472,
+        9.794276294512587,
+        22.762291451785913
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.2289892124253474,
+        -0.9378815769708015,
+        0.26065703169410476
+      ],
+      "tangent": [
+        0.5850545746908067,
+        -0.07449118631485575,
+        -0.8075656058765533
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47494669900078296,
+      "nozzle_axis": [
+        -0.19552409045856461,
+        0.9473345109664681,
+        -0.25362896991919887
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000024",
+      "point_type": "deposition",
+      "position": [
+        14.262611640274946,
+        9.71297471361017,
+        21.974683670523888
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.19552409045856461,
+        -0.9473345109664681,
+        0.25362896991919887
+      ],
+      "tangent": [
+        0.599710109317336,
+        -0.08216660714826045,
+        -0.7959877093600958
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749483921008231,
+      "nozzle_axis": [
+        -0.16244196010539808,
+        0.9554410777810203,
+        -0.24646491938155968
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000025",
+      "point_type": "deposition",
+      "position": [
+        14.870227034037221,
+        9.623331544785817,
+        21.19890662282907
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.16244196010539808,
+        -0.9554410777810203,
+        0.24646491938155968
+      ],
+      "tangent": [
+        0.614078063757249,
+        -0.09059662428871837,
+        -0.7840283051520761
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47495149588894753,
+      "nozzle_axis": [
+        -0.12977045602692,
+        0.9622563209323025,
+        -0.23921204310902705
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000026",
+      "point_type": "deposition",
+      "position": [
+        15.491763822283893,
+        9.524602606240745,
+        20.4353492863294
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.12977045602692,
+        -0.9622563209323025,
+        0.23921204310902705
+      ],
+      "tangent": [
+        0.6281434229405177,
+        -0.09977837929099886,
+        -0.7716735807597871
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47495447075518965,
+      "nozzle_axis": [
+        -0.09755178081977361,
+        0.9678338817828763,
+        -0.23190779920472804
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000027",
+      "point_type": "deposition",
+      "position": [
+        16.126902394290376,
+        9.416048720482301,
+        19.68441486725313
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.09755178081977361,
+        -0.9678338817828763,
+        0.23190779920472804
+      ],
+      "tangent": [
+        0.6418857666048835,
+        -0.10970707377741505,
+        -0.7589117343889591
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749547948727603,
+      "nozzle_axis": [
+        -0.06620382761433286,
+        0.9722525114503743,
+        -0.2243704686175337
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000028",
+      "point_type": "deposition",
+      "position": [
+        16.77518722044492,
+        9.29709245243622,
+        18.94640065310677
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.06620382761433286,
+        -0.9722525114503743,
+        0.2243704686175337
+      ],
+      "tangent": [
+        0.6551712287430322,
+        -0.1202198804570783,
+        -0.7458537667466936
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749530919440947,
+      "nozzle_axis": [
+        -0.03591075356761342,
+        0.9756098578877245,
+        -0.21655443419727108
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000029",
+      "point_type": "deposition",
+      "position": [
+        17.43608277777333,
+        9.167541255056658,
+        18.22147629951573
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.03591075356761342,
+        -0.9756098578877245,
+        0.21655443419727108
+      ],
+      "tangent": [
+        0.6679183121413949,
+        -0.13092782381445953,
+        -0.732627486010046
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47495101199802686,
+      "nozzle_axis": [
+        -0.006667753384438241,
+        0.9779956050288477,
+        -0.2085189142717329
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000030",
+      "point_type": "deposition",
+      "position": [
+        18.109087028405046,
+        9.02726615180913,
+        17.509815307464017
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.006667753384438241,
+        -0.9779956050288477,
+        0.2085189142717329
+      ],
+      "tangent": [
+        0.6801586524560689,
+        -0.14176630401430435,
+        -0.7192263360968288
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749495567450301,
+      "nozzle_axis": [
+        0.021535771057868393,
+        0.9794935573815101,
+        -0.2003211961152825
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000031",
+      "point_type": "deposition",
+      "position": [
+        18.79371770453441,
+        8.87614372491717,
+        16.81159611323034
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.021535771057868393,
+        -0.9794935573815101,
+        0.2003211961152825
+      ],
+      "tangent": [
+        0.6919107932097945,
+        -0.1527294085823977,
+        -0.7056438067423707
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47494955044441955,
+      "nozzle_axis": [
+        0.048715693995504274,
+        0.9801817429534595,
+        -0.19201700950502976
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000032",
+      "point_type": "deposition",
+      "position": [
+        19.489526374085518,
+        8.714055510018095,
+        16.12701969397869
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.048715693995504274,
+        -0.9801817429534595,
+        0.19201700950502976
+      ],
+      "tangent": [
+        0.7032076587334659,
+        -0.16381180501961723,
+        -0.6918559685619633
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47495111486925573,
+      "nozzle_axis": [
+        0.074891542733776,
+        0.9801326632223442,
+        -0.18366060903642356
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000033",
+      "point_type": "deposition",
+      "position": [
+        20.196081215555896,
+        8.54088191814709,
+        15.456300094770288
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.074891542733776,
+        -0.9801326632223442,
+        0.18366060903642356
+      ],
+      "tangent": [
+        0.7140657496911902,
+        -0.1750144835873581,
+        -0.6778495671257813
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.474953241268618,
+      "nozzle_axis": [
+        0.100083922462832,
+        0.979413839306004,
+        -0.1753047056993251
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000034",
+      "point_type": "deposition",
+      "position": [
+        20.91291727700356,
+        8.356496654862298,
+        14.799618649773095
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.100083922462832,
+        -0.979413839306004,
+        0.1753047056993251
+      ],
+      "tangent": [
+        0.7244530189452445,
+        -0.18634450444069012,
+        -0.6636592114977948
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47495495934953774,
+      "nozzle_axis": [
+        0.12431496487559288,
+        0.9780881574726698,
+        -0.167001035085709
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000035",
+      "point_type": "deposition",
+      "position": [
+        21.639556127522184,
+        8.16077294633946,
+        14.157140884579995
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.12431496487559288,
+        -0.9780881574726698,
+        0.167001035085709
+      ],
+      "tangent": [
+        0.7343573140632331,
+        -0.19780271421868162,
+        -0.6493022574499157
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47495571675457904,
+      "nozzle_axis": [
+        0.1474866497828096,
+        0.9762410507262831,
+        -0.15874854019072368
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000036",
+      "point_type": "deposition",
+      "position": [
+        22.37554321998143,
+        7.953614860087774,
+        13.529047644965353
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.1474866497828096,
+        -0.9762410507262831,
+        0.15874854019072368
+      ],
+      "tangent": [
+        0.7438036682543683,
+        -0.20935821570959204,
+        -0.6347639250983326
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749550720302768,
+      "nozzle_axis": [
+        0.16924056743247112,
+        0.9740267176686817,
+        -0.15043132520425864
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000037",
+      "point_type": "deposition",
+      "position": [
+        23.12049080680544,
+        7.735248103949607,
+        12.915485109280782
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.16924056743247112,
+        -0.9740267176686817,
+        0.15043132520425864
+      ],
+      "tangent": [
+        0.7528603498158445,
+        -0.2206862272220115,
+        -0.6200797390575499
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749537192450731,
+      "nozzle_axis": [
+        0.1895842289410312,
+        0.9715295823513415,
+        -0.14208480127396728
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000038",
+      "point_type": "deposition",
+      "position": [
+        23.874058989484173,
+        7.5061034609614214,
+        12.316559336095043
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.1895842289410312,
+        -0.9715295823513415,
+        0.14208480127396728
+      ],
+      "tangent": [
+        0.7615746819726467,
+        -0.23157925536229987,
+        -0.6052892302561684
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749525420402496,
+      "nozzle_axis": [
+        0.20855742967765822,
+        0.9688205673079143,
+        -0.13375539947015191
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000039",
+      "point_type": "deposition",
+      "position": [
+        24.635931188101548,
+        7.266617281192373,
+        11.732370475906482
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.20855742967765822,
+        -0.9688205673079143,
+        0.13375539947015191
+      ],
+      "tangent": [
+        0.7699688347080142,
+        -0.24203126863020724,
+        -0.5903972040784365
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47495221477656036,
+      "nozzle_axis": [
+        0.2262028109863362,
+        0.9659631801204381,
+        -0.1254887363610372
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000040",
+      "point_type": "deposition",
+      "position": [
+        25.405814401338514,
+        7.017225784393442,
+        11.163018325005211
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.2262028109863362,
+        -0.9659631801204381,
+        0.1254887363610372
+      ],
+      "tangent": [
+        0.7780655208179087,
+        -0.25204202599582165,
+        -0.5754032172714001
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749530216791185,
+      "nozzle_axis": [
+        0.24256566191402518,
+        0.9630138060836415,
+        -0.11732991499404309
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000041",
+      "point_type": "deposition",
+      "position": [
+        26.18346492891983,
+        6.758360819484615,
+        10.608644745123247
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.24256566191402518,
+        -0.9630138060836415,
+        0.11732991499404309
+      ],
+      "tangent": [
+        0.7859140508663117,
+        -0.2616157335244504,
+        -0.5602645023766615
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749545586943349,
+      "nozzle_axis": [
+        0.2576920775492481,
+        0.9600224747881043,
+        -0.10932356136751124
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000042",
+      "point_type": "deposition",
+      "position": [
+        26.96865608565905,
+        6.490448318184807,
+        10.06939938806906
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.2576920775492481,
+        -0.9600224747881043,
+        0.10932356136751124
+      ],
+      "tangent": [
+        0.7935322407914412,
+        -0.27075853525319926,
+        -0.5449737593793451
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47495611849762737,
+      "nozzle_axis": [
+        0.2716278826546139,
+        0.9570335445856991,
+        -0.1015139788517037
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000043",
+      "point_type": "deposition",
+      "position": [
+        27.761159185177632,
+        6.213909559761066,
+        9.54541522867351
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.2716278826546139,
+        -0.9570335445856991,
+        0.1015139788517037
+      ],
+      "tangent": [
+        0.8009192280166835,
+        -0.27947551126043413,
+        -0.5295487029526924
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749571320644229,
+      "nozzle_axis": [
+        0.28441956530889956,
+        0.9540857974153919,
+        -0.09394573987005647
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000044",
+      "point_type": "deposition",
+      "position": [
+        28.560747772810636,
+        5.929161486795335,
+        9.036814155881022
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.28441956530889956,
+        -0.9540857974153919,
+        0.09394573987005647
+      ],
+      "tangent": [
+        0.8080782372834924,
+        -0.28777139197693263,
+        -0.5140011560186053
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749572253322635,
+      "nozzle_axis": [
+        0.2958087637700877,
+        0.9513166929649337,
+        -0.08656630385475998
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000045",
+      "point_type": "deposition",
+      "position": [
+        29.367249830730298,
+        5.636714668013444,
+        8.543733940231213
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.2958087637700877,
+        -0.9513166929649337,
+        0.08656630385475998
+      ],
+      "tangent": [
+        0.81506495143983,
+        -0.2955518213605587,
+        -0.49831540797455165
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47495672626905167,
+      "nozzle_axis": [
+        0.30554481753746937,
+        0.9488681571426801,
+        -0.07931951107167014
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000046",
+      "point_type": "deposition",
+      "position": [
+        30.18065808325479,
+        5.337480510711562,
+        8.066321449238874
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.30554481753746937,
+        -0.9488681571426801,
+        0.07931951107167014
+      ],
+      "tangent": [
+        0.8220453351166647,
+        -0.30241154101171525,
+        -0.48248184098041463
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47495629667445716,
+      "nozzle_axis": [
+        0.3136796546676099,
+        0.9467766464930114,
+        -0.07224303359533266
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000047",
+      "point_type": "deposition",
+      "position": [
+        31.001011118218287,
+        5.032468086917191,
+        7.604711981274679
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.3136796546676099,
+        -0.9467766464930114,
+        0.07224303359533266
+      ],
+      "tangent": [
+        0.8290646098168778,
+        -0.3082514421777358,
+        -0.4665114373137428
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749563490436357,
+      "nozzle_axis": [
+        0.32026349934609927,
+        0.9450700809957515,
+        -0.06537455922050192
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000048",
+      "point_type": "deposition",
+      "position": [
+        31.828360995302436,
+        4.72268294857702,
+        7.1590433303450745
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.32026349934609927,
+        -0.9450700809957515,
+        0.06537455922050192
+      ],
+      "tangent": [
+        0.8361356613087539,
+        -0.3130748050903956,
+        -0.4504012903016416
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47495683354202367,
+      "nozzle_axis": [
+        0.32534459753008776,
+        0.9437685624989713,
+        -0.058751964193637325
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000049",
+      "point_type": "deposition",
+      "position": [
+        32.66277645387763,
+        4.409125591723204,
+        6.7294739861703015
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.32534459753008776,
+        -0.9437685624989713,
+        0.058751964193637325
+      ],
+      "tangent": [
+        0.8432754133237609,
+        -0.3168867582500316,
+        -0.43413057912271785
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749573783837131,
+      "nozzle_axis": [
+        0.32896943121220573,
+        0.9428849059741508,
+        -0.05241342780275721
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000050",
+      "point_type": "deposition",
+      "position": [
+        33.50436486424513,
+        4.092785391066247,
+        6.316246123716947
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.32896943121220573,
+        -0.9428849059741508,
+        0.05241342780275721
+      ],
+      "tangent": [
+        0.8505235529787747,
+        -0.3196987839878694,
+        -0.41761510191208273
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749576450968124,
+      "nozzle_axis": [
+        0.3311818557880496,
+        0.9424255189794438,
+        -0.046397409120655854
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000051",
+      "point_type": "deposition",
+      "position": [
+        34.353230531177445,
+        3.7746480759660805,
+        5.919614973655726
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.3311818557880496,
+        -0.9424255189794438,
+        0.046397409120655854
+      ],
+      "tangent": [
+        0.8578775904206293,
+        -0.32151479784466536,
+        -0.4008419571614219
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749575315871488,
+      "nozzle_axis": [
+        0.3320232008184017,
+        0.9423909123105292,
+        -0.040742637529154045
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000052",
+      "point_type": "deposition",
+      "position": [
+        35.20946504778835,
+        3.455698467699386,
+        5.539833888138589
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.3320232008184017,
+        -0.9423909123105292,
+        0.040742637529154045
+      ],
+      "tangent": [
+        0.8653248777839875,
+        -0.32233579169998333,
+        -0.3838130968026913
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749572399478885,
+      "nozzle_axis": [
+        0.3315339726124667,
+        0.9427755664054319,
+        -0.035488820672338335
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000053",
+      "point_type": "deposition",
+      "position": [
+        36.073145688995844,
+        3.136915131626241,
+        5.177160749880874
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.3315339726124667,
+        -0.9427755664054319,
+        0.035488820672338335
+      ],
+      "tangent": [
+        0.872850591402887,
+        -0.32216795207058657,
+        -0.36652374513293773
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749572409655275,
+      "nozzle_axis": [
+        0.3291818220991129,
+        0.94377205487975,
+        -0.030555464774116723
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000054",
+      "point_type": "deposition",
+      "position": [
+        36.94443673985725,
+        2.81950508598871,
+        4.831904841341959
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.3291818220991129,
+        -0.94377205487975,
+        0.030555464774116723
+      ],
+      "tangent": [
+        0.880541801117273,
+        -0.32078008032111066,
+        -0.34892159084002056
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749583278670734,
+      "nozzle_axis": [
+        0.32478416671318333,
+        0.9454327551184116,
+        -0.025925867422956335
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000055",
+      "point_type": "deposition",
+      "position": [
+        37.82366596437005,
+        2.505189406329117,
+        4.5043915130174845
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.32478416671318333,
+        -0.9454327551184116,
+        0.025925867422956335
+      ],
+      "tangent": [
+        0.8885622232615252,
+        -0.3176521336390357,
+        -0.33098987505224947
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47496046531640507,
+      "nozzle_axis": [
+        0.31837811945300715,
+        0.9477170321586184,
+        -0.021628684888989752
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000056",
+      "point_type": "deposition",
+      "position": [
+        38.71113998775677,
+        2.1957481113239448,
+        4.194959596077738
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.31837811945300715,
+        -0.9477170321586184,
+        0.021628684888989752
+      ],
+      "tangent": [
+        0.8968905042272228,
+        -0.3127246001486357,
+        -0.3127151225779047
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749625942651765,
+      "nozzle_axis": [
+        0.3099952852144217,
+        0.9505734755227321,
+        -0.017691545366734694
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000057",
+      "point_type": "deposition",
+      "position": [
+        39.60711436129553,
+        1.8929732905026353,
+        3.9039642768597096
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.3099952852144217,
+        -0.9505734755227321,
+        0.017691545366734694
+      ],
+      "tangent": [
+        0.9054769880646469,
+        -0.30598602026560484,
+        -0.2940815864473533
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749627999730116,
+      "nozzle_axis": [
+        0.29966426377618827,
+        0.9539399202024675,
+        -0.014140638584765563
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000058",
+      "point_type": "deposition",
+      "position": [
+        40.51178929585381,
+        1.5986695460263436,
+        3.6318055679073247
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.29966426377618827,
+        -0.9539399202024675,
+        0.014140638584765563
+      ],
+      "tangent": [
+        0.914269430390441,
+        -0.29742497171704196,
+        -0.2750450778557138
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749602603730974,
+      "nozzle_axis": [
+        0.28741325704469056,
+        0.9577435026390615,
+        -0.01100012852764561
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000059",
+      "point_type": "deposition",
+      "position": [
+        41.425297147617876,
+        1.3146539395702748,
+        3.378922465364531
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.28741325704469056,
+        -0.9577435026390615,
+        0.01100012852764561
+      ],
+      "tangent": [
+        0.9232009610705283,
+        -0.28702925796744166,
+        -0.25556641123025686
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749557793014634,
+      "nozzle_axis": [
+        0.273272898324945,
+        0.9619008137002402,
+        -0.008291419896517065
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000060",
+      "point_type": "deposition",
+      "position": [
+        42.3476868034314,
+        1.0427541713138748,
+        3.14576868058011
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.273272898324945,
+        -0.9619008137002402,
+        0.008291419896517065
+      ],
+      "tangent": [
+        0.9321858035745095,
+        -0.27478745274985616,
+        -0.23562997140727146
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47495109898790483,
+      "nozzle_axis": [
+        0.257279258135932,
+        0.9663182678685218,
+        -0.006032289499373502
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000061",
+      "point_type": "deposition",
+      "position": [
+        43.27891513350467,
+        0.7848021779593785,
+        2.9328177035780074
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.257279258135932,
+        -0.9663182678685218,
+        0.006032289499373502
+      ],
+      "tangent": [
+        0.9411276221650587,
+        -0.2606941158237248,
+        -0.2152147224815923
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749474092439625,
+      "nozzle_axis": [
+        0.23868351357801104,
+        0.9710885220104654,
+        -0.004154848443142058
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000062",
+      "point_type": "deposition",
+      "position": [
+        44.2189294183581,
+        0.5428978991614009,
+        2.7406880488631296
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.23868351357801104,
+        -0.9710885220104654,
+        0.004154848443142058
+      ],
+      "tangent": [
+        0.9500143551638577,
+        -0.24447770755895598,
+        -0.1941735705221424
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749415223932434,
+      "nozzle_axis": [
+        0.21754047065620352,
+        0.9760477061914127,
+        -0.002649314092246131
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000063",
+      "point_type": "deposition",
+      "position": [
+        45.16768465066902,
+        0.3198180045274906,
+        2.570004307335727
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.21754047065620352,
+        -0.9760477061914127,
+        0.002649314092246131
+      ],
+      "tangent": [
+        0.9588601754895082,
+        -0.22545586009137752,
+        -0.1725016492984542
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749310897786494,
+      "nozzle_axis": [
+        0.1939880602225728,
+        0.9810027221315117,
+        -0.0015138235192400438
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000064",
+      "point_type": "deposition",
+      "position": [
+        46.1248015456741,
+        0.11805065097594031,
+        2.4209800021677745
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.1939880602225728,
+        -0.9810027221315117,
+        0.0015138235192400438
+      ],
+      "tangent": [
+        0.9673321445781976,
+        -0.20392080406840105,
+        -0.15061483238327458
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749200917722334,
+      "nozzle_axis": [
+        0.16797588288920723,
+        0.9857908421468049,
+        -0.0007199354724673509
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000065",
+      "point_type": "deposition",
+      "position": [
+        47.08975570148515,
+        -0.059872476675505625,
+        2.293887294096341
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.16797588288920723,
+        -0.9857908421468049,
+        0.0007199354724673509
+      ],
+      "tangent": [
+        0.9752756364989487,
+        -0.17982625446314554,
+        -0.12845213527741273
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749121372356833,
+      "nozzle_axis": [
+        0.13945668870930988,
+        0.9902281454262825,
+        -0.00022799092077197987
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000066",
+      "point_type": "deposition",
+      "position": [
+        48.06185453248747,
+        -0.21135780613015598,
+        2.1890589416427955
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.13945668870930988,
+        -0.9902281454262825,
+        0.00022799092077197987
+      ],
+      "tangent": [
+        0.9825131899072771,
+        -0.15310823294909204,
+        -0.10595140707623316
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47491059328321966,
+      "nozzle_axis": [
+        0.10839504700260795,
+        0.994107898353828,
+        1.4691421715173689e-05
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000067",
+      "point_type": "deposition",
+      "position": [
+        49.040204332155454,
+        -0.33376349504023795,
+        2.1068696623496246
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.10839504700260795,
+        -0.994107898353828,
+        -1.4691421715173689e-05
+      ],
+      "tangent": [
+        0.9888343416264327,
+        -0.12371745652302207,
+        -0.08307006543691678
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749149349076189,
+      "nozzle_axis": [
+        0.07477751700927075,
+        0.997200239299559,
+        7.543759273201446e-05
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000068",
+      "point_type": "deposition",
+      "position": [
+        50.02367043739629,
+        -0.42442465180816574,
+        2.0477136509055978
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.07477751700927075,
+        -0.997200239299559,
+        -7.543759273201446e-05
+      ],
+      "tangent": [
+        0.9939963892848054,
+        -0.09163189457722656,
+        -0.059789413652902475
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.47492024695616125,
+      "nozzle_axis": [
+        0.03862408887479349,
+        0.9992538107805095,
+        3.740617490678106e-05
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000069",
+      "point_type": "deposition",
+      "position": [
+        51.01083960080646,
+        -0.48069404189337683,
+        2.011976318555997
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.03862408887479349,
+        -0.9992538107805095,
+        -3.740617490678106e-05
+      ],
+      "tangent": [
+        0.9977279374248744,
+        -0.05687124820221551,
+        -0.03611957931410714
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4749222091218718,
+      "nozzle_axis": [
+        -0.0,
+        1.0,
+        -0.0
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000070",
+      "point_type": "deposition",
+      "position": [
+        52.0,
+        -0.5,
+        2.0
+      ],
+      "region_id": "pass-0001",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.0,
+        -1.0,
+        0.0
+      ],
+      "tangent": [
+        0.9997363410121302,
+        -0.019512374265068563,
+        -0.012104367402627264
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 1800.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.0,
+        1.0,
+        -0.0
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000071",
+      "point_type": "travel",
+      "position": [
+        52.0,
+        -0.5,
+        5.0
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.0,
+        -1.0,
+        0.0
+      ],
+      "tangent": [
+        -0.9997668015473794,
+        0.01800401951082535,
+        0.011924672120307388
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4406223742761044,
+      "nozzle_axis": [
+        0.03862408887479349,
+        0.9992538107805095,
+        3.740617490678106e-05
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000072",
+      "point_type": "deposition",
+      "position": [
+        51.082250787874514,
+        -0.4834729712013059,
+        5.010946411129404
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.03862408887479349,
+        -0.9992538107805095,
+        -3.740617490678106e-05
+      ],
+      "tangent": [
+        -0.9997668015473794,
+        0.01800401951082535,
+        0.011924672120307388
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4408246083775237,
+      "nozzle_axis": [
+        0.07477751700927075,
+        0.997200239299559,
+        7.543759273201446e-05
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000073",
+      "point_type": "deposition",
+      "position": [
+        50.165732503175924,
+        -0.4349860394896834,
+        5.043711121232499
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.07477751700927075,
+        -0.997200239299559,
+        -7.543759273201446e-05
+      ],
+      "tangent": [
+        -0.9979678273282029,
+        0.0527958892931111,
+        0.03567645850663761
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4410190157040723,
+      "nozzle_axis": [
+        0.10839504700260795,
+        0.994107898353828,
+        1.4691421715173689e-05
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000074",
+      "point_type": "deposition",
+      "position": [
+        49.25194009326001,
+        -0.35629470691153986,
+        5.098167198200329
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.10839504700260795,
+        -0.994107898353828,
+        -1.4691421715173689e-05
+      ],
+      "tangent": [
+        -0.9945610985943443,
+        0.08564673697166414,
+        0.059269364843211284
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4411580795583498,
+      "nozzle_axis": [
+        0.13945668870930988,
+        0.9902281454262825,
+        -0.00022799092077197987
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000075",
+      "point_type": "deposition",
+      "position": [
+        48.34228258331215,
+        -0.24928327253601862,
+        5.174184214568335
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.13945668870930988,
+        -0.9902281454262825,
+        0.00022799092077197987
+      ],
+      "tangent": [
+        -0.9897486298156362,
+        0.1164332942778085,
+        0.0827099616835119
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.44145683536394603,
+      "nozzle_axis": [
+        0.16797588288920723,
+        0.9857908421468049,
+        -0.0007199354724673509
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000076",
+      "point_type": "deposition",
+      "position": [
+        47.43754810490051,
+        -0.11585080905210042,
+        5.271665456092606
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.16797588288920723,
+        -0.9857908421468049,
+        0.0007199354724673509
+      ],
+      "tangent": [
+        -0.9837259610660786,
+        0.1450823213995058,
+        0.10599223340391731
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.44212671686262617,
+      "nozzle_axis": [
+        0.1939880602225728,
+        0.9810027221315117,
+        -0.0015138235192400438
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000077",
+      "point_type": "deposition",
+      "position": [
+        46.53790168340868,
+        0.04218712659578367,
+        5.390327213310053
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.1939880602225728,
+        -0.9810027221315117,
+        0.0015138235192400438
+      ],
+      "tangent": [
+        -0.9767115757681145,
+        0.17157571849374212,
+        0.12882651351303004
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.44273142704723417,
+      "nozzle_axis": [
+        0.21754047065620352,
+        0.9760477061914127,
+        -0.002649314092246131
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000078",
+      "point_type": "deposition",
+      "position": [
+        45.64422753776282,
+        0.22289184838807224,
+        5.529736746872153
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.21754047065620352,
+        -0.9760477061914127,
+        0.002649314092246131
+      ],
+      "tangent": [
+        -0.9689025077143313,
+        0.1959162172850327,
+        0.1511448522100709
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4432796725393341,
+      "nozzle_axis": [
+        0.23868351357801104,
+        0.9710885220104654,
+        -0.004154848443142058
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000079",
+      "point_type": "deposition",
+      "position": [
+        44.75723205347441,
+        0.4243203473614979,
+        5.689475785971518
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.23868351357801104,
+        -0.9710885220104654,
+        0.004154848443142058
+      ],
+      "tangent": [
+        -0.960472268036741,
+        0.2181143993212659,
+        0.1729714749346901
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4437628978213224,
+      "nozzle_axis": [
+        0.257279258135932,
+        0.9663182678685218,
+        -0.006032289499373502
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000080",
+      "point_type": "deposition",
+      "position": [
+        43.87749572870717,
+        0.6445338848234843,
+        5.869146065898853
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.257279258135932,
+        -0.9663182678685218,
+        0.006032289499373502
+      ],
+      "tangent": [
+        -0.9515744510445802,
+        0.23819588906757536,
+        0.19434192175265066
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.44430953716004934,
+      "nozzle_axis": [
+        0.273272898324945,
+        0.9619008137002402,
+        -0.008291419896517065
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000081",
+      "point_type": "deposition",
+      "position": [
+        43.00515233247135,
+        0.8814655319487131,
+        6.06839168641477
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.273272898324945,
+        -0.9619008137002402,
+        0.008291419896517065
+      ],
+      "tangent": [
+        -0.9424169304796184,
+        0.255963874525482,
+        0.21525060762580284
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.44485152887230567,
+      "nozzle_axis": [
+        0.28741325704469056,
+        0.9577435026390615,
+        -0.01100012852764561
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000082",
+      "point_type": "deposition",
+      "position": [
+        42.14036053101298,
+        1.1331478757460243,
+        6.286797774443495
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.28741325704469056,
+        -0.9577435026390615,
+        0.01100012852764561
+      ],
+      "tangent": [
+        -0.933120463252741,
+        0.271568191142234,
+        0.23566272216607584
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4453699387533191,
+      "nozzle_axis": [
+        0.29966426377618827,
+        0.9539399202024675,
+        -0.014140638584765563
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000083",
+      "point_type": "deposition",
+      "position": [
+        41.28333669308047,
+        1.398072003153716,
+        6.523944281375671
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.29966426377618827,
+        -0.9539399202024675,
+        0.014140638584765563
+      ],
+      "tangent": [
+        -0.9236623454180957,
+        0.28552349427006385,
+        0.2555860048526823
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4458559967212371,
+      "nozzle_axis": [
+        0.3099952852144217,
+        0.9505734755227321,
+        -0.017691545366734694
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000084",
+      "point_type": "deposition",
+      "position": [
+        40.43422082230926,
+        1.6747105162639588,
+        6.7794176514621
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.3099952852144217,
+        -0.9505734755227321,
+        0.017691545366734694
+      ],
+      "tangent": [
+        -0.914141832716028,
+        0.2978237082587426,
+        0.2750377219175455
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4463358344197672,
+      "nozzle_axis": [
+        0.31837811945300715,
+        0.9477170321586184,
+        -0.021628684888989752
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000085",
+      "point_type": "deposition",
+      "position": [
+        39.59301601270697,
+        1.9615447359982645,
+        7.052825725479443
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.31837811945300715,
+        -0.9477170321586184,
+        0.021628684888989752
+      ],
+      "tangent": [
+        -0.904651335320201,
+        0.3084682314415783,
+        0.2940294401836014
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.44672411670459794,
+      "nozzle_axis": [
+        0.32478416671318333,
+        0.9454327551184116,
+        -0.025925867422956335
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000086",
+      "point_type": "deposition",
+      "position": [
+        38.75981337806062,
+        2.256997879506511,
+        7.343750488593702
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.32478416671318333,
+        -0.9454327551184116,
+        0.025925867422956335
+      ],
+      "tangent": [
+        -0.895266786983678,
+        0.3174610538829201,
+        0.3125953604765551
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4471036414851237,
+      "nozzle_axis": [
+        0.3291818220991129,
+        0.94377205487975,
+        -0.030555464774116723
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000087",
+      "point_type": "deposition",
+      "position": [
+        37.934486840020426,
+        2.5595476103236763,
+        7.651855220242938
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.3291818220991129,
+        -0.94377205487975,
+        0.030555464774116723
+      ],
+      "tangent": [
+        -0.8860512451730377,
+        0.3248103064199074,
+        0.33077402523583294
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4474831853730714,
+      "nozzle_axis": [
+        0.3315339726124667,
+        0.9427755664054319,
+        -0.035488820672338335
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000088",
+      "point_type": "deposition",
+      "position": [
+        37.11683592000379,
+        2.8676864019546398,
+        7.976816593048563
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.3315339726124667,
+        -0.9427755664054319,
+        0.035488820672338335
+      ],
+      "tangent": [
+        -0.8770663444723147,
+        0.33053000608179545,
+        0.34857501699568105
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4478743814005133,
+      "nozzle_axis": [
+        0.3320232008184017,
+        0.9423909123105292,
+        -0.040742637529154045
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000089",
+      "point_type": "deposition",
+      "position": [
+        36.30658926687834,
+        3.1799244092082177,
+        8.318328599792661
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.3320232008184017,
+        -0.9423909123105292,
+        0.040742637529154045
+      ],
+      "tangent": [
+        -0.8683649024176326,
+        0.33463455313755014,
+        0.3660083497621983
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4481713243424892,
+      "nozzle_axis": [
+        0.3311818557880496,
+        0.9424255189794438,
+        -0.046397409120655854
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000090",
+      "point_type": "deposition",
+      "position": [
+        35.503693641128415,
+        3.4948653986742513,
+        8.676027197979415
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.3311818557880496,
+        -0.9424255189794438,
+        0.046397409120655854
+      ],
+      "tangent": [
+        -0.8599164636991642,
+        0.3373077810488648,
+        0.38310199203738843
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4484471726060325,
+      "nozzle_axis": [
+        0.32896943121220573,
+        0.9428849059741508,
+        -0.05241342780275721
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000091",
+      "point_type": "deposition",
+      "position": [
+        34.70810877008383,
+        3.811584651054756,
+        9.049637438367812
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.32896943121220573,
+        -0.9428849059741508,
+        0.05241342780275721
+      ],
+      "tangent": [
+        -0.8515623721790911,
+        0.3390036785362872,
+        0.39989752715862686
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.44873970346924397,
+      "nozzle_axis": [
+        0.32534459753008776,
+        0.9437685624989713,
+        -0.058751964193637325
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000092",
+      "point_type": "deposition",
+      "position": [
+        33.91972066108168,
+        4.12922919766075,
+        9.43891400090518
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.32534459753008776,
+        -0.9437685624989713,
+        0.058751964193637325
+      ],
+      "tangent": [
+        -0.8433091375587815,
+        0.33977243643057065,
+        0.41639451239407316
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.44905996640246326,
+      "nozzle_axis": [
+        0.32026349934609927,
+        0.9450700809957515,
+        -0.06537455922050192
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000093",
+      "point_type": "deposition",
+      "position": [
+        33.13837579403903,
+        4.446960113703792,
+        9.843618019713695
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.32026349934609927,
+        -0.9450700809957515,
+        0.06537455922050192
+      ],
+      "tangent": [
+        -0.835179183718073,
+        0.33962243600217706,
+        0.43258794718295196
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.449303211519546,
+      "nozzle_axis": [
+        0.3136796546676099,
+        0.9467766464930114,
+        -0.07224303359533266
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000094",
+      "point_type": "deposition",
+      "position": [
+        32.36408904231563,
+        4.763868650732434,
+        10.263422179446136
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.3136796546676099,
+        -0.9467766464930114,
+        0.07224303359533266
+      ],
+      "tangent": [
+        -0.8271866999799116,
+        0.3385600055234204,
+        0.44848554718778333
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4494767909185595,
+      "nozzle_axis": [
+        0.30554481753746937,
+        0.9488681571426801,
+        -0.07931951107167014
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000095",
+      "point_type": "deposition",
+      "position": [
+        31.59688367030644,
+        5.0790489580351545,
+        10.698072548956695
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.30554481753746937,
+        -0.9488681571426801,
+        0.07931951107167014
+      ],
+      "tangent": [
+        -0.8193049919481553,
+        0.33658366919487415,
+        0.4641667413765756
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.44967516289464354,
+      "nozzle_axis": [
+        0.2958087637700877,
+        0.9513166929649337,
+        -0.08656630385475998
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000096",
+      "point_type": "deposition",
+      "position": [
+        30.836622066865388,
+        5.3916663206621,
+        11.147417062617444
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.2958087637700877,
+        -0.9513166929649337,
+        0.08656630385475998
+      ],
+      "tangent": [
+        -0.8115315226720781,
+        0.3336994044656439,
+        0.4796470527052295
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.44990383084925095,
+      "nozzle_axis": [
+        0.28441956530889956,
+        0.9540857974153919,
+        -0.09394573987005647
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000097",
+      "point_type": "deposition",
+      "position": [
+        30.083155821775108,
+        5.700895346935894,
+        11.611309998773283
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.28441956530889956,
+        -0.9540857974153919,
+        0.09394573987005647
+      ],
+      "tangent": [
+        -0.803869122342541,
+        0.3299148005280165,
+        0.4949249019162319
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.45014717641233776,
+      "nozzle_axis": [
+        0.2716278826546139,
+        0.9570335445856991,
+        -0.1015139788517037
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000098",
+      "point_type": "deposition",
+      "position": [
+        29.336364121679473,
+        6.005905300712806,
+        12.089590603272649
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.2716278826546139,
+        -0.9570335445856991,
+        0.1015139788517037
+      ],
+      "tangent": [
+        -0.7963173709159358,
+        0.32523757891754485,
+        0.5099991784673638
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.45028723054512904,
+      "nozzle_axis": [
+        0.2576920775492481,
+        0.9600224747881043,
+        -0.10932356136751124
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000099",
+      "point_type": "deposition",
+      "position": [
+        28.596400737270695,
+        6.305926338935433,
+        12.58200320338963
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.2576920775492481,
+        -0.9600224747881043,
+        0.10932356136751124
+      ],
+      "tangent": [
+        -0.788790799344278,
+        0.3198183039135236,
+        0.5249050650848133
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.45045319971254055,
+      "nozzle_axis": [
+        0.24256566191402518,
+        0.9630138060836415,
+        -0.11732991499404309
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000100",
+      "point_type": "deposition",
+      "position": [
+        27.863325533958033,
+        6.600582444189054,
+        13.088418032113614
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.24256566191402518,
+        -0.9630138060836415,
+        0.11732991499404309
+      ],
+      "tangent": [
+        -0.7811601689468068,
+        0.31398362940255625,
+        0.5396323479167966
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.45065142198262365,
+      "nozzle_axis": [
+        0.2262028109863362,
+        0.9659631801204381,
+        -0.1254887363610372
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000101",
+      "point_type": "deposition",
+      "position": [
+        27.137197352452294,
+        6.889542732419661,
+        13.608699229897997
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.2262028109863362,
+        -0.9659631801204381,
+        0.1254887363610372
+      ],
+      "tangent": [
+        -0.7734171249019027,
+        0.3077787655489519,
+        0.5541644001428078
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.45090062399904673,
+      "nozzle_axis": [
+        0.20855742967765822,
+        0.9688205673079143,
+        -0.13375539947015191
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000102",
+      "point_type": "deposition",
+      "position": [
+        26.418035637188957,
+        7.172489250068552,
+        14.142717514648455
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.20855742967765822,
+        -0.9688205673079143,
+        0.13375539947015191
+      ],
+      "tangent": [
+        -0.7655736207788686,
+        0.30120678757755437,
+        0.5684817519364568
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.45108429921679866,
+      "nozzle_axis": [
+        0.1895842289410312,
+        0.9715295823513415,
+        -0.14208480127396728
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000103",
+      "point_type": "deposition",
+      "position": [
+        25.70604798184571,
+        7.449031083264233,
+        14.690207322619889
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.1895842289410312,
+        -0.9715295823513415,
+        0.14208480127396728
+      ],
+      "tangent": [
+        -0.7576279537065107,
+        0.2942688986612888,
+        0.5825853577315153
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4512684642070072,
+      "nozzle_axis": [
+        0.16924056743247112,
+        0.9740267176686817,
+        -0.15043132520425864
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000104",
+      "point_type": "deposition",
+      "position": [
+        25.001366030236124,
+        7.718819623411875,
+        15.25101536687616
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.16924056743247112,
+        -0.9740267176686817,
+        0.15043132520425864
+      ],
+      "tangent": [
+        -0.7495479157112999,
+        0.2869655416724719,
+        0.5965137885627381
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.45148453717722276,
+      "nozzle_axis": [
+        0.1474866497828096,
+        0.9762410507262831,
+        -0.15874854019072368
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000105",
+      "point_type": "deposition",
+      "position": [
+        24.30407782642649,
+        7.981527305218767,
+        15.825026362781314
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.1474866497828096,
+        -0.9762410507262831,
+        0.15874854019072368
+      ],
+      "tangent": [
+        -0.741328462589726,
+        0.27930012410992067,
+        0.6102651482974726
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4517508457997832,
+      "nozzle_axis": [
+        0.12431496487559288,
+        0.9780881574726698,
+        -0.167001035085709
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000106",
+      "point_type": "deposition",
+      "position": [
+        23.614247655917236,
+        8.236838077129867,
+        16.412146062637362
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.12431496487559288,
+        -0.9780881574726698,
+        0.167001035085709
+      ],
+      "tangent": [
+        -0.7329670434998897,
+        0.2712760178685798,
+        0.623833820237727
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.45198777503266724,
+      "nozzle_axis": [
+        0.100083922462832,
+        0.979413839306004,
+        -0.1753047056993251
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000107",
+      "point_type": "deposition",
+      "position": [
+        22.932072495477712,
+        8.484395913534973,
+        17.012179656576766
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.100083922462832,
+        -0.979413839306004,
+        0.1753047056993251
+      ],
+      "tangent": [
+        -0.724453392544313,
+        0.2629003881042192,
+        0.6372210511005475
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4521889671092253,
+      "nozzle_axis": [
+        0.074891542733776,
+        0.9801326632223442,
+        -0.18366060903642356
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000108",
+      "point_type": "deposition",
+      "position": [
+        22.257823083024952,
+        8.724010786694679,
+        17.62491952137534
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.074891542733776,
+        -0.9801326632223442,
+        0.18366060903642356
+      ],
+      "tangent": [
+        -0.7157178558475314,
+        0.254351935766883,
+        0.6504252790233878
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4524116320391223,
+      "nozzle_axis": [
+        0.048715693995504274,
+        0.9801817429534595,
+        -0.19201700950502976
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000109",
+      "point_type": "deposition",
+      "position": [
+        21.591734314135024,
+        8.955780836969845,
+        18.25018772489154
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.048715693995504274,
+        -0.9801817429534595,
+        0.19201700950502976
+      ],
+      "tangent": [
+        -0.7067073134837465,
+        0.24590354503188258,
+        0.6633974823658427
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.45266140132839106,
+      "nozzle_axis": [
+        0.021535771057868393,
+        0.9794935573815101,
+        -0.2003211961152825
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000110",
+      "point_type": "deposition",
+      "position": [
+        20.934023941625444,
+        9.179829871091279,
+        18.887802175462273
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.021535771057868393,
+        -0.9794935573815101,
+        0.2003211961152825
+      ],
+      "tangent": [
+        -0.6974329551363002,
+        0.2375805316350992,
+        0.6761233349602949
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4529853780190883,
+      "nozzle_axis": [
+        -0.006667753384438241,
+        0.9779956050288477,
+        -0.2085189142717329
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000111",
+      "point_type": "deposition",
+      "position": [
+        20.28480659577834,
+        9.396299793883708,
+        19.537620746997245
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.006667753384438241,
+        -0.9779956050288477,
+        0.2085189142717329
+      ],
+      "tangent": [
+        -0.6879346246656979,
+        0.22937950755661593,
+        0.6885717055609748
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4532408979296178,
+      "nozzle_axis": [
+        -0.03591075356761342,
+        0.9756098578877245,
+        -0.21655443419727108
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000112",
+      "point_type": "deposition",
+      "position": [
+        19.644394626727728,
+        9.605260771433576,
+        20.1992999857931
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.03591075356761342,
+        -0.9756098578877245,
+        0.21655443419727108
+      ],
+      "tangent": [
+        -0.6782215518248044,
+        0.2212979227649312,
+        0.7007444298888723
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.45350262226473464,
+      "nozzle_axis": [
+        -0.06620382761433286,
+        0.9722525114503743,
+        -0.2243704686175337
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000113",
+      "point_type": "deposition",
+      "position": [
+        19.0130064001617,
+        9.806821444014608,
+        20.87262295357768
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.06620382761433286,
+        -0.9722525114503743,
+        0.2243704686175337
+      ],
+      "tangent": [
+        -0.6682791540172763,
+        0.21333751579151247,
+        0.7126640699950151
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4537727031416755,
+      "nozzle_axis": [
+        -0.09755178081977361,
+        0.9678338817828763,
+        -0.23190779920472804
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000114",
+      "point_type": "deposition",
+      "position": [
+        18.3908579803596,
+        10.001091465958806,
+        21.557382510200767
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.09755178081977361,
+        -0.9678338817828763,
+        0.23190779920472804
+      ],
+      "tangent": [
+        -0.6581075490822794,
+        0.20549850153525287,
+        0.7243375040046464
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4541397358129922,
+      "nozzle_axis": [
+        -0.12977045602692,
+        0.9622563209323025,
+        -0.23921204310902705
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000115",
+      "point_type": "deposition",
+      "position": [
+        17.77804001241245,
+        10.188214831380696,
+        22.25350782824695
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.12977045602692,
+        -0.9622563209323025,
+        0.23921204310902705
+      ],
+      "tangent": [
+        -0.6477139114198951,
+        0.19777880753313615,
+        0.7357650659306346
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.45448281225144316,
+      "nozzle_axis": [
+        -0.16244196010539808,
+        0.9554410777810203,
+        -0.24646491938155968
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000116",
+      "point_type": "deposition",
+      "position": [
+        17.174777261972487,
+        10.368296371481705,
+        22.960720065637133
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.16244196010539808,
+        -0.9554410777810203,
+        0.24646491938155968
+      ],
+      "tangent": [
+        -0.6371332697417382,
+        0.19019231732939915,
+        0.746919057875132
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.45480127633798234,
+      "nozzle_axis": [
+        -0.19552409045856461,
+        0.9473345109664681,
+        -0.25362896991919887
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000117",
+      "point_type": "deposition",
+      "position": [
+        16.58127981646451,
+        10.541721824610208,
+        23.678665525449883
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.19552409045856461,
+        -0.9473345109664681,
+        0.25362896991919887
+      ],
+      "tangent": [
+        -0.6263807703831594,
+        0.18303426536520834,
+        0.7577239525027688
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.45510071176185596,
+      "nozzle_axis": [
+        -0.2289892124253474,
+        0.9378815769708015,
+        -0.26065703169410476
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000118",
+      "point_type": "deposition",
+      "position": [
+        15.99772946070897,
+        10.709080699110707,
+        24.40695380414229
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.2289892124253474,
+        -0.9378815769708015,
+        0.26065703169410476
+      ],
+      "tangent": [
+        -0.6154773295745386,
+        0.176515346348822,
+        0.7681340958993751
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.45544616203293525,
+      "nozzle_axis": [
+        -0.2628099770736707,
+        0.9270246585210855,
+        -0.26749990363437803
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000119",
+      "point_type": "deposition",
+      "position": [
+        15.424187047536485,
+        10.87099805276148,
+        25.14529039873469
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.2628099770736707,
+        -0.9270246585210855,
+        0.26749990363437803
+      ],
+      "tangent": [
+        -0.6044630107188925,
+        0.1706465796208663,
+        0.7781415125389157
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.45590572536982044,
+      "nozzle_axis": [
+        -0.2969587858890841,
+        0.9147029865930292,
+        -0.2741056836351153
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000120",
+      "point_type": "deposition",
+      "position": [
+        14.860518922594707,
+        11.028092306450075,
+        25.89343911960951
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.2969587858890841,
+        -0.9147029865930292,
+        0.2741056836351153
+      ],
+      "tangent": [
+        -0.593457561324944,
+        0.16539656682170045,
+        0.7876878179773033
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4563040781381402,
+      "nozzle_axis": [
+        -0.33140711125373895,
+        0.9008520903757089,
+        -0.2804190397889695
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000121",
+      "point_type": "deposition",
+      "position": [
+        14.30676586598601,
+        11.180904546647223,
+        26.650875595817205
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.33140711125373895,
+        -0.9008520903757089,
+        0.2804190397889695
+      ],
+      "tangent": [
+        -0.582509514832139,
+        0.1607477969382195,
+        0.7967702372136746
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.45665888206472965,
+      "nozzle_axis": [
+        -0.366124609545153,
+        0.8854033150020735,
+        -0.28638041146130827
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000122",
+      "point_type": "deposition",
+      "position": [
+        13.762938660875328,
+        11.329983004137214,
+        27.41712460466423
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.366124609545153,
+        -0.8854033150020735,
+        0.28638041146130827
+      ],
+      "tangent": [
+        -0.5716237408388493,
+        0.1566982761216769,
+        0.8054141476097219
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.45699088346278166,
+      "nozzle_axis": [
+        -0.4010472550860428,
+        0.8682886427251831,
+        -0.29195193457555624
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000123",
+      "point_type": "deposition",
+      "position": [
+        13.229016555284796,
+        11.475883321686668,
+        28.1917643861387
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.4010472550860428,
+        -0.8682886427251831,
+        0.29195193457555624
+      ],
+      "tangent": [
+        -0.5608046461266613,
+        0.15324627899156265,
+        0.8136422597542428
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.45749569467937284,
+      "nozzle_axis": [
+        -0.43576760986216023,
+        0.8495069129586923,
+        -0.29739636014990667
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000124",
+      "point_type": "deposition",
+      "position": [
+        12.704707675407315,
+        11.619197178896018,
+        28.974702126042608
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.43576760986216023,
+        -0.8495069129586923,
+        0.29739636014990667
+      ],
+      "tangent": [
+        -0.5500997392282951,
+        0.15036349469626922,
+        0.8214506049445011
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.45797572703295053,
+      "nozzle_axis": [
+        -0.4701591828586644,
+        0.8290327654113909,
+        -0.3027457954258239
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000125",
+      "point_type": "deposition",
+      "position": [
+        12.189779597990649,
+        11.760503591775509,
+        29.765410100709506
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.4701591828586644,
+        -0.8290327654113909,
+        0.3027457954258239
+      ],
+      "tangent": [
+        -0.5396912163037337,
+        0.14810190623328717,
+        0.8287335014434153
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.45838288862338683,
+      "nozzle_axis": [
+        -0.5041597380519262,
+        0.8068295498870701,
+        -0.30797570676344116
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000126",
+      "point_type": "deposition",
+      "position": [
+        11.68393963506992,
+        11.900628776929944,
+        30.56318687189878
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.5041597380519262,
+        -0.8068295498870701,
+        0.30797570676344116
+      ],
+      "tangent": [
+        -0.529695126559228,
+        0.1467334199060616,
+        0.8353995309922522
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.45871216629276523,
+      "nozzle_axis": [
+        -0.5377125430507033,
+        0.7828550959688182,
+        -0.3130544996667486
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000127",
+      "point_type": "deposition",
+      "position": [
+        11.186842335845794,
+        12.040427327861476,
+        31.36731262382981
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.5377125430507033,
+        -0.7828550959688182,
+        0.3130544996667486
+      ],
+      "tangent": [
+        -0.5201665034436738,
+        0.14628629754787872,
+        0.8414434786989059
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4591942359815355,
+      "nozzle_axis": [
+        -0.5707624975702509,
+        0.7570622815618762,
+        -0.31794161917511843
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000128",
+      "point_type": "deposition",
+      "position": [
+        10.69779701786588,
+        12.180801623307087,
+        32.17744709993692
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.5707624975702509,
+        -0.7570622815618762,
+        0.31794161917511843
+      ],
+      "tangent": [
+        -0.5112036132783635,
+        0.14673455486623854,
+        0.8468410926374277
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4597763395081563,
+      "nozzle_axis": [
+        -0.603254881676121,
+        0.7293982491178974,
+        -0.3225860225082219
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000129",
+      "point_type": "deposition",
+      "position": [
+        10.21597302395878,
+        12.322502390690104,
+        32.9930918985747
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.603254881676121,
+        -0.7293982491178974,
+        0.3225860225082219
+      ],
+      "tangent": [
+        -0.5030174395724984,
+        0.14793359835916903,
+        0.851521641511498
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4602474294070229,
+      "nozzle_axis": [
+        -0.6351326852049272,
+        0.6998048980399408,
+        -0.3269244207208861
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000130",
+      "point_type": "deposition",
+      "position": [
+        9.740706501998172,
+        12.466156983827428,
+        33.81338217270795
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.6351326852049272,
+        -0.6998048980399408,
+        0.3269244207208861
+      ],
+      "tangent": [
+        -0.4956636712452884,
+        0.14981985840693388,
+        0.8554949064924753
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.460608769474903,
+      "nozzle_axis": [
+        -0.6663337978093624,
+        0.6682200302438832,
+        -0.3308795265316604
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000131",
+      "point_type": "deposition",
+      "position": [
+        9.271315397637496,
+        12.612354346594541,
+        34.63747777328275
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.6663337978093624,
+        -0.6682200302438832,
+        0.3308795265316604
+      ],
+      "tangent": [
+        -0.48915206358310764,
+        0.15235214520169466,
+        0.8587893120811584
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4609581657596702,
+      "nozzle_axis": [
+        -0.6966313682206281,
+        0.6346239582484909,
+        -0.33460001259425187
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000132",
+      "point_type": "deposition",
+      "position": [
+        8.807013353994833,
+        12.761671318463343,
+        35.4647388117694
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.6966313682206281,
+        -0.6346239582484909,
+        0.33460001259425187
+      ],
+      "tangent": [
+        -0.4834820109568756,
+        0.15548514338368896,
+        0.8614345681873055
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4615659002004092,
+      "nozzle_axis": [
+        -0.7258235316992696,
+        0.5989990410467857,
+        -0.3382016405291828
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000133",
+      "point_type": "deposition",
+      "position": [
+        8.346546113023262,
+        12.914629471803366,
+        36.294943527572045
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.7258235316992696,
+        -0.5989990410467857,
+        0.3382016405291828
+      ],
+      "tangent": [
+        -0.47885746232636917,
+        0.1590670228700445,
+        0.8633615772140956
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4620665981151464,
+      "nozzle_axis": [
+        -0.753851325838914,
+        0.561283071487219,
+        -0.34156916165366147
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000134",
+      "point_type": "deposition",
+      "position": [
+        7.8887376335071435,
+        13.07164818874349,
+        37.1270672407632
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.753851325838914,
+        -0.561283071487219,
+        0.34156916165366147
+      ],
+      "tangent": [
+        -0.47557661831460896,
+        0.1631128162881786,
+        0.864419510003667
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4624148346523053,
+      "nozzle_axis": [
+        -0.7805920228091286,
+        0.5214291245025288,
+        -0.34465600538403396
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000135",
+      "point_type": "deposition",
+      "position": [
+        7.432475456721464,
+        13.23300989072459,
+        37.96004856341148
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.7805920228091286,
+        -0.5214291245025288,
+        0.34465600538403396
+      ],
+      "tangent": [
+        -0.47361336281912075,
+        0.16749812321476737,
+        0.864658754237008
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.46263760239022145,
+      "nozzle_axis": [
+        -0.8059137656185572,
+        0.47939491233898057,
+        -0.34739533734639916
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000136",
+      "point_type": "deposition",
+      "position": [
+        6.976589467003705,
+        13.39892210713208,
+        38.79287877813771
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.8059137656185572,
+        -0.47939491233898057,
+        0.34739533734639916
+      ],
+      "tangent": [
+        -0.47299500501896485,
+        0.17213876144988072,
+        0.8640856277207777
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.46316377355633054,
+      "nozzle_axis": [
+        -0.8296726213126391,
+        0.43514869486953334,
+        -0.34969837688721994
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000137",
+      "point_type": "deposition",
+      "position": [
+        6.519399011065518,
+        13.569513307946432,
+        39.62531788966929
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.8296726213126391,
+        -0.43514869486953334,
+        0.34969837688721994
+      ],
+      "tangent": [
+        -0.47380954940691106,
+        0.17679227319994628,
+        0.8626986745252455
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4636648339109239,
+      "nozzle_axis": [
+        -0.851710461418617,
+        0.3886770114233029,
+        -0.35145336917027326
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000138",
+      "point_type": "deposition",
+      "position": [
+        6.059470934725724,
+        13.744412094415315,
+        40.45656486655153
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.851710461418617,
+        -0.3886770114233029,
+        0.35145336917027326
+      ],
+      "tangent": [
+        -0.47613159441268604,
+        0.18106056652377545,
+        0.8605322632255709
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.46396704326719224,
+      "nozzle_axis": [
+        -0.8718542783279798,
+        0.33999393961477514,
+        -0.35252551451834274
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000139",
+      "point_type": "deposition",
+      "position": [
+        5.595690791718836,
+        13.922993273505906,
+        41.28561760805216
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.8718542783279798,
+        -0.33999393961477514,
+        0.35252551451834274
+      ],
+      "tangent": [
+        -0.4798066411693505,
+        0.18475227326463178,
+        0.8577016874259586
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.464064045163412,
+      "nozzle_axis": [
+        -0.8899173521067818,
+        0.2891518141378296,
+        -0.352758181762034
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000140",
+      "point_type": "deposition",
+      "position": [
+        5.127192888495293,
+        14.10448950788899,
+        42.11161473487113
+      ],
+      "region_id": "pass-0002",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.8899173521067818,
+        -0.2891518141378296,
+        0.352758181762034
+      ],
+      "tangent": [
+        -0.48458611670316576,
+        0.18772881332188424,
+        0.8543618601899918
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 1800.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.8899173521067818,
+        0.2891518141378296,
+        -0.352758181762034
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000141",
+      "point_type": "travel",
+      "position": [
+        6.1370442556086635,
+        16.92621194083905,
+        42.1012919813014
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.8899173521067818,
+        -0.2891518141378296,
+        0.352758181762034
+      ],
+      "tangent": [
+        0.6494037602505304,
+        -0.260348270882224,
+        -0.7144883022283205
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4665245672066329,
+      "nozzle_axis": [
+        -0.8718542783279798,
+        0.33999393961477514,
+        -0.35252551451834274
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000142",
+      "point_type": "deposition",
+      "position": [
+        6.768216772677911,
+        16.673172640013373,
+        41.40686209386126
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.8718542783279798,
+        -0.33999393961477514,
+        0.35252551451834274
+      ],
+      "tangent": [
+        0.6494037602505304,
+        -0.260348270882224,
+        -0.7144883022283205
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4664228229290478,
+      "nozzle_axis": [
+        -0.851710461418617,
+        0.3886770114233029,
+        -0.35145336917027326
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000143",
+      "point_type": "deposition",
+      "position": [
+        7.381457470295153,
+        16.410741020877243,
+        40.70025470174061
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.851710461418617,
+        -0.3886770114233029,
+        0.35145336917027326
+      ],
+      "tangent": [
+        0.6310916198478,
+        -0.27007078340269086,
+        -0.7271761404983917
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.46577095624373854,
+      "nozzle_axis": [
+        -0.8296726213126391,
+        0.43514869486953334,
+        -0.34969837688721994
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000144",
+      "point_type": "deposition",
+      "position": [
+        7.97731275685343,
+        16.143125606030587,
+        39.982668788962286
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.8296726213126391,
+        -0.43514869486953334,
+        0.34969837688721994
+      ],
+      "tangent": [
+        0.6140583342820184,
+        -0.275790916982754,
+        -0.7395077634539106
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4645689304099304,
+      "nozzle_axis": [
+        -0.8059137656185572,
+        0.47939491233898057,
+        -0.34739533734639916
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000145",
+      "point_type": "deposition",
+      "position": [
+        8.55709445461542,
+        15.873853602914659,
+        39.25597549337343
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.8059137656185572,
+        -0.47939491233898057,
+        0.34739533734639916
+      ],
+      "tangent": [
+        0.5990396617358605,
+        -0.2782161118299413,
+        -0.7508310587513116
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.46317132696114005,
+      "nozzle_axis": [
+        -0.7805920228091286,
+        0.5214291245025288,
+        -0.34465600538403396
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000146",
+      "point_type": "deposition",
+      "position": [
+        9.122956404510827,
+        15.60545224599074,
+        38.52189737810239
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.7805920228091286,
+        -0.5214291245025288,
+        0.34465600538403396
+      ],
+      "tangent": [
+        0.586421741025829,
+        -0.2781533394321925,
+        -0.7607498021129911
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.46225478417454424,
+      "nozzle_axis": [
+        -0.753851325838914,
+        0.561283071487219,
+        -0.34156916165366147
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000147",
+      "point_type": "deposition",
+      "position": [
+        9.67780476037695,
+        15.339123937901942,
+        37.78119443038837
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.753851325838914,
+        -0.561283071487219,
+        0.34156916165366147
+      ],
+      "tangent": [
+        0.5761480896110664,
+        -0.2765522224089145,
+        -0.7691373395683041
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4610371056691996,
+      "nozzle_axis": [
+        -0.7258235316992696,
+        0.5989990410467857,
+        -0.3382016405291828
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000148",
+      "point_type": "deposition",
+      "position": [
+        10.223501390904135,
+        15.07594820489091,
+        37.03587410484459
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.7258235316992696,
+        -0.5989990410467857,
+        0.3382016405291828
+      ],
+      "tangent": [
+        0.5681416515767165,
+        -0.2740004010348241,
+        -0.775976058893853
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.45948001430653324,
+      "nozzle_axis": [
+        -0.6966313682206281,
+        0.6346239582484909,
+        -0.33460001259425187
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000149",
+      "point_type": "deposition",
+      "position": [
+        10.761822970767724,
+        14.816576814177017,
+        36.28803456463926
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.6966313682206281,
+        -0.6346239582484909,
+        0.33460001259425187
+      ],
+      "tangent": [
+        0.562362562655751,
+        -0.2709546958871905,
+        -0.7812374164746185
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.45777468608089367,
+      "nozzle_axis": [
+        -0.6663337978093624,
+        0.6682200302438832,
+        -0.3308795265316604
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000150",
+      "point_type": "deposition",
+      "position": [
+        11.2946246814016,
+        14.561403367455075,
+        35.53933748433568
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.6663337978093624,
+        -0.6682200302438832,
+        0.3308795265316604
+      ],
+      "tangent": [
+        0.5586696444352272,
+        -0.26756231427984234,
+        -0.7850469007414982
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4565076884529849,
+      "nozzle_axis": [
+        -0.6351326852049272,
+        0.6998048980399408,
+        -0.3269244207208861
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000151",
+      "point_type": "deposition",
+      "position": [
+        11.824054517840302,
+        14.310118209201182,
+        34.79029106631325
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.6351326852049272,
+        -0.6998048980399408,
+        0.3269244207208861
+      ],
+      "tangent": [
+        0.55667478975384,
+        -0.26421652693433384,
+        -0.7875930455173386
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4552078629324486,
+      "nozzle_axis": [
+        -0.603254881676121,
+        0.7293982491178974,
+        -0.3225860225082219
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000152",
+      "point_type": "deposition",
+      "position": [
+        12.351473735121793,
+        14.062401059089401,
+        34.04207160407905
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.603254881676121,
+        -0.7293982491178974,
+        0.3225860225082219
+      ],
+      "tangent": [
+        0.5561442253309317,
+        -0.2612086515546408,
+        -0.7889699873785215
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4537256999417301,
+      "nozzle_axis": [
+        -0.5707624975702509,
+        0.7570622815618762,
+        -0.31794161917511843
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000153",
+      "point_type": "deposition",
+      "position": [
+        12.878025529012543,
+        13.817945789671102,
+        33.29607908286783
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.5707624975702509,
+        -0.7570622815618762,
+        0.31794161917511843
+      ],
+      "tangent": [
+        0.5570432997293715,
+        -0.2586111594204451,
+        -0.789191377582033
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.45205974403951404,
+      "nozzle_axis": [
+        -0.5377125430507033,
+        0.7828550959688182,
+        -0.3130544996667486
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000154",
+      "point_type": "deposition",
+      "position": [
+        13.404753529414828,
+        13.576361068096062,
+        32.553674223728244
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.5377125430507033,
+        -0.7828550959688182,
+        0.3130544996667486
+      ],
+      "tangent": [
+        0.5592832441434935,
+        -0.25651624123797867,
+        -0.7882903467641024
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4506213469720409,
+      "nozzle_axis": [
+        -0.5041597380519262,
+        0.8068295498870701,
+        -0.30797570676344116
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000155",
+      "point_type": "deposition",
+      "position": [
+        13.93301817053475,
+        13.336938024030726,
+        31.81546819748459
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.5041597380519262,
+        -0.8068295498870701,
+        0.30797570676344116
+      ],
+      "tangent": [
+        0.5627053166509112,
+        -0.25503243892813643,
+        -0.786334014085086
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4495127658175309,
+      "nozzle_axis": [
+        -0.4701591828586644,
+        0.8290327654113909,
+        -0.3027457954258239
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000156",
+      "point_type": "deposition",
+      "position": [
+        14.464021751955544,
+        13.098784510115669,
+        31.081763814117217
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.4701591828586644,
+        -0.8290327654113909,
+        0.3027457954258239
+      ],
+      "tangent": [
+        0.5670177544756192,
+        -0.25430576253229303,
+        -0.7834663012869766
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4483169768962609,
+      "nozzle_axis": [
+        -0.43576760986216023,
+        0.8495069129586923,
+        -0.29739636014990667
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000157",
+      "point_type": "deposition",
+      "position": [
+        14.998389396805244,
+        12.861263115273795,
+        30.353492544425922
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.43576760986216023,
+        -0.8495069129586923,
+        0.29739636014990667
+      ],
+      "tangent": [
+        0.572131957401222,
+        -0.25430727676967074,
+        -0.7797389513819611
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.44703896293452045,
+      "nozzle_axis": [
+        -0.4010472550860428,
+        0.8682886427251831,
+        -0.29195193457555624
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000158",
+      "point_type": "deposition",
+      "position": [
+        15.536635692557216,
+        12.62395332220046,
+        29.63144494169255
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.4010472550860428,
+        -0.8682886427251831,
+        0.29195193457555624
+      ],
+      "tangent": [
+        0.5779322237708148,
+        -0.254807097635213,
+        -0.775285552375407
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.44567440056329355,
+      "nozzle_axis": [
+        -0.366124609545153,
+        0.8854033150020735,
+        -0.28638041146130827
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000159",
+      "point_type": "deposition",
+      "position": [
+        16.079157598414692,
+        12.386465327351688,
+        28.916350527448664
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.366124609545153,
+        -0.8854033150020735,
+        0.28638041146130827
+      ],
+      "tangent": [
+        0.5843066473695879,
+        -0.25577919077993216,
+        -0.7701705962990765
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.44461947145323333,
+      "nozzle_axis": [
+        -0.33140711125373895,
+        0.9008520903757089,
+        -0.2804190397889695
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000160",
+      "point_type": "deposition",
+      "position": [
+        16.626589069211796,
+        12.148107404549464,
+        28.208170820591913
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.33140711125373895,
+        -0.9008520903757089,
+        0.2804190397889695
+      ],
+      "tangent": [
+        0.5909932489545696,
+        -0.25732521918375323,
+        -0.7645330020752247
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.44354511218282183,
+      "nozzle_axis": [
+        -0.2969587858890841,
+        0.9147029865930292,
+        -0.2741056836351153
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000161",
+      "point_type": "deposition",
+      "position": [
+        17.17921025626763,
+        11.908402337505425,
+        27.50743978153959
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.2969587858890841,
+        -0.9147029865930292,
+        0.2741056836351153
+      ],
+      "tangent": [
+        0.5980410165752552,
+        -0.2594063805931726,
+        -0.7583239889395464
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.44241032297385097,
+      "nozzle_axis": [
+        -0.2628099770736707,
+        0.9270246585210855,
+        -0.26749990363437803
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000162",
+      "point_type": "deposition",
+      "position": [
+        17.73723006732325,
+        11.666903685290322,
+        26.814762815384526
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.2628099770736707,
+        -0.9270246585210855,
+        0.26749990363437803
+      ],
+      "tangent": [
+        0.6054323224336892,
+        -0.2620177401920639,
+        -0.7515307091378194
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4411755944833967,
+      "nozzle_axis": [
+        -0.2289892124253474,
+        0.9378815769708015,
+        -0.26065703169410476
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000163",
+      "point_type": "deposition",
+      "position": [
+        18.30077917583426,
+        11.42319247464779,
+        26.130810227801902
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.2289892124253474,
+        -0.9378815769708015,
+        0.26065703169410476
+      ],
+      "tangent": [
+        0.6131426476617257,
+        -0.26515832374045323,
+        -0.7441418930348713
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4401822168428118,
+      "nozzle_axis": [
+        -0.19552409045856461,
+        0.9473345109664681,
+        -0.25362896991919887
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000164",
+      "point_type": "deposition",
+      "position": [
+        18.870338727738208,
+        11.176649196690592,
+        25.455686374035068
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.19552409045856461,
+        -0.9473345109664681,
+        0.25362896991919887
+      ],
+      "tangent": [
+        0.6210804854288806,
+        -0.2688449666782294,
+        -0.7361938701939916
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.43930641665269043,
+      "nozzle_axis": [
+        -0.16244196010539808,
+        0.9554410777810203,
+        -0.24646491938155968
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000165",
+      "point_type": "deposition",
+      "position": [
+        19.446125466243327,
+        10.926717978397805,
+        24.789627232123333
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.16244196010539808,
+        -0.9554410777810203,
+        0.24646491938155968
+      ],
+      "tangent": [
+        0.6291226897806902,
+        -0.2730827054488071,
+        -0.7277571553670011
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.43846013580295273,
+      "nozzle_axis": [
+        -0.12977045602692,
+        0.9622563209323025,
+        -0.23921204310902705
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000166",
+      "point_type": "deposition",
+      "position": [
+        20.028247116641843,
+        10.67309549503066,
+        24.132956337625494
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.12977045602692,
+        -0.9622563209323025,
+        0.23921204310902705
+      ],
+      "tangent": [
+        0.6372720559409318,
+        -0.2776507647457833,
+        -0.7188841210883016
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4375405603599669,
+      "nozzle_axis": [
+        -0.09755178081977361,
+        0.9678338817828763,
+        -0.23190779920472804
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000167",
+      "point_type": "deposition",
+      "position": [
+        20.61664017656828,
+        10.415708480832599,
+        23.486074686686806
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.09755178081977361,
+        -0.9678338817828763,
+        0.23190779920472804
+      ],
+      "tangent": [
+        0.6454913997740769,
+        -0.282364146339776,
+        -0.7096557909856811
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4365341672134904,
+      "nozzle_axis": [
+        -0.06620382761433286,
+        0.9722525114503743,
+        -0.2243704686175337
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000168",
+      "point_type": "deposition",
+      "position": [
+        21.211155301886308,
+        10.154496595509016,
+        22.849354595804645
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.06620382761433286,
+        -0.9722525114503743,
+        0.2243704686175337
+      ],
+      "tangent": [
+        0.6537111676142705,
+        -0.28722082799535104,
+        -0.7001184937580582
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.43571989472066885,
+      "nozzle_axis": [
+        -0.03591075356761342,
+        0.9756098578877245,
+        -0.21655443419727108
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000169",
+      "point_type": "deposition",
+      "position": [
+        21.812015634230566,
+        9.889238653657833,
+        22.22276481803698
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.03591075356761342,
+        -0.9756098578877245,
+        0.21655443419727108
+      ],
+      "tangent": [
+        0.6619228614983014,
+        -0.29221482340206867,
+        -0.6902670660041651
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4349395828592975,
+      "nozzle_axis": [
+        -0.006667753384438241,
+        0.9779956050288477,
+        -0.2085189142717329
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000170",
+      "point_type": "deposition",
+      "position": [
+        22.419248788736272,
+        9.619811337650287,
+        21.606536160669958
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.006667753384438241,
+        -0.9779956050288477,
+        0.2085189142717329
+      ],
+      "tangent": [
+        0.670143453595554,
+        -0.29734040492115543,
+        -0.680070904541833
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4341864879128716,
+      "nozzle_axis": [
+        0.021535771057868393,
+        0.9794935573815101,
+        -0.2003211961152825
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000171",
+      "point_type": "deposition",
+      "position": [
+        23.032861265154796,
+        9.346096615487765,
+        21.000912466432492
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.021535771057868393,
+        -0.9794935573815101,
+        0.2003211961152825
+      ],
+      "tangent": [
+        0.6783582559114456,
+        -0.30259593583754074,
+        -0.6695265314021429
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.43331038536515004,
+      "nozzle_axis": [
+        0.048715693995504274,
+        0.9801817429534595,
+        -0.19201700950502976
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000172",
+      "point_type": "deposition",
+      "position": [
+        23.65264854312815,
+        9.068075600223692,
+        20.406362684675948
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.048715693995504274,
+        -0.9801817429534595,
+        0.19201700950502976
+      ],
+      "tangent": [
+        0.6865699587987245,
+        -0.3079780495320856,
+        -0.6586130978666687
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.43259253984104096,
+      "nozzle_axis": [
+        0.074891542733776,
+        0.9801326632223442,
+        -0.18366060903642356
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000173",
+      "point_type": "deposition",
+      "position": [
+        24.278775493348714,
+        8.785551606919364,
+        19.82295135147669
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.074891542733776,
+        -0.9801326632223442,
+        0.18366060903642356
+      ],
+      "tangent": [
+        0.6947436870185186,
+        -0.31348556504443736,
+        -0.6473469007083332
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4319522837493673,
+      "nozzle_axis": [
+        0.100083922462832,
+        0.979413839306004,
+        -0.1753047056993251
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000174",
+      "point_type": "deposition",
+      "position": [
+        24.9112662875958,
+        8.498403017582456,
+        19.250830597809458
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.100083922462832,
+        -0.979413839306004,
+        0.1753047056993251
+      ],
+      "tangent": [
+        0.7028451814246166,
+        -0.3190892329248343,
+        -0.635759948706773
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4313871957029034,
+      "nozzle_axis": [
+        0.12431496487559288,
+        0.9780881574726698,
+        -0.167001035085709
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000175",
+      "point_type": "deposition",
+      "position": [
+        25.550187965566085,
+        8.206718556043397,
+        18.69011420059708
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.12431496487559288,
+        -0.9780881574726698,
+        0.167001035085709
+      ],
+      "tangent": [
+        0.7109214378188192,
+        -0.3245542355762745,
+        -0.6239032436356802
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.43073145531732787,
+      "nozzle_axis": [
+        0.1474866497828096,
+        0.9762410507262831,
+        -0.15874854019072368
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000176",
+      "point_type": "deposition",
+      "position": [
+        26.195371983886858,
+        7.91081439228359,
+        18.14108938311393
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.1474866497828096,
+        -0.9762410507262831,
+        0.15874854019072368
+      ],
+      "tangent": [
+        0.7189823844321235,
+        -0.3297506993076886,
+        -0.6118241636143418
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4300048731531881,
+      "nozzle_axis": [
+        0.16924056743247112,
+        0.9740267176686817,
+        -0.15043132520425864
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000177",
+      "point_type": "deposition",
+      "position": [
+        26.846687469042788,
+        7.611006276062283,
+        17.604024412017125
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.16924056743247112,
+        -0.9740267176686817,
+        0.15043132520425864
+      ],
+      "tangent": [
+        0.7270416043947303,
+        -0.33466573234615526,
+        -0.5995075921723995
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.42939038543352004,
+      "nozzle_axis": [
+        0.1895842289410312,
+        0.9715295823513415,
+        -0.14208480127396728
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000178",
+      "point_type": "deposition",
+      "position": [
+        27.504301267366575,
+        7.307488261845687,
+        17.078986879691776
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.1895842289410312,
+        -0.9715295823513415,
+        0.14208480127396728
+      ],
+      "tangent": [
+        0.7351227086203325,
+        -0.3392918233995305,
+        -0.5869204902241253
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4288517068790948,
+      "nozzle_axis": [
+        0.20855742967765822,
+        0.9688205673079143,
+        -0.13375539947015191
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000179",
+      "point_type": "deposition",
+      "position": [
+        28.168321402324448,
+        7.0004835738204685,
+        16.56609088395376
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.20855742967765822,
+        -0.9688205673079143,
+        0.13375539947015191
+      ],
+      "tangent": [
+        0.7432165004059035,
+        -0.3436205287009625,
+        -0.5740680846203462
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.42832476619996396,
+      "nozzle_axis": [
+        0.2262028109863362,
+        0.9659631801204381,
+        -0.1254887363610372
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000180",
+      "point_type": "deposition",
+      "position": [
+        28.838752165182388,
+        6.690267498555372,
+        16.06552612517277
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.2262028109863362,
+        -0.9659631801204381,
+        0.1254887363610372
+      ],
+      "tangent": [
+        0.7513148703186949,
+        -0.34764208814797,
+        -0.5609553852011067
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4276768401977596,
+      "nozzle_axis": [
+        0.24256566191402518,
+        0.9630138060836415,
+        -0.11732991499404309
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000181",
+      "point_type": "deposition",
+      "position": [
+        29.51540517562168,
+        6.377217217621276,
+        15.577663957805752
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.24256566191402518,
+        -0.9630138060836415,
+        0.11732991499404309
+      ],
+      "tangent": [
+        0.7594365990467811,
+        -0.3513497125046176,
+        -0.5475485654726723
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4271396965744707,
+      "nozzle_axis": [
+        0.2576920775492481,
+        0.9600224747881043,
+        -0.10932356136751124
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000182",
+      "point_type": "deposition",
+      "position": [
+        30.19844477073437,
+        6.06154931666594,
+        15.1025986166208
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.2576920775492481,
+        -0.9600224747881043,
+        0.10932356136751124
+      ],
+      "tangent": [
+        0.7675685689797022,
+        -0.35473310880189723,
+        -0.5338566412757209
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.42668161113167474,
+      "nozzle_axis": [
+        0.2716278826546139,
+        0.9570335445856991,
+        -0.1015139788517037
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000183",
+      "point_type": "deposition",
+      "position": [
+        30.88798030026225,
+        5.743528966078959,
+        14.640448621747806
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.2716278826546139,
+        -0.9570335445856991,
+        0.1015139788517037
+      ],
+      "tangent": [
+        0.7757003009704172,
+        -0.3577603634637141,
+        -0.5199005341492884
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.42629509987444875,
+      "nozzle_axis": [
+        0.28441956530889956,
+        0.9540857974153919,
+        -0.09394573987005647
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000184",
+      "point_type": "deposition",
+      "position": [
+        31.584185818297836,
+        5.4236482467581855,
+        14.191313803707441
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.28441956530889956,
+        -0.9540857974153919,
+        0.09394573987005647
+      ],
+      "tangent": [
+        0.7839138867782038,
+        -0.36017947501435527,
+        -0.5057170789034842
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.42569125959857373,
+      "nozzle_axis": [
+        0.2958087637700877,
+        0.9513166929649337,
+        -0.08656630385475998
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000185",
+      "point_type": "deposition",
+      "position": [
+        32.286816222440606,
+        5.102764915887769,
+        13.755585252215113
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.2958087637700877,
+        -0.9513166929649337,
+        0.08656630385475998
+      ],
+      "tangent": [
+        0.7922704222458496,
+        -0.3618209097434709,
+        -0.49131782718194755
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.42511941839841977,
+      "nozzle_axis": [
+        0.30554481753746937,
+        0.9488681571426801,
+        -0.07931951107167014
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000186",
+      "point_type": "deposition",
+      "position": [
+        32.9960543181798,
+        4.781559497337243,
+        13.333433975040037
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.30554481753746937,
+        -0.9488681571426801,
+        0.07931951107167014
+      ],
+      "tangent": [
+        0.8007968378328943,
+        -0.3626712736037782,
+        -0.4766486880496479
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.424619022795119,
+      "nozzle_axis": [
+        0.3136796546676099,
+        0.9467766464930114,
+        -0.07224303359533266
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000187",
+      "point_type": "deposition",
+      "position": [
+        33.71214489227991,
+        4.4606940017762104,
+        12.92500110153892
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.3136796546676099,
+        -0.9467766464930114,
+        0.07224303359533266
+      ],
+      "tangent": [
+        0.8094867566352533,
+        -0.3627144089199436,
+        -0.46170277061546244
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.424177760427132,
+      "nozzle_axis": [
+        0.32026349934609927,
+        0.9450700809957515,
+        -0.06537455922050192
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000188",
+      "point_type": "deposition",
+      "position": [
+        34.435300988224014,
+        4.140853421913421,
+        12.530438766254914
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.32026349934609927,
+        -0.9450700809957515,
+        0.06537455922050192
+      ],
+      "tangent": [
+        0.8183241990424914,
+        -0.3619319366945264,
+        -0.446487153748027
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.42360601384672425,
+      "nozzle_axis": [
+        0.32534459753008776,
+        0.9437685624989713,
+        -0.058751964193637325
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000189",
+      "point_type": "deposition",
+      "position": [
+        35.16540274699633,
+        3.8228769681507857,
+        12.150082669599893
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.32534459753008776,
+        -0.9437685624989713,
+        0.058751964193637325
+      ],
+      "tangent": [
+        0.8272990296533314,
+        -0.36030814676132444,
+        -0.4309922910123525
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.42288877150297965,
+      "nozzle_axis": [
+        0.32896943121220573,
+        0.9428849059741508,
+        -0.05241342780275721
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000190",
+      "point_type": "deposition",
+      "position": [
+        35.90230890670719,
+        3.5076160600772988,
+        11.784332658416943
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.32896943121220573,
+        -0.9428849059741508,
+        0.05241342780275721
+      ],
+      "tangent": [
+        0.836425510670533,
+        -0.3578369681877626,
+        -0.4151446365999788
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4222352327089527,
+      "nozzle_axis": [
+        0.3311818557880496,
+        0.9424255189794438,
+        -0.046397409120655854
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000191",
+      "point_type": "deposition",
+      "position": [
+        36.646215354367214,
+        3.195774212611429,
+        11.433399858017681
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.3311818557880496,
+        -0.9424255189794438,
+        0.046397409120655854
+      ],
+      "tangent": [
+        0.8456781130885487,
+        -0.35450401858528685,
+        -0.39894289046162307
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4216238184132281,
+      "nozzle_axis": [
+        0.3320232008184017,
+        0.9423909123105292,
+        -0.040742637529154045
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000192",
+      "point_type": "deposition",
+      "position": [
+        37.39725567333106,
+        2.8880838718027184,
+        11.097510428075847
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.3320232008184017,
+        -0.9423909123105292,
+        0.040742637529154045
+      ],
+      "tangent": [
+        0.8550260619985302,
+        -0.35029179362782276,
+        -0.38239520475587635
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.42098136791060736,
+      "nozzle_axis": [
+        0.3315339726124667,
+        0.9427755664054319,
+        -0.035488820672338335
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000193",
+      "point_type": "deposition",
+      "position": [
+        38.155493196217584,
+        2.5855660872276873,
+        10.77693916799298
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.3315339726124667,
+        -0.9427755664054319,
+        0.035488820672338335
+      ],
+      "tangent": [
+        0.8645371000429052,
+        -0.344928654008386,
+        -0.3655131000297622
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.42014914582790425,
+      "nozzle_axis": [
+        0.3291818220991129,
+        0.94377205487975,
+        -0.030555464774116723
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000194",
+      "point_type": "deposition",
+      "position": [
+        38.92076863571932,
+        2.289593561661881,
+        10.472107045040463
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.3291818220991129,
+        -0.94377205487975,
+        0.030555464774116723
+      ],
+      "tangent": [
+        0.8742900339283198,
+        -0.3381342403818155,
+        -0.3482559002443895
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.41934690528798857,
+      "nozzle_axis": [
+        0.32478416671318333,
+        0.9454327551184116,
+        -0.025925867422956335
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000195",
+      "point_type": "deposition",
+      "position": [
+        39.69327822358021,
+        2.0013911011274996,
+        10.183292129905414
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.32478416671318333,
+        -0.9454327551184116,
+        0.025925867422956335
+      ],
+      "tangent": [
+        0.884243087280147,
+        -0.3298872110705081,
+        -0.33058824929116354
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.41855204247719824,
+      "nozzle_axis": [
+        0.31837811945300715,
+        0.9477170321586184,
+        -0.021628684888989752
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000196",
+      "point_type": "deposition",
+      "position": [
+        40.47312113018492,
+        1.7222061542767448,
+        9.910792782360796
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.31837811945300715,
+        -0.9477170321586184,
+        0.021628684888989752
+      ],
+      "tangent": [
+        0.8943322626138058,
+        -0.3201723104616382,
+        -0.3125051930156156
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.41774708075525774,
+      "nozzle_axis": [
+        0.3099952852144217,
+        0.9505734755227321,
+        -0.017691545366734694
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000197",
+      "point_type": "deposition",
+      "position": [
+        41.26030042539388,
+        1.4532998891530668,
+        9.654918908349575
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.3099952852144217,
+        -0.9505734755227321,
+        0.017691545366734694
+      ],
+      "tangent": [
+        0.9044852234925983,
+        -0.30897883720936314,
+        -0.2940043513968706
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.41676758397657826,
+      "nozzle_axis": [
+        0.29966426377618827,
+        0.9539399202024675,
+        -0.014140638584765563
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000198",
+      "point_type": "deposition",
+      "position": [
+        42.054441896703004,
+        1.1960257587766296,
+        9.416099217471851
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.29966426377618827,
+        -0.9539399202024675,
+        0.014140638584765563
+      ],
+      "tangent": [
+        0.9146294502832595,
+        -0.29630803193088534,
+        -0.2750536654687374
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4157846004037383,
+      "nozzle_axis": [
+        0.28741325704469056,
+        0.9577435026390615,
+        -0.01100012852764561
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000199",
+      "point_type": "deposition",
+      "position": [
+        42.85541786652298,
+        0.951605479907567,
+        9.194672697695983
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.28741325704469056,
+        -0.9577435026390615,
+        0.01100012852764561
+      ],
+      "tangent": [
+        0.9246818307851169,
+        -0.2821695025338298,
+        -0.25562449737005927
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.41474430987604055,
+      "nozzle_axis": [
+        0.273272898324945,
+        0.9619008137002402,
+        -0.008291419896517065
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000200",
+      "point_type": "deposition",
+      "position": [
+        43.662912846429826,
+        0.7212668936259508,
+        8.99100750377777
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.273272898324945,
+        -0.9619008137002402,
+        0.008291419896517065
+      ],
+      "tangent": [
+        0.9345458903851712,
+        -0.2665799597063091,
+        -0.23570978733851985
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4136607319276857,
+      "nozzle_axis": [
+        0.257279258135932,
+        0.9663182678685218,
+        -0.006032289499373502
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000201",
+      "point_type": "deposition",
+      "position": [
+        44.47656983348183,
+        0.5062689460233899,
+        8.805465878012845
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.257279258135932,
+        -0.9663182678685218,
+        0.006032289499373502
+      ],
+      "tangent": [
+        0.9441441346509973,
+        -0.24947742650919547,
+        -0.21529715898373702
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4125718037557957,
+      "nozzle_axis": [
+        0.23868351357801104,
+        0.9710885220104654,
+        -0.004154848443142058
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000202",
+      "point_type": "deposition",
+      "position": [
+        45.296123969765134,
+        0.30828059518211526,
+        8.638390585293505
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.23868351357801104,
+        -0.9710885220104654,
+        0.004154848443142058
+      ],
+      "tangent": [
+        0.9534970199971122,
+        -0.23034634829301956,
+        -0.19438105022017318
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4116124336279252,
+      "nozzle_axis": [
+        0.21754047065620352,
+        0.9760477061914127,
+        -0.002649314092246131
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000203",
+      "point_type": "deposition",
+      "position": [
+        46.12140775401161,
+        0.12870020244729136,
+        8.490038864735723
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.21754047065620352,
+        -0.9760477061914127,
+        0.002649314092246131
+      ],
+      "tangent": [
+        0.9624009968474183,
+        -0.20941687245199747,
+        -0.17299969595210118
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.41052530297075285,
+      "nozzle_axis": [
+        0.1939880602225728,
+        0.9810027221315117,
+        -0.0015138235192400438
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000204",
+      "point_type": "deposition",
+      "position": [
+        46.95161616709832,
+        -0.031022125851374528,
+        8.36075534427708
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.1939880602225728,
+        -0.9810027221315117,
+        0.0015138235192400438
+      ],
+      "tangent": [
+        0.9707076163098625,
+        -0.18675272152182448,
+        -0.1511626430114819
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.40932544415803634,
+      "nozzle_axis": [
+        0.16797588288920723,
+        0.9857908421468049,
+        -0.0007199354724673509
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000205",
+      "point_type": "deposition",
+      "position": [
+        47.78585712064123,
+        -0.16949001264678637,
+        8.250889143100862
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.16797588288920723,
+        -0.9857908421468049,
+        0.0007199354724673509
+      ],
+      "tangent": [
+        0.9782818620627761,
+        -0.1623758957826633,
+        -0.12883581345171494
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.40799315126411745,
+      "nozzle_axis": [
+        0.13945668870930988,
+        0.9902281454262825,
+        -0.00022799092077197987
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000206",
+      "point_type": "deposition",
+      "position": [
+        48.623073445262854,
+        -0.28536651620572984,
+        8.16079360506476
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.13945668870930988,
+        -0.9902281454262825,
+        0.00022799092077197987
+      ],
+      "tangent": [
+        0.9849769158458959,
+        -0.1363275867155093,
+        -0.10599652990089953
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.40739854099276834,
+      "nozzle_axis": [
+        0.10839504700260795,
+        0.994107898353828,
+        1.4691421715173689e-05
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000207",
+      "point_type": "deposition",
+      "position": [
+        49.46387122109317,
+        -0.37757632145953063,
+        8.090594924416163
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.10839504700260795,
+        -0.994107898353828,
+        -1.4691421715173689e-05
+      ],
+      "tangent": [
+        0.9906342114409201,
+        -0.108642280391991,
+        -0.08270860918945824
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4071189960640079,
+      "nozzle_axis": [
+        0.07477751700927075,
+        0.997200239299559,
+        7.543759273201446e-05
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000208",
+      "point_type": "deposition",
+      "position": [
+        50.30786486631582,
+        -0.4448880060995682,
+        8.04032554560713
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.07477751700927075,
+        -0.997200239299559,
+        -7.543759273201446e-05
+      ],
+      "tangent": [
+        0.9950824049565524,
+        -0.07936158454796902,
+        -0.05926842535380451
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.40672717965337307,
+      "nozzle_axis": [
+        0.03862408887479349,
+        0.9992538107805095,
+        3.740617490678106e-05
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000209",
+      "point_type": "deposition",
+      "position": [
+        51.15367227659484,
+        -0.486059152516111,
+        8.010094971903467
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        -0.03862408887479349,
+        -0.9992538107805095,
+        -3.740617490678106e-05
+      ],
+      "tangent": [
+        0.9981815262012419,
+        -0.048588221462805926,
+        -0.03567667985730646
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.8,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.4063213101712025,
+      "nozzle_axis": [
+        -0.0,
+        1.0,
+        -0.0
+      ],
+      "operation_id": "curve-operation-1",
+      "point_id": "point-0000210",
+      "point_type": "deposition",
+      "position": [
+        52.0,
+        -0.5,
+        8.0
+      ],
+      "region_id": "pass-0003",
+      "stage_id": "curve_offset_buildup",
+      "surface_normal": [
+        0.0,
+        -1.0,
+        0.0
+      ],
+      "tangent": [
+        0.9997932598300342,
+        -0.016468756682850916,
+        -0.011925504255787898
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "toolpath_id": "curve-operation-1-curve_offset_buildup-v1",
+  "units": {
+    "angle": "rad",
+    "feedrate": "mm_min",
+    "length": "mm",
+    "material_volume": "mm3"
+  }
+}

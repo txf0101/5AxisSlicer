@@ -1,0 +1,15 @@
+Collecting numpy<2.3,>=2
+  Using cached numpy-2.2.6-cp312-cp312-win_amd64.whl.metadata (60 kB)
+Using cached numpy-2.2.6-cp312-cp312-win_amd64.whl (12.6 MB)
+Installing collected packages: numpy
+  Attempting uninstall: numpy
+    Found existing installation: numpy 1.26.4
+    Not uninstalling numpy at c:\users\tang xufeng\appdata\roaming\python\python312\site-packages, outside environment F:\����Ŀ������\5AxisSclicer_V2.0\tmp\pytest9
+    Can't uninstall 'numpy'. No files were found to uninstall.
+Successfully installed numpy-2.2.6
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+gensim 4.3.3 requires numpy<2.0,>=1.18.5, but you have numpy 2.2.6 which is incompatible.
+numba 0.60.0 requires numpy<2.1,>=1.22, but you have numpy 2.2.6 which is incompatible.
+
+[notice] A new release of pip is available: 24.2 -> 26.2.1
+[notice] To update, run: F:\����Ŀ������\5AxisSclicer_V2.0\tmp\pytest9\Scripts\python.exe -m pip install --upgrade pip

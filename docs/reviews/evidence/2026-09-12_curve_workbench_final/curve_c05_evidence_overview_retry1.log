@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "source": {
+    "path": "example/Ҷ��/Ҷ��.stp",
+    "sha256": "3776fe6e1c384e03a7dab20e7ab8d8028210b86ec7c2ced3d3518a8011fdf21f",
+    "stable_edge_id": "body_002_edge_0011",
+    "stable_face_id": "body_002_face_0006",
+    "frame": "Source/Model -> Build -> Workpiece/Machine"
+  },
+  "failure_fixture": {
+    "path": "docs/reviews/evidence/2026-09-12_project_audit/frozen_cases/analytic/rectangle_8x6x1.step",
+    "sha256": "02e6adf319958391e8d74a1ef32fa4c22a0d1e32025a92701ad91e0ad39f8518",
+    "expected_error": "curve.offset_outside_face"
+  },
+  "products": [
+    {
+      "operation_type": "curve_buildup",
+      "operation_semantic_sha256": "6be1f7cf0efb73959ccabf241c5cfd0b9481ddd7ae01250f3d80f0b721d8e59a",
+      "plan_length_mm": 68.27612913311788,
+      "toolpath_points": 70,
+      "trajectory_samples": 70,
+      "status": "ready",
+      "readback_passed": true,
+      "bundle_sha256": {
+        "machine_axes.csv": "755668be789044dd90db752a3f8a469ae02aa8e6dc6cc77f2c32ee4378d65b4f",
+        "main.gcode": "2ca38e097f6e41a9e83f070bbbc43b01de4fd9056ca202bd993b025f31b2e60b",
+        "manifest.json": "6f38b117199fdbc69f3d83acbc1d10bd9816ff14380c99795ab8cb11ab4f176c",
+        "preview.json": "2c9df95df473e79ecb5ca754660a636239ed65f6486410561328fa64f28d95af",
+        "toolpath.json": "c0627cd71c79926728783c349a26b9b78418033b619c1c626f6b4928fbc9d3de",
+        "warnings.json": "de6e486d5d935a537e5a897f6c6df4da9b29574a06acfb9f252508a162b51cb1"
+      }
+    },
+    {
+      "operation_type": "curve_multi_pass",
+      "operation_semantic_sha256": "ad4e6342d573f42735997a2a2344e18beebda114b7306116b4a3715793768026",
+      "plan_length_mm": 68.27612913311788,
+      "toolpath_points": 210,
+      "trajectory_samples": 210,
+      "status": "ready",
+      "readback_passed": true,
+      "bundle_sha256": {
+        "machine_axes.csv": "5fdc2cbd98d4d524a437583581da2bb71c1f9431c50fe71d7134a6ce8e82f023",
+        "main.gcode": "bd98831f80e0040b28223dfcf946513e7b5e0462ba85cadd597f7ec2afe717ab",
+        "manifest.json": "384765b0350240ff0f32a20a42dc848740319e62f4a10156bc66d1a3e61b6da9",
+        "preview.json": "998645f84a3cbd272bf047531fe9212e815fb3eb04e48ba0211f8d48c5770a6c",
+        "toolpath.json": "c5506ef41d63174e2ba153fca1e541d2c2bb344de6d1991b107f06035839aeac",
+        "warnings.json": "a61017677a9cba90e2233544e4c4efecd4cdb30b684a5dc50fcfc85c6310c043"
+      }
+    },
+    {
+      "operation_type": "curve_offset_buildup",
+      "operation_semantic_sha256": "fd189f9b4e288e1a5dcea96468f0b95ab3d1c88031c44cd4ae62a5be3534174f",
+      "plan_length_mm": 68.27612913311788,
+      "toolpath_points": 210,
+      "trajectory_samples": 210,
+      "status": "ready",
+      "readback_passed": true,
+      "bundle_sha256": {
+        "machine_axes.csv": "37b0dec3fe5341c98f9cc15c0e494cd970081953e61ac818855d3a48cc073dce",
+        "main.gcode": "66e88274e81d1bd475cea95e426314c93cb95a1ae1c3d6da7d894ec673e20192",
+        "manifest.json": "72e6941b1e052b9cd22b9949e9febc0b44e166003bbe509f3c841224df7d553e",
+        "preview.json": "1d52ad51f6a03c12a906d4a528c0575e52e1867a9e2b6f03e50fcff326b82e3f",
+        "toolpath.json": "78c59987b7cf71df738c92a3d6e0b7f1ca7f726d3f472ffac1fdff041deb4bb9",
+        "warnings.json": "ba6ace5e2e4a3e02e143032a37fa7b7dbbdf1db349deedb1f8130a4741310726"
+      }
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "01_curve_buildup_zh_1366x768.png",
+      "sha256": "62766a47abf38200aeccaa41b00bfe1fd91b9dd439f1a0223bb54d2f9c757068",
+      "language": "zh",
+      "size": [
+        1366,
+        768
+      ],
+      "capture_method": "Qt QWidget.grab; actual CurvePage and generated Toolpath",
+      "viewer_backend": "opengl",
+      "model_visible": true,
+      "visible_segments": 69,
+      "status": "Status: ready",
+      "export_enabled": true,
+      "clipped_visible_buttons": [],
+      "horizontal_scroll_max": 0
+    },
+    {
+      "file": "06_curve_buildup_zh_1366x768_path_only.png",
+      "sha256": "33c26eca6013c3763efa4e0dac02ec5ad98b0189f9f0ddbc210811008373482d",
+      "language": "zh",
+      "size": [
+        1366,
+        768
+      ],
+      "capture_method": "Qt QWidget.grab; actual CurvePage and generated Toolpath",
+      "viewer_backend": "opengl",
+      "model_visible": false,
+      "visible_segments": 69,
+      "status": "Status: ready",
+      "export_enabled": true,
+      "clipped_visible_buttons": [],
+      "horizontal_scroll_max": 0
+    },
+    {
+      "file": "09_curve_overview_edge_normal_zh_1366x768.png",
+      "sha256": "b07477b1ab4b1e82fd8208cca1ca4f9f136e2a560c65db376dbff1c573a7d694",
+      "language": "zh",
+      "size": [
+        1366,
+        768
+      ],
+      "capture_method": "Qt QWidget.grab; actual CurvePage and generated Toolpath",
+      "viewer_backend": "opengl",
+      "model_visible": true,
+      "visible_segments": 69,
+      "status": "Status: ready",
+      "export_enabled": true,
+      "clipped_visible_buttons": [],
+      "horizontal_scroll_max": 0
+    },
+    {
+      "file": "02_curve_multi_pass_en_1600x900.png",
+      "sha256": "25e215c8f7fb27eee253720945ddef4d04288bb0f4bdc93d939bef97b0e5585c",
+      "language": "en",
+      "size": [
+        1600,
+        900
+      ],
+      "capture_method": "Qt QWidget.grab; actual CurvePage and generated Toolpath",
+      "viewer_backend": "opengl",
+      "model_visible": true,
+      "visible_segments": 207,
+      "status": "Status: ready",
+      "export_enabled": true,
+      "clipped_visible_buttons": [],
+      "horizontal_scroll_max": 0
+    },
+    {
+      "file": "07_curve_multi_pass_en_1600x900_path_only.png",
+      "sha256": "f746d88c5774dbb1b5609c2d9367d6086ab71b0dca6d835ebbcccc79679498a4",
+      "language": "en",
+      "size": [
+        1600,
+        900
+      ],
+      "capture_method": "Qt QWidget.grab; actual CurvePage and generated Toolpath",
+      "viewer_backend": "opengl",
+      "model_visible": false,
+      "visible_segments": 207,
+      "status": "Status: ready",
+      "export_enabled": true,
+      "clipped_visible_buttons": [],
+      "horizontal_scroll_max": 0
+    },
+    {
+      "file": "03_curve_offset_buildup_en_1920x1080.png",
+      "sha256": "bdecc3d20965f0697a76e1936472532790b6a7150235bad5972adbee306fa3d1",
+      "language": "en",
+      "size": [
+        1920,
+        1080
+      ],
+      "capture_method": "Qt QWidget.grab; actual CurvePage and generated Toolpath",
+      "viewer_backend": "opengl",
+      "model_visible": true,
+      "visible_segments": 207,
+      "status": "Status: ready",
+      "export_enabled": true,
+      "clipped_visible_buttons": [],
+      "horizontal_scroll_max": 0
+    },
+    {
+      "file": "08_curve_offset_buildup_en_1920x1080_path_only.png",
+      "sha256": "4b776f96a678f2fe746ca39f029afe82e8c86b5f2a9e84022b4708163f43273f",
+      "language": "en",
+      "size": [
+        1920,
+        1080
+      ],
+      "capture_method": "Qt QWidget.grab; actual CurvePage and generated Toolpath",
+      "viewer_backend": "opengl",
+      "model_visible": false,
+      "visible_segments": 207,
+      "status": "Status: ready",
+      "export_enabled": true,
+      "clipped_visible_buttons": [],
+      "horizontal_scroll_max": 0
+    },
+    {
+      "file": "04_offset_failure_zh_1366x768.png",
+      "sha256": "b8896979da4929c27ed40fee0585db27ed1b647868bef07f4d9ac1078e263021",
+      "language": "zh",
+      "size": [
+        1366,
+        768
+      ],
+      "capture_method": "Qt QWidget.grab; actual CurvePage and generated Toolpath",
+      "viewer_backend": "opengl",
+      "model_visible": true,
+      "visible_segments": 0,
+      "status": "curve.offset_outside_face [body_001_face_0006]: offset crosses the trimmed face boundary",
+      "export_enabled": false,
+      "clipped_visible_buttons": [],
+      "horizontal_scroll_max": 0
+    },
+    {
+      "file": "05_offset_recovered_zh_1366x768.png",
+      "sha256": "e8abbb4389b20cf35c72bc2790c44bb12b107a07e55a58e0b7ce451bcd5f651f",
+      "language": "zh",
+      "size": [
+        1366,
+        768
+      ],
+      "capture_method": "Qt QWidget.grab; actual CurvePage and generated Toolpath",
+      "viewer_backend": "opengl",
+      "model_visible": true,
+      "visible_segments": 24,
+      "status": "Status: warning",
+      "export_enabled": true,
+      "clipped_visible_buttons": [],
+      "horizontal_scroll_max": 0
+    }
+  ],
+  "limits": [
+    "Generic XYZAC and offline FK/readback only",
+    "No real controller, calibration, site collision, material qualification, or trial build"
+  ]
+}

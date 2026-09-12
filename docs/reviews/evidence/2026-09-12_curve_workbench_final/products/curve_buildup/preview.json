@@ -1,0 +1,1316 @@
+{
+  "coordinate_frame": "workpiece_build",
+  "segments": [
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749237553020902,
+      "end": [
+        51.01083340044664,
+        -0.4807368049874498,
+        2.0117978590682477
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        52.0,
+        -0.5,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749275008571798,
+      "end": [
+        50.02362505488767,
+        -0.4246125544751387,
+        2.0470967866685505
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        51.01083340044664,
+        -0.4807368049874498,
+        2.0117978590682477
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749309534632268,
+      "end": [
+        49.04007537203668,
+        -0.3341607944024749,
+        2.1057397544891803
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        50.02362505488767,
+        -0.4246125544751387,
+        2.0470967866685505
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47493406285237055,
+      "end": [
+        48.06162571822017,
+        -0.2119211415861117,
+        2.187575311842303
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        49.04007537203668,
+        -0.3341607944024749,
+        2.1057397544891803
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47493711865281285,
+      "end": [
+        47.089478048047454,
+        -0.060435910833446974,
+        2.292442116057341
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        48.06162571822017,
+        -0.2119211415861117,
+        2.187575311842303
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47494025768630826,
+      "end": [
+        46.12455172383247,
+        0.11761166617473312,
+        2.4198984024302637
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        47.089478048047454,
+        -0.060435910833446974,
+        2.292442116057341
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749430651703393,
+      "end": [
+        45.16753014166693,
+        0.3195768376417284,
+        2.5694316466837197
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        46.12455172383247,
+        0.11761166617473312,
+        2.4198984024302637
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47494559158753324,
+      "end": [
+        44.21888838474325,
+        0.5428402344480259,
+        2.7405547570003104
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        45.16753014166693,
+        0.3195768376417284,
+        2.5694316466837197
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749478215546951,
+      "end": [
+        43.278919281474025,
+        0.7848177573675176,
+        2.932817606322783
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        44.21888838474325,
+        0.5428402344480259,
+        2.7405547570003104
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749496472262301,
+      "end": [
+        42.34778493454579,
+        1.043099585730594,
+        3.145765703167131
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        43.278919281474025,
+        0.7848177573675176,
+        2.932817606322783
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47495123124144945,
+      "end": [
+        41.42556773260304,
+        1.31555560643881,
+        3.3789121093021675
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        42.34778493454579,
+        1.043099585730594,
+        3.145765703167131
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47495264678046123,
+      "end": [
+        40.51223788649282,
+        1.600097572555066,
+        3.631784399690538
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        41.42556773260304,
+        1.31555560643881,
+        3.3789121093021675
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749538844874963,
+      "end": [
+        39.60766264124842,
+        1.8946545431062662,
+        3.9039329863203913
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        40.51223788649282,
+        1.600097572555066,
+        3.631784399690538
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749548848472124,
+      "end": [
+        38.71163902842573,
+        2.197233607068809,
+        4.194925694271313
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        39.60766264124842,
+        1.8946545431062662,
+        3.9039329863203913
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749556056843077,
+      "end": [
+        37.824004294515326,
+        2.5061742708458414,
+        4.504364505843519
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        38.71163902842573,
+        2.197233607068809,
+        4.194925694271313
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749562295092214,
+      "end": [
+        36.94458499448909,
+        2.819930135518011,
+        4.83189107998311
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        37.824004294515326,
+        2.5061742708458414,
+        4.504364505843519
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47495675399264026,
+      "end": [
+        36.073162223021384,
+        3.1369621490560826,
+        5.17715898000775
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        36.94458499448909,
+        2.819930135518011,
+        4.83189107998311
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749571784850824,
+      "end": [
+        35.20948293963168,
+        3.4557492506281697,
+        5.539831692626693
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        36.073162223021384,
+        3.1369621490560826,
+        5.17715898000775
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749574298406998,
+      "end": [
+        34.35334477850765,
+        3.7749731831468463,
+        5.919598968007989
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        35.20948293963168,
+        3.4557492506281697,
+        5.539831692626693
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47495760807585613,
+      "end": [
+        33.50460754578212,
+        4.093480959518731,
+        6.316207458205776
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        34.35334477850765,
+        3.7749731831468463,
+        5.919598968007989
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749577307081772,
+      "end": [
+        32.66312097213832,
+        4.410124979775476,
+        6.729411771753129
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        33.50460754578212,
+        4.093480959518731,
+        6.316207458205776
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749577999162055,
+      "end": [
+        31.82872523149778,
+        4.723757778307364,
+        7.158968979753229
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        32.66312097213832,
+        4.410124979775476,
+        6.729411771753129
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47495779666734894,
+      "end": [
+        31.00129704552749,
+        5.033331098894281,
+        7.604646129837082
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        31.82872523149778,
+        4.723757778307364,
+        7.158968979753229
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47495772491818083,
+      "end": [
+        30.180820670127588,
+        5.337985423567256,
+        8.066279241646024
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        31.00129704552749,
+        5.033331098894281,
+        7.604646129837082
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47495762192828644,
+      "end": [
+        29.36730070777307,
+        5.636878287844902,
+        8.543719051431141
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        30.180820670127588,
+        5.337985423567256,
+        8.066279241646024
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749574875530047,
+      "end": [
+        28.560747958508248,
+        5.929162109718208,
+        9.036814094543825
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        29.36730070777307,
+        5.636878287844902,
+        8.543719051431141
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749573563994166,
+      "end": [
+        27.761192485468698,
+        6.214026887537875,
+        9.545402783540817
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        28.560747958508248,
+        5.929162109718208,
+        9.036814094543825
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749571900502052,
+      "end": [
+        26.968766006541063,
+        6.490857824438113,
+        10.069352755117032
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        27.761192485468698,
+        6.214026887537875,
+        9.545402783540817
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749570073843907,
+      "end": [
+        26.183649317295764,
+        6.759092862719024,
+        10.608555555778375
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        26.968766006541063,
+        6.490857824438113,
+        10.069352755117032
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47495680888429964,
+      "end": [
+        25.406034247325742,
+        7.018164601767249,
+        11.162896362793463
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        26.183649317295764,
+        6.759092862719024,
+        10.608555555778375
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47495662664968263,
+      "end": [
+        24.63612418275404,
+        7.267513807338671,
+        11.732246701477159
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        25.406034247325742,
+        7.018164601767249,
+        11.162896362793463
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47495647561356713,
+      "end": [
+        23.87418357753893,
+        7.506741915866045,
+        12.316465962985367
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        24.63612418275404,
+        7.267513807338671,
+        11.732246701477159
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47495631014018624,
+      "end": [
+        23.120544761629624,
+        7.735558629027023,
+        12.915437150946522
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        23.87418357753893,
+        7.506741915866045,
+        12.316465962985367
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749561359575625,
+      "end": [
+        22.37555193155184,
+        7.953672523562139,
+        13.52903826819066
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        23.120544761629624,
+        7.735558629027023,
+        12.915437150946522
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47495596467207907,
+      "end": [
+        21.639557705355138,
+        8.160791365915852,
+        14.157136904470912
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        22.37555193155184,
+        7.953672523562139,
+        13.52903826819066
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47495587193204863,
+      "end": [
+        20.912935024379674,
+        8.356725973540202,
+        14.799571601090674
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        21.639557705355138,
+        8.160791365915852,
+        14.157136904470912
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47495576667950223,
+      "end": [
+        20.196121112679112,
+        8.541442077569581,
+        15.45619217140118
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        20.912935024379674,
+        8.356725973540202,
+        14.799571601090674
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749556507618047,
+      "end": [
+        19.489569129354027,
+        8.714915765311039,
+        16.126851170488067
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        20.196121112679112,
+        8.541442077569581,
+        15.45619217140118
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47495552481456893,
+      "end": [
+        18.793739189421643,
+        8.877120904167992,
+        16.8113962653448
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        19.489569129354027,
+        8.714915765311039,
+        16.126851170488067
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47495551071903697,
+      "end": [
+        18.109081426630468,
+        9.028087794512487,
+        17.50964012462726
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        18.793739189421643,
+        8.877120904167992,
+        16.8113962653448
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47495551924901164,
+      "end": [
+        17.436064089213954,
+        9.168048978814813,
+        18.221363600950536
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        18.109081426630468,
+        9.028087794512487,
+        17.50964012462726
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749555112297243,
+      "end": [
+        16.7751744362824,
+        9.297280197383367,
+        18.946357326479912
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        17.436064089213954,
+        9.168048978814813,
+        18.221363600950536
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749554866464544,
+      "end": [
+        16.126901659553365,
+        9.41605600997883,
+        19.68441312057828
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        16.7751744362824,
+        9.297280197383367,
+        18.946357326479912
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749555526725482,
+      "end": [
+        15.491716106787885,
+        9.52467271687852,
+        20.4353016866556
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        16.126901659553365,
+        9.41605600997883,
+        19.68441312057828
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749557398822691,
+      "end": [
+        14.870016065233951,
+        9.62363609419214,
+        21.198707210771644
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        15.491716106787885,
+        9.52467271687852,
+        20.4353016866556
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47495589824017603,
+      "end": [
+        14.262198761344585,
+        9.713564303582073,
+        21.974313026316928
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        14.870016065233951,
+        9.62363609419214,
+        21.198707210771644
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749560301681274,
+      "end": [
+        13.668655466099757,
+        9.795077188840752,
+        22.76181279710364
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        14.262198761344585,
+        9.713564303582073,
+        21.974313026316928
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749561762440867,
+      "end": [
+        13.089763224116677,
+        9.868797450751911,
+        23.560902016272582
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        13.668655466099757,
+        9.795077188840752,
+        22.76181279710364
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47495650220694224,
+      "end": [
+        12.525777315452512,
+        9.935458476839436,
+        24.37119334127429
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        13.089763224116677,
+        9.868797450751911,
+        23.560902016272582
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749567959827903,
+      "end": [
+        11.976879831003012,
+        9.995932868336363,
+        25.192260597768353
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        12.525777315452512,
+        9.935458476839436,
+        24.37119334127429
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749570497696574,
+      "end": [
+        11.443242150723114,
+        10.051102011256123,
+        26.023696270769527
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        11.976879831003012,
+        9.995932868336363,
+        25.192260597768353
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47495726880375655,
+      "end": [
+        10.925024948616965,
+        10.101846782849934,
+        26.865108707767597
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        11.443242150723114,
+        10.051102011256123,
+        26.023696270769527
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47495766099653275,
+      "end": [
+        10.422271595100014,
+        10.1490788081157,
+        27.716054539077746
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        10.925024948616965,
+        10.101846782849934,
+        26.865108707767597
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47495805441200023,
+      "end": [
+        9.9348442916957,
+        10.193825287257583,
+        28.57600488940016
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        10.422271595100014,
+        10.1490788081157,
+        27.716054539077746
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47495839060648815,
+      "end": [
+        9.462579632618075,
+        10.237135501872912,
+        29.4444482852022
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        9.9348442916957,
+        10.193825287257583,
+        28.57600488940016
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47495866941642034,
+      "end": [
+        9.005303773029556,
+        10.280057838346993,
+        30.32089635861651
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        9.462579632618075,
+        10.237135501872912,
+        29.4444482852022
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749590238364997,
+      "end": [
+        8.562777466296467,
+        10.32363301164696,
+        31.204852181881687
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        9.005303773029556,
+        10.280057838346993,
+        30.32089635861651
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749594450109563,
+      "end": [
+        8.13450718186304,
+        10.36891919991524,
+        32.09571787683868
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        8.562777466296467,
+        10.32363301164696,
+        31.204852181881687
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749597905235704,
+      "end": [
+        7.719925420457919,
+        10.416995965389008,
+        32.99289120127389
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        8.13450718186304,
+        10.36891919991524,
+        32.09571787683868
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47496006072364116,
+      "end": [
+        7.318455542269137,
+        10.468941724518817,
+        33.89579433858932
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        7.719925420457919,
+        10.416995965389008,
+        32.99289120127389
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749603017172366,
+      "end": [
+        6.929498774093121,
+        10.52582589489217,
+        34.80386279284066
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        7.318455542269137,
+        10.468941724518817,
+        33.89579433858932
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749606498382004,
+      "end": [
+        6.552240832023003,
+        10.588633535371601,
+        35.71646597860817
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        6.929498774093121,
+        10.52582589489217,
+        34.80386279284066
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749609145763848,
+      "end": [
+        6.185716243651475,
+        10.658301312588657,
+        36.632937553542476
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        6.552240832023003,
+        10.588633535371601,
+        35.71646597860817
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47496108810908944,
+      "end": [
+        5.828951786536891,
+        10.735764079601557,
+        37.55262955527712
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        6.185716243651475,
+        10.658301312588657,
+        36.632937553542476
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47496117669334237,
+      "end": [
+        5.480970845797567,
+        10.82195397126581,
+        38.474906991232096
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        5.828951786536891,
+        10.735764079601557,
+        37.55262955527712
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47496135389305283,
+      "end": [
+        5.140682713708952,
+        10.917684656326477,
+        39.39911230126534
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        5.480970845797567,
+        10.82195397126581,
+        38.474906991232096
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47496148335513777,
+      "end": [
+        4.806812334963427,
+        11.023562799453616,
+        40.32455098360115
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        5.140682713708952,
+        10.917684656326477,
+        39.39911230126534
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.47496151198723013,
+      "end": [
+        4.478068747674811,
+        11.140173713924419,
+        41.25053480216936
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        4.806812334963427,
+        11.023562799453616,
+        40.32455098360115
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:curve_buildup:pass-0001:buildup",
+      "delta_e": 0.4749614406109389,
+      "end": [
+        4.15316421418435,
+        11.2681017667715,
+        42.176379090881
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.8,
+      "move_type": "extrude",
+      "start": [
+        4.478068747674811,
+        11.140173713924419,
+        41.25053480216936
+      ],
+      "width": 0.6
+    }
+  ]
+}

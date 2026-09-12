@@ -1,0 +1,752 @@
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - pybind11>=2.13,<4
+  - setuptools-scm>=8,<9
+  - setuptools>=77
+* Getting build dependencies for sdist...
+running egg_info
+writing src\five_axis_slicer.egg-info\PKG-INFO
+writing dependency_links to src\five_axis_slicer.egg-info\dependency_links.txt
+writing entry points to src\five_axis_slicer.egg-info\entry_points.txt
+writing requirements to src\five_axis_slicer.egg-info\requires.txt
+writing top-level names to src\five_axis_slicer.egg-info\top_level.txt
+reading manifest template 'MANIFEST.in'
+no previously-included directories found matching '.agents'
+no previously-included directories found matching 'outputs'
+no previously-included directories found matching 'tmp'
+adding license file 'LICENSE'
+writing manifest file 'src\five_axis_slicer.egg-info\SOURCES.txt'
+* Building sdist...
+running sdist
+running egg_info
+writing src\five_axis_slicer.egg-info\PKG-INFO
+writing dependency_links to src\five_axis_slicer.egg-info\dependency_links.txt
+writing entry points to src\five_axis_slicer.egg-info\entry_points.txt
+writing requirements to src\five_axis_slicer.egg-info\requires.txt
+writing top-level names to src\five_axis_slicer.egg-info\top_level.txt
+reading manifest template 'MANIFEST.in'
+no previously-included directories found matching '.agents'
+no previously-included directories found matching 'outputs'
+no previously-included directories found matching 'tmp'
+adding license file 'LICENSE'
+writing manifest file 'src\five_axis_slicer.egg-info\SOURCES.txt'
+running check
+creating five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912
+creating five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\docs\formats
+creating five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\docs\guides
+creating five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\native
+creating five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\schemas
+creating five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\scripts
+creating five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+creating five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer.egg-info
+creating five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\algorithms
+creating five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\algorithms\curve
+creating five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\algorithms\planar
+creating five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\algorithms\tube
+creating five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\kinematics
+creating five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\manufacturing
+creating five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\manufacturing\profiles
+creating five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\postprocessing
+creating five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\validation
+copying files to five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912...
+copying .editorconfig -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912
+copying .gitattributes -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912
+copying .gitignore -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912
+copying .pre-commit-config.yaml -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912
+copying AGENTS.md -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912
+copying LICENSE -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912
+copying MANIFEST.in -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912
+copying README.md -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912
+copying pyproject.toml -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912
+copying run_app.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912
+copying setup.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912
+copying docs\formats\manufacturing-setup-yaml.md -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\docs\formats
+copying docs\guides\README.md -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\docs\guides
+copying docs\guides\curve_workbench_zh.md -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\docs\guides
+copying docs\guides\gcode_preview_zh.md -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\docs\guides
+copying docs\guides\machine_profiles_zh.md -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\docs\guides
+copying docs\guides\planar_workbench_zh.md -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\docs\guides
+copying docs\guides\tube_coordinate_setup_zh.md -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\docs\guides
+copying docs\guides\tube_setup_script_console_zh.md -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\docs\guides
+copying docs\guides\tube_workbench_zh.md -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\docs\guides
+copying native\five_axis_slicer_native.cpp -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\native
+copying schemas\manufacturing-setup-v1.schema.json -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\schemas
+copying scripts\audit_fix_plot_evidence.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\scripts
+copying scripts\audit_fix_ui_evidence.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\scripts
+copying scripts\automation_client.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\scripts
+copying scripts\check_context_budget.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\scripts
+copying scripts\check_quality.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\scripts
+copying scripts\curve_c05_evidence.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\scripts
+copying scripts\desktop_click_smoke.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\scripts
+copying scripts\desktop_workbench_smoke.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\scripts
+copying scripts\generate_sample_step.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\scripts
+copying scripts\inspect_step_models.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\scripts
+copying scripts\planar_audit_fix_evidence.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\scripts
+copying scripts\planar_p02_real_model_evidence.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\scripts
+copying scripts\planar_p02_ui_evidence.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\scripts
+copying scripts\planar_p06_real_model_evidence.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\scripts
+copying scripts\planar_p06_ui_evidence.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\scripts
+copying scripts\planar_p07_real_model_evidence.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\scripts
+copying scripts\planar_p07_ui_evidence.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\scripts
+copying scripts\planar_section_recovery_evidence.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\scripts
+copying scripts\planar_support_motion_evidence.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\scripts
+copying scripts\run_app.ps1 -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\scripts
+copying scripts\tube_t12_ui_evidence.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\scripts
+copying src\five_axis_slicer\__init__.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\__main__.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\app.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\automation.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\automation_routes.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\background_load.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\command_kernel.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\curve_automation.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\curve_commands.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\curve_controller.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\curve_generation_context.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\curve_operation_service.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\curve_shell.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\curve_ui.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\gcode_arrays.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\gcode_cache.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\gcode_parser.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\gcode_preview.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\gcode_source.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\geometry_vtk.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\localization.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\machine_profile_ui.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\manufacturing_script_service.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\model_commit.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\models.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\native_preview_index.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\opengl_picking.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\opengl_scene.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\opengl_viewer.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\planar_commands.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\planar_controller.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\planar_generation_context.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\planar_operation_service.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\planar_shell.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\planar_ui.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\planar_ui_diagnostics.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\project_assets.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\project_contract.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\project_io.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\project_storage.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\qt_load_wait.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\restricted_script.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\result_commit.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\result_preview.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\result_preview_layout.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\result_preview_text.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\result_state.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\script_console.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\selection_list.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\setup_config.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\setup_config_io.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\setup_config_session.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\step_loader.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\step_reader.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\step_topology.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\styles.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\theme.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\tube_commands.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\tube_controller.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\tube_controller_state.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\tube_drafts.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\tube_generation_context.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\tube_generation_service.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\tube_operation_service.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\tube_operation_ui.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\tube_resource_context.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\tube_resource_selection.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\tube_script_service.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\tube_serialization.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\tube_ui.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\tube_ui_presenter.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\tube_ui_text.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\tube_validation.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\ui.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\ui_controls.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\viewer.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\viewer_common.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\viewer_interaction.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\viewer_overlays.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\workbench_navigation.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer\workbenches.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer
+copying src\five_axis_slicer.egg-info\PKG-INFO -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer.egg-info
+copying src\five_axis_slicer.egg-info\SOURCES.txt -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer.egg-info
+copying src\five_axis_slicer.egg-info\dependency_links.txt -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer.egg-info
+copying src\five_axis_slicer.egg-info\entry_points.txt -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer.egg-info
+copying src\five_axis_slicer.egg-info\requires.txt -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer.egg-info
+copying src\five_axis_slicer.egg-info\top_level.txt -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer.egg-info
+copying src\five_axis_slicer\algorithms\__init__.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\algorithms
+copying src\five_axis_slicer\algorithms\curve\__init__.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\algorithms\curve
+copying src\five_axis_slicer\algorithms\curve\chain.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\algorithms\curve
+copying src\five_axis_slicer\algorithms\curve\toolpath.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\algorithms\curve
+copying src\five_axis_slicer\algorithms\planar\__init__.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\algorithms\planar
+copying src\five_axis_slicer\algorithms\planar\offset.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\algorithms\planar
+copying src\five_axis_slicer\algorithms\planar\region.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\algorithms\planar
+copying src\five_axis_slicer\algorithms\planar\section_loops.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\algorithms\planar
+copying src\five_axis_slicer\algorithms\planar\spiral.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\algorithms\planar
+copying src\five_axis_slicer\algorithms\planar\support.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\algorithms\planar
+copying src\five_axis_slicer\algorithms\planar\support_geometry.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\algorithms\planar
+copying src\five_axis_slicer\algorithms\planar\thin_wall.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\algorithms\planar
+copying src\five_axis_slicer\algorithms\planar\zigzag.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\algorithms\planar
+copying src\five_axis_slicer\algorithms\tube\__init__.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\algorithms\tube
+copying src\five_axis_slicer\algorithms\tube\buildup.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\algorithms\tube
+copying src\five_axis_slicer\algorithms\tube\continuous.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\algorithms\tube
+copying src\five_axis_slicer\algorithms\tube\geometry.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\algorithms\tube
+copying src\five_axis_slicer\algorithms\tube\indexed.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\algorithms\tube
+copying src\five_axis_slicer\algorithms\tube\section.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\algorithms\tube
+copying src\five_axis_slicer\kinematics\__init__.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\kinematics
+copying src\five_axis_slicer\kinematics\xyzac.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\kinematics
+copying src\five_axis_slicer\manufacturing\__init__.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\coordinates.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\curve_parameters.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\json_contract.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\library.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\machine.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\nozzle_envelope.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\own_printer.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\planar_parameters.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\preview_kinematics.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\reference_audit.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\reference_descriptors.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\reference_rebind.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\references.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\resources.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\setup.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\toolpath.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\tube_parameters.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\profiles\own_ac_fdm.json -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\manufacturing\profiles
+copying src\five_axis_slicer\postprocessing\__init__.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\postprocessing
+copying src\five_axis_slicer\postprocessing\curve_product.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\postprocessing
+copying src\five_axis_slicer\postprocessing\gcode_contract.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\postprocessing
+copying src\five_axis_slicer\postprocessing\gcode_readback.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\postprocessing
+copying src\five_axis_slicer\postprocessing\indexed_tube.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\postprocessing
+copying src\five_axis_slicer\postprocessing\planar_product.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\postprocessing
+copying src\five_axis_slicer\postprocessing\planar_support_product.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\postprocessing
+copying src\five_axis_slicer\postprocessing\tube_product.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\postprocessing
+copying src\five_axis_slicer\validation\__init__.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\validation
+copying src\five_axis_slicer\validation\indexed_tube.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\validation
+copying src\five_axis_slicer\validation\planar.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\validation
+copying src\five_axis_slicer\validation\planar_geometry.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\validation
+copying src\five_axis_slicer\validation\planar_qualification.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\validation
+copying src\five_axis_slicer\validation\planar_travel.py -> five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\src\five_axis_slicer\validation
+Writing five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912\setup.cfg
+Creating tar archive
+removing 'five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912' (and everything under it)
+* Building wheel from sdist
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - pybind11>=2.13,<4
+  - setuptools-scm>=8,<9
+  - setuptools>=77
+* Getting build dependencies for wheel...
+running egg_info
+writing src\five_axis_slicer.egg-info\PKG-INFO
+writing dependency_links to src\five_axis_slicer.egg-info\dependency_links.txt
+writing entry points to src\five_axis_slicer.egg-info\entry_points.txt
+writing requirements to src\five_axis_slicer.egg-info\requires.txt
+writing top-level names to src\five_axis_slicer.egg-info\top_level.txt
+ERROR setuptools_scm._file_finders.git listing git files failed - pretending there aren't any
+reading manifest file 'src\five_axis_slicer.egg-info\SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+no previously-included directories found matching '.agents'
+no previously-included directories found matching '.github'
+no previously-included directories found matching 'example'
+no previously-included directories found matching 'outputs'
+no previously-included directories found matching 'tests'
+no previously-included directories found matching 'tmp'
+no previously-included directories found matching '����'
+adding license file 'LICENSE'
+writing manifest file 'src\five_axis_slicer.egg-info\SOURCES.txt'
+* Building wheel...
+running bdist_wheel
+running build
+running build_py
+creating build\lib\five_axis_slicer
+copying src\five_axis_slicer\app.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\automation.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\automation_routes.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\background_load.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\command_kernel.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\curve_automation.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\curve_commands.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\curve_controller.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\curve_generation_context.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\curve_operation_service.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\curve_shell.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\curve_ui.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\gcode_arrays.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\gcode_cache.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\gcode_parser.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\gcode_preview.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\gcode_source.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\geometry_vtk.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\localization.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\machine_profile_ui.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\manufacturing_script_service.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\models.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\model_commit.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\native_preview_index.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\opengl_picking.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\opengl_scene.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\opengl_viewer.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\planar_commands.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\planar_controller.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\planar_generation_context.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\planar_operation_service.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\planar_shell.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\planar_ui.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\planar_ui_diagnostics.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\project_assets.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\project_contract.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\project_io.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\project_storage.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\qt_load_wait.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\restricted_script.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\result_commit.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\result_preview.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\result_preview_layout.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\result_preview_text.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\result_state.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\script_console.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\selection_list.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\setup_config.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\setup_config_io.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\setup_config_session.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\step_loader.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\step_reader.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\step_topology.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\styles.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\theme.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\tube_commands.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\tube_controller.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\tube_controller_state.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\tube_drafts.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\tube_generation_context.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\tube_generation_service.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\tube_operation_service.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\tube_operation_ui.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\tube_resource_context.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\tube_resource_selection.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\tube_script_service.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\tube_serialization.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\tube_ui.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\tube_ui_presenter.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\tube_ui_text.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\tube_validation.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\ui.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\ui_controls.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\viewer.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\viewer_common.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\viewer_interaction.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\viewer_overlays.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\workbenches.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\workbench_navigation.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\__init__.py -> build\lib\five_axis_slicer
+copying src\five_axis_slicer\__main__.py -> build\lib\five_axis_slicer
+creating build\lib\five_axis_slicer\algorithms
+copying src\five_axis_slicer\algorithms\__init__.py -> build\lib\five_axis_slicer\algorithms
+creating build\lib\five_axis_slicer\kinematics
+copying src\five_axis_slicer\kinematics\xyzac.py -> build\lib\five_axis_slicer\kinematics
+copying src\five_axis_slicer\kinematics\__init__.py -> build\lib\five_axis_slicer\kinematics
+creating build\lib\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\coordinates.py -> build\lib\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\curve_parameters.py -> build\lib\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\json_contract.py -> build\lib\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\library.py -> build\lib\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\machine.py -> build\lib\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\nozzle_envelope.py -> build\lib\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\own_printer.py -> build\lib\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\planar_parameters.py -> build\lib\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\preview_kinematics.py -> build\lib\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\references.py -> build\lib\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\reference_audit.py -> build\lib\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\reference_descriptors.py -> build\lib\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\reference_rebind.py -> build\lib\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\resources.py -> build\lib\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\setup.py -> build\lib\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\toolpath.py -> build\lib\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\tube_parameters.py -> build\lib\five_axis_slicer\manufacturing
+copying src\five_axis_slicer\manufacturing\__init__.py -> build\lib\five_axis_slicer\manufacturing
+creating build\lib\five_axis_slicer\postprocessing
+copying src\five_axis_slicer\postprocessing\curve_product.py -> build\lib\five_axis_slicer\postprocessing
+copying src\five_axis_slicer\postprocessing\gcode_contract.py -> build\lib\five_axis_slicer\postprocessing
+copying src\five_axis_slicer\postprocessing\gcode_readback.py -> build\lib\five_axis_slicer\postprocessing
+copying src\five_axis_slicer\postprocessing\indexed_tube.py -> build\lib\five_axis_slicer\postprocessing
+copying src\five_axis_slicer\postprocessing\planar_product.py -> build\lib\five_axis_slicer\postprocessing
+copying src\five_axis_slicer\postprocessing\planar_support_product.py -> build\lib\five_axis_slicer\postprocessing
+copying src\five_axis_slicer\postprocessing\tube_product.py -> build\lib\five_axis_slicer\postprocessing
+copying src\five_axis_slicer\postprocessing\__init__.py -> build\lib\five_axis_slicer\postprocessing
+creating build\lib\five_axis_slicer\validation
+copying src\five_axis_slicer\validation\indexed_tube.py -> build\lib\five_axis_slicer\validation
+copying src\five_axis_slicer\validation\planar.py -> build\lib\five_axis_slicer\validation
+copying src\five_axis_slicer\validation\planar_geometry.py -> build\lib\five_axis_slicer\validation
+copying src\five_axis_slicer\validation\planar_qualification.py -> build\lib\five_axis_slicer\validation
+copying src\five_axis_slicer\validation\planar_travel.py -> build\lib\five_axis_slicer\validation
+copying src\five_axis_slicer\validation\__init__.py -> build\lib\five_axis_slicer\validation
+creating build\lib\five_axis_slicer\algorithms\curve
+copying src\five_axis_slicer\algorithms\curve\chain.py -> build\lib\five_axis_slicer\algorithms\curve
+copying src\five_axis_slicer\algorithms\curve\toolpath.py -> build\lib\five_axis_slicer\algorithms\curve
+copying src\five_axis_slicer\algorithms\curve\__init__.py -> build\lib\five_axis_slicer\algorithms\curve
+creating build\lib\five_axis_slicer\algorithms\planar
+copying src\five_axis_slicer\algorithms\planar\offset.py -> build\lib\five_axis_slicer\algorithms\planar
+copying src\five_axis_slicer\algorithms\planar\region.py -> build\lib\five_axis_slicer\algorithms\planar
+copying src\five_axis_slicer\algorithms\planar\section_loops.py -> build\lib\five_axis_slicer\algorithms\planar
+copying src\five_axis_slicer\algorithms\planar\spiral.py -> build\lib\five_axis_slicer\algorithms\planar
+copying src\five_axis_slicer\algorithms\planar\support.py -> build\lib\five_axis_slicer\algorithms\planar
+copying src\five_axis_slicer\algorithms\planar\support_geometry.py -> build\lib\five_axis_slicer\algorithms\planar
+copying src\five_axis_slicer\algorithms\planar\thin_wall.py -> build\lib\five_axis_slicer\algorithms\planar
+copying src\five_axis_slicer\algorithms\planar\zigzag.py -> build\lib\five_axis_slicer\algorithms\planar
+copying src\five_axis_slicer\algorithms\planar\__init__.py -> build\lib\five_axis_slicer\algorithms\planar
+creating build\lib\five_axis_slicer\algorithms\tube
+copying src\five_axis_slicer\algorithms\tube\buildup.py -> build\lib\five_axis_slicer\algorithms\tube
+copying src\five_axis_slicer\algorithms\tube\continuous.py -> build\lib\five_axis_slicer\algorithms\tube
+copying src\five_axis_slicer\algorithms\tube\geometry.py -> build\lib\five_axis_slicer\algorithms\tube
+copying src\five_axis_slicer\algorithms\tube\indexed.py -> build\lib\five_axis_slicer\algorithms\tube
+copying src\five_axis_slicer\algorithms\tube\section.py -> build\lib\five_axis_slicer\algorithms\tube
+copying src\five_axis_slicer\algorithms\tube\__init__.py -> build\lib\five_axis_slicer\algorithms\tube
+running egg_info
+writing src\five_axis_slicer.egg-info\PKG-INFO
+writing dependency_links to src\five_axis_slicer.egg-info\dependency_links.txt
+writing entry points to src\five_axis_slicer.egg-info\entry_points.txt
+writing requirements to src\five_axis_slicer.egg-info\requires.txt
+writing top-level names to src\five_axis_slicer.egg-info\top_level.txt
+ERROR setuptools_scm._file_finders.git listing git files failed - pretending there aren't any
+reading manifest file 'src\five_axis_slicer.egg-info\SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+no previously-included directories found matching '.agents'
+no previously-included directories found matching '.github'
+no previously-included directories found matching 'example'
+no previously-included directories found matching 'outputs'
+no previously-included directories found matching 'tests'
+no previously-included directories found matching 'tmp'
+no previously-included directories found matching '����'
+adding license file 'LICENSE'
+writing manifest file 'src\five_axis_slicer.egg-info\SOURCES.txt'
+creating build\lib\five_axis_slicer\manufacturing\profiles
+copying src\five_axis_slicer\manufacturing\profiles\own_ac_fdm.json -> build\lib\five_axis_slicer\manufacturing\profiles
+installing to build\bdist.win-amd64\wheel
+running install
+running install_lib
+creating build\bdist.win-amd64\wheel
+creating build\bdist.win-amd64\wheel\five_axis_slicer
+creating build\bdist.win-amd64\wheel\five_axis_slicer\algorithms
+creating build\bdist.win-amd64\wheel\five_axis_slicer\algorithms\curve
+copying build\lib\five_axis_slicer\algorithms\curve\chain.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\algorithms\curve
+copying build\lib\five_axis_slicer\algorithms\curve\toolpath.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\algorithms\curve
+copying build\lib\five_axis_slicer\algorithms\curve\__init__.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\algorithms\curve
+creating build\bdist.win-amd64\wheel\five_axis_slicer\algorithms\planar
+copying build\lib\five_axis_slicer\algorithms\planar\offset.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\algorithms\planar
+copying build\lib\five_axis_slicer\algorithms\planar\region.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\algorithms\planar
+copying build\lib\five_axis_slicer\algorithms\planar\section_loops.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\algorithms\planar
+copying build\lib\five_axis_slicer\algorithms\planar\spiral.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\algorithms\planar
+copying build\lib\five_axis_slicer\algorithms\planar\support.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\algorithms\planar
+copying build\lib\five_axis_slicer\algorithms\planar\support_geometry.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\algorithms\planar
+copying build\lib\five_axis_slicer\algorithms\planar\thin_wall.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\algorithms\planar
+copying build\lib\five_axis_slicer\algorithms\planar\zigzag.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\algorithms\planar
+copying build\lib\five_axis_slicer\algorithms\planar\__init__.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\algorithms\planar
+creating build\bdist.win-amd64\wheel\five_axis_slicer\algorithms\tube
+copying build\lib\five_axis_slicer\algorithms\tube\buildup.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\algorithms\tube
+copying build\lib\five_axis_slicer\algorithms\tube\continuous.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\algorithms\tube
+copying build\lib\five_axis_slicer\algorithms\tube\geometry.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\algorithms\tube
+copying build\lib\five_axis_slicer\algorithms\tube\indexed.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\algorithms\tube
+copying build\lib\five_axis_slicer\algorithms\tube\section.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\algorithms\tube
+copying build\lib\five_axis_slicer\algorithms\tube\__init__.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\algorithms\tube
+copying build\lib\five_axis_slicer\algorithms\__init__.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\algorithms
+copying build\lib\five_axis_slicer\app.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\automation.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\automation_routes.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\background_load.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\command_kernel.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\curve_automation.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\curve_commands.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\curve_controller.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\curve_generation_context.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\curve_operation_service.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\curve_shell.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\curve_ui.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\gcode_arrays.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\gcode_cache.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\gcode_parser.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\gcode_preview.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\gcode_source.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\geometry_vtk.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+creating build\bdist.win-amd64\wheel\five_axis_slicer\kinematics
+copying build\lib\five_axis_slicer\kinematics\xyzac.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\kinematics
+copying build\lib\five_axis_slicer\kinematics\__init__.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\kinematics
+copying build\lib\five_axis_slicer\localization.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\machine_profile_ui.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+creating build\bdist.win-amd64\wheel\five_axis_slicer\manufacturing
+copying build\lib\five_axis_slicer\manufacturing\coordinates.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\manufacturing
+copying build\lib\five_axis_slicer\manufacturing\curve_parameters.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\manufacturing
+copying build\lib\five_axis_slicer\manufacturing\json_contract.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\manufacturing
+copying build\lib\five_axis_slicer\manufacturing\library.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\manufacturing
+copying build\lib\five_axis_slicer\manufacturing\machine.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\manufacturing
+copying build\lib\five_axis_slicer\manufacturing\nozzle_envelope.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\manufacturing
+copying build\lib\five_axis_slicer\manufacturing\own_printer.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\manufacturing
+copying build\lib\five_axis_slicer\manufacturing\planar_parameters.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\manufacturing
+copying build\lib\five_axis_slicer\manufacturing\preview_kinematics.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\manufacturing
+creating build\bdist.win-amd64\wheel\five_axis_slicer\manufacturing\profiles
+copying build\lib\five_axis_slicer\manufacturing\profiles\own_ac_fdm.json -> build\bdist.win-amd64\wheel\.\five_axis_slicer\manufacturing\profiles
+copying build\lib\five_axis_slicer\manufacturing\references.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\manufacturing
+copying build\lib\five_axis_slicer\manufacturing\reference_audit.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\manufacturing
+copying build\lib\five_axis_slicer\manufacturing\reference_descriptors.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\manufacturing
+copying build\lib\five_axis_slicer\manufacturing\reference_rebind.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\manufacturing
+copying build\lib\five_axis_slicer\manufacturing\resources.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\manufacturing
+copying build\lib\five_axis_slicer\manufacturing\setup.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\manufacturing
+copying build\lib\five_axis_slicer\manufacturing\toolpath.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\manufacturing
+copying build\lib\five_axis_slicer\manufacturing\tube_parameters.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\manufacturing
+copying build\lib\five_axis_slicer\manufacturing\__init__.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\manufacturing
+copying build\lib\five_axis_slicer\manufacturing_script_service.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\models.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\model_commit.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\native_preview_index.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\opengl_picking.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\opengl_scene.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\opengl_viewer.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\planar_commands.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\planar_controller.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\planar_generation_context.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\planar_operation_service.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\planar_shell.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\planar_ui.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\planar_ui_diagnostics.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+creating build\bdist.win-amd64\wheel\five_axis_slicer\postprocessing
+copying build\lib\five_axis_slicer\postprocessing\curve_product.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\postprocessing
+copying build\lib\five_axis_slicer\postprocessing\gcode_contract.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\postprocessing
+copying build\lib\five_axis_slicer\postprocessing\gcode_readback.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\postprocessing
+copying build\lib\five_axis_slicer\postprocessing\indexed_tube.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\postprocessing
+copying build\lib\five_axis_slicer\postprocessing\planar_product.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\postprocessing
+copying build\lib\five_axis_slicer\postprocessing\planar_support_product.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\postprocessing
+copying build\lib\five_axis_slicer\postprocessing\tube_product.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\postprocessing
+copying build\lib\five_axis_slicer\postprocessing\__init__.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\postprocessing
+copying build\lib\five_axis_slicer\project_assets.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\project_contract.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\project_io.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\project_storage.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\qt_load_wait.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\restricted_script.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\result_commit.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\result_preview.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\result_preview_layout.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\result_preview_text.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\result_state.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\script_console.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\selection_list.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\setup_config.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\setup_config_io.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\setup_config_session.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\step_loader.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\step_reader.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\step_topology.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\styles.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\theme.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\tube_commands.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\tube_controller.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\tube_controller_state.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\tube_drafts.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\tube_generation_context.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\tube_generation_service.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\tube_operation_service.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\tube_operation_ui.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\tube_resource_context.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\tube_resource_selection.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\tube_script_service.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\tube_serialization.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\tube_ui.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\tube_ui_presenter.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\tube_ui_text.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\tube_validation.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\ui.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\ui_controls.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+creating build\bdist.win-amd64\wheel\five_axis_slicer\validation
+copying build\lib\five_axis_slicer\validation\indexed_tube.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\validation
+copying build\lib\five_axis_slicer\validation\planar.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\validation
+copying build\lib\five_axis_slicer\validation\planar_geometry.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\validation
+copying build\lib\five_axis_slicer\validation\planar_qualification.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\validation
+copying build\lib\five_axis_slicer\validation\planar_travel.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\validation
+copying build\lib\five_axis_slicer\validation\__init__.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer\validation
+copying build\lib\five_axis_slicer\viewer.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\viewer_common.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\viewer_interaction.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\viewer_overlays.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\workbenches.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\workbench_navigation.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\__init__.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+copying build\lib\five_axis_slicer\__main__.py -> build\bdist.win-amd64\wheel\.\five_axis_slicer
+running install_data
+creating build\bdist.win-amd64\wheel\five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.data\data
+creating build\bdist.win-amd64\wheel\five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.data\data\share\five-axis-slicer\schemas
+copying schemas\manufacturing-setup-v1.schema.json -> build\bdist.win-amd64\wheel\five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.data\data\share\five-axis-slicer\schemas
+creating build\bdist.win-amd64\wheel\five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.data\data\share\doc\five-axis-slicer\formats
+copying docs\formats\manufacturing-setup-yaml.md -> build\bdist.win-amd64\wheel\five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.data\data\share\doc\five-axis-slicer\formats
+creating build\bdist.win-amd64\wheel\five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.data\data\share\doc\five-axis-slicer\guides
+copying docs\guides\README.md -> build\bdist.win-amd64\wheel\five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.data\data\share\doc\five-axis-slicer\guides
+copying docs\guides\curve_workbench_zh.md -> build\bdist.win-amd64\wheel\five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.data\data\share\doc\five-axis-slicer\guides
+copying docs\guides\gcode_preview_zh.md -> build\bdist.win-amd64\wheel\five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.data\data\share\doc\five-axis-slicer\guides
+copying docs\guides\machine_profiles_zh.md -> build\bdist.win-amd64\wheel\five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.data\data\share\doc\five-axis-slicer\guides
+copying docs\guides\planar_workbench_zh.md -> build\bdist.win-amd64\wheel\five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.data\data\share\doc\five-axis-slicer\guides
+copying docs\guides\tube_coordinate_setup_zh.md -> build\bdist.win-amd64\wheel\five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.data\data\share\doc\five-axis-slicer\guides
+copying docs\guides\tube_setup_script_console_zh.md -> build\bdist.win-amd64\wheel\five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.data\data\share\doc\five-axis-slicer\guides
+copying docs\guides\tube_workbench_zh.md -> build\bdist.win-amd64\wheel\five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.data\data\share\doc\five-axis-slicer\guides
+running install_egg_info
+Copying src\five_axis_slicer.egg-info to build\bdist.win-amd64\wheel\.\five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912-py3.12.egg-info
+running install_scripts
+creating build\bdist.win-amd64\wheel\five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.dist-info\WHEEL
+creating 'F:\\����Ŀ������\\5AxisSclicer_V2.0\\tmp\\curve_build_final_01\\.tmp-8a18vo6l\\five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912-py3-none-any.whl' and adding 'build\\bdist.win-amd64\\wheel' to it
+adding 'five_axis_slicer/__init__.py'
+adding 'five_axis_slicer/__main__.py'
+adding 'five_axis_slicer/app.py'
+adding 'five_axis_slicer/automation.py'
+adding 'five_axis_slicer/automation_routes.py'
+adding 'five_axis_slicer/background_load.py'
+adding 'five_axis_slicer/command_kernel.py'
+adding 'five_axis_slicer/curve_automation.py'
+adding 'five_axis_slicer/curve_commands.py'
+adding 'five_axis_slicer/curve_controller.py'
+adding 'five_axis_slicer/curve_generation_context.py'
+adding 'five_axis_slicer/curve_operation_service.py'
+adding 'five_axis_slicer/curve_shell.py'
+adding 'five_axis_slicer/curve_ui.py'
+adding 'five_axis_slicer/gcode_arrays.py'
+adding 'five_axis_slicer/gcode_cache.py'
+adding 'five_axis_slicer/gcode_parser.py'
+adding 'five_axis_slicer/gcode_preview.py'
+adding 'five_axis_slicer/gcode_source.py'
+adding 'five_axis_slicer/geometry_vtk.py'
+adding 'five_axis_slicer/localization.py'
+adding 'five_axis_slicer/machine_profile_ui.py'
+adding 'five_axis_slicer/manufacturing_script_service.py'
+adding 'five_axis_slicer/model_commit.py'
+adding 'five_axis_slicer/models.py'
+adding 'five_axis_slicer/native_preview_index.py'
+adding 'five_axis_slicer/opengl_picking.py'
+adding 'five_axis_slicer/opengl_scene.py'
+adding 'five_axis_slicer/opengl_viewer.py'
+adding 'five_axis_slicer/planar_commands.py'
+adding 'five_axis_slicer/planar_controller.py'
+adding 'five_axis_slicer/planar_generation_context.py'
+adding 'five_axis_slicer/planar_operation_service.py'
+adding 'five_axis_slicer/planar_shell.py'
+adding 'five_axis_slicer/planar_ui.py'
+adding 'five_axis_slicer/planar_ui_diagnostics.py'
+adding 'five_axis_slicer/project_assets.py'
+adding 'five_axis_slicer/project_contract.py'
+adding 'five_axis_slicer/project_io.py'
+adding 'five_axis_slicer/project_storage.py'
+adding 'five_axis_slicer/qt_load_wait.py'
+adding 'five_axis_slicer/restricted_script.py'
+adding 'five_axis_slicer/result_commit.py'
+adding 'five_axis_slicer/result_preview.py'
+adding 'five_axis_slicer/result_preview_layout.py'
+adding 'five_axis_slicer/result_preview_text.py'
+adding 'five_axis_slicer/result_state.py'
+adding 'five_axis_slicer/script_console.py'
+adding 'five_axis_slicer/selection_list.py'
+adding 'five_axis_slicer/setup_config.py'
+adding 'five_axis_slicer/setup_config_io.py'
+adding 'five_axis_slicer/setup_config_session.py'
+adding 'five_axis_slicer/step_loader.py'
+adding 'five_axis_slicer/step_reader.py'
+adding 'five_axis_slicer/step_topology.py'
+adding 'five_axis_slicer/styles.py'
+adding 'five_axis_slicer/theme.py'
+adding 'five_axis_slicer/tube_commands.py'
+adding 'five_axis_slicer/tube_controller.py'
+adding 'five_axis_slicer/tube_controller_state.py'
+adding 'five_axis_slicer/tube_drafts.py'
+adding 'five_axis_slicer/tube_generation_context.py'
+adding 'five_axis_slicer/tube_generation_service.py'
+adding 'five_axis_slicer/tube_operation_service.py'
+adding 'five_axis_slicer/tube_operation_ui.py'
+adding 'five_axis_slicer/tube_resource_context.py'
+adding 'five_axis_slicer/tube_resource_selection.py'
+adding 'five_axis_slicer/tube_script_service.py'
+adding 'five_axis_slicer/tube_serialization.py'
+adding 'five_axis_slicer/tube_ui.py'
+adding 'five_axis_slicer/tube_ui_presenter.py'
+adding 'five_axis_slicer/tube_ui_text.py'
+adding 'five_axis_slicer/tube_validation.py'
+adding 'five_axis_slicer/ui.py'
+adding 'five_axis_slicer/ui_controls.py'
+adding 'five_axis_slicer/viewer.py'
+adding 'five_axis_slicer/viewer_common.py'
+adding 'five_axis_slicer/viewer_interaction.py'
+adding 'five_axis_slicer/viewer_overlays.py'
+adding 'five_axis_slicer/workbench_navigation.py'
+adding 'five_axis_slicer/workbenches.py'
+adding 'five_axis_slicer/algorithms/__init__.py'
+adding 'five_axis_slicer/algorithms/curve/__init__.py'
+adding 'five_axis_slicer/algorithms/curve/chain.py'
+adding 'five_axis_slicer/algorithms/curve/toolpath.py'
+adding 'five_axis_slicer/algorithms/planar/__init__.py'
+adding 'five_axis_slicer/algorithms/planar/offset.py'
+adding 'five_axis_slicer/algorithms/planar/region.py'
+adding 'five_axis_slicer/algorithms/planar/section_loops.py'
+adding 'five_axis_slicer/algorithms/planar/spiral.py'
+adding 'five_axis_slicer/algorithms/planar/support.py'
+adding 'five_axis_slicer/algorithms/planar/support_geometry.py'
+adding 'five_axis_slicer/algorithms/planar/thin_wall.py'
+adding 'five_axis_slicer/algorithms/planar/zigzag.py'
+adding 'five_axis_slicer/algorithms/tube/__init__.py'
+adding 'five_axis_slicer/algorithms/tube/buildup.py'
+adding 'five_axis_slicer/algorithms/tube/continuous.py'
+adding 'five_axis_slicer/algorithms/tube/geometry.py'
+adding 'five_axis_slicer/algorithms/tube/indexed.py'
+adding 'five_axis_slicer/algorithms/tube/section.py'
+adding 'five_axis_slicer/kinematics/__init__.py'
+adding 'five_axis_slicer/kinematics/xyzac.py'
+adding 'five_axis_slicer/manufacturing/__init__.py'
+adding 'five_axis_slicer/manufacturing/coordinates.py'
+adding 'five_axis_slicer/manufacturing/curve_parameters.py'
+adding 'five_axis_slicer/manufacturing/json_contract.py'
+adding 'five_axis_slicer/manufacturing/library.py'
+adding 'five_axis_slicer/manufacturing/machine.py'
+adding 'five_axis_slicer/manufacturing/nozzle_envelope.py'
+adding 'five_axis_slicer/manufacturing/own_printer.py'
+adding 'five_axis_slicer/manufacturing/planar_parameters.py'
+adding 'five_axis_slicer/manufacturing/preview_kinematics.py'
+adding 'five_axis_slicer/manufacturing/reference_audit.py'
+adding 'five_axis_slicer/manufacturing/reference_descriptors.py'
+adding 'five_axis_slicer/manufacturing/reference_rebind.py'
+adding 'five_axis_slicer/manufacturing/references.py'
+adding 'five_axis_slicer/manufacturing/resources.py'
+adding 'five_axis_slicer/manufacturing/setup.py'
+adding 'five_axis_slicer/manufacturing/toolpath.py'
+adding 'five_axis_slicer/manufacturing/tube_parameters.py'
+adding 'five_axis_slicer/manufacturing/profiles/own_ac_fdm.json'
+adding 'five_axis_slicer/postprocessing/__init__.py'
+adding 'five_axis_slicer/postprocessing/curve_product.py'
+adding 'five_axis_slicer/postprocessing/gcode_contract.py'
+adding 'five_axis_slicer/postprocessing/gcode_readback.py'
+adding 'five_axis_slicer/postprocessing/indexed_tube.py'
+adding 'five_axis_slicer/postprocessing/planar_product.py'
+adding 'five_axis_slicer/postprocessing/planar_support_product.py'
+adding 'five_axis_slicer/postprocessing/tube_product.py'
+adding 'five_axis_slicer/validation/__init__.py'
+adding 'five_axis_slicer/validation/indexed_tube.py'
+adding 'five_axis_slicer/validation/planar.py'
+adding 'five_axis_slicer/validation/planar_geometry.py'
+adding 'five_axis_slicer/validation/planar_qualification.py'
+adding 'five_axis_slicer/validation/planar_travel.py'
+adding 'five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.data/data/share/doc/five-axis-slicer/formats/manufacturing-setup-yaml.md'
+adding 'five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.data/data/share/doc/five-axis-slicer/guides/README.md'
+adding 'five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.data/data/share/doc/five-axis-slicer/guides/curve_workbench_zh.md'
+adding 'five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.data/data/share/doc/five-axis-slicer/guides/gcode_preview_zh.md'
+adding 'five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.data/data/share/doc/five-axis-slicer/guides/machine_profiles_zh.md'
+adding 'five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.data/data/share/doc/five-axis-slicer/guides/planar_workbench_zh.md'
+adding 'five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.data/data/share/doc/five-axis-slicer/guides/tube_coordinate_setup_zh.md'
+adding 'five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.data/data/share/doc/five-axis-slicer/guides/tube_setup_script_console_zh.md'
+adding 'five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.data/data/share/doc/five-axis-slicer/guides/tube_workbench_zh.md'
+adding 'five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.data/data/share/five-axis-slicer/schemas/manufacturing-setup-v1.schema.json'
+adding 'five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.dist-info/licenses/LICENSE'
+adding 'five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.dist-info/METADATA'
+adding 'five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.dist-info/WHEEL'
+adding 'five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.dist-info/entry_points.txt'
+adding 'five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.dist-info/top_level.txt'
+adding 'five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.dist-info/RECORD'
+removing build\bdist.win-amd64\wheel
+Successfully built five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912.tar.gz and five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912-py3-none-any.whl

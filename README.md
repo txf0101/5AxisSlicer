@@ -1,8 +1,8 @@
 # 5AxisSclicer V2.0
 
-5AxisSclicer V2.0 以 Workbench 为入口。当前有三条可交互主线：`Imported NC Review` 用于已有 NC/G-code 的空间路径、层范围和路径类型预览；Tube Workbench 已完成 T01—T12，可配置 Setup，使用 Indexed、Buildup、Continuous 三种操作生成、检查、后处理、回读和导出离线结果；Planar Workbench 已完成 P01—P07，可生成 Region 预览、Zigzag、Offset、Thin Wall、Spiral 及 buildplate-only Planar Support 离线路径。Tube 与 Planar 都支持保存和重开项目。
+5AxisSclicer V2.0 以 Workbench 为入口。当前有四条可交互主线：`Imported NC Review` 用于已有 NC/G-code 的空间路径、层范围和路径类型预览；Tube Workbench 已完成 T01—T12，可配置 Setup，使用 Indexed、Buildup、Continuous 三种操作生成、检查、后处理、回读和导出离线结果；Planar Workbench 已完成 P01—P07，可生成 Region 预览、Zigzag、Offset、Thin Wall、Spiral 及 buildplate-only Planar Support 离线路径；Curve Workbench 已完成 C01—C05，可沿 STEP 有向 edge 链生成 Buildup、Multi-pass Buildup 和 Offset Buildup。三类制造工作台都支持保存、重开、统一命令、检查、回读和六件套导出。
 
-使用者可从[图文使用手册索引](docs/guides/README.md)进入。Tube 的完整流程见[Tube 工作台手册](docs/guides/tube_workbench_zh.md)，Planar 的完整流程见[Planar 工作台手册](docs/guides/planar_workbench_zh.md)，坐标设置见[管状坐标设置](docs/guides/tube_coordinate_setup_zh.md)，G-code 阅读见[G-code 可视化手册](docs/guides/gcode_preview_zh.md)，底部控制台与 YAML 工作文件见[设置脚本说明](docs/guides/tube_setup_script_console_zh.md)。Tube 与 Planar 均已完成制造 Setup、生成、检查、导出和回读闭环；下一项为 Curve C01。
+使用者可从[图文使用手册索引](docs/guides/README.md)进入。Tube 的完整流程见[Tube 工作台手册](docs/guides/tube_workbench_zh.md)，Planar 的完整流程见[Planar 工作台手册](docs/guides/planar_workbench_zh.md)，Curve 的完整流程见[Curve 工作台手册](docs/guides/curve_workbench_zh.md)，坐标设置见[管状坐标设置](docs/guides/tube_coordinate_setup_zh.md)，G-code 阅读见[G-code 可视化手册](docs/guides/gcode_preview_zh.md)，底部控制台与 YAML 工作文件见[设置脚本说明](docs/guides/tube_setup_script_console_zh.md)。Tube、Planar 与 Curve 均已完成制造 Setup、生成、检查、导出和回读闭环；下一项为 Rotary R01。
 
 六个工作台的算法开发按[开发计划](docs/planning/development_plan.md)推进，优先完成管状工作台。每轮任务状态、验收证据和下一步更新到[进度台账主表](docs/planning/progress_tracker.md#主表)；NX 与公开项目资料见[参考资料](docs/planning/reference_research.md)，全部开发文档从[文档索引](docs/README.md)进入。
 
@@ -14,6 +14,7 @@ Tube 的 T01—T12 实现已经聚拢到本仓库：Indexed 支持受限圆管�
 
 - Workbench 首页展示 Planar、Curve、Freeform、Rotary、Tube、Research 六类工作台。
 - Planar 工作台支持 Region 截面预览，以及 Zigzag、Offset、Thin Wall、Spiral 和 buildplate-only Planar Support 五种路径操作的独立检查、G-code 回读和六件套离线导出。
+- Curve 工作台支持稳定有向 edge 链、邻面或用户法向、Buildup、Multi-pass Buildup、Offset Buildup、引用重绑、真实 Toolpath Viewer、G-code 回读和六件套离线导出。
 - Operation Session 包含 Objects、Print、Material、Machine、Preview、Checks 六个页签。
 - Objects 页保留 STEP/STP 的 body 列表选择和 edge 空间点选。
 - Tube Workbench 显式创建 `Tube Thin-Wall Indexed` 操作，Part 可包含多个封闭 solid；sheet、Ignore 和未分配实体保留显示且不进入后续制造计算。
@@ -25,6 +26,7 @@ Tube 的 T01—T12 实现已经聚拢到本仓库：Indexed 支持受限圆管�
 - A/C 五轴 G-code 仅在调用方显式确认已注册的控制器语义后，采用 `P_part = Rz(-C) * Rx(-A) * P_machine` 反算工件坐标。未确认语义、非零 B、U/V/W 或运动学诊断会让整份文件统一保留 Machine XYZ；纯 E 回抽和 prime 只进入运动类型统计，不写入路径线。
 - T08—T12 已补齐生成/后处理/回读、RMF、时间参数化与离线检查相关实现；其算法为本项目独立复写，受本地 Fractal/V1 项目启发，运行不依赖相邻目录。Generic XYZAC 仅为离线参考，不能作为实机资格。
 - Planar P01—P07 的 Generic XYZAC 同样仅为离线参考；具体控制器、真实机床标定、碰撞资格和试切尚未验证。P07 仅支持从 buildplate 连通的垂直支撑，使用 Lines/Grid 图案和主体/界面分层。
+- Curve C01—C05 的 Generic XYZAC、FK/运动限制、夹具 AABB 扫掠和 G-code 回读也只属于离线检查；真实控制器、机床标定、现场完整碰撞与试切尚未验证。
 
 T08—T12 的公开来源、术语边界和控制器语义限制见[参考资料检索](docs/planning/reference_research.md)；其中 M82 按 Marlin/RepRap 语义处理，不称为 LinuxCNC 定义。
 

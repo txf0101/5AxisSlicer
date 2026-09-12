@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="7" time="5.448" timestamp="2026-09-12T21:59:21.606894+08:00" hostname="BelongtoTXF"><testcase classname="tests.test_curve_workbench" name="test_c01_missing_normal_face_and_degenerate_edge_are_locatable" time="0.035" /><testcase classname="tests.test_curve_workbench" name="test_c01_parallel_normal_rejects_degenerate_local_frame" time="0.028" /><testcase classname="tests.test_curve_workbench" name="test_c04_sharp_frame_reversal_and_self_intersection_are_errors" time="0.028" /><testcase classname="tests.test_curve_workbench" name="test_real_step_all_three_operations_generate_and_read_back" time="1.343" /><testcase classname="tests.test_curve_workbench" name="test_real_step_forward_offset_rejects_trim_boundary_projection_collapse" time="0.463" /><testcase classname="tests.test_curve_workbench" name="test_curve_validation_reports_singularity_motion_limits_and_blocks_export" time="0.083"><failure message="AssertionError: assert {'xyzac.accel...mit_exceeded'} &lt;= {'xyzac.rotar...mit_exceeded'}&#10;  &#10;  Extra items in the left set:&#10;  'xyzac.acceleration_limit_exceeded'">tmp_path = WindowsPath('F:/【项目和任务】/5AxisSclicer_V2.0/tmp/curve_validation_matrix_01/test_curve_validation_reports_0')
+
+    def test_curve_validation_reports_singularity_motion_limits_and_blocks_export(
+        tmp_path: Path,
+    ) -&gt; None:
+        model, edge = _line_model(tmp_path)
+        controller, operation = _configured(model, edge.edge_id)
+        singular = controller.generate_operation(operation.operation_id)
+        assert "xyzac.rotary_singularity" in {item.code for item in singular.validation.issues}
+        slow_machine = replace(
+            _machine(),
+            joints=tuple(
+                replace(item, max_velocity=1.0e-6, max_acceleration=1.0e-6)
+                for item in _machine().joints
+            ),
+        )
+        slow_setup = replace(
+            _setup(model.bodies[0].body_id),
+            machine=ResourceSnapshot.capture("machine", slow_machine),
+        )
+        limited = CurveController(model, setup=slow_setup)
+        slow_operation = limited.create_operation()
+        slow_operation = limited.configure_operation(
+            operation_id=slow_operation.operation_id,
+            edge_ids=(edge.edge_id,),
+            normal_mode="specified",
+            specified_normal=(0, 0, 1),
+        )
+        result = limited.generate_operation(slow_operation.operation_id)
+        codes = {item.code for item in result.validation.issues}
+&gt;       assert {"xyzac.velocity_limit_exceeded", "xyzac.acceleration_limit_exceeded"} &lt;= codes
+E       AssertionError: assert {'xyzac.accel...mit_exceeded'} &lt;= {'xyzac.rotar...mit_exceeded'}
+E         
+E         Extra items in the left set:
+E         'xyzac.acceleration_limit_exceeded'
+
+tests\test_curve_workbench.py:437: AssertionError</failure></testcase><testcase classname="tests.test_curve_workbench" name="test_curve_controller_reuses_setup_fixture_for_swept_collision_validation" time="0.590" /></testsuite></testsuites>

@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "F:\����Ŀ������\5AxisSclicer_V2.0\scripts\curve_c05_evidence.py", line 299, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "F:\����Ŀ������\5AxisSclicer_V2.0\scripts\curve_c05_evidence.py", line 293, in main
+    manifest = generate(args.output.resolve(), args.images.resolve())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\����Ŀ������\5AxisSclicer_V2.0\scripts\curve_c05_evidence.py", line 195, in generate
+    "trajectory_poses": len(result.trajectory.poses),
+                            ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MachineAxisTrajectory' object has no attribute 'poses'

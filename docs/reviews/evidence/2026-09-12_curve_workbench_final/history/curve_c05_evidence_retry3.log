@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "source": {
+    "path": "example/Ҷ��/Ҷ��.stp",
+    "sha256": "3776fe6e1c384e03a7dab20e7ab8d8028210b86ec7c2ced3d3518a8011fdf21f",
+    "stable_edge_id": "body_002_edge_0011",
+    "stable_face_id": "body_002_face_0006",
+    "frame": "Source/Model -> Build -> Workpiece/Machine"
+  },
+  "failure_fixture": {
+    "path": "docs/reviews/evidence/2026-09-12_project_audit/frozen_cases/analytic/rectangle_8x6x1.step",
+    "sha256": "02e6adf319958391e8d74a1ef32fa4c22a0d1e32025a92701ad91e0ad39f8518",
+    "expected_error": "curve.offset_outside_face"
+  },
+  "products": [
+    {
+      "operation_type": "curve_buildup",
+      "operation_semantic_sha256": "3853e93efaf973274b680ad57a26f41c2541ce5008da0fe022a79b0e884612da",
+      "plan_length_mm": 68.27612913311788,
+      "toolpath_points": 70,
+      "trajectory_samples": 70,
+      "status": "ready",
+      "readback_passed": true,
+      "bundle_sha256": {
+        "machine_axes.csv": "755668be789044dd90db752a3f8a469ae02aa8e6dc6cc77f2c32ee4378d65b4f",
+        "main.gcode": "1e4ba22e902f0882b7dd5d4e6caf27c7fdfd5a698ac3694b0875ebb65fbdef49",
+        "manifest.json": "bed3d8e9f3932234f29626698b7e3ac9037ce5b4a14289f0aafb291904a77733",
+        "preview.json": "501e3e74df3ae0bab47a272e4d882d36ed13a578a89c2563efa67fb207ef7a9e",
+        "toolpath.json": "25df6e5f4e2f02c3c08f8d9e665dd99eed23fa63389859b43eee2a2831ca8f64",
+        "warnings.json": "7164d3838eb96baa6cbb60ae6d0d37c49da5a9e12de6f01fa5286cdc873f3c91"
+      }
+    },
+    {
+      "operation_type": "curve_multi_pass",
+      "operation_semantic_sha256": "18f74b9e93bf6cd149be387ca608b9379e9b11d162874845713f972d828dd2be",
+      "plan_length_mm": 68.27612913311788,
+      "toolpath_points": 210,
+      "trajectory_samples": 210,
+      "status": "ready",
+      "readback_passed": true,
+      "bundle_sha256": {
+        "machine_axes.csv": "028d140ff3d7719837ddf941101b9dcfeb93bb76e9040bd86de5c4511638f234",
+        "main.gcode": "26cd1dd5679762465f0c5611110b260537a55e929d8e5e96d4ed0bab1a66d29f",
+        "manifest.json": "cfb6fce57f596b747635153004869b677d6a73c670ccb09ab3497af276e217ff",
+        "preview.json": "d51023f6f308a289bd891fada92ecc318fdb765dd3f558cf691b857c2954198e",
+        "toolpath.json": "068f9073c728174dcff8203eb2d0565d6876ae128f4c43268a277529e4fa9ec0",
+        "warnings.json": "fadf82f43c7bd53d313093bff3651749a3631ce1fbe4389db1412964d65e83be"
+      }
+    },
+    {
+      "operation_type": "curve_offset_buildup",
+      "operation_semantic_sha256": "e281aebdf81400345464c139b5d433ba9369dbe20f8510757a749cb8a3853182",
+      "plan_length_mm": 68.27612913311788,
+      "toolpath_points": 210,
+      "trajectory_samples": 210,
+      "status": "ready",
+      "readback_passed": true,
+      "bundle_sha256": {
+        "machine_axes.csv": "0872a51cfe80102d770f04e3ed123ddd4cec29bb99bbeb9d77edf4f3f5a46e1f",
+        "main.gcode": "06bd26a81d26f66439f2651bcf1d1862214a9f2570ebac02b842cd653df63138",
+        "manifest.json": "a188ea75bf83b2b2f74f04f0d5837ab9e54dac381c0663a064459afe0901e940",
+        "preview.json": "eabfdafea18ada436da22c8d087c35f617d28711eae35c7b97b13f13d282def7",
+        "toolpath.json": "ed06c42ecfce3f5e7b483f15810b8334d842a288e2e164e16533d49526ab3df3",
+        "warnings.json": "9b2c58c6db4d9601559e2f73142026f4e20b547be6eed877dd8e6ac1d504be54"
+      }
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "01_curve_buildup_zh_1366x768.png",
+      "sha256": "f29685e8fe71f0b62643ed2241f85b19684480c07020d1030aa5c2e84a78097b",
+      "language": "zh",
+      "size": [
+        1366,
+        768
+      ],
+      "capture_method": "Qt QWidget.grab; actual CurvePage and generated Toolpath",
+      "viewer_backend": "opengl",
+      "visible_segments": 69,
+      "status": "Status: ready",
+      "export_enabled": true,
+      "clipped_visible_buttons": [],
+      "horizontal_scroll_max": 0
+    },
+    {
+      "file": "02_curve_multi_pass_en_1600x900.png",
+      "sha256": "dfdfd65b8ea57d4e0ea0c06ef72490e790b9d0a536153364f9e5806fdb9c3af6",
+      "language": "en",
+      "size": [
+        1600,
+        900
+      ],
+      "capture_method": "Qt QWidget.grab; actual CurvePage and generated Toolpath",
+      "viewer_backend": "opengl",
+      "visible_segments": 207,
+      "status": "Status: ready",
+      "export_enabled": true,
+      "clipped_visible_buttons": [],
+      "horizontal_scroll_max": 0
+    },
+    {
+      "file": "03_curve_offset_buildup_en_1920x1080.png",
+      "sha256": "16e369d17eaf9912c266b06aeabb7b5007561072bed7ecc6e94fb0b7f7382e4f",
+      "language": "en",
+      "size": [
+        1920,
+        1080
+      ],
+      "capture_method": "Qt QWidget.grab; actual CurvePage and generated Toolpath",
+      "viewer_backend": "opengl",
+      "visible_segments": 207,
+      "status": "Status: ready",
+      "export_enabled": true,
+      "clipped_visible_buttons": [],
+      "horizontal_scroll_max": 0
+    },
+    {
+      "file": "04_offset_failure_zh_1366x768.png",
+      "sha256": "24a11d4c8983dbcd93687636df6531cf18c138ec26135cdb01e7836725dfe70b",
+      "language": "zh",
+      "size": [
+        1366,
+        768
+      ],
+      "capture_method": "Qt QWidget.grab; actual CurvePage and generated Toolpath",
+      "viewer_backend": "opengl",
+      "visible_segments": 0,
+      "status": "curve.offset_outside_face [body_001_face_0006]: offset crosses the trimmed face boundary",
+      "export_enabled": false,
+      "clipped_visible_buttons": [],
+      "horizontal_scroll_max": 0
+    },
+    {
+      "file": "05_offset_recovered_zh_1366x768.png",
+      "sha256": "989251bf6d8017f04eb27cf7de8425994d921e2f81f60f561477ff8e1e8871f1",
+      "language": "zh",
+      "size": [
+        1366,
+        768
+      ],
+      "capture_method": "Qt QWidget.grab; actual CurvePage and generated Toolpath",
+      "viewer_backend": "opengl",
+      "visible_segments": 24,
+      "status": "Status: warning",
+      "export_enabled": true,
+      "clipped_visible_buttons": [],
+      "horizontal_scroll_max": 0
+    }
+  ],
+  "limits": [
+    "Generic XYZAC and offline FK/readback only",
+    "No real controller, calibration, site collision, material qualification, or trial build"
+  ]
+}

@@ -1,6 +1,6 @@
 # 六个工作台开发参考资料
 
-检索日期：2026-09-10。本文服务于[开发计划](development_plan.md)与[进度台账](progress_tracker.md)。资料来自当前项目、相邻参考项目、Siemens 官方页面、项目官方 GitHub README/许可证和部分源码。已实际读取的网页与未运行的代码分别说明，公开介绍不能替代本项目的算法验证。
+初次检索：2026-09-10；更新至：2026-09-12。本文服务于[开发计划](development_plan.md)与[进度台账](progress_tracker.md)。资料来自当前项目、相邻参考项目、Siemens 官方页面、项目官方 GitHub README/许可证和部分源码。已实际读取的网页与未运行的代码分别说明，公开介绍不能替代本项目的算法验证。
 
 ## 1 检索结论
 
@@ -107,3 +107,11 @@ P07 关闭时于 2026-09-12 重新固定上游版本。PrusaSlicer `master` 为 
 | --- | --- | --- | --- |
 | P07-01 | [Prusa Support material](https://help.prusa3d.com/article/support-material_1698)，Prusa 官方 Support 文档；访问日 2026-09-12，内容哈希见上文 | 已核对 `Supports on build plate only`、`Overhang threshold`、`Top contact Z distance`、`Top interface layers` 四项支撑参数及其公开说明 | 用于定义 P07 的可观察参数语义和验收边界；文档不公开本项目所需的完整几何、分区、接口生成或五轴路径算法 |
 | P07-02 | 固定 [PrusaSlicer commit](https://github.com/prusa3d/PrusaSlicer/tree/6f510128d7c2e543b62919b74bea7e876f564205) 及其 [AGPLv3](https://github.com/prusa3d/PrusaSlicer/blob/6f510128d7c2e543b62919b74bea7e876f564205/LICENSE)；固定 [CuraEngine commit](https://github.com/Ultimaker/CuraEngine/tree/553d59ca44ae3a562034d6593c238c46783a1d32) 及其 [AGPLv3](https://github.com/Ultimaker/CuraEngine/blob/553d59ca44ae3a562034d6593c238c46783a1d32/LICENSE) | 两个公开项目的许可证均为 AGPLv3；本登记只用于许可证和公开可观察行为边界核对 | P07 采用 clean-room 独立实现：不复制、翻译或改写 PrusaSlicer/CuraEngine 源码、测试和内部数据结构；本项目的支撑几何、状态契约、独立真值和 Toolpath 输出均由本项目验证 |
+
+## 10 Curve C01—C05 的几何与许可证边界
+
+Curve 本轮复用 OCCT/OCP 的公开几何 API：`BRepAdaptor_Curve`、`GCPnts_UniformAbscissa`、`GeomAPI_ProjectPointOnSurf` 和 `BRepClass_FaceClassifier`。运行环境为 OCP `7.8.1.1.post1`；它们分别用于权威 STEP 曲线适配、弧长采样、曲面投影和 trimmed face 分类。Curve 链顺序、方向、法向所有权、局部横向标架、状态机、Toolpath、验证和回读均由本项目独立设计。
+
+Open5x 与 COMPAS Slicer 的公开 MIT README 仅是早期术语和路径组织背景，本轮没有用其源码、Grasshopper 图、内部组件、数据结构或实现公式。2026-09-12 尝试重新固定两者 HEAD 时，GitHub 连接分别返回 reset/connection failure，因此不把未固定的 `master` 作为 C01—C05 验收来源。C01—C05 实际实现依据固定为 OCP `7.8.1.1.post1` 的公开 API、CadQuery `2.7.0` 的解析夹具生成和本项目独立真值。CuraEngine 与 PrusaSlicer 均为 AGPLv3，Curve C01—C05 没有读取、复制或改写其源码、测试和内部结构；P07 已登记的公开可观察行为也没有用作 Curve 实现公式。
+
+CadQuery 2.7.0 仅用于测试中生成解析 STEP 夹具，工具许可证为 Apache-2.0；产品运行时不依赖 CadQuery。真实叶轮 STEP 的作者、建模工具和再分发许可证未知，当前只作为本地验收输入，详见[样例来源登记](example_source_inventory.md)。

@@ -2,9 +2,11 @@
 
 最近更新：2026-09-12。关联[开发计划](development_plan.md)、[参考资料](reference_research.md)与[文档索引](../README.md)。**下方主表是任务进度的唯一维护位置**，计划和复盘引用任务编号，不另行维护一份状态表。
 
-当前顺序：**管状 → 平面 → 曲线 → 回转 → 自由曲面 → 研究 → 整体验收**。用户已确定管状优先，并于 2026-09-12 将回转 R01—R05 调整到 Curve C05 之后、Freeform 之前；Research 仍使用 X01—X06 编号。Planar P01—P07 已按当前源码重新验收并全部完成，当前没有进行中的支撑任务；AUD-01 保留的 Tube T04、T07、T08、T12 待验证状态不因 Planar 关闭而撤销。后续工作台首项为 **C01**。
+当前顺序：**管状 → 平面 → 曲线 → 回转 → 自由曲面 → 研究 → 整体验收**。用户已确定管状优先，并于 2026-09-12 将回转 R01—R05 调整到 Curve C05 之后、Freeform 之前；Research 仍使用 X01—X06 编号。Planar P01—P07 与 Curve C01—C05 已按当前源码验收并全部完成；AUD-01 保留的 Tube T04、T07、T08、T12 待验证状态不因后续工作台关闭而撤销。后续工作台首项为 **R01**。
 
 本表保留规划、基础、算法、工作台和整体验收任务的唯一状态。2026-09-12 的 AUD-01 已完成检查和修改方案，确认的 Planar 缺陷已在 AUD-02 和 P07 最终验收中修复。P07 以 clean-room 独立实现的 Grid/Lines 支撑首版关闭：解析悬垂真值为 33 段、61.86 mm³、66/66 回读，复杂 STEP 为 9,662/9,662 回读；9 张 Qt/OpenGL UI 图覆盖参数、正常、错误恢复和 Stale 恢复；最终 Planar 223 passed，全仓 753 passed、3 skipped、130 subtests，官方质量脚本全绿。Tree/Organic、桥接专用路径、双材料不在首版范围。Generic XYZAC 仍仅为离线参考，真实控制器语义、机床标定、完整喷嘴扫掠和现场试切未验证。
+
+Curve C01—C05 已完成有向 STEP edge 链、弧长采样、明确法向、Buildup、Multi-pass 和 Offset 三操作及统一产品链。真实叶轮样条长 `68.27612913311773 mm`，三操作 70/210/210 点均完成六件套和回读；反向 Offset 的相邻道独立点距为 2.947—3.000 mm，正向投影塌缩会拒绝。当前 Curve/共享直接集 40 passed、2 subtests；全仓 783 passed、3 skipped、130 subtests；质量、sdist/wheel、Twine、依赖一致性和 Windows native preview smoke 已通过。Generic XYZAC 与保守 AABB 扫掠仍只提供离线资格，实机未验证。
 
 本轮新增用户授权子任务 **I01-OWN**：自有机型默认配置、选择、自定义及文件导入导出；独立于 I01 的第二运动学与控制器完整验收。
 
@@ -56,6 +58,8 @@
 | 2026-09-12 | P07 | `five-axis-workbench-development` | 按公开行为独立实现平面 Grid/Lines 支撑，复用区域、共享 Toolpath、产品状态、输出与手册闭环 | [P07 任务行](#主表) |
 | 2026-09-12 | P07 | `five-axis-slicer-validation` | 复用已核验解释器、Qt 串行、失败分类和证据归档规则 | [P07 任务行](#主表) |
 | 2026-09-12 | P07/Planar 最终验收 | `five-axis-workbench-development`、`five-axis-slicer-validation` | 收敛统一命令、取消/撤销/重开、主体/interface Viewer、独立真值、真实 STEP、当前 UI、全仓与质量门禁 | [最终证据](../reviews/evidence/2026-09-12_p07_planar_final/manifest.json) |
+| 2026-09-12 | C01—C05 | `five-axis-workbench-development` | 按阶段门实现稳定有向引用、三种 Curve 操作、共享产品链、统一命令、项目生命周期、双语 UI 和图文手册 | [Curve 复盘](../reviews/2026-09-12_curve_workbench_review.md) |
+| 2026-09-12 | C01—C05/C05 验收 | `five-axis-slicer-validation` | 只读 preflight、唯一 basetemp、失败诊断、Qt/共享/全仓串行回归、质量、构建和证据归档 | [Curve 最终证据](../reviews/evidence/2026-09-12_curve_workbench_final/validation_manifest.json) |
 | 2026-09-12 | DOC-MULTICHAT | `five-axis-workbench-development` | 编制 P07、C、R、F、X 与 I 阶段的多对话启动提示词，统一完整工作台、验证、图文手册和分支交接门槛；未启动新开发任务 | [启动提示词](workbench_multi_chat_prompts.md)与[编制复盘](../reviews/2026-09-12_multi_chat_workbench_prompt_review.md) |
 
 | 2026-09-12 | AUD-01 | `five-axis-workbench-development` | 独立真值、真实模型、生成/回读与阶段资格审查；GPT-6 子 Agent 复核 Tube 和支撑，只出方案 | [独立审查](../reviews/2026-09-12_project_algorithm_audit.md) |
@@ -94,12 +98,12 @@
 | P04 | Planar Thin Wall | P03 | 已完成 | 单/多道、开放壁和不足道宽规则可验证 | [P04 复盘](../reviews/2026-09-12_planar_algorithm_foundation_review.md#p04-thin-wall-产品接入与关闭)与[证据](../reviews/evidence/2026-09-12_p04_planar/manifest.json)；开放壁及闭壁同心多道、区域驱动内偏置、半道宽内移和 `reduce` Warning 已验证；7 passed | 进入 P05；保留不足道宽策略和可见诊断 | 2026-09-12 |
 | P05 | Planar Spiral | P04 | 已完成 | 单连通连续 Z 路径和层间过渡；多岛输入明确拒绝 | [P05 复盘](../reviews/2026-09-12_planar_algorithm_foundation_review.md#p05-spiral-产品接入与关闭)与[证据](../reviews/evidence/2026-09-12_p05_planar/manifest.json)；至少两层、单岛无孔、拓扑对应、连续 Z、实体内插值、进给和体积检查已验证；10 passed | 进入 P06；在真实 STEP 与 UI 中核对正常、失败及恢复流程 | 2026-09-12 |
 | P06 | 整个 Planar 工作台验收 | P02,P03,P04,P05 | 已完成 | 四操作生成/检查/输出/回读、改参重开和帮助通过 | [最终证据](../reviews/evidence/2026-09-12_p07_planar_final/manifest.json)与[使用手册](../guides/planar_workbench_zh.md)；当前真实 STEP Zigzag/Offset/Thin Wall/Spiral 为 142/16/6/129 点，四项六件套及回读通过；操作切换、取消、撤销/重做、问题定位、重开 Stale、三尺寸双语 UI 和恢复流程通过 | P07 已完成；进入 C01 | 2026-09-12 |
-| P07 | Planar Grid/Lines 支撑生成 | P06 | 已完成 | 检测悬垂和空中岛；按 XY/Z 间隙生成支撑主体与接触层路径；共享 Toolpath、检查、G-code、回读、六件套、保存重开、脚本/HTTP、双语 UI、真实模型和图文手册通过 | [最终证据](../reviews/evidence/2026-09-12_p07_planar_final/manifest.json)与[复盘](../reviews/2026-09-12_p07_planar_support_review.md)；解析 33 段、61.86 mm³、66/66，复杂 STEP 9,662/9,662；Lines/Grid 独立方向、间距、顺序和材料真值；主体/interface Viewer 可辨；P07 150 passed、Planar 223 passed、全仓 753 passed、3 skipped、130 subtests，质量 exit 0；严格失败模型未导出 | C01：验证反向边、断链与法向歧义 | 2026-09-12 |
-| C01 | Curve Region、边链与姿态输入 | P07 | 未开始 | 有向 edge 链、弧长采样、邻面或指定法向可追溯 | 可复用 STEP 选择；当前下拉项未生成路径 | 验证反向边、断链、法向歧义 | 2026-09-12 |
-| C02 | Curve Buildup | C01 | 未开始 | 直线/圆弧/样条单道，端点与挤出量正确 | 待实现 | 生成单道并走共享后处理链 | 2026-09-10 |
-| C03 | Curve Multi-pass Buildup | C02 | 未开始 | 多层重复堆叠、累计道高和层间连接正确 | 待实现 | 实现重复层与端点衔接规则 | 2026-09-10 |
-| C04 | Curve Offset Buildup | C03 | 未开始 | 横向多道、锐角、自交和偏置失败可定位 | 待实现 | 实现横向框架与偏置裁剪 | 2026-09-10 |
-| C05 | 整个 Curve 工作台验收 | C02,C03,C04 | 未开始 | 三操作全流程、边引用重绑定、参数与持久化通过 | 实机状态未验证 | 回归边链与多道例子，完善帮助 | 2026-09-10 |
+| P07 | Planar Grid/Lines 支撑生成 | P06 | 已完成 | 检测悬垂和空中岛；按 XY/Z 间隙生成支撑主体与接触层路径；共享 Toolpath、检查、G-code、回读、六件套、保存重开、脚本/HTTP、双语 UI、真实模型和图文手册通过 | [最终证据](../reviews/evidence/2026-09-12_p07_planar_final/manifest.json)与[复盘](../reviews/2026-09-12_p07_planar_support_review.md)；解析 33 段、61.86 mm³、66/66，复杂 STEP 9,662/9,662；Lines/Grid 独立方向、间距、顺序和材料真值；主体/interface Viewer 可辨；P07 150 passed、Planar 223 passed、全仓 753 passed、3 skipped、130 subtests，质量 exit 0；严格失败模型未导出 | C01—C05 已完成；进入 R01 | 2026-09-12 |
+| C01 | Curve Region、边链与姿态输入 | P07 | 已完成 | 有向 edge 链、弧长采样、邻面或指定法向可追溯 | [复盘](../reviews/2026-09-12_curve_workbench_review.md)与[最终证据](../reviews/evidence/2026-09-12_curve_workbench_final/validation_manifest.json)；完整 GeometryReference、反向、断链、法向歧义/缺失、退化 edge、拓扑重绑均验证 | C02 已完成 | 2026-09-12 |
+| C02 | Curve Buildup | C01 | 已完成 | 直线/圆弧/样条单道，端点与挤出量正确 | 20 mm 解析直线、R40 四分之一圆和真实 STEP 样条通过；单道 70 点、69 沉积段、32.771862137049 mm³、回读与六件套通过 | C03 已完成 | 2026-09-12 |
+| C03 | Curve Multi-pass Buildup | C02 | 已完成 | 多层重复堆叠、累计道高和层间连接正确 | 3 层 210 点、207 沉积段；累计层高、奇偶换向、Travel/Retract/Prime/Dwell 分离、材料量和回读通过 | C04 已完成 | 2026-09-12 |
+| C04 | Curve Offset Buildup | C03 | 已完成 | 横向多道、锐角、自交和偏置失败可定位 | 真实叶轮反向 edge 三道相邻点距 2.947—3.000 mm；210 点、93.880702147199 mm³；正向投影塌缩、trim 越界、标架反转和自交拒绝 | C05 已完成 | 2026-09-12 |
+| C05 | 整个 Curve 工作台验收 | C02,C03,C04 | 已完成 | 三操作全流程、边引用重绑定、参数与持久化通过 | [图文手册](../guides/curve_workbench_zh.md)、[复盘](../reviews/2026-09-12_curve_workbench_review.md)、[最终证据](../reviews/evidence/2026-09-12_curve_workbench_final/validation_manifest.json)；GUI/脚本/HTTP、取消、撤销、Stale、Viewer、保存重开、三操作六件套、当前直接集 40 passed/2 subtests、全仓 783 passed/3 skipped/130 subtests，质量/构建/native 门通过；实机未验证 | R01：注册回转区域、坐标和周期规则 | 2026-09-12 |
 | R01 | Rotary Region 与回转坐标 | C05 | 未开始 | 回转轴、轮廓、半径与角度范围有效，去除无效锁定行为 | 当前卡片 Locked 仍进入通用会话；可直接复用 Tube 连续运动和轴轨迹契约，不依赖 Freeform 曲面算法 | 注册回转操作和周期几何规则 | 2026-09-12 |
 | R02 | Rotary Spiral | R01 | 未开始 | 圆柱/圆锥螺旋、螺距/方向/角速度可核对 | NX-01、OS-03 | 生成解析回转路径并走轴轨迹链 | 2026-09-10 |
 | R03 | Rotary Thin Wall | R02 | 未开始 | 圆周、轴向步进、径向多道和轮廓变化可验证 | NX-05 提供轮廓层与连接参考 | 实现轮廓层与层间连接规则 | 2026-09-10 |
@@ -125,7 +129,7 @@
 
 ## 模型分工与悲观 token 预算
 
-以下预算最初覆盖 A01—A03 完成后的 44 项任务。P07 已关闭；主表中 C01—C05、R01—R05、F01—F06、X01—X06、I01—I04 共 26 项后续未开始任务，另有 AUD-01 指出的 7 项待验证任务；当前进行中的支撑任务为 0 项。由于产品没有提供本轮精确 token，本表保留原阶段上限，不用消息字数推算消耗。单位为百万 token（M），按模型看到的输入、推理和输出总量规划；它是任务上下文预算，不是人民币账单或 ChatGPT Credits 换算。实际消耗受模型、上下文缓存、重试次数和产品计量方式影响。
+以下预算最初覆盖 A01—A03 完成后的 44 项任务。P07 与 C01—C05 已关闭；主表中 R01—R05、F01—F06、X01—X06、I01—I04 共 21 项后续未开始任务，另有 AUD-01 指出的 7 项待验证任务。由于产品没有提供本轮精确 token，本表保留原阶段上限，不用消息字数推算消耗。单位为百万 token（M），按模型看到的输入、推理和输出总量规划；它是任务上下文预算，不是人民币账单或 ChatGPT Credits 换算。实际消耗受模型、上下文缓存、重试次数和产品计量方式影响。
 
 模型选择依据为 [OpenAI Codex Models](https://developers.openai.com/codex/models)：Luna 适合明确、重复且高吞吐的任务，Terra 适合日常开发，Sol 适合复杂开放问题，Astra 用于最困难的跨步骤判断。官方说明也建议从较低推理强度开始，只在任务确有更深规划或检查需求时提高；模型可用性随账户和发布批次变化。
 
@@ -169,6 +173,7 @@
 
 | 日期 | 变更依据 | 变更内容 | 影响 |
 | --- | --- | --- | --- |
+| 2026-09-12 | 用户要求从 P07 干净基线按 C01→C05 完成整个 Curve 工作台 | 完成有向 edge 链、三种 Curve 操作、统一产品链、GUI/脚本/HTTP、保存重开、真实 STEP、失败矩阵、六件套、图文手册、当前串行回归、质量与构建证据 | C01—C05 改为已完成；后续未开始任务为 21 项；下一项为 R01；Generic XYZAC、真实控制器/机床/材料/试切边界继续单列未验证 |
 | 2026-09-12 | 用户要求检查完成情况、运行示例并先出修改方案 | AUD-01 核对实际源码和生成结果；T04/T07/T08/T12/P01/P02/P06 调整为待验证，保留历史证据；归档独立反例、版本快照、修改顺序和验收矩阵 | 本轮审查完成，产品修复尚未实施；P07 并行修改的已解决失败单列，不覆盖其他任务成果 |
 | 2026-09-12 | 用户要求为平面切片补充成熟切片器式支撑功能 | 在已关闭 P06 后新增 P07：首版 Grid/Lines 支撑，包含悬垂/空中岛检测、XY/Z 间隙、接触层、共享 Toolpath、输出、UI、真实模型和手册；C01 依赖改为 P07 | 当前任务由 C01 改为 P07；Tree/Organic、桥接专用路径、双材料与实机资格留作后续；不复制 AGPLv3 上游源码 |
 | 2026-09-12 | P07 阶段证据关闭 | P07 Grid/Lines 支撑的解析真值、六件套、66/66 回读、7 图 UI 审计、211 项专项、741 项全仓回归与最终质量门禁已归档；支撑完整中心线段与目标 CAD 相交检查已覆盖；风扇在 Z=57 mm 的端点修正超限保留为未导出 Error | P07 改为已完成，当前任务回到 C01；主表后续未开始任务为 26 项，联合逐层调度、完整喷嘴扫掠、真实控制器和实机资格仍未验证 |

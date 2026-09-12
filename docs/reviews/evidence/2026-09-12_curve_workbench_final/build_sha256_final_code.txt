@@ -1,0 +1,10 @@
+
+Algorithm : SHA256
+Hash      : 284286F1C4F7AE8B56ED92CDB0BDC6AFFE5330B4E7314F09DD9326BF9772DAA7
+Path      : F:\【项目和任务】\5AxisSclicer_V2.0\tmp\curve_build_final_02\five_axis_slicer-2.0.2.dev22+g999946e.d20260912-py3-none-any.whl
+
+Algorithm : SHA256
+Hash      : 83ECCA253F00DECE1913DE64B7DE1962E03E2F7645128D3CB153B859B356BF74
+Path      : F:\【项目和任务】\5AxisSclicer_V2.0\tmp\curve_build_final_02\five_axis_slicer-2.0.2.dev22+g999946e.d20260912.tar.gz
+
+

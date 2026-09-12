@@ -1,0 +1,24 @@
+Obtaining file:///F:/%E3%80%90%E9%A1%B9%E7%9B%AE%E5%92%8C%E4%BB%BB%E5%8A%A1%E3%80%91/5AxisSclicer_V2.0
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: five-axis-slicer
+  Building editable for five-axis-slicer (pyproject.toml): started
+  Building editable for five-axis-slicer (pyproject.toml): finished with status 'done'
+  Created wheel for five-axis-slicer: filename=five_axis_slicer-2.0.2.dev21+g25f7ac1.d20260912-0.editable-cp312-cp312-win_amd64.whl size=10406 sha256=0b97fec7a9696fd51e347250befce10bf2335261ccf2f490b2a58e469ad1b577
+  Stored in directory: C:\Users\Tang Xufeng\AppData\Local\Temp\pip-ephem-wheel-cache-ta_p9v_s\wheels\1b\48\fb\9dfd576553d244ef51a697f055221d285c10eae9fc851870ea
+Successfully built five-axis-slicer
+Installing collected packages: five-axis-slicer
+  Attempting uninstall: five-axis-slicer
+    Found existing installation: five-axis-slicer 2.0.2.dev21+g25f7ac1.d20260912
+    Uninstalling five-axis-slicer-2.0.2.dev21+g25f7ac1.d20260912:
+      Successfully uninstalled five-axis-slicer-2.0.2.dev21+g25f7ac1.d20260912
+Successfully installed five-axis-slicer-2.0.2.dev21+g25f7ac1.d20260912
+
+[notice] A new release of pip is available: 24.2 -> 26.2.1
+[notice] To update, run: F:\����Ŀ������\5AxisSclicer_V2.0\tmp\curve_cleancheck\Scripts\python.exe -m pip install --upgrade pip

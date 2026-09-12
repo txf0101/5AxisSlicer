@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="5" time="4.899" timestamp="2026-09-12T21:53:07.168223+08:00" hostname="BelongtoTXF"><testcase classname="tests.test_curve_workbench" name="test_c01_missing_normal_face_and_degenerate_edge_are_locatable" time="0.035" /><testcase classname="tests.test_curve_workbench" name="test_c01_parallel_normal_rejects_degenerate_local_frame" time="0.028" /><testcase classname="tests.test_curve_workbench" name="test_c04_sharp_frame_reversal_and_self_intersection_are_errors" time="0.027" /><testcase classname="tests.test_curve_workbench" name="test_real_step_all_three_operations_generate_and_read_back" time="1.329"><failure message="assert 0.598461981200597 &gt; 2.94&#10; +  where 0.598461981200597 = min([0.599998245241384, 0.599795175326479, 0.599323785351481, 0.5988010344057274, 0.598461981200597, 0.5985253738321484, ...])">def test_real_step_all_three_operations_generate_and_read_back() -&gt; None:
+        model = load_step(Path("example/叶轮/叶轮.stp"))
+        for operation_type in (
+            "curve_buildup",
+            "curve_multi_pass",
+            "curve_offset_buildup",
+        ):
+            controller = CurveController(model, setup=_setup(model.bodies[1].body_id))
+            operation = controller.create_operation(operation_type)
+            operation = controller.configure_operation(
+                operation_id=operation.operation_id,
+                edge_ids=("body_002_edge_0011",),
+                reversed_flags=(operation_type == "curve_offset_buildup",),
+                normal_mode="adjacent_face",
+                normal_face_id="body_002_face_0006",
+            )
+            result = controller.generate_operation(operation.operation_id)
+            assert result.exportable and result.readback.passed
+            assert result.plan.total_length_mm == pytest.approx(68.27612913311773, abs=1e-9)
+            if operation_type == "curve_offset_buildup":
+                paths = [[
+                    item for item in result.toolpath.points if item.region_id == "pass-0001"
+                ], [
+                    item for item in result.toolpath.points if item.region_id == "pass-0002"
+                ], [
+                    item for item in result.toolpath.points if item.region_id == "pass-0003"
+                ]]
+                paths[1].reverse()
+                spacing = [
+                    math.dist(left.position, right.position)
+                    for left_path, right_path in zip(paths, paths[1:])
+                    for left, right in zip(left_path, right_path)
+                ]
+&gt;               assert min(spacing) &gt; 2.94
+E               assert 0.598461981200597 &gt; 2.94
+E                +  where 0.598461981200597 = min([0.599998245241384, 0.599795175326479, 0.599323785351481, 0.5988010344057274, 0.598461981200597, 0.5985253738321484, ...])
+
+tests\test_curve_workbench.py:356: AssertionError</failure></testcase><testcase classname="tests.test_curve_workbench" name="test_real_step_forward_offset_rejects_trim_boundary_projection_collapse" time="0.444" /></testsuite></testsuites>

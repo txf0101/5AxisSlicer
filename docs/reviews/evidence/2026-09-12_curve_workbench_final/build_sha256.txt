@@ -1,0 +1,7 @@
+
+Algorithm Hash                                                             Path
+--------- ----                                                             ----
+SHA256    7594A16FD1FAEBE89339E9162A19397F2D8C7BFF5E47CB6734D885F5BBEB8452 F:\【项目和任务】\5AxisSclicer_V2.0\tmp\curv…
+SHA256    5D1A13748ED555F21DBB193BD0AF187EA756292E62B14A60B1F175AD2F99FFE2 F:\【项目和任务】\5AxisSclicer_V2.0\tmp\curv…
+
+

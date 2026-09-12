@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="5" time="4.655" timestamp="2026-09-12T21:53:46.649309+08:00" hostname="BelongtoTXF"><testcase classname="tests.test_curve_workbench" name="test_c01_missing_normal_face_and_degenerate_edge_are_locatable" time="0.033" /><testcase classname="tests.test_curve_workbench" name="test_c01_parallel_normal_rejects_degenerate_local_frame" time="0.028" /><testcase classname="tests.test_curve_workbench" name="test_c04_sharp_frame_reversal_and_self_intersection_are_errors" time="0.026" /><testcase classname="tests.test_curve_workbench" name="test_real_step_all_three_operations_generate_and_read_back" time="1.291"><failure message="AssertionError: assert 0.6000000118239792 &lt;= (0.6 + 1e-09)&#10; +  where 0.6000000118239792 = max([0.599998245241384, 0.599795175326479, 0.599323785351481, 0.5988010344057274, 0.598461981200597, 0.5985253738321484, ...])&#10; +  and   0.6 = CurveProcessParameters(sampling_step_mm=1.0, chord_error_mm=0.05, chain_tolerance_mm=0.01, bead_width_mm=0.6, layer_he..._feedrate_mm_min=1800.0, retract_length_mm=1.0, dwell_s=0.0, layer_count=3, offset_pass_count=3, offset_spacing_mm=0.6).offset_spacing_mm&#10; +    where CurveProcessParameters(sampling_step_mm=1.0, chord_error_mm=0.05, chain_tolerance_mm=0.01, bead_width_mm=0.6, layer_he..._feedrate_mm_min=1800.0, retract_length_mm=1.0, dwell_s=0.0, layer_count=3, offset_pass_count=3, offset_spacing_mm=0.6) = CurveOperationDefinition(operation_id='curve-operation-1', setup_id='setup-1', name='Curve Offset Buildup', operation_...feedrate_mm_min=1800.0, retract_length_mm=1.0, dwell_s=0.0, layer_count=3, offset_pass_count=3, offset_spacing_mm=0.6)).parameters">def test_real_step_all_three_operations_generate_and_read_back() -&gt; None:
+        model = load_step(Path("example/叶轮/叶轮.stp"))
+        for operation_type in (
+            "curve_buildup",
+            "curve_multi_pass",
+            "curve_offset_buildup",
+        ):
+            controller = CurveController(model, setup=_setup(model.bodies[1].body_id))
+            operation = controller.create_operation(operation_type)
+            operation = controller.configure_operation(
+                operation_id=operation.operation_id,
+                edge_ids=("body_002_edge_0011",),
+                reversed_flags=(operation_type == "curve_offset_buildup",),
+                normal_mode="adjacent_face",
+                normal_face_id="body_002_face_0006",
+            )
+            result = controller.generate_operation(operation.operation_id)
+            assert result.exportable and result.readback.passed
+            assert result.plan.total_length_mm == pytest.approx(68.27612913311773, abs=1e-9)
+            if operation_type == "curve_offset_buildup":
+                paths = [[
+                    item for item in result.toolpath.points if item.region_id == "pass-0001"
+                ], [
+                    item for item in result.toolpath.points if item.region_id == "pass-0002"
+                ], [
+                    item for item in result.toolpath.points if item.region_id == "pass-0003"
+                ]]
+                paths[1].reverse()
+                spacing = [
+                    math.dist(left.position, right.position)
+                    for left_path, right_path in zip(paths, paths[1:])
+                    for left, right in zip(left_path, right_path)
+                ]
+                assert min(spacing) &gt; operation.parameters.offset_spacing_mm * 0.98
+&gt;               assert max(spacing) &lt;= operation.parameters.offset_spacing_mm + 1.0e-9
+E               AssertionError: assert 0.6000000118239792 &lt;= (0.6 + 1e-09)
+E                +  where 0.6000000118239792 = max([0.599998245241384, 0.599795175326479, 0.599323785351481, 0.5988010344057274, 0.598461981200597, 0.5985253738321484, ...])
+E                +  and   0.6 = CurveProcessParameters(sampling_step_mm=1.0, chord_error_mm=0.05, chain_tolerance_mm=0.01, bead_width_mm=0.6, layer_he..._feedrate_mm_min=1800.0, retract_length_mm=1.0, dwell_s=0.0, layer_count=3, offset_pass_count=3, offset_spacing_mm=0.6).offset_spacing_mm
+E                +    where CurveProcessParameters(sampling_step_mm=1.0, chord_error_mm=0.05, chain_tolerance_mm=0.01, bead_width_mm=0.6, layer_he..._feedrate_mm_min=1800.0, retract_length_mm=1.0, dwell_s=0.0, layer_count=3, offset_pass_count=3, offset_spacing_mm=0.6) = CurveOperationDefinition(operation_id='curve-operation-1', setup_id='setup-1', name='Curve Offset Buildup', operation_...feedrate_mm_min=1800.0, retract_length_mm=1.0, dwell_s=0.0, layer_count=3, offset_pass_count=3, offset_spacing_mm=0.6)).parameters
+
+tests\test_curve_workbench.py:357: AssertionError</failure></testcase><testcase classname="tests.test_curve_workbench" name="test_real_step_forward_offset_rejects_trim_boundary_projection_collapse" time="0.438" /></testsuite></testsuites>

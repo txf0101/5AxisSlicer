@@ -11,9 +11,10 @@
 | Tube 设置脚本与 YAML | [设置脚本与 YAML](tube_setup_script_console_zh.md) | 已有命令说明，界面截图仍需随控制台改版补拍 |
 | Tube 三种操作 | [Tube 工作台完整手册](tube_workbench_zh.md) | 覆盖 Indexed、Buildup、Continuous 及生成和导出 |
 | Planar 路径与支撑操作 | [Planar 工作台手册](planar_workbench_zh.md) | 覆盖 Region、Zigzag、Offset、Thin Wall、Spiral、Planar Support（P07）、真实 STEP、离线检查、导出和错误恢复；真人桌面点击仍未验证 |
+| Curve 曲线沉积 | [Curve 工作台手册](curve_workbench_zh.md) | 覆盖有向边链、法向、Buildup、Multi-pass、Offset、真实 STEP、六件套、脚本/HTTP 和错误恢复 |
 | G-code 与成果预览 | [G-code 可视化手册](gcode_preview_zh.md) | 覆盖普通 Preview、成果页和五轴坐标回读边界 |
 
-Planar P01—P07 已完成，手册记录五种路径操作（含 Planar Support）的当前范围和 Warning/Error 恢复方式。Curve、Freeform、Rotary 与 Research 尚未完成对应算法和阶段验收；未完成操作仍需明确标注边界，不能用入口占位页或设计说明冒充已交付能力。
+Planar P01—P07 与 Curve C01—C05 已完成。下一项为 Rotary R01；Rotary、Freeform 与 Research 尚未完成对应算法和阶段验收，不能用入口占位页或设计说明冒充已交付能力。
 
 ## 每个模块的交付门槛
 

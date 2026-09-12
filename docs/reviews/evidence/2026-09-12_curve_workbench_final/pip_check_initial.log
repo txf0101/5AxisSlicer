@@ -1,0 +1,1 @@
+nlopt 2.10.0 has requirement numpy<3,>=2, but you have numpy 1.26.4.

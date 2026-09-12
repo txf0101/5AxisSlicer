@@ -1,0 +1,41 @@
+{
+  "collision_samples_checked": 0,
+  "issues": [],
+  "metrics": [
+    {
+      "limit": 0.05,
+      "name": "curve_path_length_error",
+      "passed": true,
+      "unit": "mm",
+      "value": 0.001416347599061396
+    },
+    {
+      "limit": 0.024,
+      "name": "curve_material_volume_error",
+      "passed": true,
+      "unit": "mm3",
+      "value": 0.0
+    },
+    {
+      "limit": 0.01,
+      "name": "curve_fk_position_error",
+      "passed": true,
+      "unit": "mm",
+      "value": 1.2710574864626038e-13
+    },
+    {
+      "limit": 0.00017453292519943296,
+      "name": "curve_fk_orientation_error",
+      "passed": true,
+      "unit": "rad",
+      "value": 0.0
+    }
+  ],
+  "motion_sample_error_mm": 0.25,
+  "ready_for_export": true,
+  "report_id": "curve-operation-1-curve_buildup-v1-validation-v1",
+  "schema_version": 1,
+  "status": "ready",
+  "toolpath_id": "curve-operation-1-curve_buildup-v1",
+  "trajectory_id": "curve-operation-1-curve_buildup-v1-xyzac-v1"
+}
