@@ -311,7 +311,9 @@ def _write_temporary_index(
                 timeline_machine_ends=timeline.machine_ends,
                 timeline_flags=timeline.flags,
                 timeline_path_segment_indices=timeline.path_segment_indices,
-                **_segment_npz_arrays(preview.segments),
+                # NumPy's stub reserves arbitrary keyword names for
+                # ``allow_pickle`` even though these keys are fixed array names.
+                **_segment_npz_arrays(preview.segments),  # type: ignore[arg-type]
             )
         complete = True
         return temporary_path

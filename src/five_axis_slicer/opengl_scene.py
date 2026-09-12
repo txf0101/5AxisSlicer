@@ -69,7 +69,7 @@ def build_paper_path_arrays(
         role_codes = timeline_arrays.role_codes
         delta_es = timeline_arrays.delta_es
         spatial = (timeline_arrays.flags & TIMELINE_FLAG_HAS_SPATIAL_LENGTH) != 0
-        step_indices = np.arange(count, dtype=np.int64)
+        step_indices: np.ndarray = np.arange(count, dtype=np.int64)
     else:
         timeline = preview.timeline
         count = len(timeline)
