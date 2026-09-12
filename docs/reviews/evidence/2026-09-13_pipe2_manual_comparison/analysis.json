@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "analysis_date": "2026-09-13",
+  "inputs": {
+    "step": {
+      "path": "example/pipe2/弯管新.stp",
+      "sha256": "116e99fd43492bd1f4f519c80c93cd1f7cd0bf2cb6861b3e123148e4031a0d4b"
+    },
+    "gcode": {
+      "path": "example/pipe2/弯管.gcode",
+      "sha256": "4d6630c01f63d6f802ae6955752fa41b35abfea23509c661fcd855f7064ff70a"
+    }
+  },
+  "step_geometry": {
+    "solid_count": 2,
+    "face_count": 11,
+    "surface_type_counts": {"cylinder": 5, "torus": 2, "plane": 4},
+    "base_radius_mm": 25.0,
+    "base_height_mm": 5.0,
+    "pipe_inner_radius_mm": 15.0,
+    "pipe_outer_radius_mm": 16.0,
+    "wall_thickness_mm": 1.0,
+    "inlet_straight_length_mm": 14.642637,
+    "bend_centerline_radius_mm": 35.0,
+    "bend_angle_deg": 70.513,
+    "outlet_straight_length_mm": 8.75,
+    "centerline_total_length_mm": 66.46657754105667,
+    "classification": "continuous swept tube with changing local axis; not a single fixed-axis rotary body"
+  },
+  "gcode": {
+    "line_count": 679277,
+    "motion_segment_count": 675834,
+    "g0_count": 3210,
+    "g1_count": 672624,
+    "g2_count": 0,
+    "g3_count": 0,
+    "positive_extrusion_segment_count": 669892,
+    "travel_or_non_extrusion_segment_count": 5942,
+    "print_run_count": 865,
+    "base_run_count": 13,
+    "pipe_run_count": 852,
+    "pipe_closed_run_count_below_0_05_mm": 476,
+    "model_frame_deposition_length_mm": 197776.60818926804,
+    "model_frame_travel_length_mm": 12399.573709216336,
+    "total_positive_e_mm": 6578.070499999998,
+    "c_axis_values_deg": [0.0],
+    "a_axis_groups": [
+      {"a_deg": 0.0, "deposition_endpoint_count": 89057, "centerline_s_range_mm": [0.20000000000000018, 29.06296040906495]},
+      {"a_deg": 30.379, "deposition_endpoint_count": 44532, "centerline_s_range_mm": [22.091894670173755, 41.45628468136078]},
+      {"a_deg": 50.678, "deposition_endpoint_count": 44562, "centerline_s_range_mm": [34.49059129107478, 53.74990318945268]},
+      {"a_deg": 70.513, "deposition_endpoint_count": 48965, "centerline_s_range_mm": [47.14634271803638, 66.46657754105667]}
+    ]
+  },
+  "wall_alignment": {
+    "inferred_bead_center_radii_mm": [15.2, 15.8],
+    "absolute_residual_mm": {
+      "median": 0.018298128829579596,
+      "p95": 0.04207361780676866,
+      "maximum": 0.08254057957427285
+    },
+    "distance_to_nearest_design_surface_mm": {
+      "median": 0.1963448700034327,
+      "minimum": 0.11745942042572644,
+      "maximum": 0.2780220418875299
+    }
+  },
+  "method": {
+    "gcode_state": "G90/G91, M82/M83, G92 and modal G0/G1 state machine",
+    "deposition_definition": "delta E > 0",
+    "model_frame_reconstruction": "inverse rotation about A for each motion endpoint; C is constant zero",
+    "centerline_projection": "nearest point among inlet line, bounded R35 circular arc and outlet line",
+    "independence_note": "measurements are computed from the input STEP and G-code, not from the Rotary implementation"
+  },
+  "images": [
+    {"path": "docs/guides/assets/rotary/pipe2_manual_comparison/01_model_manual_path_overview.png", "sha256": "c57fbb984fea82d0167d548a2a42d1091690fcb32a13886fc594e604651d3237"},
+    {"path": "docs/guides/assets/rotary/pipe2_manual_comparison/02_continuous_geometry_vs_indexed_frames.png", "sha256": "966d33590e4688eba974cadf5894b392ddbe42317cf4f34bfb880897bc8c74b8"},
+    {"path": "docs/guides/assets/rotary/pipe2_manual_comparison/03_wall_alignment_and_motion_scale.png", "sha256": "96579da0b4ab9c853635e5af2f287f48ff0c217f2a23fc912c85aff78a03bf19"}
+  ],
+  "qualification": {
+    "offline_geometry_and_motion_structure_comparison": true,
+    "controller_semantics_verified": false,
+    "machine_calibration_verified": false,
+    "collision_verified": false,
+    "physical_trial_verified": false
+  }
+}

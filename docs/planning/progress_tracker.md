@@ -36,6 +36,7 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 | --- | --- | --- | --- | --- |
 | 2026-09-13 | R01—R05 | `five-axis-workbench-development` | 按阶段门完成资料边界、稳定几何引用、三操作、共享产品链、双语 UI、手册和证据归档 | [Rotary 复盘](../reviews/2026-09-13_rotary_workbench_review.md) |
 | 2026-09-13 | R01—R05/R05 验收 | `five-axis-slicer-validation` | 复用指定解释器、仓库内 basetemp、串行 Qt/全仓、WinError 5 分类、质量、构建和指纹规则 | [Rotary 最终证据](../reviews/evidence/2026-09-13_rotary_workbench_final/validation_manifest.json) |
+| 2026-09-13 | R05 图文补充/pipe2 对比 | `five-axis-workbench-development`、`technical-evidence-report`、`visualize`、`computer-use` | 用当前 STEP/G-code 独立量测解释固定轴 Rotary 与弯管 Tube 的差异；补生产 `RotaryPage` + `ModelViewer` 截图。Computer Use 未枚举到 Qt 窗口，截图改由 Qt 自身捕获并在清单中明示 | [Rotary 手册](../guides/rotary_workbench_zh.md)；[pipe2 对比报告](../reviews/2026-09-13_pipe2_model_manual_gcode_comparison.md) |
 | 2026-09-12 | I01-OWN | `five-axis-workbench-development`、`five-axis-slicer-validation` | 自有机型接入、默认值、用户库、保存重开、双语 UI 与相关验证 | [本轮复盘](../reviews/2026-09-12_own_printer_profile_review.md) |
 | 2026-09-11 | DOC-SKILL | `skill-creator` | 把 Tube T01—T12 方法提炼为可发现、可校验的个人 Skill | [Skill 建立复盘](../reviews/2026-09-11_workbench_development_skill_review.md) |
 | 2026-09-11 | DOC-SKILL | `five-axis-workbench-development` | 自检开发闭环、阶段门槛和调用登记规则；尚未启动 P01 | [Skill 建立复盘](../reviews/2026-09-11_workbench_development_skill_review.md) |

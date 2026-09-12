@@ -113,7 +113,11 @@ RotaryPage 是当前 Qt 双语页面，包含操作类型/已有操作、轴 edg
 
 中文图文手册为 `docs/guides/rotary_workbench_zh.md`，已写入选边/选面、坐标、周期、三操作、参数、状态、取消恢复、路径/轴轨迹、检查、六件套、脚本/HTTP、保存重开、公开资料和实机边界。预留截图目录为 `docs/guides/assets/rotary/current_r01_r05/`。
 
-截图目录已有 10 张图，覆盖总览、坐标设置、三操作结果、跨周期、轴限 Error 与恢复、导出和重开 Stale，并包含 1366×768 中文、1600×900 英文和 1920×1080 英文。`summary.json` 记录每图尺寸、语言、状态、导出按钮和 SHA-256。图像是 Windows Qt 当前 RotaryPage 控件与真实 generated preview payload 的 evidence paint harness，用于布局/状态/载荷核对；它避开 VTK/OpenGL，所以不单独证明生产 Viewer 后端通过。
+原验收截图目录已有 10 张图，覆盖总览、坐标设置、三操作结果、跨周期、轴限 Error 与恢复、导出和重开 Stale，并包含 1366×768 中文、1600×900 英文和 1920×1080 英文。`summary.json` 记录每图尺寸、语言、状态、导出按钮和 SHA-256。图像是 Windows Qt 当前 RotaryPage 控件与真实 generated preview payload 的 evidence paint harness，用于布局/状态/载荷核对；它避开 VTK/OpenGL，所以不单独证明生产 Viewer 后端通过。
+
+本轮又在 `docs/guides/assets/rotary/live_qt/` 增加 7 张 1600×900 当前生产 `RotaryPage` + `ModelViewer` 截图，覆盖选 edge/face、坐标、Spiral、Thin Wall、Around Part 跨零点、轴加速度 Error 和输入变更 Stale。截图直接加载真实生成结果并由 Qt `QWidget.grab()` 捕获，逐图 SHA-256 和捕获方式见目录 `summary.json`。Computer Use 当时返回空应用清单且浏览器桥接 `nodeRepl.fetch request failed`，因此没有把这些图片冒充为 Computer Use 截图。
+
+用户提供的 `example/pipe2/弯管新.stp` 与手工 `弯管.gcode` 也完成了独立可视化对比。STEP 是沿连续弯曲中心线扫掠的 1 mm 空心管；G-code 使用 A=0°/30.379°/50.678°/70.513° 四段重叠转位且 C=0，管壁道中心贴合 R15.2/R15.8。结论是整件应进入 Tube Indexed/Continuous，只有可分离的固定轴圆柱区适合 Rotary。报告和机器可读量测分别为 `docs/reviews/2026-09-13_pipe2_model_manual_gcode_comparison.md` 与 `docs/reviews/evidence/2026-09-13_pipe2_manual_comparison/analysis.json`。
 
 ## 9. 当前验证记录和 R05 关闭结果
 
@@ -138,4 +142,4 @@ R05 离线关闭证据汇总于 `docs/reviews/evidence/2026-09-13_rotary_workben
 
 这些项在现场标定、干跑、碰撞验证和材料试验完成前统一标为“未验证”。当前输出不得直接下发真实机床。
 
-使用的 Skills：`five-axis-workbench-development`、`five-axis-slicer-validation`。公开资料及许可边界同步记录在 `docs/planning/reference_research.md`。产品证据为 `docs/reviews/evidence/2026-09-13_rotary_workbench_final/products_summary.json`，图片证据为 `docs/guides/assets/rotary/current_r01_r05/summary.json`，最终综合证据为 `docs/reviews/evidence/2026-09-13_rotary_workbench_final/validation_manifest.json`。
+使用的 Skills：R01—R05 实施与验收使用 `five-axis-workbench-development`、`five-axis-slicer-validation`；本轮 pipe2 对比与教程补图使用 `five-axis-workbench-development`、`technical-evidence-report`、`visualize`、`computer-use`。公开资料及许可边界同步记录在 `docs/planning/reference_research.md`。产品证据为 `docs/reviews/evidence/2026-09-13_rotary_workbench_final/products_summary.json`，图片证据为 `docs/guides/assets/rotary/current_r01_r05/summary.json` 和 `docs/guides/assets/rotary/live_qt/summary.json`，最终综合证据为 `docs/reviews/evidence/2026-09-13_rotary_workbench_final/validation_manifest.json`。

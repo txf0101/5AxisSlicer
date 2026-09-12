@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "captured_at_local": "2026-09-13",
+  "capture_method": "Windows Qt QWidget.grab() on the production RotaryPage with the production ModelViewer",
+  "computer_use_status": "unavailable: cua.getState returned no apps and the browser bridge returned nodeRepl.fetch request failed",
+  "common_size_px": [1600, 900],
+  "source": {
+    "branch": "codex/rotary-workbench-r01-r05",
+    "baseline_commit": "971ae16c4aa2f36d0ea2edce7983f2057450cafb",
+    "fixture": "tests/test_rotary_integration.py::_controller",
+    "viewer": "five_axis_slicer.viewer.ModelViewer",
+    "page": "five_axis_slicer.rotary_ui.RotaryPage"
+  },
+  "images": [
+    {
+      "file": "01_spiral_overview_zh.png",
+      "scene": "generated Rotary Spiral, loaded STEP and production Viewer",
+      "sha256": "39132df1f8b4dd6ff3491779e2de02d73ff06ca2d2671193d8c0c73725db7874"
+    },
+    {
+      "file": "02_selection_overview_zh.png",
+      "scene": "selected stable axis edge and cylindrical surface face",
+      "sha256": "47087d06a27140f377ad0dc0b1dd859d7af2bce18c085d4dbf702900aaa54d14"
+    },
+    {
+      "file": "03_coordinates_zh.png",
+      "scene": "rotary frame, axial extent and radial profile controls",
+      "sha256": "1b0c3a89216085ee547d1b28849993568ea0cf696fdf34625313fee1f6100db9"
+    },
+    {
+      "file": "04_thin_wall_result_zh.png",
+      "scene": "generated two-pass Rotary Thin Wall",
+      "sha256": "124c1126bccf8d9b79d810c03044f6962419a909d3d914b36db47662e717e8cc"
+    },
+    {
+      "file": "05_around_part_cross_zero_zh.png",
+      "scene": "Around Part inputs 350:20;120:210 and generated path",
+      "sha256": "927bf24739aff12cc535e891723e4985b4435ab23436cc7471fbc01205a9bb84"
+    },
+    {
+      "file": "06_acceleration_limit_error_zh.png",
+      "scene": "ERROR with acceleration_limit_exceeded and export disabled",
+      "sha256": "9e86fcd80bf31df8e937becf860e1ae0c98637cb8fab13851714fe5b879aa1c0"
+    },
+    {
+      "file": "07_input_change_stale_zh.png",
+      "scene": "input change marks the generated product Stale and disables export",
+      "sha256": "f8efcf3a66a528f50486dd46ca78088c27905f0076a5c043378e677ad34b4b16"
+    }
+  ]
+}

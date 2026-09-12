@@ -2,7 +2,7 @@
 
 适用版本：R01—R05，2026-09-13 当前本地分支。Rotary 工作台在有明确回转轴和圆柱/圆锥表面的 STEP 零件上生成 Rotary Spiral、Rotary Thin Wall 和 Around Part。内部长度使用 mm，内部角度使用 rad；界面的起止角和区域角使用 deg，角速度使用 rad/s。
 
-> 图片证据：下列 10 张图由 Windows Qt 上的当前 `RotaryPage` 和真实 generated preview payload 生成，尺寸、语言、状态与 SHA-256 见 `assets/rotary/current_r01_r05/summary.json`。截图使用 `qt_evidence_paint_harness`，用于核对当前控件、状态和路径载荷；不把它宣称为 VTK/OpenGL Viewer 验收。
+> 图片证据：本手册优先使用 `assets/rotary/live_qt/` 中 7 张当前生产 `RotaryPage` + `ModelViewer` 截图；它们由真实生成结果渲染，并由 Qt `QWidget.grab()` 捕获，尺寸与 SHA-256 见该目录 `summary.json`。Computer Use 在本轮未枚举到 Qt 原生窗口，不能声称由 Computer Use 捕获。`assets/rotary/current_r01_r05/` 中另有 10 张三尺寸中英状态图，使用 `qt_evidence_paint_harness` 核对控件、状态和真实 preview payload，不单独作为 VTK/OpenGL 资格证据。
 
 ## 1. 支持范围与入口
 
@@ -15,6 +15,8 @@
 - 局部有向角区域、多区域和跨 0°/360° 连续展开；
 - shared Toolpath/events、规定回转相位的 XYZAC 轴轨迹、检查、后处理和 G-code 回读。
 
+判断模型是否适合 Rotary 时，要看所选区域能否由一条固定轴和同轴圆柱/圆锥面表达。带弯头的扫掠管即使外观具有回转特征，局部轴也可能沿中心线变化。仓库中的具体反例和手工代码对照见 [pipe2 模型与手工 G-code 可视化报告](../reviews/2026-09-13_pipe2_model_manual_gcode_comparison.md)。
+
 工作流入口：
 
 1. 打开 STEP，在 Tube Setup 完成零件分配、Model CS、Build CS、机型、喷嘴、已审阅材料和安装位置，点击应用。
@@ -24,9 +26,9 @@
 5. 核对回转坐标、轮廓和工艺参数，点击“应用几何与参数”。
 6. 点击“生成与检查”，核对状态、问题列表、三维路径和机床轴轨迹，只导出 Ready/Warning 结果。
 
-下图为 1366 × 768 中文总览，显示几何引用、操作、Warning 状态和可用的导出动作。
+下图为当前 1600 × 900 中文生产界面。左侧是操作、稳定几何引用和坐标，右侧是加载 STEP 与 generated Toolpath 后的真实 Viewer。
 
-![Rotary 工作台总览](assets/rotary/current_r01_r05/01_rotary_overview_zh_1366x768.png)
+![Rotary 工作台总览](assets/rotary/live_qt/01_spiral_overview_zh.png)
 
 ## 2. 选边、选面与稳定引用
 
@@ -37,6 +39,10 @@
 - **轮廓边**：可选，保存完整 `GeometryReference`，并可把 profile 的轴向起止范围限制到该 edge 的投影区间。当前路径的径向轮廓仍是圆柱常半径或圆锥沿轴向的线性变半径，不会沿任意 contour edge 生成非线性径向插值。
 
 应用时会保存对象 ID、几何类型、父实体和 kernel signature。STEP 更新后使用签名唯一重绑；引用缺失、候选不唯一或几何类型改变时，操作进入 Invalid/Stale，需要重新选择。
+
+下图将轴 edge 和圆柱 face 同时高亮。正确顺序是先在 Viewer 切到相应选择模式并点击几何，再按“采用 Viewer 已选轴向边/已选表面”；橙色面和蓝色边是待应用选择，左侧文本框中的稳定 ID 是保存对象。
+
+![Viewer 选边选面](assets/rotary/live_qt/02_selection_overview_zh.png)
 
 ## 3. 回转坐标和角度周期
 
@@ -53,7 +59,7 @@ Rotary frame 在 Source 坐标中包含：
 
 下图显示当前非零回转中心、轴单位方向、零角方向、正方向、face 引用和 Source 单位。
 
-![Rotary 坐标设置](assets/rotary/current_r01_r05/02_rotary_coordinates_zh_1366x768.png)
+![Rotary 坐标设置](assets/rotary/live_qt/03_coordinates_zh.png)
 
 ## 4. 三种操作
 
@@ -61,7 +67,7 @@ Rotary frame 在 Source 坐标中包含：
 
 Spiral 使用起始角、终止/展开角、CCW/CW 和螺距定义一条连续螺旋。轴向位移等于圈数乘以螺距，起点使用 profile 的轴向起点；计算终点不能超出 profile 轴向终点。圆柱的半径不变，圆锥的半径按轴向坐标线性变化，法向包含锥度分量。
 
-![Rotary Spiral 结果](assets/rotary/current_r01_r05/03_rotary_spiral_zh_1366x768.png)
+![Rotary Spiral 结果](assets/rotary/live_qt/01_spiral_overview_zh.png)
 
 ### 4.2 Rotary Thin Wall
 
@@ -72,7 +78,7 @@ Thin Wall 要求起止角明确构成一个完整周期。轴向从 profile 起�
 - `error`：报 `rotary.thin_wall_below_minimum`，禁止生成/导出；
 - `reduce`：把该操作的有效道宽缩减为目标壁厚，结果带 `rotary.thin_wall_width_reduced` Warning。该策略是几何退化处理，不代表实际材料能稳定拉出更窄道。
 
-![Rotary Thin Wall 结果](assets/rotary/current_r01_r05/04_rotary_thin_wall_en_1600x900.png)
+![Rotary Thin Wall 结果](assets/rotary/live_qt/04_thin_wall_result_zh.png)
 
 ### 4.3 Around Part
 
@@ -80,7 +86,7 @@ Around Part 在一个或多个有向角区域内生成局部周向道，再按�
 
 轴向相邻道交替方向。程序从净空半径上的首个安全点开始，经 safe approach 到首道起点。跨区域时先 Retract，沿“当前/目标半径的较大值 + 安全连接间隙”离开表面，在该净空半径上插值相位和轴向位置，然后 Approach 到下一道起点并 Prime。最后一道结束后执行 Retract、safe depart 和 finish，使入口、段间和出口均进入后续轴限和碰撞检查。
 
-![Around Part 多区域结果](assets/rotary/current_r01_r05/05_rotary_around_part_en_1920x1080.png)
+![Around Part 多区域结果](assets/rotary/live_qt/05_around_part_cross_zero_zh.png)
 
 下图同时显示 `350:20;120:210`、跨 0° 展开和区域间非沉积安全连接。
 
@@ -168,6 +174,10 @@ Viewer 直接读取 generated shared Toolpath，其 source 标识为 `<generated
 
 ![轴限 Error](assets/rotary/current_r01_r05/07_rotary_axis_limit_error_zh_1366x768.png)
 
+下图是同类错误在生产 Viewer 中的当前画面：状态为 `ERROR`，问题列表包含 `acceleration_limit_exceeded`，导出按钮禁用。它是错误示例，不是成功结果。
+
+![回转轴加速度限制错误示例](assets/rotary/live_qt/06_acceleration_limit_error_zh.png)
+
 ![修复后的 Warning 结果](assets/rotary/current_r01_r05/08_rotary_axis_limit_recovered_zh_1366x768.png)
 
 ## 10. 六件套与 G-code 回读
@@ -195,6 +205,10 @@ Viewer 直接读取 generated shared Toolpath，其 source 标识为 `<generated
 - 项目保存 Setup、Rotary 操作、稳定几何引用、参数和产品状态摘要。生成的 Toolpath/G-code 对象不嵌入 `project.json`。
 - 重开后 Ready/Warning 资格显式改为 Stale，几何引用和参数仍可检查，重新 Generate 才能导出。
 - STEP 更新时重绑 axis/contour/surface 引用，并对后台解析期间的 Rotary 输入做并发 token 检查，避免旧草稿覆盖新编辑。
+
+参数变更触发的 Stale 与项目重开的恢复入口相同：左侧保留几何和参数，导出禁用，点击“生成与检查”取得当前运行时结果。下图显示真实生产界面的输入变更 Stale；项目重开的 Stale 证据见紧随其后的三尺寸状态图。
+
+![Rotary 输入变化后的 Stale](assets/rotary/live_qt/07_input_change_stale_zh.png)
 
 ![Rotary 项目重开后 Stale](assets/rotary/current_r01_r05/10_rotary_reopen_stale_en_1920x1080.png)
 
