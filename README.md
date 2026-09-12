@@ -1,8 +1,8 @@
 # 5AxisSclicer V2.0
 
-5AxisSclicer V2.0 以 Workbench 为入口。当前有四条可交互主线：`Imported NC Review` 用于已有 NC/G-code 的空间路径、层范围和路径类型预览；Tube Workbench 已完成 T01—T12，可配置 Setup，使用 Indexed、Buildup、Continuous 三种操作生成、检查、后处理、回读和导出离线结果；Planar Workbench 已完成 P01—P07，可生成 Region 预览、Zigzag、Offset、Thin Wall、Spiral 及 buildplate-only Planar Support 离线路径；Curve Workbench 已完成 C01—C05，可沿 STEP 有向 edge 链生成 Buildup、Multi-pass Buildup 和 Offset Buildup。三类制造工作台都支持保存、重开、统一命令、检查、回读和六件套导出。
+5AxisSclicer V2.0 以 Workbench 为入口。`Imported NC Review` 用于已有 NC/G-code 的空间路径、层范围和路径类型预览；Tube Workbench 已完成 T01—T12，可配置 Setup，使用 Indexed、Buildup、Continuous 三种操作生成离线结果；Planar Workbench 已完成 P01—P07，可生成 Region、Zigzag、Offset、Thin Wall、Spiral 及 buildplate-only Planar Support；Curve Workbench 已完成 C01—C05，可沿 STEP 有向 edge 链生成 Buildup、Multi-pass Buildup 和 Offset Buildup；Rotary Workbench 已完成 R01—R05，可生成圆柱/圆锥 Spiral、圆周多道 Thin Wall 和跨周期 Around Part。四类制造工作台都支持保存、重开、统一命令、检查、回读和六件套导出。
 
-使用者可从[图文使用手册索引](docs/guides/README.md)进入。Tube 的完整流程见[Tube 工作台手册](docs/guides/tube_workbench_zh.md)，Planar 的完整流程见[Planar 工作台手册](docs/guides/planar_workbench_zh.md)，Curve 的完整流程见[Curve 工作台手册](docs/guides/curve_workbench_zh.md)，坐标设置见[管状坐标设置](docs/guides/tube_coordinate_setup_zh.md)，G-code 阅读见[G-code 可视化手册](docs/guides/gcode_preview_zh.md)，底部控制台与 YAML 工作文件见[设置脚本说明](docs/guides/tube_setup_script_console_zh.md)。Tube、Planar 与 Curve 均已完成制造 Setup、生成、检查、导出和回读闭环；下一项为 Rotary R01。
+使用者可从[图文使用手册索引](docs/guides/README.md)进入。Tube 的完整流程见[Tube 工作台手册](docs/guides/tube_workbench_zh.md)，Planar 的完整流程见[Planar 工作台手册](docs/guides/planar_workbench_zh.md)，Curve 的完整流程见[Curve 工作台手册](docs/guides/curve_workbench_zh.md)，Rotary 的完整流程见[Rotary 工作台手册](docs/guides/rotary_workbench_zh.md)，坐标设置见[管状坐标设置](docs/guides/tube_coordinate_setup_zh.md)，G-code 阅读见[G-code 可视化手册](docs/guides/gcode_preview_zh.md)，底部控制台与 YAML 工作文件见[设置脚本说明](docs/guides/tube_setup_script_console_zh.md)。Tube、Planar、Curve 与 Rotary 均已完成制造 Setup、生成、检查、导出和回读闭环；下一阶段为 Freeform F01。
 
 六个工作台的算法开发按[开发计划](docs/planning/development_plan.md)推进，优先完成管状工作台。每轮任务状态、验收证据和下一步更新到[进度台账主表](docs/planning/progress_tracker.md#主表)；NX 与公开项目资料见[参考资料](docs/planning/reference_research.md)，全部开发文档从[文档索引](docs/README.md)进入。
 
@@ -15,6 +15,7 @@ Tube 的 T01—T12 实现已经聚拢到本仓库：Indexed 支持受限圆管�
 - Workbench 首页展示 Planar、Curve、Freeform、Rotary、Tube、Research 六类工作台。
 - Planar 工作台支持 Region 截面预览，以及 Zigzag、Offset、Thin Wall、Spiral 和 buildplate-only Planar Support 五种路径操作的独立检查、G-code 回读和六件套离线导出。
 - Curve 工作台支持稳定有向 edge 链、邻面或用户法向、Buildup、Multi-pass Buildup、Offset Buildup、引用重绑、真实 Toolpath Viewer、G-code 回读和六件套离线导出。
+- Rotary 工作台支持稳定回转轴/面/轮廓引用、非零回转中心、连续角展开、圆柱/圆锥 Spiral、多层多道 Thin Wall、跨零点多区域 Around Part、G93 逆时间 XYZAC 后处理与完整回读。Generic XYZAC 资格仍仅限离线参考。
 - Operation Session 包含 Objects、Print、Material、Machine、Preview、Checks 六个页签。
 - Objects 页保留 STEP/STP 的 body 列表选择和 edge 空间点选。
 - Tube Workbench 显式创建 `Tube Thin-Wall Indexed` 操作，Part 可包含多个封闭 solid；sheet、Ignore 和未分配实体保留显示且不进入后续制造计算。

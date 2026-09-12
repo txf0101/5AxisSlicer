@@ -1,0 +1,79 @@
+{
+  "controller_g93_verified_by_readback": true,
+  "inputs": {
+    "rotary_cone_nonzero_center.step": "b19f19ed20d4d391f979d8593b1cc71c561c4cad57ae9af8c4875da47e59a26e",
+    "rotary_cylinder_nonzero_center.step": "e2804dcf8db30e0d829f2ae5b7a711ab436089d40187426dcbe88afd5fea80d0"
+  },
+  "machine_qualification": "Generic XYZAC reference; offline only",
+  "products": {
+    "rotary_around_part_cross_zero": {
+      "deposition_length_mm": 75.37430136730059,
+      "files": {
+        "machine_axes.csv": "d9a43bbc78a20e7066dfd164a4fea03b929fe8cd06f5625f3b9a844e501d40d8",
+        "main.gcode": "8bdc5796aed637ba3f5c5f32b5280b0e1c73944b6aeb7d59b35f49b1a1638cd2",
+        "manifest.json": "217390a8f19fa34c5333ec870a9ac3b6b01c17c6cbe5e2475e2569b222cfe1ab",
+        "preview.json": "f9613534971d49f1dbe623241ba6367e3eda5cbf4428254b4b45ab353f6af8e1",
+        "toolpath.json": "7ad973875c87b64ec8732460534ce85e72c741be426c4b12edfe09aa221c1de9",
+        "warnings.json": "786e50451a7bed0a48150b4d1bab16c564c3b203caa3fb616332cd1dc09a1ec9"
+      },
+      "material_volume_mm3": 9.04491616407607,
+      "operation_type": "rotary_around_part",
+      "path_count": 6,
+      "point_count": 109,
+      "readback_passed": true,
+      "status": "warning"
+    },
+    "rotary_spiral_cone": {
+      "deposition_length_mm": 75.86008695761195,
+      "files": {
+        "machine_axes.csv": "e1dc06c7e62e8268ab4177f0d05afdd3e06f1a01696ad815ba82dcfc361720f1",
+        "main.gcode": "9102f3aae99a4393ba8fe76fbaa0462e318d42f9b3068d33b0687bacc0139a83",
+        "manifest.json": "7a96e35f10962124a1712ceff45d57ee2c3fadc73c280f0ae0ba6331ea6e832a",
+        "preview.json": "087507a250fa060c5d654167e46945f958c77d9323c833945e97a8584a2bec1f",
+        "toolpath.json": "24b492d4aebaf4864ec450daad4c82463a1c66007093e8605d16241d5edd8923",
+        "warnings.json": "a4ceb945d8df45ab88ed47f796012203dc311358bc360c1bdaa1393c2a8346ca"
+      },
+      "material_volume_mm3": 9.103210434913434,
+      "operation_type": "rotary_spiral",
+      "path_count": 1,
+      "point_count": 75,
+      "readback_passed": true,
+      "status": "warning"
+    },
+    "rotary_spiral_cylinder": {
+      "deposition_length_mm": 75.79766029772063,
+      "files": {
+        "machine_axes.csv": "16e603b2993d844e87f14b00c802ef2c94729d4b10a6bb4f9ae973302bf911dd",
+        "main.gcode": "f55176e40984b107af199a7d01d6cd8bbbbdf7bc7f1e8a89395c46e0b88900c5",
+        "manifest.json": "eab982391834d147b7c7b4e1b37b51b7a5536d0854d9a095d676897dab4364f3",
+        "preview.json": "bfaab5c2fdf5afd074895a5a5c2b22b8a05761723f567f3d820b3ab84a3f51e6",
+        "toolpath.json": "359af93e97f11e0d53f23d66522831e9a2eb211ace97d84ed4f8de77821e697d",
+        "warnings.json": "9a5f810980b0addc3a63e94cf1d5d33f7e37c562194b358529f23f98bb1cf9f5"
+      },
+      "material_volume_mm3": 9.095719235726476,
+      "operation_type": "rotary_spiral",
+      "path_count": 1,
+      "point_count": 75,
+      "readback_passed": true,
+      "status": "warning"
+    },
+    "rotary_thin_wall": {
+      "deposition_length_mm": 987.403347911638,
+      "files": {
+        "machine_axes.csv": "db0239093671e839fa47257a1aeeadd5ca5ccb43969d1ba1c3ec52e6c4a9e342",
+        "main.gcode": "a47c8b1a98ffd1fd6d4926539fde95d8e2c4996e31d2796429f1c6533fc65953",
+        "manifest.json": "38f6700c39980c634ed581e6247db6a2596842026b04b2640d3890d9c6f6dca3",
+        "preview.json": "77adadf26c94f313d89f1e27a1e4759ae47421f5a0dc5a39c5467ec7f459d9fe",
+        "toolpath.json": "e91c0979548b8f6211cf3f1604092439b08473ac536ab18c4f5c931c60c1db14",
+        "warnings.json": "ed000a770646434f0656aefe56b4a5443d0d01041fa54d9e42dd2a8941894ce2"
+      },
+      "material_volume_mm3": 118.48840174939656,
+      "operation_type": "rotary_thin_wall",
+      "path_count": 12,
+      "point_count": 892,
+      "readback_passed": true,
+      "status": "warning"
+    }
+  },
+  "schema_version": 1
+}

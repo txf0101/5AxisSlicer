@@ -725,6 +725,7 @@ def _default_setup_loader(payload: Mapping[str, Any]) -> Any:
 def _default_operation_loader(payload: Mapping[str, Any]) -> Any:
     from .manufacturing.curve_parameters import CurveOperationDefinition
     from .manufacturing.planar_parameters import PlanarOperationDefinition
+    from .manufacturing.rotary_parameters import RotaryOperationDefinition
     from .manufacturing.setup import TubeOperationDefinition
 
     operation_type = str(payload.get("operation_type", "")).strip().lower()
@@ -734,6 +735,8 @@ def _default_operation_loader(payload: Mapping[str, Any]) -> Any:
         return PlanarOperationDefinition.from_json(payload)
     if operation_type.startswith("curve_"):
         return CurveOperationDefinition.from_json(payload)
+    if operation_type.startswith("rotary_"):
+        return RotaryOperationDefinition.from_json(payload)
     raise ValueError(f"unsupported operation_type: {operation_type!r}")
 
 

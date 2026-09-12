@@ -1,0 +1,63 @@
+{
+  "collision_samples_checked": 658,
+  "issues": [
+    {
+      "code": "rotary.substrate_collision_geometry_unavailable",
+      "context": {},
+      "object_id": "rotary-operation-1",
+      "severity": "warning"
+    },
+    {
+      "code": "rotary.machine_collision_geometry_unavailable",
+      "context": {
+        "reference_only": true
+      },
+      "object_id": "generic_xyzac_rotary_evidence_v1",
+      "severity": "warning"
+    }
+  ],
+  "metrics": [
+    {
+      "limit": 0.028700406500916105,
+      "name": "rotary_path_length_error",
+      "passed": true,
+      "unit": "mm",
+      "value": 0.0
+    },
+    {
+      "limit": 0.0034440487801099327,
+      "name": "rotary_material_volume_error",
+      "passed": true,
+      "unit": "mm3",
+      "value": 0.0
+    },
+    {
+      "limit": 3.141592653589793,
+      "name": "rotary_maximum_unwrapped_phase_step",
+      "passed": true,
+      "unit": "rad",
+      "value": 0.08726646259971815
+    },
+    {
+      "limit": 0.01,
+      "name": "rotary_fk_position_error",
+      "passed": true,
+      "unit": "mm",
+      "value": 1.302446348448666e-13
+    },
+    {
+      "limit": 0.00017453292519943296,
+      "name": "rotary_fk_orientation_error",
+      "passed": true,
+      "unit": "rad",
+      "value": 1.4901161193847656e-08
+    }
+  ],
+  "motion_sample_error_mm": 0.25,
+  "ready_for_export": true,
+  "report_id": "rotary-operation-1-rotary_around_part-v1-validation-v1",
+  "schema_version": 1,
+  "status": "warning",
+  "toolpath_id": "rotary-operation-1-rotary_around_part-v1",
+  "trajectory_id": "rotary-operation-1-rotary_around_part-v1-rotary-xyzac-v1"
+}

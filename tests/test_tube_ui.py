@@ -468,7 +468,7 @@ class TubeUiTests(unittest.TestCase):
         self.assertIn("平面工作台", window.workbench_buttons["planar"].text())
         self.assertIn("[预览]", window.workbench_buttons["planar"].text())
         self.assertIn("回转工作台", window.workbench_buttons["rotary"].text())
-        self.assertIn("[锁定]", window.workbench_buttons["rotary"].text())
+        self.assertIn("[可用]", window.workbench_buttons["rotary"].text())
         self.assertIn("研究工作台", window.workbench_buttons["research"].text())
         self.assertIn("[研发]", window.workbench_buttons["research"].text())
 
@@ -483,6 +483,7 @@ class TubeUiTests(unittest.TestCase):
         combo.setCurrentIndex(combo.findData("ignore"))
 
         window.set_language("en")
+        self.assertIn("[Ready]", window.workbench_buttons["rotary"].text())
         combo = next(iter(page._role_combos.values()))
         self.assertEqual(
             [combo.itemText(i) for i in range(combo.count())], ["Part", "Ignore", "Unassigned"]

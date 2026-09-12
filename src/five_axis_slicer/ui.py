@@ -36,7 +36,7 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
-from . import curve_shell, model_commit, planar_shell, workbench_navigation
+from . import curve_shell, model_commit, planar_shell, rotary_shell, workbench_navigation
 from .automation import AutomationServer
 from .automation_routes import AutomationRouter
 from .background_load import ResultLoadCoordinator
@@ -384,6 +384,7 @@ class MainWindow(QMainWindow):
                     controller,
                     self.planar_page.controller,
                     self.curve_page.controller,
+                    self.rotary_page.controller,
                 )
             )
         self.model_loader.start(request)
@@ -472,6 +473,7 @@ class MainWindow(QMainWindow):
                     self.tube_page.controller,
                     self.planar_page.controller,
                     self.curve_page.controller,
+                    self.rotary_page.controller,
                 )
                 with model_commit.source_update_transaction(
                     self,
@@ -698,6 +700,7 @@ class MainWindow(QMainWindow):
             previous_controller = self.tube_page.controller
             previous_planar = self.planar_page.controller
             previous_curve = self.curve_page.controller
+            previous_rotary = self.rotary_page.controller
             previous_source = previous_controller.state_json()["source"]["hash"]
             previous_operations = previous_controller.operations
             self.model = model
@@ -723,6 +726,11 @@ class MainWindow(QMainWindow):
             )
             self.curve_page.set_controller(curve_controller)
             self.curve_command_service = self.curve_page.commands
+            rotary_controller = rotary_shell.controller_for_model(
+                previous_rotary, controller.setup, model
+            )
+            self.rotary_page.set_controller(rotary_controller)
+            self.rotary_command_service = self.rotary_page.commands
             if controller is not previous_controller:
                 self.last_project_dir = None
             model_commit.refresh_publication_ui(self)
@@ -797,12 +805,16 @@ class MainWindow(QMainWindow):
         planar_shell.sync_source_update(planar_controller, controller.setup, model)
         curve_controller = self.curve_page.controller
         curve_shell.sync_source_update(curve_controller, controller.setup, model)
+        rotary_controller = self.rotary_page.controller
+        rotary_shell.sync_source_update(rotary_controller, controller.setup, model)
         self.viewer.load_model(model)
         self.tube_page.set_controller(controller, model)
         self.planar_page.set_controller(planar_controller)
         self.planar_command_service = self.planar_page.commands
         self.curve_page.set_controller(curve_controller)
         self.curve_command_service = self.curve_page.commands
+        self.rotary_page.set_controller(rotary_controller)
+        self.rotary_command_service = self.rotary_page.commands
         self.model = model
         self._original_step_path = Path(model.source_path).expanduser().resolve()
         model_commit.refresh_publication_ui(self)
@@ -1004,6 +1016,7 @@ class MainWindow(QMainWindow):
         tube_operations, planar_operations, curve_operations = curve_shell.split_operations(
             loaded.operations
         )
+        rotary_operations = rotary_shell.rotary_operations(loaded.operations)
         controller = TubeSetupController(
             loaded.model,
             setup=setup,
@@ -1014,6 +1027,9 @@ class MainWindow(QMainWindow):
         )
         curve_controller = curve_shell.CurveController(
             loaded.model, setup=setup, operations=curve_operations
+        )
+        rotary_controller = rotary_shell.controller_for_project(
+            setup, loaded.model, rotary_operations
         )
         self.tube_script_service.prepare_project_controller(
             controller,
@@ -1058,6 +1074,8 @@ class MainWindow(QMainWindow):
             self.planar_command_service = self.planar_page.commands
             self.curve_page.set_controller(curve_controller)
             self.curve_command_service = self.curve_page.commands
+            self.rotary_page.set_controller(rotary_controller)
+            self.rotary_command_service = self.rotary_page.commands
             if loaded.model is not None:
                 self.tube_page.viewer.set_selection(
                     body_ids=list(loaded.selection.body_ids),
@@ -1291,6 +1309,7 @@ class MainWindow(QMainWindow):
                     controller.operations
                     + self.planar_page.controller.operations
                     + self.curve_page.controller.operations
+                    + self.rotary_page.controller.operations
                 ),
                 resources=self.tube_page.project_resources(),
                 original_source_path=self._original_step_path,
@@ -1376,6 +1395,7 @@ class MainWindow(QMainWindow):
             "tube": tube_state,
             "planar": self.planar_page.state_json(),
             "curve": self.curve_page.state_json(),
+            "rotary": self.rotary_page.state_json(),
             "results": self.result_page.state_json(),
             "result_load_metrics": self._public_load_metrics(),
         }
@@ -1463,6 +1483,7 @@ class MainWindow(QMainWindow):
         self.tube_page.set_language(self.language)
         self.planar_page.set_language(self.language)
         self.curve_page.set_language(self.language)
+        self.rotary_page.set_language(self.language)
         for group, key in self.localized_groups:
             group.setTitle(tr(self.language, key))
         for label, key in self.localized_labels:
@@ -1568,6 +1589,8 @@ class MainWindow(QMainWindow):
         self.planar_command_service = self.planar_page.commands
         self.curve_page = curve_shell.install_curve_page(self)
         self.curve_command_service = self.curve_page.commands
+        self.rotary_page = rotary_shell.install_rotary_page(self)
+        self.rotary_command_service = self.rotary_page.commands
         self.result_page = ResultPreviewPage(
             viewer_factory=self._result_viewer_factory, parent=self
         )
@@ -1584,6 +1607,7 @@ class MainWindow(QMainWindow):
         self.stack.addWidget(self.tube_page)
         self.stack.addWidget(self.planar_page)
         self.stack.addWidget(self.curve_page)
+        self.stack.addWidget(self.rotary_page)
         self.stack.addWidget(self.result_page)
         self.stack.currentChanged.connect(lambda _index: self._update_context_actions())
         self.setCentralWidget(self.stack)
@@ -2183,6 +2207,7 @@ class MainWindow(QMainWindow):
             self.tube_page,
             self.planar_page,
             self.curve_page,
+            self.rotary_page,
         }:
             self.open_model_dialog()
         else:
@@ -2550,6 +2575,8 @@ class MainWindow(QMainWindow):
             planar_shell.populate_operation_combo(self.operation_combo, self.planar_page.controller)
         elif self.current_workbench_key == "curve":
             curve_shell.populate_operation_combo(self.operation_combo, self.curve_page.controller)
+        elif self.current_workbench_key == "rotary":
+            rotary_shell.populate_operation_combo(self.operation_combo, self.rotary_page.controller)
         else:
             self.operation_combo.addItem(
                 tr(self.language, "operation_imported_nc"), "imported_nc_review"
@@ -2713,6 +2740,8 @@ class MainWindow(QMainWindow):
             operation_label = planar_shell.operation_label(self.planar_page.controller)
         elif self.current_workbench_key == "curve":
             operation_label = curve_shell.operation_label(self.curve_page.controller)
+        elif self.current_workbench_key == "rotary":
+            operation_label = rotary_shell.operation_label(self.rotary_page.controller)
         else:
             operation_label = (
                 tr(self.language, "operation_imported_nc")

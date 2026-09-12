@@ -222,6 +222,8 @@ class _Parser:
             "平面": "planar",
             "curve": "curve",
             "曲线": "curve",
+            "rotary": "rotary",
+            "回转": "rotary",
         }[namespace]
 
     def _qualified_name(self, call: ast.Call) -> tuple[str, str]:
@@ -230,20 +232,22 @@ class _Parser:
             self._fail_at(
                 call,
                 "E_SCRIPT_FORBIDDEN",
-                "Command must use tube, 管状, planar, 平面, curve, or 曲线 directly",
+                "Command must use tube, 管状, planar, 平面, curve, 曲线, rotary, or 回转 directly",
             )
         namespace = function.value.id
         method = function.attr
         if "__" in namespace or "__" in method:
             self._fail_at(function, "E_SCRIPT_FORBIDDEN", "Dunder access is not allowed")
-        if namespace not in {"tube", "管状", "planar", "平面", "curve", "曲线"}:
+        if namespace not in {
+            "tube", "管状", "planar", "平面", "curve", "曲线", "rotary", "回转"
+        }:
             self._fail_at(function, "E_SCRIPT_FORBIDDEN", "Unknown command namespace")
         return namespace, method
 
     def _canonical_method(self, namespace: str, method: str, node: ast.AST) -> str:
-        if namespace in {"tube", "planar", "curve"} and method in _ENGLISH_METHODS:
+        if namespace in {"tube", "planar", "curve", "rotary"} and method in _ENGLISH_METHODS:
             return method
-        if namespace in {"管状", "平面", "曲线"} and method in _CHINESE_METHODS:
+        if namespace in {"管状", "平面", "曲线", "回转"} and method in _CHINESE_METHODS:
             return _CHINESE_METHODS[method]
         self._fail_at(node, "E_COMMAND_UNKNOWN", f"Unknown manufacturing command: {method}")
 
@@ -258,6 +262,8 @@ class _Parser:
             ("平面", "事务"),
             ("curve", "transaction"),
             ("曲线", "事务"),
+            ("rotary", "transaction"),
+            ("回转", "事务"),
         }
 
     def _literal(self, node: ast.AST, depth: int) -> object:

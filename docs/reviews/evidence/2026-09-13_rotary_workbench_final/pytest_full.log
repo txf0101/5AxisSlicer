@@ -1,0 +1,80 @@
+........................................................................ [  8%]
+.............................................................. [ 16%]
+.............................................................................................. [ 27%]
+.............................................................F.......... [ 36%]
+........................................................................ [ 45%]
+........................................................................ [ 53%]
+................s.............s......................................................... [ 64%]
+...........................................................s............ [ 73%]
+.................................................................. [ 81%]
+........................................................................ [ 90%]
+................................................................ [ 97%]
+.................                                                        [100%]
+================================== FAILURES ===================================
+____ test_offset_product_generates_multiple_passes_reads_back_and_exports _____
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000256340016D0>
+tmp_path = WindowsPath('F:/����Ŀ������/5AxisSclicer_V2.0/tmp/pytest_rotary_full/test_offset_product_generates_0')
+
+    def test_offset_product_generates_multiple_passes_reads_back_and_exports(
+        monkeypatch, tmp_path: Path
+    ) -> None:
+        operation = _offset_operation()
+        layers = (PlanarSliceLayer("l1", 0.5, (_rect("region", 0, 0, 8, 6),)),)
+        monkeypatch.setattr(planar_product, "slice_planar_layers", lambda *args, **kwargs: layers)
+        result = generate_planar_path_product(
+            _model(), operation, _machine(), _nozzle(), RigidTransform.identity("build")
+        )
+    
+        assert result.operation_type == "planar_offset"
+        assert result.exportable and result.readback.passed
+        assert len({point.region_id for point in result.toolpath.points}) == 1
+        assert sum(point.point_type == "approach" for point in result.toolpath.points) >= 1
+        assert sum(point.point_type == "travel" for point in result.toolpath.points) >= 2
+        assert "; P03 POINT" in result.gcode
+>       destination = export_planar_product(result, tmp_path / "p03-output")
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_planar_path_products.py:185: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+result = PlanarZigzagProductResult(operation_type='planar_offset', layers=(PlanarSliceLayer(layer_id='l1', z_mm=0.5, regions=(P...ts=15, read_points=15, coordinate_mismatches=(), feedrate_mismatches=(), extrusion_mismatches=(), order_mismatches=()))
+destination = WindowsPath('F:/����Ŀ������/5AxisSclicer_V2.0/tmp/pytest_rotary_full/test_offset_product_generates_0/p03-output')
+cancelled = None
+
+    def export_planar_product(
+        result: PlanarZigzagProductResult,
+        destination: str | Path,
+        *,
+        cancelled: Callable[[], bool] | None = None,
+    ) -> Path:
+        """Publish the six P02 artefacts while preserving a previous directory on failure."""
+    
+        if not result.exportable:
+            raise ValueError("validation Error or failed G-code readback blocks export")
+        target = Path(destination).resolve()
+        target.parent.mkdir(parents=True, exist_ok=True)
+        stage = Path(mkdtemp(prefix=f".{target.name}.stage-", dir=target.parent))
+        backup = target.with_name(f".{target.name}.previous")
+        try:
+            _checkpoint(cancelled)
+            _write_planar_artifacts(stage, result)
+            _checkpoint(cancelled)
+            if backup.exists():
+                shutil.rmtree(backup)
+            moved_old = False
+            if target.exists():
+                os.replace(target, backup)
+                moved_old = True
+            try:
+>               os.replace(stage, target)
+E               PermissionError: [WinError 5] �ܾ����ʡ�: 'F:\\����Ŀ������\\5AxisSclicer_V2.0\\tmp\\pytest_rotary_full\\test_offset_product_generates_0\\.p03-output.stage-lx9vg83u' -> 'F:\\����Ŀ������\\5AxisSclicer_V2.0\\tmp\\pytest_rotary_full\\test_offset_product_generates_0\\p03-output'
+
+src\five_axis_slicer\postprocessing\planar_product.py:790: PermissionError
+=========================== short test summary info ===========================
+SKIPPED [1] tests\test_project_io.py:779: file symlink unavailable: [WinError 1314] �ͻ���û���������Ȩ��: 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmp3xh699up\\outside.step' -> 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmp3xh699up\\project\\source\\7e9e880aeabb25882faf6af17b00f3ad65ba8080547120473971b653f84244a6.step'
+SKIPPED [1] tests\test_project_io.py:807: directory symlink unavailable: [WinError 1314] �ͻ���û���������Ȩ��: 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmp41hcrw6g\\outside-source' -> 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmp41hcrw6g\\project\\source'
+SKIPPED [1] tests\test_setup_config.py:335: file symlink unavailable: [WinError 1314] �ͻ���û���������Ȩ��: 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmpk1jfm387\\target.yaml' -> 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmpk1jfm387\\manufacturing-setup.yaml'
+FAILED tests/test_planar_path_products.py::test_offset_product_generates_multiple_passes_reads_back_and_exports
+1 failed, 819 passed, 3 skipped, 130 subtests passed in 408.02s (0:06:48)
+FULL_PYTEST_EXIT=1

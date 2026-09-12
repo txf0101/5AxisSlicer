@@ -15,6 +15,7 @@ from datetime import datetime, timezone
 from decimal import Decimal
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import shutil
@@ -317,6 +318,7 @@ def postprocess_indexed_gcode(
     *,
     header: str = "5AxisSclicer T08 Tube Thin-Wall Indexed",
     marker_tag: str = "T08",
+    inverse_time: bool = False,
 ) -> str:
     """Emit conservative, absolute-position/absolute-extrusion Generic XYZAC NC."""
 
@@ -336,6 +338,9 @@ def postprocess_indexed_gcode(
         "M82 ; absolute extrusion",
         "G92 E0 ; known initial extrusion position",
     ]
+    if inverse_time:
+        lines.append("G93 ; inverse-time coordinated motion")
+    previous_time_s: float | None = None
     for index, (point, sample) in enumerate(
         zip(toolpath.points, trajectory.samples, strict=True), start=1
     ):
@@ -345,23 +350,32 @@ def postprocess_indexed_gcode(
             e_position,
             event_feedrate_mm_min(toolpath, index - 1),
             marker_tag,
+            inverse_time=inverse_time,
         )
         axes = machine.controller_values(sample.joint_positions)
         if point.point_type == "deposition":
             e_position += Decimal(str(point.material_volume_mm3 / filament_area))
         words = " ".join(f"{axis}{value:.6f}" for axis, value in sorted(axes.items()))
         e_word = f" E{e_position:f}" if point.point_type == "deposition" else ""
-        feed = point.feedrate_mm_min or 1.0
+        feed = (
+            _inverse_time_feed(sample.time_s, previous_time_s)
+            if inverse_time
+            else point.feedrate_mm_min or 1.0
+        )
         point_id = marker_identifier(point.point_id)
         lines.append(f"; {marker_tag} POINT {index} {point_id} {point.point_type}")
         lines.append(f"G1 {words}{e_word} F{feed:.6f}")
+        previous_time_s = sample.time_s
     _emit_events(
         lines,
         events.get(len(toolpath.points), ()),
         e_position,
         event_feedrate_mm_min(toolpath, len(toolpath.points)),
         marker_tag,
+        inverse_time=inverse_time,
     )
+    if inverse_time:
+        lines.append("G94 ; restore units-per-minute mode")
     lines.extend(("M400 ; finish queued motion", "M2"))
     return "\n".join(lines) + "\n"
 
@@ -394,6 +408,8 @@ def _emit_events(
     e_position: Decimal,
     feed: float,
     marker_tag: str,
+    *,
+    inverse_time: bool = False,
 ) -> Decimal:
     for event in events:
         event_id = marker_identifier(event.event_id)
@@ -401,8 +417,21 @@ def _emit_events(
         delta = event_extrusion_mm(event)
         if delta is not None:
             e_position += Decimal(str(delta))
+            if inverse_time:
+                lines.append("G94 ; extrusion actuator feed")
             lines.append(f"G1 E{e_position:f} F{feed:.6f}")
+            if inverse_time:
+                lines.append("G93 ; resume inverse-time motion")
     return e_position
+
+
+def _inverse_time_feed(time_s: float, previous_time_s: float | None) -> float:
+    # The first block establishes the cycle start point; one second is declared
+    # explicitly because no prior controller pose belongs to the SlicePlan.
+    duration_s = 1.0 if previous_time_s is None else time_s - previous_time_s
+    if not math.isfinite(duration_s) or duration_s <= 0.0:
+        raise ValueError("inverse-time trajectory duration must be finite and positive")
+    return 60.0 / duration_s
 
 
 def export_indexed_product(

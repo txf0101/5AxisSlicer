@@ -199,6 +199,8 @@ def _solve_rotary(
     c_axis: JointSpec,
     fixed_axis: Vector3,
     previous: Mapping[str, float] | None,
+    *,
+    preferred_c: float | None = None,
 ) -> tuple[dict[str, float], bool]:
     if math.dist(fixed_axis, (0.0, 0.0, -1.0)) > 1.0e-9:
         raise ValueError("the analytic XYZAC solver requires fixed machine nozzle axis (0,0,-1)")
@@ -226,7 +228,11 @@ def _solve_rotary(
     if not feasible:
         raise XYZACInverseKinematicsError("xyzac.orientation_unreachable", point.point_id)
     seed_a = 0.0 if previous is None else previous["A"]
-    seed_c = 0.0 if previous is None else previous["C"]
+    seed_c = (
+        (0.0 if previous is None else previous["C"])
+        if preferred_c is None
+        else float(preferred_c)
+    )
     a_value, c_value = min(
         feasible,
         key=lambda item: abs(item[0] - seed_a) + abs(item[1] - seed_c),
@@ -311,6 +317,26 @@ def _motion_limit_issues(
             limit = profile.joint_map[name].max_acceleration
             if limit is not None and abs(value) > limit + 1.0e-9:
                 issues.append(_limit_issue("acceleration", name, index + 1, value, limit))
+    if velocities:
+        start_duration = samples[1].time_s - samples[0].time_s
+        end_duration = samples[-1].time_s - samples[-2].time_s
+        for boundary, velocity, duration, sample_index in (
+            ("start", velocities[0], start_duration, 1),
+            ("end", velocities[-1], end_duration, len(samples) - 1),
+        ):
+            for name, speed in velocity.items():
+                value = speed / duration if boundary == "start" else -speed / duration
+                limit = profile.joint_map[name].max_acceleration
+                if limit is not None and abs(value) > limit + 1.0e-9:
+                    issue = _limit_issue(
+                        "acceleration", name, sample_index, value, limit
+                    )
+                    issues.append(
+                        replace(
+                            issue,
+                            context=MappingProxyType(dict(issue.context) | {"boundary": boundary}),
+                        )
+                    )
     return issues
 
 

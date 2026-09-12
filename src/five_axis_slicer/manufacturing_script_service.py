@@ -1,4 +1,4 @@
-"""Namespace-safe restricted-script dispatcher for Tube, Planar and Curve."""
+"""Namespace-safe restricted-script dispatcher for manufacturing workbenches."""
 
 from __future__ import annotations
 
@@ -18,6 +18,7 @@ class ManufacturingScriptService:
             "tube": self._window.tube_script_service,
             "planar": self._window.planar_command_service,
             "curve": self._window.curve_command_service,
+            "rotary": self._window.rotary_command_service,
         }
 
     def execute_script(self, source: str) -> str:

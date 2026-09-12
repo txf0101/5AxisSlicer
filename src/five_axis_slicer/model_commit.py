@@ -87,6 +87,7 @@ class ModelHostProtocol(Protocol):
     tube_page: TubePageProtocol
     planar_page: WorkbenchPageProtocol
     curve_page: WorkbenchPageProtocol
+    rotary_page: WorkbenchPageProtocol
     stack: IndexWidgetProtocol
     preview_tabs: IndexWidgetProtocol
     progress_timer: TimerProtocol
@@ -144,6 +145,9 @@ class _PublicationSnapshot:
     curve_controller: CommandCheckpointController
     curve_checkpoint: object
     curve_viewer: _ViewerSnapshot
+    rotary_controller: CommandCheckpointController
+    rotary_checkpoint: object
+    rotary_viewer: _ViewerSnapshot
     workbench_key: str
     operation: str
     project_directory: Path | None
@@ -165,6 +169,8 @@ class SourceUpdateBaseline:
     planar_token: tuple[object, ...] | None = None
     curve_controller: CommandCheckpointController | None = None
     curve_token: tuple[object, ...] | None = None
+    rotary_controller: CommandCheckpointController | None = None
+    rotary_token: tuple[object, ...] | None = None
 
     @classmethod
     def capture(
@@ -172,6 +178,7 @@ class SourceUpdateBaseline:
         controller: TubeSetupController,
         planar_controller: CommandCheckpointController | None = None,
         curve_controller: CommandCheckpointController | None = None,
+        rotary_controller: CommandCheckpointController | None = None,
     ) -> SourceUpdateBaseline:
         return cls(
             controller,
@@ -180,6 +187,8 @@ class SourceUpdateBaseline:
             None if planar_controller is None else planar_controller.command_applied_token(),
             curve_controller,
             None if curve_controller is None else curve_controller.command_applied_token(),
+            rotary_controller,
+            None if rotary_controller is None else rotary_controller.command_applied_token(),
         )
 
     def require_current(
@@ -187,6 +196,7 @@ class SourceUpdateBaseline:
         current: TubeSetupController,
         planar_current: CommandCheckpointController | None = None,
         curve_current: CommandCheckpointController | None = None,
+        rotary_current: CommandCheckpointController | None = None,
     ) -> TubeSetupController:
         if current is not self.controller or current.edit_state_token() != self.edit_token:
             raise StaleDraftError("Manufacturing Setup changed during STEP loading")
@@ -200,6 +210,11 @@ class SourceUpdateBaseline:
             or curve_current.command_applied_token() != self.curve_token
         ):
             raise StaleDraftError("Curve inputs changed during STEP loading")
+        if self.rotary_controller is not None and (
+            rotary_current is not self.rotary_controller
+            or rotary_current.command_applied_token() != self.rotary_token
+        ):
+            raise StaleDraftError("Rotary inputs changed during STEP loading")
         return current
 
 
@@ -272,6 +287,9 @@ def _capture(host: ModelHostProtocol) -> _PublicationSnapshot:
         curve_controller=host.curve_page.controller,
         curve_checkpoint=host.curve_page.controller.command_checkpoint(),
         curve_viewer=_capture_viewer(host.curve_page.viewer),
+        rotary_controller=host.rotary_page.controller,
+        rotary_checkpoint=host.rotary_page.controller.command_checkpoint(),
+        rotary_viewer=_capture_viewer(host.rotary_page.viewer),
         workbench_key=host.current_workbench_key,
         operation=host.current_operation,
         project_directory=host.last_project_dir,
@@ -307,6 +325,9 @@ def _restore(host: ModelHostProtocol, snapshot: _PublicationSnapshot) -> None:
     snapshot.curve_controller.restore_command_checkpoint(snapshot.curve_checkpoint)
     host.curve_page.set_controller(snapshot.curve_controller)
     _restore_viewer_projection(host.curve_page.viewer, snapshot.curve_viewer)
+    snapshot.rotary_controller.restore_command_checkpoint(snapshot.rotary_checkpoint)
+    host.rotary_page.set_controller(snapshot.rotary_controller)
+    _restore_viewer_projection(host.rotary_page.viewer, snapshot.rotary_viewer)
     refresh_publication_ui(host)
     host.stack.setCurrentIndex(snapshot.stack_index)
     host.preview_tabs.setCurrentIndex(snapshot.preview_tab_index)

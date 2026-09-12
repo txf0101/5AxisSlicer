@@ -32,6 +32,16 @@
 
 CURVE-IMPELLER 固定对象只对上述 SHA 有效。`body_001_edge_0005` 为半径 40 mm、圆心 `(-52,0,42)`、圆心角 π/2 的解析圆弧，长度 `62.83185307179585 mm`；`body_002_edge_0011` 为真实非圆样条，OCCT 精确长度 `68.27612913311773 mm`，100000 段独立弦长为 `68.276129132436 mm`。该样条在 `body_002_face_0006` 上做 3.0 mm Offset 时必须明确反向，实测相邻道三维点距为 2.947—3.000 mm；正向投影塌回修剪边界并应拒绝。项目保存完整描述符和 kernel signature，不只保存遍历 ID。
 
+## Rotary R01—R05 样例
+
+| 编号 | 文件 | SHA-256 | 用途 | 来源与限制 |
+| --- | --- | --- | --- | --- |
+| ROTARY-CYLINDER | `docs/reviews/evidence/2026-09-13_rotary_workbench_final/inputs/rotary_cylinder_nonzero_center.step` | `e2804dcf8db30e0d829f2ae5b7a711ab436089d40187426dcbe88afd5fea80d0` | 非零中心圆柱 Spiral、Thin Wall、跨零点 Around Part 与六件套 | 本项目使用 CadQuery 2.7.0 生成；圆心、半径和轴长由生成器显式定义；只用于 Generic XYZAC 离线资格 |
+| ROTARY-CONE | `docs/reviews/evidence/2026-09-13_rotary_workbench_final/inputs/rotary_cone_nonzero_center.step` | `b19f19ed20d4d391f979d8593b1cc71c561c4cad57ae9af8c4875da47e59a26e` | 半径线性变化圆锥 Spiral、面派生 profile 与六件套 | 本项目使用 CadQuery 2.7.0 生成；附加同轴细杆仅提供稳定轴向参考边，不进入沉积面 |
+| ROTARY-TRUTH | `tests/fixtures/analytic_rotary_truth.json` | `850a0c17165be7ff17df888900d270c8ff92f8ca6507beb85af4d9bbdef144e4` | 圆柱/圆锥 Spiral、Thin Wall 和 350°→20° Around Part 独立真值 | `derive_analytic_rotary_truth.py` 不导入项目算法；圆锥长度用复合 Simpson 积分，其余用独立闭式量测 |
+
+生成入口为 `scripts/generate_rotary_evidence.py`。四组产品目录严格包含 `main.gcode`、`toolpath.json`、`machine_axes.csv`、`warnings.json`、`preview.json` 与 `manifest.json`；逐文件哈希见同目录 `products_summary.json`。
+
 ## 独立解析真值
 
 机器可读真值位于 `tests/fixtures/analytic_tube_truth.json`，SHA-256 为 `e3d02045c104aadfd86a54ca3f4089a2dd019d6bf737663e772ef9c97f1159e8`。直管由起点、轴向和长度定义；圆弧管由圆心、平面法向、中心线半径和 90° 扫掠角定义。预期端点、切向、恒定内外半径和中心线长度均由登记参数直接计算，且明确独立于历史 G-code。`tests/test_toolpath_contract.py` 会读取该文件并复核关键公式。

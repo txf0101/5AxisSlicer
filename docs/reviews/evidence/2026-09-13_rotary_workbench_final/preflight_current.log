@@ -1,0 +1,60 @@
+{
+  "python": "F:\\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\\5AxisSclicer_V2.0\\tmp\\pytest9\\Scripts\\python.exe",
+  "version": "3.12.7",
+  "repo": "F:\\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\\5AxisSclicer_V2.0",
+  "packages": {
+    "cadquery-ocp": {
+      "version": "7.8.1.1.post1",
+      "matches": true
+    },
+    "jsonschema": {
+      "version": "4.23.0",
+      "matches": true
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "matches": true
+    },
+    "PyOpenGL": {
+      "version": "3.1.10",
+      "matches": true
+    },
+    "PyQt5": {
+      "version": "5.15.10",
+      "matches": true
+    },
+    "ruamel.yaml": {
+      "version": "0.18.6",
+      "matches": true
+    },
+    "vtk": {
+      "version": "9.3.1",
+      "matches": true
+    },
+    "pytest": {
+      "version": "9.1.1",
+      "matches": true
+    },
+    "pytest-timeout": {
+      "version": "2.4.0",
+      "matches": true
+    },
+    "cadquery": {
+      "version": "2.7.0",
+      "matches": true
+    }
+  },
+  "issues": [],
+  "quality_tools": {
+    "ruff": "0.12.12",
+    "mypy": "1.11.2"
+  },
+  "qsettings": {
+    "path": "\\HKEY_CURRENT_USER\\Software\\5AxisSclicer\\5AxisSclicer V2.0",
+    "writable": true
+  },
+  "qt_platform_env": null,
+  "dependency_probe_ok": true,
+  "gui_settings_writable": true,
+  "note": "Metadata and settings probe only; no GUI, rendering, import or test validation."
+}

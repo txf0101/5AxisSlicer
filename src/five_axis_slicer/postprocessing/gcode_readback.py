@@ -202,16 +202,46 @@ def _read_program(
         reader.command(command, {})
     if reader.command("G92", {"E": 0.0})["E"] != 0:
         raise _SequenceMismatch("initial extrusion must be G92 E0")
+    inverse_time = (
+        reader.cursor < len(reader.records) and reader.records[reader.cursor].code == "G93"
+    )
+    if inverse_time:
+        reader.command("G93", {})
     diameter = Decimal(str(nozzle.filament_diameter_mm))
     area = Decimal(str(math.pi)) * diameter * diameter / 4
     events = events_by_sequence(toolpath)
     for index, (point, sample) in enumerate(zip(toolpath.points, trajectory.samples, strict=True)):
-        _read_events(reader, toolpath, index, events.get(index, ()))
+        _read_events(
+            reader,
+            toolpath,
+            index,
+            events.get(index, ()),
+            inverse_time=inverse_time,
+        )
         if sample.source_point_id != point.point_id:
             raise _SequenceMismatch(f"{point.point_id}:trajectory point identity mismatch")
         reader.take("POINT", (str(index + 1), point.point_id, point.point_type))
-        _read_point(reader, point, machine.controller_values(sample.joint_positions), area)
-    _read_events(reader, toolpath, len(toolpath.points), events.get(len(toolpath.points), ()))
+        previous_time_s = None if index == 0 else trajectory.samples[index - 1].time_s
+        _read_point(
+            reader,
+            point,
+            machine.controller_values(sample.joint_positions),
+            area,
+            inverse_time_feed=(
+                _expected_inverse_time_feed(sample.time_s, previous_time_s)
+                if inverse_time
+                else None
+            ),
+        )
+    _read_events(
+        reader,
+        toolpath,
+        len(toolpath.points),
+        events.get(len(toolpath.points), ()),
+        inverse_time=inverse_time,
+    )
+    if inverse_time:
+        reader.command("G94", {})
     reader.command("M400", {})
     reader.command("M2", {})
     if reader.cursor != len(reader.records):
@@ -223,21 +253,38 @@ def _read_events(
     toolpath: GeneratedToolpath,
     sequence: int,
     events: Iterable[ToolpathEvent],
+    *,
+    inverse_time: bool = False,
 ) -> None:
     for event in events:
         reader.take("EVENT", (event.event_id, event.event_type))
         delta = event_extrusion_mm(event)
         if delta is not None:
             feed = event_feedrate_mm_min(toolpath, sequence)
+            if inverse_time:
+                reader.command("G94", {})
             words = reader.command("G1", {"E": 0.0, "F": feed})
             reader.extrusion_move(words, Decimal(str(delta)), event.event_id)
             reader.feedrate(words, feed, event.event_id)
+            if inverse_time:
+                reader.command("G93", {})
 
 
 def _read_point(
-    reader: _Reader, point: ToolpathPoint, axes: dict[str, float], area: Decimal
+    reader: _Reader,
+    point: ToolpathPoint,
+    axes: dict[str, float],
+    area: Decimal,
+    *,
+    inverse_time_feed: float | None = None,
 ) -> None:
-    expected = axes | {"F": point.feedrate_mm_min or 1.0}
+    expected = axes | {
+        "F": (
+            point.feedrate_mm_min or 1.0
+            if inverse_time_feed is None
+            else inverse_time_feed
+        )
+    }
     deposition = point.point_type == "deposition"
     if deposition:
         expected["E"] = 0.0
@@ -248,3 +295,10 @@ def _read_point(
     reader.feedrate(words, expected["F"], point.point_id)
     if deposition:
         reader.extrusion_move(words, Decimal(str(point.material_volume_mm3)) / area, point.point_id)
+
+
+def _expected_inverse_time_feed(time_s: float, previous_time_s: float | None) -> float:
+    duration_s = 1.0 if previous_time_s is None else time_s - previous_time_s
+    if not math.isfinite(duration_s) or duration_s <= 0.0:
+        raise _SequenceMismatch("inverse-time trajectory duration must be finite and positive")
+    return 60.0 / duration_s

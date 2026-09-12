@@ -16,6 +16,7 @@ from PyQt5.QtCore import QTimer
 
 from .curve_automation import CurveAutomationRoutes
 from .localization import tr
+from .rotary_automation import RotaryAutomationRoutes
 from .tube_script_service import command_result_json
 
 Payload = dict[str, Any]
@@ -76,6 +77,7 @@ class AutomationRouter:
         }
         self._planar_routes = _planar_routes(self)
         self._curve_routes = CurveAutomationRoutes(window).routes
+        self._rotary_routes = RotaryAutomationRoutes(window).routes
 
     def dispatch(self, path: str, payload: Payload) -> Response:
         handler = self._routes.get(path)
@@ -93,6 +95,9 @@ class AutomationRouter:
         curve_handler = self._curve_routes.get(path)
         if curve_handler is not None:
             return curve_handler(payload)
+        rotary_handler = self._rotary_routes.get(path)
+        if rotary_handler is not None:
+            return rotary_handler(payload)
         raise RuntimeError(f"Unknown endpoint: {path}")
 
     def _health(self, _payload: Payload) -> Response:

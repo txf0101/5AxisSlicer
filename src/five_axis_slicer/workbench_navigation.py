@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from . import curve_shell, planar_shell
+from . import curve_shell, planar_shell, rotary_shell
 from .workbenches import WORKBENCHES
 
 
@@ -19,6 +19,10 @@ def enter_workbench(host: Any, key: str) -> None:
         host.curve_page.controller, host.tube_page.controller.setup
     ):
         host.curve_page.refresh()
+    if key == "rotary" and rotary_shell.sync_shared_setup(
+        host.rotary_page.controller, host.tube_page.controller.setup
+    ):
+        host.rotary_page.refresh()
     host.current_workbench_key = key
     if key == "tube":
         host.current_operation = (
@@ -30,6 +34,8 @@ def enter_workbench(host: Any, key: str) -> None:
         host.current_operation = planar_shell.current_operation(host.planar_page.controller)
     elif key == "curve":
         host.current_operation = curve_shell.current_operation(host.curve_page.controller)
+    elif key == "rotary":
+        host.current_operation = rotary_shell.current_operation(host.rotary_page.controller)
     else:
         host.current_operation = "imported_nc_review"
     host._update_operation_combo()
@@ -45,6 +51,7 @@ def active_workbench_viewer(host: Any) -> Any:
         "tube": host.tube_page,
         "planar": host.planar_page,
         "curve": host.curve_page,
+        "rotary": host.rotary_page,
     }
     page = pages.get(host.current_workbench_key)
     return host.viewer if page is None else page.viewer
@@ -55,6 +62,7 @@ def refresh_active_workbench(host: Any) -> None:
         "tube": host.tube_page,
         "planar": host.planar_page,
         "curve": host.curve_page,
+        "rotary": host.rotary_page,
     }
     page = pages.get(host.current_workbench_key)
     if page is None:
@@ -68,6 +76,7 @@ def show_session(host: Any) -> None:
         "tube": host.tube_page,
         "planar": host.planar_page,
         "curve": host.curve_page,
+        "rotary": host.rotary_page,
     }
     host.stack.setCurrentWidget(pages.get(host.current_workbench_key, host.session_page))
 
@@ -93,11 +102,13 @@ def open_gcode_from_shell(host: Any) -> None:
 def current_page_name(host: Any) -> str:
     if host.stack.currentWidget() is host.curve_page:
         return "curve"
+    if host.stack.currentWidget() is host.rotary_page:
+        return "rotary"
     return planar_shell.page_name(host)
 
 
 def active_viewer(host: Any) -> Any:
-    pages = (host.result_page, host.tube_page, host.planar_page, host.curve_page)
+    pages = (host.result_page, host.tube_page, host.planar_page, host.curve_page, host.rotary_page)
     current = host.stack.currentWidget()
     for page in pages:
         if current is page:

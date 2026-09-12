@@ -1,0 +1,97 @@
+{
+  "capture_scope": "current RotaryPage controls and real generated preview payload",
+  "schema_version": 1,
+  "screenshots": {
+    "01_rotary_overview_zh_1366x768.png": {
+      "backend": "qt_evidence_paint_harness",
+      "export_enabled": true,
+      "height": 768,
+      "language": "zh",
+      "sha256": "8c9e77813e57c08a625e34a8bc515927142c19c0e2154576d73fadbf9366450a",
+      "status": "状态: WARNING · 已生成，存在警告；导出前请核对问题。",
+      "width": 1366
+    },
+    "02_rotary_coordinates_zh_1366x768.png": {
+      "backend": "qt_evidence_paint_harness",
+      "export_enabled": true,
+      "height": 768,
+      "language": "zh",
+      "sha256": "f6e8a90aef0aacb31769dd40e9168e5c31b1f040e102e181ce6dce11e277fd7d",
+      "status": "状态: WARNING · 已生成，存在警告；导出前请核对问题。",
+      "width": 1366
+    },
+    "03_rotary_spiral_zh_1366x768.png": {
+      "backend": "qt_evidence_paint_harness",
+      "export_enabled": true,
+      "height": 768,
+      "language": "zh",
+      "sha256": "b9ce5d7b342ff9b2ac831ea210273638bdecf1ef64ee7cdc825b244917521e3b",
+      "status": "状态: WARNING · 已生成，存在警告；导出前请核对问题。",
+      "width": 1366
+    },
+    "04_rotary_thin_wall_en_1600x900.png": {
+      "backend": "qt_evidence_paint_harness",
+      "export_enabled": true,
+      "height": 900,
+      "language": "en",
+      "sha256": "77f8ff719caee09b0d9bedb0dd61f2eb8e222766f58e27e3f0d1049b9cd19ee0",
+      "status": "Status: WARNING · Generated with warnings; review the issues before export.",
+      "width": 1600
+    },
+    "05_rotary_around_part_en_1920x1080.png": {
+      "backend": "qt_evidence_paint_harness",
+      "export_enabled": true,
+      "height": 1080,
+      "language": "en",
+      "sha256": "701222b776c119a57b8a156d51fe9f4332faf81f9e8d9921b37a7ba7ae056f23",
+      "status": "Status: WARNING · Generated with warnings; review the issues before export.",
+      "width": 1920
+    },
+    "06_rotary_cross_zero_zh_1366x768.png": {
+      "backend": "qt_evidence_paint_harness",
+      "export_enabled": true,
+      "height": 768,
+      "language": "zh",
+      "sha256": "fe082a396fcd4cec83760c8963c811b9036503b8f377074101d02a2a802fc335",
+      "status": "状态: WARNING · 已生成，存在警告；导出前请核对问题。",
+      "width": 1366
+    },
+    "07_rotary_axis_limit_error_zh_1366x768.png": {
+      "backend": "qt_evidence_paint_harness",
+      "export_enabled": false,
+      "height": 768,
+      "language": "zh",
+      "sha256": "f8c5d6c43ccfb8fcde23ab6be8caf28a312af076779f586a4e409e95f3ffda16",
+      "status": "状态: ERROR · 生成或检查失败，已禁止导出。\nxyzac.acceleration_limit_exceeded · sample-1",
+      "width": 1366
+    },
+    "08_rotary_axis_limit_recovered_zh_1366x768.png": {
+      "backend": "qt_evidence_paint_harness",
+      "export_enabled": true,
+      "height": 768,
+      "language": "zh",
+      "sha256": "3fec3f7948ea212ca63d42e6fd6fc2f409f0d584e8ca72540daa1119f8a5899a",
+      "status": "状态: WARNING · 已生成，存在警告；导出前请核对问题。",
+      "width": 1366
+    },
+    "09_rotary_export_zh_1600x900.png": {
+      "backend": "qt_evidence_paint_harness",
+      "export_enabled": true,
+      "height": 900,
+      "language": "zh",
+      "sha256": "0754dd77a8ecb0599e43e428e76ade103b40828574e932e12fd919421c3a7dea",
+      "status": "状态: WARNING · 已生成，存在警告；导出前请核对问题。",
+      "width": 1600
+    },
+    "10_rotary_reopen_stale_en_1920x1080.png": {
+      "backend": "qt_evidence_paint_harness",
+      "export_enabled": false,
+      "height": 1080,
+      "language": "en",
+      "sha256": "df3a1816776ca369fcc959c7804b3018e364e9a0900e0aec6a4392dc40d21da2",
+      "status": "Status: STALE · Inputs changed; the previous result is Stale. Generate again.",
+      "width": 1920
+    }
+  },
+  "viewer_note": "The Qt evidence paint harness avoids VTK/OpenGL; production viewer qualification is recorded separately."
+}

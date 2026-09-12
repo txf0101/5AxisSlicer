@@ -16,6 +16,13 @@ from .tube_product import (
     generate_tube_product,
     readback_tube_gcode,
 )
+from .rotary_product import (
+    RotaryProductResult,
+    RotaryProductState,
+    RotaryValidationReport,
+    export_rotary_product,
+    generate_rotary_product,
+)
 
 __all__ = [
     "GenerationCancelled",
@@ -25,9 +32,14 @@ __all__ = [
     "TubeProductResult",
     "TubeProductService",
     "TubeProductState",
+    "RotaryProductResult",
+    "RotaryProductState",
+    "RotaryValidationReport",
     "export_indexed_product",
     "export_tube_product",
+    "export_rotary_product",
     "generate_tube_product",
+    "generate_rotary_product",
     "readback_indexed_gcode",
     "readback_tube_gcode",
 ]

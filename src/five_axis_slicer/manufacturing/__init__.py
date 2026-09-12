@@ -79,6 +79,15 @@ from .resources import (
     get_builtin_material_profile,
     get_builtin_nozzle_profile,
 )
+from .rotary_parameters import (
+    ROTARY_OPERATION_TYPES,
+    RotaryAngularRegion,
+    RotaryFrame,
+    RotaryGeometrySelection,
+    RotaryOperationDefinition,
+    RotaryProcessParameters,
+    RotaryProfile,
+)
 from .setup import (
     BUILD_CS_NODE,
     MACHINE_NODE,
@@ -171,6 +180,13 @@ __all__ = [
     "ResourceSnapshot",
     "ResourceValidationIssue",
     "RigidTransform",
+    "ROTARY_OPERATION_TYPES",
+    "RotaryAngularRegion",
+    "RotaryFrame",
+    "RotaryGeometrySelection",
+    "RotaryOperationDefinition",
+    "RotaryProcessParameters",
+    "RotaryProfile",
     "RESOURCE_LIBRARY_SCHEMA_VERSION",
     "ResourceLibraryError",
     "ResourceSnapshotAudit",

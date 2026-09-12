@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "independent_of": "five_axis_slicer.algorithms.rotary",
+  "units": {"length": "mm", "angle": "rad", "volume": "mm3"},
+  "frame": {
+    "origin": [10.0, -20.0, 5.0],
+    "axis": [0.0, 0.0, 1.0],
+    "zero_direction": [1.0, 0.0, 0.0]
+  },
+  "cylinder_spiral": {
+    "radius": 12.0,
+    "axial_start": 4.0,
+    "start_angle": 0.5235987755982988,
+    "end_angle": 19.373154697137057,
+    "pitch": 8.0,
+    "turns": 3,
+    "start": [20.392304845413264, -14.0, 9.0],
+    "end": [20.392304845413264, -14.0, 33.0],
+    "length": 227.464347129934,
+    "volume": 72.78859108157888
+  },
+  "cone_spiral": {
+    "radius_start": 15.0,
+    "radius_end": 9.0,
+    "axial_start": 0.0,
+    "axial_end": 12.0,
+    "start_angle": 0.0,
+    "end_angle": 12.566370614359172,
+    "pitch": 6.0,
+    "length": 151.404863120125,
+    "volume": 34.0660942020281
+  },
+  "thin_wall": {
+    "axial": [2.0, 6.0, 10.0, 14.0],
+    "radii": [10.4, 11.2, 12.0],
+    "layers": 4,
+    "passes_per_layer": 3,
+    "length": 844.460105284936,
+    "volume": 270.2272336911795
+  },
+  "around_part": {
+    "radius": 20.0,
+    "axial": [0.0, 0.8, 1.6],
+    "regions_deg": [[350.0, 380.0], [480.0, 570.0]],
+    "deposition_stripes": 6,
+    "length": 125.66370614359172,
+    "volume": 40.21238596594935
+  }
+}

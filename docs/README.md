@@ -32,6 +32,9 @@
 - [Curve C01—C05 工作台图文手册](guides/curve_workbench_zh.md)：有向边链、明确法向、三种 Curve 操作、状态、六件套、脚本/HTTP 和错误恢复。
 - [Curve C01—C05 实施与验收复盘](reviews/2026-09-12_curve_workbench_review.md)：独立真值、真实 STEP、产品链接入、失败修复、UI 和离线能力边界。
 - [Curve C01—C05 当前验收证据](reviews/evidence/2026-09-12_curve_workbench_final/validation_manifest.json)：真实叶轮三操作、六件套、Qt/OpenGL 截图、JUnit、质量/构建/native 门禁、失败历史和逐文件 SHA-256。
+- [Rotary R01—R05 工作台图文手册](guides/rotary_workbench_zh.md)：回转坐标、圆柱/圆锥 Spiral、Thin Wall、Around Part、状态、六件套与错误恢复。
+- [Rotary R01—R05 实施与验收复盘](reviews/2026-09-13_rotary_workbench_review.md)：Open5x/NX 资料边界、独立真值、周期/运动语义、产品链、UI 和离线资格限制。
+- [Rotary R01—R05 当前验收证据](reviews/evidence/2026-09-13_rotary_workbench_final/validation_manifest.json)：真实 STEP、四组六件套、G93 回读、Qt 多尺寸截图、JUnit、质量与包检查及逐文件 SHA-256。
 - [Planar P01—P06 历史阶段交接](planning/planar_handoff.md)：P07 加入前的四操作真实 STEP、六件套、回读和 UI 证据；当前状态以 P01—P07 最终证据和进度台账为准。
 - [多对话工作台开发启动提示词](planning/workbench_multi_chat_prompts.md)：P07、Curve、Rotary、Freeform、Research 与最终集成的可复制任务提示词及统一完成条件。
 - [多对话工作台提示词编制复盘](reviews/2026-09-12_multi_chat_workbench_prompt_review.md)：依赖、工作树、多 Agent、完整验收和 Planar Support 计数边界。
@@ -44,6 +47,7 @@
 - [Tube 工作台完整图文手册](guides/tube_workbench_zh.md)：三种操作、生成、检查、预览、导出及错误处理。
 - [Planar 工作台图文手册](guides/planar_workbench_zh.md)：Region、Zigzag、Offset、Thin Wall、Spiral 与 buildplate-only Planar Support 的离线生成链与恢复说明。
 - [Curve 工作台图文手册](guides/curve_workbench_zh.md)：Buildup、Multi-pass Buildup 与 Offset Buildup 的完整离线工作流。
+- [Rotary 工作台图文手册](guides/rotary_workbench_zh.md)：Spiral、Thin Wall 与 Around Part 的完整离线工作流。
 - [G-code 可视化图文手册](guides/gcode_preview_zh.md)：普通 Preview、成果页、分色、层范围与五轴回读边界。
 - [根目录 README](../README.md)：启动、当前能力、自动化接口和验证入口。
 - [项目结构](project_structure.md)：现有模块及职责；该文档有自身的核查日期。

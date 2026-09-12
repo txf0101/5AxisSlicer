@@ -1,6 +1,6 @@
 # 六个工作台开发参考资料
 
-初次检索：2026-09-10；更新至：2026-09-12。本文服务于[开发计划](development_plan.md)与[进度台账](progress_tracker.md)。资料来自当前项目、相邻参考项目、Siemens 官方页面、项目官方 GitHub README/许可证和部分源码。已实际读取的网页与未运行的代码分别说明，公开介绍不能替代本项目的算法验证。
+初次检索：2026-09-10；更新至：2026-09-13。本文服务于[开发计划](development_plan.md)与[进度台账](progress_tracker.md)。资料来自当前项目、相邻参考项目、Siemens 官方页面、项目官方 GitHub README/许可证和部分源码。已实际读取的网页与未运行的代码分别说明，公开介绍不能替代本项目的算法验证。
 
 ## 1 检索结论
 
@@ -115,3 +115,25 @@ Curve 本轮复用 OCCT/OCP 的公开几何 API：`BRepAdaptor_Curve`、`GCPnts_
 Open5x 与 COMPAS Slicer 的公开 MIT README 仅是早期术语和路径组织背景，本轮没有用其源码、Grasshopper 图、内部组件、数据结构或实现公式。2026-09-12 尝试重新固定两者 HEAD 时，GitHub 连接分别返回 reset/connection failure，因此不把未固定的 `master` 作为 C01—C05 验收来源。C01—C05 实际实现依据固定为 OCP `7.8.1.1.post1` 的公开 API、CadQuery `2.7.0` 的解析夹具生成和本项目独立真值。CuraEngine 与 PrusaSlicer 均为 AGPLv3，Curve C01—C05 没有读取、复制或改写其源码、测试和内部结构；P07 已登记的公开可观察行为也没有用作 Curve 实现公式。
 
 CadQuery 2.7.0 仅用于测试中生成解析 STEP 夹具，工具许可证为 Apache-2.0；产品运行时不依赖 CadQuery。真实叶轮 STEP 的作者、建模工具和再分发许可证未知，当前只作为本地验收输入，详见[样例来源登记](example_source_inventory.md)。
+
+## 11 Rotary R01—R05 的 Open5x 与 NX 资料核对
+
+Rotary 实施前重新核对 Open5x 的原始 Grasshopper 定义，而未采用相邻目录中后来补写的 Python port。上游固定为 [FreddieHong19/Open5x commit `500a786e51447b47e00d2a5ca3dcc938ae542926`](https://github.com/FreddieHong19/Open5x/tree/500a786e51447b47e00d2a5ca3dcc938ae542926)，提交时间 `2024-04-02T12:05:07Z`；许可证为 MIT，Copyright © 2022 Freddie Hong。本轮没有复制或移植上游源码，因此运行时不新增许可证依赖；若以后复制软件或其实质部分，必须随交付保留 MIT 版权和许可通知。
+
+在 `tmp/gh_extract_env` 中建立隔离 Python 环境，安装 `pythonnet 3.0.5`，并使用 McNeel 官方 NuGet 的 Grasshopper/GH_IO 与 RhinoCommon `8.35.26251.13001` 解包二进制 `.gh`。三个文件均由 GH_IO 报告 `ReadFromFile=True` 且消息数为 0，提取结果位于可清理的 `tmp/grasshopper_extracted/`；该环境只用于静态研究，不进入应用依赖。当前机器没有 Rhino/Grasshopper、Heteroptera 及其商业运行环境，因此不能声称 Grasshopper 定义已执行。
+
+| Open5x 原始文件 | SHA-256 | 静态核对结果 |
+| --- | --- | --- |
+| `Open5x_Gcode_0503.gh` | `891506E19DCA0005683860038BBAE99ECFBC2086F6FEC9723BF01A2E26FE2565` | 104 个文档对象；含 IK、Simulation、Speed Compensation、Extrusion、Travel、Retract/Deretraction 和 G-code 组织 |
+| `open5x_supportless_slicing_ver2.gh` | `96B856187A6D8FA06F8F3BBF1DC7483F7A664650F4FE203745EC4444EC378990` | 116 个文档对象；支持面、路径和姿态数据进入后续运动链 |
+| `2022_03_22_open5x_supportless_surface_Lite.gh` | `6E0259CD5FBDD1F34F3B99D17D0BB18F0A5997AF1C4FDCDDA8B667859EFAEA0E` | 122 个文档对象；可见 Brep、Curve、Plane、进入/退出向量、换刀点和路径长度等接口 |
+
+Open5x 的 C# 挤出脚本使用道截面积 `(w-h)h + π(h/2)²`，再结合段长、丝材直径和 extrusion multiplier 计算丝材 E；另一脚本在 Travel 索引两侧插入 Retract/Deretraction 索引。它支持本项目将位置、法向、运动轴、进给、挤出和离散事件分开建模。上游固定温度、宏路径和作者机器绝对路径不具备可移植性。该定义也没有公开 Rotary Region、圆柱/圆锥螺旋、350°→20° 周期裁剪、最短等价相位、轴限和整段碰撞算法；这些部分采用本项目的独立几何与解析真值。
+
+Siemens 官方公开资料对 Rotary 的可观察产品语义提供以下边界：
+
+- [NX Additive Manufacturing Multi-Axis](https://plm.sw.siemens.com/en-US/nx/products/nx-am-multi-axis/)列出 rotary deposition、沿零件轴生成圆形特征、在圆件上添加局部特征、按 draft angle 对齐打印头，以及用于 flange 等特征的 Thin Wall。
+- [NX 2512 发布说明](https://blogs.sw.siemens.com/nx-manufacturing/whats-new-in-nx-for-manufacturing-december-2512/)列出 Rotary Buildup 的 profile slicing、infill ramp、slice boundary 和局部 build-style 改进。
+- [NX 2606 发布说明](https://blogs.sw.siemens.com/nx-manufacturing/whats-new-in-nx-for-manufacturing-2606-june-2026/)说明圆柱件多区域之间可采用 continuous rotary non-cutting moves；Circular NCM 保持同一回转路径，Rotary spline NCM 用于不同高度间的平滑连接。
+
+公开页面没有披露相应数学、净空、样条、速度规划或碰撞实现。本轮还核对了 Siemens Documentation Center：`Manufacturing Additive` 产品 ID 为 `289330135`；相关 NX Additive Manufacturing 条目元数据为 `PUBLISHED`，但正文访问属性为 private。公开 landing URL 只返回通用应用外壳。当前没有找到可开放访问且包含 Rotary Buildup/Thin Wall 算法正文的 Siemens 技术手册或 PDF，因此不能声称读取了私有 NX Help，也不能反推其内部算法。Rotary R01—R05 只借鉴上述操作、区域和连续连接语义；回转坐标、周期展开、几何、事件、IK/FK、检查和回读均保留可独立验证的本地实现。

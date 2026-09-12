@@ -1,0 +1,2057 @@
+{
+  "coordinate_frame": "workpiece_build",
+  "segments": [
+    {
+      "comment": "generated:rotary_around_part:cross-zero:none",
+      "delta_e": 0.0,
+      "end": [
+        21.817693036146494,
+        -22.083778132003165,
+        5.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        22.802500789158707,
+        -22.257426309670095,
+        5.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:cross-zero:buildup",
+      "delta_e": 0.1256238356121674,
+      "end": [
+        21.954336377100947,
+        -21.0458689129719,
+        5.0
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        21.817693036146494,
+        -22.083778132003165,
+        5.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:cross-zero:buildup",
+      "delta_e": 0.12562383561216764,
+      "end": [
+        22.0,
+        -20.000000000000004,
+        5.0
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        21.954336377100947,
+        -21.0458689129719,
+        5.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:cross-zero:buildup",
+      "delta_e": 0.12562383561216764,
+      "end": [
+        21.954336377100947,
+        -18.954131087028106,
+        5.0
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        22.0,
+        -20.000000000000004,
+        5.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:cross-zero:buildup",
+      "delta_e": 0.12562383561216778,
+      "end": [
+        21.817693036146498,
+        -17.91622186799684,
+        5.0
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        21.954336377100947,
+        -18.954131087028106,
+        5.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:cross-zero:buildup",
+      "delta_e": 0.12562383561216717,
+      "end": [
+        21.59110991546882,
+        -16.89417145876976,
+        5.0
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        21.817693036146498,
+        -17.91622186799684,
+        5.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:cross-zero:buildup",
+      "delta_e": 0.12562383561216767,
+      "end": [
+        21.276311449430903,
+        -15.895758280091982,
+        5.0
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        21.59110991546882,
+        -16.89417145876976,
+        5.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:cross-zero:none",
+      "delta_e": 0.0,
+      "end": [
+        22.216004070216812,
+        -15.553738136766315,
+        5.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        21.276311449430903,
+        -15.895758280091982,
+        5.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:cross-zero:none",
+      "delta_e": 0.0,
+      "end": [
+        22.216004070216812,
+        -15.553738136766315,
+        5.8
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        22.216004070216812,
+        -15.553738136766315,
+        5.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:cross-zero:none",
+      "delta_e": 0.0,
+      "end": [
+        21.276311449430903,
+        -15.895758280091982,
+        5.8
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        22.216004070216812,
+        -15.553738136766315,
+        5.8
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:cross-zero:buildup",
+      "delta_e": 0.12562383561216767,
+      "end": [
+        21.59110991546882,
+        -16.89417145876976,
+        5.8
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        21.276311449430903,
+        -15.895758280091982,
+        5.8
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:cross-zero:buildup",
+      "delta_e": 0.12562383561216717,
+      "end": [
+        21.817693036146498,
+        -17.91622186799684,
+        5.8
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        21.59110991546882,
+        -16.89417145876976,
+        5.8
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:cross-zero:buildup",
+      "delta_e": 0.12562383561216778,
+      "end": [
+        21.954336377100947,
+        -18.954131087028106,
+        5.8
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        21.817693036146498,
+        -17.91622186799684,
+        5.8
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:cross-zero:buildup",
+      "delta_e": 0.12562383561216764,
+      "end": [
+        22.0,
+        -20.000000000000004,
+        5.8
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        21.954336377100947,
+        -18.954131087028106,
+        5.8
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:cross-zero:buildup",
+      "delta_e": 0.12562383561216764,
+      "end": [
+        21.954336377100947,
+        -21.0458689129719,
+        5.8
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        22.0,
+        -20.000000000000004,
+        5.8
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:cross-zero:buildup",
+      "delta_e": 0.1256238356121674,
+      "end": [
+        21.817693036146494,
+        -22.083778132003165,
+        5.8
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        21.954336377100947,
+        -21.0458689129719,
+        5.8
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:cross-zero:none",
+      "delta_e": 0.0,
+      "end": [
+        22.802500789158707,
+        -22.257426309670095,
+        5.8
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        21.817693036146494,
+        -22.083778132003165,
+        5.8
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:cross-zero:none",
+      "delta_e": 0.0,
+      "end": [
+        22.802500789158707,
+        -22.257426309670095,
+        6.6
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        22.802500789158707,
+        -22.257426309670095,
+        5.8
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:cross-zero:none",
+      "delta_e": 0.0,
+      "end": [
+        21.817693036146494,
+        -22.083778132003165,
+        6.6
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        22.802500789158707,
+        -22.257426309670095,
+        6.6
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:cross-zero:buildup",
+      "delta_e": 0.1256238356121674,
+      "end": [
+        21.954336377100947,
+        -21.0458689129719,
+        6.6
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        21.817693036146494,
+        -22.083778132003165,
+        6.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:cross-zero:buildup",
+      "delta_e": 0.12562383561216764,
+      "end": [
+        22.0,
+        -20.000000000000004,
+        6.6
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        21.954336377100947,
+        -21.0458689129719,
+        6.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:cross-zero:buildup",
+      "delta_e": 0.12562383561216764,
+      "end": [
+        21.954336377100947,
+        -18.954131087028106,
+        6.6
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        22.0,
+        -20.000000000000004,
+        6.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:cross-zero:buildup",
+      "delta_e": 0.12562383561216778,
+      "end": [
+        21.817693036146498,
+        -17.91622186799684,
+        6.6
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        21.954336377100947,
+        -18.954131087028106,
+        6.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:cross-zero:buildup",
+      "delta_e": 0.12562383561216717,
+      "end": [
+        21.59110991546882,
+        -16.89417145876976,
+        6.6
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        21.817693036146498,
+        -17.91622186799684,
+        6.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:cross-zero:buildup",
+      "delta_e": 0.12562383561216767,
+      "end": [
+        21.276311449430903,
+        -15.895758280091982,
+        6.6
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        21.59110991546882,
+        -16.89417145876976,
+        6.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        22.216004070216812,
+        -15.553738136766315,
+        6.6
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        21.276311449430903,
+        -15.895758280091982,
+        6.6
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        21.782001231476453,
+        -14.505962597370916,
+        6.52
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        22.216004070216812,
+        -15.553738136766315,
+        6.6
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        21.258330249197705,
+        -13.50000000000001,
+        6.4399999999999995
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        21.782001231476453,
+        -14.505962597370916,
+        6.52
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        20.6489765757569,
+        -12.543506327436411,
+        6.36
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        21.258330249197705,
+        -13.50000000000001,
+        6.4399999999999995
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        19.958577760546724,
+        -11.643761074075,
+        6.28
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        20.6489765757569,
+        -12.543506327436411,
+        6.36
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        19.192388155425128,
+        -10.807611844574893,
+        6.2
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        19.958577760546724,
+        -11.643761074075,
+        6.28
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        18.356238925925012,
+        -10.041422239453288,
+        6.12
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        19.192388155425128,
+        -10.807611844574893,
+        6.2
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        17.456493672563603,
+        -9.351023424243111,
+        6.04
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        18.356238925925012,
+        -10.041422239453288,
+        6.12
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        16.500000000000007,
+        -8.741669750802302,
+        5.96
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        17.456493672563603,
+        -9.351023424243111,
+        6.04
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        15.4940374026291,
+        -8.217998768523554,
+        5.88
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        16.500000000000007,
+        -8.741669750802302,
+        5.96
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        14.446261863233703,
+        -7.783995929783195,
+        5.8
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        15.4940374026291,
+        -8.217998768523554,
+        5.88
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        13.364647586332781,
+        -7.442964258242116,
+        5.72
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        14.446261863233703,
+        -7.783995929783195,
+        5.8
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        12.257426309670107,
+        -7.197499210841297,
+        5.640000000000001
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        13.364647586332781,
+        -7.442964258242116,
+        5.72
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        11.13302465571957,
+        -7.049468924807309,
+        5.5600000000000005
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        12.257426309670107,
+        -7.197499210841297,
+        5.640000000000001
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        10.000000000000016,
+        -7.0,
+        5.48
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        11.13302465571957,
+        -7.049468924807309,
+        5.5600000000000005
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        8.86697534428045,
+        -7.049468924807307,
+        5.4
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        10.000000000000016,
+        -7.0,
+        5.48
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        7.742573690329912,
+        -7.197499210841293,
+        5.32
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        8.86697534428045,
+        -7.049468924807307,
+        5.4
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        6.6353524136672375,
+        -7.44296425824211,
+        5.24
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        7.742573690329912,
+        -7.197499210841293,
+        5.32
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        5.553738136766316,
+        -7.783995929783188,
+        5.16
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        6.6353524136672375,
+        -7.44296425824211,
+        5.24
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        4.5059625973709165,
+        -8.217998768523547,
+        5.08
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        5.553738136766316,
+        -7.783995929783188,
+        5.16
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        3.5000000000000098,
+        -8.741669750802291,
+        5.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        4.5059625973709165,
+        -8.217998768523547,
+        5.08
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        4.000000000000009,
+        -9.60769515458673,
+        5.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        3.5000000000000098,
+        -8.741669750802291,
+        5.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216756,
+      "end": [
+        3.1170827637874563,
+        -10.170175468532092,
+        5.0
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        4.000000000000009,
+        -9.60769515458673,
+        5.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216747,
+      "end": [
+        2.286548683761538,
+        -10.807466682572255,
+        5.0
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        3.1170827637874563,
+        -10.170175468532092,
+        5.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216764,
+      "end": [
+        1.5147186257614393,
+        -11.51471862576142,
+        5.0
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        2.286548683761538,
+        -10.807466682572255,
+        5.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.1256238356121676,
+      "end": [
+        0.8074666825722723,
+        -12.286548683761517,
+        5.0
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        1.5147186257614393,
+        -11.51471862576142,
+        5.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216744,
+      "end": [
+        0.17017546853210774,
+        -13.117082763787433,
+        5.0
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        0.8074666825722723,
+        -12.286548683761517,
+        5.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216747,
+      "end": [
+        -0.39230484541325517,
+        -13.999999999999984,
+        5.0
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        0.17017546853210774,
+        -13.117082763787433,
+        5.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216756,
+      "end": [
+        -0.8756934444397917,
+        -14.92858085911159,
+        5.0
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -0.39230484541325517,
+        -13.999999999999984,
+        5.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216744,
+      "end": [
+        -1.2763114494308923,
+        -15.895758280091956,
+        5.0
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -0.8756934444397917,
+        -14.92858085911159,
+        5.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216764,
+      "end": [
+        -1.5911099154688149,
+        -16.89417145876973,
+        5.0
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -1.2763114494308923,
+        -15.895758280091956,
+        5.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.1256238356121702,
+      "end": [
+        -1.8176930361464958,
+        -17.916221867996835,
+        5.0
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -1.5911099154688149,
+        -16.89417145876973,
+        5.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216736,
+      "end": [
+        -1.9543363771009474,
+        -18.9541310870281,
+        5.0
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -1.8176930361464958,
+        -17.916221867996835,
+        5.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216764,
+      "end": [
+        -2.0,
+        -19.999999999999996,
+        5.0
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -1.9543363771009474,
+        -18.9541310870281,
+        5.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216764,
+      "end": [
+        -1.9543363771009474,
+        -21.045868912971894,
+        5.0
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -2.0,
+        -19.999999999999996,
+        5.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216736,
+      "end": [
+        -1.8176930361464976,
+        -22.083778132003157,
+        5.0
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -1.9543363771009474,
+        -21.045868912971894,
+        5.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.1256238356121676,
+      "end": [
+        -1.5911099154688202,
+        -23.10582854123024,
+        5.0
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -1.8176930361464976,
+        -22.083778132003157,
+        5.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216767,
+      "end": [
+        -1.276311449430903,
+        -24.104241719908018,
+        5.0
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -1.5911099154688202,
+        -23.10582854123024,
+        5.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216736,
+      "end": [
+        -0.8756934444398041,
+        -25.071419140888384,
+        5.0
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -1.276311449430903,
+        -24.104241719908018,
+        5.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216744,
+      "end": [
+        -0.3923048454132694,
+        -25.99999999999999,
+        5.0
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -0.8756934444398041,
+        -25.071419140888384,
+        5.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        -1.2583302491977086,
+        -26.49999999999999,
+        5.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        -0.3923048454132694,
+        -25.99999999999999,
+        5.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        -1.2583302491977086,
+        -26.49999999999999,
+        5.8
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        -1.2583302491977086,
+        -26.49999999999999,
+        5.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        -0.3923048454132694,
+        -25.99999999999999,
+        5.8
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        -1.2583302491977086,
+        -26.49999999999999,
+        5.8
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216744,
+      "end": [
+        -0.8756934444398041,
+        -25.071419140888384,
+        5.8
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -0.3923048454132694,
+        -25.99999999999999,
+        5.8
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216736,
+      "end": [
+        -1.276311449430903,
+        -24.104241719908018,
+        5.8
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -0.8756934444398041,
+        -25.071419140888384,
+        5.8
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216767,
+      "end": [
+        -1.5911099154688202,
+        -23.10582854123024,
+        5.8
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -1.276311449430903,
+        -24.104241719908018,
+        5.8
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.1256238356121676,
+      "end": [
+        -1.8176930361464976,
+        -22.083778132003157,
+        5.8
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -1.5911099154688202,
+        -23.10582854123024,
+        5.8
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216736,
+      "end": [
+        -1.9543363771009474,
+        -21.045868912971894,
+        5.8
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -1.8176930361464976,
+        -22.083778132003157,
+        5.8
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216764,
+      "end": [
+        -2.0,
+        -19.999999999999996,
+        5.8
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -1.9543363771009474,
+        -21.045868912971894,
+        5.8
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216764,
+      "end": [
+        -1.9543363771009474,
+        -18.9541310870281,
+        5.8
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -2.0,
+        -19.999999999999996,
+        5.8
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216736,
+      "end": [
+        -1.8176930361464958,
+        -17.916221867996835,
+        5.8
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -1.9543363771009474,
+        -18.9541310870281,
+        5.8
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.1256238356121702,
+      "end": [
+        -1.5911099154688149,
+        -16.89417145876973,
+        5.8
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -1.8176930361464958,
+        -17.916221867996835,
+        5.8
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216764,
+      "end": [
+        -1.2763114494308923,
+        -15.895758280091956,
+        5.8
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -1.5911099154688149,
+        -16.89417145876973,
+        5.8
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216744,
+      "end": [
+        -0.8756934444397917,
+        -14.92858085911159,
+        5.8
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -1.2763114494308923,
+        -15.895758280091956,
+        5.8
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216756,
+      "end": [
+        -0.39230484541325517,
+        -13.999999999999984,
+        5.8
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -0.8756934444397917,
+        -14.92858085911159,
+        5.8
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216747,
+      "end": [
+        0.17017546853210774,
+        -13.117082763787433,
+        5.8
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -0.39230484541325517,
+        -13.999999999999984,
+        5.8
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216744,
+      "end": [
+        0.8074666825722723,
+        -12.286548683761517,
+        5.8
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        0.17017546853210774,
+        -13.117082763787433,
+        5.8
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.1256238356121676,
+      "end": [
+        1.5147186257614393,
+        -11.51471862576142,
+        5.8
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        0.8074666825722723,
+        -12.286548683761517,
+        5.8
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216764,
+      "end": [
+        2.286548683761538,
+        -10.807466682572255,
+        5.8
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        1.5147186257614393,
+        -11.51471862576142,
+        5.8
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216747,
+      "end": [
+        3.1170827637874563,
+        -10.170175468532092,
+        5.8
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        2.286548683761538,
+        -10.807466682572255,
+        5.8
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216756,
+      "end": [
+        4.000000000000009,
+        -9.60769515458673,
+        5.8
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        3.1170827637874563,
+        -10.170175468532092,
+        5.8
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        3.5000000000000098,
+        -8.741669750802291,
+        5.8
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        4.000000000000009,
+        -9.60769515458673,
+        5.8
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        3.5000000000000098,
+        -8.741669750802291,
+        6.6
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        3.5000000000000098,
+        -8.741669750802291,
+        5.8
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        4.000000000000009,
+        -9.60769515458673,
+        6.6
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        3.5000000000000098,
+        -8.741669750802291,
+        6.6
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216756,
+      "end": [
+        3.1170827637874563,
+        -10.170175468532092,
+        6.6
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        4.000000000000009,
+        -9.60769515458673,
+        6.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216747,
+      "end": [
+        2.286548683761538,
+        -10.807466682572255,
+        6.6
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        3.1170827637874563,
+        -10.170175468532092,
+        6.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216764,
+      "end": [
+        1.5147186257614393,
+        -11.51471862576142,
+        6.6
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        2.286548683761538,
+        -10.807466682572255,
+        6.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.1256238356121676,
+      "end": [
+        0.8074666825722723,
+        -12.286548683761517,
+        6.6
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        1.5147186257614393,
+        -11.51471862576142,
+        6.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216744,
+      "end": [
+        0.17017546853210774,
+        -13.117082763787433,
+        6.6
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        0.8074666825722723,
+        -12.286548683761517,
+        6.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216747,
+      "end": [
+        -0.39230484541325517,
+        -13.999999999999984,
+        6.6
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        0.17017546853210774,
+        -13.117082763787433,
+        6.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216756,
+      "end": [
+        -0.8756934444397917,
+        -14.92858085911159,
+        6.6
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -0.39230484541325517,
+        -13.999999999999984,
+        6.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216744,
+      "end": [
+        -1.2763114494308923,
+        -15.895758280091956,
+        6.6
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -0.8756934444397917,
+        -14.92858085911159,
+        6.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216764,
+      "end": [
+        -1.5911099154688149,
+        -16.89417145876973,
+        6.6
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -1.2763114494308923,
+        -15.895758280091956,
+        6.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.1256238356121702,
+      "end": [
+        -1.8176930361464958,
+        -17.916221867996835,
+        6.6
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -1.5911099154688149,
+        -16.89417145876973,
+        6.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216736,
+      "end": [
+        -1.9543363771009474,
+        -18.9541310870281,
+        6.6
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -1.8176930361464958,
+        -17.916221867996835,
+        6.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216764,
+      "end": [
+        -2.0,
+        -19.999999999999996,
+        6.6
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -1.9543363771009474,
+        -18.9541310870281,
+        6.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216764,
+      "end": [
+        -1.9543363771009474,
+        -21.045868912971894,
+        6.6
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -2.0,
+        -19.999999999999996,
+        6.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216736,
+      "end": [
+        -1.8176930361464976,
+        -22.083778132003157,
+        6.6
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -1.9543363771009474,
+        -21.045868912971894,
+        6.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.1256238356121676,
+      "end": [
+        -1.5911099154688202,
+        -23.10582854123024,
+        6.6
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -1.8176930361464976,
+        -22.083778132003157,
+        6.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216767,
+      "end": [
+        -1.276311449430903,
+        -24.104241719908018,
+        6.6
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -1.5911099154688202,
+        -23.10582854123024,
+        6.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216736,
+      "end": [
+        -0.8756934444398041,
+        -25.071419140888384,
+        6.6
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -1.276311449430903,
+        -24.104241719908018,
+        6.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:buildup",
+      "delta_e": 0.12562383561216744,
+      "end": [
+        -0.3923048454132694,
+        -25.99999999999999,
+        6.6
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 120.0,
+      "height": 0.2,
+      "move_type": "extrude",
+      "start": [
+        -0.8756934444398041,
+        -25.071419140888384,
+        6.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:rotary_around_part:local-sector:none",
+      "delta_e": 0.0,
+      "end": [
+        -1.2583302491977086,
+        -26.49999999999999,
+        6.6
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 120.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        -0.3923048454132694,
+        -25.99999999999999,
+        6.6
+      ],
+      "width": null
+    }
+  ]
+}

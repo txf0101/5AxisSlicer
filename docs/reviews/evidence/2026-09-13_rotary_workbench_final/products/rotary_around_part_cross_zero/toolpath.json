@@ -1,0 +1,4346 @@
+{
+  "coordinate_frame": "workpiece_build",
+  "events": [
+    {
+      "context": {
+        "clearance_mm": 1.0,
+        "semantic": "initial_clearance_entry",
+        "sequence_index": 1
+      },
+      "duration_s": null,
+      "event_id": "event-0000001",
+      "event_type": "safe_approach",
+      "layer_id": "layer-0001",
+      "operation_id": "rotary-operation-1",
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "axial_mm": 0.0,
+        "radius_mm": 12.0,
+        "reversed_from_declared": false,
+        "semantic": "seam",
+        "sequence_index": 2,
+        "unwrapped_angle_rad": 6.1086523819801535
+      },
+      "duration_s": null,
+      "event_id": "event-0000002",
+      "event_type": "index_start",
+      "layer_id": "layer-0001",
+      "operation_id": "rotary-operation-1",
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 2
+      },
+      "duration_s": null,
+      "event_id": "event-0000003",
+      "event_type": "prime",
+      "layer_id": "layer-0001",
+      "operation_id": "rotary-operation-1",
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "reversed_from_declared": false,
+        "semantic": "deposition_path_end",
+        "sequence_index": 8,
+        "unwrapped_angle_rad": 6.632251157578452
+      },
+      "duration_s": null,
+      "event_id": "event-0000004",
+      "event_type": "index_end",
+      "layer_id": "layer-0001",
+      "operation_id": "rotary-operation-1",
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 8
+      },
+      "duration_s": null,
+      "event_id": "event-0000005",
+      "event_type": "retract",
+      "layer_id": "layer-0002",
+      "operation_id": "rotary-operation-1",
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "clearance_mm": 1.0,
+        "from_layer_id": "layer-0001",
+        "from_region_id": "cross-zero",
+        "semantic": "safe_connection",
+        "sequence_index": 8
+      },
+      "duration_s": null,
+      "event_id": "event-0000006",
+      "event_type": "safe_depart",
+      "layer_id": "layer-0002",
+      "operation_id": "rotary-operation-1",
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "from_layer_id": "layer-0001",
+        "semantic": "layer_change",
+        "sequence_index": 10,
+        "to_layer_id": "layer-0002"
+      },
+      "duration_s": null,
+      "event_id": "event-0000007",
+      "event_type": "operation_change",
+      "layer_id": "layer-0002",
+      "operation_id": "rotary-operation-1",
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "clearance_mm": 1.0,
+        "from_layer_id": "layer-0001",
+        "from_region_id": "cross-zero",
+        "semantic": "safe_connection",
+        "sequence_index": 10
+      },
+      "duration_s": null,
+      "event_id": "event-0000008",
+      "event_type": "safe_approach",
+      "layer_id": "layer-0002",
+      "operation_id": "rotary-operation-1",
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "axial_mm": 0.8,
+        "radius_mm": 12.0,
+        "reversed_from_declared": true,
+        "semantic": "seam",
+        "sequence_index": 11,
+        "unwrapped_angle_rad": 6.632251157578452
+      },
+      "duration_s": null,
+      "event_id": "event-0000009",
+      "event_type": "index_start",
+      "layer_id": "layer-0002",
+      "operation_id": "rotary-operation-1",
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 11
+      },
+      "duration_s": null,
+      "event_id": "event-0000010",
+      "event_type": "prime",
+      "layer_id": "layer-0002",
+      "operation_id": "rotary-operation-1",
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "reversed_from_declared": true,
+        "semantic": "deposition_path_end",
+        "sequence_index": 17,
+        "unwrapped_angle_rad": 6.1086523819801535
+      },
+      "duration_s": null,
+      "event_id": "event-0000011",
+      "event_type": "index_end",
+      "layer_id": "layer-0002",
+      "operation_id": "rotary-operation-1",
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 17
+      },
+      "duration_s": null,
+      "event_id": "event-0000012",
+      "event_type": "retract",
+      "layer_id": "layer-0003",
+      "operation_id": "rotary-operation-1",
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "clearance_mm": 1.0,
+        "from_layer_id": "layer-0002",
+        "from_region_id": "cross-zero",
+        "semantic": "safe_connection",
+        "sequence_index": 17
+      },
+      "duration_s": null,
+      "event_id": "event-0000013",
+      "event_type": "safe_depart",
+      "layer_id": "layer-0003",
+      "operation_id": "rotary-operation-1",
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "from_layer_id": "layer-0002",
+        "semantic": "layer_change",
+        "sequence_index": 19,
+        "to_layer_id": "layer-0003"
+      },
+      "duration_s": null,
+      "event_id": "event-0000014",
+      "event_type": "operation_change",
+      "layer_id": "layer-0003",
+      "operation_id": "rotary-operation-1",
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "clearance_mm": 1.0,
+        "from_layer_id": "layer-0002",
+        "from_region_id": "cross-zero",
+        "semantic": "safe_connection",
+        "sequence_index": 19
+      },
+      "duration_s": null,
+      "event_id": "event-0000015",
+      "event_type": "safe_approach",
+      "layer_id": "layer-0003",
+      "operation_id": "rotary-operation-1",
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "axial_mm": 1.6,
+        "radius_mm": 12.0,
+        "reversed_from_declared": false,
+        "semantic": "seam",
+        "sequence_index": 20,
+        "unwrapped_angle_rad": 6.1086523819801535
+      },
+      "duration_s": null,
+      "event_id": "event-0000016",
+      "event_type": "index_start",
+      "layer_id": "layer-0003",
+      "operation_id": "rotary-operation-1",
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 20
+      },
+      "duration_s": null,
+      "event_id": "event-0000017",
+      "event_type": "prime",
+      "layer_id": "layer-0003",
+      "operation_id": "rotary-operation-1",
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "reversed_from_declared": false,
+        "semantic": "deposition_path_end",
+        "sequence_index": 26,
+        "unwrapped_angle_rad": 6.632251157578452
+      },
+      "duration_s": null,
+      "event_id": "event-0000018",
+      "event_type": "index_end",
+      "layer_id": "layer-0003",
+      "operation_id": "rotary-operation-1",
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 26
+      },
+      "duration_s": null,
+      "event_id": "event-0000019",
+      "event_type": "retract",
+      "layer_id": "layer-0001",
+      "operation_id": "rotary-operation-1",
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "clearance_mm": 1.0,
+        "from_layer_id": "layer-0003",
+        "from_region_id": "cross-zero",
+        "semantic": "safe_connection",
+        "sequence_index": 26
+      },
+      "duration_s": null,
+      "event_id": "event-0000020",
+      "event_type": "safe_depart",
+      "layer_id": "layer-0001",
+      "operation_id": "rotary-operation-1",
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "from_layer_id": "layer-0003",
+        "semantic": "layer_change",
+        "sequence_index": 47,
+        "to_layer_id": "layer-0001"
+      },
+      "duration_s": null,
+      "event_id": "event-0000021",
+      "event_type": "operation_change",
+      "layer_id": "layer-0001",
+      "operation_id": "rotary-operation-1",
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "clearance_mm": 1.0,
+        "from_layer_id": "layer-0003",
+        "from_region_id": "cross-zero",
+        "semantic": "safe_connection",
+        "sequence_index": 47
+      },
+      "duration_s": null,
+      "event_id": "event-0000022",
+      "event_type": "safe_approach",
+      "layer_id": "layer-0001",
+      "operation_id": "rotary-operation-1",
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "axial_mm": 0.0,
+        "radius_mm": 12.0,
+        "reversed_from_declared": false,
+        "semantic": "seam",
+        "sequence_index": 48,
+        "unwrapped_angle_rad": 8.377580409572781
+      },
+      "duration_s": null,
+      "event_id": "event-0000023",
+      "event_type": "index_start",
+      "layer_id": "layer-0001",
+      "operation_id": "rotary-operation-1",
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 48
+      },
+      "duration_s": null,
+      "event_id": "event-0000024",
+      "event_type": "prime",
+      "layer_id": "layer-0001",
+      "operation_id": "rotary-operation-1",
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "reversed_from_declared": false,
+        "semantic": "deposition_path_end",
+        "sequence_index": 66,
+        "unwrapped_angle_rad": 9.948376736367678
+      },
+      "duration_s": null,
+      "event_id": "event-0000025",
+      "event_type": "index_end",
+      "layer_id": "layer-0001",
+      "operation_id": "rotary-operation-1",
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 66
+      },
+      "duration_s": null,
+      "event_id": "event-0000026",
+      "event_type": "retract",
+      "layer_id": "layer-0002",
+      "operation_id": "rotary-operation-1",
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "clearance_mm": 1.0,
+        "from_layer_id": "layer-0001",
+        "from_region_id": "local-sector",
+        "semantic": "safe_connection",
+        "sequence_index": 66
+      },
+      "duration_s": null,
+      "event_id": "event-0000027",
+      "event_type": "safe_depart",
+      "layer_id": "layer-0002",
+      "operation_id": "rotary-operation-1",
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "from_layer_id": "layer-0001",
+        "semantic": "layer_change",
+        "sequence_index": 68,
+        "to_layer_id": "layer-0002"
+      },
+      "duration_s": null,
+      "event_id": "event-0000028",
+      "event_type": "operation_change",
+      "layer_id": "layer-0002",
+      "operation_id": "rotary-operation-1",
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "clearance_mm": 1.0,
+        "from_layer_id": "layer-0001",
+        "from_region_id": "local-sector",
+        "semantic": "safe_connection",
+        "sequence_index": 68
+      },
+      "duration_s": null,
+      "event_id": "event-0000029",
+      "event_type": "safe_approach",
+      "layer_id": "layer-0002",
+      "operation_id": "rotary-operation-1",
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "axial_mm": 0.8,
+        "radius_mm": 12.0,
+        "reversed_from_declared": true,
+        "semantic": "seam",
+        "sequence_index": 69,
+        "unwrapped_angle_rad": 9.948376736367678
+      },
+      "duration_s": null,
+      "event_id": "event-0000030",
+      "event_type": "index_start",
+      "layer_id": "layer-0002",
+      "operation_id": "rotary-operation-1",
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 69
+      },
+      "duration_s": null,
+      "event_id": "event-0000031",
+      "event_type": "prime",
+      "layer_id": "layer-0002",
+      "operation_id": "rotary-operation-1",
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "reversed_from_declared": true,
+        "semantic": "deposition_path_end",
+        "sequence_index": 87,
+        "unwrapped_angle_rad": 8.377580409572781
+      },
+      "duration_s": null,
+      "event_id": "event-0000032",
+      "event_type": "index_end",
+      "layer_id": "layer-0002",
+      "operation_id": "rotary-operation-1",
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 87
+      },
+      "duration_s": null,
+      "event_id": "event-0000033",
+      "event_type": "retract",
+      "layer_id": "layer-0003",
+      "operation_id": "rotary-operation-1",
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "clearance_mm": 1.0,
+        "from_layer_id": "layer-0002",
+        "from_region_id": "local-sector",
+        "semantic": "safe_connection",
+        "sequence_index": 87
+      },
+      "duration_s": null,
+      "event_id": "event-0000034",
+      "event_type": "safe_depart",
+      "layer_id": "layer-0003",
+      "operation_id": "rotary-operation-1",
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "from_layer_id": "layer-0002",
+        "semantic": "layer_change",
+        "sequence_index": 89,
+        "to_layer_id": "layer-0003"
+      },
+      "duration_s": null,
+      "event_id": "event-0000035",
+      "event_type": "operation_change",
+      "layer_id": "layer-0003",
+      "operation_id": "rotary-operation-1",
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "clearance_mm": 1.0,
+        "from_layer_id": "layer-0002",
+        "from_region_id": "local-sector",
+        "semantic": "safe_connection",
+        "sequence_index": 89
+      },
+      "duration_s": null,
+      "event_id": "event-0000036",
+      "event_type": "safe_approach",
+      "layer_id": "layer-0003",
+      "operation_id": "rotary-operation-1",
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "axial_mm": 1.6,
+        "radius_mm": 12.0,
+        "reversed_from_declared": false,
+        "semantic": "seam",
+        "sequence_index": 90,
+        "unwrapped_angle_rad": 8.377580409572781
+      },
+      "duration_s": null,
+      "event_id": "event-0000037",
+      "event_type": "index_start",
+      "layer_id": "layer-0003",
+      "operation_id": "rotary-operation-1",
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 90
+      },
+      "duration_s": null,
+      "event_id": "event-0000038",
+      "event_type": "prime",
+      "layer_id": "layer-0003",
+      "operation_id": "rotary-operation-1",
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "reversed_from_declared": false,
+        "semantic": "deposition_path_end",
+        "sequence_index": 108,
+        "unwrapped_angle_rad": 9.948376736367678
+      },
+      "duration_s": null,
+      "event_id": "event-0000039",
+      "event_type": "index_end",
+      "layer_id": "layer-0003",
+      "operation_id": "rotary-operation-1",
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 108
+      },
+      "duration_s": null,
+      "event_id": "event-0000040",
+      "event_type": "retract",
+      "layer_id": "layer-0003",
+      "operation_id": "rotary-operation-1",
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "clearance_mm": 1.0,
+        "semantic": "final_clearance_exit",
+        "sequence_index": 108
+      },
+      "duration_s": null,
+      "event_id": "event-0000041",
+      "event_type": "safe_depart",
+      "layer_id": "layer-0003",
+      "operation_id": "rotary-operation-1",
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part"
+    },
+    {
+      "context": {
+        "semantic": "safe_program_end",
+        "sequence_index": 109
+      },
+      "duration_s": null,
+      "event_id": "event-0000042",
+      "event_type": "finish",
+      "layer_id": "layer-0003",
+      "operation_id": "rotary-operation-1",
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part"
+    }
+  ],
+  "operation_id": "rotary-operation-1",
+  "points": [
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.9848077530122081,
+        0.17364817766693041,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000001",
+      "point_type": "travel",
+      "position": [
+        22.802500789158707,
+        -22.257426309670095,
+        5.0
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.9848077530122081,
+        -0.17364817766693041,
+        0.0
+      ],
+      "tangent": [
+        -0.9848077530122082,
+        0.1736481776669293,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.9848077530122081,
+        0.17364817766693041,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000002",
+      "point_type": "approach",
+      "position": [
+        21.817693036146494,
+        -22.083778132003165,
+        5.0
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.9848077530122081,
+        -0.17364817766693041,
+        0.0
+      ],
+      "tangent": [
+        0.17364817766693041,
+        0.9848077530122081,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.1256238356121674,
+      "nozzle_axis": [
+        -0.9961946980917455,
+        0.08715574274765832,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000003",
+      "point_type": "deposition",
+      "position": [
+        21.954336377100947,
+        -21.0458689129719,
+        5.0
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.9961946980917455,
+        -0.08715574274765832,
+        0.0
+      ],
+      "tangent": [
+        0.08715574274765832,
+        0.9961946980917455,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.12562383561216764,
+      "nozzle_axis": [
+        -1.0,
+        2.4492935982947064e-16,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000004",
+      "point_type": "deposition",
+      "position": [
+        22.0,
+        -20.000000000000004,
+        5.0
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        1.0,
+        -2.4492935982947064e-16,
+        0.0
+      ],
+      "tangent": [
+        2.4492935982947064e-16,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.12562383561216764,
+      "nozzle_axis": [
+        -0.9961946980917455,
+        -0.08715574274765783,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000005",
+      "point_type": "deposition",
+      "position": [
+        21.954336377100947,
+        -18.954131087028106,
+        5.0
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.9961946980917455,
+        0.08715574274765783,
+        0.0
+      ],
+      "tangent": [
+        -0.08715574274765785,
+        0.9961946980917457,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.12562383561216778,
+      "nozzle_axis": [
+        -0.9848077530122081,
+        -0.17364817766692991,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000006",
+      "point_type": "deposition",
+      "position": [
+        21.817693036146498,
+        -17.91622186799684,
+        5.0
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.9848077530122081,
+        0.17364817766692991,
+        0.0
+      ],
+      "tangent": [
+        -0.17364817766692994,
+        0.9848077530122081,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.12562383561216717,
+      "nozzle_axis": [
+        -0.9659258262890684,
+        -0.25881904510252024,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000007",
+      "point_type": "deposition",
+      "position": [
+        21.59110991546882,
+        -16.89417145876976,
+        5.0
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.9659258262890684,
+        0.25881904510252024,
+        0.0
+      ],
+      "tangent": [
+        -0.2588190451025203,
+        0.9659258262890684,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.12562383561216767,
+      "nozzle_axis": [
+        -0.9396926207859086,
+        -0.3420201433256681,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000008",
+      "point_type": "deposition",
+      "position": [
+        21.276311449430903,
+        -15.895758280091982,
+        5.0
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.9396926207859086,
+        0.3420201433256681,
+        0.0
+      ],
+      "tangent": [
+        -0.3420201433256682,
+        0.9396926207859086,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.9396926207859086,
+        -0.3420201433256681,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000009",
+      "point_type": "depart",
+      "position": [
+        22.216004070216812,
+        -15.553738136766315,
+        5.0
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.9396926207859086,
+        0.3420201433256681,
+        0.0
+      ],
+      "tangent": [
+        0.9396926207859089,
+        0.34202014332566755,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.9396926207859086,
+        -0.3420201433256681,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000010",
+      "point_type": "travel",
+      "position": [
+        22.216004070216812,
+        -15.553738136766315,
+        5.8
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.9396926207859086,
+        0.3420201433256681,
+        0.0
+      ],
+      "tangent": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.9396926207859086,
+        -0.3420201433256681,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000011",
+      "point_type": "approach",
+      "position": [
+        21.276311449430903,
+        -15.895758280091982,
+        5.8
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.9396926207859086,
+        0.3420201433256681,
+        0.0
+      ],
+      "tangent": [
+        0.3420201433256682,
+        -0.9396926207859086,
+        -0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.12562383561216767,
+      "nozzle_axis": [
+        -0.9659258262890684,
+        -0.25881904510252024,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000012",
+      "point_type": "deposition",
+      "position": [
+        21.59110991546882,
+        -16.89417145876976,
+        5.8
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.9659258262890684,
+        0.25881904510252024,
+        0.0
+      ],
+      "tangent": [
+        0.2588190451025203,
+        -0.9659258262890684,
+        -0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.12562383561216717,
+      "nozzle_axis": [
+        -0.9848077530122081,
+        -0.17364817766692991,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000013",
+      "point_type": "deposition",
+      "position": [
+        21.817693036146498,
+        -17.91622186799684,
+        5.8
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.9848077530122081,
+        0.17364817766692991,
+        0.0
+      ],
+      "tangent": [
+        0.17364817766692994,
+        -0.9848077530122081,
+        -0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.12562383561216778,
+      "nozzle_axis": [
+        -0.9961946980917455,
+        -0.08715574274765783,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000014",
+      "point_type": "deposition",
+      "position": [
+        21.954336377100947,
+        -18.954131087028106,
+        5.8
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.9961946980917455,
+        0.08715574274765783,
+        0.0
+      ],
+      "tangent": [
+        0.08715574274765785,
+        -0.9961946980917457,
+        -0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.12562383561216764,
+      "nozzle_axis": [
+        -1.0,
+        2.4492935982947064e-16,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000015",
+      "point_type": "deposition",
+      "position": [
+        22.0,
+        -20.000000000000004,
+        5.8
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        1.0,
+        -2.4492935982947064e-16,
+        0.0
+      ],
+      "tangent": [
+        -2.4492935982947064e-16,
+        -1.0,
+        -0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.12562383561216764,
+      "nozzle_axis": [
+        -0.9961946980917455,
+        0.08715574274765832,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000016",
+      "point_type": "deposition",
+      "position": [
+        21.954336377100947,
+        -21.0458689129719,
+        5.8
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.9961946980917455,
+        -0.08715574274765832,
+        0.0
+      ],
+      "tangent": [
+        -0.08715574274765832,
+        -0.9961946980917455,
+        -0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.1256238356121674,
+      "nozzle_axis": [
+        -0.9848077530122081,
+        0.17364817766693041,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000017",
+      "point_type": "deposition",
+      "position": [
+        21.817693036146494,
+        -22.083778132003165,
+        5.8
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.9848077530122081,
+        -0.17364817766693041,
+        0.0
+      ],
+      "tangent": [
+        -0.17364817766693041,
+        -0.9848077530122081,
+        -0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.9848077530122081,
+        0.17364817766693041,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000018",
+      "point_type": "depart",
+      "position": [
+        22.802500789158707,
+        -22.257426309670095,
+        5.8
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.9848077530122081,
+        -0.17364817766693041,
+        0.0
+      ],
+      "tangent": [
+        0.9848077530122082,
+        -0.1736481776669293,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.9848077530122081,
+        0.17364817766693041,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000019",
+      "point_type": "travel",
+      "position": [
+        22.802500789158707,
+        -22.257426309670095,
+        6.6
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.9848077530122081,
+        -0.17364817766693041,
+        0.0
+      ],
+      "tangent": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.9848077530122081,
+        0.17364817766693041,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000020",
+      "point_type": "approach",
+      "position": [
+        21.817693036146494,
+        -22.083778132003165,
+        6.6
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.9848077530122081,
+        -0.17364817766693041,
+        0.0
+      ],
+      "tangent": [
+        0.17364817766693041,
+        0.9848077530122081,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.1256238356121674,
+      "nozzle_axis": [
+        -0.9961946980917455,
+        0.08715574274765832,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000021",
+      "point_type": "deposition",
+      "position": [
+        21.954336377100947,
+        -21.0458689129719,
+        6.6
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.9961946980917455,
+        -0.08715574274765832,
+        0.0
+      ],
+      "tangent": [
+        0.08715574274765832,
+        0.9961946980917455,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.12562383561216764,
+      "nozzle_axis": [
+        -1.0,
+        2.4492935982947064e-16,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000022",
+      "point_type": "deposition",
+      "position": [
+        22.0,
+        -20.000000000000004,
+        6.6
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        1.0,
+        -2.4492935982947064e-16,
+        0.0
+      ],
+      "tangent": [
+        2.4492935982947064e-16,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.12562383561216764,
+      "nozzle_axis": [
+        -0.9961946980917455,
+        -0.08715574274765783,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000023",
+      "point_type": "deposition",
+      "position": [
+        21.954336377100947,
+        -18.954131087028106,
+        6.6
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.9961946980917455,
+        0.08715574274765783,
+        0.0
+      ],
+      "tangent": [
+        -0.08715574274765785,
+        0.9961946980917457,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.12562383561216778,
+      "nozzle_axis": [
+        -0.9848077530122081,
+        -0.17364817766692991,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000024",
+      "point_type": "deposition",
+      "position": [
+        21.817693036146498,
+        -17.91622186799684,
+        6.6
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.9848077530122081,
+        0.17364817766692991,
+        0.0
+      ],
+      "tangent": [
+        -0.17364817766692994,
+        0.9848077530122081,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.12562383561216717,
+      "nozzle_axis": [
+        -0.9659258262890684,
+        -0.25881904510252024,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000025",
+      "point_type": "deposition",
+      "position": [
+        21.59110991546882,
+        -16.89417145876976,
+        6.6
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.9659258262890684,
+        0.25881904510252024,
+        0.0
+      ],
+      "tangent": [
+        -0.2588190451025203,
+        0.9659258262890684,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.12562383561216767,
+      "nozzle_axis": [
+        -0.9396926207859086,
+        -0.3420201433256681,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000026",
+      "point_type": "deposition",
+      "position": [
+        21.276311449430903,
+        -15.895758280091982,
+        6.6
+      ],
+      "region_id": "cross-zero",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.9396926207859086,
+        0.3420201433256681,
+        0.0
+      ],
+      "tangent": [
+        -0.3420201433256682,
+        0.9396926207859086,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.9396926207859086,
+        -0.3420201433256681,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000027",
+      "point_type": "depart",
+      "position": [
+        22.216004070216812,
+        -15.553738136766315,
+        6.6
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.9396926207859086,
+        0.3420201433256681,
+        0.0
+      ],
+      "tangent": [
+        0.9396926207859089,
+        0.34202014332566755,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.9063077870366503,
+        -0.4226182617406988,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000028",
+      "point_type": "travel",
+      "position": [
+        21.782001231476453,
+        -14.505962597370916,
+        6.52
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.9063077870366503,
+        0.4226182617406988,
+        0.0
+      ],
+      "tangent": [
+        -0.3817348681414495,
+        0.9215894958977946,
+        -0.07036541406031165
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.866025403784439,
+        -0.4999999999999993,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000029",
+      "point_type": "travel",
+      "position": [
+        21.258330249197705,
+        -13.50000000000001,
+        6.4399999999999995
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.866025403784439,
+        0.4999999999999993,
+        0.0
+      ],
+      "tangent": [
+        -0.46060406874267806,
+        0.8848121836648789,
+        -0.07036541406031172
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.8191520442889924,
+        -0.5735764363510453,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000030",
+      "point_type": "travel",
+      "position": [
+        20.6489765757569,
+        -12.543506327436411,
+        6.36
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.8191520442889924,
+        0.5735764363510453,
+        0.0
+      ],
+      "tangent": [
+        -0.5359677942604268,
+        0.8413009164500738,
+        -0.07036541406031101
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.7660444431189788,
+        -0.6427876096865386,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000031",
+      "point_type": "travel",
+      "position": [
+        19.958577760546724,
+        -11.643761074075,
+        6.28
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.7660444431189788,
+        0.6427876096865386,
+        0.0
+      ],
+      "tangent": [
+        -0.6072524812376586,
+        0.7913868412696966,
+        -0.07036541406031173
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.7071067811865483,
+        -0.7071067811865467,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000032",
+      "point_type": "travel",
+      "position": [
+        19.192388155425128,
+        -10.807611844574893,
+        6.2
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.7071067811865483,
+        0.7071067811865467,
+        0.0
+      ],
+      "tangent": [
+        -0.6739156101635967,
+        0.7354498343748187,
+        -0.07036541406031163
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.6427876096865396,
+        -0.7660444431189778,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000033",
+      "point_type": "travel",
+      "position": [
+        18.356238925925012,
+        -10.041422239453288,
+        6.12
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.6427876096865396,
+        0.7660444431189778,
+        0.0
+      ],
+      "tangent": [
+        -0.7354498343748184,
+        0.673915610163597,
+        -0.07036541406031085
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.5735764363510465,
+        -0.8191520442889915,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000034",
+      "point_type": "travel",
+      "position": [
+        17.456493672563603,
+        -9.351023424243111,
+        6.04
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.5735764363510465,
+        0.8191520442889915,
+        0.0
+      ],
+      "tangent": [
+        -0.791386841269696,
+        0.6072524812376594,
+        -0.07036541406031183
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.5000000000000004,
+        -0.8660254037844384,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000035",
+      "point_type": "travel",
+      "position": [
+        16.500000000000007,
+        -8.741669750802302,
+        5.96
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.5000000000000004,
+        0.8660254037844384,
+        0.0
+      ],
+      "tangent": [
+        -0.8413009164500705,
+        0.5359677942604316,
+        -0.07036541406031178
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.42261826174070005,
+        -0.9063077870366497,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000036",
+      "point_type": "travel",
+      "position": [
+        15.4940374026291,
+        -8.217998768523554,
+        5.88
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.42261826174070005,
+        0.9063077870366497,
+        0.0
+      ],
+      "tangent": [
+        -0.8848121836648792,
+        0.4606040687426774,
+        -0.07036541406031162
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.3420201433256695,
+        -0.9396926207859081,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000037",
+      "point_type": "travel",
+      "position": [
+        14.446261863233703,
+        -7.783995929783195,
+        5.8
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.3420201433256695,
+        0.9396926207859081,
+        0.0
+      ],
+      "tangent": [
+        -0.9215894958977944,
+        0.3817348681414501,
+        -0.07036541406031174
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.2588190451025216,
+        -0.9659258262890681,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000038",
+      "point_type": "travel",
+      "position": [
+        13.364647586332781,
+        -7.442964258242116,
+        5.72
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.2588190451025216,
+        0.9659258262890681,
+        0.0
+      ],
+      "tangent": [
+        -0.9513529555959741,
+        0.2999604346958534,
+        -0.0703654140603117
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.17364817766693133,
+        -0.9848077530122079,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000039",
+      "point_type": "travel",
+      "position": [
+        12.257426309670107,
+        -7.197499210841297,
+        5.640000000000001
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.17364817766693133,
+        0.9848077530122079,
+        0.0
+      ],
+      "tangent": [
+        -0.9738760448594488,
+        0.21590312122115776,
+        -0.0703654140603109
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.08715574274765926,
+        -0.9961946980917454,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000040",
+      "point_type": "travel",
+      "position": [
+        11.13302465571957,
+        -7.049468924807309,
+        5.5600000000000005
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        0.08715574274765926,
+        0.9961946980917454,
+        0.0
+      ],
+      "tangent": [
+        -0.9889873493791096,
+        0.13020265462809907,
+        -0.07036541406031169
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -1.1943401194869635e-15,
+        -1.0,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000041",
+      "point_type": "travel",
+      "position": [
+        10.000000000000016,
+        -7.0,
+        5.48
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        1.1943401194869635e-15,
+        1.0,
+        0.0
+      ],
+      "tangent": [
+        -0.9965718630031065,
+        0.04351126721480905,
+        -0.07036541406031176
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.08715574274765776,
+        -0.9961946980917455,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000042",
+      "point_type": "travel",
+      "position": [
+        8.86697534428045,
+        -7.049468924807307,
+        5.4
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.08715574274765776,
+        0.9961946980917455,
+        0.0
+      ],
+      "tangent": [
+        -0.9965718630031066,
+        -0.04351126721480701,
+        -0.070365414060311
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.17364817766692986,
+        -0.9848077530122081,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000043",
+      "point_type": "travel",
+      "position": [
+        7.742573690329912,
+        -7.197499210841293,
+        5.32
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.17364817766692986,
+        0.9848077530122081,
+        0.0
+      ],
+      "tangent": [
+        -0.9889873493791098,
+        -0.13020265462809744,
+        -0.07036541406031165
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.2588190451025202,
+        -0.9659258262890684,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000044",
+      "point_type": "travel",
+      "position": [
+        6.6353524136672375,
+        -7.44296425824211,
+        5.24
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.2588190451025202,
+        0.9659258262890684,
+        0.0
+      ],
+      "tangent": [
+        -0.9738760448594491,
+        -0.21590312122115626,
+        -0.0703654140603117
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.34202014332566805,
+        -0.9396926207859086,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000045",
+      "point_type": "travel",
+      "position": [
+        5.553738136766316,
+        -7.783995929783188,
+        5.16
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.34202014332566805,
+        0.9396926207859086,
+        0.0
+      ],
+      "tangent": [
+        -0.9513529555959747,
+        -0.299960434695852,
+        -0.07036541406031174
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.4226182617406988,
+        -0.9063077870366504,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000046",
+      "point_type": "travel",
+      "position": [
+        4.5059625973709165,
+        -8.217998768523547,
+        5.08
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.4226182617406988,
+        0.9063077870366504,
+        0.0
+      ],
+      "tangent": [
+        -0.9215894958977946,
+        -0.3817348681414495,
+        -0.07036541406031165
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.4999999999999992,
+        -0.8660254037844392,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000047",
+      "point_type": "travel",
+      "position": [
+        3.5000000000000098,
+        -8.741669750802291,
+        5.0
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.4999999999999992,
+        0.8660254037844392,
+        0.0
+      ],
+      "tangent": [
+        -0.8848121836648805,
+        -0.4606040687426749,
+        -0.07036541406031172
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.4999999999999992,
+        -0.8660254037844392,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000048",
+      "point_type": "approach",
+      "position": [
+        4.000000000000009,
+        -9.60769515458673,
+        5.0
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.4999999999999992,
+        0.8660254037844392,
+        0.0
+      ],
+      "tangent": [
+        -0.8660254037844392,
+        -0.4999999999999993,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.12562383561216756,
+      "nozzle_axis": [
+        0.5735764363510453,
+        -0.8191520442889924,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000049",
+      "point_type": "deposition",
+      "position": [
+        3.1170827637874563,
+        -10.170175468532092,
+        5.0
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.5735764363510453,
+        0.8191520442889924,
+        0.0
+      ],
+      "tangent": [
+        -0.8191520442889924,
+        -0.5735764363510453,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.12562383561216747,
+      "nozzle_axis": [
+        0.6427876096865385,
+        -0.7660444431189788,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000050",
+      "point_type": "deposition",
+      "position": [
+        2.286548683761538,
+        -10.807466682572255,
+        5.0
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.6427876096865385,
+        0.7660444431189788,
+        0.0
+      ],
+      "tangent": [
+        -0.7660444431189788,
+        -0.6427876096865385,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.12562383561216764,
+      "nozzle_axis": [
+        0.7071067811865467,
+        -0.7071067811865483,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000051",
+      "point_type": "deposition",
+      "position": [
+        1.5147186257614393,
+        -11.51471862576142,
+        5.0
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.7071067811865467,
+        0.7071067811865483,
+        0.0
+      ],
+      "tangent": [
+        -0.7071067811865483,
+        -0.7071067811865467,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.1256238356121676,
+      "nozzle_axis": [
+        0.7660444431189772,
+        -0.6427876096865404,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000052",
+      "point_type": "deposition",
+      "position": [
+        0.8074666825722723,
+        -12.286548683761517,
+        5.0
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.7660444431189772,
+        0.6427876096865404,
+        0.0
+      ],
+      "tangent": [
+        -0.6427876096865403,
+        -0.7660444431189772,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.12562383561216744,
+      "nozzle_axis": [
+        0.819152044288991,
+        -0.5735764363510473,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000053",
+      "point_type": "deposition",
+      "position": [
+        0.17017546853210774,
+        -13.117082763787433,
+        5.0
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.819152044288991,
+        0.5735764363510473,
+        0.0
+      ],
+      "tangent": [
+        -0.5735764363510473,
+        -0.819152044288991,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.12562383561216747,
+      "nozzle_axis": [
+        0.8660254037844379,
+        -0.5000000000000013,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000054",
+      "point_type": "deposition",
+      "position": [
+        -0.39230484541325517,
+        -13.999999999999984,
+        5.0
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.8660254037844379,
+        0.5000000000000013,
+        0.0
+      ],
+      "tangent": [
+        -0.5000000000000013,
+        -0.8660254037844379,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.12562383561216756,
+      "nozzle_axis": [
+        0.9063077870366493,
+        -0.42261826174070094,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000055",
+      "point_type": "deposition",
+      "position": [
+        -0.8756934444397917,
+        -14.92858085911159,
+        5.0
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9063077870366493,
+        0.42261826174070094,
+        0.0
+      ],
+      "tangent": [
+        -0.4226182617407009,
+        -0.9063077870366493,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.12562383561216744,
+      "nozzle_axis": [
+        0.9396926207859078,
+        -0.3420201433256704,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000056",
+      "point_type": "deposition",
+      "position": [
+        -1.2763114494308923,
+        -15.895758280091956,
+        5.0
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9396926207859078,
+        0.3420201433256704,
+        0.0
+      ],
+      "tangent": [
+        -0.34202014332567043,
+        -0.9396926207859079,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.12562383561216764,
+      "nozzle_axis": [
+        0.9659258262890679,
+        -0.2588190451025225,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000057",
+      "point_type": "deposition",
+      "position": [
+        -1.5911099154688149,
+        -16.89417145876973,
+        5.0
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9659258262890679,
+        0.2588190451025225,
+        0.0
+      ],
+      "tangent": [
+        -0.2588190451025225,
+        -0.9659258262890679,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.1256238356121702,
+      "nozzle_axis": [
+        0.984807753012208,
+        -0.1736481776669305,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000058",
+      "point_type": "deposition",
+      "position": [
+        -1.8176930361464958,
+        -17.916221867996835,
+        5.0
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.984807753012208,
+        0.1736481776669305,
+        0.0
+      ],
+      "tangent": [
+        -0.17364817766693053,
+        -0.9848077530122081,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.12562383561216736,
+      "nozzle_axis": [
+        0.9961946980917455,
+        -0.08715574274765844,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000059",
+      "point_type": "deposition",
+      "position": [
+        -1.9543363771009474,
+        -18.9541310870281,
+        5.0
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9961946980917455,
+        0.08715574274765844,
+        0.0
+      ],
+      "tangent": [
+        -0.08715574274765843,
+        -0.9961946980917455,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.12562383561216764,
+      "nozzle_axis": [
+        1.0,
+        -3.6739403974420594e-16,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000060",
+      "point_type": "deposition",
+      "position": [
+        -2.0,
+        -19.999999999999996,
+        5.0
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -1.0,
+        3.6739403974420594e-16,
+        0.0
+      ],
+      "tangent": [
+        -3.67394039744206e-16,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.12562383561216764,
+      "nozzle_axis": [
+        0.9961946980917455,
+        0.08715574274765771,
+        0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000061",
+      "point_type": "deposition",
+      "position": [
+        -1.9543363771009474,
+        -21.045868912971894,
+        5.0
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9961946980917455,
+        -0.08715574274765771,
+        -0.0
+      ],
+      "tangent": [
+        0.08715574274765771,
+        -0.9961946980917457,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.12562383561216736,
+      "nozzle_axis": [
+        0.9848077530122082,
+        0.1736481776669298,
+        0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000062",
+      "point_type": "deposition",
+      "position": [
+        -1.8176930361464976,
+        -22.083778132003157,
+        5.0
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9848077530122082,
+        -0.1736481776669298,
+        -0.0
+      ],
+      "tangent": [
+        0.1736481776669298,
+        -0.9848077530122082,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.1256238356121676,
+      "nozzle_axis": [
+        0.9659258262890684,
+        0.25881904510252013,
+        0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000063",
+      "point_type": "deposition",
+      "position": [
+        -1.5911099154688202,
+        -23.10582854123024,
+        5.0
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9659258262890684,
+        -0.25881904510252013,
+        -0.0
+      ],
+      "tangent": [
+        0.2588190451025202,
+        -0.9659258262890685,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.12562383561216767,
+      "nozzle_axis": [
+        0.9396926207859086,
+        0.342020143325668,
+        0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000064",
+      "point_type": "deposition",
+      "position": [
+        -1.276311449430903,
+        -24.104241719908018,
+        5.0
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9396926207859086,
+        -0.342020143325668,
+        -0.0
+      ],
+      "tangent": [
+        0.34202014332566805,
+        -0.9396926207859088,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.12562383561216736,
+      "nozzle_axis": [
+        0.9063077870366504,
+        0.42261826174069866,
+        0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000065",
+      "point_type": "deposition",
+      "position": [
+        -0.8756934444398041,
+        -25.071419140888384,
+        5.0
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9063077870366504,
+        -0.42261826174069866,
+        -0.0
+      ],
+      "tangent": [
+        0.42261826174069866,
+        -0.9063077870366504,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0001",
+      "material_volume_mm3": 0.12562383561216744,
+      "nozzle_axis": [
+        0.8660254037844392,
+        0.49999999999999917,
+        0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000066",
+      "point_type": "deposition",
+      "position": [
+        -0.3923048454132694,
+        -25.99999999999999,
+        5.0
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.8660254037844392,
+        -0.49999999999999917,
+        -0.0
+      ],
+      "tangent": [
+        0.49999999999999917,
+        -0.8660254037844392,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.8660254037844392,
+        0.49999999999999917,
+        0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000067",
+      "point_type": "depart",
+      "position": [
+        -1.2583302491977086,
+        -26.49999999999999,
+        5.0
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.8660254037844392,
+        -0.49999999999999917,
+        -0.0
+      ],
+      "tangent": [
+        -0.8660254037844389,
+        -0.4999999999999998,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.8660254037844392,
+        0.49999999999999917,
+        0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000068",
+      "point_type": "travel",
+      "position": [
+        -1.2583302491977086,
+        -26.49999999999999,
+        5.8
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.8660254037844392,
+        -0.49999999999999917,
+        -0.0
+      ],
+      "tangent": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.8660254037844392,
+        0.49999999999999917,
+        0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000069",
+      "point_type": "approach",
+      "position": [
+        -0.3923048454132694,
+        -25.99999999999999,
+        5.8
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.8660254037844392,
+        -0.49999999999999917,
+        -0.0
+      ],
+      "tangent": [
+        -0.49999999999999917,
+        0.8660254037844392,
+        -0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.12562383561216744,
+      "nozzle_axis": [
+        0.9063077870366504,
+        0.42261826174069866,
+        0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000070",
+      "point_type": "deposition",
+      "position": [
+        -0.8756934444398041,
+        -25.071419140888384,
+        5.8
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9063077870366504,
+        -0.42261826174069866,
+        -0.0
+      ],
+      "tangent": [
+        -0.42261826174069866,
+        0.9063077870366504,
+        -0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.12562383561216736,
+      "nozzle_axis": [
+        0.9396926207859086,
+        0.342020143325668,
+        0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000071",
+      "point_type": "deposition",
+      "position": [
+        -1.276311449430903,
+        -24.104241719908018,
+        5.8
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9396926207859086,
+        -0.342020143325668,
+        -0.0
+      ],
+      "tangent": [
+        -0.34202014332566805,
+        0.9396926207859088,
+        -0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.12562383561216767,
+      "nozzle_axis": [
+        0.9659258262890684,
+        0.25881904510252013,
+        0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000072",
+      "point_type": "deposition",
+      "position": [
+        -1.5911099154688202,
+        -23.10582854123024,
+        5.8
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9659258262890684,
+        -0.25881904510252013,
+        -0.0
+      ],
+      "tangent": [
+        -0.2588190451025202,
+        0.9659258262890685,
+        -0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.1256238356121676,
+      "nozzle_axis": [
+        0.9848077530122082,
+        0.1736481776669298,
+        0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000073",
+      "point_type": "deposition",
+      "position": [
+        -1.8176930361464976,
+        -22.083778132003157,
+        5.8
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9848077530122082,
+        -0.1736481776669298,
+        -0.0
+      ],
+      "tangent": [
+        -0.1736481776669298,
+        0.9848077530122082,
+        -0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.12562383561216736,
+      "nozzle_axis": [
+        0.9961946980917455,
+        0.08715574274765771,
+        0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000074",
+      "point_type": "deposition",
+      "position": [
+        -1.9543363771009474,
+        -21.045868912971894,
+        5.8
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9961946980917455,
+        -0.08715574274765771,
+        -0.0
+      ],
+      "tangent": [
+        -0.08715574274765771,
+        0.9961946980917457,
+        -0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.12562383561216764,
+      "nozzle_axis": [
+        1.0,
+        -3.6739403974420594e-16,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000075",
+      "point_type": "deposition",
+      "position": [
+        -2.0,
+        -19.999999999999996,
+        5.8
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -1.0,
+        3.6739403974420594e-16,
+        0.0
+      ],
+      "tangent": [
+        3.67394039744206e-16,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.12562383561216764,
+      "nozzle_axis": [
+        0.9961946980917455,
+        -0.08715574274765844,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000076",
+      "point_type": "deposition",
+      "position": [
+        -1.9543363771009474,
+        -18.9541310870281,
+        5.8
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9961946980917455,
+        0.08715574274765844,
+        0.0
+      ],
+      "tangent": [
+        0.08715574274765843,
+        0.9961946980917455,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.12562383561216736,
+      "nozzle_axis": [
+        0.984807753012208,
+        -0.1736481776669305,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000077",
+      "point_type": "deposition",
+      "position": [
+        -1.8176930361464958,
+        -17.916221867996835,
+        5.8
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.984807753012208,
+        0.1736481776669305,
+        0.0
+      ],
+      "tangent": [
+        0.17364817766693053,
+        0.9848077530122081,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.1256238356121702,
+      "nozzle_axis": [
+        0.9659258262890679,
+        -0.2588190451025225,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000078",
+      "point_type": "deposition",
+      "position": [
+        -1.5911099154688149,
+        -16.89417145876973,
+        5.8
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9659258262890679,
+        0.2588190451025225,
+        0.0
+      ],
+      "tangent": [
+        0.2588190451025225,
+        0.9659258262890679,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.12562383561216764,
+      "nozzle_axis": [
+        0.9396926207859078,
+        -0.3420201433256704,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000079",
+      "point_type": "deposition",
+      "position": [
+        -1.2763114494308923,
+        -15.895758280091956,
+        5.8
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9396926207859078,
+        0.3420201433256704,
+        0.0
+      ],
+      "tangent": [
+        0.34202014332567043,
+        0.9396926207859079,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.12562383561216744,
+      "nozzle_axis": [
+        0.9063077870366493,
+        -0.42261826174070094,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000080",
+      "point_type": "deposition",
+      "position": [
+        -0.8756934444397917,
+        -14.92858085911159,
+        5.8
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9063077870366493,
+        0.42261826174070094,
+        0.0
+      ],
+      "tangent": [
+        0.4226182617407009,
+        0.9063077870366493,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.12562383561216756,
+      "nozzle_axis": [
+        0.8660254037844379,
+        -0.5000000000000013,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000081",
+      "point_type": "deposition",
+      "position": [
+        -0.39230484541325517,
+        -13.999999999999984,
+        5.8
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.8660254037844379,
+        0.5000000000000013,
+        0.0
+      ],
+      "tangent": [
+        0.5000000000000013,
+        0.8660254037844379,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.12562383561216747,
+      "nozzle_axis": [
+        0.819152044288991,
+        -0.5735764363510473,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000082",
+      "point_type": "deposition",
+      "position": [
+        0.17017546853210774,
+        -13.117082763787433,
+        5.8
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.819152044288991,
+        0.5735764363510473,
+        0.0
+      ],
+      "tangent": [
+        0.5735764363510473,
+        0.819152044288991,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.12562383561216744,
+      "nozzle_axis": [
+        0.7660444431189772,
+        -0.6427876096865404,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000083",
+      "point_type": "deposition",
+      "position": [
+        0.8074666825722723,
+        -12.286548683761517,
+        5.8
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.7660444431189772,
+        0.6427876096865404,
+        0.0
+      ],
+      "tangent": [
+        0.6427876096865403,
+        0.7660444431189772,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.1256238356121676,
+      "nozzle_axis": [
+        0.7071067811865467,
+        -0.7071067811865483,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000084",
+      "point_type": "deposition",
+      "position": [
+        1.5147186257614393,
+        -11.51471862576142,
+        5.8
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.7071067811865467,
+        0.7071067811865483,
+        0.0
+      ],
+      "tangent": [
+        0.7071067811865483,
+        0.7071067811865467,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.12562383561216764,
+      "nozzle_axis": [
+        0.6427876096865385,
+        -0.7660444431189788,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000085",
+      "point_type": "deposition",
+      "position": [
+        2.286548683761538,
+        -10.807466682572255,
+        5.8
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.6427876096865385,
+        0.7660444431189788,
+        0.0
+      ],
+      "tangent": [
+        0.7660444431189788,
+        0.6427876096865385,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.12562383561216747,
+      "nozzle_axis": [
+        0.5735764363510453,
+        -0.8191520442889924,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000086",
+      "point_type": "deposition",
+      "position": [
+        3.1170827637874563,
+        -10.170175468532092,
+        5.8
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.5735764363510453,
+        0.8191520442889924,
+        0.0
+      ],
+      "tangent": [
+        0.8191520442889924,
+        0.5735764363510453,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0002",
+      "material_volume_mm3": 0.12562383561216756,
+      "nozzle_axis": [
+        0.4999999999999992,
+        -0.8660254037844392,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000087",
+      "point_type": "deposition",
+      "position": [
+        4.000000000000009,
+        -9.60769515458673,
+        5.8
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.4999999999999992,
+        0.8660254037844392,
+        0.0
+      ],
+      "tangent": [
+        0.8660254037844392,
+        0.4999999999999993,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.4999999999999992,
+        -0.8660254037844392,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000088",
+      "point_type": "depart",
+      "position": [
+        3.5000000000000098,
+        -8.741669750802291,
+        5.8
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.4999999999999992,
+        0.8660254037844392,
+        0.0
+      ],
+      "tangent": [
+        -0.4999999999999991,
+        0.8660254037844393,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.4999999999999992,
+        -0.8660254037844392,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000089",
+      "point_type": "travel",
+      "position": [
+        3.5000000000000098,
+        -8.741669750802291,
+        6.6
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.4999999999999992,
+        0.8660254037844392,
+        0.0
+      ],
+      "tangent": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.4999999999999992,
+        -0.8660254037844392,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000090",
+      "point_type": "approach",
+      "position": [
+        4.000000000000009,
+        -9.60769515458673,
+        6.6
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.4999999999999992,
+        0.8660254037844392,
+        0.0
+      ],
+      "tangent": [
+        -0.8660254037844392,
+        -0.4999999999999993,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.12562383561216756,
+      "nozzle_axis": [
+        0.5735764363510453,
+        -0.8191520442889924,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000091",
+      "point_type": "deposition",
+      "position": [
+        3.1170827637874563,
+        -10.170175468532092,
+        6.6
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.5735764363510453,
+        0.8191520442889924,
+        0.0
+      ],
+      "tangent": [
+        -0.8191520442889924,
+        -0.5735764363510453,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.12562383561216747,
+      "nozzle_axis": [
+        0.6427876096865385,
+        -0.7660444431189788,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000092",
+      "point_type": "deposition",
+      "position": [
+        2.286548683761538,
+        -10.807466682572255,
+        6.6
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.6427876096865385,
+        0.7660444431189788,
+        0.0
+      ],
+      "tangent": [
+        -0.7660444431189788,
+        -0.6427876096865385,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.12562383561216764,
+      "nozzle_axis": [
+        0.7071067811865467,
+        -0.7071067811865483,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000093",
+      "point_type": "deposition",
+      "position": [
+        1.5147186257614393,
+        -11.51471862576142,
+        6.6
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.7071067811865467,
+        0.7071067811865483,
+        0.0
+      ],
+      "tangent": [
+        -0.7071067811865483,
+        -0.7071067811865467,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.1256238356121676,
+      "nozzle_axis": [
+        0.7660444431189772,
+        -0.6427876096865404,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000094",
+      "point_type": "deposition",
+      "position": [
+        0.8074666825722723,
+        -12.286548683761517,
+        6.6
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.7660444431189772,
+        0.6427876096865404,
+        0.0
+      ],
+      "tangent": [
+        -0.6427876096865403,
+        -0.7660444431189772,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.12562383561216744,
+      "nozzle_axis": [
+        0.819152044288991,
+        -0.5735764363510473,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000095",
+      "point_type": "deposition",
+      "position": [
+        0.17017546853210774,
+        -13.117082763787433,
+        6.6
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.819152044288991,
+        0.5735764363510473,
+        0.0
+      ],
+      "tangent": [
+        -0.5735764363510473,
+        -0.819152044288991,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.12562383561216747,
+      "nozzle_axis": [
+        0.8660254037844379,
+        -0.5000000000000013,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000096",
+      "point_type": "deposition",
+      "position": [
+        -0.39230484541325517,
+        -13.999999999999984,
+        6.6
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.8660254037844379,
+        0.5000000000000013,
+        0.0
+      ],
+      "tangent": [
+        -0.5000000000000013,
+        -0.8660254037844379,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.12562383561216756,
+      "nozzle_axis": [
+        0.9063077870366493,
+        -0.42261826174070094,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000097",
+      "point_type": "deposition",
+      "position": [
+        -0.8756934444397917,
+        -14.92858085911159,
+        6.6
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9063077870366493,
+        0.42261826174070094,
+        0.0
+      ],
+      "tangent": [
+        -0.4226182617407009,
+        -0.9063077870366493,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.12562383561216744,
+      "nozzle_axis": [
+        0.9396926207859078,
+        -0.3420201433256704,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000098",
+      "point_type": "deposition",
+      "position": [
+        -1.2763114494308923,
+        -15.895758280091956,
+        6.6
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9396926207859078,
+        0.3420201433256704,
+        0.0
+      ],
+      "tangent": [
+        -0.34202014332567043,
+        -0.9396926207859079,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.12562383561216764,
+      "nozzle_axis": [
+        0.9659258262890679,
+        -0.2588190451025225,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000099",
+      "point_type": "deposition",
+      "position": [
+        -1.5911099154688149,
+        -16.89417145876973,
+        6.6
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9659258262890679,
+        0.2588190451025225,
+        0.0
+      ],
+      "tangent": [
+        -0.2588190451025225,
+        -0.9659258262890679,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.1256238356121702,
+      "nozzle_axis": [
+        0.984807753012208,
+        -0.1736481776669305,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000100",
+      "point_type": "deposition",
+      "position": [
+        -1.8176930361464958,
+        -17.916221867996835,
+        6.6
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.984807753012208,
+        0.1736481776669305,
+        0.0
+      ],
+      "tangent": [
+        -0.17364817766693053,
+        -0.9848077530122081,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.12562383561216736,
+      "nozzle_axis": [
+        0.9961946980917455,
+        -0.08715574274765844,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000101",
+      "point_type": "deposition",
+      "position": [
+        -1.9543363771009474,
+        -18.9541310870281,
+        6.6
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9961946980917455,
+        0.08715574274765844,
+        0.0
+      ],
+      "tangent": [
+        -0.08715574274765843,
+        -0.9961946980917455,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.12562383561216764,
+      "nozzle_axis": [
+        1.0,
+        -3.6739403974420594e-16,
+        -0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000102",
+      "point_type": "deposition",
+      "position": [
+        -2.0,
+        -19.999999999999996,
+        6.6
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -1.0,
+        3.6739403974420594e-16,
+        0.0
+      ],
+      "tangent": [
+        -3.67394039744206e-16,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.12562383561216764,
+      "nozzle_axis": [
+        0.9961946980917455,
+        0.08715574274765771,
+        0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000103",
+      "point_type": "deposition",
+      "position": [
+        -1.9543363771009474,
+        -21.045868912971894,
+        6.6
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9961946980917455,
+        -0.08715574274765771,
+        -0.0
+      ],
+      "tangent": [
+        0.08715574274765771,
+        -0.9961946980917457,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.12562383561216736,
+      "nozzle_axis": [
+        0.9848077530122082,
+        0.1736481776669298,
+        0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000104",
+      "point_type": "deposition",
+      "position": [
+        -1.8176930361464976,
+        -22.083778132003157,
+        6.6
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9848077530122082,
+        -0.1736481776669298,
+        -0.0
+      ],
+      "tangent": [
+        0.1736481776669298,
+        -0.9848077530122082,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.1256238356121676,
+      "nozzle_axis": [
+        0.9659258262890684,
+        0.25881904510252013,
+        0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000105",
+      "point_type": "deposition",
+      "position": [
+        -1.5911099154688202,
+        -23.10582854123024,
+        6.6
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9659258262890684,
+        -0.25881904510252013,
+        -0.0
+      ],
+      "tangent": [
+        0.2588190451025202,
+        -0.9659258262890685,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.12562383561216767,
+      "nozzle_axis": [
+        0.9396926207859086,
+        0.342020143325668,
+        0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000106",
+      "point_type": "deposition",
+      "position": [
+        -1.276311449430903,
+        -24.104241719908018,
+        6.6
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9396926207859086,
+        -0.342020143325668,
+        -0.0
+      ],
+      "tangent": [
+        0.34202014332566805,
+        -0.9396926207859088,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.12562383561216736,
+      "nozzle_axis": [
+        0.9063077870366504,
+        0.42261826174069866,
+        0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000107",
+      "point_type": "deposition",
+      "position": [
+        -0.8756934444398041,
+        -25.071419140888384,
+        6.6
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.9063077870366504,
+        -0.42261826174069866,
+        -0.0
+      ],
+      "tangent": [
+        0.42261826174069866,
+        -0.9063077870366504,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.12562383561216744,
+      "nozzle_axis": [
+        0.8660254037844392,
+        0.49999999999999917,
+        0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000108",
+      "point_type": "deposition",
+      "position": [
+        -0.3923048454132694,
+        -25.99999999999999,
+        6.6
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.8660254037844392,
+        -0.49999999999999917,
+        -0.0
+      ],
+      "tangent": [
+        0.49999999999999917,
+        -0.8660254037844392,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 120.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-0003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.8660254037844392,
+        0.49999999999999917,
+        0.0
+      ],
+      "operation_id": "rotary-operation-1",
+      "point_id": "point-0000109",
+      "point_type": "depart",
+      "position": [
+        -1.2583302491977086,
+        -26.49999999999999,
+        6.6
+      ],
+      "region_id": "local-sector",
+      "stage_id": "rotary_around_part",
+      "surface_normal": [
+        -0.8660254037844392,
+        -0.49999999999999917,
+        -0.0
+      ],
+      "tangent": [
+        -0.8660254037844389,
+        -0.4999999999999998,
+        0.0
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "toolpath_id": "rotary-operation-1-rotary_around_part-v1",
+  "units": {
+    "angle": "rad",
+    "feedrate": "mm_min",
+    "length": "mm",
+    "material_volume": "mm3"
+  }
+}
