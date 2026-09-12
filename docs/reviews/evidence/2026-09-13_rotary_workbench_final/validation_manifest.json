@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "task": "Rotary R01-R05 final acceptance",
+  "status": "passed_offline_stage_gates",
+  "baseline_commit": "859d590b7178403cb08c9791164655c057e54a35",
+  "package_source_commit": "a28395b130d1a195960e8d03b9a1cca5b3e9276f",
+  "package_source_tree": "39fa66245341e9ac65cad2849623da598d5ee265",
+  "branch": "codex/rotary-workbench-r01-r05",
+  "environment": {
+    "qualified_interpreter": "tmp/pytest9/Scripts/python.exe",
+    "python": "3.12.7",
+    "pytest": "9.1.1",
+    "numpy": "2.2.6",
+    "cadquery": "2.7.0",
+    "cadquery_ocp": "7.8.1.1.post1",
+    "pyqt5": "5.15.10",
+    "vtk": "9.3.1",
+    "ruff": "0.12.12",
+    "mypy": "1.11.2",
+    "qsettings_writable": true,
+    "pytest_basetemp": "unique repository-local directory per run",
+    "preflight_exit": 0,
+    "preflight_evidence": "preflight_current.log"
+  },
+  "validation_runs": [
+    {
+      "name": "rotary_specialized",
+      "exit": 0,
+      "result": "37 passed in 15.40s",
+      "evidence": [
+        "pytest_rotary.log",
+        "pytest_rotary.xml"
+      ]
+    },
+    {
+      "name": "full_repository_first_run",
+      "exit": 1,
+      "result": "819 passed, 1 failed, 3 skipped, 130 subtests passed in 408.02s",
+      "failure": "tests/test_planar_path_products.py::test_offset_product_generates_multiple_passes_reads_back_and_exports",
+      "diagnosis": "one Windows PermissionError WinError 5 while replacing a Planar P03 staged export directory",
+      "evidence": [
+        "pytest_full.log",
+        "pytest_full.xml"
+      ]
+    },
+    {
+      "name": "planar_failure_isolation_retry",
+      "exit": 0,
+      "result": "1 passed in 2.68s with a fresh repository-local basetemp",
+      "evidence": [
+        "pytest_planar_retry.log",
+        "pytest_planar_retry.xml"
+      ]
+    },
+    {
+      "name": "full_repository_final_retry",
+      "exit": 0,
+      "result": "820 passed, 3 skipped, 130 subtests passed in 432.77s",
+      "evidence": [
+        "pytest_full_retry.log",
+        "pytest_full_retry.xml"
+      ]
+    },
+    {
+      "name": "quality",
+      "exit": 0,
+      "result": "Ruff, migrated Ruff, security Ruff, format, context budget, and Mypy passed; 147 source files",
+      "evidence": "check_quality_final_source.log"
+    },
+    {
+      "name": "package_build",
+      "exit": 0,
+      "result": "wheel and sdist built from package_source_commit",
+      "evidence": "build.log"
+    },
+    {
+      "name": "twine_check",
+      "exit": 0,
+      "result": "wheel and sdist PASSED",
+      "evidence": "twine.log"
+    },
+    {
+      "name": "isolated_wheel_install_and_import",
+      "exit": 0,
+      "result": "installed 2.0.2.dev26+ga28395b and imported five_axis_slicer.rotary_controller and five_axis_slicer.rotary_ui",
+      "evidence": "package_smoke.log"
+    }
+  ],
+  "skipped_tests": [
+    {
+      "count": 3,
+      "reason": "Windows process lacks symbolic-link privilege (WinError 1314)",
+      "tests": [
+        "tests/test_project_io.py:779 file symlink containment",
+        "tests/test_project_io.py:807 directory symlink containment",
+        "tests/test_setup_config.py:335 setup file symlink containment"
+      ],
+      "classification": "environment permission; explicitly unverified on this host"
+    }
+  ],
+  "input_fingerprints": {
+    "inputs/rotary_cylinder_nonzero_center.step": "e2804dcf8db30e0d829f2ae5b7a711ab436089d40187426dcbe88afd5fea80d0",
+    "inputs/rotary_cone_nonzero_center.step": "b19f19ed20d4d391f979d8593b1cc71c561c4cad57ae9af8c4875da47e59a26e",
+    "tests/fixtures/analytic_rotary_truth.json": "tracked by package_source_tree",
+    "tests/fixtures/derive_analytic_rotary_truth.py": "tracked by package_source_tree"
+  },
+  "product_evidence": {
+    "summary": "products_summary.json",
+    "summary_sha256": "8d72e90356d3d209f6c9bf72b4a39e53982efb0c15de77acdd9ee2abd5308e62",
+    "products": [
+      "rotary_spiral_cylinder",
+      "rotary_spiral_cone",
+      "rotary_thin_wall",
+      "rotary_around_part_cross_zero"
+    ],
+    "required_bundle_files": [
+      "main.gcode",
+      "toolpath.json",
+      "machine_axes.csv",
+      "warnings.json",
+      "preview.json",
+      "manifest.json"
+    ],
+    "all_products_readback_passed": true,
+    "all_products_status": "warning",
+    "warning_basis": "offline qualification limits are retained in each result"
+  },
+  "ui_evidence": {
+    "summary": "../../../guides/assets/rotary/current_r01_r05/summary.json",
+    "summary_sha256": "52f6f5a3e997e253e356ae5e3d9552aa0e7b711bb8851b3eb36a738bb7be2d18",
+    "screenshots": 10,
+    "sizes": [
+      "1366x768",
+      "1600x900",
+      "1920x1080"
+    ],
+    "languages": [
+      "zh",
+      "en"
+    ],
+    "capture_method": "current RotaryPage widgets with real generated preview payload in Qt evidence paint harness",
+    "viewer_boundary": "the harness avoids VTK/OpenGL and does not qualify the production viewer backend"
+  },
+  "packages": [
+    {
+      "path": "packages/five_axis_slicer-2.0.2.dev26+ga28395b-py3-none-any.whl",
+      "sha256": "30754092a31f004d2b9de3e82eecbfcd527782eed34cde4963973934c555c4c6"
+    },
+    {
+      "path": "packages/five_axis_slicer-2.0.2.dev26+ga28395b.tar.gz",
+      "sha256": "68addf322765413f7c46e01cdcc8e0ece7bb56a899d6a532547e14322de1fa9e"
+    }
+  ],
+  "evidence_fingerprints": {
+    "preflight_current.log": "6bc095be950548bd25843963841a2262f2664ebb228b948589ee936c2f3f0fba",
+    "pytest_rotary.log": "85dac5b02c0b606f249e7ecde11ee4db1962a0f15067de3e979c0d83ac55a2ba",
+    "pytest_rotary.xml": "0b905cd04106392504ee94c04dbdca253dcdfa7f8808286baaff5dd3b74327e2",
+    "pytest_full.log": "bd84339150dbcc81e0c71fdbf153506ea28d539e0c785f2823a49090da92cda5",
+    "pytest_full.xml": "c8baf3539a4ad643e758ead8eaf51d1433ad7915485d9f1b881b385ac7570e3e",
+    "pytest_planar_retry.log": "eb36e165dcb7b9a82f511b3e0a69f04ec2ab81eaacf34c4937c60fff3a7d1f3a",
+    "pytest_planar_retry.xml": "2d1cab3b6f103d04b7a9c916eb5a6fc6cdafd73e0ee920ea22a4a67295917551",
+    "pytest_full_retry.log": "43bd8d934ccc2d85e32043c3927510a7c03cce664fcfd7e42168b9efe10124a4",
+    "pytest_full_retry.xml": "a2d814e0612f5fb7227bf128154b3323651a4cd305dad20e0723d7b214deaec7",
+    "check_quality_final_source.log": "076ccea8d1269a75b8650610e6de72e3b969434366d5263f1c0774dcde1fa650",
+    "build.log": "9419a5a6243f59b68de20d899f6509afa1cd7d369ea50350f5f47332b926b982",
+    "twine.log": "e3f1abb09852d8ba4ffe82d1784e46927f6f99a5090f6c4aa6dc4cd3d2219caf",
+    "package_smoke.log": "2ccf5901b65a2e649ce7860fe9e5afeb6320ded2c24a7f0108b2125cd56e5a16"
+  },
+  "research_boundary": {
+    "open5x": "fixed upstream commit 500a786e51447b47e00d2a5ca3dcc938ae542926; three Grasshopper files statically parsed only; definitions were not executed",
+    "nx": "used public Siemens product and release pages; private NX Documentation Center Rotary/Additive body was not read"
+  },
+  "unverified_boundaries": [
+    "Generic XYZAC is an offline reference machine only",
+    "G93 compatibility with a real controller dialect is unverified",
+    "real controller axis semantics, machine parameters, calibration, fixture installation, site collision, and trial build are unverified",
+    "exact substrate and complete machine collision geometry are unavailable; affected products retain Warning",
+    "fixture AABB and approximate printed-workpiece checks do not equal a complete joint-space machine sweep",
+    "Around Part uses numerical angular bands with global stable surface references, not an independent CAD boundary reference for each band",
+    "contour currently clips the axial range; arbitrary nonlinear radial contour generation is outside the supported scope",
+    "the production VTK/OpenGL viewer backend is not qualified by the Qt screenshot harness",
+    "the three symlink containment tests were skipped on this Windows host because symbolic-link privilege is unavailable"
+  ]
+}

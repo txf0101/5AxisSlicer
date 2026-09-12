@@ -1,0 +1,7 @@
+Processing f:\����Ŀ������\5axissclicer_v2.0\docs\reviews\evidence\2026-09-13_rotary_workbench_final\packages\five_axis_slicer-2.0.2.dev26+ga28395b-py3-none-any.whl
+Installing collected packages: five-axis-slicer
+Successfully installed five-axis-slicer-2.0.2.dev26+ga28395b
+
+[notice] A new release of pip is available: 24.2 -> 26.2.1
+[notice] To update, run: F:\����Ŀ������\5AxisSclicer_V2.0\tmp\rotary_package_smoke\Scripts\python.exe -m pip install --upgrade pip
+2.0.2.dev26+ga28395b

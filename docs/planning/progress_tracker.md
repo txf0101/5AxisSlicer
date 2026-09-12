@@ -1,12 +1,14 @@
 # 六个工作台开发进度台账
 
-最近更新：2026-09-12。关联[开发计划](development_plan.md)、[参考资料](reference_research.md)与[文档索引](../README.md)。**下方主表是任务进度的唯一维护位置**，计划和复盘引用任务编号，不另行维护一份状态表。
+最近更新：2026-09-13。关联[开发计划](development_plan.md)、[参考资料](reference_research.md)与[文档索引](../README.md)。**下方主表是任务进度的唯一维护位置**，计划和复盘引用任务编号，不另行维护一份状态表。
 
-当前顺序：**管状 → 平面 → 曲线 → 回转 → 自由曲面 → 研究 → 整体验收**。用户已确定管状优先，并于 2026-09-12 将回转 R01—R05 调整到 Curve C05 之后、Freeform 之前；Research 仍使用 X01—X06 编号。Planar P01—P07 与 Curve C01—C05 已按当前源码验收并全部完成；AUD-01 保留的 Tube T04、T07、T08、T12 待验证状态不因后续工作台关闭而撤销。后续工作台首项为 **R01**。
+当前顺序：**管状 → 平面 → 曲线 → 回转 → 自由曲面 → 研究 → 整体验收**。用户已确定管状优先，并于 2026-09-12 将回转 R01—R05 调整到 Curve C05 之后、Freeform 之前；Research 仍使用 X01—X06 编号。Planar P01—P07、Curve C01—C05 与 Rotary R01—R05 已按当前源码验收并全部完成；AUD-01 保留的 Tube T04、T07、T08、T12 待验证状态不因后续工作台关闭而撤销。后续工作台首项为 **F01**。
 
 本表保留规划、基础、算法、工作台和整体验收任务的唯一状态。2026-09-12 的 AUD-01 已完成检查和修改方案，确认的 Planar 缺陷已在 AUD-02 和 P07 最终验收中修复。P07 以 clean-room 独立实现的 Grid/Lines 支撑首版关闭：解析悬垂真值为 33 段、61.86 mm³、66/66 回读，复杂 STEP 为 9,662/9,662 回读；9 张 Qt/OpenGL UI 图覆盖参数、正常、错误恢复和 Stale 恢复；最终 Planar 223 passed，全仓 753 passed、3 skipped、130 subtests，官方质量脚本全绿。Tree/Organic、桥接专用路径、双材料不在首版范围。Generic XYZAC 仍仅为离线参考，真实控制器语义、机床标定、完整喷嘴扫掠和现场试切未验证。
 
 Curve C01—C05 已完成有向 STEP edge 链、弧长采样、明确法向、Buildup、Multi-pass 和 Offset 三操作及统一产品链。真实叶轮样条长 `68.27612913311773 mm`，三操作 70/210/210 点均完成六件套和回读；反向 Offset 的相邻道独立点距为 2.947—3.000 mm，正向投影塌缩会拒绝。当前 Curve/共享直接集 40 passed、2 subtests；全仓 783 passed、3 skipped、130 subtests；质量、sdist/wheel、Twine、依赖一致性和 Windows native preview smoke 已通过。Generic XYZAC 与保守 AABB 扫掠仍只提供离线资格，实机未验证。
+
+Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连续角展开、圆柱/圆锥 Spiral、Thin Wall 和跨零点多区域 Around Part，并接入 shared Toolpath/events、规定相位 XYZAC、整段离线检查、G93 逆时间后处理和回读。四组真实 STEP 产品均输出严格六件套并回读通过；当前 Rotary 专项 37 passed，全仓 820 passed、3 skipped、130 subtests，质量、sdist/wheel、Twine 与隔离安装导入通过。Qt 当前控件和真实 generated preview payload 的 10 张三尺寸中英证据图已归档；该截图 harness 不替代生产 VTK/OpenGL 资格。Generic XYZAC、基体/机床精确碰撞、真实控制器语义、机床标定、现场碰撞与试切仍未验证。
 
 本轮新增用户授权子任务 **I01-OWN**：自有机型默认配置、选择、自定义及文件导入导出；独立于 I01 的第二运动学与控制器完整验收。
 
@@ -32,6 +34,8 @@ Curve C01—C05 已完成有向 STEP edge 链、弧长采样、明确法向、Bu
 
 | 日期 | 任务 | Skill | 本轮用途 | 证据 |
 | --- | --- | --- | --- | --- |
+| 2026-09-13 | R01—R05 | `five-axis-workbench-development` | 按阶段门完成资料边界、稳定几何引用、三操作、共享产品链、双语 UI、手册和证据归档 | [Rotary 复盘](../reviews/2026-09-13_rotary_workbench_review.md) |
+| 2026-09-13 | R01—R05/R05 验收 | `five-axis-slicer-validation` | 复用指定解释器、仓库内 basetemp、串行 Qt/全仓、WinError 5 分类、质量、构建和指纹规则 | [Rotary 最终证据](../reviews/evidence/2026-09-13_rotary_workbench_final/validation_manifest.json) |
 | 2026-09-12 | I01-OWN | `five-axis-workbench-development`、`five-axis-slicer-validation` | 自有机型接入、默认值、用户库、保存重开、双语 UI 与相关验证 | [本轮复盘](../reviews/2026-09-12_own_printer_profile_review.md) |
 | 2026-09-11 | DOC-SKILL | `skill-creator` | 把 Tube T01—T12 方法提炼为可发现、可校验的个人 Skill | [Skill 建立复盘](../reviews/2026-09-11_workbench_development_skill_review.md) |
 | 2026-09-11 | DOC-SKILL | `five-axis-workbench-development` | 自检开发闭环、阶段门槛和调用登记规则；尚未启动 P01 | [Skill 建立复盘](../reviews/2026-09-11_workbench_development_skill_review.md) |
@@ -103,12 +107,12 @@ Curve C01—C05 已完成有向 STEP edge 链、弧长采样、明确法向、Bu
 | C02 | Curve Buildup | C01 | 已完成 | 直线/圆弧/样条单道，端点与挤出量正确 | 20 mm 解析直线、R40 四分之一圆和真实 STEP 样条通过；单道 70 点、69 沉积段、32.771862137049 mm³、回读与六件套通过 | C03 已完成 | 2026-09-12 |
 | C03 | Curve Multi-pass Buildup | C02 | 已完成 | 多层重复堆叠、累计道高和层间连接正确 | 3 层 210 点、207 沉积段；累计层高、奇偶换向、Travel/Retract/Prime/Dwell 分离、材料量和回读通过 | C04 已完成 | 2026-09-12 |
 | C04 | Curve Offset Buildup | C03 | 已完成 | 横向多道、锐角、自交和偏置失败可定位 | 真实叶轮反向 edge 三道相邻点距 2.947—3.000 mm；210 点、93.880702147199 mm³；正向投影塌缩、trim 越界、标架反转和自交拒绝 | C05 已完成 | 2026-09-12 |
-| C05 | 整个 Curve 工作台验收 | C02,C03,C04 | 已完成 | 三操作全流程、边引用重绑定、参数与持久化通过 | [图文手册](../guides/curve_workbench_zh.md)、[复盘](../reviews/2026-09-12_curve_workbench_review.md)、[最终证据](../reviews/evidence/2026-09-12_curve_workbench_final/validation_manifest.json)；GUI/脚本/HTTP、取消、撤销、Stale、Viewer、保存重开、三操作六件套、当前直接集 40 passed/2 subtests、全仓 783 passed/3 skipped/130 subtests，质量/构建/native 门通过；实机未验证 | R01：注册回转区域、坐标和周期规则 | 2026-09-12 |
-| R01 | Rotary Region 与回转坐标 | C05 | 未开始 | 回转轴、轮廓、半径与角度范围有效，去除无效锁定行为 | 当前卡片 Locked 仍进入通用会话；可直接复用 Tube 连续运动和轴轨迹契约，不依赖 Freeform 曲面算法 | 注册回转操作和周期几何规则 | 2026-09-12 |
-| R02 | Rotary Spiral | R01 | 未开始 | 圆柱/圆锥螺旋、螺距/方向/角速度可核对 | NX-01、OS-03 | 生成解析回转路径并走轴轨迹链 | 2026-09-10 |
-| R03 | Rotary Thin Wall | R02 | 未开始 | 圆周、轴向步进、径向多道和轮廓变化可验证 | NX-05 提供轮廓层与连接参考 | 实现轮廓层与层间连接规则 | 2026-09-10 |
-| R04 | Rotary Around Part | R03 | 未开始 | 局部覆盖、多周向区域、跨零点和连续回转空移检查 | NX-06 的 NCM 仅在适用回转场景参考 | 实现区域裁剪与安全连接 | 2026-09-10 |
-| R05 | 整个 Rotary 工作台验收 | R02,R03,R04 | 未开始 | 三操作的轴速、周期、碰撞、输出回读与 UI 通过 | 实机状态未验证 | 验收不同回转中心、方向和限位案例 | 2026-09-10 |
+| C05 | 整个 Curve 工作台验收 | C02,C03,C04 | 已完成 | 三操作全流程、边引用重绑定、参数与持久化通过 | [图文手册](../guides/curve_workbench_zh.md)、[复盘](../reviews/2026-09-12_curve_workbench_review.md)、[最终证据](../reviews/evidence/2026-09-12_curve_workbench_final/validation_manifest.json)；GUI/脚本/HTTP、取消、撤销、Stale、Viewer、保存重开、三操作六件套、当前直接集 40 passed/2 subtests、全仓 783 passed/3 skipped/130 subtests，质量/构建/native 门通过；实机未验证 | R01—R05 已完成；进入 F01 | 2026-09-13 |
+| R01 | Rotary Region 与回转坐标 | C05 | 已完成 | 回转轴、轮廓、半径与角度范围有效，去除无效锁定行为 | 稳定 axis/face/contour 描述符、非零中心、正方向/零角、非默认 Build CS、不同轴向、重绑几何不漂移和 preview-only 阻断均验证；[复盘](../reviews/2026-09-13_rotary_workbench_review.md) | R02—R05 已完成；进入 F01 | 2026-09-13 |
+| R02 | Rotary Spiral | R01 | 已完成 | 圆柱/圆锥螺旋、螺距/方向/角速度可核对 | 三圈圆柱与两圈线性变径圆锥独立端点/长度/体积/法切向真值通过；规定相位连续展开、机床 C 对齐、G93 段时间与回读验证；[六件套](../reviews/evidence/2026-09-13_rotary_workbench_final/products/) | R03—R05 已完成；进入 F01 | 2026-09-13 |
+| R03 | Rotary Thin Wall | R02 | 已完成 | 圆周、轴向步进、径向多道和轮廓变化可验证 | 4 层×3 道独立真值、奇偶蛇形、轴向裁剪、窄壁 error/reduce、超宽拒绝、Retract/Prime 与首末净空连接通过；任意非线性径向 contour 不在当前支持范围 | R04—R05 已完成；进入 F01 | 2026-09-13 |
+| R04 | Rotary Around Part | R03 | 已完成 | 局部覆盖、多周向区域、跨零点和连续回转空移检查 | `350°→380°` 与 `480°→570°` 多区域/多层独立真值、无跨区沉积、连续方向、结构化 depart/travel/approach 和最终安全离开通过；区域为数值角带并保存全局 surface refs | R05 已完成；进入 F01 | 2026-09-13 |
+| R05 | 整个 Rotary 工作台验收 | R02,R03,R04 | 已完成 | 三操作的轴速、周期、碰撞、输出回读与 UI 通过 | [图文手册](../guides/rotary_workbench_zh.md)、[复盘](../reviews/2026-09-13_rotary_workbench_review.md)、[最终证据](../reviews/evidence/2026-09-13_rotary_workbench_final/validation_manifest.json)；GUI/脚本/HTTP、取消、撤销、Stale、保存重开、四组六件套、37 项专项、820 项全仓、质量/构建/Twine/包导入和三尺寸中英 Qt 图通过；3 项符号链接权限 skip 单列 | F01：曲面区域、度量、投影与修剪基础 | 2026-09-13 |
 | F01 | Freeform Region 与曲面计算 | R05 | 未开始 | face/边界/导引引用、UV 度量、法向、周期和修剪正确 | OS-02/03/06；当前只有选择与预览 | 构造曲面度量及投影基础并验证 | 2026-09-12 |
 | F02 | Freeform Coating 单面路径 | F01 | 未开始 | UV/投影单层覆盖，三维道间距、边界和法向正确 | 待实现 | 在修剪 NURBS 与圆柱上验证路径 | 2026-09-10 |
 | F03 | Freeform Thin Wall | F02 | 未开始 | 曲面导引多道/多层筋壁，沿/跨方向偏置有效 | NX-04 可参考操作与偏置语义 | 实现驱动线、壁道和起停规则 | 2026-09-10 |
@@ -129,7 +133,7 @@ Curve C01—C05 已完成有向 STEP edge 链、弧长采样、明确法向、Bu
 
 ## 模型分工与悲观 token 预算
 
-以下预算最初覆盖 A01—A03 完成后的 44 项任务。P07 与 C01—C05 已关闭；主表中 R01—R05、F01—F06、X01—X06、I01—I04 共 21 项后续未开始任务，另有 AUD-01 指出的 7 项待验证任务。由于产品没有提供本轮精确 token，本表保留原阶段上限，不用消息字数推算消耗。单位为百万 token（M），按模型看到的输入、推理和输出总量规划；它是任务上下文预算，不是人民币账单或 ChatGPT Credits 换算。实际消耗受模型、上下文缓存、重试次数和产品计量方式影响。
+以下预算最初覆盖 A01—A03 完成后的 44 项任务。P07、C01—C05 与 R01—R05 已关闭；主表中 F01—F06、X01—X06、I01—I04 共 16 项后续未开始任务，另有 AUD-01 指出的 7 项待验证任务。由于产品没有提供本轮精确 token，本表保留原阶段上限，不用消息字数推算消耗。单位为百万 token（M），按模型看到的输入、推理和输出总量规划；它是任务上下文预算，不是人民币账单或 ChatGPT Credits 换算。实际消耗受模型、上下文缓存、重试次数和产品计量方式影响。
 
 模型选择依据为 [OpenAI Codex Models](https://developers.openai.com/codex/models)：Luna 适合明确、重复且高吞吐的任务，Terra 适合日常开发，Sol 适合复杂开放问题，Astra 用于最困难的跨步骤判断。官方说明也建议从较低推理强度开始，只在任务确有更深规划或检查需求时提高；模型可用性随账户和发布批次变化。
 
@@ -173,6 +177,7 @@ Curve C01—C05 已完成有向 STEP edge 链、弧长采样、明确法向、Bu
 
 | 日期 | 变更依据 | 变更内容 | 影响 |
 | --- | --- | --- | --- |
+| 2026-09-13 | 用户要求从含 C05 的干净基线按 R01→R05 完成整个 Rotary 工作台，并先研究 Open5x Grasshopper 与公开 NX 资料 | 完成稳定回转几何引用、Spiral/Thin Wall/Around Part、连续相位 XYZAC、G93 回读、失败矩阵、四组六件套、双语三尺寸 Qt 图文手册、当前全仓/质量/构建证据；Open5x 仅静态解析，NX 私有正文不冒充公开来源 | R01—R05 改为已完成；后续未开始任务为 16 项；下一项为 F01；Generic XYZAC、精确基体/机床碰撞、真实控制器/标定/现场/试切仍未验证 |
 | 2026-09-12 | 用户要求从 P07 干净基线按 C01→C05 完成整个 Curve 工作台 | 完成有向 edge 链、三种 Curve 操作、统一产品链、GUI/脚本/HTTP、保存重开、真实 STEP、失败矩阵、六件套、图文手册、当前串行回归、质量与构建证据 | C01—C05 改为已完成；后续未开始任务为 21 项；下一项为 R01；Generic XYZAC、真实控制器/机床/材料/试切边界继续单列未验证 |
 | 2026-09-12 | 用户要求检查完成情况、运行示例并先出修改方案 | AUD-01 核对实际源码和生成结果；T04/T07/T08/T12/P01/P02/P06 调整为待验证，保留历史证据；归档独立反例、版本快照、修改顺序和验收矩阵 | 本轮审查完成，产品修复尚未实施；P07 并行修改的已解决失败单列，不覆盖其他任务成果 |
 | 2026-09-12 | 用户要求为平面切片补充成熟切片器式支撑功能 | 在已关闭 P06 后新增 P07：首版 Grid/Lines 支撑，包含悬垂/空中岛检测、XY/Z 间隙、接触层、共享 Toolpath、输出、UI、真实模型和手册；C01 依赖改为 P07 | 当前任务由 C01 改为 P07；Tree/Organic、桥接专用路径、双材料与实机资格留作后续；不复制 AGPLv3 上游源码 |

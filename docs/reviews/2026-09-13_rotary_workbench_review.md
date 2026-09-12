@@ -2,7 +2,7 @@
 
 日期：2026-09-13。分支：`codex/rotary-workbench-r01-r05`。C05 完成基线：`859d590b7178403cb08c9791164655c057e54a35`。本轮不 push、不发布、不合并 `main`。
 
-> 复盘状态：当前已有 37 项 Rotary 专项、820 项全仓通过、质量门、四个真实 STEP 产品六件套及 10 张当前 Qt 证据图。最终提交和 wheel/sdist 构建数字在最终证据 manifest 中回填；在包检查与 Git 清洁门满足前，本文不提前宣布 R05 完成。
+> 复盘状态：R01—R05 离线阶段门已满足。当前已有 37 项 Rotary 专项、820 项全仓通过、质量门、四个真实 STEP 产品六件套、10 张当前 Qt 证据图，以及 wheel/sdist 构建、Twine 检查和隔离安装导入证据。Generic XYZAC 与真实机床资格边界仍按第 10 节执行。
 
 ## 1. 任务范围和制造契约
 
@@ -115,7 +115,7 @@ RotaryPage 是当前 Qt 双语页面，包含操作类型/已有操作、轴 edg
 
 截图目录已有 10 张图，覆盖总览、坐标设置、三操作结果、跨周期、轴限 Error 与恢复、导出和重开 Stale，并包含 1366×768 中文、1600×900 英文和 1920×1080 英文。`summary.json` 记录每图尺寸、语言、状态、导出按钮和 SHA-256。图像是 Windows Qt 当前 RotaryPage 控件与真实 generated preview payload 的 evidence paint harness，用于布局/状态/载荷核对；它避开 VTK/OpenGL，所以不单独证明生产 Viewer 后端通过。
 
-## 9. 当前验证记录和 R05 待关闭项
+## 9. 当前验证记录和 R05 关闭结果
 
 `five-axis-slicer-validation` preflight 使用 `tmp/pytest9/Scripts/python.exe`，Python 3.12.7；依赖探针、Ruff 0.12.12、Mypy 1.11.2 和 QSettings 可写性通过。这是环境预检，不代表 GUI、VTK 或全仓通过。
 
@@ -128,9 +128,9 @@ RotaryPage 是当前 Qt 双语页面，包含操作类型/已有操作、轴 edg
 | 真实 STEP 产品 | 4 个 Warning 产品，六件套和回读全部通过 | 圆柱 Spiral 75 点，圆锥 Spiral 75 点，Thin Wall 892 点/12 道，Around Part 109 点/6 道 |
 | 当前 Qt 截图 | 10 张，三尺寸、中英文、错误/恢复/重开 | evidence paint harness；不声称 VTK/OpenGL 后端通过 |
 | 全仓串行回归 | 820 passed、3 skipped、130 subtests passed，退出码 0 | 首轮 819 passed/1 failed/3 skipped；失败为既有 Planar P03 `os.replace` 的一次 WinError 5，单测复跑 1 passed，换新 basetemp 后全仓通过；两次日志均保留 |
-| wheel/sdist 构建与包检查 | 待最终串行回填 | 不引用历史包 |
+| wheel/sdist 构建与包检查 | `five_axis_slicer-2.0.2.dev26+ga28395b-py3-none-any.whl` 与 `five_axis_slicer-2.0.2.dev26+ga28395b.tar.gz` 构建退出码 0；Twine 两包 PASSED；隔离环境安装 wheel 及导入 `rotary_controller`、`rotary_ui` 退出码 0 | 包来自源码提交 `a28395b`；未发布 |
 
-R05 最终关闭前仍需串行完成全仓 pytest、wheel/sdist 构建与包检查，再把准确数字、跳过项、源码/环境/产物指纹、最终 commit 和证据 manifest 回填本文与唯一进度台账。当前不用 37 项专项或 Qt 证据图替代这些未完成门槛。
+R05 离线关闭证据汇总于 `docs/reviews/evidence/2026-09-13_rotary_workbench_final/validation_manifest.json`。其中单列首轮全仓回归的 Planar P03 一次性 Windows `WinError 5`、单用例恢复和换新 basetemp 后的最终全仓结果，也记录 3 项因 Windows 缺少符号链接权限而跳过的测试。源码与包对应提交 `a28395b130d1a195960e8d03b9a1cca5b3e9276f`，tree 为 `39fa66245341e9ac65cad2849623da598d5ee265`。
 
 ## 10. 实机边界
 
@@ -138,4 +138,4 @@ R05 最终关闭前仍需串行完成全仓 pytest、wheel/sdist 构建与包检
 
 这些项在现场标定、干跑、碰撞验证和材料试验完成前统一标为“未验证”。当前输出不得直接下发真实机床。
 
-使用的 Skills：`five-axis-workbench-development`、`five-axis-slicer-validation`。公开资料及许可边界同步记录在 `docs/planning/reference_research.md`。当前产品证据为 `docs/reviews/evidence/2026-09-13_rotary_workbench_final/products_summary.json`，图片证据为 `docs/guides/assets/rotary/current_r01_r05/summary.json`；最终综合 manifest 须在全仓和构建完成后生成。
+使用的 Skills：`five-axis-workbench-development`、`five-axis-slicer-validation`。公开资料及许可边界同步记录在 `docs/planning/reference_research.md`。产品证据为 `docs/reviews/evidence/2026-09-13_rotary_workbench_final/products_summary.json`，图片证据为 `docs/guides/assets/rotary/current_r01_r05/summary.json`，最终综合证据为 `docs/reviews/evidence/2026-09-13_rotary_workbench_final/validation_manifest.json`。
