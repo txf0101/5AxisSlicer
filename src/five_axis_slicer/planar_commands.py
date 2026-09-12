@@ -224,6 +224,13 @@ class PlanarCommandService:
 
 
 def _script_invocation(call: ScriptCall) -> CommandInvocation:
+    if call.namespace != "planar":
+        raise ScriptParseError(
+            "E_SCRIPT_FORBIDDEN",
+            "Planar command service accepts only planar/平面 commands",
+            call.line,
+            call.column,
+        )
     return CommandInvocation(call.name, call.args, call.kwargs, origin="script")
 
 

@@ -36,13 +36,14 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
-from . import model_commit, planar_shell
+from . import curve_shell, model_commit, planar_shell
 from .automation import AutomationServer
 from .automation_routes import AutomationRouter
 from .background_load import ResultLoadCoordinator
 from .gcode_preview import ROLE_COLORS, rgb_to_hex, role_label
 from .localization import tr
 from .manufacturing.own_printer import default_printer_setup
+from .manufacturing_script_service import ManufacturingScriptService
 from .manufacturing.preview_kinematics import (
     AC_INVERSE_TRANSFORM,
     MACHINE_COORDINATE_TRANSFORM,
@@ -379,7 +380,11 @@ class MainWindow(QMainWindow):
         if canonical_intent == "source_update":
             controller = self.tube_page.controller
             self._model_load_controller_states[request.request_id] = (
-                model_commit.SourceUpdateBaseline.capture(controller)
+                model_commit.SourceUpdateBaseline.capture(
+                    controller,
+                    self.planar_page.controller,
+                    self.curve_page.controller,
+                )
             )
         self.model_loader.start(request)
         self.statusBar().showMessage(f"STEP loading: {request.model_path}")
@@ -463,7 +468,11 @@ class MainWindow(QMainWindow):
                 baseline = self._model_load_controller_states.get(result.request_id)
                 if baseline is None:
                     raise RuntimeError("source update edit baseline is unavailable")
-                controller = baseline.require_current(self.tube_page.controller)
+                controller = baseline.require_current(
+                    self.tube_page.controller,
+                    self.planar_page.controller,
+                    self.curve_page.controller,
+                )
                 with model_commit.source_update_transaction(
                     self,
                     controller,
@@ -687,6 +696,7 @@ class MainWindow(QMainWindow):
         with model_commit.publication_transaction(self):
             previous_controller = self.tube_page.controller
             previous_planar = self.planar_page.controller
+            previous_curve = self.curve_page.controller
             previous_source = previous_controller.state_json()["source"]["hash"]
             previous_operations = previous_controller.operations
             self.model = model
@@ -707,6 +717,11 @@ class MainWindow(QMainWindow):
             )
             self.planar_page.set_controller(planar_controller)
             self.planar_command_service = self.planar_page.commands
+            curve_controller = curve_shell.controller_for_model(
+                previous_curve, controller.setup, model
+            )
+            self.curve_page.set_controller(curve_controller)
+            self.curve_command_service = self.curve_page.commands
             if controller is not previous_controller:
                 self.last_project_dir = None
             model_commit.refresh_publication_ui(self)
@@ -779,10 +794,14 @@ class MainWindow(QMainWindow):
         result = controller.update_cad_model(model)
         planar_controller = self.planar_page.controller
         planar_shell.sync_source_update(planar_controller, controller.setup, model)
+        curve_controller = self.curve_page.controller
+        curve_shell.sync_source_update(curve_controller, controller.setup, model)
         self.viewer.load_model(model)
         self.tube_page.set_controller(controller, model)
         self.planar_page.set_controller(planar_controller)
         self.planar_command_service = self.planar_page.commands
+        self.curve_page.set_controller(curve_controller)
+        self.curve_command_service = self.curve_page.commands
         self.model = model
         self._original_step_path = Path(model.source_path).expanduser().resolve()
         model_commit.refresh_publication_ui(self)
@@ -983,7 +1002,9 @@ class MainWindow(QMainWindow):
         # Construct and validate the candidate controller before publishing any
         # model or Viewer state. Structural operation errors therefore leave
         # the previously committed project untouched.
-        tube_operations, planar_operations = planar_shell.split_operations(loaded.operations)
+        tube_operations, planar_operations, curve_operations = curve_shell.split_operations(
+            loaded.operations
+        )
         controller = TubeSetupController(
             loaded.model,
             setup=setup,
@@ -991,6 +1012,9 @@ class MainWindow(QMainWindow):
         )
         planar_controller = planar_shell.PlanarController(
             loaded.model, setup=setup, operations=planar_operations
+        )
+        curve_controller = curve_shell.CurveController(
+            loaded.model, setup=setup, operations=curve_operations
         )
         self.tube_script_service.prepare_project_controller(
             controller,
@@ -1033,6 +1057,8 @@ class MainWindow(QMainWindow):
             self.tube_page.set_controller(controller, loaded.model)
             self.planar_page.set_controller(planar_controller)
             self.planar_command_service = self.planar_page.commands
+            self.curve_page.set_controller(curve_controller)
+            self.curve_command_service = self.curve_page.commands
             if loaded.model is not None:
                 self.tube_page.viewer.set_selection(
                     body_ids=list(loaded.selection.body_ids),
@@ -1251,9 +1277,7 @@ class MainWindow(QMainWindow):
         if self.model is None and self.gcode_preview is None:
             raise RuntimeError(tr(self.language, "no_project_content"))
         controller = self.tube_page.controller
-        selection_viewer = (
-            self.tube_page.viewer if self.current_workbench_key == "tube" else self.viewer
-        )
+        selection_viewer = self._active_workbench_viewer()
         with controller.draft_resolution_transaction(draft_resolution):
             path = save_project(
                 directory,
@@ -1264,7 +1288,11 @@ class MainWindow(QMainWindow):
                 self.viewer.preview_settings,
                 result_preview_state=self.result_page.state,
                 setup=controller.setup,
-                operations=controller.operations + self.planar_page.controller.operations,
+                operations=(
+                    controller.operations
+                    + self.planar_page.controller.operations
+                    + self.curve_page.controller.operations
+                ),
                 resources=self.tube_page.project_resources(),
                 original_source_path=self._original_step_path,
             )
@@ -1336,9 +1364,7 @@ class MainWindow(QMainWindow):
                 "units": self.model.units.to_json(),
                 "bodies": [body.to_json() for body in self.model.bodies],
             }
-        selection_viewer = (
-            self.tube_page.viewer if self.current_workbench_key == "tube" else self.viewer
-        )
+        selection_viewer = self._active_workbench_viewer()
         tube_state = self.tube_page.state_json()
         tube_state["commands"] = self.tube_script_service.state_json()
         return {
@@ -1350,6 +1376,7 @@ class MainWindow(QMainWindow):
             "preview": self.viewer.preview_state(),
             "tube": tube_state,
             "planar": self.planar_page.state_json(),
+            "curve": self.curve_page.state_json(),
             "results": self.result_page.state_json(),
             "result_load_metrics": self._public_load_metrics(),
         }
@@ -1361,6 +1388,10 @@ class MainWindow(QMainWindow):
             self.planar_page.controller, self.tube_page.controller.setup
         ):
             self.planar_page.refresh()
+        if key == "curve" and curve_shell.sync_shared_setup(
+            self.curve_page.controller, self.tube_page.controller.setup
+        ):
+            self.curve_page.refresh()
         self.current_workbench_key = key
         if key == "tube":
             self.current_operation = (
@@ -1370,6 +1401,8 @@ class MainWindow(QMainWindow):
             )
         elif key == "planar":
             self.current_operation = planar_shell.current_operation(self.planar_page.controller)
+        elif key == "curve":
+            self.current_operation = curve_shell.current_operation(self.curve_page.controller)
         else:
             self.current_operation = "imported_nc_review"
         self._update_operation_combo()
@@ -1382,18 +1415,31 @@ class MainWindow(QMainWindow):
     def set_mode(self, mode: str) -> None:
         if mode not in {"body", "face", "edge", "vertex"}:
             raise RuntimeError(f"Unsupported selection mode: {mode}")
-        viewer = self.tube_page.viewer if self.current_workbench_key == "tube" else self.viewer
+        viewer = self._active_workbench_viewer()
         viewer.set_mode(mode)
-        if self.current_workbench_key == "tube":
-            self.tube_page.refresh()
-        else:
-            self.refresh_lists()
+        self._refresh_active_workbench()
 
     def clear_selection(self) -> None:
-        viewer = self.tube_page.viewer if self.current_workbench_key == "tube" else self.viewer
+        viewer = self._active_workbench_viewer()
         viewer.clear_selection()
+        self._refresh_active_workbench()
+
+    def _active_workbench_viewer(self):
+        if self.current_workbench_key == "tube":
+            return self.tube_page.viewer
+        if self.current_workbench_key == "planar":
+            return self.planar_page.viewer
+        if self.current_workbench_key == "curve":
+            return self.curve_page.viewer
+        return self.viewer
+
+    def _refresh_active_workbench(self) -> None:
         if self.current_workbench_key == "tube":
             self.tube_page.refresh()
+        elif self.current_workbench_key == "planar":
+            self.planar_page.refresh()
+        elif self.current_workbench_key == "curve":
+            self.curve_page.refresh()
         else:
             self.refresh_lists()
 
@@ -1462,6 +1508,7 @@ class MainWindow(QMainWindow):
         self.result_page.retranslate(self.language)
         self.tube_page.set_language(self.language)
         self.planar_page.set_language(self.language)
+        self.curve_page.set_language(self.language)
         for group, key in self.localized_groups:
             group.setTitle(tr(self.language, key))
         for label, key in self.localized_labels:
@@ -1565,6 +1612,8 @@ class MainWindow(QMainWindow):
         self.tube_page.error_raised.connect(self.show_error)
         self.planar_page = planar_shell.install_planar_page(self)
         self.planar_command_service = self.planar_page.commands
+        self.curve_page = curve_shell.install_curve_page(self)
+        self.curve_command_service = self.curve_page.commands
         self.result_page = ResultPreviewPage(
             viewer_factory=self._result_viewer_factory, parent=self
         )
@@ -1580,11 +1629,16 @@ class MainWindow(QMainWindow):
         self.stack.addWidget(self.session_page)
         self.stack.addWidget(self.tube_page)
         self.stack.addWidget(self.planar_page)
+        self.stack.addWidget(self.curve_page)
         self.stack.addWidget(self.result_page)
         self.stack.currentChanged.connect(lambda _index: self._update_context_actions())
         self.setCentralWidget(self.stack)
         self.script_console_manager = install_script_console(self)
         self.tube_script_service = TubeScriptService(self, self.script_console_manager.dock)
+        self.manufacturing_script_service = ManufacturingScriptService(self)
+        self.script_console_manager.dock.set_executor(
+            self.manufacturing_script_service.execute_script
+        )
         self.setStatusBar(QStatusBar(self))
         self.setMinimumSize(1280, 720)
         self.resize(1600, 900)
@@ -2158,7 +2212,14 @@ class MainWindow(QMainWindow):
         self.stack.setCurrentWidget(self.home_page)
 
     def _show_session(self) -> None:
-        self.stack.setCurrentWidget(planar_shell.active_session_page(self))
+        if self.current_workbench_key == "tube":
+            self.stack.setCurrentWidget(self.tube_page)
+        elif self.current_workbench_key == "planar":
+            self.stack.setCurrentWidget(self.planar_page)
+        elif self.current_workbench_key == "curve":
+            self.stack.setCurrentWidget(self.curve_page)
+        else:
+            self.stack.setCurrentWidget(self.session_page)
 
     def _show_results(self) -> None:
         self.stack.setCurrentWidget(self.result_page)
@@ -2170,10 +2231,18 @@ class MainWindow(QMainWindow):
         self._show_results()
 
     def _current_page_name(self) -> str:
+        current = self.stack.currentWidget()
+        if current is self.curve_page:
+            return "curve"
         return planar_shell.page_name(self)
 
     def _open_model_from_shell(self) -> None:
-        if self.stack.currentWidget() in {self.session_page, self.tube_page, self.planar_page}:
+        if self.stack.currentWidget() in {
+            self.session_page,
+            self.tube_page,
+            self.planar_page,
+            self.curve_page,
+        }:
             self.open_model_dialog()
         else:
             self.open_result_model_dialog()
@@ -2201,6 +2270,10 @@ class MainWindow(QMainWindow):
             return self.result_page.viewer
         if self.stack.currentWidget() is self.tube_page:
             return self.tube_page.viewer
+        if self.stack.currentWidget() is self.planar_page:
+            return self.planar_page.viewer
+        if self.stack.currentWidget() is self.curve_page:
+            return self.curve_page.viewer
         return self.viewer
 
     def _fit_active_view(self) -> None:
@@ -2547,6 +2620,8 @@ class MainWindow(QMainWindow):
                 self.operation_combo.addItem("Tube Setup", "tube_setup")
         elif self.current_workbench_key == "planar":
             planar_shell.populate_operation_combo(self.operation_combo, self.planar_page.controller)
+        elif self.current_workbench_key == "curve":
+            curve_shell.populate_operation_combo(self.operation_combo, self.curve_page.controller)
         else:
             self.operation_combo.addItem(
                 tr(self.language, "operation_imported_nc"), "imported_nc_review"
@@ -2708,6 +2783,8 @@ class MainWindow(QMainWindow):
             )
         elif self.current_workbench_key == "planar":
             operation_label = planar_shell.operation_label(self.planar_page.controller)
+        elif self.current_workbench_key == "curve":
+            operation_label = curve_shell.operation_label(self.curve_page.controller)
         else:
             operation_label = (
                 tr(self.language, "operation_imported_nc")

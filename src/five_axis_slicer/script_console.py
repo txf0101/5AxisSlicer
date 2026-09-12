@@ -498,7 +498,7 @@ class ScriptConsoleManager(QObject):
         self,
         window: QMainWindow,
         stack: QStackedWidget,
-        tube_page: QWidget,
+        tube_page: QWidget | Sequence[QWidget],
         tools_menu: QMenu,
         settings: QSettings,
         guarded_actions: Sequence[QAction] = (),
@@ -507,7 +507,9 @@ class ScriptConsoleManager(QObject):
         super().__init__(window)
         self._window = window
         self._stack = stack
-        self._tube_page = tube_page
+        self._workbench_pages = (
+            tuple(tube_page) if isinstance(tube_page, Sequence) else (tube_page,)
+        )
         self._settings = settings
         self._compact_height = compact_height
         self._height_restored = False
@@ -613,12 +615,12 @@ class ScriptConsoleManager(QObject):
             if (
                 not self._syncing_visibility
                 and self._window.isVisible()
-                and self._stack.currentWidget() is self._tube_page
+                and self._stack.currentWidget() in self._workbench_pages
             ):
                 self.action.setChecked(False)
 
     def _sync_visibility(self) -> None:
-        should_show = self._stack.currentWidget() is self._tube_page and self.action.isChecked()
+        should_show = self._stack.currentWidget() in self._workbench_pages and self.action.isChecked()
         if not should_show:
             self._release_console_focus()
         self._syncing_visibility = True
@@ -634,7 +636,7 @@ class ScriptConsoleManager(QObject):
         compact = (
             self._compact_height is not None
             and self._window.height() < self._compact_height
-            and self._stack.currentWidget() is self._tube_page
+            and self._stack.currentWidget() in self._workbench_pages
             and self.dock.isVisible()
         )
         self.dock.set_compact(compact)
@@ -665,7 +667,7 @@ def install_script_console(window: Any) -> ScriptConsoleManager:
     manager = ScriptConsoleManager(
         window,
         window.stack,
-        window.tube_page,
+        (window.tube_page, window.planar_page, window.curve_page),
         window.tools_menu,
         window.settings,
         (window.clear_action, window.fit_action, window.home_view_action),

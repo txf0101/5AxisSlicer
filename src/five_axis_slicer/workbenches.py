@@ -30,8 +30,8 @@ WORKBENCHES: tuple[WorkbenchInfo, ...] = (
         "Curve Workbench",
         "沿 STEP 边线和空间曲线生成单道或多道沉积路径。",
         "Single-pass or multi-pass deposition along STEP edges and spatial curves.",
-        "P0",
-        "P0",
+        "可用",
+        "Ready",
     ),
     WorkbenchInfo(
         "freeform",

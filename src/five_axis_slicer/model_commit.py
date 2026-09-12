@@ -30,6 +30,13 @@ class TubePageProtocol(Protocol):
     def set_view_mode(self, mode: str) -> None: ...
 
 
+class WorkbenchPageProtocol(Protocol):
+    controller: object
+    viewer: ViewerProtocol
+
+    def set_controller(self, controller: object) -> None: ...
+
+
 class IndexWidgetProtocol(Protocol):
     def currentIndex(self) -> int: ...
 
@@ -70,6 +77,8 @@ class ModelHostProtocol(Protocol):
     last_project_dir: Path | None
     viewer: ViewerProtocol
     tube_page: TubePageProtocol
+    planar_page: WorkbenchPageProtocol
+    curve_page: WorkbenchPageProtocol
     stack: IndexWidgetProtocol
     preview_tabs: IndexWidgetProtocol
     progress_timer: TimerProtocol
@@ -121,6 +130,12 @@ class _PublicationSnapshot:
     model_viewer: _ViewerSnapshot
     tube_viewer: _ViewerSnapshot
     tube_page: _TubePageSnapshot
+    planar_controller: object
+    planar_checkpoint: object
+    planar_viewer: _ViewerSnapshot
+    curve_controller: object
+    curve_checkpoint: object
+    curve_viewer: _ViewerSnapshot
     workbench_key: str
     operation: str
     project_directory: Path | None
@@ -138,14 +153,45 @@ class SourceUpdateBaseline:
 
     controller: TubeSetupController
     edit_token: tuple[object, ...]
+    planar_controller: object | None = None
+    planar_token: tuple[object, ...] | None = None
+    curve_controller: object | None = None
+    curve_token: tuple[object, ...] | None = None
 
     @classmethod
-    def capture(cls, controller: TubeSetupController) -> SourceUpdateBaseline:
-        return cls(controller, controller.edit_state_token())
+    def capture(
+        cls,
+        controller: TubeSetupController,
+        planar_controller: object | None = None,
+        curve_controller: object | None = None,
+    ) -> SourceUpdateBaseline:
+        return cls(
+            controller,
+            controller.edit_state_token(),
+            planar_controller,
+            None if planar_controller is None else planar_controller.command_applied_token(),
+            curve_controller,
+            None if curve_controller is None else curve_controller.command_applied_token(),
+        )
 
-    def require_current(self, current: TubeSetupController) -> TubeSetupController:
+    def require_current(
+        self,
+        current: TubeSetupController,
+        planar_current: object | None = None,
+        curve_current: object | None = None,
+    ) -> TubeSetupController:
         if current is not self.controller or current.edit_state_token() != self.edit_token:
             raise StaleDraftError("Manufacturing Setup changed during STEP loading")
+        if self.planar_controller is not None and (
+            planar_current is not self.planar_controller
+            or planar_current.command_applied_token() != self.planar_token
+        ):
+            raise StaleDraftError("Planar inputs changed during STEP loading")
+        if self.curve_controller is not None and (
+            curve_current is not self.curve_controller
+            or curve_current.command_applied_token() != self.curve_token
+        ):
+            raise StaleDraftError("Curve inputs changed during STEP loading")
         return current
 
 
@@ -212,6 +258,12 @@ def _capture(host: ModelHostProtocol) -> _PublicationSnapshot:
         model_viewer=_capture_viewer(host.viewer),
         tube_viewer=_capture_viewer(host.tube_page.viewer),
         tube_page=_capture_tube_page(host.tube_page),
+        planar_controller=host.planar_page.controller,
+        planar_checkpoint=host.planar_page.controller.command_checkpoint(),
+        planar_viewer=_capture_viewer(host.planar_page.viewer),
+        curve_controller=host.curve_page.controller,
+        curve_checkpoint=host.curve_page.controller.command_checkpoint(),
+        curve_viewer=_capture_viewer(host.curve_page.viewer),
         workbench_key=host.current_workbench_key,
         operation=host.current_operation,
         project_directory=host.last_project_dir,
@@ -241,6 +293,12 @@ def _restore(host: ModelHostProtocol, snapshot: _PublicationSnapshot) -> None:
         host.tube_page.set_controller(snapshot.controller, snapshot.model)
     _restore_viewer_projection(host.tube_page.viewer, snapshot.tube_viewer)
     _restore_tube_page(host.tube_page, snapshot.tube_page)
+    snapshot.planar_controller.restore_command_checkpoint(snapshot.planar_checkpoint)
+    host.planar_page.set_controller(snapshot.planar_controller)
+    _restore_viewer_projection(host.planar_page.viewer, snapshot.planar_viewer)
+    snapshot.curve_controller.restore_command_checkpoint(snapshot.curve_checkpoint)
+    host.curve_page.set_controller(snapshot.curve_controller)
+    _restore_viewer_projection(host.curve_page.viewer, snapshot.curve_viewer)
     refresh_publication_ui(host)
     host.stack.setCurrentIndex(snapshot.stack_index)
     host.preview_tabs.setCurrentIndex(snapshot.preview_tab_index)

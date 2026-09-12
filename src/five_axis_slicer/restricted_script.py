@@ -1,4 +1,4 @@
-"""Parse the Tube console's small, non-executable command language.
+"""Parse the manufacturing workbenches' small, non-executable command language.
 
 The parser inspects Python syntax trees but never evaluates them.  Keeping the
 accepted grammar here prevents console input from reaching Python objects,
@@ -77,6 +77,7 @@ class ScriptCall:
     kwargs: dict[str, object]
     line: int
     column: int
+    namespace: str = "tube"
 
 
 @dataclass(frozen=True, slots=True)
@@ -158,6 +159,8 @@ class _Parser:
             self._fail_at(context, "E_SCRIPT_FORBIDDEN", "Invalid transaction context")
         if context.args or context.keywords:
             self._fail_at(context, "E_ARGUMENT_INVALID", "Transaction accepts no arguments")
+        namespace, _method = self._qualified_name(context)
+        transaction_namespace = self._canonical_namespace(namespace)
 
         calls: list[ScriptCall] = []
         for child in statement.body:
@@ -168,6 +171,12 @@ class _Parser:
                     "Transactions contain modifying manufacturing calls only",
                 )
             call = self._command(child.value)
+            if call.namespace != transaction_namespace:
+                self._fail_at(
+                    child,
+                    "E_SCRIPT_FORBIDDEN",
+                    "A transaction may modify only one manufacturing workbench",
+                )
             if call.name not in _TRANSACTION_METHODS:
                 self._fail_at(
                     child,
@@ -195,7 +204,25 @@ class _Parser:
                 self._fail_at(keyword.value, "E_ARGUMENT_INVALID", "Duplicate keyword argument")
             kwargs[keyword.arg] = self._literal(keyword.value, 1)
         line, column = self._location(call)
-        return ScriptCall(canonical, args, kwargs, line, column)
+        return ScriptCall(
+            canonical,
+            args,
+            kwargs,
+            line,
+            column,
+            self._canonical_namespace(namespace),
+        )
+
+    @staticmethod
+    def _canonical_namespace(namespace: str) -> str:
+        return {
+            "tube": "tube",
+            "管状": "tube",
+            "planar": "planar",
+            "平面": "planar",
+            "curve": "curve",
+            "曲线": "curve",
+        }[namespace]
 
     def _qualified_name(self, call: ast.Call) -> tuple[str, str]:
         function = call.func
@@ -203,20 +230,20 @@ class _Parser:
             self._fail_at(
                 call,
                 "E_SCRIPT_FORBIDDEN",
-                "Command must use tube, 管状, planar, or 平面 directly",
+                "Command must use tube, 管状, planar, 平面, curve, or 曲线 directly",
             )
         namespace = function.value.id
         method = function.attr
         if "__" in namespace or "__" in method:
             self._fail_at(function, "E_SCRIPT_FORBIDDEN", "Dunder access is not allowed")
-        if namespace not in {"tube", "管状", "planar", "平面"}:
+        if namespace not in {"tube", "管状", "planar", "平面", "curve", "曲线"}:
             self._fail_at(function, "E_SCRIPT_FORBIDDEN", "Unknown command namespace")
         return namespace, method
 
     def _canonical_method(self, namespace: str, method: str, node: ast.AST) -> str:
-        if namespace in {"tube", "planar"} and method in _ENGLISH_METHODS:
+        if namespace in {"tube", "planar", "curve"} and method in _ENGLISH_METHODS:
             return method
-        if namespace in {"管状", "平面"} and method in _CHINESE_METHODS:
+        if namespace in {"管状", "平面", "曲线"} and method in _CHINESE_METHODS:
             return _CHINESE_METHODS[method]
         self._fail_at(node, "E_COMMAND_UNKNOWN", f"Unknown manufacturing command: {method}")
 
@@ -229,6 +256,8 @@ class _Parser:
             ("管状", "事务"),
             ("planar", "transaction"),
             ("平面", "事务"),
+            ("curve", "transaction"),
+            ("曲线", "事务"),
         }
 
     def _literal(self, node: ast.AST, depth: int) -> object:

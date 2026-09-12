@@ -541,6 +541,13 @@ class TubeScriptService:
 
     @staticmethod
     def _script_invocation(call: ScriptCall) -> CommandInvocation:
+        if call.namespace != "tube":
+            raise ScriptParseError(
+                "E_SCRIPT_FORBIDDEN",
+                "Tube command service accepts only tube/管状 commands",
+                call.line,
+                call.column,
+            )
         return CommandInvocation(call.name, call.args, call.kwargs, origin="script")
 
     def _format_result(self, result: CommandResult) -> str:

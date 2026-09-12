@@ -85,6 +85,18 @@ class AutomationRouter:
             "/planar/undo": self._planar_undo,
             "/planar/redo": self._planar_redo,
         }
+        self._curve_routes: dict[str, Route] = {
+            "/curve/state": self._curve_state,
+            "/curve/issues": self._curve_issues,
+            "/curve/validate": self._curve_validate,
+            "/curve/operation/create": self._curve_operation_create,
+            "/curve/operation/set": self._curve_operation_set,
+            "/curve/operation/generate": self._curve_operation_generate,
+            "/curve/operation/export": self._curve_operation_export,
+            "/curve/generation/cancel": self._curve_generation_cancel,
+            "/curve/undo": self._curve_undo,
+            "/curve/redo": self._curve_redo,
+        }
 
     def dispatch(self, path: str, payload: Payload) -> Response:
         handler = self._routes.get(path)
@@ -99,6 +111,9 @@ class AutomationRouter:
         planar_handler = self._planar_routes.get(path)
         if planar_handler is not None:
             return planar_handler(payload)
+        curve_handler = self._curve_routes.get(path)
+        if curve_handler is not None:
+            return curve_handler(payload)
         raise RuntimeError(f"Unknown endpoint: {path}")
 
     def _health(self, _payload: Payload) -> Response:
@@ -199,31 +214,34 @@ class AutomationRouter:
         return {"results": self.window.result_page.state_json()}
 
     def _preview_state(self, _payload: Payload) -> Response:
-        return {"preview": self.window.viewer.preview_state()}
+        return {"preview": self.window._active_viewer().preview_state()}
 
     def _preview_perf(self, _payload: Payload) -> Response:
-        return {"preview_perf": self.window.viewer.performance_state()}
+        return {"preview_perf": self.window._active_viewer().performance_state()}
 
     def _preview_layers(self, payload: Payload) -> Response:
-        self.window.viewer.set_preview_layers(
+        viewer = self.window._active_viewer()
+        viewer.set_preview_layers(
             int(payload["layer_min"]),
             int(payload["layer_max"]),
         )
         self.window._sync_preview_controls()
-        return {"preview": self.window.viewer.preview_state()}
+        return {"preview": viewer.preview_state()}
 
     def _preview_progress(self, payload: Payload) -> Response:
         index = int(payload.get("progress_index", payload.get("index", 0)))
         interactive = bool(payload.get("interactive", False))
-        self.window.viewer.set_preview_progress(index, interactive=interactive)
+        viewer = self.window._active_viewer()
+        viewer.set_preview_progress(index, interactive=interactive)
         self.window._sync_progress_controls()
         self.window._update_preview_summary()
         if not interactive:
             QTimer.singleShot(250, self.window._update_preview_summary)
-        return {"preview": self.window.viewer.preview_state()}
+        return {"preview": viewer.preview_state()}
 
     def _preview_visibility(self, payload: Payload) -> Response:
-        self.window.viewer.set_preview_visibility(
+        viewer = self.window._active_viewer()
+        viewer.set_preview_visibility(
             show_travel=payload.get("show_travel"),
             show_extrusion=payload.get("show_extrusion"),
             visible_roles=payload.get("visible_roles"),
@@ -231,18 +249,13 @@ class AutomationRouter:
         )
         self.window._sync_legend_from_settings()
         self.window._update_preview_summary()
-        return {"preview": self.window.viewer.preview_state()}
+        return {"preview": viewer.preview_state()}
 
     def _active_selection_viewer(self) -> Any:
-        if self.window.current_workbench_key == "tube":
-            return self.window.tube_page.viewer
-        return self.window.viewer
+        return self.window._active_workbench_viewer()
 
     def _refresh_selection(self) -> None:
-        if self.window.current_workbench_key == "tube":
-            self.window.tube_page.refresh()
-        else:
-            self.window.refresh_lists()
+        self.window._refresh_active_workbench()
 
     def _selection_mode(self, payload: Payload) -> Response:
         self.window.set_mode(str(payload["mode"]))
@@ -264,7 +277,7 @@ class AutomationRouter:
         return self.window.current_state()
 
     def _camera(self, payload: Payload) -> Response:
-        self.window.viewer.camera_command(
+        self.window._active_viewer().camera_command(
             str(payload.get("command", "fit")),
             float(payload.get("value", 10.0)),
         )
@@ -503,6 +516,64 @@ class AutomationRouter:
         return {
             "command": command_result_json(result),
             "planar": self.window.planar_page.state_json(),
+        }
+
+    def _curve_state(self, _payload: Payload) -> Response:
+        return {"curve": self.window.curve_page.state_json()}
+
+    def _curve_issues(self, _payload: Payload) -> Response:
+        return self._curve_command("issues")
+
+    def _curve_validate(self, _payload: Payload) -> Response:
+        return self._curve_command("validate")
+
+    def _curve_operation_create(self, payload: Payload) -> Response:
+        allowed = ("operation_type", "operation_id", "name")
+        return self._curve_command(
+            "create_operation", **{key: payload[key] for key in allowed if key in payload}
+        )
+
+    def _curve_operation_set(self, payload: Payload) -> Response:
+        allowed = (
+            "operation_id", "name", "enabled", "edge_ids", "reversed_flags",
+            "normal_mode", "normal_face_id", "specified_normal", "sampling_step_mm",
+            "chord_error_mm", "chain_tolerance_mm", "bead_width_mm", "layer_height_mm",
+            "feedrate_mm_min", "travel_feedrate_mm_min", "retract_length_mm", "dwell_s",
+            "layer_count", "offset_pass_count", "offset_spacing_mm",
+        )
+        return self._curve_command(
+            "set_operation", **{key: payload[key] for key in allowed if key in payload}
+        )
+
+    def _curve_operation_generate(self, payload: Payload) -> Response:
+        return self._curve_command("generate_operation", operation_id=payload.get("operation_id"))
+
+    def _curve_operation_export(self, payload: Payload) -> Response:
+        destination = payload.get("destination")
+        if not isinstance(destination, str) or not destination.strip():
+            raise ValueError("destination is required")
+        return self._curve_command(
+            "export_operation",
+            operation_id=payload.get("operation_id"),
+            destination=destination,
+        )
+
+    def _curve_generation_cancel(self, _payload: Payload) -> Response:
+        return self._curve_command("cancel_generation")
+
+    def _curve_undo(self, _payload: Payload) -> Response:
+        return self._curve_command("undo")
+
+    def _curve_redo(self, _payload: Payload) -> Response:
+        return self._curve_command("redo")
+
+    def _curve_command(self, command_name: str, **kwargs: Any) -> Response:
+        result = self.window.curve_command_service.execute_command(
+            command_name, origin="http", **kwargs
+        )
+        return {
+            "command": command_result_json(result),
+            "curve": self.window.curve_page.state_json(),
         }
 
 
