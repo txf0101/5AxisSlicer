@@ -119,48 +119,14 @@ class CurveCommandProvider:
             key: value for key, value in parameter_changes.items() if value is not None
         }
         current = controller.operation(operation_id)
-        if name is not None or enabled is not None:
-            current = controller.set_operation_metadata(
-                current.operation_id, name=name, enabled=enabled
-            )
-        parameters = (
-            current.parameters
-            if not parameter_changes
-            else replace(current.parameters, **parameter_changes)
+        current = _apply_metadata(controller, current, name, enabled)
+        parameters = _updated_parameters(current, parameter_changes)
+        geometry = _configuration_inputs(
+            current, edge_ids, reversed_flags, normal_mode, normal_face_id, specified_normal
         )
-        selected_edges = (
-            tuple(item.edge.object_id for item in current.geometry.edges)
-            if edge_ids is None
-            else tuple(str(item) for item in edge_ids)
+        updated = _configure_if_selected(
+            controller, current, parameters, geometry, parameter_changes
         )
-        selected_flags = (
-            tuple(item.reversed for item in current.geometry.edges)
-            if reversed_flags is None
-            else tuple(bool(item) for item in reversed_flags)
-        )
-        mode = normal_mode or current.geometry.normal_mode
-        face_id = normal_face_id
-        if normal_face_id is None and current.geometry.normal_face is not None:
-            face_id = current.geometry.normal_face.object_id
-        normal = (
-            current.geometry.specified_normal
-            if specified_normal is None
-            else tuple(float(item) for item in specified_normal)
-        )
-        if not selected_edges:
-            if parameter_changes:
-                raise ValueError("edge_ids are required before setting Curve parameters")
-            updated = current
-        else:
-            updated = controller.configure_operation(
-                operation_id=current.operation_id,
-                edge_ids=selected_edges,
-                reversed_flags=selected_flags,
-                normal_mode=mode,
-                normal_face_id=face_id,
-                specified_normal=normal,
-                parameters=parameters,
-            )
         return CommandOutcome(updated.to_json(), ("operation",), ("operations", "products"))
 
     @staticmethod
@@ -177,7 +143,7 @@ class CurveCommandProvider:
                 record_history=False,
             )
         return CommandOutcome(
-            {"status": result.manifest.status.value, "result": result.to_json()},
+            {"status": _status_value(result.manifest.status), "result": result.to_json()},
             ("operation",),
             ("products",),
             project_only=True,
@@ -247,6 +213,89 @@ def _script_invocation(call: ScriptCall) -> CommandInvocation:
             call.column,
         )
     return CommandInvocation(call.name, call.args, call.kwargs, origin="script")
+
+
+def _apply_metadata(
+    controller: CurveController,
+    current: Any,
+    name: str | None,
+    enabled: bool | None,
+) -> Any:
+    if name is None and enabled is None:
+        return current
+    return controller.set_operation_metadata(current.operation_id, name=name, enabled=enabled)
+
+
+def _updated_parameters(current: Any, changes: dict[str, Any]) -> CurveProcessParameters:
+    return current.parameters if not changes else replace(current.parameters, **changes)
+
+
+def _configuration_inputs(
+    current: Any,
+    edge_ids: tuple[str, ...] | list[str] | None,
+    reversed_flags: tuple[bool, ...] | list[bool] | None,
+    normal_mode: str | None,
+    normal_face_id: str | None,
+    specified_normal: tuple[float, float, float] | list[float] | None,
+) -> tuple[
+    tuple[str, ...],
+    tuple[bool, ...],
+    str,
+    str | None,
+    tuple[float, float, float] | None,
+]:
+    selected_edges = (
+        tuple(item.edge.object_id for item in current.geometry.edges)
+        if edge_ids is None
+        else tuple(str(item) for item in edge_ids)
+    )
+    flags = (
+        tuple(item.reversed for item in current.geometry.edges)
+        if reversed_flags is None
+        else tuple(bool(item) for item in reversed_flags)
+    )
+    face_id = normal_face_id
+    if face_id is None and current.geometry.normal_face is not None:
+        face_id = current.geometry.normal_face.object_id
+    normal = (
+        current.geometry.specified_normal
+        if specified_normal is None
+        else cast(tuple[float, float, float], tuple(float(item) for item in specified_normal))
+    )
+    return selected_edges, flags, normal_mode or current.geometry.normal_mode, face_id, normal
+
+
+def _configure_if_selected(
+    controller: CurveController,
+    current: Any,
+    parameters: CurveProcessParameters,
+    geometry: tuple[
+        tuple[str, ...],
+        tuple[bool, ...],
+        str,
+        str | None,
+        tuple[float, float, float] | None,
+    ],
+    parameter_changes: dict[str, Any],
+) -> Any:
+    edge_ids, flags, mode, face_id, normal = geometry
+    if not edge_ids:
+        if parameter_changes:
+            raise ValueError("edge_ids are required before setting Curve parameters")
+        return current
+    return controller.configure_operation(
+        operation_id=current.operation_id,
+        edge_ids=edge_ids,
+        reversed_flags=flags,
+        normal_mode=mode,
+        normal_face_id=face_id,
+        specified_normal=normal,
+        parameters=parameters,
+    )
+
+
+def _status_value(status: Any) -> str:
+    return str(getattr(status, "value", status))
 
 
 __all__ = ["CurveCommandProvider", "CurveCommandService"]

@@ -14,6 +14,7 @@ from typing import Any
 
 from PyQt5.QtCore import QTimer
 
+from .curve_automation import CurveAutomationRoutes
 from .localization import tr
 from .tube_script_service import command_result_json
 
@@ -73,30 +74,8 @@ class AutomationRouter:
             "/tube/draft/discard": self._tube_draft_discard,
             "/tube/view": self._tube_view,
         }
-        self._planar_routes: dict[str, Route] = {
-            "/planar/state": self._planar_state,
-            "/planar/issues": self._planar_issues,
-            "/planar/validate": self._planar_validate,
-            "/planar/operation/create": self._planar_operation_create,
-            "/planar/operation/set": self._planar_operation_set,
-            "/planar/operation/generate": self._planar_operation_generate,
-            "/planar/operation/export": self._planar_operation_export,
-            "/planar/generation/cancel": self._planar_generation_cancel,
-            "/planar/undo": self._planar_undo,
-            "/planar/redo": self._planar_redo,
-        }
-        self._curve_routes: dict[str, Route] = {
-            "/curve/state": self._curve_state,
-            "/curve/issues": self._curve_issues,
-            "/curve/validate": self._curve_validate,
-            "/curve/operation/create": self._curve_operation_create,
-            "/curve/operation/set": self._curve_operation_set,
-            "/curve/operation/generate": self._curve_operation_generate,
-            "/curve/operation/export": self._curve_operation_export,
-            "/curve/generation/cancel": self._curve_generation_cancel,
-            "/curve/undo": self._curve_undo,
-            "/curve/redo": self._curve_redo,
-        }
+        self._planar_routes = _planar_routes(self)
+        self._curve_routes = CurveAutomationRoutes(window).routes
 
     def dispatch(self, path: str, payload: Payload) -> Response:
         handler = self._routes.get(path)
@@ -518,64 +497,6 @@ class AutomationRouter:
             "planar": self.window.planar_page.state_json(),
         }
 
-    def _curve_state(self, _payload: Payload) -> Response:
-        return {"curve": self.window.curve_page.state_json()}
-
-    def _curve_issues(self, _payload: Payload) -> Response:
-        return self._curve_command("issues")
-
-    def _curve_validate(self, _payload: Payload) -> Response:
-        return self._curve_command("validate")
-
-    def _curve_operation_create(self, payload: Payload) -> Response:
-        allowed = ("operation_type", "operation_id", "name")
-        return self._curve_command(
-            "create_operation", **{key: payload[key] for key in allowed if key in payload}
-        )
-
-    def _curve_operation_set(self, payload: Payload) -> Response:
-        allowed = (
-            "operation_id", "name", "enabled", "edge_ids", "reversed_flags",
-            "normal_mode", "normal_face_id", "specified_normal", "sampling_step_mm",
-            "chord_error_mm", "chain_tolerance_mm", "bead_width_mm", "layer_height_mm",
-            "feedrate_mm_min", "travel_feedrate_mm_min", "retract_length_mm", "dwell_s",
-            "layer_count", "offset_pass_count", "offset_spacing_mm",
-        )
-        return self._curve_command(
-            "set_operation", **{key: payload[key] for key in allowed if key in payload}
-        )
-
-    def _curve_operation_generate(self, payload: Payload) -> Response:
-        return self._curve_command("generate_operation", operation_id=payload.get("operation_id"))
-
-    def _curve_operation_export(self, payload: Payload) -> Response:
-        destination = payload.get("destination")
-        if not isinstance(destination, str) or not destination.strip():
-            raise ValueError("destination is required")
-        return self._curve_command(
-            "export_operation",
-            operation_id=payload.get("operation_id"),
-            destination=destination,
-        )
-
-    def _curve_generation_cancel(self, _payload: Payload) -> Response:
-        return self._curve_command("cancel_generation")
-
-    def _curve_undo(self, _payload: Payload) -> Response:
-        return self._curve_command("undo")
-
-    def _curve_redo(self, _payload: Payload) -> Response:
-        return self._curve_command("redo")
-
-    def _curve_command(self, command_name: str, **kwargs: Any) -> Response:
-        result = self.window.curve_command_service.execute_command(
-            command_name, origin="http", **kwargs
-        )
-        return {
-            "command": command_result_json(result),
-            "curve": self.window.curve_page.state_json(),
-        }
-
 
 def automation_vector(
     payload: Payload,
@@ -589,6 +510,21 @@ def automation_vector(
     if any(not math.isfinite(value) for value in values):
         raise ValueError(f"{key} values must be finite")
     return values  # type: ignore[return-value]
+
+
+def _planar_routes(router: AutomationRouter) -> dict[str, Route]:
+    return {
+        "/planar/state": router._planar_state,
+        "/planar/issues": router._planar_issues,
+        "/planar/validate": router._planar_validate,
+        "/planar/operation/create": router._planar_operation_create,
+        "/planar/operation/set": router._planar_operation_set,
+        "/planar/operation/generate": router._planar_operation_generate,
+        "/planar/operation/export": router._planar_operation_export,
+        "/planar/generation/cancel": router._planar_generation_cancel,
+        "/planar/undo": router._planar_undo,
+        "/planar/redo": router._planar_redo,
+    }
 
 
 __all__ = ["AutomationRouter", "automation_vector"]

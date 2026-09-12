@@ -110,21 +110,7 @@ def _append_path(
     if len(samples) < 2:
         raise CurveGeometryError("curve.path_degenerate", path.region_id)
     parameters = operation.parameters
-    if points:
-        events.append(
-            ToolpathEvent(
-                f"event-{len(events) + 1:07d}",
-                "retract",
-                operation.operation_id,
-                operation.operation_type,
-                path.layer_id,
-                path.region_id,
-                context={
-                    "sequence_index": len(points),
-                    "extrusion_length_mm": -parameters.retract_length_mm,
-                },
-            )
-        )
+    _append_retract(events, operation, path, len(points))
     first, following = samples[0], samples[1]
     points.append(
         ToolpathPoint(
@@ -141,6 +127,53 @@ def _append_path(
             feedrate_mm_min=parameters.travel_feedrate_mm_min,
         )
     )
+    _append_prime(events, operation, path, len(points))
+    _append_deposition_points(points, operation, path)
+    if parameters.dwell_s > 0.0:
+        events.append(
+            ToolpathEvent(
+                f"event-{len(events) + 1:07d}",
+                "dwell",
+                operation.operation_id,
+                operation.operation_type,
+                path.layer_id,
+                path.region_id,
+                duration_s=parameters.dwell_s,
+                context={"sequence_index": len(points)},
+            )
+        )
+
+
+def _append_retract(
+    events: list[ToolpathEvent],
+    operation: CurveOperationDefinition,
+    path: CurvePathDefinition,
+    sequence_index: int,
+) -> None:
+    if sequence_index == 0:
+        return
+    events.append(
+        ToolpathEvent(
+            f"event-{len(events) + 1:07d}",
+            "retract",
+            operation.operation_id,
+            operation.operation_type,
+            path.layer_id,
+            path.region_id,
+            context={
+                "sequence_index": sequence_index,
+                "extrusion_length_mm": -operation.parameters.retract_length_mm,
+            },
+        )
+    )
+
+
+def _append_prime(
+    events: list[ToolpathEvent],
+    operation: CurveOperationDefinition,
+    path: CurvePathDefinition,
+    sequence_index: int,
+) -> None:
     events.append(
         ToolpathEvent(
             f"event-{len(events) + 1:07d}",
@@ -150,12 +183,21 @@ def _append_path(
             path.layer_id,
             path.region_id,
             context={
-                "sequence_index": len(points),
-                "extrusion_length_mm": parameters.retract_length_mm,
+                "sequence_index": sequence_index,
+                "extrusion_length_mm": operation.parameters.retract_length_mm,
             },
         )
     )
-    previous = first
+
+
+def _append_deposition_points(
+    points: list[ToolpathPoint],
+    operation: CurveOperationDefinition,
+    path: CurvePathDefinition,
+) -> None:
+    parameters = operation.parameters
+    samples = path.samples
+    previous = samples[0]
     for current in samples[1:]:
         length = math.dist(previous.position, current.position)
         if length <= 1.0e-10:
@@ -184,19 +226,6 @@ def _append_path(
             )
         )
         previous = current
-    if parameters.dwell_s > 0.0:
-        events.append(
-            ToolpathEvent(
-                f"event-{len(events) + 1:07d}",
-                "dwell",
-                operation.operation_id,
-                operation.operation_type,
-                path.layer_id,
-                path.region_id,
-                duration_s=parameters.dwell_s,
-                context={"sequence_index": len(points)},
-            )
-        )
 
 
 def _height_offset(samples: tuple[CurveSample, ...], distance: float) -> tuple[CurveSample, ...]:
@@ -229,22 +258,29 @@ def _lateral_offset(
             raise CurveGeometryError(
                 "curve.offset_frame_reversal", detail="lateral frame reverses at a sharp turn"
             )
-    result = tuple(
-        CurveSample(
-            (
-                shifted
-                if project_point is None
-                else project_point(shifted)
-            ),
-            item.tangent,
-            item.surface_normal,
-            item.source_edge_id,
-            item.edge_parameter,
-            item.chain_distance_mm,
+    result_items = []
+    for item, lateral in zip(samples, laterals, strict=True):
+        shifted = _add(item.position, _scale(lateral, distance))
+        projected = shifted if project_point is None else project_point(shifted)
+        if abs(distance) > 1.0e-12:
+            achieved = _dot(_subtract(projected, item.position), lateral)
+            if achieved < abs(distance) * 0.5:
+                raise CurveGeometryError(
+                    "curve.offset_outside_face",
+                    item.source_edge_id,
+                    "surface projection collapses the requested lateral offset",
+                )
+        result_items.append(
+            CurveSample(
+                projected,
+                item.tangent,
+                item.surface_normal,
+                item.source_edge_id,
+                item.edge_parameter,
+                item.chain_distance_mm,
+            )
         )
-        for item, lateral in zip(samples, laterals, strict=True)
-        for shifted in (_add(item.position, _scale(lateral, distance)),)
-    )
+    result = tuple(result_items)
     if abs(distance) > 1.0e-12 and _polyline_self_intersects(result, bead_width_mm * 0.05):
         raise CurveGeometryError(
             "curve.offset_self_intersection",
@@ -274,12 +310,15 @@ def _polyline_self_intersects(samples: tuple[CurveSample, ...], tolerance: float
             if first_index == 0 and second_index == len(segments) - 1:
                 continue
             second = segments[second_index]
-            if _segment_distance(
-                first[0].position,
-                first[1].position,
-                second[0].position,
-                second[1].position,
-            ) <= tolerance:
+            if (
+                _segment_distance(
+                    first[0].position,
+                    first[1].position,
+                    second[0].position,
+                    second[1].position,
+                )
+                <= tolerance
+            ):
                 return True
     return False
 

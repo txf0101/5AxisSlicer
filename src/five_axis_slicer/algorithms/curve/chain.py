@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 import math
+from typing import cast
 
 from OCP.BRep import BRep_Tool
 from OCP.BRepAdaptor import BRepAdaptor_Curve
@@ -95,6 +96,30 @@ def build_curve_plan(
     if transform.source_frame not in {"source", "model"}:
         raise ValueError("Curve input transform must start in Source/Model frame")
     normal_face_id = _validate_normal_source(model, geometry)
+    edge_samples, lengths = _sample_chain_edges(model, geometry, parameters, cancelled)
+    _validate_chain(edge_samples, geometry, parameters.chain_tolerance_mm)
+    output = _samples_in_build(model, geometry, edge_samples, lengths, transform, normal_face_id)
+    if len(output) < 2:
+        raise CurveGeometryError("curve.chain_degenerate", detail="chain has fewer than two points")
+    closed = math.dist(output[0].position, output[-1].position) <= parameters.chain_tolerance_mm
+    return CurvePlan(
+        f"{operation_id}-curve-plan-v1",
+        operation_id,
+        tuple(output),
+        tuple(item.edge.object_id for item in geometry.edges),
+        tuple(lengths),
+        sum(lengths),
+        closed,
+        _normal_source_label(geometry, normal_face_id),
+    )
+
+
+def _sample_chain_edges(
+    model: CadModel,
+    geometry: CurveGeometrySelection,
+    parameters: CurveProcessParameters,
+    cancelled: CancelCheck | None,
+) -> tuple[list[list[tuple[Vector3, Vector3, float, float]]], list[float]]:
     edge_samples: list[list[tuple[Vector3, Vector3, float, float]]] = []
     lengths: list[float] = []
     for selected in geometry.edges:
@@ -111,13 +136,20 @@ def build_curve_plan(
             raise CurveGeometryError("curve.edge_degenerate", edge_id, "insufficient extent")
         edge_samples.append(sampled)
         lengths.append(length)
-    _validate_chain(edge_samples, geometry, parameters.chain_tolerance_mm)
+    return edge_samples, lengths
 
+
+def _samples_in_build(
+    model: CadModel,
+    geometry: CurveGeometrySelection,
+    edge_samples: list[list[tuple[Vector3, Vector3, float, float]]],
+    lengths: list[float],
+    transform: RigidTransform,
+    normal_face_id: str | None,
+) -> list[CurveSample]:
     output: list[CurveSample] = []
     chain_base = 0.0
-    for selected, sampled, edge_length in zip(
-        geometry.edges, edge_samples, lengths, strict=True
-    ):
+    for selected, sampled, edge_length in zip(geometry.edges, edge_samples, lengths, strict=True):
         edge_id = selected.edge.object_id
         for index, (point, tangent, parameter, local_distance) in enumerate(sampled):
             if output and index == 0:
@@ -125,7 +157,7 @@ def build_curve_plan(
             normal = (
                 geometry.specified_normal
                 if geometry.normal_mode == "specified"
-                else _face_normal(model, normal_face_id, point)
+                else _face_normal(model, cast(str, normal_face_id), point)
             )
             assert normal is not None
             build_point = transform.transform_point(point)
@@ -146,23 +178,13 @@ def build_curve_plan(
                 )
             )
         chain_base += edge_length
-    if len(output) < 2:
-        raise CurveGeometryError("curve.chain_degenerate", detail="chain has fewer than two points")
-    closed = math.dist(output[0].position, output[-1].position) <= parameters.chain_tolerance_mm
-    return CurvePlan(
-        f"{operation_id}-curve-plan-v1",
-        operation_id,
-        tuple(output),
-        tuple(item.edge.object_id for item in geometry.edges),
-        tuple(lengths),
-        sum(lengths),
-        closed,
-        (
-            f"specified:{geometry.specified_normal}"
-            if geometry.normal_mode == "specified"
-            else f"adjacent_face:{normal_face_id}"
-        ),
-    )
+    return output
+
+
+def _normal_source_label(geometry: CurveGeometrySelection, face_id: str | None) -> str:
+    if geometry.normal_mode == "specified":
+        return f"specified:{geometry.specified_normal}"
+    return f"adjacent_face:{face_id}"
 
 
 def _sample_edge(

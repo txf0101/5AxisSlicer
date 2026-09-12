@@ -130,8 +130,10 @@ class CurveProductState:
 
     def stale_for(self, operation: CurveOperationDefinition) -> "CurveProductState":
         digest = operation.semantic_sha256()
-        return self if digest == self.parameter_semantic_sha256 else replace(
-            self, parameter_semantic_sha256=digest, status="stale"
+        return (
+            self
+            if digest == self.parameter_semantic_sha256
+            else replace(self, parameter_semantic_sha256=digest, status="stale")
         )
 
     def to_json(self) -> dict[str, Any]:
@@ -182,19 +184,8 @@ def generate_curve_product(
         T_build_from_source=T_build_from_source,
         cancelled=cancelled,
     )
-    project = None
-    if operation.operation_type == "curve_offset_buildup" and operation.geometry.normal_face:
-        face_id = operation.geometry.normal_face.object_id
-        T_source_from_build = T_build_from_source.inverse()
-
-        def project(build_point: Vector3) -> Vector3:
-            source_point = T_source_from_build.transform_point(build_point)
-            projected = project_point_to_face(model, face_id, source_point)
-            return T_build_from_source.transform_point(projected)
-
-    toolpath = generate_curve_toolpath(
-        plan, operation, cancelled=cancelled, project_point=project
-    )
+    project = _surface_projector(model, operation, T_build_from_source)
+    toolpath = generate_curve_toolpath(plan, operation, cancelled=cancelled, project_point=project)
     _checkpoint(cancelled)
     trajectory = solve_xyzac_trajectory(
         toolpath,
@@ -202,13 +193,47 @@ def generate_curve_product(
         tool_length_mm=nozzle.length_mm or 0.0,
         T_workpiece_from_build=T_workpiece_from_build,
     )
-    validation = _validate_curve(plan, toolpath, trajectory, operation, nozzle, obstacles, check_ipw)
-    algorithm = CURVE_ALGORITHM_VERSIONS[operation.operation_type]
-    manifest = GeneratedResultManifest(
+    validation = _validate_curve(
+        plan, toolpath, trajectory, operation, nozzle, obstacles, check_ipw
+    )
+    manifest = _result_manifest(model, operation, machine, toolpath, validation, source_path)
+    if not manifest.ready_for_export:
+        return _blocked_result(operation, plan, toolpath, trajectory, validation, manifest)
+    return _postprocessed_result(
+        operation, machine, nozzle, plan, toolpath, trajectory, validation, manifest
+    )
+
+
+def _surface_projector(
+    model: CadModel,
+    operation: CurveOperationDefinition,
+    transform: RigidTransform,
+) -> Callable[[Vector3], Vector3] | None:
+    if operation.operation_type != "curve_offset_buildup" or not operation.geometry.normal_face:
+        return None
+    face_id = operation.geometry.normal_face.object_id
+    inverse = transform.inverse()
+
+    def project(build_point: Vector3) -> Vector3:
+        source_point = inverse.transform_point(build_point)
+        return transform.transform_point(project_point_to_face(model, face_id, source_point))
+
+    return project
+
+
+def _result_manifest(
+    model: CadModel,
+    operation: CurveOperationDefinition,
+    machine: MachineProfile,
+    toolpath: GeneratedToolpath,
+    validation: CurveValidationReport,
+    source_path: str | Path | None,
+) -> GeneratedResultManifest:
+    return GeneratedResultManifest(
         f"{toolpath.toolpath_id}-result-v1",
         operation.operation_id,
         validation.status,
-        algorithm,
+        CURVE_ALGORITHM_VERSIONS[operation.operation_type],
         operation.semantic_sha256(),
         (_source_fingerprint(model, source_path),),
         toolpath,
@@ -217,17 +242,38 @@ def generate_curve_product(
         validation.ready_for_export,
         tuple(item.code for item in validation.issues),
     )
-    if not manifest.ready_for_export:
-        return CurveProductResult(
-            operation.operation_type,
-            plan,
-            toolpath,
-            trajectory,
-            validation,
-            manifest,
-            "",
-            GCodeReadbackReport(len(toolpath.points), 0, (), (), (), ("blocked",)),
-        )
+
+
+def _blocked_result(
+    operation: CurveOperationDefinition,
+    plan: CurvePlan,
+    toolpath: GeneratedToolpath,
+    trajectory: MachineAxisTrajectory,
+    validation: CurveValidationReport,
+    manifest: GeneratedResultManifest,
+) -> CurveProductResult:
+    return CurveProductResult(
+        operation.operation_type,
+        plan,
+        toolpath,
+        trajectory,
+        validation,
+        manifest,
+        "",
+        GCodeReadbackReport(len(toolpath.points), 0, (), (), (), ("blocked",)),
+    )
+
+
+def _postprocessed_result(
+    operation: CurveOperationDefinition,
+    machine: MachineProfile,
+    nozzle: NozzleProfile,
+    plan: CurvePlan,
+    toolpath: GeneratedToolpath,
+    trajectory: MachineAxisTrajectory,
+    validation: CurveValidationReport,
+    manifest: GeneratedResultManifest,
+) -> CurveProductResult:
     marker = CURVE_MARKERS[operation.operation_type]
     gcode = postprocess_indexed_gcode(
         toolpath,
@@ -265,7 +311,7 @@ def state_from_curve_result(
     return CurveProductState(
         operation.operation_id,
         operation.semantic_sha256(),
-        result.manifest.status.value,
+        _status_value(result.manifest.status),
         result.to_json(),
     )
 
@@ -315,29 +361,69 @@ def _validate_curve(
     obstacles: tuple[CollisionBox, ...],
     check_ipw: bool,
 ) -> CurveValidationReport:
+    expected_length, length_error, volume_error, length_limit = _path_measurements(
+        plan, toolpath, operation
+    )
+    metrics = _curve_metrics(trajectory, operation, length_error, volume_error, length_limit)
+    issues = list(_coalesced_trajectory_issues(trajectory.issues))
+    issues.extend(_metric_issues(metrics))
+    collision_issues, checked = _curve_collision_issues(toolpath, nozzle, obstacles, check_ipw)
+    issues.extend(collision_issues)
+    return CurveValidationReport(
+        f"{toolpath.toolpath_id}-validation-v1",
+        toolpath.toolpath_id,
+        trajectory.trajectory_id,
+        tuple(issues),
+        metrics,
+        checked,
+    )
+
+
+def _path_measurements(
+    plan: CurvePlan,
+    toolpath: GeneratedToolpath,
+    operation: CurveOperationDefinition,
+) -> tuple[float, float, float, float]:
     groups: dict[tuple[str, str], list[Any]] = {}
     for point in toolpath.points:
         groups.setdefault((point.layer_id, point.region_id), []).append(point)
-    deposited_length = sum(
-        math.dist(left.position, right.position)
+    deposited_segments = [
+        (math.dist(left.position, right.position), right)
         for group in groups.values()
         for left, right in zip(group, group[1:])
         if right.point_type == "deposition"
+    ]
+    base_group = next(iter(groups.values()), [])
+    base_length = sum(
+        math.dist(left.position, right.position)
+        for left, right in zip(base_group, base_group[1:])
+        if right.point_type == "deposition"
     )
-    expected_count = {
-        "curve_buildup": 1,
-        "curve_multi_pass": operation.parameters.layer_count,
-        "curve_offset_buildup": operation.parameters.offset_pass_count,
-    }[operation.operation_type]
-    expected_length = plan.total_length_mm * expected_count
-    length_error = abs(expected_length - deposited_length)
+    expected_length = plan.total_length_mm
+    length_error = abs(expected_length - base_length)
     actual_volume = sum(item.material_volume_mm3 for item in toolpath.points)
-    expected_volume = (
-        expected_length * operation.parameters.bead_width_mm * operation.parameters.layer_height_mm
+    expected_volume = sum(
+        length * point.bead_width_mm * point.layer_height_mm
+        for length, point in deposited_segments
+        if point.bead_width_mm is not None and point.layer_height_mm is not None
     )
     volume_error = abs(actual_volume - expected_volume)
-    length_limit = max(operation.parameters.chord_error_mm * expected_count, 1.0e-6)
-    metrics = (
+    length_limit = max(operation.parameters.chord_error_mm, 1.0e-6)
+    return expected_length, length_error, volume_error, length_limit
+
+
+def _curve_metrics(
+    trajectory: MachineAxisTrajectory,
+    operation: CurveOperationDefinition,
+    length_error: float,
+    volume_error: float,
+    length_limit: float,
+) -> tuple[ValidationMetric, ...]:
+    fk_position_error = max((item.fk_position_error_mm for item in trajectory.samples), default=0.0)
+    fk_orientation_error = max(
+        (item.fk_orientation_error_rad for item in trajectory.samples), default=0.0
+    )
+    return (
         ValidationMetric(
             "curve_path_length_error",
             length_error,
@@ -359,22 +445,23 @@ def _validate_curve(
         ),
         ValidationMetric(
             "curve_fk_position_error",
-            max((item.fk_position_error_mm for item in trajectory.samples), default=0.0),
+            fk_position_error,
             0.01,
             "mm",
-            max((item.fk_position_error_mm for item in trajectory.samples), default=0.0) <= 0.01,
+            fk_position_error <= 0.01,
         ),
         ValidationMetric(
             "curve_fk_orientation_error",
-            max((item.fk_orientation_error_rad for item in trajectory.samples), default=0.0),
+            fk_orientation_error,
             math.radians(0.01),
             "rad",
-            max((item.fk_orientation_error_rad for item in trajectory.samples), default=0.0)
-            <= math.radians(0.01),
+            fk_orientation_error <= math.radians(0.01),
         ),
     )
-    issues = list(_coalesced_trajectory_issues(trajectory.issues))
-    issues.extend(
+
+
+def _metric_issues(metrics: tuple[ValidationMetric, ...]) -> tuple[ValidationIssue, ...]:
+    return tuple(
         ValidationIssue(
             f"curve.metric.{item.name}",
             IssueSeverity.ERROR,
@@ -383,22 +470,30 @@ def _validate_curve(
         for item in metrics
         if not item.passed
     )
-    checked = 0
-    if obstacles:
-        from ..validation.indexed_tube import _collision_issues
 
-        collision_issues, checked = _collision_issues(
-            toolpath, nozzle, obstacles, 0.25, check_ipw=check_ipw
-        )
-        issues.extend(collision_issues)
-    return CurveValidationReport(
-        f"{toolpath.toolpath_id}-validation-v1",
-        toolpath.toolpath_id,
-        trajectory.trajectory_id,
-        tuple(issues),
-        metrics,
-        checked,
+
+def _curve_collision_issues(
+    toolpath: GeneratedToolpath,
+    nozzle: NozzleProfile,
+    obstacles: tuple[CollisionBox, ...],
+    check_ipw: bool,
+) -> tuple[tuple[ValidationIssue, ...], int]:
+    if not obstacles:
+        return (), 0
+    from ..validation.indexed_tube import _collision_issues
+
+    issues, checked = _collision_issues(toolpath, nozzle, obstacles, 0.25, check_ipw=check_ipw)
+    mapped = tuple(
+            replace(issue, code=issue.code.replace("tube.", "curve.", 1))
+            if issue.code.startswith("tube.")
+            else issue
+            for issue in issues
     )
+    return _coalesced_trajectory_issues(mapped), checked
+
+
+def _status_value(status: GeneratedResultStatus | str) -> str:
+    return status.value if isinstance(status, GeneratedResultStatus) else status
 
 
 def _coalesced_trajectory_issues(

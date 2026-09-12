@@ -5,15 +5,17 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+from typing import cast
 
 from .manufacturing.coordinates import RigidTransform
 from .manufacturing.curve_parameters import CurveOperationDefinition
 from .manufacturing.machine import MachineProfile
 from .manufacturing.setup import ManufacturingSetup
-from .models import CadModel
+from .models import BoundingBox, CadModel, Vector3
 from .postprocessing.curve_product import CURVE_ALGORITHM_VERSIONS
+from .validation.indexed_tube import CollisionBox
 
-CURVE_CONTEXT_VERSION = "curve-build-context-v1"
+CURVE_CONTEXT_VERSION = "curve-build-context-v2"
 
 
 def curve_input_fingerprint(
@@ -44,6 +46,10 @@ def curve_input_fingerprint(
         "placement": None
         if setup.T_mount_from_build is None
         else setup.T_mount_from_build.to_json(),
+        "collision": {
+            "check_ipw": True,
+            "fixture_body_ids": list(setup.assignments.fixture_body_ids),
+        },
     }
     return hashlib.sha256(
         json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
@@ -85,9 +91,40 @@ def curve_workpiece_from_build(
     return mount.T_parent_from_mount @ setup.T_mount_from_build
 
 
+def curve_collision_boxes(
+    setup: ManufacturingSetup,
+    model: CadModel,
+    transform: RigidTransform,
+) -> tuple[CollisionBox, ...]:
+    """Resolve Setup fixture bodies to conservative Build-frame AABBs."""
+
+    boxes = []
+    for body_id in setup.assignments.fixture_body_ids:
+        body = model.body_map.get(body_id)
+        if body is None or body.bounds is None:
+            raise ValueError(f"collision body has no valid bounds: {body_id}")
+        bounds = _transformed_bounds(body.bounds, transform)
+        boxes.append(CollisionBox(body_id, "fixture", bounds.minimum, bounds.maximum))
+    return tuple(boxes)
+
+
+def _transformed_bounds(box: BoundingBox, transform: RigidTransform) -> BoundingBox:
+    corners = tuple(
+        transform.transform_point((x, y, z))
+        for x in (box.minimum[0], box.maximum[0])
+        for y in (box.minimum[1], box.maximum[1])
+        for z in (box.minimum[2], box.maximum[2])
+    )
+    return BoundingBox(
+        cast(Vector3, tuple(min(point[index] for point in corners) for index in range(3))),
+        cast(Vector3, tuple(max(point[index] for point in corners) for index in range(3))),
+    )
+
+
 __all__ = [
     "CURVE_CONTEXT_VERSION",
     "curve_build_from_source",
+    "curve_collision_boxes",
     "curve_input_fingerprint",
     "curve_workpiece_from_build",
     "validate_curve_generation_inputs",

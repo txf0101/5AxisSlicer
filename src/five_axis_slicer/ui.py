@@ -36,19 +36,19 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
-from . import curve_shell, model_commit, planar_shell
+from . import curve_shell, model_commit, planar_shell, workbench_navigation
 from .automation import AutomationServer
 from .automation_routes import AutomationRouter
 from .background_load import ResultLoadCoordinator
 from .gcode_preview import ROLE_COLORS, rgb_to_hex, role_label
 from .localization import tr
 from .manufacturing.own_printer import default_printer_setup
-from .manufacturing_script_service import ManufacturingScriptService
 from .manufacturing.preview_kinematics import (
     AC_INVERSE_TRANSFORM,
     MACHINE_COORDINATE_TRANSFORM,
 )
 from .manufacturing.setup import ManufacturingSetup
+from .manufacturing_script_service import ManufacturingScriptService
 from .models import CadModel
 from .project_io import (
     ProjectFormatError,
@@ -693,6 +693,7 @@ class MainWindow(QMainWindow):
     def _commit_model(self, model: CadModel) -> None:
         """Publish one fully loaded CAD model to both workbench viewers."""
 
+        started_from_home = self.stack.currentWidget() is self.home_page
         with model_commit.publication_transaction(self):
             previous_controller = self.tube_page.controller
             previous_planar = self.planar_page.controller
@@ -725,7 +726,7 @@ class MainWindow(QMainWindow):
             if controller is not previous_controller:
                 self.last_project_dir = None
             model_commit.refresh_publication_ui(self)
-            self._show_session()
+            workbench_navigation.show_after_model_import(self, started_from_home)
             message = tr(
                 self.language,
                 "status_loaded",
@@ -999,9 +1000,7 @@ class MainWindow(QMainWindow):
         if loaded.setup is not None and not isinstance(loaded.setup, ManufacturingSetup):
             raise ProjectFormatError("project Setup was not reconstructed as ManufacturingSetup")
         setup = loaded.setup or ManufacturingSetup()
-        # Construct and validate the candidate controller before publishing any
-        # model or Viewer state. Structural operation errors therefore leave
-        # the previously committed project untouched.
+        # Validate candidates before publishing; errors leave the prior project untouched.
         tube_operations, planar_operations, curve_operations = curve_shell.split_operations(
             loaded.operations
         )
@@ -1381,36 +1380,7 @@ class MainWindow(QMainWindow):
             "result_load_metrics": self._public_load_metrics(),
         }
 
-    def enter_workbench(self, key: str) -> None:
-        if key not in {workbench.key for workbench in WORKBENCHES}:
-            raise RuntimeError(f"Unknown workbench: {key}")
-        if key == "planar" and planar_shell.sync_shared_setup(
-            self.planar_page.controller, self.tube_page.controller.setup
-        ):
-            self.planar_page.refresh()
-        if key == "curve" and curve_shell.sync_shared_setup(
-            self.curve_page.controller, self.tube_page.controller.setup
-        ):
-            self.curve_page.refresh()
-        self.current_workbench_key = key
-        if key == "tube":
-            self.current_operation = (
-                self.tube_page.controller.operations[0].operation_type
-                if self.tube_page.controller.operations
-                else "tube_setup"
-            )
-        elif key == "planar":
-            self.current_operation = planar_shell.current_operation(self.planar_page.controller)
-        elif key == "curve":
-            self.current_operation = curve_shell.current_operation(self.curve_page.controller)
-        else:
-            self.current_operation = "imported_nc_review"
-        self._update_operation_combo()
-        self._show_session()
-        if key == "tube":
-            self.tube_page.activate_coordinate_entry()
-        self._update_workbench_texts()
-        self._update_checks()
+    enter_workbench = workbench_navigation.enter_workbench
 
     def set_mode(self, mode: str) -> None:
         if mode not in {"body", "face", "edge", "vertex"}:
@@ -1424,24 +1394,8 @@ class MainWindow(QMainWindow):
         viewer.clear_selection()
         self._refresh_active_workbench()
 
-    def _active_workbench_viewer(self):
-        if self.current_workbench_key == "tube":
-            return self.tube_page.viewer
-        if self.current_workbench_key == "planar":
-            return self.planar_page.viewer
-        if self.current_workbench_key == "curve":
-            return self.curve_page.viewer
-        return self.viewer
-
-    def _refresh_active_workbench(self) -> None:
-        if self.current_workbench_key == "tube":
-            self.tube_page.refresh()
-        elif self.current_workbench_key == "planar":
-            self.planar_page.refresh()
-        elif self.current_workbench_key == "curve":
-            self.curve_page.refresh()
-        else:
-            self.refresh_lists()
+    _active_workbench_viewer = workbench_navigation.active_workbench_viewer
+    _refresh_active_workbench = workbench_navigation.refresh_active_workbench
 
     def toggle_language(self) -> None:
         self.set_language("en" if self.language == "zh" else "zh")
@@ -2208,18 +2162,9 @@ class MainWindow(QMainWindow):
         QApplication.setStyle("Fusion")
         self.setStyleSheet(APP_STYLE)
 
-    def _show_home(self) -> None:
-        self.stack.setCurrentWidget(self.home_page)
+    _show_home = workbench_navigation.show_home
 
-    def _show_session(self) -> None:
-        if self.current_workbench_key == "tube":
-            self.stack.setCurrentWidget(self.tube_page)
-        elif self.current_workbench_key == "planar":
-            self.stack.setCurrentWidget(self.planar_page)
-        elif self.current_workbench_key == "curve":
-            self.stack.setCurrentWidget(self.curve_page)
-        else:
-            self.stack.setCurrentWidget(self.session_page)
+    _show_session = workbench_navigation.show_session
 
     def _show_results(self) -> None:
         self.stack.setCurrentWidget(self.result_page)
@@ -2230,11 +2175,7 @@ class MainWindow(QMainWindow):
 
         self._show_results()
 
-    def _current_page_name(self) -> str:
-        current = self.stack.currentWidget()
-        if current is self.curve_page:
-            return "curve"
-        return planar_shell.page_name(self)
+    _current_page_name = workbench_navigation.current_page_name
 
     def _open_model_from_shell(self) -> None:
         if self.stack.currentWidget() in {
@@ -2247,11 +2188,7 @@ class MainWindow(QMainWindow):
         else:
             self.open_result_model_dialog()
 
-    def _open_gcode_from_shell(self) -> None:
-        if self.stack.currentWidget() is self.session_page:
-            self.open_gcode_dialog()
-        else:
-            self.open_result_gcode_dialog()
+    _open_gcode_from_shell = workbench_navigation.open_gcode_from_shell
 
     def _load_results_demo_from_ui(self) -> None:
         try:
@@ -2265,16 +2202,7 @@ class MainWindow(QMainWindow):
         except Exception as exc:
             self.show_error(str(exc))
 
-    def _active_viewer(self):
-        if self.stack.currentWidget() is self.result_page:
-            return self.result_page.viewer
-        if self.stack.currentWidget() is self.tube_page:
-            return self.tube_page.viewer
-        if self.stack.currentWidget() is self.planar_page:
-            return self.planar_page.viewer
-        if self.stack.currentWidget() is self.curve_page:
-            return self.curve_page.viewer
-        return self.viewer
+    _active_viewer = workbench_navigation.active_viewer
 
     def _fit_active_view(self) -> None:
         viewer = self._active_viewer()

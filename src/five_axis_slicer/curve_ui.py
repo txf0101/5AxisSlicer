@@ -130,6 +130,8 @@ class CurvePage(QWidget):
         self._last_error: str | None = None
         self._generation_in_progress = False
         self.viewer = (viewer_factory or ModelViewer)(self)
+        if controller.cad_model is not None:
+            self.viewer.load_model(controller.cad_model)
         self._build_ui()
         self._install_generation_event_pump()
         self.refresh()
@@ -149,6 +151,16 @@ class CurvePage(QWidget):
         nav.addWidget(self.back_button)
         nav.addWidget(self.open_button)
         layout.addLayout(nav)
+        self._build_parameter_form(layout)
+        self._build_action_area(layout)
+        self.editor_scroll.setWidget(editor)
+        self.editor_scroll.setMinimumWidth(450)
+        root.addWidget(self.editor_scroll, 0)
+        root.addWidget(self.viewer, 1)
+        self._connect_controls()
+        self.set_language("zh")
+
+    def _build_parameter_form(self, layout: QVBoxLayout) -> None:
         form = QFormLayout()
         form.setRowWrapPolicy(QFormLayout.WrapAllRows)
         form.setFieldGrowthPolicy(QFormLayout.AllNonFixedFieldsGrow)
@@ -165,6 +177,24 @@ class CurvePage(QWidget):
         self.normal_face_edit = QLineEdit()
         self.specified_normal_edit = QLineEdit("0,0,1")
         self._spins: dict[str, QDoubleSpinBox | QSpinBox] = {}
+        self._add_primary_rows(form)
+        self._add_numeric_rows(form)
+        layout.addLayout(form)
+
+    def _add_primary_rows(self, form: QFormLayout) -> None:
+        self._rows: list[tuple[QFormLayout, QWidget, str]] = []
+        for widget, label in (
+            (self.operation_type_combo, "type"),
+            (self.operation_combo, "existing"),
+            (self.edge_ids_edit, "edges"),
+            (self.reverse_flags_edit, "reverse"),
+            (self.normal_mode_combo, "normal_mode"),
+            (self.normal_face_edit, "face"),
+            (self.specified_normal_edit, "normal"),
+        ):
+            self._add_row(form, widget, label)
+
+    def _add_numeric_rows(self, form: QFormLayout) -> None:
         defaults = (
             ("sampling_step_mm", 1.0, 0.001),
             ("chord_error_mm", 0.05, 0.0001),
@@ -177,15 +207,18 @@ class CurvePage(QWidget):
             ("dwell_s", 0.0, 0.0),
             ("offset_spacing_mm", 0.6, 0.001),
         )
-        labels = ("sampling", "chord", "tolerance", "bead", "height", "feed", "travel", "retract", "dwell", "spacing")
-        self._rows: list[tuple[QFormLayout, QWidget, str]] = []
-        self._add_row(form, self.operation_type_combo, "type")
-        self._add_row(form, self.operation_combo, "existing")
-        self._add_row(form, self.edge_ids_edit, "edges")
-        self._add_row(form, self.reverse_flags_edit, "reverse")
-        self._add_row(form, self.normal_mode_combo, "normal_mode")
-        self._add_row(form, self.normal_face_edit, "face")
-        self._add_row(form, self.specified_normal_edit, "normal")
+        labels = (
+            "sampling",
+            "chord",
+            "tolerance",
+            "bead",
+            "height",
+            "feed",
+            "travel",
+            "retract",
+            "dwell",
+            "spacing",
+        )
         for (name, value, minimum), label in zip(defaults, labels, strict=True):
             spin = QDoubleSpinBox()
             spin.setDecimals(4)
@@ -193,13 +226,17 @@ class CurvePage(QWidget):
             spin.setValue(value)
             self._spins[name] = spin
             self._add_row(form, spin, label)
-        for name, value, label in (("layer_count", 3, "layers"), ("offset_pass_count", 3, "passes")):
+        for name, value, label in (
+            ("layer_count", 3, "layers"),
+            ("offset_pass_count", 3, "passes"),
+        ):
             spin = QSpinBox()
             spin.setRange(1, 100)
             spin.setValue(value)
             self._spins[name] = spin
             self._add_row(form, spin, label)
-        layout.addLayout(form)
+
+    def _build_action_area(self, layout: QVBoxLayout) -> None:
         self.use_selection_button = QPushButton()
         layout.addWidget(self.use_selection_button)
         actions = QGridLayout()
@@ -210,7 +247,17 @@ class CurvePage(QWidget):
         self.export_button = QPushButton()
         self.undo_button = QPushButton()
         self.redo_button = QPushButton()
-        for index, button in enumerate((self.create_button, self.apply_button, self.generate_button, self.cancel_button, self.export_button, self.undo_button, self.redo_button)):
+        for index, button in enumerate(
+            (
+                self.create_button,
+                self.apply_button,
+                self.generate_button,
+                self.cancel_button,
+                self.export_button,
+                self.undo_button,
+                self.redo_button,
+            )
+        ):
             actions.addWidget(button, index // 2, index % 2)
         layout.addLayout(actions)
         self.status_label = QLabel()
@@ -218,15 +265,15 @@ class CurvePage(QWidget):
         layout.addWidget(self.status_label)
         self.issue_list = QListWidget()
         self.issue_list.setMinimumHeight(110)
+        self.issue_list.setWordWrap(True)
+        self.issue_list.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         layout.addWidget(self.issue_list)
         self.help_label = QLabel()
         self.help_label.setWordWrap(True)
         layout.addWidget(self.help_label)
         layout.addStretch(1)
-        self.editor_scroll.setWidget(editor)
-        self.editor_scroll.setMinimumWidth(450)
-        root.addWidget(self.editor_scroll, 0)
-        root.addWidget(self.viewer, 1)
+
+    def _connect_controls(self) -> None:
         self.back_button.clicked.connect(self.back_requested.emit)
         self.open_button.clicked.connect(self.open_step_requested.emit)
         self.create_button.clicked.connect(self._create)
@@ -239,7 +286,6 @@ class CurvePage(QWidget):
         self.operation_combo.currentIndexChanged.connect(self._operation_changed)
         self.use_selection_button.clicked.connect(self._use_selected_edges)
         self.issue_list.itemDoubleClicked.connect(lambda _item: self._jump_to_issue())
-        self.set_language("zh")
 
     def _add_row(self, form: QFormLayout, widget: QWidget, key: str) -> None:
         label = QLabel()
@@ -255,7 +301,18 @@ class CurvePage(QWidget):
             label.setText(text[key])
         self.normal_mode_combo.setItemText(0, text["adjacent"])
         self.normal_mode_combo.setItemText(1, text["specified"])
-        for button, key in ((self.back_button,"back"),(self.open_button,"open"),(self.use_selection_button,"selected"),(self.create_button,"create"),(self.apply_button,"apply"),(self.generate_button,"generate"),(self.cancel_button,"cancel"),(self.export_button,"export"),(self.undo_button,"undo"),(self.redo_button,"redo")):
+        for button, key in (
+            (self.back_button, "back"),
+            (self.open_button, "open"),
+            (self.use_selection_button, "selected"),
+            (self.create_button, "create"),
+            (self.apply_button, "apply"),
+            (self.generate_button, "generate"),
+            (self.cancel_button, "cancel"),
+            (self.export_button, "export"),
+            (self.undo_button, "undo"),
+            (self.redo_button, "redo"),
+        ):
             button.setText(text[key])
         self.help_label.setText(text["help"])
 
@@ -282,6 +339,22 @@ class CurvePage(QWidget):
         return state
 
     def refresh(self, *_ignored: Any) -> None:
+        self._refresh_operation_combo()
+        operation = self._selected_operation()
+        if operation is not None:
+            self._load_controls(operation)
+        result = (
+            None if operation is None else self.controller.product_result(operation.operation_id)
+        )
+        state = None if operation is None else self.controller.product_state(operation.operation_id)
+        self._refresh_issues(self.controller.validation_report().issues, result)
+        self._refresh_buttons(operation, result, state)
+        status = "draft" if state is None else state.status
+        self.status_label.setText(self._last_error or f"Status: {status}")
+        if result is not None and state is not None and state.status in {"ready", "warning"}:
+            self.viewer.load_gcode_preview(_preview_from_toolpath(result.preview_toolpath))
+
+    def _refresh_operation_combo(self) -> None:
         operations = self.controller.operations
         ids = {item.operation_id for item in operations}
         if self._selected_operation_id not in ids:
@@ -294,30 +367,27 @@ class CurvePage(QWidget):
         if index >= 0:
             self.operation_combo.setCurrentIndex(index)
         self.operation_combo.blockSignals(False)
-        operation = self._selected_operation()
-        if operation is not None:
-            self._load_controls(operation)
-        result = None if operation is None else self.controller.product_result(operation.operation_id)
-        state = None if operation is None else self.controller.product_state(operation.operation_id)
-        setup_issues = self.controller.validation_report().issues
-        self._refresh_issues(setup_issues, result)
+
+    def _refresh_buttons(self, operation: Any, result: Any, state: Any) -> None:
         complete = bool(operation and operation.geometry.is_complete)
         self.apply_button.setEnabled(operation is not None and not self._generation_in_progress)
         self.generate_button.setEnabled(complete and not self._generation_in_progress)
-        exportable = bool(result and result.exportable and state and state.status in {"ready", "warning"})
+        exportable = bool(
+            result and result.exportable and state and state.status in {"ready", "warning"}
+        )
         self.export_button.setEnabled(exportable and not self._generation_in_progress)
         self.cancel_button.setEnabled(self._generation_in_progress)
-        self.create_button.setEnabled(self.controller.can_create_operation and not self._generation_in_progress)
+        self.create_button.setEnabled(
+            self.controller.can_create_operation and not self._generation_in_progress
+        )
         self.undo_button.setEnabled(self.commands.kernel.can_undo)
         self.redo_button.setEnabled(self.commands.kernel.can_redo)
-        status = "draft" if state is None else state.status
-        self.status_label.setText(self._last_error or f"Status: {status}")
-        if result is not None and state is not None and state.status in {"ready", "warning"}:
-            self.viewer.load_gcode_preview(_preview_from_toolpath(result.preview_toolpath))
 
     def _create(self) -> None:
         try:
-            result = self.commands.execute_command("create_operation", str(self.operation_type_combo.currentData()), origin="gui")
+            result = self.commands.execute_command(
+                "create_operation", str(self.operation_type_combo.currentData()), origin="gui"
+            )
             self._selected_operation_id = str(result.payload["operation_id"])
             self._last_error = None
         except (CommandError, KeyError, ValueError, TypeError) as exc:
@@ -329,14 +399,11 @@ class CurvePage(QWidget):
         if operation is None:
             return
         try:
-            edge_ids = tuple(item.strip() for item in self.edge_ids_edit.text().split(",") if item.strip())
-            flags_raw = tuple(item.strip() for item in self.reverse_flags_edit.text().split(",") if item.strip())
-            flags = tuple(item.lower() in {"1", "true", "yes", "y"} for item in flags_raw)
-            if flags and len(flags) != len(edge_ids):
-                raise ValueError("one reverse flag is required for each edge")
-            flags = flags or tuple(False for _ in edge_ids)
+            edge_ids, flags = self._directed_edge_inputs()
             normal_mode = str(self.normal_mode_combo.currentData())
-            normal = tuple(float(item.strip()) for item in self.specified_normal_edit.text().split(","))
+            normal = tuple(
+                float(item.strip()) for item in self.specified_normal_edit.text().split(",")
+            )
             kwargs = {name: widget.value() for name, widget in self._spins.items()}
             self.commands.execute_command(
                 "set_operation",
@@ -354,6 +421,18 @@ class CurvePage(QWidget):
             self._last_error = str(exc)
         self.refresh()
 
+    def _directed_edge_inputs(self) -> tuple[tuple[str, ...], tuple[bool, ...]]:
+        edge_ids = tuple(
+            item.strip() for item in self.edge_ids_edit.text().split(",") if item.strip()
+        )
+        raw = tuple(
+            item.strip() for item in self.reverse_flags_edit.text().split(",") if item.strip()
+        )
+        flags = tuple(item.lower() in {"1", "true", "yes", "y"} for item in raw)
+        if flags and len(flags) != len(edge_ids):
+            raise ValueError("one reverse flag is required for each edge")
+        return edge_ids, flags or tuple(False for _ in edge_ids)
+
     def _generate(self) -> None:
         operation = self._selected_operation()
         if operation is None:
@@ -361,8 +440,14 @@ class CurvePage(QWidget):
         self._generation_in_progress = True
         self.refresh()
         try:
-            response = self.commands.execute_command("generate_operation", operation.operation_id, origin="gui")
-            self._last_error = None if response.payload.get("status") != "cancelled" else "Generation cancelled; previous valid result retained."
+            response = self.commands.execute_command(
+                "generate_operation", operation.operation_id, origin="gui"
+            )
+            self._last_error = (
+                None
+                if response.payload.get("status") != "cancelled"
+                else "Generation cancelled; previous valid result retained."
+            )
             result = self.controller.product_result(operation.operation_id)
             if result is not None:
                 self.preview_ready.emit(result.preview_toolpath)
@@ -382,7 +467,9 @@ class CurvePage(QWidget):
         destination = QFileDialog.getExistingDirectory(self, self._t("export"))
         if destination:
             try:
-                self.commands.execute_command("export_operation", operation.operation_id, destination, origin="gui")
+                self.commands.execute_command(
+                    "export_operation", operation.operation_id, destination, origin="gui"
+                )
                 self._last_error = None
             except (CommandError, ValueError, TypeError) as exc:
                 self._last_error = str(exc)
@@ -409,12 +496,24 @@ class CurvePage(QWidget):
         self.reverse_flags_edit.setText(",".join("0" for _ in self.viewer.selection.edge_ids))
 
     def _load_controls(self, operation: Any) -> None:
-        self.edge_ids_edit.setText(",".join(item.edge.object_id for item in operation.geometry.edges))
-        self.reverse_flags_edit.setText(",".join("1" if item.reversed else "0" for item in operation.geometry.edges))
-        self.normal_mode_combo.setCurrentIndex(max(0, self.normal_mode_combo.findData(operation.geometry.normal_mode)))
-        self.normal_face_edit.setText("" if operation.geometry.normal_face is None else operation.geometry.normal_face.object_id)
+        self.edge_ids_edit.setText(
+            ",".join(item.edge.object_id for item in operation.geometry.edges)
+        )
+        self.reverse_flags_edit.setText(
+            ",".join("1" if item.reversed else "0" for item in operation.geometry.edges)
+        )
+        self.normal_mode_combo.setCurrentIndex(
+            max(0, self.normal_mode_combo.findData(operation.geometry.normal_mode))
+        )
+        self.normal_face_edit.setText(
+            ""
+            if operation.geometry.normal_face is None
+            else operation.geometry.normal_face.object_id
+        )
         if operation.geometry.specified_normal is not None:
-            self.specified_normal_edit.setText(",".join(f"{item:g}" for item in operation.geometry.specified_normal))
+            self.specified_normal_edit.setText(
+                ",".join(f"{item:g}" for item in operation.geometry.specified_normal)
+            )
         for name, widget in self._spins.items():
             widget.setValue(getattr(operation.parameters, name))
 
@@ -462,10 +561,20 @@ def _preview_from_toolpath(toolpath: GeneratedToolpath) -> GCodePreview:
     segments = toolpath.to_preview_segments()
     layers = [segment.layer for segment in segments]
     points = [point for segment in segments for point in (segment.start, segment.end)]
-    bounds = None if not points else (
-        tuple(min(point[i] for point in points) for i in range(3)),
-        tuple(max(point[i] for point in points) for i in range(3)),
-    )
+    bounds = None
+    if points:
+        bounds = (
+            (
+                min(point[0] for point in points),
+                min(point[1] for point in points),
+                min(point[2] for point in points),
+            ),
+            (
+                max(point[0] for point in points),
+                max(point[1] for point in points),
+                max(point[2] for point in points),
+            ),
+        )
     return GCodePreview(
         source_path=Path(f"<generated:{toolpath.operation_id}>"),
         segments=segments,

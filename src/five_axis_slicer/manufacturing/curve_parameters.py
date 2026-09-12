@@ -5,16 +5,14 @@ from __future__ import annotations
 from dataclasses import dataclass, field, replace
 import hashlib
 import math
-from typing import Any, Mapping
+from typing import Any, Mapping, cast
 
 from .coordinates import GeometryReference
 from .json_contract import parse_json_bool, require_bool
 from .resources import canonical_json_bytes
 from .setup import NodeState
 
-CURVE_OPERATION_TYPES = frozenset(
-    {"curve_buildup", "curve_multi_pass", "curve_offset_buildup"}
-)
+CURVE_OPERATION_TYPES = frozenset({"curve_buildup", "curve_multi_pass", "curve_offset_buildup"})
 
 
 @dataclass(frozen=True, slots=True)
@@ -98,7 +96,9 @@ class CurveGeometrySelection:
             tuple(DirectedEdgeReference.from_json(item) for item in payload.get("edges", ())),
             str(payload.get("normal_mode", "adjacent_face")),
             None if face is None else GeometryReference.from_json(face),
-            None if normal is None else tuple(float(value) for value in normal),
+            None
+            if normal is None
+            else cast(tuple[float, float, float], tuple(float(value) for value in normal)),
         )
 
 

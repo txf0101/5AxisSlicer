@@ -9,6 +9,7 @@ from typing import Any
 
 from .curve_generation_context import (
     curve_build_from_source,
+    curve_collision_boxes,
     curve_input_fingerprint,
     curve_workpiece_from_build,
     validate_curve_generation_inputs,
@@ -222,14 +223,19 @@ class CurveController:
             validate_curve_generation_inputs(self._setup, self._cad_model, operation)
             input_digest = curve_input_fingerprint(self._setup, self._cad_model, operation)
             machine = self.machine_profile()
+            T_build_from_source = curve_build_from_source(self._setup)
             result = generate_curve_product(
                 self._cad_model,
                 operation,
                 machine,
                 self.nozzle_profile(),
-                T_build_from_source=curve_build_from_source(self._setup),
+                T_build_from_source=T_build_from_source,
                 T_workpiece_from_build=curve_workpiece_from_build(self._setup, machine),
                 source_path=self._cad_model.source_path,
+                obstacles=curve_collision_boxes(
+                    self._setup, self._cad_model, T_build_from_source
+                ),
+                check_ipw=True,
                 cancelled=cancel_check,
             )
         except GenerationCancelled:

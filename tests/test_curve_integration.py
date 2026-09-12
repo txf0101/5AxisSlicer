@@ -112,6 +112,27 @@ def test_curve_operation_round_trips_through_project_default_loader(tmp_path: Pa
     assert isinstance(loaded.operations[0], CurveOperationDefinition)
 
 
+def test_directed_geometry_reference_round_trips_and_rebinds(tmp_path: Path) -> None:
+    model, edge = _line_model(tmp_path)
+    controller, operation = _configured(model, edge.edge_id, reversed_flag=True)
+    project_json = save_project(
+        tmp_path / "directed-project",
+        model,
+        SelectionState(edge_ids={edge.edge_id}),
+        setup=controller.setup,
+        operations=(operation,),
+        original_source_path=model.source_path,
+    )
+    loaded = load_project(project_json)
+    restored = loaded.operations[0]
+    assert isinstance(restored, CurveOperationDefinition)
+    assert restored.geometry.edges[0].reversed is True
+    assert (
+        restored.geometry.edges[0].edge.signature["kernel_signature"]
+        == operation.geometry.edges[0].edge.signature["kernel_signature"]
+    )
+
+
 def test_restricted_script_preserves_namespace_and_rejects_cross_domain_transaction() -> None:
     groups = parse_script("curve.state()\n平面.状态()\n")
     assert [group.calls[0].namespace for group in groups] == ["curve", "planar"]

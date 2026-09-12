@@ -8,8 +8,12 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from five_axis_slicer.algorithms.curve.chain import CurveGeometryError, build_curve_plan
-from five_axis_slicer.algorithms.curve.toolpath import curve_paths, generate_curve_toolpath
+from five_axis_slicer.algorithms.curve.chain import (
+    CurveGeometryError,
+    CurveSample,
+    build_curve_plan,
+)
+from five_axis_slicer.algorithms.curve.toolpath import curve_paths
 from five_axis_slicer.curve_commands import CurveCommandService
 from five_axis_slicer.curve_controller import CurveController
 from five_axis_slicer.manufacturing.coordinates import (
@@ -164,6 +168,40 @@ def test_c01_ambiguous_adjacent_normal_requires_user_choice(tmp_path: Path) -> N
         controller.configure_operation(operation_id=operation.operation_id, edge_ids=(edge.edge_id,))
 
 
+def test_c01_missing_normal_face_and_degenerate_edge_are_locatable(tmp_path: Path) -> None:
+    model, edge = _line_model(tmp_path)
+    _controller, operation = _configured(model, edge.edge_id)
+    missing_face = replace(
+        operation.geometry,
+        normal_mode="adjacent_face",
+        normal_face=None,
+        specified_normal=None,
+    )
+    with pytest.raises(CurveGeometryError, match="curve.normal_face_missing"):
+        build_curve_plan(model, operation.operation_id, missing_face, operation.parameters)
+    model.edges = [
+        replace(item, exact_length=0.0) if item.edge_id == edge.edge_id else item
+        for item in model.edges
+    ]
+    with pytest.raises(CurveGeometryError, match="curve.edge_degenerate") as caught:
+        build_curve_plan(model, operation.operation_id, operation.geometry, operation.parameters)
+    assert caught.value.object_id == edge.edge_id
+
+
+def test_c01_parallel_normal_rejects_degenerate_local_frame(tmp_path: Path) -> None:
+    model, edge = _line_model(tmp_path)
+    controller = CurveController(model, setup=_setup(model.bodies[0].body_id))
+    operation = controller.create_operation()
+    operation = controller.configure_operation(
+        operation_id=operation.operation_id,
+        edge_ids=(edge.edge_id,),
+        normal_mode="specified",
+        specified_normal=(1, 0, 0),
+    )
+    with pytest.raises(CurveGeometryError, match="curve.normal_parallel_tangent"):
+        build_curve_plan(model, operation.operation_id, operation.geometry, operation.parameters)
+
+
 def test_c02_circle_length_and_material_use_independent_analytic_truth(tmp_path: Path) -> None:
     radius = 8.0
     model = load_step(
@@ -228,6 +266,32 @@ def test_c04_spacing_and_offset_order(tmp_path: Path) -> None:
     assert math.dist(paths[0].samples[0].position, paths[1].samples[-1].position) == pytest.approx(0.6)
 
 
+def test_c04_sharp_frame_reversal_and_self_intersection_are_errors(tmp_path: Path) -> None:
+    model, edge = _line_model(tmp_path)
+    _controller, operation = _configured(model, edge.edge_id, "curve_offset_buildup")
+    base = build_curve_plan(model, operation.operation_id, operation.geometry, operation.parameters)
+    reversal = replace(
+        base,
+        samples=(
+            CurveSample((0, 0, 0), (1, 0, 0), (0, 0, 1), edge.edge_id, 0.0, 0.0),
+            CurveSample((1, 0, 0), (-1, 0, 0), (0, 0, 1), edge.edge_id, 0.5, 1.0),
+            CurveSample((0, 0, 0), (-1, 0, 0), (0, 0, 1), edge.edge_id, 1.0, 2.0),
+        ),
+    )
+    with pytest.raises(CurveGeometryError, match="curve.offset_frame_reversal"):
+        curve_paths(reversal, operation)
+    crossing_positions = ((0, 0, 0), (2, 2, 0), (0, 2, 0), (2, 0, 0), (3, 0, 0))
+    crossing = replace(
+        base,
+        samples=tuple(
+            CurveSample(point, (1, 0, 0), (0, 0, 1), edge.edge_id, index / 4, index)
+            for index, point in enumerate(crossing_positions)
+        ),
+    )
+    with pytest.raises(CurveGeometryError, match="curve.offset_self_intersection"):
+        curve_paths(crossing, operation)
+
+
 def test_real_step_bspline_is_sampled_and_preserves_source_edge() -> None:
     model = load_step(Path("example/叶轮/叶轮.stp"))
     edge = next(item for item in model.edges if item.edge_id == "body_002_edge_0011")
@@ -254,6 +318,57 @@ def test_tracked_real_step_quarter_arc_matches_independent_circle_truth() -> Non
     for sample in plan.samples:
         x, _y, z = sample.position
         assert math.hypot(x + 52.0, z - 42.0) == pytest.approx(40.0, abs=1e-8)
+
+
+def test_real_step_all_three_operations_generate_and_read_back() -> None:
+    model = load_step(Path("example/叶轮/叶轮.stp"))
+    for operation_type in (
+        "curve_buildup",
+        "curve_multi_pass",
+        "curve_offset_buildup",
+    ):
+        controller = CurveController(model, setup=_setup(model.bodies[1].body_id))
+        operation = controller.create_operation(operation_type)
+        operation = controller.configure_operation(
+            operation_id=operation.operation_id,
+            edge_ids=("body_002_edge_0011",),
+            reversed_flags=(operation_type == "curve_offset_buildup",),
+            normal_mode="adjacent_face",
+            normal_face_id="body_002_face_0006",
+        )
+        result = controller.generate_operation(operation.operation_id)
+        assert result.exportable and result.readback.passed
+        assert result.plan.total_length_mm == pytest.approx(68.27612913311773, abs=1e-9)
+        if operation_type == "curve_offset_buildup":
+            paths = [[
+                item for item in result.toolpath.points if item.region_id == "pass-0001"
+            ], [
+                item for item in result.toolpath.points if item.region_id == "pass-0002"
+            ], [
+                item for item in result.toolpath.points if item.region_id == "pass-0003"
+            ]]
+            paths[1].reverse()
+            spacing = [
+                math.dist(left.position, right.position)
+                for left_path, right_path in zip(paths, paths[1:])
+                for left, right in zip(left_path, right_path)
+            ]
+            assert min(spacing) > operation.parameters.offset_spacing_mm * 0.98
+            assert max(spacing) <= operation.parameters.offset_spacing_mm + 1.0e-6
+
+
+def test_real_step_forward_offset_rejects_trim_boundary_projection_collapse() -> None:
+    model = load_step(Path("example/叶轮/叶轮.stp"))
+    controller = CurveController(model, setup=_setup(model.bodies[1].body_id))
+    operation = controller.create_operation("curve_offset_buildup")
+    operation = controller.configure_operation(
+        operation_id=operation.operation_id,
+        edge_ids=("body_002_edge_0011",),
+        normal_mode="adjacent_face",
+        normal_face_id="body_002_face_0006",
+    )
+    with pytest.raises(CurveGeometryError, match="curve.offset_outside_face"):
+        controller.generate_operation(operation.operation_id)
 
 
 def test_trimmed_face_offset_fails_instead_of_silently_dropping_a_pass() -> None:
@@ -289,6 +404,61 @@ def test_export_writes_six_files_and_readback_passes(tmp_path: Path) -> None:
         "preview.json",
         "manifest.json",
     }
+
+
+def test_curve_validation_reports_singularity_motion_limits_and_blocks_export(
+    tmp_path: Path,
+) -> None:
+    model, edge = _line_model(tmp_path)
+    controller, operation = _configured(model, edge.edge_id)
+    singular = controller.generate_operation(operation.operation_id)
+    assert "xyzac.rotary_singularity" in {item.code for item in singular.validation.issues}
+    slow_machine = replace(
+        _machine(),
+        joints=tuple(
+            replace(item, max_velocity=1.0e-6, max_acceleration=1.0e-6)
+            for item in _machine().joints
+        ),
+    )
+    slow_setup = replace(
+        _setup(model.bodies[0].body_id),
+        machine=ResourceSnapshot.capture("machine", slow_machine),
+    )
+    limited = CurveController(model, setup=slow_setup)
+    slow_operation = limited.create_operation("curve_multi_pass")
+    slow_operation = limited.configure_operation(
+        operation_id=slow_operation.operation_id,
+        edge_ids=(edge.edge_id,),
+        normal_mode="specified",
+        specified_normal=(0, 0, 1),
+    )
+    result = limited.generate_operation(slow_operation.operation_id)
+    codes = {item.code for item in result.validation.issues}
+    assert {"xyzac.velocity_limit_exceeded", "xyzac.acceleration_limit_exceeded"} <= codes
+    assert not result.exportable
+
+
+def test_curve_controller_reuses_setup_fixture_for_swept_collision_validation() -> None:
+    model = load_step(Path("example/叶轮/叶轮.stp"))
+    setup = _setup("body_002")
+    setup = replace(
+        setup,
+        assignments=replace(setup.assignments, fixture_body_ids=("body_001",)),
+    )
+    controller = CurveController(model, setup=setup)
+    operation = controller.create_operation()
+    operation = controller.configure_operation(
+        operation_id=operation.operation_id,
+        edge_ids=("body_002_edge_0011",),
+        normal_mode="adjacent_face",
+        normal_face_id="body_002_face_0006",
+    )
+    result = controller.generate_operation(operation.operation_id)
+    assert {item.code for item in result.validation.issues} >= {
+        "curve.nozzle_obstacle_collision"
+    }
+    assert result.validation.collision_samples_checked > len(result.toolpath.points)
+    assert not result.exportable
 
 
 def test_commands_support_script_undo_and_error_state(tmp_path: Path) -> None:

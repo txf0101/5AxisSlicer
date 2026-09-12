@@ -7,7 +7,7 @@ from contextlib import contextmanager
 from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Protocol
+from typing import Any, Protocol
 
 from .gcode_preview import GCodePreview, PreviewSettings
 from .models import CadModel, PickHit, PickRequest, SelectionState
@@ -30,11 +30,19 @@ class TubePageProtocol(Protocol):
     def set_view_mode(self, mode: str) -> None: ...
 
 
+class CommandCheckpointController(Protocol):
+    def command_applied_token(self) -> tuple[object, ...]: ...
+
+    def command_checkpoint(self) -> Any: ...
+
+    def restore_command_checkpoint(self, checkpoint: Any) -> None: ...
+
+
 class WorkbenchPageProtocol(Protocol):
-    controller: object
+    controller: CommandCheckpointController
     viewer: ViewerProtocol
 
-    def set_controller(self, controller: object) -> None: ...
+    def set_controller(self, controller: Any) -> None: ...
 
 
 class IndexWidgetProtocol(Protocol):
@@ -130,10 +138,10 @@ class _PublicationSnapshot:
     model_viewer: _ViewerSnapshot
     tube_viewer: _ViewerSnapshot
     tube_page: _TubePageSnapshot
-    planar_controller: object
+    planar_controller: CommandCheckpointController
     planar_checkpoint: object
     planar_viewer: _ViewerSnapshot
-    curve_controller: object
+    curve_controller: CommandCheckpointController
     curve_checkpoint: object
     curve_viewer: _ViewerSnapshot
     workbench_key: str
@@ -153,17 +161,17 @@ class SourceUpdateBaseline:
 
     controller: TubeSetupController
     edit_token: tuple[object, ...]
-    planar_controller: object | None = None
+    planar_controller: CommandCheckpointController | None = None
     planar_token: tuple[object, ...] | None = None
-    curve_controller: object | None = None
+    curve_controller: CommandCheckpointController | None = None
     curve_token: tuple[object, ...] | None = None
 
     @classmethod
     def capture(
         cls,
         controller: TubeSetupController,
-        planar_controller: object | None = None,
-        curve_controller: object | None = None,
+        planar_controller: CommandCheckpointController | None = None,
+        curve_controller: CommandCheckpointController | None = None,
     ) -> SourceUpdateBaseline:
         return cls(
             controller,
@@ -177,8 +185,8 @@ class SourceUpdateBaseline:
     def require_current(
         self,
         current: TubeSetupController,
-        planar_current: object | None = None,
-        curve_current: object | None = None,
+        planar_current: CommandCheckpointController | None = None,
+        curve_current: CommandCheckpointController | None = None,
     ) -> TubeSetupController:
         if current is not self.controller or current.edit_state_token() != self.edit_token:
             raise StaleDraftError("Manufacturing Setup changed during STEP loading")

@@ -64,34 +64,15 @@ def configure_curve_operation(
     flags = reversed_flags or tuple(False for _ in edge_ids)
     if len(flags) != len(edge_ids):
         raise ValueError("reversed_flags must match edge_ids")
-    directed = tuple(
-        DirectedEdgeReference(
-            _geometry_reference(model, edge_id, "edge"),
-            bool(reversed_flag),
-        )
-        for edge_id, reversed_flag in zip(edge_ids, flags, strict=True)
-    )
+    directed = _directed_edges(model, edge_ids, flags)
     mode = str(normal_mode).strip().lower()
-    face_id = normal_face_id
-    if mode == "adjacent_face" and face_id is None:
-        common = set(model.edge_map[edge_ids[0]].face_ids)
-        for edge_id in edge_ids[1:]:
-            common.intersection_update(model.edge_map[edge_id].face_ids)
-        if len(common) > 1:
-            raise ValueError("curve.normal_ambiguous: choose one adjacent face")
-        if not common:
-            raise ValueError("curve.normal_missing: selected chain has no common adjacent face")
-        face_id = next(iter(common))
+    face_id = _normal_face_id(model, edge_ids, mode, normal_face_id)
     face = None if face_id is None else _geometry_reference(model, face_id, "face")
     geometry = CurveGeometrySelection(directed, mode, face, specified_normal)
     updated_parameters = current.parameters if parameters is None else parameters
     if geometry == current.geometry and updated_parameters == current.parameters:
         return current
-    reasons = list(current.dirty_reasons)
-    if geometry != current.geometry and "operation_geometry_changed" not in reasons:
-        reasons.append("operation_geometry_changed")
-    if updated_parameters != current.parameters and "operation_parameters_changed" not in reasons:
-        reasons.append("operation_parameters_changed")
+    reasons = _dirty_reasons(current, geometry, updated_parameters)
     return replace(
         current,
         geometry=geometry,
@@ -99,6 +80,48 @@ def configure_curve_operation(
         state=NodeState.DIRTY,
         dirty_reasons=tuple(reasons),
     )
+
+
+def _directed_edges(
+    model: CadModel,
+    edge_ids: tuple[str, ...],
+    flags: tuple[bool, ...],
+) -> tuple[DirectedEdgeReference, ...]:
+    return tuple(
+        DirectedEdgeReference(_geometry_reference(model, edge_id, "edge"), bool(flag))
+        for edge_id, flag in zip(edge_ids, flags, strict=True)
+    )
+
+
+def _normal_face_id(
+    model: CadModel,
+    edge_ids: tuple[str, ...],
+    mode: str,
+    requested: str | None,
+) -> str | None:
+    if mode != "adjacent_face" or requested is not None:
+        return requested
+    common = set(model.edge_map[edge_ids[0]].face_ids)
+    for edge_id in edge_ids[1:]:
+        common.intersection_update(model.edge_map[edge_id].face_ids)
+    if len(common) > 1:
+        raise ValueError("curve.normal_ambiguous: choose one adjacent face")
+    if not common:
+        raise ValueError("curve.normal_missing: selected chain has no common adjacent face")
+    return next(iter(common))
+
+
+def _dirty_reasons(
+    current: CurveOperationDefinition,
+    geometry: CurveGeometrySelection,
+    parameters: CurveProcessParameters,
+) -> list[str]:
+    reasons = list(current.dirty_reasons)
+    if geometry != current.geometry and "operation_geometry_changed" not in reasons:
+        reasons.append("operation_geometry_changed")
+    if parameters != current.parameters and "operation_parameters_changed" not in reasons:
+        reasons.append("operation_parameters_changed")
+    return reasons
 
 
 def rebind_curve_operation_geometry(

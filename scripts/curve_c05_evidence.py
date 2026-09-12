@@ -113,29 +113,41 @@ def _configured(model, operation_type: str, edge_id: str, face_id: str) -> Curve
     controller.configure_operation(
         operation_id=operation.operation_id,
         edge_ids=(edge_id,),
+        reversed_flags=(operation_type == "curve_offset_buildup",),
         normal_mode="adjacent_face",
         normal_face_id=face_id,
         parameters=CurveProcessParameters(
             sampling_step_mm=1.0,
+            layer_height_mm=0.8,
             layer_count=3,
             offset_pass_count=3,
-            offset_spacing_mm=0.6,
+            offset_spacing_mm=3.0,
         ),
     )
     return controller
 
 
-def _capture(page: CurvePage, path: Path, *, language: str, size: tuple[int, int]) -> dict:
+def _capture(
+    page: CurvePage,
+    path: Path,
+    *,
+    language: str,
+    size: tuple[int, int],
+    model_visible: bool = True,
+    scroll_to_bottom: bool = True,
+) -> dict:
     page.set_language(language)
     page.resize(*size)
     page.show()
     QApplication.processEvents()
+    if hasattr(page.viewer, "set_model_visible"):
+        page.viewer.set_model_visible(model_visible)
     if hasattr(page.viewer, "set_standard_view"):
         page.viewer.set_standard_view("isometric")
     if hasattr(page.viewer, "fit_view"):
         page.viewer.fit_view()
     page.editor_scroll.verticalScrollBar().setValue(
-        page.editor_scroll.verticalScrollBar().maximum()
+        page.editor_scroll.verticalScrollBar().maximum() if scroll_to_bottom else 0
     )
     QApplication.processEvents()
     if not page.grab().save(str(path)):
@@ -155,6 +167,7 @@ def _capture(page: CurvePage, path: Path, *, language: str, size: tuple[int, int
         "size": [page.width(), page.height()],
         "capture_method": "Qt QWidget.grab; actual CurvePage and generated Toolpath",
         "viewer_backend": getattr(page.viewer, "backend", "unknown"),
+        "model_visible": model_visible,
         "visible_segments": getattr(page.viewer, "visible_path_segment_count", None),
         "status": page.status_label.text(),
         "export_enabled": page.export_button.isEnabled(),
@@ -212,6 +225,26 @@ def generate(output: Path, images: Path) -> dict:
                 size=size,
             )
         )
+        shots.append(
+            _capture(
+                page,
+                images
+                / f"{index + 5:02d}_{operation_type}_{language}_{size[0]}x{size[1]}_path_only.png",
+                language=language,
+                size=size,
+                model_visible=False,
+            )
+        )
+        if index == 1:
+            shots.append(
+                _capture(
+                    page,
+                    images / "09_curve_overview_edge_normal_zh_1366x768.png",
+                    language="zh",
+                    size=(1366, 768),
+                    scroll_to_bottom=False,
+                )
+            )
         page.close()
 
     rectangle = load_step(RECTANGLE_STEP)
