@@ -17,6 +17,7 @@ from five_axis_slicer.command_kernel import (  # noqa: E402
 )
 from five_axis_slicer.manufacturing.machine import (  # noqa: E402
     CARTESIAN_REFERENCE,
+    GENERIC_XYZAC_REFERENCE,
 )
 from five_axis_slicer.manufacturing.library import (  # noqa: E402
     UserResourceLibrary,
@@ -358,6 +359,38 @@ class CommandKernelTests(unittest.TestCase):
             with self.assertRaises(CommandError) as raised:
                 first_kernel.execute(invocation("set_nozzle", nozzle_id, length_mm=10**4000))
             self.assertEqual(raised.exception.code, "E_ARGUMENT_INVALID")
+
+    def test_rotary_axis_words_are_a_transactional_machine_command(self) -> None:
+        controller = TubeSetupController(cad_model())
+        kernel = CommandKernel(controller, TubeCommandProvider())
+        kernel.execute(invocation("set_machine", GENERIC_XYZAC_REFERENCE.profile_id))
+        assert controller.setup.machine is not None
+        original_hash = controller.setup.machine.content_hash
+
+        result = kernel.execute(
+            invocation(
+                "set_machine_axis_words",
+                {"A": "u", "C": "w"},
+                name="DIY U/W controller",
+            )
+        )
+
+        self.assertTrue(result.changed)
+        self.assertEqual(dict(controller.machine_profile().rotary_axis_words), {"A": "U", "C": "W"})
+        self.assertEqual(controller.machine_profile().name, "DIY U/W controller")
+        assert controller.setup.machine is not None
+        self.assertNotEqual(controller.setup.machine.content_hash, original_hash)
+        self.assertIn("setup.resources.machine.rotary_axis_words", result.changed_fields)
+
+        kernel.execute(invocation("undo"))
+        assert controller.setup.machine is not None
+        self.assertEqual(controller.setup.machine.content_hash, original_hash)
+        kernel.execute(invocation("set_machine_axis_words", {"A": "U", "C": "W"}))
+        self.assertEqual(controller.machine_profile().name, GENERIC_XYZAC_REFERENCE.name)
+        kernel.execute(invocation("undo"))
+        with self.assertRaises(CommandError) as raised:
+            kernel.execute(invocation("set_machine_axis_words", {"A": "E"}))
+        self.assertEqual(raised.exception.code, "E_ARGUMENT_INVALID")
 
     def test_coordinate_and_placement_commands_reach_coordinates_valid(self) -> None:
         controller = TubeSetupController(cad_model())

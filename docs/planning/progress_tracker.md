@@ -12,6 +12,8 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 
 本轮新增用户授权子任务 **I01-OWN**：自有机型默认配置、选择、自定义及文件导入导出；独立于 I01 的第二运动学与控制器完整验收。
 
+用户授权子任务 **I01-AXIS** 已完成跨工作台旋转轴 G-code 输出字：内部物理关节继续使用 A/B/C 语义，客户可把实际存在的旋转关节映射为固件单字母地址。A→U、C→W 的生成、篡改回读、GUI、受限脚本、HTTP、用户库副本、项目快照、四工作台同步和 Stale 已验证；危险保留字与缺映射 fail closed。最终聚焦 122 passed、55 subtests，全仓 834 passed、3 skipped、138 subtests，质量与包检查通过。该子任务不替代 I01 规划的第二运动学，也不代表真实固件、机床标定或试切资格。
+
 ## 状态与更新规则
 
 状态只使用：`未开始`、`进行中`、`待验证`、`已完成`、`受阻`、`历史已验收`。
@@ -34,6 +36,7 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 
 | 日期 | 任务 | Skill | 本轮用途 | 证据 |
 | --- | --- | --- | --- | --- |
+| 2026-09-13 | I01-AXIS | `five-axis-workbench-development`、`five-axis-slicer-validation` | 按共享机型/后处理契约分离内部关节与控制器地址；复用已验证解释器、Qt 串行、WinError 5 诊断、JUnit、质量和构建规则 | [实施复盘](../reviews/2026-09-13_custom_rotary_axis_words_review.md)；[验证清单](../reviews/evidence/2026-09-13_custom_rotary_axis_words/validation_manifest.json) |
 | 2026-09-13 | R01—R05 | `five-axis-workbench-development` | 按阶段门完成资料边界、稳定几何引用、三操作、共享产品链、双语 UI、手册和证据归档 | [Rotary 复盘](../reviews/2026-09-13_rotary_workbench_review.md) |
 | 2026-09-13 | R01—R05/R05 验收 | `five-axis-slicer-validation` | 复用指定解释器、仓库内 basetemp、串行 Qt/全仓、WinError 5 分类、质量、构建和指纹规则 | [Rotary 最终证据](../reviews/evidence/2026-09-13_rotary_workbench_final/validation_manifest.json) |
 | 2026-09-13 | R05 图文补充/pipe2 对比 | `five-axis-workbench-development`、`technical-evidence-report`、`visualize`、`computer-use` | 用当前 STEP/G-code 独立量测解释固定轴 Rotary 与弯管 Tube 的差异；补生产 `RotaryPage` + `ModelViewer` 截图。Computer Use 未枚举到 Qt 窗口，截图改由 Qt 自身捕获并在清单中明示 | [Rotary 手册](../guides/rotary_workbench_zh.md)；[pipe2 对比报告](../reviews/2026-09-13_pipe2_model_manual_gcode_comparison.md) |
@@ -128,6 +131,7 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 | X05 | Support-reduction Toolpath | X04 | 未开始 | 有约束的方向/场优化、固定基准、悬垂代理与可达检查 | 改善幅度未测，不设虚构提升率 | 固定基线并报告改善或负结果 | 2026-09-10 |
 | X06 | 整个 Research 工作台验收 | X02,X03,X04,X05 | 未开始 | 四方法按计划 7.1 完成生成/检查/输出回读、改参重开；限制和失败记录完整 | 尚未实施；研究完成不能替代实验验证 | 形成四方法报告及可重开项目 | 2026-09-10 |
 | I01-OWN | 自有机型默认配置与文件管理 | 用户专项授权 | 已完成 | 自有机型默认选择、自定义、导入导出、保存重开和双语界面 | [本轮复盘](../reviews/2026-09-12_own_printer_profile_review.md) | 729 passed、3 skipped；最终专项6 passed，质量门禁通过；实机标定与品牌库另列 | 2026-09-12 |
+| I01-AXIS | 跨工作台旋转轴 G-code 输出字 | 用户专项授权、I01-OWN | 已完成 | 保留内部 A/B/C 运动学语义；按实际旋转关节配置单字母输出地址；GUI/脚本/HTTP、用户库、项目快照、四工作台 Stale、共享后处理和严格回读通过 | [图文指南](../guides/machine_profiles_zh.md)、[复盘](../reviews/2026-09-13_custom_rotary_axis_words_review.md)、[证据清单](../reviews/evidence/2026-09-13_custom_rotary_axis_words/validation_manifest.json)；122 passed/55 subtests；全仓 834 passed/3 skipped/138 subtests；质量、sdist/wheel 与 Twine 通过 | I01 仍需真实 XYZAB/第二运动学与控制器注册；目标固件、标定、现场碰撞和试切未验证 | 2026-09-13 |
 | I01 | 机型配置与后处理完整性 | X06 | 未开始 | XYZAC、XYZAB 独立模型及控制器注册、FK/IK/回读验证 | 实际设备参数/标定未核验 | 补齐第二机型与来源说明，分开记录实机资格 | 2026-09-10 |
 | I02 | 全软件工作流与质量回归 | I01 | 未开始 | 六工作台、20 操作、多工序、错误恢复、双语/双后端及数值矩阵通过 | 待前述阶段完成 | 完整 pytest、质量检查、GUI 冒烟与性能基线 | 2026-09-10 |
 | I03 | 本地安装包、帮助与复现实例 | I02 | 未开始 | 本地构建/包检查、干净环境启动、20 操作帮助与案例可找到 | 不包含对外发布或上传 | 生成本地交付包，核验文件清单与版本 | 2026-09-10 |
@@ -179,6 +183,7 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 
 | 日期 | 变更依据 | 变更内容 | 影响 |
 | --- | --- | --- | --- |
+| 2026-09-13 | 用户要求客户可定义原生 A/B/C 对应的固件轴名，并在所有工作台最终 G-code 中生效 | 新增 I01-AXIS：机型领域校验/不可变映射、客户友好双语 UI、用户库副本、共享 Setup 发布、受限脚本与 HTTP 命令、G-code 审计头、严格回读、图文教程和当前回归证据 | I01-AXIS 已完成；Tube/Planar/Curve/Rotary 共用映射。I01 第二运动学仍未开始，轴字改名不增加物理 B 轴或异形机构 IK，也不取得实机资格 |
 | 2026-09-13 | 用户要求从含 C05 的干净基线按 R01→R05 完成整个 Rotary 工作台，并先研究 Open5x Grasshopper 与公开 NX 资料 | 完成稳定回转几何引用、Spiral/Thin Wall/Around Part、连续相位 XYZAC、G93 回读、失败矩阵、四组六件套、双语三尺寸 Qt 图文手册、当前全仓/质量/构建证据；Open5x 仅静态解析，NX 私有正文不冒充公开来源 | R01—R05 改为已完成；后续未开始任务为 16 项；下一项为 F01；Generic XYZAC、精确基体/机床碰撞、真实控制器/标定/现场/试切仍未验证 |
 | 2026-09-13 | 用户要求用经典扇叶模型和对应手工代码检查差异、选面并形成可视报告 | 独立解析 2,936,410 行手工代码，区分 XYZ 基础与三段 XYZAC 叶片程序；确认 180° frame 注册候选、叶片 B-spline 拒绝、轮毂圆柱面接受及修剪面角区语义限制；更新报告、教程、索引和证据 | R01—R05 状态不变；新增的是补充诊断证据，不把 imported NC 外观对齐升级为控制器、碰撞或实机资格 |
 | 2026-09-12 | 用户要求从 P07 干净基线按 C01→C05 完成整个 Curve 工作台 | 完成有向 edge 链、三种 Curve 操作、统一产品链、GUI/脚本/HTTP、保存重开、真实 STEP、失败矩阵、六件套、图文手册、当前串行回归、质量与构建证据 | C01—C05 改为已完成；后续未开始任务为 21 项；下一项为 R01；Generic XYZAC、真实控制器/机床/材料/试切边界继续单列未验证 |

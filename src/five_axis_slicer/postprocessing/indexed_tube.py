@@ -320,19 +320,17 @@ def postprocess_indexed_gcode(
     marker_tag: str = "T08",
     inverse_time: bool = False,
 ) -> str:
-    """Emit conservative, absolute-position/absolute-extrusion Generic XYZAC NC."""
+    """Emit conservative absolute NC using the machine's controller axis words."""
 
-    if len(toolpath.points) != len(trajectory.samples):
-        raise ValueError("toolpath and trajectory sample counts differ")
+    _validate_post_inputs(toolpath, trajectory, machine, header)
     filament_area = filament_area_mm2(nozzle)
     events = events_by_sequence(toolpath)
     marker_identifier(marker_tag)
-    if "\n" in header or "\r" in header:
-        raise ValueError("G-code header must be a single comment line")
     e_position = Decimal(0)
     lines = [
         f"; {header}",
-        "; reference XYZAC profile; offline simulation only",
+        _machine_profile_comment(machine),
+        _controller_axis_map_comment(machine),
         "G21 ; millimetres",
         "G90 ; absolute axes",
         "M82 ; absolute extrusion",
@@ -378,6 +376,52 @@ def postprocess_indexed_gcode(
         lines.append("G94 ; restore units-per-minute mode")
     lines.extend(("M400 ; finish queued motion", "M2"))
     return "\n".join(lines) + "\n"
+
+
+def _validate_post_inputs(
+    toolpath: GeneratedToolpath,
+    trajectory: MachineAxisTrajectory,
+    machine: MachineProfile,
+    header: str,
+) -> None:
+    if len(toolpath.points) != len(trajectory.samples):
+        raise ValueError("toolpath and trajectory sample counts differ")
+    machine.validate()
+    if "\n" in header or "\r" in header:
+        raise ValueError("G-code header must be a single comment line")
+
+
+def _machine_profile_comment(machine: MachineProfile) -> str:
+    payload = {
+        "id": machine.profile_id,
+        "name": machine.name,
+        "version": machine.version,
+        "reference_only": machine.reference_only,
+    }
+    return "; MACHINE_PROFILE " + json.dumps(
+        payload,
+        ensure_ascii=True,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+
+
+def _controller_axis_map_comment(machine: MachineProfile) -> str:
+    # The domain accessor fails closed when a rotary joint is not mapped.  The
+    # complete map below also records the linear words needed to interpret the
+    # emitted motion blocks without relabelling internal kinematic joints.
+    _ = machine.rotary_axis_words
+    mapping = {
+        joint.joint_id: joint.post_axis_map.word
+        for joint in machine.joints
+        if joint.post_axis_map is not None
+    }
+    return "; CONTROLLER_AXIS_MAP " + json.dumps(
+        mapping,
+        ensure_ascii=True,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
 
 
 def readback_indexed_gcode(

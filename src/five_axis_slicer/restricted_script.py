@@ -31,6 +31,7 @@ _ENGLISH_METHODS = frozenset(
         "export_operation",
         "confirm_part",
         "set_machine",
+        "set_machine_axis_words",
         "set_nozzle",
         "set_material",
         "set_model_cs",
@@ -52,6 +53,7 @@ _CHINESE_METHODS = {
     "导出操作": "export_operation",
     "确认零件": "confirm_part",
     "设置机床": "set_machine",
+    "设置旋转轴字": "set_machine_axis_words",
     "设置喷嘴": "set_nozzle",
     "设置材料": "set_material",
     "设置模型坐标": "set_model_cs",
@@ -238,9 +240,7 @@ class _Parser:
         method = function.attr
         if "__" in namespace or "__" in method:
             self._fail_at(function, "E_SCRIPT_FORBIDDEN", "Dunder access is not allowed")
-        if namespace not in {
-            "tube", "管状", "planar", "平面", "curve", "曲线", "rotary", "回转"
-        }:
+        if namespace not in {"tube", "管状", "planar", "平面", "curve", "曲线", "rotary", "回转"}:
             self._fail_at(function, "E_SCRIPT_FORBIDDEN", "Unknown command namespace")
         return namespace, method
 

@@ -13,6 +13,24 @@ from typing import Any, cast
 
 from .coordinates import Matrix4, RigidTransform
 from .json_contract import parse_json_bool, require_bool
+from .machine_helpers import (
+    RESERVED_POST_WORDS,
+)
+from .machine_helpers import (
+    chain_errors as _chain_errors,
+)
+from .machine_helpers import (
+    rotary_axis_words as _rotary_axis_words,
+)
+from .machine_helpers import (
+    rotation_about_axis_matrix as _rotation_about_axis_matrix,
+)
+from .machine_helpers import (
+    translation_matrix as _translation_matrix,
+)
+from .machine_helpers import (
+    with_rotary_axis_words as _with_rotary_axis_words,
+)
 
 Vector3 = tuple[float, float, float]
 
@@ -76,6 +94,8 @@ class PostAxisMap:
         errors: list[str] = []
         if not _AXIS_WORD.fullmatch(self.word):
             errors.append("post_axis.invalid_word")
+        elif self.word in RESERVED_POST_WORDS:
+            errors.append(f"post_axis.reserved_word:{self.word}")
         if self.output_unit not in _OUTPUT_UNITS:
             errors.append("post_axis.invalid_output_unit")
         if not math.isfinite(self.scale) or abs(self.scale) <= _EPSILON:
@@ -495,6 +515,33 @@ class MachineProfile:
     def build_surface_map(self) -> Mapping[str, BuildSurface]:
         return MappingProxyType({surface.surface_id: surface for surface in self.build_surfaces})
 
+    @property
+    def rotary_axis_words(self) -> Mapping[str, str]:
+        """Return the internal rotary-joint to controller-word mapping.
+
+        Internal joint identifiers remain the authority for kinematics.  This
+        read-only view describes only the address words emitted by the
+        postprocessor and refuses an incomplete profile instead of silently
+        omitting a rotary joint.
+        """
+
+        return _rotary_axis_words(self, MachineProfileValidationError)
+
+    def with_rotary_axis_words(self, words: Mapping[str, str]) -> MachineProfile:
+        """Return a validated copy with atomically updated rotary words.
+
+        Updating all requested joints in one operation permits safe swaps while
+        preserving each joint's output unit, scale, offset and every kinematic
+        field.  It intentionally cannot rename internal joint identifiers.
+        """
+
+        return cast(MachineProfile, _with_rotary_axis_words(self, words))
+
+    def with_rotary_axis_word(self, joint_id: str, word: str) -> MachineProfile:
+        """Return a validated copy with one rotary controller word changed."""
+
+        return self.with_rotary_axis_words({joint_id: word})
+
     def validation_errors(self) -> tuple[str, ...]:
         errors: list[str] = []
         _validate_machine_identity(self, errors)
@@ -576,8 +623,10 @@ class MachineProfile:
             raise KeyError(f"unknown joint position(s): {', '.join(unknown)}")
         result: dict[str, float] = {}
         for joint in self.joints:
-            if joint.joint_id not in joint_positions or joint.post_axis_map is None:
+            if joint.joint_id not in joint_positions:
                 continue
+            if joint.post_axis_map is None:
+                raise ValueError(f"joint has no controller mapping: {joint.joint_id}")
             value = joint.effective_position(joint_positions[joint.joint_id])
             result[joint.post_axis_map.word] = joint.post_axis_map.encode(value, joint.joint_type)
         return result
@@ -864,78 +913,6 @@ def _duplicates(values: Iterable[str]) -> tuple[str, ...]:
             duplicates.add(value)
         seen.add(value)
     return tuple(sorted(duplicates))
-
-
-def _chain_errors(root_link_id: str, joints: tuple[JointSpec, ...]) -> list[str]:
-    child_to_parent = {
-        joint.child_link_id: joint.parent_link_id for joint in joints if joint.child_link_id
-    }
-    errors: list[str] = []
-    for child in sorted(child_to_parent):
-        path: set[str] = set()
-        current = child
-        while current != root_link_id:
-            if current in path:
-                errors.append(f"joint.cycle:{current}")
-                break
-            path.add(current)
-            parent = child_to_parent.get(current)
-            if parent is None:
-                break
-            current = parent
-    return errors
-
-
-def _translation_matrix(
-    axis: Vector3,
-    distance: float,
-) -> Matrix4:
-    return (
-        (1.0, 0.0, 0.0, axis[0] * distance),
-        (0.0, 1.0, 0.0, axis[1] * distance),
-        (0.0, 0.0, 1.0, axis[2] * distance),
-        (0.0, 0.0, 0.0, 1.0),
-    )
-
-
-def _rotation_about_axis_matrix(
-    axis: Vector3,
-    center: Vector3,
-    angle_rad: float,
-) -> Matrix4:
-    x, y, z = axis
-    cosine = math.cos(angle_rad)
-    sine = math.sin(angle_rad)
-    one_minus_cosine = 1.0 - cosine
-    rotation = (
-        (
-            cosine + x * x * one_minus_cosine,
-            x * y * one_minus_cosine - z * sine,
-            x * z * one_minus_cosine + y * sine,
-        ),
-        (
-            y * x * one_minus_cosine + z * sine,
-            cosine + y * y * one_minus_cosine,
-            y * z * one_minus_cosine - x * sine,
-        ),
-        (
-            z * x * one_minus_cosine - y * sine,
-            z * y * one_minus_cosine + x * sine,
-            cosine + z * z * one_minus_cosine,
-        ),
-    )
-    cx, cy, cz = center
-    translation = (
-        cx - (rotation[0][0] * cx + rotation[0][1] * cy + rotation[0][2] * cz),
-        cy - (rotation[1][0] * cx + rotation[1][1] * cy + rotation[1][2] * cz),
-        cz - (rotation[2][0] * cx + rotation[2][1] * cy + rotation[2][2] * cz),
-    )
-    return (
-        (*rotation[0], translation[0]),
-        (*rotation[1], translation[1]),
-        (*rotation[2], translation[2]),
-        (0.0, 0.0, 0.0, 1.0),
-    )
 
 
 def _linear_joint(

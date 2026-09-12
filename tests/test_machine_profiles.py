@@ -399,6 +399,88 @@ class MachineSerializationTests(unittest.TestCase):
         self.assertAlmostEqual(values["A"], 45.0)
         self.assertAlmostEqual(values["C"], -180.0)
 
+    def test_rotary_axis_words_are_read_only_and_update_without_changing_kinematics(
+        self,
+    ) -> None:
+        original = GENERIC_XYZAC_REFERENCE
+        original_a = original.joint_map["A"]
+        original_c = original.joint_map["C"]
+
+        renamed = original.with_rotary_axis_words({"A": "u", "C": "w"})
+
+        self.assertEqual(dict(original.rotary_axis_words), {"A": "A", "C": "C"})
+        self.assertEqual(dict(renamed.rotary_axis_words), {"A": "U", "C": "W"})
+        with self.assertRaises(TypeError):
+            renamed.rotary_axis_words["A"] = "B"  # type: ignore[index]
+        self.assertEqual(
+            renamed.joint_map["A"],
+            replace(original_a, post_axis_map=replace(original_a.post_axis_map, word="U")),
+        )
+        self.assertEqual(
+            renamed.joint_map["C"],
+            replace(original_c, post_axis_map=replace(original_c.post_axis_map, word="W")),
+        )
+        for joint_id, original_joint in (("A", original_a), ("C", original_c)):
+            changed = renamed.joint_map[joint_id]
+            self.assertEqual(changed.joint_id, original_joint.joint_id)
+            self.assertEqual(changed.axis_direction, original_joint.axis_direction)
+            self.assertEqual(changed.motion_side, original_joint.motion_side)
+            self.assertEqual(changed.soft_limits, original_joint.soft_limits)
+            self.assertEqual(changed.max_velocity, original_joint.max_velocity)
+            self.assertEqual(changed.max_acceleration, original_joint.max_acceleration)
+            self.assertEqual(
+                changed.post_axis_map.output_unit, original_joint.post_axis_map.output_unit
+            )
+            self.assertEqual(changed.post_axis_map.scale, original_joint.post_axis_map.scale)
+            self.assertEqual(changed.post_axis_map.offset, original_joint.post_axis_map.offset)
+
+    def test_rotary_axis_word_json_round_trip_normalises_lowercase(self) -> None:
+        renamed = GENERIC_XYZAC_REFERENCE.with_rotary_axis_words({"A": "u", "C": "w"})
+
+        restored = MachineProfile.from_json(json.loads(json.dumps(renamed.to_json())))
+
+        self.assertEqual(restored, renamed)
+        self.assertEqual(restored.rotary_axis_words, {"A": "U", "C": "W"})
+        values = restored.controller_values({"A": math.pi / 4.0, "C": -math.pi})
+        self.assertAlmostEqual(values["U"], 45.0)
+        self.assertAlmostEqual(values["W"], -180.0)
+
+    def test_rotary_axis_word_update_fails_closed_for_invalid_targets_and_words(self) -> None:
+        profile = GENERIC_XYZAC_REFERENCE
+
+        with self.assertRaisesRegex(KeyError, "unknown machine joint"):
+            profile.with_rotary_axis_word("B", "U")
+        with self.assertRaisesRegex(ValueError, "joint is not rotary"):
+            profile.with_rotary_axis_word("X", "U")
+        with self.assertRaises(MachineProfileValidationError) as duplicate:
+            profile.with_rotary_axis_word("A", "C")
+        self.assertIn("post_axis.duplicate_word:C", duplicate.exception.errors)
+        for reserved in ("E", "F", "G", "M", "N", "P", "S", "T"):
+            with self.subTest(reserved=reserved):
+                with self.assertRaises(MachineProfileValidationError) as captured:
+                    profile.with_rotary_axis_word("A", reserved)
+                self.assertIn(
+                    f"joint:A.post_axis.reserved_word:{reserved}",
+                    captured.exception.errors,
+                )
+
+    def test_missing_post_axis_map_fails_closed_when_queried_updated_or_encoded(self) -> None:
+        profile = replace(
+            GENERIC_XYZAC_REFERENCE,
+            joints=tuple(
+                replace(joint, post_axis_map=None) if joint.joint_id == "A" else joint
+                for joint in GENERIC_XYZAC_REFERENCE.joints
+            ),
+        )
+
+        with self.assertRaises(MachineProfileValidationError) as queried:
+            _ = profile.rotary_axis_words
+        self.assertEqual(queried.exception.errors, ("joint:A.post_axis.missing",))
+        with self.assertRaisesRegex(ValueError, "rotary joint has no post-axis mapping"):
+            profile.with_rotary_axis_word("A", "U")
+        with self.assertRaisesRegex(ValueError, "joint has no controller mapping"):
+            profile.controller_values({"A": 0.0})
+
 
 if __name__ == "__main__":
     unittest.main()

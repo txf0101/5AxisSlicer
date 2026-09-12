@@ -14,13 +14,20 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from five_axis_slicer.kinematics.xyzac import MachineAxisSample, MachineAxisTrajectory
-from five_axis_slicer.manufacturing.machine import GENERIC_XYZAC_REFERENCE
+from five_axis_slicer.manufacturing.machine import GENERIC_XYZAC_REFERENCE, PostAxisMap
 from five_axis_slicer.manufacturing.resources import NozzleProfile
 from five_axis_slicer.manufacturing.toolpath import GeneratedToolpath, ToolpathEvent, ToolpathPoint
 from five_axis_slicer.postprocessing.indexed_tube import (
     postprocess_indexed_gcode,
     readback_indexed_gcode,
 )
+from five_axis_slicer.postprocessing import (
+    curve_product,
+    planar_product,
+    rotary_product,
+    tube_product,
+)
+from five_axis_slicer.postprocessing import indexed_tube
 
 
 @pytest.fixture
@@ -130,6 +137,56 @@ def test_writer_preserves_events_including_after_last_point_and_sets_initial_e(p
     actual = [Decimal(match[1]) for match in re.finditer(r"\bE([-+\d.]+)", gcode)]
     expected = list(map(Decimal, ("0", ".75", "3.75", "3", "3.75", "4", "3.25")))
     assert all(abs(a - b) < Decimal("1e-12") for a, b in zip(actual, expected, strict=True))
+
+
+def test_writer_audits_custom_rotary_words_and_readback_checks_them(program):
+    path, trajectory, nozzle = program
+    machine = replace(
+        GENERIC_XYZAC_REFERENCE,
+        profile_id="user.machine.custom_uw",
+        name="Custom U/W controller",
+        joints=tuple(
+            replace(joint, post_axis_map=PostAxisMap("U", "deg"))
+            if joint.joint_id == "A"
+            else replace(joint, post_axis_map=PostAxisMap("W", "deg"))
+            if joint.joint_id == "C"
+            else joint
+            for joint in GENERIC_XYZAC_REFERENCE.joints
+        ),
+    )
+    trajectory = replace(trajectory, machine_profile_id=machine.profile_id)
+
+    gcode = postprocess_indexed_gcode(path, trajectory, machine, nozzle)
+
+    assert (
+        '; MACHINE_PROFILE {"id":"user.machine.custom_uw",'
+        '"name":"Custom U/W controller","reference_only":true,"version":1}'
+    ) in gcode
+    assert ('; CONTROLLER_AXIS_MAP {"A":"U","C":"W","X":"X","Y":"Y","Z":"Z"}') in gcode
+    point_moves = [
+        line
+        for line in gcode.splitlines()
+        if line.startswith("G1 ") and re.search(r"\bX[-+\d.]", line)
+    ]
+    assert point_moves
+    assert all(re.search(r"\b[AC][-+\d.]", line) is None for line in point_moves)
+    assert all(re.search(r"\bU[-+\d.]", line) for line in point_moves)
+    assert all(re.search(r"\bW[-+\d.]", line) for line in point_moves)
+
+    report = readback_indexed_gcode(gcode, path, trajectory, machine, nozzle)
+    assert report.passed, report.to_json()
+
+    corrupted = gcode.replace(" U0.000000", " U1.000000", 1)
+    assert corrupted != gcode
+    corrupted_report = readback_indexed_gcode(corrupted, path, trajectory, machine, nozzle)
+    assert not corrupted_report.passed
+    assert corrupted_report.coordinate_mismatches == ("p1:U",)
+
+
+def test_all_generated_workbenches_use_the_shared_axis_word_writer_and_readback():
+    for product in (tube_product, planar_product, curve_product, rotary_product):
+        assert product.postprocess_indexed_gcode is indexed_tube.postprocess_indexed_gcode
+        assert product.readback_indexed_gcode is indexed_tube.readback_indexed_gcode
 
 
 def _double_e(gcode):

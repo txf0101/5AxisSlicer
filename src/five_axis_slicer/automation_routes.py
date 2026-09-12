@@ -59,6 +59,7 @@ class AutomationRouter:
             "/selection/set": self._selection_set,
             "/selection/clear": self._selection_clear,
             "/camera": self._camera,
+            "/setup/machine/axis-map": self._machine_axis_map,
         }
         self._tube_routes: dict[str, Route] = {
             "/tube/state": self._tube_state,
@@ -105,6 +106,15 @@ class AutomationRouter:
 
     def _state(self, _payload: Payload) -> Response:
         return self.window.current_state()
+
+    def _machine_axis_map(self, payload: Payload) -> Response:
+        mapping = payload.get("mapping")
+        if not isinstance(mapping, dict):
+            raise ValueError("mapping must be an object from internal rotary joints to axis words")
+        kwargs: dict[str, Any] = {"mapping": mapping}
+        if "name" in payload:
+            kwargs["name"] = payload["name"]
+        return self._tube_command("set_machine_axis_words", payload, **kwargs)
 
     def _select_workbench(self, payload: Payload) -> Response:
         self.window.enter_workbench(str(payload["key"]))

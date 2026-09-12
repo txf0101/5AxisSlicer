@@ -52,6 +52,7 @@ _MUTATION_COMMANDS = frozenset(
         "export_operation",
         "confirm_part",
         "set_machine",
+        "set_machine_axis_words",
         "set_nozzle",
         "set_material",
         "set_model_cs",
@@ -96,6 +97,7 @@ _ALIASES = {
     "导出操作": "export_operation",
     "确认零件": "confirm_part",
     "设置机床": "set_machine",
+    "设置旋转轴字": "set_machine_axis_words",
     "设置喷嘴": "set_nozzle",
     "设置材料": "set_material",
     "设置模型坐标": "set_model_cs",
@@ -116,6 +118,7 @@ _PUBLIC_COMMANDS = (
     "export_operation",
     "confirm_part",
     "set_machine",
+    "set_machine_axis_words",
     "set_nozzle",
     "set_material",
     "set_model_cs",
@@ -140,6 +143,9 @@ _HELP = {
     "export_operation": "export_operation(operation_id, destination)",
     "confirm_part": "confirm_part(part_body_ids=None, ignored_body_ids=())",
     "set_machine": "set_machine(resource_id)",
+    "set_machine_axis_words": (
+        "set_machine_axis_words(mapping, name=None)  # e.g. {'A': 'U', 'C': 'W'}"
+    ),
     "set_nozzle": (
         "set_nozzle(resource_id, interface=None, length_mm=None, use_collision_envelope=None)"
     ),
@@ -165,6 +171,43 @@ _OPERATION_PARAMETER_FIELDS = (
     "travel_feedrate_mm_min",
     "contour_chord_error_mm",
 )
+
+
+def _set_machine_axis_words(
+    controller: TubeSetupController,
+    mapping: Any,
+    name: str | None = None,
+) -> CommandOutcome:
+    """Apply controller address aliases without changing physical joint semantics."""
+
+    if not isinstance(mapping, dict):
+        raise TypeError("mapping must be an object from internal rotary joint IDs to axis words")
+    if name is not None and (not isinstance(name, str) or not name.strip()):
+        raise ValueError("name must be non-empty text or None")
+    current = controller.machine_profile()
+    normalized = {str(key): str(value) for key, value in mapping.items()}
+    updated = current.with_rotary_axis_words(normalized)
+    target_name = current.name if name is None else name.strip()
+    if updated != current or target_name != current.name:
+        updated = replace(
+            updated,
+            profile_id=_project_resource_id(
+                "machine-axis-words",
+                current.to_json(),
+                {"mapping": dict(updated.rotary_axis_words), "name": target_name},
+            ),
+            name=target_name,
+        )
+    snapshot = controller.select_machine(updated)
+    return CommandOutcome(
+        snapshot.to_json(),
+        ("machine", "placement", "operation"),
+        changed_fields=(
+            "setup.resources.machine.rotary_axis_words",
+            "setup.placement",
+            "operations",
+        ),
+    )
 
 
 class TubeCommandProvider:
@@ -386,6 +429,8 @@ class TubeCommandProvider:
             ("machine", "placement", "operation"),
             changed_fields=("setup.resources.machine", "setup.placement", "operations"),
         )
+
+    _command_set_machine_axis_words = staticmethod(_set_machine_axis_words)
 
     def _command_set_nozzle(
         self,

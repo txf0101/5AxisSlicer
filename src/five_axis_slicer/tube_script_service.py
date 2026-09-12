@@ -56,6 +56,7 @@ _ZH_ALIASES = {
     "export_operation": "导出操作",
     "confirm_part": "确认零件",
     "set_machine": "设置机床",
+    "set_machine_axis_words": "设置旋转轴字",
     "set_nozzle": "设置喷嘴",
     "set_material": "设置材料",
     "set_model_cs": "设置模型坐标",
@@ -129,6 +130,7 @@ _COMMAND_NODES = {
     "set_operation": ("operation",),
     "confirm_part": ("part",),
     "set_machine": ("machine", "placement"),
+    "set_machine_axis_words": ("machine", "placement"),
     "set_nozzle": ("nozzle",),
     "set_complete_nozzle": ("nozzle",),
     "set_material": ("material",),
@@ -506,6 +508,7 @@ class TubeScriptService:
 
     def _published(self, result: CommandResult) -> None:
         try:
+            _sync_shared_workbench_setups(self)
             self.page.refresh()
             self._sync_console()
             self.window.statusBar().showMessage(
@@ -634,6 +637,38 @@ class TubeScriptService:
 
     def _resolve_external_change(self) -> None:
         _resolve_external_change(self)
+
+
+def _sync_shared_workbench_setups(service: TubeScriptService) -> None:
+    """Publish the authoritative Setup to every loaded manufacturing workbench."""
+
+    from . import curve_shell, planar_shell, rotary_shell
+
+    setup = service.page.controller.setup
+    consumers = (
+        ("planar_page", "planar_command_service", planar_shell.sync_shared_setup),
+        ("curve_page", "curve_command_service", curve_shell.sync_shared_setup),
+        ("rotary_page", "rotary_command_service", rotary_shell.sync_shared_setup),
+    )
+    changed_pages: list[tuple[str, Any]] = []
+    for page_name, service_name, sync in consumers:
+        page = getattr(service.window, page_name, None)
+        if page is None or not sync(page.controller, setup):
+            continue
+        command_service = getattr(service.window, service_name, None)
+        kernel = getattr(command_service, "kernel", None)
+        if kernel is not None:
+            kernel.synchronize_external_state(clear_history=True)
+        changed_pages.append((page_name, page))
+
+    # All controllers and command epochs must be synchronized before any UI
+    # rendering is attempted.  A broken page refresh must never leave a later
+    # workbench pointing at an exportable result from the previous machine map.
+    for page_name, page in changed_pages:
+        try:
+            page.refresh()
+        except Exception:
+            LOGGER.exception("%s refresh failed after shared Setup synchronization", page_name)
 
 
 def _resolve_external_change(service: TubeScriptService) -> None:

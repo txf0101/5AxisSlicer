@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "task": "I01-AXIS custom rotary G-code axis words",
+  "date": "2026-09-13",
+  "branch": "codex/custom-rotary-axis-words",
+  "base_commit": "c518b66904d124113086134e8901830530891830",
+  "environment": {
+    "python": "tmp/pytest9/Scripts/python.exe",
+    "python_version": "3.12.7",
+    "pytest_version": "9.1.1",
+    "qt": "5.15.10",
+    "vtk": "9.3.1",
+    "qsettings_writable": true,
+    "preflight_issues": []
+  },
+  "source_fingerprints": {
+    "src/five_axis_slicer/manufacturing/machine.py": "fa1bd2c0498236e151a66670cfc678d5ad8c74e7277c10c97544094af2f0590a",
+    "src/five_axis_slicer/manufacturing/machine_helpers.py": "e6e35add4bfe43c225b3e03ae37095d64fcd20e31d34591dd0be765151cb22bd",
+    "src/five_axis_slicer/machine_profile_ui.py": "5f77d9ab2ec85c7f734028310fa77a3bb592333537195c82cc67c3fd20b958d4",
+    "src/five_axis_slicer/postprocessing/indexed_tube.py": "7103d71591168696ada86d050e02ea4d8b8b213a8f5ad118b247e61b769d1bfb",
+    "src/five_axis_slicer/tube_commands.py": "d06eb887a0e57babd5cd0c3ce10b43bf1cfc5ab82308a9319c8ecf105c1b21d5",
+    "src/five_axis_slicer/restricted_script.py": "c965c1169dc1e52d825e3a5d02267f3a8f7c236943fbb548e04e5821bed8dcec",
+    "src/five_axis_slicer/tube_script_service.py": "35978b40b109b11c5120a4c848114fc466226c8e5f6b76234a398a4dd7fc9e01",
+    "src/five_axis_slicer/automation_routes.py": "1838ccf2ae477ebcaafd263cf8315b2da9a514b436a445ec7107842320d1eb8f"
+  },
+  "acceptance": {
+    "internal_semantics": "Internal rotary joint IDs and kinematics remain A/B/C-style MachineProfile joints; only PostAxisMap.word changes.",
+    "verified_mapping": {
+      "A": "U",
+      "C": "W"
+    },
+    "shared_consumers": [
+      "Tube",
+      "Planar",
+      "Curve",
+      "Rotary"
+    ],
+    "reserved_words_rejected": [
+      "E",
+      "F",
+      "G",
+      "M",
+      "N",
+      "P",
+      "S",
+      "T"
+    ],
+    "readback": "passed for U/W; a corrupted U coordinate was rejected as p1:U",
+    "persistence": "Machine ResourceSnapshot payload and content hash retain the mapping; GUI saves a user-library copy and project/YAML retain the selected snapshot.",
+    "stale": "Publishing a changed Machine snapshot synchronizes all loaded workbench setups and invalidates their previous generation semantics."
+  },
+  "tests": [
+    {
+      "name": "focused default-temp failed attempt",
+      "result": "120 passed, 2 errors, 55 subtests passed",
+      "exit_code": 1,
+      "cause": "Windows denied access to pytest's default per-user temporary directory while creating two tmp_path fixtures; no product test assertion failed.",
+      "junit": "pytest_focused_default_tmp_winerror5.xml",
+      "sha256": "652fb5aded7ca6838d4855df2393ca3a6d20a2a4285877ee61c93a7785b4d231"
+    },
+    {
+      "name": "focused final",
+      "command": "pytest -q tests/test_machine_profiles.py tests/test_generated_gcode_readback.py tests/test_command_kernel.py tests/test_restricted_script.py tests/test_tube_t12_integration.py tests/test_own_printer.py tests/test_tube_resource_library_ui.py --basetemp=tmp/pytest-axis-words-focused-final",
+      "result": "122 passed, 55 subtests passed",
+      "exit_code": 0,
+      "junit": "pytest_focused.xml",
+      "sha256": "2e66a17512bdfc3bf39076692f15c14ec67474c1e7131d316a02ce277b2eebe6"
+    },
+    {
+      "name": "full regression failed attempt",
+      "result": "832 passed, 1 failed, 3 skipped, 138 subtests passed",
+      "exit_code": 1,
+      "cause": "Transient WinError 5 while an unrelated Planar export test replaced its stage directory.",
+      "junit": "pytest_full_winerror5.xml",
+      "sha256": "a6b6f7e5c4a9319cce2129b8a326bda2fa9e4069c1d413f8bda1d4087f58e52c"
+    },
+    {
+      "name": "minimal Planar failure reproduction",
+      "result": "1 passed",
+      "exit_code": 0,
+      "junit": "pytest_planar_repro.xml",
+      "sha256": "6406f373ba57b281abd1208760cb0bd11816cb3bdba8df488fa865149657d7c4"
+    },
+    {
+      "name": "full regression final",
+      "command": "pytest -q -ra --basetemp=tmp/pytest-axis-words-full-final",
+      "result": "834 passed, 3 skipped, 138 subtests passed in 492.34 s",
+      "exit_code": 0,
+      "junit": "pytest_full_pass.xml",
+      "sha256": "bc2fde6280342872ce797451d71bc1133284c1f9b95b801c550d9c2c41415932"
+    }
+  ],
+  "quality": {
+    "command": "tmp/pytest9/Scripts/python.exe -X utf8 scripts/check_quality.py",
+    "exit_code": 0,
+    "checks": [
+      "Ruff",
+      "Migrated Ruff",
+      "Security Ruff",
+      "Migrated format: 61 files",
+      "Context budget",
+      "Mypy: 148 source files"
+    ]
+  },
+  "package": {
+    "build_exit_code": 0,
+    "twine_check": "PASSED for sdist and wheel",
+    "artifacts_not_committed": true,
+    "artifacts": [
+      {
+        "name": "five_axis_slicer-2.0.2.dev29+gc518b66.d20260912-py3-none-any.whl",
+        "size": 639040,
+        "sha256": "edb0c77a26fef50f4a2871b4a8d74d6a0a5064addb30764f7a61918c34a13037"
+      },
+      {
+        "name": "five_axis_slicer-2.0.2.dev29+gc518b66.d20260912.tar.gz",
+        "size": 598938,
+        "sha256": "5b1945dafb169f47922b15e3feb39fd35db62becabc7ff3a7251c1f74d268284"
+      }
+    ]
+  },
+  "ui_evidence": {
+    "file": "../../../guides/assets/machine_profiles/rotary_axis_words_zh.png",
+    "size": [
+      680,
+      360
+    ],
+    "capture": "Current Windows Qt production dialog captured with QWidget.grab().",
+    "sha256": "602d37c7f135e5adaadd5394f303d9ef51833022e4ce658ac53f2961c72c7065"
+  },
+  "not_verified": [
+    "Target firmware interpretation of custom axis letters",
+    "Physical ABC machine beyond the configured joints",
+    "Actual axis directions, order, limits, scale, zero offsets and calibration",
+    "Machine collision envelope, site collision and trial print",
+    "Standalone Imported NC Review for arbitrary custom words without registered controller semantics"
+  ],
+  "skips": [
+    "Two project path tests and one Setup YAML path test require Windows symlink privilege (WinError 1314)."
+  ]
+}

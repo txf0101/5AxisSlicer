@@ -35,6 +35,7 @@
 - [Rotary R01—R05 工作台图文手册](guides/rotary_workbench_zh.md)：回转坐标、圆柱/圆锥 Spiral、Thin Wall、Around Part、状态、六件套与错误恢复。
 - [Rotary R01—R05 实施与验收复盘](reviews/2026-09-13_rotary_workbench_review.md)：Open5x/NX 资料边界、独立真值、周期/运动语义、产品链、UI 和离线资格限制。
 - [Rotary R01—R05 当前验收证据](reviews/evidence/2026-09-13_rotary_workbench_final/validation_manifest.json)：真实 STEP、四组六件套、G93 回读、Qt 多尺寸截图、JUnit、质量与包检查及逐文件 SHA-256。
+- [跨工作台旋转轴 G-code 输出字实施复盘](reviews/2026-09-13_custom_rotary_axis_words_review.md)：内部物理轴与控制器地址分离、危险字拒绝、共享发布、回读和实机边界。
 - [pipe2 与扇叶模型、手工 G-code 可视化对比](reviews/2026-09-13_pipe2_model_manual_gcode_comparison.md)：连续弯管、三叶自由曲面、选面契约、XYZAC 策略、180° 坐标注册及 Rotary/Tube/Freeform 适用性判断。
 - [Planar P01—P06 历史阶段交接](planning/planar_handoff.md)：P07 加入前的四操作真实 STEP、六件套、回读和 UI 证据；当前状态以 P01—P07 最终证据和进度台账为准。
 - [多对话工作台开发启动提示词](planning/workbench_multi_chat_prompts.md)：P07、Curve、Rotary、Freeform、Research 与最终集成的可复制任务提示词及统一完成条件。
@@ -49,6 +50,7 @@
 - [Planar 工作台图文手册](guides/planar_workbench_zh.md)：Region、Zigzag、Offset、Thin Wall、Spiral 与 buildplate-only Planar Support 的离线生成链与恢复说明。
 - [Curve 工作台图文手册](guides/curve_workbench_zh.md)：Buildup、Multi-pass Buildup 与 Offset Buildup 的完整离线工作流。
 - [Rotary 工作台图文手册](guides/rotary_workbench_zh.md)：Spiral、Thin Wall 与 Around Part 的完整离线工作流。
+- [机型选择与旋转轴输出字指南](guides/machine_profiles_zh.md)：把内部 A/B/C 映射到固件轴字，并说明保存、重开、Stale 与安全限制。
 - [pipe2 与扇叶回转特征对比报告](reviews/2026-09-13_pipe2_model_manual_gcode_comparison.md)：用当前 STEP 与手工 G-code 说明固定轴 Rotary、中心线随动 Tube 和自由曲面多轴路径的差异。
 - [G-code 可视化图文手册](guides/gcode_preview_zh.md)：普通 Preview、成果页、分色、层范围与五轴回读边界。
 - [根目录 README](../README.md)：启动、当前能力、自动化接口和验证入口。

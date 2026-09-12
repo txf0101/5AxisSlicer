@@ -34,5 +34,14 @@
       true,
       true
     ]
+  },
+  {
+    "file": "rotary_axis_words_zh.png",
+    "size": [
+      680,
+      360
+    ],
+    "capture": "Current Windows Qt production dialog via QWidget.grab()",
+    "sha256": "602d37c7f135e5adaadd5394f303d9ef51833022e4ce658ac53f2961c72c7065"
   }
 ]

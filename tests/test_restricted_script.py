@@ -42,6 +42,15 @@ tube.set_model_cs(origin=(0, 0, 0), z=[0, 0, 1], x={"axis": None})
         self.assertEqual(groups[1].calls[0].kwargs["z"], [0, 0, 1])
         self.assertEqual(groups[1].calls[0].kwargs["x"], {"axis": None})
 
+    def test_parses_rotary_axis_word_mapping_without_executing_python(self) -> None:
+        call = parse_script("tube.set_machine_axis_words({'A': 'u', 'C': 'w'}, name='DIY U/W')")[
+            0
+        ].calls[0]
+
+        self.assertEqual(call.name, "set_machine_axis_words")
+        self.assertEqual(call.args, ({"A": "u", "C": "w"},))
+        self.assertEqual(call.kwargs, {"name": "DIY U/W"})
+
     def test_maps_every_chinese_alias_to_canonical_name(self) -> None:
         aliases = {
             "帮助": "help",
@@ -52,6 +61,7 @@ tube.set_model_cs(origin=(0, 0, 0), z=[0, 0, 1], x={"axis": None})
             "设置操作": "set_operation",
             "确认零件": "confirm_part",
             "设置机床": "set_machine",
+            "设置旋转轴字": "set_machine_axis_words",
             "设置喷嘴": "set_nozzle",
             "设置材料": "set_material",
             "设置模型坐标": "set_model_cs",

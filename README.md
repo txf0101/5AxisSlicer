@@ -2,7 +2,7 @@
 
 5AxisSclicer V2.0 以 Workbench 为入口。`Imported NC Review` 用于已有 NC/G-code 的空间路径、层范围和路径类型预览；Tube Workbench 已完成 T01—T12，可配置 Setup，使用 Indexed、Buildup、Continuous 三种操作生成离线结果；Planar Workbench 已完成 P01—P07，可生成 Region、Zigzag、Offset、Thin Wall、Spiral 及 buildplate-only Planar Support；Curve Workbench 已完成 C01—C05，可沿 STEP 有向 edge 链生成 Buildup、Multi-pass Buildup 和 Offset Buildup；Rotary Workbench 已完成 R01—R05，可生成圆柱/圆锥 Spiral、圆周多道 Thin Wall 和跨周期 Around Part。四类制造工作台都支持保存、重开、统一命令、检查、回读和六件套导出。
 
-使用者可从[图文使用手册索引](docs/guides/README.md)进入。Tube 的完整流程见[Tube 工作台手册](docs/guides/tube_workbench_zh.md)，Planar 的完整流程见[Planar 工作台手册](docs/guides/planar_workbench_zh.md)，Curve 的完整流程见[Curve 工作台手册](docs/guides/curve_workbench_zh.md)，Rotary 的完整流程见[Rotary 工作台手册](docs/guides/rotary_workbench_zh.md)。遇到弯管或扇叶等带回转外观的模型，可先看[pipe2 与扇叶模型、手工 G-code 可视化对比](docs/reviews/2026-09-13_pipe2_model_manual_gcode_comparison.md)，判断固定轴 Rotary、中心线随动 Tube 和自由曲面路径的适用范围。坐标设置见[管状坐标设置](docs/guides/tube_coordinate_setup_zh.md)，G-code 阅读见[G-code 可视化手册](docs/guides/gcode_preview_zh.md)，底部控制台与 YAML 工作文件见[设置脚本说明](docs/guides/tube_setup_script_console_zh.md)。Tube、Planar、Curve 与 Rotary 均已完成制造 Setup、生成、检查、导出和回读闭环；下一阶段为 Freeform F01。
+使用者可从[图文使用手册索引](docs/guides/README.md)进入。Tube 的完整流程见[Tube 工作台手册](docs/guides/tube_workbench_zh.md)，Planar 的完整流程见[Planar 工作台手册](docs/guides/planar_workbench_zh.md)，Curve 的完整流程见[Curve 工作台手册](docs/guides/curve_workbench_zh.md)，Rotary 的完整流程见[Rotary 工作台手册](docs/guides/rotary_workbench_zh.md)。机床内部 A/B/C 与固件输出字的映射见[机型选择与自定义](docs/guides/machine_profiles_zh.md)。遇到弯管或扇叶等带回转外观的模型，可先看[pipe2 与扇叶模型、手工 G-code 可视化对比](docs/reviews/2026-09-13_pipe2_model_manual_gcode_comparison.md)，判断固定轴 Rotary、中心线随动 Tube 和自由曲面路径的适用范围。坐标设置见[管状坐标设置](docs/guides/tube_coordinate_setup_zh.md)，G-code 阅读见[G-code 可视化手册](docs/guides/gcode_preview_zh.md)，底部控制台与 YAML 工作文件见[设置脚本说明](docs/guides/tube_setup_script_console_zh.md)。Tube、Planar、Curve 与 Rotary 均已完成制造 Setup、生成、检查、导出和回读闭环；下一阶段为 Freeform F01。
 
 六个工作台的算法开发按[开发计划](docs/planning/development_plan.md)推进，优先完成管状工作台。每轮任务状态、验收证据和下一步更新到[进度台账主表](docs/planning/progress_tracker.md#主表)；NX 与公开项目资料见[参考资料](docs/planning/reference_research.md)，全部开发文档从[文档索引](docs/README.md)进入。
 
@@ -21,7 +21,7 @@ Tube 的 T01—T12 实现已经聚拢到本仓库：Indexed 支持受限圆管�
 - Tube Workbench 显式创建 `Tube Thin-Wall Indexed` 操作，Part 可包含多个封闭 solid；sheet、Ignore 和未分配实体保留显示且不进入后续制造计算。
 - Tube Operation 编辑器可指定管体、入口圆边、出口圆边和既有基体，并编辑道宽、层高、最大楔角、道高误差、安全间隙、回抽、沉积/空移进给和轮廓弦高误差。
 - Tube 坐标编辑采用原点、Z 方向、X 方向三参考定义，支持几何拾取、数值输入、方向翻转、Draft、Apply/Cancel 和六自由度装夹微调。
-- Machine、Nozzle、Material 使用内置模板、用户资源库和项目冻结快照；参考机型会产生 Warning，资源不完整或材料未审核会阻止 Setup Ready。
+- Machine、Nozzle、Material 使用内置模板、用户资源库和项目冻结快照；旋转关节保留内部 A/B/C 运动学语义，同时可映射为固件使用的单字母 G-code 地址，并由四个制造工作台共用；参考机型会产生 Warning，资源不完整或材料未审核会阻止 Setup Ready。
 - Preview 页叠加半透明 STEP 模型和 G-code 路径，支持 Feature Type 图例、层范围、travel/extrusion 显隐、五轴姿态抽样和路径段属性面板；默认优先显示正挤出路径，空走和姿态抽样可在面板中打开。
 - G-code 分色采用路径段数据结构中的 `move_type` 与 `extrusion_role` 字段，再由颜色映射表决定渲染颜色。`;TYPE:`、`;LAYER_CHANGE`、`;Layer` 等注释只作为解析线索。
 - A/C 五轴 G-code 仅在调用方显式确认已注册的控制器语义后，采用 `P_part = Rz(-C) * Rx(-A) * P_machine` 反算工件坐标。未确认语义、非零 B、U/V/W 或运动学诊断会让整份文件统一保留 Machine XYZ；纯 E 回抽和 prime 只进入运动类型统计，不写入路径线。

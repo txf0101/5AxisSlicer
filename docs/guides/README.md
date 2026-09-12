@@ -6,7 +6,7 @@
 
 | 模块 | 手册 | 当前状态 |
 | --- | --- | --- |
-| 机型配置 | [机型选择与自定义](machine_profiles_zh.md) | 自有机型默认、用户配置另存、JSON导入导出及快照重开 |
+| 机型配置 | [机型选择、旋转轴输出字与自定义](machine_profiles_zh.md) | A/B/C 内部轴到固件轴字的映射、用户配置另存、JSON 导入导出及快照重开 |
 | Tube 坐标与装夹 | [管状坐标设置](tube_coordinate_setup_zh.md) | 已有图文步骤 |
 | Tube 设置脚本与 YAML | [设置脚本与 YAML](tube_setup_script_console_zh.md) | 已有命令说明，界面截图仍需随控制台改版补拍 |
 | Tube 三种操作 | [Tube 工作台完整手册](tube_workbench_zh.md) | 覆盖 Indexed、Buildup、Continuous 及生成和导出 |

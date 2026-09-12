@@ -19,7 +19,7 @@
 
 工作流入口：
 
-1. 打开 STEP，在 Tube Setup 完成零件分配、Model CS、Build CS、机型、喷嘴、已审阅材料和安装位置，点击应用。
+1. 打开 STEP，在 Tube Setup 完成零件分配、Model CS、Build CS、机型、喷嘴、已审阅材料和安装位置，点击应用。目标固件若不用 A/C，可先按[机型轴字指南](machine_profiles_zh.md#旋转轴输出字ac-改为-uw)建立用户机型副本。
 2. 返回首页，进入“Rotary 回转增材工作台”。
 3. 选择操作类型，点击“新建操作”。
 4. 在 Viewer 分别选择轴 edge、轮廓 edge（可选）和圆柱/圆锥 face，逐项点击“采用 Viewer 已选…”。
@@ -194,7 +194,7 @@ Viewer 直接读取 generated shared Toolpath，其 source 标识为 `<generated
 
 | 文件 | 用途 |
 | --- | --- |
-| `main.gcode` | 按注册机型控制器语义输出的绝对 XYZAC/绝对 E 离线 NC；协调运动为 `G93` 逆时间进给，Spiral/Thin Wall/Around Part 分别使用 R02/R03/R04 标记 |
+| `main.gcode` | 按注册机型控制器语义输出绝对线性轴、映射后的旋转轴字和绝对 E；协调运动为 `G93` 逆时间进给，Spiral/Thin Wall/Around Part 分别使用 R02/R03/R04 标记；头部记录 `CONTROLLER_AXIS_MAP` |
 | `toolpath.json` | shared Toolpath 点、事件、层/区域、姿态、工艺和材料体积 |
 | `machine_axes.csv` | 点 ID、时间、`rotary_phase_rad`、XYZAC 内部轴值；回转轴内部为 rad |
 | `warnings.json` | 检查状态、指标、问题代码、对象和上下文 |
@@ -252,6 +252,6 @@ HTTP 路由为：`/rotary/state`、`/rotary/issues`、`/rotary/validate`、`/rot
 
 Siemens NX 公开产品页和 2512/2606 发布说明用于核对 Rotary deposition、Thin Wall、局部回转特征和连续 rotary non-cutting move 的产品语义。Siemens Documentation Center 中相关 NX Additive Manufacturing 正文访问属性为 private，本轮没有声称读取私有 NX Help，也没有反推 NX 内部算法。
 
-当前 Generic XYZAC 只提供离线参考资格。真实控制器轴字、回转正方向、单位/缩放/零偏、轴速度和加速度、回转中心、工具长度、实际喷嘴包络、机床壳体、现场夹具、材料参数和试切均需以目标机床标定与现场证据另行确认。未完成这些工作前，不得把六件套或示例目录中的手工 XYZAC 代码直接用于真实机床。
+当前 Generic XYZAC 只提供离线参考资格。软件已验证自定义轴字会进入四工作台 G-code 和严格回读，但目标固件是否把该字解释为预期物理关节仍未验证。回转正方向、单位/缩放/零偏、轴速度和加速度、回转中心、工具长度、实际喷嘴包络、机床壳体、现场夹具、材料参数和试切均需以目标机床标定与现场证据另行确认。未完成这些工作前，不得把六件套或示例目录中的手工代码直接用于真实机床。
 
 当前 Rotary 专项为 37 passed；最终全仓串行复跑为 820 passed、3 skipped、130 subtests passed，退出码 0。首轮全仓曾在既有 Planar P03 目录替换处遇到一次 Windows `WinError 5`；该用例单测随即 1 passed，换新仓库内 basetemp 后全仓通过，失败日志仍保留。`scripts/check_quality.py` 退出码 0，Ruff、format、context budget 和 Mypy 对 147 个源文件通过。截图 SHA-256 见图片 `summary.json`，六件套指纹见 `products_summary.json`，构建与包检查见最终验证清单。
