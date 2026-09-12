@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "analysis_date": "2026-09-13",
+  "scope": "offline STEP, manual XYZAC G-code and Rotary selection compatibility comparison",
+  "inputs": {
+    "step": {
+      "path": "example/扇叶/风扇扇叶(1).STEP",
+      "sha256": "294b882a7231d6b0fcfaf4aa8c6355422b212590f443158ea0a624fec2b901ef",
+      "size_bytes": 707751,
+      "provenance": "user-provided example; STEP header names Haoge_aimoyu and SolidWorks 2026; redistribution rights not independently confirmed"
+    },
+    "gcode": {
+      "path": "example/扇叶/风扇扇叶完整新.gcode",
+      "sha256": "1de2cef4dbdb995e6d34bf0e143db166b3dcff3364339763f70a8536c9d6651e",
+      "size_bytes": 186891627,
+      "provenance": "user-provided manual/reference code; generator and redistribution rights not independently confirmed"
+    }
+  },
+  "step_geometry": {
+    "body_count": 4,
+    "face_count": 60,
+    "edge_count": 156,
+    "vertex_count": 108,
+    "surface_type_counts": {
+      "plane": 34,
+      "bsplinesurface": 19,
+      "cylinder": 7
+    },
+    "tessellated_mesh": {
+      "tolerance_mm": 0.08,
+      "angular_tolerance_rad": 0.08,
+      "vertex_count": 5090,
+      "triangle_count": 5188,
+      "bounds_mm": {
+        "X": [-72.92189493, 82.50343908],
+        "Y": [-81.99386879, 74.31681207],
+        "Z": [0.0, 65.0]
+      }
+    },
+    "blade_primary_faces": [
+      {"face_id": "body_001_face_0003", "surface_type": "bsplinesurface", "area_mm2": 4234.142952185649},
+      {"face_id": "body_002_face_0003", "surface_type": "bsplinesurface", "area_mm2": 4234.142952185649},
+      {"face_id": "body_003_face_0002", "surface_type": "bsplinesurface", "area_mm2": 4234.142952185649}
+    ],
+    "hub_rotary_candidate": {
+      "surface_face_ids": ["body_004_face_0002", "body_004_face_0042"],
+      "surface_type": "cylinder",
+      "radius_mm": 17.499999999999996,
+      "axis_origin_mm": [0.0, 0.0, 65.0],
+      "axis_direction": [0.0, 0.0, -1.0],
+      "axial_edge_id": "body_004_edge_0006",
+      "axial_edge_length_mm": 65.0,
+      "derived_axial_range_mm": [0.0, 65.0]
+    }
+  },
+  "gcode_truth": {
+    "parser": "independent streaming modal parser; does not import five_axis_slicer parser or Rotary implementation",
+    "line_count": 2936410,
+    "motion_record_count": 2910683,
+    "g0_count": 3,
+    "g1_movement_count": 2910680,
+    "g2_count": 0,
+    "g3_count": 0,
+    "positive_extrusion_motion_count": 2890849,
+    "positive_xyz_only_count": 287140,
+    "positive_explicit_ac_count": 2603709,
+    "travel_or_nonpositive_count": 19834,
+    "negative_extrusion_motion_count": 9692,
+    "extruder_only_records": 5860,
+    "extruder_only_retract_count": 2934,
+    "extruder_only_prime_count": 2926,
+    "total_positive_e_mm": 17581.386608,
+    "modal_state": {
+      "G90_count": 7,
+      "G91_count": 0,
+      "G21_count": 4,
+      "G20_count": 0,
+      "M83_count": 4,
+      "M82_count": 0,
+      "G92_count": 325,
+      "G92_scope": "E only"
+    },
+    "machine_endpoint_ranges": {
+      "X_mm": [-17.3, 17.3],
+      "Y_mm": [-58.84, 17.3],
+      "Z_mm": [0.0, 93.2],
+      "A_deg": [0.0, 90.0],
+      "C_deg": [-269.78, 66.47]
+    },
+    "program_stages": [
+      {"lines": [1, 332309], "role": "XYZ preamble/support/base", "positive_extrusion_count": 287140, "positive_e_mm": 6707.28349},
+      {"lines": [332310, 1201190], "role": "first XYZAC blade program", "positive_extrusion_count": 868539, "positive_e_mm": 3855.306768, "deposition_A_deg": [90.0, 90.0], "deposition_C_deg": [-149.79, -53.56]},
+      {"lines": [1201191, 2068799], "role": "second XYZAC blade program", "positive_extrusion_count": 867585, "positive_e_mm": 3509.398213, "deposition_A_deg": [90.0, 90.0], "deposition_C_deg": [-269.78, -173.53]},
+      {"lines": [2068800, 2936410], "role": "third XYZAC blade program", "positive_extrusion_count": 867585, "positive_e_mm": 3509.398137, "deposition_A_deg": [90.0, 90.0], "deposition_C_deg": [-29.78, 66.47]}
+    ],
+    "rotary_motion": {
+      "A_during_positive_explicit_ac": "constant 90 degrees",
+      "C_abs_delta_deg_median": 0.1,
+      "C_abs_delta_deg_p95": 0.23,
+      "C_abs_delta_deg_p99": 0.29,
+      "C_abs_delta_deg_max_positive_extrusion": 39.42,
+      "C_positive_extrusion_direction_reversals": 4282,
+      "largest_nonextrusion_C_jump_deg": 228.18,
+      "large_positive_extrusion_move_interpretation": "30.60 to 39.42 degree C changes coincide with 32 mm-class Y/Z moves and E 1.67 to 1.95; they may be intentional radial deposition strokes but require coordinated-axis interpolation, collision and readback evidence before qualification"
+    }
+  },
+  "alignment_hypothesis": {
+    "machine_to_part_transform": "P_part = Rz(-C) * Rx(-A) * P_machine",
+    "rotary_centre_mm": [0.0, 0.0, 0.0],
+    "positive_extrusion_part_bounds_mm": {
+      "X": [-82.50054331824263, 72.92225520139966],
+      "Y": [-74.33175835808566, 81.99427553648772],
+      "Z": [0.2, 65.0]
+    },
+    "step_registration": "rotate STEP 180 degrees about global Z at X=Y=0",
+    "rotated_step_mesh_bounds_mm": {
+      "X": [-82.50343908, 72.92189493],
+      "Y": [-74.31681207, 81.99386879],
+      "Z": [0.0, 65.0]
+    },
+    "absolute_envelope_edge_differences_mm": {
+      "X_min": 0.00289576175737,
+      "X_max": 0.00036027139966,
+      "Y_min": 0.01494628808566,
+      "Y_max": 0.00040674648772,
+      "Z_min": 0.2,
+      "Z_max": 0.0
+    },
+    "interpretation": "strong global frame/zero-angle registration candidate; not an exact point-to-BRep surface error measurement"
+  },
+  "rotary_selection_test": {
+    "method": "production RotaryPage and bind_rotary_geometry_references with injected SelectionState-compatible selection; not a Computer Use mouse click",
+    "blade_case": {
+      "face_id": "body_001_face_0003",
+      "expected": "reject non-cylinder/non-cone",
+      "actual_error": "rotary.surface_reference_invalid",
+      "passed": true
+    },
+    "hub_case": {
+      "face_id": "body_004_face_0002",
+      "axis_edge_id": "body_004_edge_0006",
+      "binding_complete": true,
+      "derived_radius_mm": 17.499999999999996,
+      "derived_axial_range_mm": [0.0, 65.0],
+      "passed": true
+    },
+    "production_vtk_state_test": {
+      "actor_construction_mode_and_selection_passed": true,
+      "rendered_capture": false,
+      "render_blocker": "vtkWin32OpenGLRenderWindow had no valid pixel format / GL version and the native render process faulted"
+    },
+    "semantic_limit": "selected faces derive axis, radius and axial profile; they do not automatically derive a trimmed angular region. For the two half-cylinder hub faces, select both for a full-surface reference and set operation angles/regions explicitly."
+  },
+  "verdict": {
+    "geometric_error": "not demonstrated; the 180-degree mismatch is consistent with an unregistered global frame/zero-angle convention, while only envelope alignment has been measured",
+    "process_strategy_difference": "demonstrated; the manual file mixes XYZ support/base with three fixed-A, varying-C multi-axis blade programs and is not one fixed-axis Rotary operation",
+    "support_scope": "whole fan is outside current Rotary surface contract; the hub cylinder is a valid local Rotary candidate; blade faces belong to Freeform/Curve-class planning",
+    "product_gap": "surface selection does not infer trimmed angular coverage, so treating one half-cylinder face as an automatic 180-degree region would be incorrect",
+    "qualification_gap": "controller axis semantics, real rotary centre, tool length, IK/FK, axis limits and dynamics, collision, generated-toolpath readback and physical trial remain unverified"
+  },
+  "validation": {
+    "streaming_parse_exit_code": 0,
+    "consistency_assertions_exit_code": 0,
+    "selection_test_exit_code": 0,
+    "figure_render_exit_code": 0,
+    "computer_use": "unavailable after documented retries; no apps enumerated and browser bridge returned nodeRepl.fetch request failed",
+    "production_vtk_render": "unavailable in this executor because no valid OpenGL pixel format was exposed"
+  },
+  "images": [
+    {"path": "docs/guides/assets/rotary/fan_blade_check/01_fan_geometry_and_rotary_scope.png", "sha256": "28422034a8c9bd81778334c835ba7c86b6368d19f450d466265ad93c5eba0d7d"},
+    {"path": "docs/guides/assets/rotary/fan_blade_check/02_fan_gcode_step_alignment.png", "sha256": "de5fdbd14b14c4c104d05ae756c03b743a02b749616724e98933008eb7ef32ce"},
+    {"path": "docs/guides/assets/rotary/fan_blade_check/03_fan_motion_structure.png", "sha256": "36a8e20a7e3796e94f3325f3c26cdff2561a8c5e9a5e7f13e53d2efa677f546f"},
+    {"path": "docs/guides/assets/rotary/fan_blade_check/04_fan_selection_decision.png", "sha256": "28c375fe97ba2220f4e0880584a0841232171ea37b151f2dfb244e828d64b599"},
+    {"path": "docs/guides/assets/rotary/fan_blade_check/selection_blade_bspline_rejected_ui.png", "sha256": "a22d518087ec596e1a99ffc0deb6cbcbe25fcbbb6aea0aec362cbc98556687a1"},
+    {"path": "docs/guides/assets/rotary/fan_blade_check/selection_hub_cylinder_accepted_ui.png", "sha256": "4589bb9040f99e8d0b6e3fad4cce231789af4e1fdd634fe22b8f53060852ef36"},
+    {"path": "docs/guides/assets/rotary/fan_blade_check/selection_hub_axis_edge_ui.png", "sha256": "36ab04d18ed334fa7655c64097f60d641c22e8c70c73f32a20a1087ff18d13d7"}
+  ]
+}

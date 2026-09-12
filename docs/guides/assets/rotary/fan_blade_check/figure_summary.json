@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "source_step": "example/扇叶/风扇扇叶(1).STEP",
+  "source_step_sha256": "294b882a7231d6b0fcfaf4aa8c6355422b212590f443158ea0a624fec2b901ef",
+  "source_gcode": "example/扇叶/风扇扇叶完整新.gcode",
+  "source_gcode_sha256": "1de2cef4dbdb995e6d34bf0e143db166b3dcff3364339763f70a8536c9d6651e",
+  "source_truth": "docs/reviews/evidence/2026-09-13_pipe2_manual_comparison/fan_blade_analysis.json",
+  "source_samples": "20,000 deterministic reservoir samples generated during validation; not retained as a tracked artifact",
+  "sample_count": 20000,
+  "step_mesh": {
+    "vertices": 5090,
+    "triangles": 5188
+  },
+  "images": [
+    {
+      "file": "01_fan_geometry_and_rotary_scope.png",
+      "sha256": "28422034a8c9bd81778334c835ba7c86b6368d19f450d466265ad93c5eba0d7d",
+      "width_px": 2231,
+      "height_px": 1102
+    },
+    {
+      "file": "02_fan_gcode_step_alignment.png",
+      "sha256": "de5fdbd14b14c4c104d05ae756c03b743a02b749616724e98933008eb7ef32ce",
+      "width_px": 2085,
+      "height_px": 1101
+    },
+    {
+      "file": "03_fan_motion_structure.png",
+      "sha256": "36a8e20a7e3796e94f3325f3c26cdff2561a8c5e9a5e7f13e53d2efa677f546f",
+      "width_px": 2411,
+      "height_px": 1120
+    },
+    {
+      "file": "04_fan_selection_decision.png",
+      "sha256": "28c375fe97ba2220f4e0880584a0841232171ea37b151f2dfb244e828d64b599",
+      "width_px": 2105,
+      "height_px": 1032
+    }
+  ],
+  "selection_capture": {
+    "method": "real RotaryPage and SelectionState-compatible Qt paint harness; not a Computer Use mouse click",
+    "production_vtk_state_passed": true,
+    "production_vtk_rendered_capture": false,
+    "render_blocker": "executor exposed no valid OpenGL pixel format / GL version",
+    "raw_images": [
+      {"file": "selection_blade_bspline_rejected_ui.png", "sha256": "a22d518087ec596e1a99ffc0deb6cbcbe25fcbbb6aea0aec362cbc98556687a1"},
+      {"file": "selection_hub_cylinder_accepted_ui.png", "sha256": "4589bb9040f99e8d0b6e3fad4cce231789af4e1fdd634fe22b8f53060852ef36"},
+      {"file": "selection_hub_axis_edge_ui.png", "sha256": "36ab04d18ed334fa7655c64097f60d641c22e8c70c73f32a20a1087ff18d13d7"}
+    ]
+  }
+}

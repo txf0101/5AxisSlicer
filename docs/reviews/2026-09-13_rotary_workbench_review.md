@@ -119,6 +119,8 @@ RotaryPage 是当前 Qt 双语页面，包含操作类型/已有操作、轴 edg
 
 用户提供的 `example/pipe2/弯管新.stp` 与手工 `弯管.gcode` 也完成了独立可视化对比。STEP 是沿连续弯曲中心线扫掠的 1 mm 空心管；G-code 使用 A=0°/30.379°/50.678°/70.513° 四段重叠转位且 C=0，管壁道中心贴合 R15.2/R15.8。结论是整件应进入 Tube Indexed/Continuous，只有可分离的固定轴圆柱区适合 Rotary。报告和机器可读量测分别为 `docs/reviews/2026-09-13_pipe2_model_manual_gcode_comparison.md` 与 `docs/reviews/evidence/2026-09-13_pipe2_manual_comparison/analysis.json`。
 
+同一报告随后加入经典扇叶 STEP 与 186,891,627 byte 手工 XYZAC 文件。独立流式解析得到 2,910,683 个运动记录、2,890,849 个正挤出运动，其中 287,140 个普通 XYZ、2,603,709 个显式 XYZAC；后三个叶片阶段沉积时 A 均为 90°，C 按约 120° 周向分区且有 4,282 次方向反转。`Rz(-C)·Rx(-A)` 逆变换的路径与 STEP 相差一个绕 Z 轴 180° 的全局注册，旋转后 XY 包围边差值不超过 0.015 mm；该结果只支持 frame 候选，不代替精确点面误差。生产 Rotary 绑定正确拒绝 B-spline 叶片面，并接受 R17.5 mm 轮毂圆柱面与 65 mm 轴向边。检查同时发现 surface 引用不会从修剪半圆柱面自动推导周向角区，教程已要求显式角度/Region。机器可读证据为 `docs/reviews/evidence/2026-09-13_pipe2_manual_comparison/fan_blade_analysis.json`，当前图在 `docs/guides/assets/rotary/fan_blade_check/`。
+
 ## 9. 当前验证记录和 R05 关闭结果
 
 `five-axis-slicer-validation` preflight 使用 `tmp/pytest9/Scripts/python.exe`，Python 3.12.7；依赖探针、Ruff 0.12.12、Mypy 1.11.2 和 QSettings 可写性通过。这是环境预检，不代表 GUI、VTK 或全仓通过。
@@ -142,4 +144,4 @@ R05 离线关闭证据汇总于 `docs/reviews/evidence/2026-09-13_rotary_workben
 
 这些项在现场标定、干跑、碰撞验证和材料试验完成前统一标为“未验证”。当前输出不得直接下发真实机床。
 
-使用的 Skills：R01—R05 实施与验收使用 `five-axis-workbench-development`、`five-axis-slicer-validation`；本轮 pipe2 对比与教程补图使用 `five-axis-workbench-development`、`technical-evidence-report`、`visualize`、`computer-use`。公开资料及许可边界同步记录在 `docs/planning/reference_research.md`。产品证据为 `docs/reviews/evidence/2026-09-13_rotary_workbench_final/products_summary.json`，图片证据为 `docs/guides/assets/rotary/current_r01_r05/summary.json` 和 `docs/guides/assets/rotary/live_qt/summary.json`，最终综合证据为 `docs/reviews/evidence/2026-09-13_rotary_workbench_final/validation_manifest.json`。
+使用的 Skills：R01—R05 实施与验收使用 `five-axis-workbench-development`、`five-axis-slicer-validation`；pipe2 与扇叶对比、选面测试及教程补图使用 `five-axis-workbench-development`、`five-axis-slicer-validation`、`technical-evidence-report`、`visualize`、`computer-use`。`computer-use` 的重试与停止规则使本轮在无法枚举 Qt 窗口后停止重复尝试，改用带明确标注的 SelectionState/Qt 替代图；`technical-evidence-report` 使几何事实、策略差异、支持范围和资格边界分栏记录。公开资料及许可边界同步记录在 `docs/planning/reference_research.md` 和 `docs/planning/example_source_inventory.md`。产品证据为 `docs/reviews/evidence/2026-09-13_rotary_workbench_final/products_summary.json`，图片证据为 `docs/guides/assets/rotary/current_r01_r05/summary.json`、`docs/guides/assets/rotary/live_qt/summary.json` 和 `docs/guides/assets/rotary/fan_blade_check/figure_summary.json`，最终综合证据为 `docs/reviews/evidence/2026-09-13_rotary_workbench_final/validation_manifest.json`。

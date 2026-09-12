@@ -44,6 +44,14 @@
 
 ![Viewer 选边选面](assets/rotary/live_qt/02_selection_overview_zh.png)
 
+### 2.1 扇叶模型的选面示例
+
+`example/扇叶/风扇扇叶(1).STEP` 可用于判断选择是否落在 Rotary 支持范围内。三片叶片的主面是 B-spline 自由曲面，选中后 Apply 会返回 `rotary.surface_reference_invalid`；中央轮毂外表面是 R17.5 mm 圆柱面，配 65 mm 轴向边可以正确派生轴线、半径和轴向范围。
+
+![扇叶面与轮毂面的选择判定](assets/rotary/fan_blade_check/04_fan_selection_decision.png)
+
+轮毂外表面由两个半圆柱 face 组成。要建立完整 360° 轮毂操作，应同时选择两个同轴、同半径面，再显式填写起止角。当前 face 选择不会自动把修剪面的 180° 边界转换成 Around Part 角区间；周向覆盖始终由操作角度或 Around Part Region 决定。扇叶整件与手工 XYZAC 代码的对比、180° 坐标注册和多轴长跨步风险见 [pipe2 与扇叶可视化对比报告](../reviews/2026-09-13_pipe2_model_manual_gcode_comparison.md)。
+
 ## 3. 回转坐标和角度周期
 
 Rotary frame 在 Source 坐标中包含：
@@ -244,6 +252,6 @@ HTTP 路由为：`/rotary/state`、`/rotary/issues`、`/rotary/validate`、`/rot
 
 Siemens NX 公开产品页和 2512/2606 发布说明用于核对 Rotary deposition、Thin Wall、局部回转特征和连续 rotary non-cutting move 的产品语义。Siemens Documentation Center 中相关 NX Additive Manufacturing 正文访问属性为 private，本轮没有声称读取私有 NX Help，也没有反推 NX 内部算法。
 
-当前 Generic XYZAC 只提供离线参考资格。真实控制器轴字、回转正方向、单位/缩放/零偏、轴速度和加速度、回转中心、工具长度、实际喷嘴包络、机床壳体、现场夹具、材料参数和试切均需以目标机床标定与现场证据另行确认。未完成这些工作前，不得把六件套直接用于真实机床。
+当前 Generic XYZAC 只提供离线参考资格。真实控制器轴字、回转正方向、单位/缩放/零偏、轴速度和加速度、回转中心、工具长度、实际喷嘴包络、机床壳体、现场夹具、材料参数和试切均需以目标机床标定与现场证据另行确认。未完成这些工作前，不得把六件套或示例目录中的手工 XYZAC 代码直接用于真实机床。
 
 当前 Rotary 专项为 37 passed；最终全仓串行复跑为 820 passed、3 skipped、130 subtests passed，退出码 0。首轮全仓曾在既有 Planar P03 目录替换处遇到一次 Windows `WinError 5`；该用例单测随即 1 passed，换新仓库内 basetemp 后全仓通过，失败日志仍保留。`scripts/check_quality.py` 退出码 0，Ruff、format、context budget 和 Mypy 对 147 个源文件通过。截图 SHA-256 见图片 `summary.json`，六件套指纹见 `products_summary.json`，构建与包检查见最终验证清单。

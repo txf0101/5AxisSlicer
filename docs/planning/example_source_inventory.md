@@ -1,6 +1,6 @@
 # A02 样例来源登记
 
-更新至：2026-09-12。本文对应 `A02`，集中登记当前 `example` 目录中与首轮 Tube 和后续工作台相关的可见文件。未知项保持“未知”，不按目录整体推断来源。
+更新至：2026-09-13。本文对应 `A02`，集中登记当前 `example` 目录中与首轮 Tube 和后续工作台相关的可见文件。未知项保持“未知”，不按目录整体推断来源。
 
 ## 首轮 Tube 样例
 
@@ -21,7 +21,7 @@
 
 ## 后续工作台参考
 
-扇叶、球形 NEU 校徽和三叶扇目录暂不进入当前阶段验收。它们可以在 Freeform、Rotary 或 Research 任务中重新登记。使用前必须逐文件记录模型来源、G-code 来源、人工调整、控制器、单位、哈希和可比较指标。
+球形 NEU 校徽和其他未登记目录暂不进入当前阶段验收。它们可以在 Freeform 或 Research 任务中重新登记。使用前必须逐文件记录模型来源、G-code 来源、人工调整、控制器、单位、哈希和可比较指标。
 
 ## Curve C01—C05 样例
 
@@ -39,8 +39,12 @@ CURVE-IMPELLER 固定对象只对上述 SHA 有效。`body_001_edge_0005` 为半
 | ROTARY-CYLINDER | `docs/reviews/evidence/2026-09-13_rotary_workbench_final/inputs/rotary_cylinder_nonzero_center.step` | `e2804dcf8db30e0d829f2ae5b7a711ab436089d40187426dcbe88afd5fea80d0` | 非零中心圆柱 Spiral、Thin Wall、跨零点 Around Part 与六件套 | 本项目使用 CadQuery 2.7.0 生成；圆心、半径和轴长由生成器显式定义；只用于 Generic XYZAC 离线资格 |
 | ROTARY-CONE | `docs/reviews/evidence/2026-09-13_rotary_workbench_final/inputs/rotary_cone_nonzero_center.step` | `b19f19ed20d4d391f979d8593b1cc71c561c4cad57ae9af8c4875da47e59a26e` | 半径线性变化圆锥 Spiral、面派生 profile 与六件套 | 本项目使用 CadQuery 2.7.0 生成；附加同轴细杆仅提供稳定轴向参考边，不进入沉积面 |
 | ROTARY-TRUTH | `tests/fixtures/analytic_rotary_truth.json` | `850a0c17165be7ff17df888900d270c8ff92f8ca6507beb85af4d9bbdef144e4` | 圆柱/圆锥 Spiral、Thin Wall 和 350°→20° Around Part 独立真值 | `derive_analytic_rotary_truth.py` 不导入项目算法；圆锥长度用复合 Simpson 积分，其余用独立闭式量测 |
+| ROTARY-FAN-STEP | `example/扇叶/风扇扇叶(1).STEP` | `294b882a7231d6b0fcfaf4aa8c6355422b212590f443158ea0a624fec2b901ef` | 检查自由曲面拒绝、轮毂圆柱面绑定和手工 XYZAC 坐标对照 | STEP header 记录 `Haoge_aimoyu` 与 `SolidWorks 2026`；原许可证及公开再分发权未确认；只作用户提供的内部分析样例 |
+| ROTARY-FAN-GCODE | `example/扇叶/风扇扇叶完整新.gcode` | `1de2cef4dbdb995e6d34bf0e143db166b3dcff3364339763f70a8536c9d6651e` | 独立流式解析 XYZ 支撑与三段 XYZAC 叶片程序 | 来源、生成器、目标控制器和人工调整范围未确认；不作为 Rotary 算法真值或实机 NC |
 
 生成入口为 `scripts/generate_rotary_evidence.py`。四组产品目录严格包含 `main.gcode`、`toolpath.json`、`machine_axes.csv`、`warnings.json`、`preview.json` 与 `manifest.json`；逐文件哈希见同目录 `products_summary.json`。
+
+扇叶对照的机器可读量测为 `docs/reviews/evidence/2026-09-13_pipe2_manual_comparison/fan_blade_analysis.json`。三片叶片主面均为 B-spline，当前 Rotary 正确拒绝；轮毂 R17.5 mm 圆柱面可局部绑定。手工代码不作为产品链回读证据，180° 对齐只登记为待确认的 frame/零角注册候选。
 
 ## 独立解析真值
 

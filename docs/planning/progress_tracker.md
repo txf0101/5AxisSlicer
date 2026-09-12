@@ -8,7 +8,7 @@
 
 Curve C01—C05 已完成有向 STEP edge 链、弧长采样、明确法向、Buildup、Multi-pass 和 Offset 三操作及统一产品链。真实叶轮样条长 `68.27612913311773 mm`，三操作 70/210/210 点均完成六件套和回读；反向 Offset 的相邻道独立点距为 2.947—3.000 mm，正向投影塌缩会拒绝。当前 Curve/共享直接集 40 passed、2 subtests；全仓 783 passed、3 skipped、130 subtests；质量、sdist/wheel、Twine、依赖一致性和 Windows native preview smoke 已通过。Generic XYZAC 与保守 AABB 扫掠仍只提供离线资格，实机未验证。
 
-Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连续角展开、圆柱/圆锥 Spiral、Thin Wall 和跨零点多区域 Around Part，并接入 shared Toolpath/events、规定相位 XYZAC、整段离线检查、G93 逆时间后处理和回读。四组真实 STEP 产品均输出严格六件套并回读通过；当前 Rotary 专项 37 passed，全仓 820 passed、3 skipped、130 subtests，质量、sdist/wheel、Twine 与隔离安装导入通过。Qt 当前控件和真实 generated preview payload 的 10 张三尺寸中英证据图已归档；该截图 harness 不替代生产 VTK/OpenGL 资格。Generic XYZAC、基体/机床精确碰撞、真实控制器语义、机床标定、现场碰撞与试切仍未验证。
+Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连续角展开、圆柱/圆锥 Spiral、Thin Wall 和跨零点多区域 Around Part，并接入 shared Toolpath/events、规定相位 XYZAC、整段离线检查、G93 逆时间后处理和回读。四组真实 STEP 产品均输出严格六件套并回读通过；当前 Rotary 专项 37 passed，全仓 820 passed、3 skipped、130 subtests，质量、sdist/wheel、Twine 与隔离安装导入通过。Qt 当前控件和真实 generated preview payload 的 10 张三尺寸中英证据图已归档；该截图 harness 不替代生产 VTK/OpenGL 资格。经典扇叶补充检查确认 B-spline 叶片面被拒绝、R17.5 mm 轮毂圆柱面可绑定，并把手工 XYZAC 的 180° frame 差异、三段叶片程序和长跨步风险纳入可视报告。Generic XYZAC、基体/机床精确碰撞、真实控制器语义、机床标定、现场碰撞与试切仍未验证。
 
 本轮新增用户授权子任务 **I01-OWN**：自有机型默认配置、选择、自定义及文件导入导出；独立于 I01 的第二运动学与控制器完整验收。
 
@@ -37,6 +37,7 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 | 2026-09-13 | R01—R05 | `five-axis-workbench-development` | 按阶段门完成资料边界、稳定几何引用、三操作、共享产品链、双语 UI、手册和证据归档 | [Rotary 复盘](../reviews/2026-09-13_rotary_workbench_review.md) |
 | 2026-09-13 | R01—R05/R05 验收 | `five-axis-slicer-validation` | 复用指定解释器、仓库内 basetemp、串行 Qt/全仓、WinError 5 分类、质量、构建和指纹规则 | [Rotary 最终证据](../reviews/evidence/2026-09-13_rotary_workbench_final/validation_manifest.json) |
 | 2026-09-13 | R05 图文补充/pipe2 对比 | `five-axis-workbench-development`、`technical-evidence-report`、`visualize`、`computer-use` | 用当前 STEP/G-code 独立量测解释固定轴 Rotary 与弯管 Tube 的差异；补生产 `RotaryPage` + `ModelViewer` 截图。Computer Use 未枚举到 Qt 窗口，截图改由 Qt 自身捕获并在清单中明示 | [Rotary 手册](../guides/rotary_workbench_zh.md)；[pipe2 对比报告](../reviews/2026-09-13_pipe2_model_manual_gcode_comparison.md) |
+| 2026-09-13 | R05 扇叶补充检查 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`technical-evidence-report`、`visualize`、`computer-use` | 对经典扇叶 STEP 与手工 XYZAC 做独立流式解析、180° frame 可视对齐和叶片/轮毂选面测试；Computer Use 与生产 VTK 截图均受当前执行环境限制，替代图和限制已逐图标注 | [pipe2 与扇叶对比报告](../reviews/2026-09-13_pipe2_model_manual_gcode_comparison.md)；[机器可读证据](../reviews/evidence/2026-09-13_pipe2_manual_comparison/fan_blade_analysis.json) |
 | 2026-09-12 | I01-OWN | `five-axis-workbench-development`、`five-axis-slicer-validation` | 自有机型接入、默认值、用户库、保存重开、双语 UI 与相关验证 | [本轮复盘](../reviews/2026-09-12_own_printer_profile_review.md) |
 | 2026-09-11 | DOC-SKILL | `skill-creator` | 把 Tube T01—T12 方法提炼为可发现、可校验的个人 Skill | [Skill 建立复盘](../reviews/2026-09-11_workbench_development_skill_review.md) |
 | 2026-09-11 | DOC-SKILL | `five-axis-workbench-development` | 自检开发闭环、阶段门槛和调用登记规则；尚未启动 P01 | [Skill 建立复盘](../reviews/2026-09-11_workbench_development_skill_review.md) |
@@ -109,11 +110,11 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 | C03 | Curve Multi-pass Buildup | C02 | 已完成 | 多层重复堆叠、累计道高和层间连接正确 | 3 层 210 点、207 沉积段；累计层高、奇偶换向、Travel/Retract/Prime/Dwell 分离、材料量和回读通过 | C04 已完成 | 2026-09-12 |
 | C04 | Curve Offset Buildup | C03 | 已完成 | 横向多道、锐角、自交和偏置失败可定位 | 真实叶轮反向 edge 三道相邻点距 2.947—3.000 mm；210 点、93.880702147199 mm³；正向投影塌缩、trim 越界、标架反转和自交拒绝 | C05 已完成 | 2026-09-12 |
 | C05 | 整个 Curve 工作台验收 | C02,C03,C04 | 已完成 | 三操作全流程、边引用重绑定、参数与持久化通过 | [图文手册](../guides/curve_workbench_zh.md)、[复盘](../reviews/2026-09-12_curve_workbench_review.md)、[最终证据](../reviews/evidence/2026-09-12_curve_workbench_final/validation_manifest.json)；GUI/脚本/HTTP、取消、撤销、Stale、Viewer、保存重开、三操作六件套、当前直接集 40 passed/2 subtests、全仓 783 passed/3 skipped/130 subtests，质量/构建/native 门通过；实机未验证 | R01—R05 已完成；进入 F01 | 2026-09-13 |
-| R01 | Rotary Region 与回转坐标 | C05 | 已完成 | 回转轴、轮廓、半径与角度范围有效，去除无效锁定行为 | 稳定 axis/face/contour 描述符、非零中心、正方向/零角、非默认 Build CS、不同轴向、重绑几何不漂移和 preview-only 阻断均验证；[复盘](../reviews/2026-09-13_rotary_workbench_review.md) | R02—R05 已完成；进入 F01 | 2026-09-13 |
+| R01 | Rotary Region 与回转坐标 | C05 | 已完成 | 回转轴、轮廓、半径与角度范围有效，去除无效锁定行为 | 稳定 axis/face/contour 描述符、非零中心、正方向/零角、非默认 Build CS、不同轴向、重绑几何不漂移和 preview-only 阻断均验证；扇叶 B-spline 面拒绝、轮毂圆柱面绑定及修剪面不自动推导角区也已实测；[复盘](../reviews/2026-09-13_rotary_workbench_review.md) | R02—R05 已完成；进入 F01 | 2026-09-13 |
 | R02 | Rotary Spiral | R01 | 已完成 | 圆柱/圆锥螺旋、螺距/方向/角速度可核对 | 三圈圆柱与两圈线性变径圆锥独立端点/长度/体积/法切向真值通过；规定相位连续展开、机床 C 对齐、G93 段时间与回读验证；[六件套](../reviews/evidence/2026-09-13_rotary_workbench_final/products/) | R03—R05 已完成；进入 F01 | 2026-09-13 |
 | R03 | Rotary Thin Wall | R02 | 已完成 | 圆周、轴向步进、径向多道和轮廓变化可验证 | 4 层×3 道独立真值、奇偶蛇形、轴向裁剪、窄壁 error/reduce、超宽拒绝、Retract/Prime 与首末净空连接通过；任意非线性径向 contour 不在当前支持范围 | R04—R05 已完成；进入 F01 | 2026-09-13 |
 | R04 | Rotary Around Part | R03 | 已完成 | 局部覆盖、多周向区域、跨零点和连续回转空移检查 | `350°→380°` 与 `480°→570°` 多区域/多层独立真值、无跨区沉积、连续方向、结构化 depart/travel/approach 和最终安全离开通过；区域为数值角带并保存全局 surface refs | R05 已完成；进入 F01 | 2026-09-13 |
-| R05 | 整个 Rotary 工作台验收 | R02,R03,R04 | 已完成 | 三操作的轴速、周期、碰撞、输出回读与 UI 通过 | [图文手册](../guides/rotary_workbench_zh.md)、[复盘](../reviews/2026-09-13_rotary_workbench_review.md)、[最终证据](../reviews/evidence/2026-09-13_rotary_workbench_final/validation_manifest.json)；GUI/脚本/HTTP、取消、撤销、Stale、保存重开、四组六件套、37 项专项、820 项全仓、质量/构建/Twine/包导入和三尺寸中英 Qt 图通过；3 项符号链接权限 skip 单列 | F01：曲面区域、度量、投影与修剪基础 | 2026-09-13 |
+| R05 | 整个 Rotary 工作台验收 | R02,R03,R04 | 已完成 | 三操作的轴速、周期、碰撞、输出回读与 UI 通过 | [图文手册](../guides/rotary_workbench_zh.md)、[复盘](../reviews/2026-09-13_rotary_workbench_review.md)、[最终证据](../reviews/evidence/2026-09-13_rotary_workbench_final/validation_manifest.json)；GUI/脚本/HTTP、取消、撤销、Stale、保存重开、四组六件套、37 项专项、820 项全仓、质量/构建/Twine/包导入和三尺寸中英 Qt 图通过；[扇叶补充报告](../reviews/2026-09-13_pipe2_model_manual_gcode_comparison.md)已登记手工 imported NC 与 generated Rotary 的边界；3 项符号链接权限 skip 单列 | F01：曲面区域、度量、投影与修剪基础 | 2026-09-13 |
 | F01 | Freeform Region 与曲面计算 | R05 | 未开始 | face/边界/导引引用、UV 度量、法向、周期和修剪正确 | OS-02/03/06；当前只有选择与预览 | 构造曲面度量及投影基础并验证 | 2026-09-12 |
 | F02 | Freeform Coating 单面路径 | F01 | 未开始 | UV/投影单层覆盖，三维道间距、边界和法向正确 | 待实现 | 在修剪 NURBS 与圆柱上验证路径 | 2026-09-10 |
 | F03 | Freeform Thin Wall | F02 | 未开始 | 曲面导引多道/多层筋壁，沿/跨方向偏置有效 | NX-04 可参考操作与偏置语义 | 实现驱动线、壁道和起停规则 | 2026-09-10 |
@@ -179,6 +180,7 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 | 日期 | 变更依据 | 变更内容 | 影响 |
 | --- | --- | --- | --- |
 | 2026-09-13 | 用户要求从含 C05 的干净基线按 R01→R05 完成整个 Rotary 工作台，并先研究 Open5x Grasshopper 与公开 NX 资料 | 完成稳定回转几何引用、Spiral/Thin Wall/Around Part、连续相位 XYZAC、G93 回读、失败矩阵、四组六件套、双语三尺寸 Qt 图文手册、当前全仓/质量/构建证据；Open5x 仅静态解析，NX 私有正文不冒充公开来源 | R01—R05 改为已完成；后续未开始任务为 16 项；下一项为 F01；Generic XYZAC、精确基体/机床碰撞、真实控制器/标定/现场/试切仍未验证 |
+| 2026-09-13 | 用户要求用经典扇叶模型和对应手工代码检查差异、选面并形成可视报告 | 独立解析 2,936,410 行手工代码，区分 XYZ 基础与三段 XYZAC 叶片程序；确认 180° frame 注册候选、叶片 B-spline 拒绝、轮毂圆柱面接受及修剪面角区语义限制；更新报告、教程、索引和证据 | R01—R05 状态不变；新增的是补充诊断证据，不把 imported NC 外观对齐升级为控制器、碰撞或实机资格 |
 | 2026-09-12 | 用户要求从 P07 干净基线按 C01→C05 完成整个 Curve 工作台 | 完成有向 edge 链、三种 Curve 操作、统一产品链、GUI/脚本/HTTP、保存重开、真实 STEP、失败矩阵、六件套、图文手册、当前串行回归、质量与构建证据 | C01—C05 改为已完成；后续未开始任务为 21 项；下一项为 R01；Generic XYZAC、真实控制器/机床/材料/试切边界继续单列未验证 |
 | 2026-09-12 | 用户要求检查完成情况、运行示例并先出修改方案 | AUD-01 核对实际源码和生成结果；T04/T07/T08/T12/P01/P02/P06 调整为待验证，保留历史证据；归档独立反例、版本快照、修改顺序和验收矩阵 | 本轮审查完成，产品修复尚未实施；P07 并行修改的已解决失败单列，不覆盖其他任务成果 |
 | 2026-09-12 | 用户要求为平面切片补充成熟切片器式支撑功能 | 在已关闭 P06 后新增 P07：首版 Grid/Lines 支撑，包含悬垂/空中岛检测、XY/Z 间隙、接触层、共享 Toolpath、输出、UI、真实模型和手册；C01 依赖改为 P07 | 当前任务由 C01 改为 P07；Tree/Organic、桥接专用路径、双材料与实机资格留作后续；不复制 AGPLv3 上游源码 |
