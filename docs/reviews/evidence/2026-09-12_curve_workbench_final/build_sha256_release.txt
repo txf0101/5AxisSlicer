@@ -1,0 +1,9 @@
+
+Algorithm : SHA256
+Hash      : 52203FD12D5A2B1262AD241325A7EC64FDC911904E72CC942072D36290585D2E
+Path      : F:\【项目和任务】\5AxisSclicer_V2.0\docs\reviews\evidence\2026-09-12_curve_workbench_final\packages\five_axis_slicer-2.0.2.dev24+gf67792f-py3-none-any.whl
+
+Algorithm : SHA256
+Hash      : 07C0E679140AD0F7822618229D3B656112F794F18B1C071F2B5F496B4AAA2A32
+Path      : F:\【项目和任务】\5AxisSclicer_V2.0\docs\reviews\evidence\2026-09-12_curve_workbench_final\packages\five_axis_slicer-2.0.2.dev24+gf67792f.tar.gz
+

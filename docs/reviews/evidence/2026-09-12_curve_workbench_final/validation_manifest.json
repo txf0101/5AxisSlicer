@@ -1,0 +1,1119 @@
+{
+  "schema_version": 1,
+  "task": "Curve C01-C05 final acceptance",
+  "baseline_commit": "125942f2863009f4a20e273bc1207dbd4d992eb8",
+  "code_commit": "95ce8fcdc35e739b7e14b2277e627e7314adc34f",
+  "acceptance_commit": "f67792f743103a03e510b1cfd8f701b210ccb7c1",
+  "branch": "codex/curve-workbench-c01-c05",
+  "environment": {
+    "qualified_interpreter": "tmp/pytest9/Scripts/python.exe",
+    "python": "3.12.7",
+    "pytest": "9.1.1",
+    "numpy": "2.2.6",
+    "ocp": "7.8.1.1.post1",
+    "qt": "5.15.2",
+    "vtk": "9.3.1",
+    "pytest_basetemp": "unique repository-local directory per run"
+  },
+  "product_evidence": {
+    "schema_version": 1,
+    "source": {
+      "path": "example/叶轮/叶轮.stp",
+      "sha256": "3776fe6e1c384e03a7dab20e7ab8d8028210b86ec7c2ced3d3518a8011fdf21f",
+      "stable_edge_id": "body_002_edge_0011",
+      "stable_face_id": "body_002_face_0006",
+      "frame": "Source/Model -> Build -> Workpiece/Machine"
+    },
+    "failure_fixture": {
+      "path": "docs/reviews/evidence/2026-09-12_project_audit/frozen_cases/analytic/rectangle_8x6x1.step",
+      "sha256": "02e6adf319958391e8d74a1ef32fa4c22a0d1e32025a92701ad91e0ad39f8518",
+      "expected_error": "curve.offset_outside_face"
+    },
+    "products": [
+      {
+        "operation_type": "curve_buildup",
+        "operation_semantic_sha256": "6be1f7cf0efb73959ccabf241c5cfd0b9481ddd7ae01250f3d80f0b721d8e59a",
+        "plan_length_mm": 68.27612913311788,
+        "toolpath_points": 70,
+        "trajectory_samples": 70,
+        "status": "ready",
+        "readback_passed": true,
+        "bundle_sha256": {
+          "machine_axes.csv": "755668be789044dd90db752a3f8a469ae02aa8e6dc6cc77f2c32ee4378d65b4f",
+          "main.gcode": "2ca38e097f6e41a9e83f070bbbc43b01de4fd9056ca202bd993b025f31b2e60b",
+          "manifest.json": "c7836a2ba214ad1fae77dfab51d6ce86acf40f03461bbb5d6b581ca3231aa094",
+          "preview.json": "2c9df95df473e79ecb5ca754660a636239ed65f6486410561328fa64f28d95af",
+          "toolpath.json": "c0627cd71c79926728783c349a26b9b78418033b619c1c626f6b4928fbc9d3de",
+          "warnings.json": "de6e486d5d935a537e5a897f6c6df4da9b29574a06acfb9f252508a162b51cb1"
+        }
+      },
+      {
+        "operation_type": "curve_multi_pass",
+        "operation_semantic_sha256": "ad4e6342d573f42735997a2a2344e18beebda114b7306116b4a3715793768026",
+        "plan_length_mm": 68.27612913311788,
+        "toolpath_points": 210,
+        "trajectory_samples": 210,
+        "status": "ready",
+        "readback_passed": true,
+        "bundle_sha256": {
+          "machine_axes.csv": "5fdc2cbd98d4d524a437583581da2bb71c1f9431c50fe71d7134a6ce8e82f023",
+          "main.gcode": "bd98831f80e0040b28223dfcf946513e7b5e0462ba85cadd597f7ec2afe717ab",
+          "manifest.json": "bf0d69f646b783f4516cf37f379c97310791b5062143295689fecddd2831249c",
+          "preview.json": "998645f84a3cbd272bf047531fe9212e815fb3eb04e48ba0211f8d48c5770a6c",
+          "toolpath.json": "c5506ef41d63174e2ba153fca1e541d2c2bb344de6d1991b107f06035839aeac",
+          "warnings.json": "a61017677a9cba90e2233544e4c4efecd4cdb30b684a5dc50fcfc85c6310c043"
+        }
+      },
+      {
+        "operation_type": "curve_offset_buildup",
+        "operation_semantic_sha256": "fd189f9b4e288e1a5dcea96468f0b95ab3d1c88031c44cd4ae62a5be3534174f",
+        "plan_length_mm": 68.27612913311788,
+        "toolpath_points": 210,
+        "trajectory_samples": 210,
+        "status": "ready",
+        "readback_passed": true,
+        "bundle_sha256": {
+          "machine_axes.csv": "37b0dec3fe5341c98f9cc15c0e494cd970081953e61ac818855d3a48cc073dce",
+          "main.gcode": "66e88274e81d1bd475cea95e426314c93cb95a1ae1c3d6da7d894ec673e20192",
+          "manifest.json": "2731d08a66e9529aa79ddab557ee969a4a33901261c79c17e8bb8124657d447d",
+          "preview.json": "1d52ad51f6a03c12a906d4a528c0575e52e1867a9e2b6f03e50fcff326b82e3f",
+          "toolpath.json": "78c59987b7cf71df738c92a3d6e0b7f1ca7f726d3f472ffac1fdff041deb4bb9",
+          "warnings.json": "ba6ace5e2e4a3e02e143032a37fa7b7dbbdf1db349deedb1f8130a4741310726"
+        }
+      }
+    ],
+    "screenshots": [
+      {
+        "file": "01_curve_buildup_zh_1366x768.png",
+        "sha256": "62766a47abf38200aeccaa41b00bfe1fd91b9dd439f1a0223bb54d2f9c757068",
+        "language": "zh",
+        "size": [
+          1366,
+          768
+        ],
+        "capture_method": "Qt QWidget.grab; actual CurvePage and generated Toolpath",
+        "viewer_backend": "opengl",
+        "model_visible": true,
+        "visible_segments": 69,
+        "status": "Status: ready",
+        "export_enabled": true,
+        "clipped_visible_buttons": [],
+        "horizontal_scroll_max": 0
+      },
+      {
+        "file": "06_curve_buildup_zh_1366x768_path_only.png",
+        "sha256": "33c26eca6013c3763efa4e0dac02ec5ad98b0189f9f0ddbc210811008373482d",
+        "language": "zh",
+        "size": [
+          1366,
+          768
+        ],
+        "capture_method": "Qt QWidget.grab; actual CurvePage and generated Toolpath",
+        "viewer_backend": "opengl",
+        "model_visible": false,
+        "visible_segments": 69,
+        "status": "Status: ready",
+        "export_enabled": true,
+        "clipped_visible_buttons": [],
+        "horizontal_scroll_max": 0
+      },
+      {
+        "file": "09_curve_overview_edge_normal_zh_1366x768.png",
+        "sha256": "b07477b1ab4b1e82fd8208cca1ca4f9f136e2a560c65db376dbff1c573a7d694",
+        "language": "zh",
+        "size": [
+          1366,
+          768
+        ],
+        "capture_method": "Qt QWidget.grab; actual CurvePage and generated Toolpath",
+        "viewer_backend": "opengl",
+        "model_visible": true,
+        "visible_segments": 69,
+        "status": "Status: ready",
+        "export_enabled": true,
+        "clipped_visible_buttons": [],
+        "horizontal_scroll_max": 0
+      },
+      {
+        "file": "02_curve_multi_pass_en_1600x900.png",
+        "sha256": "25e215c8f7fb27eee253720945ddef4d04288bb0f4bdc93d939bef97b0e5585c",
+        "language": "en",
+        "size": [
+          1600,
+          900
+        ],
+        "capture_method": "Qt QWidget.grab; actual CurvePage and generated Toolpath",
+        "viewer_backend": "opengl",
+        "model_visible": true,
+        "visible_segments": 207,
+        "status": "Status: ready",
+        "export_enabled": true,
+        "clipped_visible_buttons": [],
+        "horizontal_scroll_max": 0
+      },
+      {
+        "file": "07_curve_multi_pass_en_1600x900_path_only.png",
+        "sha256": "f746d88c5774dbb1b5609c2d9367d6086ab71b0dca6d835ebbcccc79679498a4",
+        "language": "en",
+        "size": [
+          1600,
+          900
+        ],
+        "capture_method": "Qt QWidget.grab; actual CurvePage and generated Toolpath",
+        "viewer_backend": "opengl",
+        "model_visible": false,
+        "visible_segments": 207,
+        "status": "Status: ready",
+        "export_enabled": true,
+        "clipped_visible_buttons": [],
+        "horizontal_scroll_max": 0
+      },
+      {
+        "file": "03_curve_offset_buildup_en_1920x1080.png",
+        "sha256": "bdecc3d20965f0697a76e1936472532790b6a7150235bad5972adbee306fa3d1",
+        "language": "en",
+        "size": [
+          1920,
+          1080
+        ],
+        "capture_method": "Qt QWidget.grab; actual CurvePage and generated Toolpath",
+        "viewer_backend": "opengl",
+        "model_visible": true,
+        "visible_segments": 207,
+        "status": "Status: ready",
+        "export_enabled": true,
+        "clipped_visible_buttons": [],
+        "horizontal_scroll_max": 0
+      },
+      {
+        "file": "08_curve_offset_buildup_en_1920x1080_path_only.png",
+        "sha256": "4b776f96a678f2fe746ca39f029afe82e8c86b5f2a9e84022b4708163f43273f",
+        "language": "en",
+        "size": [
+          1920,
+          1080
+        ],
+        "capture_method": "Qt QWidget.grab; actual CurvePage and generated Toolpath",
+        "viewer_backend": "opengl",
+        "model_visible": false,
+        "visible_segments": 207,
+        "status": "Status: ready",
+        "export_enabled": true,
+        "clipped_visible_buttons": [],
+        "horizontal_scroll_max": 0
+      },
+      {
+        "file": "04_offset_failure_zh_1366x768.png",
+        "sha256": "b8896979da4929c27ed40fee0585db27ed1b647868bef07f4d9ac1078e263021",
+        "language": "zh",
+        "size": [
+          1366,
+          768
+        ],
+        "capture_method": "Qt QWidget.grab; actual CurvePage and generated Toolpath",
+        "viewer_backend": "opengl",
+        "model_visible": true,
+        "visible_segments": 0,
+        "status": "curve.offset_outside_face [body_001_face_0006]: offset crosses the trimmed face boundary",
+        "export_enabled": false,
+        "clipped_visible_buttons": [],
+        "horizontal_scroll_max": 0
+      },
+      {
+        "file": "05_offset_recovered_zh_1366x768.png",
+        "sha256": "e8abbb4389b20cf35c72bc2790c44bb12b107a07e55a58e0b7ce451bcd5f651f",
+        "language": "zh",
+        "size": [
+          1366,
+          768
+        ],
+        "capture_method": "Qt QWidget.grab; actual CurvePage and generated Toolpath",
+        "viewer_backend": "opengl",
+        "model_visible": true,
+        "visible_segments": 24,
+        "status": "Status: warning",
+        "export_enabled": true,
+        "clipped_visible_buttons": [],
+        "horizontal_scroll_max": 0
+      }
+    ],
+    "limits": [
+      "Generic XYZAC and offline FK/readback only",
+      "No real controller, calibration, site collision, material qualification, or trial build"
+    ]
+  },
+  "validation_runs": [
+    {
+      "name": "preflight_closeout",
+      "command": "tmp/pytest9/Scripts/python.exe -X utf8 C:/Users/Tang Xufeng/.codex/skills/five-axis-slicer-validation/scripts/preflight.py --repo <repo>",
+      "exit": 0,
+      "result": "dependency probe passed; QSettings writable",
+      "evidence": "preflight_closeout.log"
+    },
+    {
+      "name": "curve_and_shared_direct_closeout",
+      "command": "tmp/pytest9/Scripts/python.exe -X faulthandler -m pytest -q -ra tests/test_curve_workbench.py tests/test_curve_integration.py tests/test_preview_index.py tests/test_opengl_viewer.py --basetemp=tmp/pytest_curve_closeout_direct_20260912_2",
+      "exit": 0,
+      "result": "40 passed, 2 subtests passed",
+      "evidence": "junit_curve_closeout_direct_retry1.xml"
+    },
+    {
+      "name": "planar_shared",
+      "exit": 0,
+      "result": "225 passed, 555 deselected"
+    },
+    {
+      "name": "tube_shared_retry1",
+      "exit": 0,
+      "result": "167 passed, 613 deselected, 8 subtests passed"
+    },
+    {
+      "name": "full_closeout_numpy22",
+      "command": "tmp/pytest9/Scripts/python.exe -X faulthandler -m pytest -q -ra --basetemp=tmp/pytest_full_curve_closeout_20260912_1",
+      "exit": 0,
+      "result": "783 passed, 3 skipped, 130 subtests passed in 300.54s",
+      "evidence": "junit_full_closeout.xml"
+    },
+    {
+      "name": "quality_release",
+      "command": "tmp/pytest9/Scripts/python.exe -X utf8 scripts/check_quality.py",
+      "exit": 0,
+      "result": "Ruff/format/context budget/Mypy passed; 134 source files",
+      "evidence": "check_quality_release.log"
+    },
+    {
+      "name": "pip_check_clean_env",
+      "command": "tmp/curve_cleancheck/Scripts/python.exe -m pip check",
+      "exit": 0,
+      "result": "No broken requirements found",
+      "evidence": "pip_check_clean_env_closeout.log"
+    },
+    {
+      "name": "build_release",
+      "command": "tmp/pytest9/Scripts/python.exe -m build --outdir docs/reviews/evidence/2026-09-12_curve_workbench_final/packages",
+      "exit": 0,
+      "result": "sdist and wheel built from the recorded acceptance commit",
+      "evidence": "build_release.log"
+    },
+    {
+      "name": "twine_release",
+      "command": "tmp/pytest9/Scripts/python.exe -m twine check <wheel> <sdist>",
+      "exit": 0,
+      "result": "2 artifacts PASSED",
+      "evidence": "twine_release.log"
+    },
+    {
+      "name": "native_preview_current",
+      "command": "tmp/curve_cleancheck/Scripts/python.exe -m pytest -q tests/test_preview_index.py",
+      "exit": 0,
+      "result": "native import passed; 3 tests passed",
+      "evidence": "pytest_native_preview_closeout.log"
+    }
+  ],
+  "failure_history": [
+    {
+      "stage": "curve initial",
+      "result": "1 passed, 13 errors",
+      "cause": "system pytest temp directory permission",
+      "fix": "unique repository-local --basetemp"
+    },
+    {
+      "stage": "curve final first attempt",
+      "result": "23 passed, 1 failed",
+      "cause": "test read GeometryReference kernel signature from wrong field",
+      "fix": "read signature['kernel_signature']"
+    },
+    {
+      "stage": "tube shared first attempt",
+      "result": "166 passed, 1 failed, 8 subtests passed",
+      "cause": "STEP import navigation opened CurvePage for a generic session",
+      "fix": "shared show_after_model_import routing"
+    },
+    {
+      "stage": "real Offset evidence",
+      "result": "projection collapsed onto trimmed boundary",
+      "cause": "edge direction selected the outside lateral",
+      "fix": "reject collapsed projection and explicitly reverse the edge"
+    },
+    {
+      "stage": "quality first attempt",
+      "result": "2 mypy errors under NumPy 2.2.6 stubs",
+      "cause": "np.savez keyword expansion and ndarray shape inference",
+      "fix": "targeted stub suppression and explicit ndarray annotation"
+    },
+    {
+      "stage": "quality closeout first retry",
+      "result": "context budget exceeded by one line",
+      "cause": "the explicit ndarray annotation added a function-body line",
+      "fix": "place the annotation on the existing assignment line"
+    },
+    {
+      "stage": "direct closeout first attempt",
+      "result": "no tests collected; pytest exit 4",
+      "cause": "PowerShell corrupted an absolute Chinese --junitxml path",
+      "fix": "use repository-relative output and a new basetemp"
+    },
+    {
+      "stage": "native closeout first attempt",
+      "result": "import assertion exit 1 before tests",
+      "cause": "the validation command used a non-existent NATIVE_AVAILABLE name",
+      "fix": "use NATIVE_INDEX_AVAILABLE and verify the returned source is native"
+    },
+    {
+      "stage": "new clean environment full run",
+      "result": "native exit 0xC0000409 before pytest output",
+      "cause": "unqualified new Qt/VTK environment",
+      "fix": "retain as failure; qualify with the project-validated interpreter"
+    }
+  ],
+  "source_files": [
+    {
+      "path": "scripts/curve_c05_evidence.py",
+      "bytes": 11919,
+      "sha256": "66f4faab977d57ac8e87991f2aac5ade1d69d51c21dbe54992722a8c8c87a0ab"
+    },
+    {
+      "path": "src/five_axis_slicer/algorithms/curve/chain.py",
+      "bytes": 12643,
+      "sha256": "294448e010044ca4513bb6500236aac84ca45d31df30d13a06e6707f1d013ca8"
+    },
+    {
+      "path": "src/five_axis_slicer/algorithms/curve/toolpath.py",
+      "bytes": 13862,
+      "sha256": "016af4d847c1b918eebcf0b823e86c96adf0e072e9fd54aee081a8ef87f9748c"
+    },
+    {
+      "path": "src/five_axis_slicer/curve_automation.py",
+      "bytes": 3530,
+      "sha256": "adc7a1b081f4283b84bbb6a29a6d666b4425dd72bd7713544f88b6ff5a4d3488"
+    },
+    {
+      "path": "src/five_axis_slicer/curve_commands.py",
+      "bytes": 10660,
+      "sha256": "f62d9ff8d78ddf930c721cdbaa52aa3b6b7de6314b8ec5c7943cd0371d1634a2"
+    },
+    {
+      "path": "src/five_axis_slicer/curve_controller.py",
+      "bytes": 20398,
+      "sha256": "cc1fcb555030dc65ecda3afb73ecf6ea78fe487df7953ba152fca184c752975b"
+    },
+    {
+      "path": "src/five_axis_slicer/curve_generation_context.py",
+      "bytes": 5246,
+      "sha256": "95980828e66f45a56a71f5596623a20df803cac0b498a2a87d59d04cfb1e0950"
+    },
+    {
+      "path": "src/five_axis_slicer/curve_operation_service.py",
+      "bytes": 6350,
+      "sha256": "d399f5421e5b1f96637e6932cbc3a6859b886b77ab9459c2863ab2d5fa6b2deb"
+    },
+    {
+      "path": "src/five_axis_slicer/curve_shell.py",
+      "bytes": 3201,
+      "sha256": "14c7cad6151e09795bd9c0de38e759529793d035db15940e0601dede8697879b"
+    },
+    {
+      "path": "src/five_axis_slicer/curve_ui.py",
+      "bytes": 23942,
+      "sha256": "28c2dc29c0fa5c7c869aeb16de2e55098a615a1c4efb84b61623a2bee23e67b1"
+    },
+    {
+      "path": "src/five_axis_slicer/gcode_cache.py",
+      "bytes": 12340,
+      "sha256": "30468f98baae93eeb4a0f1f5292560467f5627ee2a3198e05ac7d18b9a84594a"
+    },
+    {
+      "path": "src/five_axis_slicer/opengl_scene.py",
+      "bytes": 19066,
+      "sha256": "0fdabf64aeef6d0c05c08bc3b9b69108b67e66f81f6a65c01297f862b4b20b0b"
+    },
+    {
+      "path": "src/five_axis_slicer/postprocessing/curve_product.py",
+      "bytes": 20231,
+      "sha256": "6c86d7beb5741d2bbb9b5a4c6cbec4a630f4a479a98a4358468aeb518b92f07a"
+    },
+    {
+      "path": "tests/test_curve_workbench.py",
+      "bytes": 21289,
+      "sha256": "27d31c53f93ac34010ac8b503976a1497746c559e4a44c0c288bb98e07732dd7"
+    },
+    {
+      "path": "tests/test_curve_integration.py",
+      "bytes": 5967,
+      "sha256": "f5792bff320492e2fb7a5a72bb6193a470b7c462b9680ea30d706e37c2bcdade"
+    },
+    {
+      "path": "docs/guides/curve_workbench_zh.md",
+      "bytes": 9855,
+      "sha256": "48b4c50fe83b3ccd1db7d2aaced2800211a1c53676009cd0c07c18c3576c1ee6"
+    },
+    {
+      "path": "docs/reviews/2026-09-12_curve_workbench_review.md",
+      "bytes": 8245,
+      "sha256": "19c5933c5a560653af62127c70022eda7b683579a357c06f41d5b7c12f91df20"
+    }
+  ],
+  "external_evidence": [
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/history/curve_c01_c04_initial.xml",
+      "bytes": 86920,
+      "sha256": "78192e5d17da0889a575b13ba59e06e8d8be408d26533db2b23c918753a7c7cb"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/history/curve_c01_c04_retry1.xml",
+      "bytes": 2081,
+      "sha256": "26ca6e1fe97f2ca4f61a4b4a8faa1b9b08664738b7e3183be7b12e19f87dcd60"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/history/curve_c01_c05_integration1.xml",
+      "bytes": 3572,
+      "sha256": "e6c0b682a476b8d9c6b21d7e5d36a1977f9646c3bf3b3bbbd73c6e886e8aebfe"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/history/curve_c05_code_gate.xml",
+      "bytes": 7181,
+      "sha256": "541d1705f6f92ca14dfbbd06bb9f31ccb211f515065f12052b719fc735413389"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/history/curve_c05_refactor_gate.xml",
+      "bytes": 6405,
+      "sha256": "88737de5e0a15777dc62e441bd455ac13feeba304c5898892e5e0b7fa4b454f4"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/history/curve_integration_retry1.xml",
+      "bytes": 1038,
+      "sha256": "8ed35f579a6ed1f5af43de1d6a64f3f8690630e5d3bbe6851da2046841ae8eee"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/history/curve_shared_qt_integration1.xml",
+      "bytes": 12221,
+      "sha256": "eaa10129a023fac511b9377e884dc6188a3d3d144c15e41fe196f4561d42d063"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/history/curve_shared_source_project1.xml",
+      "bytes": 3609,
+      "sha256": "e7ac8d41e00a79f0bf82b07b7379ae7176390af149520c8a4e3ed3e024ef1070"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/history/curve_workbench_retry2.xml",
+      "bytes": 2358,
+      "sha256": "b273030b0bcd9c1c80102b31bd5305681ae87ba2505ed8dd61268c57c22bc04b"
+    }
+  ],
+  "evidence_files": [
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/build_closeout.exit.txt",
+      "bytes": 14,
+      "sha256": "2414e97fb5e03d8039e115ff617ebb022aa374e6279841f1e8b0982118c80cc5"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/build_closeout.log",
+      "bytes": 68646,
+      "sha256": "c46ab056ce768d97c389a71dcd038a600fef71510575a5df7a0601ac2cacb821"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/build_final.log",
+      "bytes": 68532,
+      "sha256": "7b5d2550e7d8a03d8ebc30df29c28e6979d1419aab51d1cd92928840bcdec65d"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/build_final_code.log",
+      "bytes": 68532,
+      "sha256": "2864a524e4d824f16f35eb21302fc116a0716af3f92ca4fb7fff94e34b16f1da"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/build_release.exit.txt",
+      "bytes": 14,
+      "sha256": "2414e97fb5e03d8039e115ff617ebb022aa374e6279841f1e8b0982118c80cc5"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/build_release.log",
+      "bytes": 66277,
+      "sha256": "47dc89f3c985fc0767efab1a7f942f5d4615f95a57e7395d83bb286e282dab0a"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/build_sha256.txt",
+      "bytes": 430,
+      "sha256": "5c22bcb79a99334de27c96c367da6cfb053d612fc6e3332d45297ce0c1287f19"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/build_sha256_closeout.txt",
+      "bytes": 506,
+      "sha256": "ddc5066c720e9cac40ac7007d9d47d099b94854d5250b7484f425f4b706b391c"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/build_sha256_final_code.txt",
+      "bytes": 486,
+      "sha256": "36d7b41f49ab59ea7fb965a846ad14641f92365bb43c2fdce00a96a13bc116b2"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/build_sha256_release.txt",
+      "bytes": 542,
+      "sha256": "4d85cd299f62beda9e486e93d900b3223beacc5be8f181bad38b2f95c3bc0d94"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/check_quality_closeout_final.exit.txt",
+      "bytes": 16,
+      "sha256": "f7498218ebcfef2459183078014fb284394154ccbcf4b4f09282fc2a00ef0446"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/check_quality_closeout_final.log",
+      "bytes": 248,
+      "sha256": "db12acc00578d6084fc8d925a6226a0c64b73db9c87841ee52815a9ced3bd706"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/check_quality_closeout_final_retry1.exit.txt",
+      "bytes": 16,
+      "sha256": "bc47e2eb3dd091b852cabe0b6aa7e1cd80b2b95f33ca976eb64f531d8bab2b62"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/check_quality_closeout_final_retry1.log",
+      "bytes": 233,
+      "sha256": "49acb609cb31b2732e76d1637a607b2b9fd30c0815fe6916713de0b0c43517ea"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/check_quality_closeout_initial.exit.txt",
+      "bytes": 16,
+      "sha256": "f7498218ebcfef2459183078014fb284394154ccbcf4b4f09282fc2a00ef0446"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/check_quality_closeout_initial.log",
+      "bytes": 643,
+      "sha256": "d5a85ddfa74bf3c5088a0b979b07c611185dcb6ca9831db4fcd5d645635e9d92"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/check_quality_docs_final.log",
+      "bytes": 643,
+      "sha256": "d5a85ddfa74bf3c5088a0b979b07c611185dcb6ca9831db4fcd5d645635e9d92"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/check_quality_final.log",
+      "bytes": 606,
+      "sha256": "bf01926172bc70fbaf93ec2f9101149624cabb7af063fcf06256b081e9a4b5b0"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/check_quality_final_retry1.log",
+      "bytes": 233,
+      "sha256": "49acb609cb31b2732e76d1637a607b2b9fd30c0815fe6916713de0b0c43517ea"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/check_quality_release.exit.txt",
+      "bytes": 16,
+      "sha256": "bc47e2eb3dd091b852cabe0b6aa7e1cd80b2b95f33ca976eb64f531d8bab2b62"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/check_quality_release.log",
+      "bytes": 233,
+      "sha256": "49acb609cb31b2732e76d1637a607b2b9fd30c0815fe6916713de0b0c43517ea"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/clean_env_install.log",
+      "bytes": 33308,
+      "sha256": "07f97bdd38ce70831cd8beb66f282574f13bdb9902543cb56ab947317a6ce63f"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/clean_env_versions.log",
+      "bytes": 240,
+      "sha256": "4075daaca81d24a592ecce90bdd6505c23fe9239f77e94c787f5bbd7ca18f9a3"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/curve_c05_evidence_closeout.exit.txt",
+      "bytes": 17,
+      "sha256": "6be9ce32d6e4d20bdb5e80e835a6a80476a14978ab19fba2b9590f3fa7efef23"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/curve_c05_evidence_closeout.log",
+      "bytes": 8687,
+      "sha256": "98159490fd5a26b3bb507d0d7bf550bf62229748a13ad1638e30571d9973dff6"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/curve_c05_evidence_final.log",
+      "bytes": 4374,
+      "sha256": "42d72c1e22c83b83417752c12d1c041f87ed7ec08808fc2058d7821b40262b88"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/curve_c05_evidence_final_retry1.log",
+      "bytes": 8129,
+      "sha256": "7a1de88e6000e02dc9e888afd47261fdfd010f594a324c6415fe22456bed9755"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/curve_c05_evidence_offset_fix.log",
+      "bytes": 1502,
+      "sha256": "1a955c8b1b88a2d7ea1b19ac75af629dcfd6929f00c70aa4f3738d3825c168af"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/curve_c05_evidence_offset_fix_retry1.log",
+      "bytes": 8129,
+      "sha256": "62dcfe8b1ce13f53e5eb8d151015ec1b441464020684170a2e028216c778f85c"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/curve_c05_evidence_overview_retry1.log",
+      "bytes": 8691,
+      "sha256": "08b6d7157033faca61fd1c232ca67b8c2b0a638af166df74aa533275aa2dee67"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/evidence_manifest.json",
+      "bytes": 8687,
+      "sha256": "98159490fd5a26b3bb507d0d7bf550bf62229748a13ad1638e30571d9973dff6"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/finalize_manifest.exit.txt",
+      "bytes": 17,
+      "sha256": "7d2f238046779f13bfc142ee802aa477125fb27bf5bb5485c633ed8ed1501aee"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/finalize_manifest.log",
+      "bytes": 147,
+      "sha256": "9097f32903c5a666d6d049d221a21523c8482f7f45292cffb268b49aa3134127"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/history/curve_c01_c04_initial.xml",
+      "bytes": 86920,
+      "sha256": "78192e5d17da0889a575b13ba59e06e8d8be408d26533db2b23c918753a7c7cb"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/history/curve_c01_c04_retry1.xml",
+      "bytes": 2081,
+      "sha256": "26ca6e1fe97f2ca4f61a4b4a8faa1b9b08664738b7e3183be7b12e19f87dcd60"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/history/curve_c01_c05_integration1.xml",
+      "bytes": 3572,
+      "sha256": "e6c0b682a476b8d9c6b21d7e5d36a1977f9646c3bf3b3bbbd73c6e886e8aebfe"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/history/curve_c05_code_gate.xml",
+      "bytes": 7181,
+      "sha256": "541d1705f6f92ca14dfbbd06bb9f31ccb211f515065f12052b719fc735413389"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/history/curve_c05_evidence_retry1.log",
+      "bytes": 6631,
+      "sha256": "62e722af3b85cd424ab0b082041ebd27c5d8df91ee2fef8cafbc6a30b8097623"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/history/curve_c05_evidence_retry2.log",
+      "bytes": 6285,
+      "sha256": "49e7a82cd4793236a0a79aa8ebb138bda5b954bf0a6ee6c08de02b5233b0736d"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/history/curve_c05_evidence_retry3.log",
+      "bytes": 6285,
+      "sha256": "351637c989eb81e23cfa46d6529727e404d29bea27770fc61af2ad8d7063b398"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/history/curve_c05_evidence_retry4.log",
+      "bytes": 6285,
+      "sha256": "70e3df2ac771df976e78ad29e4ef0819fd008ac0cfbbee764bf84fd95dffc70a"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/history/curve_c05_evidence_run.log",
+      "bytes": 765,
+      "sha256": "036afcb00cc5d4161eada926ac36c0670ea02b82a4a752fafd05eaab8b118254"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/history/curve_c05_refactor_gate.xml",
+      "bytes": 6405,
+      "sha256": "88737de5e0a15777dc62e441bd455ac13feeba304c5898892e5e0b7fa4b454f4"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/history/curve_integration_retry1.xml",
+      "bytes": 1038,
+      "sha256": "8ed35f579a6ed1f5af43de1d6a64f3f8690630e5d3bbe6851da2046841ae8eee"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/history/curve_shared_qt_integration1.xml",
+      "bytes": 12221,
+      "sha256": "eaa10129a023fac511b9377e884dc6188a3d3d144c15e41fe196f4561d42d063"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/history/curve_shared_source_project1.xml",
+      "bytes": 3609,
+      "sha256": "e7ac8d41e00a79f0bf82b07b7379ae7176390af149520c8a4e3ed3e024ef1070"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/history/curve_workbench_retry2.xml",
+      "bytes": 2358,
+      "sha256": "b273030b0bcd9c1c80102b31bd5305681ae87ba2505ed8dd61268c57c22bc04b"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/junit_curve.xml",
+      "bytes": 4707,
+      "sha256": "5d4ccafb336e4676417ccec4184fba0f2146b80a3bbdbe2d5bc5e78338feb991"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/junit_curve_closeout_direct_retry1.xml",
+      "bytes": 5712,
+      "sha256": "c05b54aab0e25d2ac913247b92bd372a6fefc38bac1fbe81954fb8fd3e375ca6"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/junit_curve_failure_matrix.xml",
+      "bytes": 3224,
+      "sha256": "2e82672eceaffee004992e7d50bf6a845471d19458f5febf393d2a825e971d6e"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/junit_curve_failure_matrix_retry1.xml",
+      "bytes": 5018,
+      "sha256": "1ddfc199c600e6ce659c8abb3f17aa18b123872ff9fb39f5ef2d5f38781eb78f"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/junit_curve_failure_matrix_retry2.xml",
+      "bytes": 915,
+      "sha256": "be1829188e096ece2e3245241563b320d438e56ed5ddec64463325fd9fb2bd30"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/junit_curve_final.xml",
+      "bytes": 4526,
+      "sha256": "1b33fcd5a1a79c6aeccb0a0dbe751ea9818835f0c1c78c1fabb48e0ef0a62c3b"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/junit_curve_numpy22.xml",
+      "bytes": 3316,
+      "sha256": "f7020690f6cf12653b31536fbd7e5b36fcb56aa7671676d18a25f57013e303c3"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/junit_curve_offset_fix.xml",
+      "bytes": 763,
+      "sha256": "cdabe4db2ed35501c41281ae590b1f44d8679e76c4a4a4fabb1355d2ad8288b6"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/junit_curve_retry1.xml",
+      "bytes": 3409,
+      "sha256": "21a1cee2a4c30e83263d2aedc000dc8b045bee797aa2bb98e7b18190ce8a7561"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/junit_curve_validation_matrix.xml",
+      "bytes": 3203,
+      "sha256": "7e7851a489f2caf147b3b16bd459000d4e1bf3c0e0ea951d5ac1593a321a94a7"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/junit_curve_validation_matrix_retry1.xml",
+      "bytes": 537,
+      "sha256": "2f73a864f334e4102756f46ffd8780fcdbad9c5feb8b40b10309e6c7bf47828e"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/junit_full.xml",
+      "bytes": 116414,
+      "sha256": "9408a1c8e931c0b30673dde2af3c01bd855e1b2836103d257491f73c416a89b1"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/junit_full_closeout.xml",
+      "bytes": 116415,
+      "sha256": "5637840763f84b20bcd8d0f3db7dc2fe5f461e5308ad1c784f57c66173626851"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/junit_full_numpy22.xml",
+      "bytes": 116414,
+      "sha256": "7706eab7ac6c1fc4deb1eefcac3978ce4ab412d85621c77ff4ac2987020a09b0"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/junit_native_preview.xml",
+      "bytes": 643,
+      "sha256": "eacfcbf4290910bb063d8afd40f503e0a799080bfd51d8e255a044d64d459e37"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/junit_native_preview_closeout.xml",
+      "bytes": 643,
+      "sha256": "474ebbadd3ba71013e05fffbc86edf4e66945d7526d5000db2cad4cc9906a9f7"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/junit_planar_shared.xml",
+      "bytes": 32889,
+      "sha256": "7d9b765c43edd0ba50c789e9595ca251936695b01221062f3a71a14f8fdd34ef"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/junit_tube_retry1.xml",
+      "bytes": 380,
+      "sha256": "5dffa77c1e5cc9352c8b1b94e48e4da556b6851fb96c08e5656188dbfb3a92b4"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/junit_tube_shared.xml",
+      "bytes": 25257,
+      "sha256": "3b045a8bf21d014c9d5240e1249c17815cde149f9f10334f645bc467f74c9400"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/junit_tube_shared_retry1.xml",
+      "bytes": 24215,
+      "sha256": "a0bdf1063fc5479488709c1285531d3fa256dadb3117f1d9010fef84bd761c5c"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/native_build.log",
+      "bytes": 1840,
+      "sha256": "2f7fb2b5c6cd7fc1f16cbd9d4245f619cd3d6f72f90d208caf928db4a6e76cee"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/native_import.log",
+      "bytes": 43,
+      "sha256": "9390409f776ec1a6c2d4cf5d8d5f71069d82c5fa2d687e7d14ec5dd5d43cf08f"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/native_import_closeout.exit.txt",
+      "bytes": 22,
+      "sha256": "0626209aa0ff87fc0b822f22edc0c27094e03496ebbc9623da6a772d7dfc6a73"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/native_import_closeout.log",
+      "bytes": 304,
+      "sha256": "140dfd48572fe98c3e1a4222a7f8baba1e18c5c8f74975a2b6e32781bdad28d7"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/native_import_closeout_retry1.exit.txt",
+      "bytes": 22,
+      "sha256": "f3d075bb4ff9df45bd13ea77b65de8b6188d95ba5fed15d19411a3e61d5cf0ad"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/native_import_closeout_retry1.log",
+      "bytes": 43,
+      "sha256": "9390409f776ec1a6c2d4cf5d8d5f71069d82c5fa2d687e7d14ec5dd5d43cf08f"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/packages/five_axis_slicer-2.0.2.dev24+gf67792f-py3-none-any.whl",
+      "bytes": 570616,
+      "sha256": "52203fd12d5a2b1262ad241325a7ec64fdc911904e72cc942072d36290585d2e"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/packages/five_axis_slicer-2.0.2.dev24+gf67792f.tar.gz",
+      "bytes": 538948,
+      "sha256": "07c0e679140ad0f7822618229d3b656112f794f18b1c071f2b5f496b4aaa2a32"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/pip_check_clean_env.log",
+      "bytes": 31,
+      "sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/pip_check_clean_env_closeout.exit.txt",
+      "bytes": 18,
+      "sha256": "518dd56f526be5911906637f00744972e9bc4f8df05a9295c56f26694deab292"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/pip_check_clean_env_closeout.log",
+      "bytes": 31,
+      "sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/pip_check_initial.log",
+      "bytes": 70,
+      "sha256": "d757051a8057ba59109256a69f79c569d6f9ad41547c2494fdce7440e4be595c"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/pip_check_no_user_site.log",
+      "bytes": 227,
+      "sha256": "3e8652f57e25764ceb308fa01e584090ce763dd474a35f64a8bc7603e2abc403"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/pip_check_retry1.log",
+      "bytes": 150,
+      "sha256": "639ad2e9faab845647a8cb5b5b0b8064f30998ebb708d2543bceaa20eefddffa"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/pip_numpy_reconcile.log",
+      "bytes": 1119,
+      "sha256": "7253153df69fd717fa6ce8c92182d7da904ddc478dd81dd2e99cc62ffbd14f57"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/preflight_closeout.exit.txt",
+      "bytes": 18,
+      "sha256": "106d66a13a5cdfcb731031aeab2a02000df38bd6a7e0182b04faa590de06147f"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/preflight_closeout.log",
+      "bytes": 1437,
+      "sha256": "6bc095be950548bd25843963841a2262f2664ebb228b948589ee936c2f3f0fba"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/preflight_final.log",
+      "bytes": 491,
+      "sha256": "43bbc9566e20a063f2244265b4764dca277a552f1a696fa7bc763658c953b0bb"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/products/curve_buildup/machine_axes.csv",
+      "bytes": 6743,
+      "sha256": "755668be789044dd90db752a3f8a469ae02aa8e6dc6cc77f2c32ee4378d65b4f"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/products/curve_buildup/main.gcode",
+      "bytes": 9766,
+      "sha256": "2ca38e097f6e41a9e83f070bbbc43b01de4fd9056ca202bd993b025f31b2e60b"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/products/curve_buildup/manifest.json",
+      "bytes": 151439,
+      "sha256": "c7836a2ba214ad1fae77dfab51d6ce86acf40f03461bbb5d6b581ca3231aa094"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/products/curve_buildup/preview.json",
+      "bytes": 31745,
+      "sha256": "2c9df95df473e79ecb5ca754660a636239ed65f6486410561328fa64f28d95af"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/products/curve_buildup/toolpath.json",
+      "bytes": 62260,
+      "sha256": "c0627cd71c79926728783c349a26b9b78418033b619c1c626f6b4928fbc9d3de"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/products/curve_buildup/warnings.json",
+      "bytes": 974,
+      "sha256": "de6e486d5d935a537e5a897f6c6df4da9b29574a06acfb9f252508a162b51cb1"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/products/curve_multi_pass/machine_axes.csv",
+      "bytes": 20263,
+      "sha256": "5fdc2cbd98d4d524a437583581da2bb71c1f9431c50fe71d7134a6ce8e82f023"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/products/curve_multi_pass/main.gcode",
+      "bytes": 29263,
+      "sha256": "bd98831f80e0040b28223dfcf946513e7b5e0462ba85cadd597f7ec2afe717ab"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/products/curve_multi_pass/manifest.json",
+      "bytes": 375097,
+      "sha256": "bf0d69f646b783f4516cf37f379c97310791b5062143295689fecddd2831249c"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/products/curve_multi_pass/preview.json",
+      "bytes": 96555,
+      "sha256": "998645f84a3cbd272bf047531fe9212e815fb3eb04e48ba0211f8d48c5770a6c"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/products/curve_multi_pass/toolpath.json",
+      "bytes": 187551,
+      "sha256": "c5506ef41d63174e2ba153fca1e541d2c2bb344de6d1991b107f06035839aeac"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/products/curve_multi_pass/warnings.json",
+      "bytes": 983,
+      "sha256": "a61017677a9cba90e2233544e4c4efecd4cdb30b684a5dc50fcfc85c6310c043"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/products/curve_offset_buildup/machine_axes.csv",
+      "bytes": 20270,
+      "sha256": "37b0dec3fe5341c98f9cc15c0e494cd970081953e61ac818855d3a48cc073dce"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/products/curve_offset_buildup/main.gcode",
+      "bytes": 29258,
+      "sha256": "66e88274e81d1bd475cea95e426314c93cb95a1ae1c3d6da7d894ec673e20192"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/products/curve_offset_buildup/manifest.json",
+      "bytes": 375882,
+      "sha256": "2731d08a66e9529aa79ddab557ee969a4a33901261c79c17e8bb8124657d447d"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/products/curve_offset_buildup/preview.json",
+      "bytes": 97439,
+      "sha256": "1d52ad51f6a03c12a906d4a528c0575e52e1867a9e2b6f03e50fcff326b82e3f"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/products/curve_offset_buildup/toolpath.json",
+      "bytes": 188468,
+      "sha256": "78c59987b7cf71df738c92a3d6e0b7f1ca7f726d3f472ffac1fdff041deb4bb9"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/products/curve_offset_buildup/warnings.json",
+      "bytes": 996,
+      "sha256": "ba6ace5e2e4a3e02e143032a37fa7b7dbbdf1db349deedb1f8130a4741310726"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/pytest_curve_closeout_direct.exit.txt",
+      "bytes": 15,
+      "sha256": "8c64b9ef0fc86405876248b7f1322796d1656137dbbec09a17696eaa4f09f70a"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/pytest_curve_closeout_direct.log",
+      "bytes": 205,
+      "sha256": "9cfec5ebf105b3844310c2a098d6add9e826e659b03fc3a24816cb4a4c18813f"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/pytest_curve_closeout_direct_retry1.exit.txt",
+      "bytes": 15,
+      "sha256": "82603b8688c709542cbc00f036b5c7a7bf7bcf8f99f708df2150e234a619c5d2"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/pytest_curve_closeout_direct_retry1.log",
+      "bytes": 118,
+      "sha256": "d8e808fcd1fbada65fc0b4d28ee77f36890271ab5cc57d8ca4997cd80490e626"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/pytest_curve_final.log",
+      "bytes": 117,
+      "sha256": "843b5953c9fd2b7ad858ff449f67f9e7d9e42a46475c9d8dbb25220e07bb1a62"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/pytest_curve_numpy22.log",
+      "bytes": 101,
+      "sha256": "ef08c6506199ca5148109efdea3bee67b0a017ac148223437ced51c394373cb7"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/pytest_full.log",
+      "bytes": 970,
+      "sha256": "e142fc4f476373e49f160af8277438355e6502d3fd2ace3843057864934535bd"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/pytest_full_closeout.exit.txt",
+      "bytes": 15,
+      "sha256": "82603b8688c709542cbc00f036b5c7a7bf7bcf8f99f708df2150e234a619c5d2"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/pytest_full_closeout.log",
+      "bytes": 1997,
+      "sha256": "b6eb31c53a230afcab47842360bce0b6f34ad9904e2561027b137d71718b4f35"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/pytest_full_numpy22.log",
+      "bytes": 970,
+      "sha256": "b9ff0a39981a2295791ae508ee697f089f4e990c6e1c009eb49e0085dc3f593c"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/pytest_native_preview.log",
+      "bytes": 100,
+      "sha256": "5fc7ce8151c9417273d916259f79ee68d5f60e54c2397e6fca4549e7b3fd0a3f"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/pytest_native_preview_closeout.exit.txt",
+      "bytes": 20,
+      "sha256": "551f5ae8f444233f687b2ee8c060f6ee2a381284bda7fd7e9301ca2ed24ff7bb"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/pytest_native_preview_closeout.log",
+      "bytes": 100,
+      "sha256": "9575bb54666382b4187e69a627fe4579d1d0d7f2cd481f6537ebe6871e49ea25"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/twine_check_closeout.exit.txt",
+      "bytes": 14,
+      "sha256": "6bb69237877ad57c2c90c80492d493fca214406077d4bab36982183c03ff6013"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/twine_check_closeout.log",
+      "bytes": 344,
+      "sha256": "5ad6676060152142173be0a33f5b77b0630c904adbe8997925df14809b15130d"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/twine_check_final.log",
+      "bytes": 322,
+      "sha256": "be01f12b027493e2582f6d4354bf33c39ae2a99a50ab36c404d59875b2f757a9"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/twine_check_final_code.log",
+      "bytes": 322,
+      "sha256": "bbf6a79d256e6bd0edfa0d7537b7b8d13b9d0dfd1891382414983c05994b0d44"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/twine_release.exit.txt",
+      "bytes": 14,
+      "sha256": "6bb69237877ad57c2c90c80492d493fca214406077d4bab36982183c03ff6013"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_curve_workbench_final/twine_release.log",
+      "bytes": 380,
+      "sha256": "183f00adfc5431bdb5f62e39808de9e84009b02d694475947d02cea144b5a5af"
+    }
+  ],
+  "machine_boundary": [
+    "Generic XYZAC and offline IK/FK/readback only",
+    "Real controller, calibration, site collision, material qualification, and trial build are unverified"
+  ]
+}
