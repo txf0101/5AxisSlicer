@@ -98,3 +98,10 @@ T08—T12 的实现是本项目独立复写，受本地 Fractal/V1 项目启发�
 | 时间参数化（T11） | [MoveIt 时间参数化教程](https://moveit.picknik.ai/main/doc/examples/time_parameterization/time_parameterization_tutorial.html)用于 TOTG 与 Ruckig 的术语和限制：TOTG 可能偏离原路径，需复查碰撞；Ruckig 用于 jerk 约束。这里是离线轨迹参考，不构成控制器后处理或实机认证。 |
 | 碰撞/截交（T09/T12） | [FCL](https://github.com/flexible-collision-library/fcl)是碰撞检测参考；[OCCT BRepAlgoAPI_Section](https://dev.opencascade.org/doc/refman/html/class_b_rep_algo_a_p_i___section.html)是 B-Rep 截交 API 参考。本项目按自身几何与检查契约独立调用/复写，结果仍属于离线检查。 |
 | 轴与资格边界（T08—T12） | Generic XYZAC 仅作离线参考（含 IK/FK、轴限位、扫掠和检查），不代表具体控制器、后处理器或实机资格。Generic XYZAC 离线参考和本地 Fractal/V1 经验均不能替代注册控制器语义、碰撞复核和现场试切。 |
+
+## 9 P07 支撑行为的公开来源边界
+
+| 编号 | 公开来源与许可证 | 本轮实际核对的行为 | 本项目实现边界 |
+| --- | --- | --- | --- |
+| P07-01 | [Prusa Support material](https://help.prusa3d.com/article/support-material_1698)，Prusa 官方 Support 文档 | 已核对 `Supports on build plate only`、`Overhang threshold`、`Top contact Z distance`、`Top interface layers` 四项支撑参数及其公开说明 | 用于定义 P07 的可观察参数语义和验收边界；文档不公开本项目所需的完整几何、分区、接口生成或五轴路径算法 |
+| P07-02 | [PrusaSlicer](https://github.com/prusa3d/PrusaSlicer) [AGPLv3](https://github.com/prusa3d/PrusaSlicer/blob/master/LICENSE)；[CuraEngine](https://github.com/Ultimaker/CuraEngine) [AGPLv3](https://github.com/Ultimaker/CuraEngine/blob/main/LICENSE) | 两个公开项目的许可证均为 AGPLv3；本登记仅用于许可证和公开行为边界核对 | P07 采用 clean-room 独立实现：不复制或翻译 PrusaSlicer/CuraEngine 源码，不把未逐页读取的 Cura 页面或未核验的上游细节写成行为依据；本项目的支撑几何、状态契约和 Toolpath 输出需独立验证 |

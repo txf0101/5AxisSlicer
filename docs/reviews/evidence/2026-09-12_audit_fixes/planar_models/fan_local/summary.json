@@ -1,0 +1,105 @@
+{
+  "operation": {
+    "operation_id": "audit-fan_local",
+    "setup_id": "setup-1",
+    "name": "Planar Zigzag",
+    "operation_type": "planar_zigzag",
+    "state": "dirty",
+    "dirty_reasons": [
+      "operation_created",
+      "operation_geometry_changed",
+      "operation_parameters_changed"
+    ],
+    "enabled": true,
+    "geometry": {
+      "body": {
+        "object_id": "body_002",
+        "geometry_type": "body",
+        "signature": {
+          "schema_version": 1,
+          "geometry_type": "body",
+          "descriptor": {
+            "kind": "solid",
+            "assembly_path": "Document",
+            "bounds_mm": {
+              "minimum": [
+                3.80980349912531,
+                -51.275592388034404,
+                55.9999998999999
+              ],
+              "maximum": [
+                52.401546397120605,
+                -3.4552711951320503,
+                96.0000001000001
+              ]
+            },
+            "dimensions_mm": [
+              48.591742897995296,
+              47.820321192902355,
+              40.000000200000194
+            ],
+            "volume_mm3": 8000.001755379692,
+            "surface_area_mm2": 5077.756202816643,
+            "centroid_mm": [
+              25.809497467435722,
+              -23.177377209302634,
+              75.99998798190909
+            ],
+            "topology": {
+              "face_count": 6,
+              "edge_count": 12,
+              "vertex_count": 8,
+              "surface_types": {
+                "bsplinesurface": 4,
+                "plane": 2
+              },
+              "curve_types": {
+                "bsplinecurve": 12
+              },
+              "vertex_edge_degrees": [
+                3,
+                3,
+                3,
+                3,
+                3,
+                3,
+                3,
+                3
+              ]
+            }
+          },
+          "parent_body": null,
+          "kernel_signature": "0da6f6caa6e502398238b3da203759190cb780b5f38390df60c6562dc04fabdc"
+        },
+        "parent_body_id": null,
+        "assembly_name": "Document"
+      }
+    },
+    "parameters": {
+      "first_layer_z_mm": 60.0,
+      "layer_height_mm": 0.6,
+      "last_layer_z_mm": 61.2,
+      "bead_width_mm": 0.6,
+      "feedrate_mm_min": 100.0,
+      "line_spacing_mm": 0.6,
+      "travel_feedrate_mm_min": 100.0,
+      "retract_length_mm": 1.0,
+      "offset_pass_count": 3,
+      "wall_thickness_mm": 0.6,
+      "thin_wall_max_passes": 3,
+      "spiral_samples_per_contour": 64,
+      "support_overhang_angle_deg": 45.0,
+      "support_xy_gap_mm": 0.4,
+      "support_z_gap_mm": 0.2,
+      "support_line_spacing_mm": 2.0,
+      "support_interface_layers": 2,
+      "support_interface_spacing_mm": 0.6,
+      "support_pattern": "lines"
+    }
+  },
+  "source_sha256": "291155b64dace255937bbcddb496da4f11f8319a2fe6b9d32aa29a340686befc",
+  "status": "error",
+  "exportable": false,
+  "error": "Planar path Generate requires a valid applied Setup and reviewed resources",
+  "seconds": 0.005504299988388084
+}

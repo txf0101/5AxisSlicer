@@ -1,0 +1,103 @@
+"""Read-only P07 source audit; writes only audit artifacts beside this script."""
+from dataclasses import asdict, replace
+import hashlib
+import json
+from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parent
+FROZEN = ROOT / "frozen"
+sys.path.insert(0, str(FROZEN / "src"))
+
+import cadquery as cq
+from five_axis_slicer.manufacturing.coordinates import GeometryReference, RigidTransform
+from five_axis_slicer.manufacturing.machine import GENERIC_XYZAC_REFERENCE
+from five_axis_slicer.manufacturing.planar_parameters import PlanarGeometrySelection, PlanarOperationDefinition, PlanarProcessParameters
+from five_axis_slicer.manufacturing.resources import NozzleProfile
+from five_axis_slicer.models import BodyInfo, BoundingBox, CadModel
+from five_axis_slicer.postprocessing.planar_product import generate_planar_path_product, export_planar_product
+
+
+def segment_box_interval(a, b, lower, upper):
+    """Independent analytic slab intersection; bounds inset by 1 um."""
+    t0, t1 = 0.0, 1.0
+    for start, end, low, high in zip(a, b, lower, upper):
+        low += 1e-6
+        high -= 1e-6
+        delta = end - start
+        if abs(delta) < 1e-12:
+            if not low < start < high:
+                return None
+            continue
+        first, second = sorted(((low-start)/delta, (high-start)/delta))
+        t0, t1 = max(t0, first), min(t1, second)
+        if t1 <= t0:
+            return None
+    return (t0, t1)
+
+
+def main():
+    out = ROOT.parents[1] / "docs/reviews/evidence/2026-09-12_project_audit/support_probe"
+    out.mkdir(parents=True, exist_ok=True)
+    # One connected solid: column x=4..8, y=2..8, z=0..2.4;
+    # roof x=0..12, y=0..10, z=2.2..3.2.
+    pillar = cq.Workplane("XY").box(4, 6, 2.4).translate((6, 5, 1.2))
+    roof = cq.Workplane("XY").box(12, 10, 1).translate((6, 5, 2.7))
+    shape = pillar.union(roof)
+    path = out / "pillar_roof.step"
+    cq.exporters.export(shape, str(path))
+    bounds = BoundingBox((0, 0, 0), (12, 10, 3.2))
+    model = CadModel(path, hashlib.sha256(path.read_bytes()).hexdigest(),
+        [BodyInfo("body", 1, "Pillar with broad roof", (.8,.8,.8), bounds=bounds)],
+        [], {"body": shape.val().wrapped}, {}, bounds=bounds,
+        source_size_bytes=path.stat().st_size, source_mtime_ns=path.stat().st_mtime_ns)
+    params = PlanarProcessParameters(first_layer_z_mm=.5, layer_height_mm=.5,
+        last_layer_z_mm=3, bead_width_mm=.6, feedrate_mm_min=100,
+        line_spacing_mm=.6, travel_feedrate_mm_min=100,
+        support_overhang_angle_deg=45, support_xy_gap_mm=.4,
+        support_z_gap_mm=0, support_line_spacing_mm=1,
+        support_interface_layers=2, support_interface_spacing_mm=.6,
+        support_pattern="grid")
+    operation = PlanarOperationDefinition("audit-p07", "setup-1", "P07 audit", "planar_support",
+        geometry=PlanarGeometrySelection(GeometryReference("body", "body", {"schema_version": 1})),
+        parameters=params)
+    machine = replace(GENERIC_XYZAC_REFERENCE, joints=tuple(replace(j,
+        soft_limit_min=-1000, soft_limit_max=1000) for j in GENERIC_XYZAC_REFERENCE.joints))
+    nozzle = NozzleProfile("audit-nozzle", "Audit nozzle", .6, 1.75,
+        interface="M6", length_mm=2, outer_profile_rz_mm=((.3,0),(.4,2)))
+    result = generate_planar_path_product(model, operation, machine, nozzle,
+        RigidTransform.identity("build"),
+        T_workpiece_from_build=RigidTransform.from_translation((250,250,250),
+            source_frame="build", target_frame="workpiece"), source_path=path)
+    hits=[]
+    for prev, cur in zip(result.toolpath.points, result.toolpath.points[1:]):
+        if cur.point_type != "travel":
+            continue
+        interval = segment_box_interval(prev.position, cur.position, (4,2,0), (8,8,2.4))
+        if interval:
+            hits.append({"previous": prev.point_id, "current": cur.point_id,
+                "start": prev.position, "end": cur.position, "pillar_interval": interval})
+    if result.exportable:
+        export_planar_product(result, out / "product")
+    summary = {"source_root": str(FROZEN), "model": str(path),
+        "input_sha256": model.source_sha256 if hasattr(model, "source_sha256") else hashlib.sha256(path.read_bytes()).hexdigest(),
+        "exportable": result.exportable, "status": result.manifest.status.value,
+        "operation": operation.to_json(),
+        "probe_script": str(Path(__file__).resolve()),
+        "probe_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        "issues": [issue.to_json() for issue in result.validation.issues],
+        "readback_passed": result.readback.passed,
+        "measurement": asdict(result.validation.measurement),
+        "point_count": len(result.toolpath.points),
+        "travel_intersecting_pillar_count": len(hits), "travel_hits": hits,
+        "source_hashes": {name: hashlib.sha256((FROZEN / name).read_bytes()).hexdigest()
+            for name in ("src/five_axis_slicer/algorithms/planar/support.py",
+                "src/five_axis_slicer/algorithms/planar/zigzag.py",
+                "src/five_axis_slicer/validation/planar.py",
+                "src/five_axis_slicer/postprocessing/planar_product.py")}}
+    (out / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(json.dumps(summary, ensure_ascii=False, indent=2))
+
+
+if __name__ == "__main__":
+    main()

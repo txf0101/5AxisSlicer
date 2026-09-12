@@ -1,0 +1,100 @@
+"""Small adapter from persisted Planar support parameters to domain geometry."""
+
+from __future__ import annotations
+
+from collections.abc import Callable
+import math
+
+from ..algorithms.planar.region import PlanarSliceLayer
+from ..algorithms.planar.support import (
+    SupportDiagnostic,
+    SupportParameters,
+    SupportPlan,
+    generate_support_plan,
+    generate_support_toolpath,
+)
+from ..manufacturing.planar_parameters import PlanarOperationDefinition, PlanarProcessParameters
+from ..manufacturing.toolpath import GeneratedToolpath
+
+
+def build_planar_support_geometry(
+    operation: PlanarOperationDefinition,
+    layers: tuple[PlanarSliceLayer, ...],
+    *,
+    cancelled: Callable[[], bool] | None = None,
+) -> tuple[
+    GeneratedToolpath,
+    tuple[SupportDiagnostic, ...],
+    tuple[PlanarSliceLayer, ...],
+]:
+    """Build support paths plus their independent measurement domains."""
+
+    values = operation.parameters
+    _require_buildplate_first_layer(values)
+    support_parameters = _domain_parameters(values)
+    plan = generate_support_plan(layers, support_parameters, cancelled=cancelled)
+    toolpath = generate_support_toolpath(
+        operation.operation_id,
+        plan,
+        support_parameters,
+        deposition_feedrate_mm_min=values.feedrate_mm_min,
+        travel_feedrate_mm_min=values.travel_feedrate_mm_min,
+        retract_length_mm=values.retract_length_mm,
+        cancelled=cancelled,
+    )
+    if not toolpath.points:
+        _raise_empty_plan(plan)
+    measurement_layers = tuple(
+        PlanarSliceLayer(
+            layer.layer_id,
+            layer.z_mm,
+            (*layer.body_regions, *layer.interface_regions),
+        )
+        for layer in plan.layers
+    )
+    return toolpath, plan.diagnostics, measurement_layers
+
+
+def _require_buildplate_first_layer(values: PlanarProcessParameters) -> None:
+    if not math.isclose(
+        values.first_layer_z_mm,
+        values.layer_height_mm,
+        rel_tol=1.0e-7,
+        abs_tol=1.0e-7,
+    ):
+        raise ValueError(
+            "planar.support_buildplate_first_layer_required: first layer Z must equal "
+            "one layer height above Build Z=0"
+        )
+
+
+def _domain_parameters(values: PlanarProcessParameters) -> SupportParameters:
+    return SupportParameters(
+        layer_height_mm=values.layer_height_mm,
+        overhang_angle_rad=math.radians(values.support_overhang_angle_deg),
+        xy_gap_mm=values.support_xy_gap_mm,
+        z_gap_mm=values.support_z_gap_mm,
+        interface_layers=values.support_interface_layers,
+        line_spacing_mm=values.support_line_spacing_mm,
+        interface_spacing_mm=values.support_interface_spacing_mm,
+        bead_width_mm=values.bead_width_mm,
+        pattern=values.support_pattern,
+    )
+
+
+def _raise_empty_plan(plan: SupportPlan) -> None:
+    unreachable = tuple(
+        diagnostic
+        for diagnostic in plan.diagnostics
+        if diagnostic.code == "planar.support_unreachable_from_buildplate"
+    )
+    if unreachable:
+        unserved_area = sum(diagnostic.area_mm2 for diagnostic in unreachable)
+        raise ValueError(
+            "planar.support_unreachable_from_buildplate: "
+            f"{unserved_area:.6g} mm^2 has no vertical route from the build plate"
+        )
+    raise ValueError("planar.support_not_required: selected layers require no support")
+
+
+__all__ = ["build_planar_support_geometry"]

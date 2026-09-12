@@ -1,0 +1,410 @@
+"""OCCT-backed inward offsets for planar contour fill.
+
+Coordinates are in Workpiece Build CS and lengths are mm. The material
+domain is an outer wire minus its holes, so inward offsets shrink the outer
+boundary while expanding hole boundaries.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+import math
+
+import cadquery as cq
+from OCP.BRepOffsetAPI import BRepOffsetAPI_MakeOffset
+from OCP.GeomAbs import GeomAbs_Arc
+
+from ...models import Vector3
+from ...step_topology import sample_edge_points
+from .region import PlanarRegion
+
+_GEOMETRY_TOLERANCE = 1.0e-7
+_AREA_TOLERANCE = 1.0e-8
+
+
+class PlanarOffsetError(ValueError):
+    def __init__(self, code: str, detail: str) -> None:
+        self.code = code
+        self.detail = detail
+        super().__init__(f"{code}: {detail}")
+
+
+@dataclass(frozen=True, slots=True)
+class OffsetDiagnostic:
+    code: str
+    region_id: str
+    pass_index: int
+    detail: str
+
+
+@dataclass(frozen=True, slots=True)
+class OffsetResult:
+    contours: tuple[tuple[Vector3, ...], ...]
+    diagnostics: tuple[OffsetDiagnostic, ...]
+    contour_pass_indices: tuple[int, ...] = ()
+    residual_contours: tuple[tuple[Vector3, ...], ...] = ()
+    residual_area_mm2: float = 0.0
+
+
+def inset_region(region: PlanarRegion, distance_mm: float) -> tuple[PlanarRegion, ...]:
+    """Return the material domain after an inset, preserving holes and split islands.
+
+    The returned identifiers identify local inset islands; callers retain the
+    input region identifier on Toolpath points as their source provenance.
+    """
+    if not math.isfinite(distance_mm) or distance_mm < 0:
+        raise PlanarOffsetError("planar.offset_parameter_invalid", "invalid inset distance")
+    if distance_mm == 0:
+        return (region,)
+    face, problem = _prepare_region(region)
+    if problem is not None:
+        raise PlanarOffsetError(*problem)
+    assert face is not None
+    loops, problem = _offset_loops(face, distance_mm)
+    if problem is not None:
+        raise PlanarOffsetError(*problem)
+    outers = [loop for loop in loops if _area(loop) > 0]
+    holes = [loop for loop in loops if _area(loop) < 0]
+    return tuple(
+        PlanarRegion(
+            f"{region.region_id}-inset-{index}",
+            outer,
+            tuple(hole for hole in holes if _contains(hole[0], outer)),
+        )
+        for index, outer in enumerate(outers, 1)
+    )
+
+
+def inward_offsets(
+    region: PlanarRegion,
+    spacing_mm: float,
+    pass_count: int,
+    *,
+    initial_offset_mm: float | None = None,
+) -> OffsetResult:
+    """Generate successive closed contour passes for one material region.
+
+    A narrow neck may split into multiple contours. They remain on the same
+    pass and are sorted deterministically. ``residual_*`` measures the domain
+    left beyond half a bead width after the final requested centreline.
+    """
+
+    _validate_parameters(spacing_mm, pass_count)
+    initial = spacing_mm if initial_offset_mm is None else float(initial_offset_mm)
+    if not math.isfinite(initial) or initial <= 0.0:
+        raise PlanarOffsetError(
+            "planar.offset_parameter_invalid", "initial offset must be finite and positive"
+        )
+    prepared, problem = _prepare_region(region)
+    if problem is not None:
+        return _diagnostic(region, problem[0], problem[1])
+    assert prepared is not None
+
+    contours: list[tuple[Vector3, ...]] = []
+    pass_indices: list[int] = []
+    for pass_index in range(1, pass_count + 1):
+        distance = initial + (pass_index - 1) * spacing_mm
+        loops, error = _offset_loops(prepared, distance)
+        if error is not None:
+            diagnostic = OffsetDiagnostic(error[0], region.region_id, pass_index, error[1])
+            return OffsetResult(tuple(contours), (diagnostic,), tuple(pass_indices))
+        if not loops:
+            diagnostic = OffsetDiagnostic(
+                "planar.offset_region_disappeared",
+                region.region_id,
+                pass_index,
+                "inset consumed every material island",
+            )
+            return OffsetResult(tuple(contours), (diagnostic,), tuple(pass_indices))
+        contours.extend(loops)
+        pass_indices.extend([pass_index] * len(loops))
+
+    residuals, residual_error = _offset_loops(prepared, initial + (pass_count - 0.5) * spacing_mm)
+    diagnostics: tuple[OffsetDiagnostic, ...] = ()
+    if residual_error is not None:
+        diagnostics = (
+            OffsetDiagnostic(residual_error[0], region.region_id, pass_count, residual_error[1]),
+        )
+        residuals = ()
+    return OffsetResult(
+        tuple(contours),
+        diagnostics,
+        tuple(pass_indices),
+        residuals,
+        _material_area(residuals),
+    )
+
+
+def inward_offsets_for_regions(
+    regions: tuple[PlanarRegion, ...],
+    spacing_mm: float,
+    pass_count: int,
+    *,
+    initial_offset_mm: float | None = None,
+) -> tuple[tuple[str, OffsetResult], ...]:
+    """Offset independent islands in stable region-id order."""
+
+    if len({region.region_id for region in regions}) != len(regions):
+        raise PlanarOffsetError("planar.offset_region_id_duplicate", "region ids must be unique")
+    return tuple(
+        (
+            region.region_id,
+            inward_offsets(
+                region,
+                spacing_mm,
+                pass_count,
+                initial_offset_mm=initial_offset_mm,
+            ),
+        )
+        for region in sorted(regions, key=lambda item: item.region_id)
+    )
+
+
+def _validate_parameters(spacing_mm: float, pass_count: int) -> None:
+    if (
+        not math.isfinite(spacing_mm)
+        or spacing_mm <= 0.0
+        or isinstance(pass_count, bool)
+        or not isinstance(pass_count, int)
+        or pass_count < 1
+    ):
+        raise PlanarOffsetError(
+            "planar.offset_parameter_invalid", "spacing must be finite and pass count positive"
+        )
+
+
+def _prepare_region(
+    region: PlanarRegion,
+) -> tuple[cq.Face | None, tuple[str, str] | None]:
+    outer = _remove_collinear_points(_remove_duplicate_points(region.outer))
+    holes = tuple(_remove_collinear_points(_remove_duplicate_points(hole)) for hole in region.holes)
+    loops = (outer, *holes)
+    if any(len(loop) < 4 for loop in loops):
+        return None, ("planar.offset_geometry_invalid", "loop has fewer than three vertices")
+    if any(not _finite_coplanar(loop, region.outer[0][2]) for loop in loops):
+        return None, ("planar.offset_geometry_invalid", "loops must be finite and coplanar")
+    if any(_self_intersects(loop) for loop in loops):
+        return None, ("planar.offset_self_intersection", "input loop crosses itself")
+    if any(abs(_area(loop)) <= _AREA_TOLERANCE for loop in loops):
+        return None, ("planar.offset_geometry_invalid", "loop area is degenerate")
+    if _invalid_hole_topology(outer, holes):
+        return None, (
+            "planar.offset_hole_topology_invalid",
+            "holes must be disjoint and inside outer",
+        )
+    try:
+        outer_wire = _wire(_orient(outer, True))
+        hole_wires = [_wire(_orient(hole, False)) for hole in holes]
+        return cq.Face.makeFromWires(outer_wire, hole_wires), None
+    except Exception as error:
+        return None, ("planar.offset_kernel_input_invalid", str(error))
+
+
+def _offset_loops(
+    face: cq.Face, distance_mm: float
+) -> tuple[tuple[tuple[Vector3, ...], ...], tuple[str, str] | None]:
+    try:
+        operation = BRepOffsetAPI_MakeOffset()
+        operation.Init(face.wrapped, GeomAbs_Arc, False)
+        operation.Perform(-distance_mm)
+        if not operation.IsDone():
+            return (), ("planar.offset_kernel_failed", f"offset {distance_mm:g} mm failed")
+        wires = cq.Shape.cast(operation.Shape()).Wires()
+        loops = tuple(_wire_loop(wire) for wire in wires)
+    except Exception as error:
+        return (), ("planar.offset_kernel_failed", str(error))
+    loops = tuple(loop for loop in loops if abs(_area(loop)) > _AREA_TOLERANCE)
+    if any(_self_intersects(loop) for loop in loops):
+        return (), ("planar.offset_output_self_intersection", "OCCT returned a crossing loop")
+    return _normalise_output(loops), None
+
+
+def _wire(loop: tuple[Vector3, ...]) -> cq.Wire:
+    return cq.Wire.makePolygon(loop[:-1], close=True)
+
+
+def _wire_loop(wire: cq.Wire) -> tuple[Vector3, ...]:
+    chains = [
+        sample_edge_points(edge.wrapped, 1 if edge.geomType() == "LINE" else 12)
+        for edge in wire.Edges()
+    ]
+    chains = [chain for chain in chains if len(chain) >= 2]
+    if not chains:
+        return ()
+    loop = chains.pop(0)
+    while chains:
+        end = loop[-1]
+        options = [
+            (math.dist(end, point), index, reverse)
+            for index, chain in enumerate(chains)
+            for point, reverse in ((chain[0], False), (chain[-1], True))
+        ]
+        distance, index, reverse = min(options)
+        if distance > 1.0e-5:
+            raise ValueError(f"offset wire has a {distance:g} mm gap")
+        chain = chains.pop(index)
+        if reverse:
+            chain.reverse()
+        loop.extend(chain[1:])
+    if math.dist(loop[0], loop[-1]) > 1.0e-5:
+        loop.append(loop[0])
+    else:
+        loop[-1] = loop[0]
+    return _remove_collinear_points(_remove_duplicate_points(tuple(loop)))
+
+
+def _normalise_output(
+    loops: tuple[tuple[Vector3, ...], ...],
+) -> tuple[tuple[Vector3, ...], ...]:
+    records = []
+    for index, loop in enumerate(loops):
+        depth = sum(
+            _contains(loop[0], other)
+            for other_index, other in enumerate(loops)
+            if other_index != index
+        )
+        records.append(_rotate_closed(_orient(loop, depth % 2 == 0)))
+    return tuple(sorted(records, key=lambda loop: (-abs(_area(loop)), loop[0])))
+
+
+def _material_area(loops: tuple[tuple[Vector3, ...], ...]) -> float:
+    total = 0.0
+    for index, loop in enumerate(loops):
+        depth = sum(
+            _contains(loop[0], other)
+            for other_index, other in enumerate(loops)
+            if other_index != index
+        )
+        total += abs(_area(loop)) * (-1.0 if depth % 2 else 1.0)
+    return total
+
+
+def _invalid_hole_topology(
+    outer: tuple[Vector3, ...], holes: tuple[tuple[Vector3, ...], ...]
+) -> bool:
+    for index, hole in enumerate(holes):
+        if not _contains(hole[0], outer) or _loops_intersect(hole, outer):
+            return True
+        for other in holes[index + 1 :]:
+            if (
+                _loops_intersect(hole, other)
+                or _contains(hole[0], other)
+                or _contains(other[0], hole)
+            ):
+                return True
+    return False
+
+
+def _finite_coplanar(loop: tuple[Vector3, ...], z_mm: float) -> bool:
+    return all(
+        all(math.isfinite(value) for value in point) and abs(point[2] - z_mm) <= 1e-6
+        for point in loop
+    )
+
+
+def _self_intersects(loop: tuple[Vector3, ...]) -> bool:
+    segments = list(zip(loop, loop[1:]))
+    count = len(segments)
+    return any(
+        _segments_intersect(*segments[left], *segments[right])
+        for left in range(count)
+        for right in range(left + 1, count)
+        if right != left + 1 and not (left == 0 and right == count - 1)
+    )
+
+
+def _loops_intersect(left: tuple[Vector3, ...], right: tuple[Vector3, ...]) -> bool:
+    return any(
+        _segments_intersect(a, b, c, d)
+        for a, b in zip(left, left[1:])
+        for c, d in zip(right, right[1:])
+    )
+
+
+def _segments_intersect(a: Vector3, b: Vector3, c: Vector3, d: Vector3) -> bool:
+    values = (_cross(a, b, c), _cross(a, b, d), _cross(c, d, a), _cross(c, d, b))
+    if (
+        values[0] * values[1] < -_GEOMETRY_TOLERANCE
+        and values[2] * values[3] < -_GEOMETRY_TOLERANCE
+    ):
+        return True
+    candidates = (
+        (values[0], c, a, b),
+        (values[1], d, a, b),
+        (values[2], a, c, d),
+        (values[3], b, c, d),
+    )
+    return any(
+        abs(value) <= _GEOMETRY_TOLERANCE and _on_segment(point, left, right)
+        for value, point, left, right in candidates
+    )
+
+
+def _cross(a: Vector3, b: Vector3, c: Vector3) -> float:
+    return (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0])
+
+
+def _on_segment(point: Vector3, left: Vector3, right: Vector3) -> bool:
+    return (
+        min(left[0], right[0]) - _GEOMETRY_TOLERANCE
+        <= point[0]
+        <= max(left[0], right[0]) + _GEOMETRY_TOLERANCE
+        and min(left[1], right[1]) - _GEOMETRY_TOLERANCE
+        <= point[1]
+        <= max(left[1], right[1]) + _GEOMETRY_TOLERANCE
+    )
+
+
+def _contains(point: Vector3, loop: tuple[Vector3, ...]) -> bool:
+    x, y = point[:2]
+    crossings = sum(
+        (a[1] > y) != (b[1] > y) and x < (b[0] - a[0]) * (y - a[1]) / (b[1] - a[1]) + a[0]
+        for a, b in zip(loop, loop[1:])
+    )
+    return crossings % 2 == 1
+
+
+def _remove_duplicate_points(loop: tuple[Vector3, ...]) -> tuple[Vector3, ...]:
+    points = [loop[0]]
+    for point in loop[1:]:
+        if math.dist(points[-1], point) > 1.0e-9:
+            points.append(point)
+    if points[-1] != points[0]:
+        points.append(points[0])
+    return tuple(points)
+
+
+def _remove_collinear_points(loop: tuple[Vector3, ...]) -> tuple[Vector3, ...]:
+    vertices = loop[:-1]
+    if len(vertices) <= 3:
+        return loop
+    kept = []
+    for index, point in enumerate(vertices):
+        previous = vertices[index - 1]
+        following = vertices[(index + 1) % len(vertices)]
+        span = math.dist(previous, following)
+        distance = abs(_cross(previous, following, point)) / span if span > 1.0e-12 else 0.0
+        if distance > _GEOMETRY_TOLERANCE:
+            kept.append(point)
+    if len(kept) < 3:
+        return loop
+    return (*kept, kept[0])
+
+
+def _rotate_closed(loop: tuple[Vector3, ...]) -> tuple[Vector3, ...]:
+    vertices = loop[:-1]
+    index = min(range(len(vertices)), key=lambda item: vertices[item])
+    ordered = vertices[index:] + vertices[:index]
+    return (*ordered, ordered[0])
+
+
+def _orient(loop: tuple[Vector3, ...], ccw: bool) -> tuple[Vector3, ...]:
+    return loop if (_area(loop) > 0.0) == ccw else tuple(reversed(loop))
+
+
+def _area(loop: tuple[Vector3, ...]) -> float:
+    return 0.5 * sum(a[0] * b[1] - b[0] * a[1] for a, b in zip(loop, loop[1:]))
+
+
+def _diagnostic(region: PlanarRegion, code: str, detail: str) -> OffsetResult:
+    return OffsetResult((), (OffsetDiagnostic(code, region.region_id, 0, detail),))

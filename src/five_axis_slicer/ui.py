@@ -36,12 +36,13 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
-from . import model_commit
+from . import model_commit, planar_shell
 from .automation import AutomationServer
 from .automation_routes import AutomationRouter
 from .background_load import ResultLoadCoordinator
 from .gcode_preview import ROLE_COLORS, rgb_to_hex, role_label
 from .localization import tr
+from .manufacturing.own_printer import default_printer_setup
 from .manufacturing.preview_kinematics import (
     AC_INVERSE_TRANSFORM,
     MACHINE_COORDINATE_TRANSFORM,
@@ -685,19 +686,27 @@ class MainWindow(QMainWindow):
 
         with model_commit.publication_transaction(self):
             previous_controller = self.tube_page.controller
+            previous_planar = self.planar_page.controller
             previous_source = previous_controller.state_json()["source"]["hash"]
             previous_operations = previous_controller.operations
             self.model = model
             self._original_step_path = Path(model.source_path).expanduser().resolve()
             self.viewer.load_model(model)
             if previous_source is None:
-                controller = TubeSetupController(model, operations=previous_operations)
+                controller = TubeSetupController(
+                    model, setup=previous_controller.setup, operations=previous_operations
+                )
             elif previous_source == model.source_hash:
                 controller = self.tube_page.controller
                 controller.attach_cad_model(model, mark_modified=False)
             else:
-                controller = TubeSetupController(model)
+                controller = TubeSetupController(model, setup=default_printer_setup())
             self.tube_page.set_controller(controller, model)
+            planar_controller = planar_shell.controller_for_model(
+                previous_planar, controller.setup, model
+            )
+            self.planar_page.set_controller(planar_controller)
+            self.planar_command_service = self.planar_page.commands
             if controller is not previous_controller:
                 self.last_project_dir = None
             model_commit.refresh_publication_ui(self)
@@ -768,8 +777,12 @@ class MainWindow(QMainWindow):
 
         controller = self.tube_page.controller
         result = controller.update_cad_model(model)
+        planar_controller = self.planar_page.controller
+        planar_shell.sync_source_update(planar_controller, controller.setup, model)
         self.viewer.load_model(model)
         self.tube_page.set_controller(controller, model)
+        self.planar_page.set_controller(planar_controller)
+        self.planar_command_service = self.planar_page.commands
         self.model = model
         self._original_step_path = Path(model.source_path).expanduser().resolve()
         model_commit.refresh_publication_ui(self)
@@ -970,10 +983,14 @@ class MainWindow(QMainWindow):
         # Construct and validate the candidate controller before publishing any
         # model or Viewer state. Structural operation errors therefore leave
         # the previously committed project untouched.
+        tube_operations, planar_operations = planar_shell.split_operations(loaded.operations)
         controller = TubeSetupController(
             loaded.model,
             setup=setup,
-            operations=loaded.operations,
+            operations=tube_operations,
+        )
+        planar_controller = planar_shell.PlanarController(
+            loaded.model, setup=setup, operations=planar_operations
         )
         self.tube_script_service.prepare_project_controller(
             controller,
@@ -1014,6 +1031,8 @@ class MainWindow(QMainWindow):
             else:
                 self.viewer.load_gcode_preview(loaded.gcode_preview)
             self.tube_page.set_controller(controller, loaded.model)
+            self.planar_page.set_controller(planar_controller)
+            self.planar_command_service = self.planar_page.commands
             if loaded.model is not None:
                 self.tube_page.viewer.set_selection(
                     body_ids=list(loaded.selection.body_ids),
@@ -1245,7 +1264,7 @@ class MainWindow(QMainWindow):
                 self.viewer.preview_settings,
                 result_preview_state=self.result_page.state,
                 setup=controller.setup,
-                operations=controller.operations,
+                operations=controller.operations + self.planar_page.controller.operations,
                 resources=self.tube_page.project_resources(),
                 original_source_path=self._original_step_path,
             )
@@ -1330,6 +1349,7 @@ class MainWindow(QMainWindow):
             "selection": selection_viewer.selection.to_json(),
             "preview": self.viewer.preview_state(),
             "tube": tube_state,
+            "planar": self.planar_page.state_json(),
             "results": self.result_page.state_json(),
             "result_load_metrics": self._public_load_metrics(),
         }
@@ -1337,6 +1357,10 @@ class MainWindow(QMainWindow):
     def enter_workbench(self, key: str) -> None:
         if key not in {workbench.key for workbench in WORKBENCHES}:
             raise RuntimeError(f"Unknown workbench: {key}")
+        if key == "planar" and planar_shell.sync_shared_setup(
+            self.planar_page.controller, self.tube_page.controller.setup
+        ):
+            self.planar_page.refresh()
         self.current_workbench_key = key
         if key == "tube":
             self.current_operation = (
@@ -1344,6 +1368,8 @@ class MainWindow(QMainWindow):
                 if self.tube_page.controller.operations
                 else "tube_setup"
             )
+        elif key == "planar":
+            self.current_operation = planar_shell.current_operation(self.planar_page.controller)
         else:
             self.current_operation = "imported_nc_review"
         self._update_operation_combo()
@@ -1435,6 +1461,7 @@ class MainWindow(QMainWindow):
         self.checks_title.setText(tr(self.language, "checks_title"))
         self.result_page.retranslate(self.language)
         self.tube_page.set_language(self.language)
+        self.planar_page.set_language(self.language)
         for group, key in self.localized_groups:
             group.setTitle(tr(self.language, key))
         for label, key in self.localized_labels:
@@ -1536,6 +1563,8 @@ class MainWindow(QMainWindow):
         self.tube_page.update_source_requested.connect(self._update_model_from_source_ui)
         self.tube_page.save_requested.connect(self.save_project_dialog)
         self.tube_page.error_raised.connect(self.show_error)
+        self.planar_page = planar_shell.install_planar_page(self)
+        self.planar_command_service = self.planar_page.commands
         self.result_page = ResultPreviewPage(
             viewer_factory=self._result_viewer_factory, parent=self
         )
@@ -1550,6 +1579,7 @@ class MainWindow(QMainWindow):
         self.stack.addWidget(self.home_page)
         self.stack.addWidget(self.session_page)
         self.stack.addWidget(self.tube_page)
+        self.stack.addWidget(self.planar_page)
         self.stack.addWidget(self.result_page)
         self.stack.currentChanged.connect(lambda _index: self._update_context_actions())
         self.setCentralWidget(self.stack)
@@ -2128,9 +2158,7 @@ class MainWindow(QMainWindow):
         self.stack.setCurrentWidget(self.home_page)
 
     def _show_session(self) -> None:
-        self.stack.setCurrentWidget(
-            self.tube_page if self.current_workbench_key == "tube" else self.session_page
-        )
+        self.stack.setCurrentWidget(planar_shell.active_session_page(self))
 
     def _show_results(self) -> None:
         self.stack.setCurrentWidget(self.result_page)
@@ -2142,17 +2170,10 @@ class MainWindow(QMainWindow):
         self._show_results()
 
     def _current_page_name(self) -> str:
-        current = self.stack.currentWidget()
-        if current is self.result_page:
-            return "results"
-        if current is self.tube_page:
-            return "tube"
-        if current is self.session_page:
-            return "session"
-        return "workbench"
+        return planar_shell.page_name(self)
 
     def _open_model_from_shell(self) -> None:
-        if self.stack.currentWidget() in {self.session_page, self.tube_page}:
+        if self.stack.currentWidget() in {self.session_page, self.tube_page, self.planar_page}:
             self.open_model_dialog()
         else:
             self.open_result_model_dialog()
@@ -2524,6 +2545,8 @@ class MainWindow(QMainWindow):
                 self.operation_combo.addItem(operation.name, operation.operation_type)
             else:
                 self.operation_combo.addItem("Tube Setup", "tube_setup")
+        elif self.current_workbench_key == "planar":
+            planar_shell.populate_operation_combo(self.operation_combo, self.planar_page.controller)
         else:
             self.operation_combo.addItem(
                 tr(self.language, "operation_imported_nc"), "imported_nc_review"
@@ -2683,6 +2706,8 @@ class MainWindow(QMainWindow):
                 if self.tube_page.controller.operations
                 else "Tube Setup"
             )
+        elif self.current_workbench_key == "planar":
+            operation_label = planar_shell.operation_label(self.planar_page.controller)
         else:
             operation_label = (
                 tr(self.language, "operation_imported_nc")

@@ -1,0 +1,76 @@
+[
+  {
+    "model": "example/三叶扇/Supportless_sample.stp",
+    "body": "body_002",
+    "z_mm": 67.7,
+    "valid_brep": true,
+    "section_done": true,
+    "edge_count": 4,
+    "vertex_count": 4,
+    "all_vertex_degrees_two": true,
+    "vertices": [
+      {
+        "degree": 2,
+        "tolerance_mm": 0.00018876908414021016,
+        "vertex_id": 1,
+        "max_shared_vertex_curve_endpoint_gap_mm": 0.00011159295254950097
+      },
+      {
+        "degree": 2,
+        "tolerance_mm": 5.000001000000001e-06,
+        "vertex_id": 2,
+        "max_shared_vertex_curve_endpoint_gap_mm": 1.0048591735576161e-14
+      },
+      {
+        "degree": 2,
+        "tolerance_mm": 0.00018876908413920166,
+        "vertex_id": 3,
+        "max_shared_vertex_curve_endpoint_gap_mm": 0.00011159295253264781
+      },
+      {
+        "degree": 2,
+        "tolerance_mm": 5.000001000000001e-06,
+        "vertex_id": 4,
+        "max_shared_vertex_curve_endpoint_gap_mm": 3.8263897345803626e-14
+      }
+    ],
+    "largest_shared_endpoint_gap_mm": 0.00011159295254950097
+  },
+  {
+    "model": "example/叶轮/叶轮.stp",
+    "body": "body_002",
+    "z_mm": 20.6,
+    "valid_brep": true,
+    "section_done": true,
+    "edge_count": 4,
+    "vertex_count": 4,
+    "all_vertex_degrees_two": true,
+    "vertices": [
+      {
+        "degree": 2,
+        "tolerance_mm": 5.000000007944304e-06,
+        "vertex_id": 1,
+        "max_shared_vertex_curve_endpoint_gap_mm": 7.105644194726877e-15
+      },
+      {
+        "degree": 2,
+        "tolerance_mm": 5e-06,
+        "vertex_id": 2,
+        "max_shared_vertex_curve_endpoint_gap_mm": 0.0
+      },
+      {
+        "degree": 2,
+        "tolerance_mm": 0.019357858720414296,
+        "vertex_id": 3,
+        "max_shared_vertex_curve_endpoint_gap_mm": 0.000290902733967955
+      },
+      {
+        "degree": 2,
+        "tolerance_mm": 0.003612773109495249,
+        "vertex_id": 4,
+        "max_shared_vertex_curve_endpoint_gap_mm": 0.00018235021137862943
+      }
+    ],
+    "largest_shared_endpoint_gap_mm": 0.000290902733967955
+  }
+]

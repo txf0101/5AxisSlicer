@@ -1,0 +1,7 @@
+{"case": "rectangle", "status": "warning", "exportable": true, "seconds": 0.16152779999538325, "error": null, "issues": ["xyzac.rotary_singularity"]}
+{"case": "fan_local", "status": "warning", "exportable": true, "seconds": 3.1669852000050014, "error": null, "issues": ["xyzac.rotary_singularity"]}
+{"case": "fan_full", "status": "error", "exportable": false, "seconds": 64.01032260000648, "error": null, "issues": ["xyzac.rotary_singularity", "planar.material_exceeds_solid_volume", "planar.material_exceeds_solid_volume", "planar.material_exceeds_solid_volume", "planar.material_exceeds_solid_volume", "planar.material_exceeds_solid_volume"]}
+{"case": "fan_spiral", "status": "warning", "exportable": true, "seconds": 96.51410439999017, "error": null, "issues": ["xyzac.rotary_singularity", "planar.spiral_cad_sampled"]}
+{"case": "pipe_local", "status": "error", "exportable": false, "seconds": 16.207091600008425, "error": null, "issues": ["xyzac.rotary_singularity", "planar.material_exceeds_solid_volume", "planar.material_exceeds_solid_volume", "planar.material_exceeds_solid_volume"]}
+{"case": "impeller_local", "status": "error", "exportable": false, "seconds": 16.72169700000086, "error": null, "issues": ["xyzac.rotary_singularity", "planar.bead_envelope_outside_region", "planar.material_exceeds_solid_volume", "planar.material_exceeds_solid_volume", "planar.material_exceeds_solid_volume"]}
+{"case": "pipe_bead_04_sparse", "status": "warning", "exportable": true, "seconds": 25.817720799997915, "error": null, "issues": ["xyzac.rotary_singularity"]}

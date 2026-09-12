@@ -1,0 +1,53 @@
+{
+  "task": "I01-OWN",
+  "python": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\tmp\\pytest9\\Scripts\\python.exe",
+  "full_regression": {
+    "passed": 729,
+    "skipped": 3,
+    "subtests_passed": 130,
+    "note": "Before final display-label-only adjustment"
+  },
+  "final_targeted_passed": 6,
+  "final_quality": "quality_v4.log: all gates passed",
+  "limitations": [
+    "No physical printer qualification",
+    "No vendor slicer format converters or verified branded catalog",
+    "Process reference retained in bundled JSON, not automatically applied to operations",
+    "Qt widget rendering, not human desktop interaction",
+    "No full installer build"
+  ],
+  "sha256": {
+    "pyproject.toml": "a01ba740f84072382637eb72fe7be9c76280426a6203cf8d216338d78b1f0a7d",
+    "src/five_axis_slicer/manufacturing/own_printer.py": "2cf489a28b2dada93aa0621d89172003b4382274f966ee5132379dc40d585894",
+    "src/five_axis_slicer/manufacturing/profiles/own_ac_fdm.json": "21abb106660a582d9bc6ab1b4699f18be5585ff9b60c21406d711551a5dd3af9",
+    "src/five_axis_slicer/manufacturing/machine.py": "ab83eed08f9d000c9ae0280871f2de706e4565180b3f4c0d12cfa506bd4cb835",
+    "src/five_axis_slicer/machine_profile_ui.py": "1ccaab4bc70f04263cd4b8c0c46043a931b449a0d462dcaee90ea9def65ce49a",
+    "src/five_axis_slicer/tube_ui.py": "c33513cc3db2076ed2ad6ca411aa3bb47a6dfff9dece3cd8f80ccd3c8193eb6f",
+    "src/five_axis_slicer/ui.py": "94634f70eda88e47b4ef7949dbd34ea9ca8972cbc70591b4d258554fc03795fa",
+    "tests/test_own_printer.py": "a02931e310cb1567f0ceb52e36f41064dce0b03917b27808dab579e7c23885b4",
+    "tests/test_machine_profiles.py": "73fd15d0a5d723162e1a8db9b48d8f226cd18cb8a4c779eabd5a678db5701e2f",
+    "tests/test_tube_ui.py": "74d7bdfd56c6b894c63fc51d93a0b24214bf299cb5e6b9d40f6bb9432ab2d598",
+    "docs/guides/machine_profiles_zh.md": "3ffca185e3cdadcef66a08b4fdb4ad4ff1df260526f2531fc58facfb4254b4b4",
+    "docs/reviews/2026-09-12_own_printer_profile_review.md": "1bd275e94448a0f5bf093b3f1a30e138bc3ea8a6eae0c54dfdf1c6957da06485",
+    "docs/guides/assets/machine_profiles/custom_selected.png": "c1a4f6aafff2c37a1b325732812beb975fc321da302dd035c68872151347584d",
+    "docs/guides/assets/machine_profiles/en_1920x1080.png": "7aa5d1da4b47b6a28816dd2e894a4192ab7f9fd40e36de815399247a7c3c96fb",
+    "docs/guides/assets/machine_profiles/summary.json": "99f097207c1701c1c96dad4147ae9c74b7b091dd6274c5558af446a8fbb92f51",
+    "docs/guides/assets/machine_profiles/zh_1366x768.png": "eb3b57976b4e06bf9ae457a4a53053311160165bc66c74aec361f08c181b9562",
+    "docs/guides/assets/machine_profiles/zh_1600x900.png": "d8395e9644352c3893cd442192c11576b86f0f5280fabbffe36b0f8ecb4853e2",
+    "docs/reviews/evidence/2026-09-12_own_printer/full.log": "24a1ac4dc010a826e7572fe9b1813bebb3f216e2e8f731e91d839621519cef50",
+    "docs/reviews/evidence/2026-09-12_own_printer/full.xml": "62d159f55a18c2b606fd7fccfd03ba6e71cdc0b7f972aa4305ee0ab5b11960c8",
+    "docs/reviews/evidence/2026-09-12_own_printer/initial.log": "cbe83e9d5e8ebd12a51db8a8278eeccd900cf1d18cfd5f28e218c4cddaa72ac1",
+    "docs/reviews/evidence/2026-09-12_own_printer/initial.xml": "1b69f7f47bca4f0c72b5991e058efb0d92df18b2527385c23055154aedb894c9",
+    "docs/reviews/evidence/2026-09-12_own_printer/label_final.log": "f351949dc87fd9398a0d046e8341e7dcb91ff4f0c720f2c2dd7829532b10bc52",
+    "docs/reviews/evidence/2026-09-12_own_printer/label_final.xml": "0e3d307245ff72e230d6d6fd63cb68f0711f4ec05da9540e527f0f2db642d1f8",
+    "docs/reviews/evidence/2026-09-12_own_printer/own_final.log": "3a8c431cf760a9bbfff1b090d63e9871fee349692fcd8666483c4d28db102a06",
+    "docs/reviews/evidence/2026-09-12_own_printer/own_final.xml": "d4d313ca95c2d2a7bbbede8ffb36575f2aec41d26f7a47ee75d2d577806fd109",
+    "docs/reviews/evidence/2026-09-12_own_printer/quality_final.log": "0ffd94c593f06459d2d003da11adc7f945bdf18b564ae702bf89f3074dc95f3b",
+    "docs/reviews/evidence/2026-09-12_own_printer/quality_initial.log": "777ac8225ea1885236af189d6b0043a213d7fa0e72a340640d2b47fde51525e4",
+    "docs/reviews/evidence/2026-09-12_own_printer/quality_v3.log": "dd774e0b71ef187bed67d58d05a14dbbbcfea5ce5182220b092f25892edd6393",
+    "docs/reviews/evidence/2026-09-12_own_printer/quality_v4.log": "dd774e0b71ef187bed67d58d05a14dbbbcfea5ce5182220b092f25892edd6393",
+    "docs/reviews/evidence/2026-09-12_own_printer/targeted.log": "1cdf7e8cd56d8d5692f5a218c5c1e52cbd7802973fe0ab798e1230657fdfe2cc",
+    "docs/reviews/evidence/2026-09-12_own_printer/targeted.xml": "4a7868e9c6f489afa4f0ed4163c9f1d0cc40e2310dcac66c48da79b7d28c830c",
+    "docs/reviews/evidence/2026-09-12_own_printer/ui_capture.py": "ba17c1d9203b433a254441882177a4125ca02d425b1d9a87ac6211ec6faa763b"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "scope": "Planar persisted qualification and Source/Build/static workpiece input contract",
+  "targeted_tests": {
+    "passed": 27,
+    "seconds": 5.33,
+    "junit": "pytest_planar_context_02.xml"
+  },
+  "initial_attempt": {
+    "passed": 22,
+    "failed": 1,
+    "errors": 4,
+    "junit": "pytest_planar_context_01.xml",
+    "cause": "One test used matrix instead of T_target_from_source dataclass field; four tmp_path setups could not access Windows system pytest temp directory. Fixed test and used new workspace basetemp."
+  },
+  "files": [
+    {
+      "path": "src/five_axis_slicer/planar_controller.py",
+      "sha256": "1a8897fe95512864ba3d89798e858f24eca6f5c8d7584bdb2dfff5d2f1d9da4a"
+    },
+    {
+      "path": "src/five_axis_slicer/planar_generation_context.py",
+      "sha256": "a3ffa7a873d131c0b3d2a0f513e2264421cc25a739a421e10600f9fb729c652e"
+    },
+    {
+      "path": "src/five_axis_slicer/postprocessing/planar_product.py",
+      "sha256": "60cc15e20e3d78b05d72088830f9108b025b4b644b954699d26047a876e403ae"
+    },
+    {
+      "path": "tests/test_planar_generation_qualification.py",
+      "sha256": "927f0944ee39621b2e6b06c5eb62f1f7c7248ff29ae5c3dbae70b10ac62760eb"
+    },
+    {
+      "path": "tests/test_planar_zigzag_product.py",
+      "sha256": "a48a2e9171ca98ca826d7de94b64297d965b1cdcfa077415b6f3f4adc8aec556"
+    }
+  ]
+}

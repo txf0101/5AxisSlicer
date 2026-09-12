@@ -1,0 +1,8 @@
+[
+  "src/five_axis_slicer/planar_controller.py",
+  "src/five_axis_slicer/manufacturing/planar_parameters.py",
+  "src/five_axis_slicer/algorithms/planar/support.py",
+  "tests/test_planar_support.py",
+  "tests/test_planar_support_product.py",
+  "scripts/planar_p07_ui_evidence.py"
+]

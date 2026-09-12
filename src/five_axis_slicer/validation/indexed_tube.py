@@ -144,12 +144,28 @@ def _geometry_metrics(
     radial_limit: float,
     spacing_limit: float,
 ) -> list[ValidationMetric]:
-    layer_centers = {layer.layer_id: layer.plane_origin for layer in plan.layers}
     radial_errors = [
-        abs(math.dist(point.position, layer_centers[point.layer_id]) - feature.path_radius_mm)
+        abs(_distance_to_centerline(point.position, feature) - feature.path_radius_mm)
         for point in toolpath.points
-        if point.point_type == "deposition" and point.layer_id in layer_centers
+        if point.point_type == "deposition"
     ]
+    chord_errors = []
+    for left, right in zip(toolpath.points, toolpath.points[1:]):
+        if right.point_type != "deposition" or left.layer_id != right.layer_id:
+            continue
+        left_radius = _distance_to_centerline(left.position, feature)
+        right_radius = _distance_to_centerline(right.position, feature)
+        # Check segment interiors against the independently recognised analytic
+        # centreline, rather than accepting points alone on the exact section.
+        for fraction in (0.25, 0.5, 0.75):
+            interior = _add(
+                left.position, _scale(_subtract(right.position, left.position), fraction)
+            )
+            radius = _distance_to_centerline(interior, feature)
+            radial_errors.append(abs(radius - feature.path_radius_mm))
+            chord_errors.append(
+                abs(radius - ((1 - fraction) * left_radius + fraction * right_radius))
+            )
     expected_centers = _expected_layer_centers(
         feature.centerline_length_mm,
         plan.nominal_layer_height_mm,
@@ -161,6 +177,7 @@ def _geometry_metrics(
     wedge_errors = [region.maximum_height_error_mm for region in plan.regions]
     return [
         _metric("maximum_radial_error", radial_errors, radial_limit, "mm"),
+        _metric("maximum_sampled_chord_error", chord_errors, plan.contour_chord_error_mm, "mm"),
         _metric("maximum_layer_spacing_error", spacing_errors, spacing_limit, "mm"),
         ValidationMetric(
             "maximum_wedge_height_error",
@@ -170,6 +187,33 @@ def _geometry_metrics(
             True,
         ),
     ]
+
+
+def _distance_to_centerline(point: Vector3, feature: TubeFeature) -> float:
+    distances = []
+    for segment in feature.centerline:
+        if segment.kind == "line":
+            distances.append(_point_segment_distance(point, segment.start, segment.end))
+            continue
+        assert segment.center is not None and segment.axis is not None
+        offset = _subtract(point, segment.center)
+        start = _subtract(segment.start, segment.center)
+        radius = math.sqrt(_dot(start, start))
+        u = _scale(start, 1.0 / radius)
+        a = segment.axis
+        v = (a[1] * u[2] - a[2] * u[1], a[2] * u[0] - a[0] * u[2], a[0] * u[1] - a[1] * u[0])
+        angle = math.atan2(_dot(offset, v), _dot(offset, u))
+        signed_angle = angle if segment.sweep_rad >= 0 else -angle
+        fraction = min(1.0, (signed_angle % (2 * math.pi)) / abs(segment.sweep_rad))
+        closest, _ = segment.point_tangent(fraction)
+        distances.append(
+            min(
+                math.dist(point, closest),
+                math.dist(point, segment.start),
+                math.dist(point, segment.end),
+            )
+        )
+    return min(distances)
 
 
 def _metric(name: str, values: list[float], limit: float, unit: str) -> ValidationMetric:

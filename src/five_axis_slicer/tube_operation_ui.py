@@ -343,13 +343,20 @@ def _refresh_product_status(page: Any, *, preserve_message: bool = False) -> Non
         page.operation_generation_status.setText(page._t(f"generation_{status}"))
     page.operation_preview_button.setEnabled(status in {"ready", "warning"})
     page.operation_export_button.setEnabled(status in {"ready", "warning"})
-    page.operation_generate_button.setEnabled(page.model is not None)
+    page.operation_generate_button.setEnabled(
+        page.model is not None and page.controller.setup_ready and not page.controller.has_drafts
+    )
     page.operation_cancel_button.setEnabled(status == "running")
 
 
 def _set_generation_busy(page: Any, busy: bool) -> None:
     page.operation_apply_button.setEnabled(not busy)
-    page.operation_generate_button.setEnabled(not busy and page.model is not None)
+    page.operation_generate_button.setEnabled(
+        not busy
+        and page.model is not None
+        and page.controller.setup_ready
+        and not page.controller.has_drafts
+    )
     if busy:
         page.operation_preview_button.setEnabled(False)
         page.operation_export_button.setEnabled(False)

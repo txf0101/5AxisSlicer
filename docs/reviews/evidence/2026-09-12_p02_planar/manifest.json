@@ -1,0 +1,45 @@
+{
+  "task": "P02",
+  "date": "2026-09-12",
+  "environment": {
+    "interpreter": "tmp/pytest9/Scripts/python.exe",
+    "python": "3.12.7",
+    "pytest": "9.1.1",
+    "basetemp_policy": "project-local unique directories"
+  },
+  "results": {
+    "planar_targeted": "44 passed in 8.89s",
+    "planar_ui_supplement": "44 passed in 8.34s",
+    "real_step": "Supportless_sample.stp body_002 at Z=60 mm: 1 layer, 399 toolpath points, 399 XYZAC samples, readback passed, six files exported",
+    "ui_render": "Qt/OpenGL direct render at 1366x768, 1600x900 and 1920x1080; 327 visible segments; all button text fits and no collisions",
+    "full_regression": "509 passed, 3 skipped, 130 subtests passed in 328.11s",
+    "quality": "Ruff, migrated Ruff, security Ruff, migrated format, context budget and mypy passed; mypy checked 106 source files",
+    "skips": "Three existing Windows symlink privilege cases; not counted as passed"
+  },
+  "files": {
+    "pytest-planar.xml": "c528ef9c1e611025bd67c02ae7d0a48ef0e6f9d3cb1c477cfa4facbdd068f188",
+    "pytest-full.xml": "a370f2835b78003c36c1963511612728c7b48a8653bd11b2db4cbcde33da3214",
+    "src/five_axis_slicer/algorithms/planar/zigzag.py": "6a8a235dd39960b166d9b31b813d273e6e545776e26f79b6fd46fd758901e65b",
+    "src/five_axis_slicer/validation/planar.py": "75aba41c8ddca966b9cd756bdb8396b7849d4d439ba6a2a7402eb7eead985c20",
+    "src/five_axis_slicer/postprocessing/planar_product.py": "8e1839abb3a3d5078e5cf129be52247cca7a946477ac30f30525e756396c0f70",
+    "src/five_axis_slicer/planar_controller.py": "9e6a7db017218c48a0ca922d169087261eacdbbb2c9571b9b589d561826956c6",
+    "src/five_axis_slicer/planar_ui.py": "76d5afecdf178317a3143a132684cc9db29b9a5262cfd9bd178034d92253b191",
+    "src/five_axis_slicer/planar_shell.py": "e9b31a0f66af113ed94154c05429d5aad353c788587cfc335b66164d299a0b2d",
+    "scripts/planar_p02_real_model_evidence.py": "d0f8354d152c786fb09b01f0989d04d142572f5d14a6386c38756596f25c7797",
+    "scripts/planar_p02_ui_evidence.py": "25ab4cb1f4566f97f8f1f7cb0a4b4216a4ab32f3a887498114e4144969fdf428",
+    "docs/guides/planar_workbench_zh.md": "83a0c46ef5fc995a5b016f7af2f7484ebe8b83ef07f5c132342b991d12664d97",
+    "docs/guides/assets/planar/01_planar_zh_1366x768.png": "1a39601420bac8a9627e64316cb554cf59e0994095c1caecc540f2715c038ae2",
+    "docs/guides/assets/planar/02_planar_zh_1600x900_generated.png": "9e2d593b0308d33b63a58383e421741da90097f700dc6011e3b21063b71e9aa0",
+    "docs/guides/assets/planar/03_planar_en_1920x1080.png": "ca5d07a634189ee062e02c358dc7f04feeda6c123d87214947c582411ec5b741",
+    "docs/guides/assets/planar/summary.json": "c604ba082bbf37b71c42d10daa2531a83fe084c6de6d75cfbe8575a40919c569",
+    "docs/reviews/evidence/2026-09-12_p02_planar/real_model/summary.json": "7258e848b2e22425bbbfe4fa36ecaa7d3cc1cd8cbe159ff927294f15387289a9",
+    "pytest-planar-supplement.xml": "ee14c3c976cdf67e81352bc329b4c9e1cea759978a5062e55a02b2e169b21a67",
+    "pytest-full-supplement.xml": "c422792321d1742f4f5449a5f0d891ec54c73b69614c694e5bd80c81b9716fd6"
+  },
+  "model_source": {
+    "path": "example/三叶扇/Supportless_sample.stp",
+    "sha256": "291155b64dace255937bbcddb496da4f11f8319a2fe6b9d32aa29a340686befc",
+    "selected_body": "body_002"
+  },
+  "qualification_boundary": "Generic XYZAC is an offline reference profile. A real controller, real machine calibration, collision qualification and trial deposition were not verified. Computer Use could not enumerate the application, so the screenshots are direct Qt/OpenGL renders rather than human-like desktop click-through evidence."
+}

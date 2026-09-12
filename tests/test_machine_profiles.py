@@ -64,7 +64,7 @@ class MachineProfileValidationTests(unittest.TestCase):
 
         self.assertEqual(
             [profile.name for profile in profiles],
-            ["Cartesian Reference", "Generic XYZAC Reference"],
+            ["自有 AC 五轴打印机 / Own AC FDM", "Cartesian Reference", "Generic XYZAC Reference"],
         )
         for profile in profiles:
             self.assertTrue(profile.reference_only)

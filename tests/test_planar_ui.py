@@ -1,0 +1,241 @@
+import os
+from pathlib import Path
+import sys
+
+os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+import cadquery as cq
+import pytest
+from PyQt5.QtWidgets import QApplication
+
+from five_axis_slicer.manufacturing.coordinates import (
+    CoordinateFrameDefinition,
+    DirectionReference,
+    PointReference,
+)
+from five_axis_slicer.manufacturing.setup import ManufacturingSetup
+from five_axis_slicer.models import BodyInfo, BoundingBox, CadModel
+from five_axis_slicer.planar_controller import PlanarController
+from five_axis_slicer.planar_ui import PlanarPage
+from five_axis_slicer.ui import MainWindow
+from test_tube_ui import TubeViewerStub
+from test_planar_zigzag_product import _setup
+
+APP = QApplication.instance() or QApplication([])
+
+
+def _app() -> QApplication:
+    return APP
+
+
+def _frame(frame_id: str) -> CoordinateFrameDefinition:
+    return CoordinateFrameDefinition.from_references(
+        frame_id,
+        frame_id,
+        PointReference("numeric", (0.0, 0.0, 0.0), confirmed=True),
+        DirectionReference("numeric", (0.0, 0.0, 1.0), confirmed=True),
+        DirectionReference("numeric", (1.0, 0.0, 0.0), confirmed=True),
+    )
+
+
+def _controller() -> PlanarController:
+    shape = cq.Workplane("XY").box(4.0, 4.0, 2.0)
+    body = BodyInfo(
+        "body",
+        1,
+        "body",
+        (0.8, 0.8, 0.8),
+        bounds=BoundingBox((-2.0, -2.0, -1.0), (2.0, 2.0, 1.0)),
+        volume=32.0,
+        surface_area=64.0,
+        centroid=(0.0, 0.0, 0.0),
+    )
+    model = CadModel(
+        Path("planar-ui.step"), "a" * 64, [body], [], {"body": shape.val().wrapped}, {}
+    )
+    setup = ManufacturingSetup(
+        model_coordinate_system=_frame("model"), build_coordinate_system=_frame("build")
+    )
+    return PlanarController(model, setup=setup)
+
+
+def _path_controller() -> PlanarController:
+    controller = _controller()
+    controller.mark_setup_changed(_setup(), reason="test_ready_setup")
+    return controller
+
+
+def test_apply_routes_planar_inputs_through_gui_command_service() -> None:
+    _app()
+    page = PlanarPage(controller=_controller(), viewer_factory=TubeViewerStub)
+    page.create_button.click()
+    page.first_layer_spin.setValue(0.0)
+    page.last_layer_spin.setValue(0.0)
+    page.feedrate_spin.setValue(900.0)
+    page.line_spacing_spin.setValue(0.55)
+    page.travel_feedrate_spin.setValue(1700.0)
+    page.retract_length_spin.setValue(0.8)
+    page.apply_button.click()
+
+    operation = page.controller.operations[0]
+    assert operation.geometry.body is not None
+    assert operation.geometry.body.object_id == "body"
+    assert operation.parameters.feedrate_mm_min == 900.0
+    assert operation.parameters.line_spacing_mm == 0.55
+    assert operation.parameters.travel_feedrate_mm_min == 1700.0
+    assert operation.parameters.retract_length_mm == 0.8
+
+
+def test_apply_routes_p03_p05_parameters_and_english_labels() -> None:
+    page = PlanarPage(controller=_controller(), viewer_factory=TubeViewerStub)
+    page.operation_type_combo.setCurrentIndex(page.operation_type_combo.findData("planar_offset"))
+    page.create_button.click()
+    page.offset_pass_count_spin.setValue(5)
+    page.wall_thickness_spin.setValue(1.2)
+    page.thin_wall_max_passes_spin.setValue(2)
+    page.spiral_samples_spin.setValue(80)
+    page.apply_button.click()
+    page.set_language("en")
+
+    parameters = page.controller.operations[-1].parameters
+    assert parameters.offset_pass_count == 5
+    assert parameters.wall_thickness_mm == 1.2
+    assert parameters.thin_wall_max_passes == 2
+    assert parameters.spiral_samples_per_contour == 80
+    assert "Offset" in page._labels["offset_passes"].text()
+    assert "Spiral" in page._labels["spiral_samples"].text()
+
+
+@pytest.mark.parametrize("operation_type", ["planar_offset", "planar_thin_wall", "planar_spiral"])
+def test_p03_p05_gui_generate_and_export_enable(operation_type: str) -> None:
+    page = PlanarPage(controller=_path_controller(), viewer_factory=TubeViewerStub)
+    page.operation_type_combo.setCurrentIndex(page.operation_type_combo.findData(operation_type))
+    page.create_button.click()
+    page.first_layer_spin.setValue(-0.5 if operation_type == "planar_spiral" else 0.0)
+    page.last_layer_spin.setValue(0.0)
+    page.layer_height_spin.setValue(0.5)
+    page.feedrate_spin.setValue(100.0)
+    page.travel_feedrate_spin.setValue(100.0)
+    page.apply_button.click()
+
+    assert page.generate_button.isEnabled()
+    page.generate_button.click()
+
+    result = page.controller.product_result(page.controller.operations[-1].operation_id)
+    assert result is not None and result.exportable
+    assert page.export_button.isEnabled()
+    assert page.viewer.visible_path_segment_count > 0
+
+
+def test_spiral_gui_reports_error_and_recovers_after_layer_fix() -> None:
+    page = PlanarPage(controller=_path_controller(), viewer_factory=TubeViewerStub)
+    page.operation_type_combo.setCurrentIndex(page.operation_type_combo.findData("planar_spiral"))
+    page.create_button.click()
+    page.first_layer_spin.setValue(0.0)
+    page.last_layer_spin.setValue(0.0)
+    page.feedrate_spin.setValue(100.0)
+    page.travel_feedrate_spin.setValue(100.0)
+    page.apply_button.click()
+
+    page._generate()
+
+    assert "planar.spiral_layers_insufficient" in page.status_label.text()
+    assert not page.export_button.isEnabled()
+
+    page.first_layer_spin.setValue(-0.5)
+    page.last_layer_spin.setValue(0.0)
+    page.layer_height_spin.setValue(0.5)
+    page.apply_button.click()
+    page._generate()
+
+    assert page.export_button.isEnabled()
+    assert "G-code" in page.status_label.text()
+
+
+def test_generate_emits_the_generated_preview_toolpath() -> None:
+    _app()
+    page = PlanarPage(controller=_controller(), viewer_factory=TubeViewerStub)
+    page.create_button.click()
+    page.first_layer_spin.setValue(0.0)
+    page.last_layer_spin.setValue(0.0)
+    page.apply_button.click()
+    previews = []
+    page.preview_ready.connect(previews.append)
+
+    page.generate_button.click()
+
+    assert len(previews) == 1
+    assert previews[0].operation_id == page.controller.operations[0].operation_id
+    assert page.viewer.model is page.controller.cad_model
+    operation_id = page.controller.operations[0].operation_id
+    assert str(page.viewer.gcode_preview.source_path) == f"<generated:{operation_id}>"
+    assert page.viewer.visible_path_segment_count > 0
+
+
+def test_invalid_generation_is_disabled_and_english_text_is_applied() -> None:
+    _app()
+    page = PlanarPage(viewer_factory=TubeViewerStub)
+    page.set_language("en")
+
+    assert not page.generate_button.isEnabled()
+    assert "Open a STEP" in page.status_label.text()
+    assert page.generate_button.text() == "Generate preview"
+
+
+@pytest.mark.parametrize(
+    ("width", "height", "diagnostic"),
+    (
+        (
+            1366,
+            768,
+            "planar.support_region_too_narrow: generated support region contains no "
+            "printable bead-width segment",
+        ),
+        (
+            1920,
+            1080,
+            "planar.support_buildplate_first_layer_required: first requested layer "
+            "must represent the buildplate deposition layer",
+        ),
+    ),
+)
+def test_editor_contains_long_support_status_without_horizontal_overflow(
+    width: int, height: int, diagnostic: str
+) -> None:
+    page = PlanarPage(controller=_path_controller(), viewer_factory=TubeViewerStub)
+    page.status_label.setText(diagnostic)
+    page.issues_label.setText("planar.support_unreachable_from_buildplate")
+    page.resize(width, height)
+    page.show()
+    _app().processEvents()
+    vertical_scroll = page.editor_scroll.verticalScrollBar()
+    vertical_scroll.setValue(vertical_scroll.maximum())
+    _app().processEvents()
+
+    viewport = page.editor_scroll.viewport()
+    assert page.editor_scroll.horizontalScrollBar().maximum() == 0
+    assert page.editor_scroll.widget().width() <= viewport.width()
+    assert page.editor_scroll.geometry().right() < page.width()
+    for widget in (page.export_button, page.status_label, page.issues_label):
+        assert widget.visibleRegion().boundingRect() == widget.rect()
+
+    page.close()
+
+
+def test_main_window_routes_planar_workbench_and_exposes_state() -> None:
+    _app()
+    window = MainWindow(
+        model_viewer_factory=lambda parent: TubeViewerStub(parent),
+        result_viewer_factory=lambda parent: TubeViewerStub(parent),
+    )
+
+    window.enter_workbench("planar")
+    state = window.current_state()
+
+    assert window.stack.currentWidget() is window.planar_page
+    assert state["page"] == "planar"
+    assert state["workbench"]["operation"] == "planar_region"
+    assert "planar" in state
+    window.close()

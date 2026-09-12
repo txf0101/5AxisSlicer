@@ -54,6 +54,9 @@ five-axis-slicer = "five_axis_slicer.app:main"
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+"five_axis_slicer.manufacturing" = ["profiles/*.json"]
+
 [tool.setuptools.data-files]
 "share/five-axis-slicer/schemas" = ["schemas/*.json"]
 "share/doc/five-axis-slicer/formats" = ["docs/formats/*.md"]

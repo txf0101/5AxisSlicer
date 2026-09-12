@@ -1,0 +1,1273 @@
+{
+  "operation": {
+    "operation_id": "audit-fan_full_sparse",
+    "setup_id": "setup-1",
+    "name": "Planar Zigzag",
+    "operation_type": "planar_zigzag",
+    "state": "dirty",
+    "dirty_reasons": [
+      "operation_created",
+      "operation_geometry_changed",
+      "operation_parameters_changed"
+    ],
+    "enabled": true,
+    "geometry": {
+      "body": {
+        "object_id": "body_002",
+        "geometry_type": "body",
+        "signature": {
+          "schema_version": 1,
+          "geometry_type": "body",
+          "descriptor": {
+            "kind": "solid",
+            "assembly_path": "Document",
+            "bounds_mm": {
+              "minimum": [
+                3.80980349912531,
+                -51.275592388034404,
+                55.9999998999999
+              ],
+              "maximum": [
+                52.401546397120605,
+                -3.4552711951320503,
+                96.0000001000001
+              ]
+            },
+            "dimensions_mm": [
+              48.591742897995296,
+              47.820321192902355,
+              40.000000200000194
+            ],
+            "volume_mm3": 8000.001755379692,
+            "surface_area_mm2": 5077.756202816643,
+            "centroid_mm": [
+              25.809497467435722,
+              -23.177377209302634,
+              75.99998798190909
+            ],
+            "topology": {
+              "face_count": 6,
+              "edge_count": 12,
+              "vertex_count": 8,
+              "surface_types": {
+                "bsplinesurface": 4,
+                "plane": 2
+              },
+              "curve_types": {
+                "bsplinecurve": 12
+              },
+              "vertex_edge_degrees": [
+                3,
+                3,
+                3,
+                3,
+                3,
+                3,
+                3,
+                3
+              ]
+            }
+          },
+          "parent_body": null,
+          "kernel_signature": "0da6f6caa6e502398238b3da203759190cb780b5f38390df60c6562dc04fabdc"
+        },
+        "parent_body_id": null,
+        "assembly_name": "Document"
+      }
+    },
+    "parameters": {
+      "first_layer_z_mm": 56.3,
+      "layer_height_mm": 0.6,
+      "last_layer_z_mm": 95.9,
+      "bead_width_mm": 0.6,
+      "feedrate_mm_min": 100.0,
+      "line_spacing_mm": 0.65,
+      "travel_feedrate_mm_min": 100.0,
+      "retract_length_mm": 1.0,
+      "offset_pass_count": 3,
+      "wall_thickness_mm": 0.6,
+      "thin_wall_max_passes": 3,
+      "spiral_samples_per_contour": 64,
+      "support_overhang_angle_deg": 45.0,
+      "support_xy_gap_mm": 0.4,
+      "support_z_gap_mm": 0.2,
+      "support_line_spacing_mm": 2.0,
+      "support_interface_layers": 2,
+      "support_interface_spacing_mm": 0.6,
+      "support_pattern": "lines"
+    }
+  },
+  "source_sha256": "291155b64dace255937bbcddb496da4f11f8319a2fe6b9d32aa29a340686befc",
+  "setup": {
+    "setup_id": "setup-1",
+    "name": "Manufacturing Setup 1",
+    "assignments": {
+      "part_body_ids": [
+        "body_002"
+      ],
+      "ignored_body_ids": [
+        "body_001",
+        "body_003",
+        "body_004"
+      ],
+      "fixture_body_ids": [],
+      "unassigned_body_ids": []
+    },
+    "resources": {
+      "machine": {
+        "schema_version": 1,
+        "resource_type": "machine",
+        "resource_id": "builtin.machine.generic_xyzac_reference.v1",
+        "profile_version": 1,
+        "payload": {
+          "build_surfaces": [
+            {
+              "depth_mm": null,
+              "diameter_mm": 250.0,
+              "id": "xyzac_plate",
+              "name": "XYZAC reference rotary table",
+              "shape": "circle",
+              "thickness_mm": 10.0,
+              "width_mm": null
+            }
+          ],
+          "id": "builtin.machine.generic_xyzac_reference.v1",
+          "joints": [
+            {
+              "T_parent_from_child_zero": {
+                "T_target_from_source": [
+                  [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    1.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                ],
+                "source_frame": "x_carriage",
+                "target_frame": "machine"
+              },
+              "axis_direction": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "child_link_id": "x_carriage",
+              "id": "X",
+              "joint_type": "linear",
+              "max_acceleration": 1000.0,
+              "max_velocity": 300.0,
+              "motion_side": "tool",
+              "name": "X linear axis",
+              "parent_link_id": "machine",
+              "post_axis_map": {
+                "offset": 0.0,
+                "output_unit": "mm",
+                "scale": 1.0,
+                "word": "X"
+              },
+              "rotation_center_mm": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "soft_limit_max": 1000.0,
+              "soft_limit_min": -1000.0,
+              "zero_offset": 0.0
+            },
+            {
+              "T_parent_from_child_zero": {
+                "T_target_from_source": [
+                  [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    1.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                ],
+                "source_frame": "y_carriage",
+                "target_frame": "x_carriage"
+              },
+              "axis_direction": [
+                0.0,
+                1.0,
+                0.0
+              ],
+              "child_link_id": "y_carriage",
+              "id": "Y",
+              "joint_type": "linear",
+              "max_acceleration": 1000.0,
+              "max_velocity": 300.0,
+              "motion_side": "tool",
+              "name": "Y linear axis",
+              "parent_link_id": "x_carriage",
+              "post_axis_map": {
+                "offset": 0.0,
+                "output_unit": "mm",
+                "scale": 1.0,
+                "word": "Y"
+              },
+              "rotation_center_mm": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "soft_limit_max": 1000.0,
+              "soft_limit_min": -1000.0,
+              "zero_offset": 0.0
+            },
+            {
+              "T_parent_from_child_zero": {
+                "T_target_from_source": [
+                  [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    1.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                ],
+                "source_frame": "tool",
+                "target_frame": "y_carriage"
+              },
+              "axis_direction": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "child_link_id": "tool",
+              "id": "Z",
+              "joint_type": "linear",
+              "max_acceleration": 1000.0,
+              "max_velocity": 300.0,
+              "motion_side": "tool",
+              "name": "Z linear axis",
+              "parent_link_id": "y_carriage",
+              "post_axis_map": {
+                "offset": 0.0,
+                "output_unit": "mm",
+                "scale": 1.0,
+                "word": "Z"
+              },
+              "rotation_center_mm": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "soft_limit_max": 1000.0,
+              "soft_limit_min": -1000.0,
+              "zero_offset": 0.0
+            },
+            {
+              "T_parent_from_child_zero": {
+                "T_target_from_source": [
+                  [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    1.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                ],
+                "source_frame": "a_cradle",
+                "target_frame": "machine"
+              },
+              "axis_direction": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "child_link_id": "a_cradle",
+              "id": "A",
+              "joint_type": "rotary",
+              "max_acceleration": 2.0943951023931953,
+              "max_velocity": 1.0471975511965976,
+              "motion_side": "workpiece",
+              "name": "A rotary axis",
+              "parent_link_id": "machine",
+              "post_axis_map": {
+                "offset": 0.0,
+                "output_unit": "deg",
+                "scale": 1.0,
+                "word": "A"
+              },
+              "rotation_center_mm": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "soft_limit_max": 1000.0,
+              "soft_limit_min": -1000.0,
+              "zero_offset": 0.0
+            },
+            {
+              "T_parent_from_child_zero": {
+                "T_target_from_source": [
+                  [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    1.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                ],
+                "source_frame": "c_table",
+                "target_frame": "a_cradle"
+              },
+              "axis_direction": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "child_link_id": "c_table",
+              "id": "C",
+              "joint_type": "rotary",
+              "max_acceleration": 4.1887902047863905,
+              "max_velocity": 2.0943951023931953,
+              "motion_side": "workpiece",
+              "name": "C rotary axis",
+              "parent_link_id": "a_cradle",
+              "post_axis_map": {
+                "offset": 0.0,
+                "output_unit": "deg",
+                "scale": 1.0,
+                "word": "C"
+              },
+              "rotation_center_mm": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "soft_limit_max": 1000.0,
+              "soft_limit_min": -1000.0,
+              "zero_offset": 0.0
+            }
+          ],
+          "manufacturer": "5AxisSclicer",
+          "model": "Generic XYZAC reference template",
+          "mount_datums": [
+            {
+              "T_parent_from_mount": {
+                "T_target_from_source": [
+                  [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    1.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                ],
+                "source_frame": "build_plate_mount",
+                "target_frame": "c_table"
+              },
+              "build_surface_id": "xyzac_plate",
+              "id": "build_plate_mount",
+              "name": "Rotary table center",
+              "parent_link_id": "c_table"
+            }
+          ],
+          "name": "Generic XYZAC Reference",
+          "reference_only": true,
+          "root_link_id": "machine",
+          "source_uri": "builtin://machine/generic-xyzac-reference/v1",
+          "tool_link_id": "tool",
+          "version": 1,
+          "workpiece_link_id": "c_table"
+        },
+        "content_hash": "e79f873227c285c75e7c43229a8a6b8a938a7d917d855305e26088dc3708dd81"
+      },
+      "nozzle": {
+        "schema_version": 1,
+        "resource_type": "nozzle",
+        "resource_id": "planar-p06-nozzle",
+        "profile_version": 1,
+        "payload": {
+          "construction_material": null,
+          "display_name": "Planar P06 evidence nozzle",
+          "filament_diameter_mm": 1.75,
+          "flow_category": null,
+          "interface": "M6",
+          "is_builtin": false,
+          "length_mm": 2.0,
+          "orifice_diameter_mm": 0.6,
+          "outer_profile_rz_mm": [
+            [
+              0.3,
+              0.0
+            ],
+            [
+              0.4,
+              2.0
+            ]
+          ],
+          "profile_version": 1,
+          "resource_id": "planar-p06-nozzle",
+          "schema_version": 1,
+          "source": null,
+          "temperature_limit_c": null,
+          "wear_resistance_rating": null
+        },
+        "content_hash": "e43bc5804f5b01f993e3e6b71ee36ff528e9be97d857c277b2ee2d4159b69af6"
+      },
+      "material": {
+        "schema_version": 1,
+        "resource_type": "material",
+        "resource_id": "aud-02-offline-pla",
+        "profile_version": 1,
+        "payload": {
+          "brand": "Generic",
+          "density_g_cm3": 1.24,
+          "display_name": "Cura Generic PLA 1.75 mm",
+          "filament_diameter_mm": 1.75,
+          "form": "filament",
+          "guid": "0ff92885-617b-4144-a03c-9989872454bc",
+          "is_builtin": false,
+          "material": "PLA",
+          "process": "FFF/FDM",
+          "profile_version": 1,
+          "recommendations": {
+            "build_plate_temperature_c": 60.0,
+            "nozzle_temperature_c": 200.0
+          },
+          "resource_id": "aud-02-offline-pla",
+          "review_confirmed": true,
+          "review_required": true,
+          "schema_version": 1,
+          "source": {
+            "file_path": "generic_pla_175.xml.fdm_material",
+            "revision": "886e7ad927463493cc9c64f427b1ae2cf4ce12c1",
+            "sha256": "5bc7c562e14cb10c15323bca26f1afddedcf6e18166c92adf4d638611907a4be",
+            "title": "Ultimaker fdm_materials: Generic PLA 1.75 mm",
+            "url": "https://github.com/Ultimaker/fdm_materials/blob/886e7ad927463493cc9c64f427b1ae2cf4ce12c1/generic_pla_175.xml.fdm_material"
+          },
+          "upstream_version": 13
+        },
+        "content_hash": "39899b98125a87e1e9966c887b7e88df8feec91cbe5dae4de08f147206b1e1f4"
+      }
+    },
+    "coordinate_systems": {
+      "model": {
+        "frame_id": "model",
+        "name": "model",
+        "origin_reference": {
+          "reference_type": "numeric",
+          "point_in_source_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "geometry": null,
+          "parameter": null,
+          "confirmed": true
+        },
+        "z_direction_reference": {
+          "reference_type": "numeric",
+          "direction_in_source": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "geometry": null,
+          "secondary_geometry": null,
+          "first_point_in_source_mm": null,
+          "second_point_in_source_mm": null,
+          "flipped": false,
+          "confirmed": true
+        },
+        "x_direction_reference": {
+          "reference_type": "numeric",
+          "direction_in_source": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "geometry": null,
+          "secondary_geometry": null,
+          "first_point_in_source_mm": null,
+          "second_point_in_source_mm": null,
+          "flipped": false,
+          "confirmed": true
+        },
+        "T_target_from_source": {
+          "source_frame": "source",
+          "target_frame": "model",
+          "T_target_from_source": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              -0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              -0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        "revision": 1
+      },
+      "build": {
+        "frame_id": "build",
+        "name": "build",
+        "origin_reference": {
+          "reference_type": "numeric",
+          "point_in_source_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "geometry": null,
+          "parameter": null,
+          "confirmed": true
+        },
+        "z_direction_reference": {
+          "reference_type": "numeric",
+          "direction_in_source": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "geometry": null,
+          "secondary_geometry": null,
+          "first_point_in_source_mm": null,
+          "second_point_in_source_mm": null,
+          "flipped": false,
+          "confirmed": true
+        },
+        "x_direction_reference": {
+          "reference_type": "numeric",
+          "direction_in_source": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "geometry": null,
+          "secondary_geometry": null,
+          "first_point_in_source_mm": null,
+          "second_point_in_source_mm": null,
+          "flipped": false,
+          "confirmed": true
+        },
+        "T_target_from_source": {
+          "source_frame": "source",
+          "target_frame": "build",
+          "T_target_from_source": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              -0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              -0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        "revision": 1
+      }
+    },
+    "placement": {
+      "mount_datum_id": "build_plate_mount",
+      "adjustment": {
+        "translation_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "quaternion_xyzw": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      "T_mount_from_build": {
+        "source_frame": "build",
+        "target_frame": "build_plate_mount",
+        "T_target_from_source": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            250.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0,
+            250.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            250.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      }
+    },
+    "draft_nodes": [],
+    "dirty_nodes": [],
+    "invalid_nodes": [],
+    "issues": [],
+    "revision": 1
+  },
+  "scope": "offline software qualification; no machine trial",
+  "status": "warning",
+  "exportable": true,
+  "point_count": 7475,
+  "measurement": {
+    "deposition_outside_max_mm": 0.0,
+    "covered_area_mm2": 12597.839999999995,
+    "residual_area_mm2": 801.4000000000015,
+    "sampled_region_area_mm2": 13399.239999999996,
+    "material_volume_mm3": 7619.359031663065,
+    "geometric_volume_mm3": 7619.359031663065,
+    "volume_difference_mm3": 0.0,
+    "bead_outside_max_mm": 1.1490136503811144e-05,
+    "overlap_area_mm2": 1096.5999999999997,
+    "geometric_region_area_mm2": 13400.006320422635,
+    "target_solid_volume_mm3": 8040.003792253581,
+    "material_excess_mm3": 0.0,
+    "sample_grid_mm": 0.19999999999999998,
+    "region_volumes": [
+      [
+        "layer-00001",
+        "region-0001",
+        120.00055030785707,
+        113.77029908004141,
+        108.00024744481331
+      ],
+      [
+        "layer-00002",
+        "region-0001",
+        120.00116113197066,
+        113.71747289798463,
+        108.0005220892819
+      ],
+      [
+        "layer-00003",
+        "region-0001",
+        120.00126600540571,
+        113.72762709024697,
+        108.00056923519287
+      ],
+      [
+        "layer-00004",
+        "region-0001",
+        120.00102369991474,
+        113.80424153634618,
+        108.00046028351608
+      ],
+      [
+        "layer-00005",
+        "region-0001",
+        120.00057261559975,
+        113.71447293713324,
+        108.00025746489257
+      ],
+      [
+        "layer-00006",
+        "region-0001",
+        120.00003071298889,
+        113.75681345703579,
+        108.00001380981242
+      ],
+      [
+        "layer-00007",
+        "region-0001",
+        119.99949546964989,
+        113.75674987705362,
+        107.99977312940777
+      ],
+      [
+        "layer-00008",
+        "region-0001",
+        119.99904386133966,
+        113.67373395023974,
+        107.99957000701876
+      ],
+      [
+        "layer-00009",
+        "region-0001",
+        119.99873236769739,
+        113.78155776437278,
+        107.99942980066413
+      ],
+      [
+        "layer-00010",
+        "region-0001",
+        119.99859700245952,
+        113.7090113449449,
+        107.99936865652083
+      ],
+      [
+        "layer-00011",
+        "region-0001",
+        119.99865336823648,
+        113.70318549654047,
+        107.99939353348812
+      ],
+      [
+        "layer-00012",
+        "region-0001",
+        119.99889673579912,
+        113.73178991081882,
+        107.99950223888558
+      ],
+      [
+        "layer-00013",
+        "region-0001",
+        119.99930214792187,
+        113.67798923404679,
+        107.99968347530486
+      ],
+      [
+        "layer-00014",
+        "region-0001",
+        119.99982454775699,
+        113.74379224119272,
+        107.99991689860889
+      ],
+      [
+        "layer-00015",
+        "region-0001",
+        120.00039893174016,
+        113.69878316533642,
+        108.00017318704501
+      ],
+      [
+        "layer-00016",
+        "region-0001",
+        120.00094052704476,
+        113.68210184635109,
+        108.00041412141204
+      ],
+      [
+        "layer-00017",
+        "region-0001",
+        120.00134499356277,
+        113.7096909838459,
+        108.00059267619629
+      ],
+      [
+        "layer-00018",
+        "region-0001",
+        120.00151192441598,
+        113.68381482477048,
+        108.00066363033531
+      ],
+      [
+        "layer-00019",
+        "region-0001",
+        120.00147706502845,
+        113.711224778138,
+        108.00064326762512
+      ],
+      [
+        "layer-00020",
+        "region-0001",
+        120.00132213520317,
+        113.69353123877326,
+        108.00056866075468
+      ],
+      [
+        "layer-00021",
+        "region-0001",
+        120.00111227319451,
+        113.68699021995424,
+        108.00046942584127
+      ],
+      [
+        "layer-00022",
+        "region-0001",
+        120.00089597338048,
+        113.69518467443035,
+        108.0003676938499
+      ],
+      [
+        "layer-00023",
+        "region-0001",
+        120.00070523687596,
+        113.69579203928753,
+        108.00027817815081
+      ],
+      [
+        "layer-00024",
+        "region-0001",
+        120.00055574926363,
+        113.68960751152731,
+        108.00020825438742
+      ],
+      [
+        "layer-00025",
+        "region-0001",
+        120.00044708547995,
+        113.69815965830739,
+        108.00015805269605
+      ],
+      [
+        "layer-00026",
+        "region-0001",
+        120.00036435386347,
+        113.68364440774194,
+        108.00012118436388
+      ],
+      [
+        "layer-00027",
+        "region-0001",
+        120.00030963526974,
+        113.69335301485067,
+        108.00009859478817
+      ],
+      [
+        "layer-00028",
+        "region-0001",
+        120.00030274335678,
+        113.71862780576353,
+        108.00009890078526
+      ],
+      [
+        "layer-00029",
+        "region-0001",
+        120.00035063074151,
+        113.68146448307623,
+        108.00012491478934
+      ],
+      [
+        "layer-00030",
+        "region-0001",
+        120.00044626192205,
+        113.71369161082644,
+        108.00017315073484
+      ],
+      [
+        "layer-00031",
+        "region-0001",
+        120.0005689218284,
+        113.68164979529983,
+        108.00023396280322
+      ],
+      [
+        "layer-00032",
+        "region-0001",
+        120.00068455234603,
+        113.70099840962071,
+        108.0002916968997
+      ],
+      [
+        "layer-00033",
+        "region-0001",
+        120.00074611681615,
+        113.7476062066618,
+        108.00032485484525
+      ],
+      [
+        "layer-00034",
+        "region-0001",
+        120.00069410008021,
+        113.67986667837974,
+        108.0003063199736
+      ],
+      [
+        "layer-00035",
+        "region-0001",
+        120.00049348838296,
+        113.7316940119709,
+        108.00022010328875
+      ],
+      [
+        "layer-00036",
+        "region-0001",
+        120.00018868454788,
+        113.70206677945401,
+        108.00008620976041
+      ],
+      [
+        "layer-00037",
+        "region-0001",
+        119.99982910745207,
+        113.7060466681114,
+        107.99992694104357
+      ],
+      [
+        "layer-00038",
+        "region-0001",
+        119.99945615009166,
+        113.76940612346058,
+        107.99976098794504
+      ],
+      [
+        "layer-00039",
+        "region-0001",
+        119.99910353631647,
+        113.6702748931501,
+        107.9996035908518
+      ],
+      [
+        "layer-00040",
+        "region-0001",
+        119.99879770527977,
+        113.73742915605166,
+        107.99946671260551
+      ],
+      [
+        "layer-00041",
+        "region-0001",
+        119.9985582235793,
+        113.7462271358032,
+        107.99935922384071
+      ],
+      [
+        "layer-00042",
+        "region-0001",
+        119.99839822512045,
+        113.69406892351039,
+        107.9992871007991
+      ],
+      [
+        "layer-00043",
+        "region-0001",
+        119.998324878678,
+        113.7699717301692,
+        107.99925363562723
+      ],
+      [
+        "layer-00044",
+        "region-0001",
+        119.99833988316645,
+        113.73042602222313,
+        107.99925965916293
+      ],
+      [
+        "layer-00045",
+        "region-0001",
+        119.99843999061957,
+        113.71620055817654,
+        107.999303776211
+      ],
+      [
+        "layer-00046",
+        "region-0001",
+        119.99861755687287,
+        113.79869749194287,
+        107.99938261330767
+      ],
+      [
+        "layer-00047",
+        "region-0001",
+        119.99886111995498,
+        113.73134714315684,
+        107.99949107897149
+      ],
+      [
+        "layer-00048",
+        "region-0001",
+        119.99915600619013,
+        113.73117493473426,
+        107.99962263643611
+      ],
+      [
+        "layer-00049",
+        "region-0001",
+        119.99948496399622,
+        113.81259702817742,
+        107.99976958886145
+      ],
+      [
+        "layer-00050",
+        "region-0001",
+        119.99982882540405,
+        113.73522023609218,
+        107.99992337701873
+      ],
+      [
+        "layer-00051",
+        "region-0001",
+        120.00016720454273,
+        113.71442165874926,
+        108.00007489170682
+      ],
+      [
+        "layer-00052",
+        "region-0001",
+        120.00047965529058,
+        113.7964065480394,
+        108.00021495271096
+      ],
+      [
+        "layer-00053",
+        "region-0001",
+        120.00074739486804,
+        113.74489470545733,
+        108.00033508452242
+      ],
+      [
+        "layer-00054",
+        "region-0001",
+        120.00095420460973,
+        113.67913449928562,
+        108.0004279637338
+      ],
+      [
+        "layer-00055",
+        "region-0001",
+        120.00108711056893,
+        113.75948598379308,
+        108.00048772719168
+      ],
+      [
+        "layer-00056",
+        "region-0001",
+        120.00113708788565,
+        113.76702245568227,
+        108.00051028893851
+      ],
+      [
+        "layer-00057",
+        "region-0001",
+        120.00109978868265,
+        113.70975867972317,
+        108.00049366774002
+      ],
+      [
+        "layer-00058",
+        "region-0001",
+        120.00097629346689,
+        113.69576203662457,
+        108.00043832520271
+      ],
+      [
+        "layer-00059",
+        "region-0001",
+        120.00077388604983,
+        113.7749129010983,
+        108.00034751448528
+      ],
+      [
+        "layer-00060",
+        "region-0001",
+        120.00050685198273,
+        113.75053003995541,
+        108.00022763960584
+      ],
+      [
+        "layer-00061",
+        "region-0001",
+        120.00019730050191,
+        113.70461778631528,
+        108.00008862534413
+      ],
+      [
+        "layer-00062",
+        "region-0001",
+        119.9998760099954,
+        113.67285084546673,
+        107.99994429773412
+      ],
+      [
+        "layer-00063",
+        "region-0001",
+        119.99958329697749,
+        113.74521121245881,
+        107.99981277513602
+      ],
+      [
+        "layer-00064",
+        "region-0001",
+        119.99936990858177,
+        113.76202400673992,
+        107.99971686987062
+      ],
+      [
+        "layer-00065",
+        "region-0001",
+        119.99929793856927,
+        113.72630533303625,
+        107.99968450038816
+      ],
+      [
+        "layer-00066",
+        "region-0001",
+        119.99944176684507,
+        113.6938217463421,
+        107.99974911393365
+      ],
+      [
+        "layer-00067",
+        "region-0001",
+        119.99988902249855,
+        113.66450221718101,
+        107.99995011965554
+      ]
+    ],
+    "absolute_volume_difference_mm3": 0.0
+  },
+  "issues": [
+    {
+      "code": "xyzac.rotary_singularity",
+      "severity": "warning",
+      "object_id": "point-0000001",
+      "context": {
+        "count": 7475,
+        "first_context": {
+          "retained_c_rad": 0.0
+        }
+      }
+    }
+  ],
+  "readback": {
+    "schema_version": 1,
+    "passed": true,
+    "expected_points": 7475,
+    "read_points": 7475,
+    "coordinate_mismatches": [],
+    "feedrate_mismatches": [],
+    "extrusion_mismatches": [],
+    "order_mismatches": []
+  },
+  "length_mm": {
+    "deposition": 21164.886199064116,
+    "travel": 6690.826835499383
+  },
+  "travel_to_deposition_ratio": 0.3161286468809477,
+  "seconds": 63.41221019999648
+}

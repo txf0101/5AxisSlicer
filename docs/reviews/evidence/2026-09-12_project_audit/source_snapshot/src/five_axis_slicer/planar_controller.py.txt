@@ -1,0 +1,517 @@
+"""Qt-independent state owner for the first Planar operation boundary."""
+
+from __future__ import annotations
+
+from collections.abc import Callable, Iterable, Mapping
+from dataclasses import dataclass, replace
+from threading import Event
+from typing import Any
+
+from .manufacturing.coordinates import GeometryReference, RigidTransform
+from .manufacturing.machine import MachineProfile
+from .manufacturing.planar_parameters import PlanarOperationDefinition, PlanarProcessParameters
+from .manufacturing.resources import NozzleProfile
+from .manufacturing.references import (
+    DEFAULT_REBIND_TOLERANCE,
+    RebindTolerance,
+    geometry_reference as build_geometry_reference,
+)
+from .manufacturing.setup import ManufacturingSetup, NodeState, PLACEMENT_NODE
+from .models import CadModel
+from .planar_operation_service import (
+    PLANAR_OPERATION_TYPES,
+    configure_planar_operation,
+    create_planar_operation,
+    rebind_planar_operation_geometry,
+)
+from .postprocessing.indexed_tube import GenerationCancelled
+from .postprocessing.planar_product import (
+    PlanarProductState,
+    PlanarRegionProductResult,
+    PlanarZigzagProductResult,
+    export_planar_product,
+    generate_planar_path_product,
+    generate_planar_region_product,
+    state_from_region_result,
+)
+
+
+PLANAR_CONTROLLER_SCHEMA_VERSION = 1
+MAX_PLANAR_OPERATIONS = 6
+
+
+@dataclass(frozen=True, slots=True)
+class PlanarControllerCheckpoint:
+    setup: ManufacturingSetup
+    operations: tuple[PlanarOperationDefinition, ...]
+    product_states: tuple[PlanarProductState, ...]
+    modified: bool
+
+    def without_drafts(self) -> "PlanarControllerCheckpoint":
+        return self
+
+
+class PlanarController:
+    """Own a Planar setup, its CAD authority, and a bounded operation list.
+
+    Product generation intentionally remains outside this initial controller.
+    """
+
+    def __init__(
+        self,
+        cad_model: CadModel | None = None,
+        *,
+        setup: ManufacturingSetup | None = None,
+        operations: Iterable[PlanarOperationDefinition] = (),
+        product_states: Iterable[PlanarProductState] = (),
+    ) -> None:
+        self._setup = ManufacturingSetup() if setup is None else setup
+        if not isinstance(self._setup, ManufacturingSetup):
+            raise TypeError("setup must be ManufacturingSetup")
+        self._operations = tuple(operations)
+        if any(not isinstance(item, PlanarOperationDefinition) for item in self._operations):
+            raise TypeError("operations must contain PlanarOperationDefinition")
+        _ensure_unique_operation_ids(self._operations)
+        if len(self._operations) > MAX_PLANAR_OPERATIONS:
+            raise ValueError(
+                f"Planar workbench supports at most {MAX_PLANAR_OPERATIONS} operations"
+            )
+        self._cad_model: CadModel | None = None
+        states = tuple(product_states)
+        if any(not isinstance(item, PlanarProductState) for item in states):
+            raise TypeError("product_states must contain PlanarProductState")
+        self._product_states = {item.operation_id: item for item in states}
+        self._product_results: dict[str, PlanarRegionProductResult | PlanarZigzagProductResult] = {}
+        self._generation_cancelled = Event()
+        self._generation_event_pump: Callable[[], None] | None = None
+        self._modified = False
+        if cad_model is not None:
+            self.attach_cad_model(cad_model, mark_modified=False)
+
+    @property
+    def setup(self) -> ManufacturingSetup:
+        return self._setup
+
+    @property
+    def operations(self) -> tuple[PlanarOperationDefinition, ...]:
+        return self._operations
+
+    @property
+    def cad_model(self) -> CadModel | None:
+        return self._cad_model
+
+    @property
+    def is_modified(self) -> bool:
+        return self._modified
+
+    @property
+    def has_drafts(self) -> bool:
+        return bool(self._setup.draft_nodes)
+
+    @property
+    def coordinates_valid(self) -> bool:
+        return self._setup.coordinates_valid
+
+    @property
+    def setup_ready(self) -> bool:
+        return self._setup.setup_ready
+
+    def validation_report(self):
+        return self._setup.validation_report()
+
+    @property
+    def available_operation_types(self) -> tuple[str, ...]:
+        return tuple(sorted(PLANAR_OPERATION_TYPES))
+
+    @property
+    def can_create_operation(self) -> bool:
+        return len(self._operations) < MAX_PLANAR_OPERATIONS
+
+    def attach_cad_model(self, model: CadModel, *, mark_modified: bool = True) -> None:
+        if not isinstance(model, CadModel):
+            raise TypeError("model must be CadModel")
+        changed = self._cad_model is not model
+        self._cad_model = model
+        if mark_modified and changed:
+            self._mark_all_products_stale()
+            self._modified = True
+
+    def geometry_reference(
+        self, object_id: str, geometry_type: str | None = None
+    ) -> GeometryReference:
+        if self._cad_model is None:
+            raise ValueError("no CAD model is attached")
+        return build_geometry_reference(self._cad_model, object_id, geometry_type)
+
+    def create_operation(
+        self,
+        operation_type: str = "planar_region",
+        *,
+        operation_id: str | None = None,
+        name: str | None = None,
+    ) -> PlanarOperationDefinition:
+        if not self.can_create_operation:
+            raise ValueError(
+                f"Planar workbench supports at most {MAX_PLANAR_OPERATIONS} operations"
+            )
+        operation = create_planar_operation(
+            self._operations,
+            self._setup.setup_id,
+            operation_type,
+            operation_id,
+            name
+            or {
+                "planar_region": "Planar Region",
+                "planar_zigzag": "Planar Zigzag",
+                "planar_offset": "Planar Offset",
+                "planar_thin_wall": "Planar Thin Wall",
+                "planar_spiral": "Planar Spiral",
+                "planar_support": "Planar Support",
+            }.get(operation_type, "Planar Region"),
+        )
+        self._operations += (operation,)
+        self._modified = True
+        return operation
+
+    def configure_operation(
+        self,
+        *,
+        body_id: str,
+        operation_id: str | None = None,
+        parameters: PlanarProcessParameters | None = None,
+    ) -> PlanarOperationDefinition:
+        current = self._operation_by_id(operation_id)
+        updated = configure_planar_operation(
+            current, self.geometry_reference, body_id=body_id, parameters=parameters
+        )
+        if updated != current:
+            self._operations = tuple(
+                updated if item.operation_id == current.operation_id else item
+                for item in self._operations
+            )
+            self._mark_product_stale(updated)
+            self._modified = True
+        return updated
+
+    def set_operation_metadata(
+        self,
+        operation_id: str | None = None,
+        *,
+        name: str | None = None,
+        enabled: bool | None = None,
+    ) -> PlanarOperationDefinition:
+        current = self._operation_by_id(operation_id)
+        updated = replace(
+            current,
+            name=current.name if name is None else name,
+            enabled=current.enabled if enabled is None else enabled,
+        )
+        if updated != current:
+            updated = updated.mark_dirty("operation_metadata_changed")
+            self._operations = tuple(
+                updated if item.operation_id == current.operation_id else item
+                for item in self._operations
+            )
+            self._mark_product_stale(updated)
+            self._modified = True
+        return updated
+
+    def product_state(self, operation_id: str) -> PlanarProductState | None:
+        return self._product_states.get(str(operation_id).strip())
+
+    def product_result(
+        self, operation_id: str
+    ) -> PlanarRegionProductResult | PlanarZigzagProductResult | None:
+        return self._product_results.get(str(operation_id).strip())
+
+    def operation(self, operation_id: str | None = None) -> PlanarOperationDefinition:
+        return self._operation_by_id(operation_id)
+
+    def generate_operation(
+        self,
+        operation_id: str | None = None,
+        *,
+        cancelled: Callable[[], bool] | None = None,
+    ) -> PlanarRegionProductResult | PlanarZigzagProductResult:
+        operation = self._operation_by_id(operation_id)
+        if self._cad_model is None:
+            raise ValueError("Generate requires an attached CAD model")
+        self._generation_cancelled.clear()
+        cancel_check = cancelled or self._generation_cancel_requested
+        result: PlanarRegionProductResult | PlanarZigzagProductResult
+        try:
+            if operation.operation_type == "planar_region":
+                result = generate_planar_region_product(
+                    self._cad_model,
+                    operation,
+                    self.T_model_from_build(),
+                    source_path=self._cad_model.source_path,
+                    cancelled=cancel_check,
+                )
+            else:
+                result = generate_planar_path_product(
+                    self._cad_model,
+                    operation,
+                    self.machine_profile(),
+                    self.nozzle_profile(),
+                    self.T_model_from_build(),
+                    T_workpiece_from_build=self.T_machine_from_build(),
+                    source_path=self._cad_model.source_path,
+                    cancelled=cancel_check,
+                )
+        except GenerationCancelled:
+            raise
+        except Exception as exc:
+            self._product_states[operation.operation_id] = PlanarProductState(
+                operation.operation_id,
+                operation.semantic_sha256(),
+                "error",
+                {"error": str(exc)},
+            )
+            raise
+        self._product_states[operation.operation_id] = state_from_region_result(operation, result)
+        self._product_results[operation.operation_id] = result
+        self._modified = True
+        return result
+
+    def export_operation_product(
+        self,
+        operation_id: str | None = None,
+        destination: str = "",
+        *,
+        cancelled: Callable[[], bool] | None = None,
+    ):
+        operation = self._operation_by_id(operation_id)
+        result = self._product_results.get(operation.operation_id)
+        state = self._product_states.get(operation.operation_id)
+        if not isinstance(result, PlanarZigzagProductResult):
+            raise ValueError("Planar operation has no exportable generated result")
+        if state is None or state.status not in {"ready", "warning"}:
+            raise ValueError("Planar product is not Ready for export")
+        if not str(destination).strip():
+            raise ValueError("destination is required")
+        return export_planar_product(result, destination, cancelled=cancelled)
+
+    def cancel_generation(self) -> None:
+        self._generation_cancelled.set()
+
+    def set_generation_event_pump(self, callback: Callable[[], None] | None) -> None:
+        self._generation_event_pump = callback
+
+    def _generation_cancel_requested(self) -> bool:
+        if self._generation_event_pump is not None:
+            self._generation_event_pump()
+        return self._generation_cancelled.is_set()
+
+    def update_cad_model(
+        self,
+        model: CadModel,
+        *,
+        tolerance: RebindTolerance = DEFAULT_REBIND_TOLERANCE,
+    ) -> tuple[PlanarOperationDefinition, ...]:
+        if not isinstance(model, CadModel):
+            raise TypeError("model must be CadModel")
+        if not isinstance(tolerance, RebindTolerance):
+            raise TypeError("tolerance must be RebindTolerance")
+        if self._cad_model is None:
+            raise ValueError("source update requires a previously attached CAD model")
+        source = self._cad_model
+        self._operations = tuple(
+            rebind_planar_operation_geometry(item, source, model, tolerance=tolerance)
+            for item in self._operations
+        )
+        self._mark_all_products_stale()
+        self._cad_model = model
+        self._modified = True
+        return self._operations
+
+    def mark_setup_changed(
+        self, setup: ManufacturingSetup | None = None, *, reason: str = "setup_changed"
+    ) -> None:
+        """Accept a changed immutable setup and make all dependent paths stale."""
+
+        if setup is not None:
+            if not isinstance(setup, ManufacturingSetup):
+                raise TypeError("setup must be ManufacturingSetup")
+            self._setup = setup
+        self._operations = tuple(item.mark_dirty(reason) for item in self._operations)
+        self._mark_all_products_stale()
+        self._modified = True
+
+    def T_model_from_build(self) -> RigidTransform:
+        model = self._setup.model_coordinate_system
+        build = self._setup.build_coordinate_system
+        if model is None or not model.is_valid:
+            raise ValueError("Model CS is not valid")
+        if build is None or not build.is_valid:
+            raise ValueError("Build CS is not valid")
+        return model.T_target_from_source @ build.T_target_from_source.inverse()
+
+    def machine_profile(self) -> MachineProfile:
+        snapshot = self._setup.machine
+        if snapshot is None:
+            raise ValueError("Machine has not been selected")
+        if snapshot.resource_type != "machine":
+            raise ValueError("selected resource is not a Machine Profile")
+        return MachineProfile.from_json(snapshot.payload)
+
+    def nozzle_profile(self) -> NozzleProfile:
+        snapshot = self._setup.nozzle
+        if snapshot is None:
+            raise ValueError("Nozzle has not been selected")
+        return snapshot.as_nozzle_profile()
+
+    def T_machine_from_build(
+        self, joint_positions: Mapping[str, float] | None = None
+    ) -> RigidTransform:
+        placement_state = self.validation_report().state_for(PLACEMENT_NODE)
+        if placement_state is not NodeState.VALID:
+            raise ValueError(
+                "Placement must be Valid before deriving T_machine_from_build "
+                f"(current state: {placement_state.value})"
+            )
+        if self._setup.mount_datum_id is None or self._setup.T_mount_from_build is None:
+            raise ValueError("Placement has not been applied")
+        return (
+            self.machine_profile().mount_transform(self._setup.mount_datum_id, joint_positions)
+            @ self._setup.T_mount_from_build
+        )
+
+    def state_json(self) -> dict[str, Any]:
+        return {
+            "schema_version": PLANAR_CONTROLLER_SCHEMA_VERSION,
+            "setup_id": self._setup.setup_id,
+            "capabilities": {
+                "available_operation_types": list(self.available_operation_types),
+                "max_interactive_operations": MAX_PLANAR_OPERATIONS,
+                "product_generation_available": True,
+            },
+            "cad_attached": self._cad_model is not None,
+            "operations": [item.to_json() for item in self._operations],
+            "products": [item.to_json() for item in self._product_states.values()],
+            "modified": self._modified,
+        }
+
+    def command_checkpoint(self) -> PlanarControllerCheckpoint:
+        return PlanarControllerCheckpoint(
+            self._setup,
+            self._operations,
+            tuple(self._product_states.values()),
+            self._modified,
+        )
+
+    def restore_command_checkpoint(self, checkpoint: PlanarControllerCheckpoint) -> None:
+        if not isinstance(checkpoint, PlanarControllerCheckpoint):
+            raise TypeError("checkpoint must be PlanarControllerCheckpoint")
+        self._setup = checkpoint.setup
+        self._operations = checkpoint.operations
+        self._product_states = {item.operation_id: item for item in checkpoint.product_states}
+        self._product_results = {}
+        self._modified = checkpoint.modified
+
+    def command_applied_token(self) -> tuple[object, ...]:
+        return (
+            self._setup,
+            self._operations,
+            tuple(
+                (key, value.parameter_semantic_sha256, value.status)
+                for key, value in sorted(self._product_states.items())
+            ),
+            self._modified,
+        )
+
+    def fork(self) -> "PlanarController":
+        candidate = PlanarController(
+            self._cad_model,
+            setup=self._setup,
+            operations=self._operations,
+            product_states=self._product_states.values(),
+        )
+        candidate._modified = self._modified
+        candidate._product_results = dict(self._product_results)
+        return candidate
+
+    def publish_from(self, candidate: "PlanarController") -> None:
+        if not isinstance(candidate, PlanarController):
+            raise TypeError("candidate must be PlanarController")
+        self._setup = candidate._setup
+        self._operations = candidate._operations
+        self._cad_model = candidate._cad_model
+        self._product_states = dict(candidate._product_states)
+        self._product_results = dict(candidate._product_results)
+        self._modified = candidate._modified
+
+    def to_json(self) -> dict[str, Any]:
+        return {
+            "schema_version": PLANAR_CONTROLLER_SCHEMA_VERSION,
+            "setups": [self._setup.to_json()],
+            "operations": [item.to_json() for item in self._operations],
+            "product_states": [item.to_json() for item in self._product_states.values()],
+        }
+
+    @classmethod
+    def from_json(
+        cls, payload: Mapping[str, Any], *, cad_model: CadModel | None = None
+    ) -> "PlanarController":
+        if not isinstance(payload, Mapping):
+            raise ValueError("Planar controller payload must be an object")
+        version = int(payload.get("schema_version", PLANAR_CONTROLLER_SCHEMA_VERSION))
+        if version > PLANAR_CONTROLLER_SCHEMA_VERSION:
+            raise ValueError(f"unsupported Planar controller schema {version}")
+        setups = payload.get("setups")
+        if setups is None:
+            setup = payload.get("setup")
+            setups = () if setup is None else (setup,)
+        operations = payload.get("operations", ())
+        product_states = payload.get("product_states", payload.get("products", ()))
+        if not isinstance(setups, list | tuple) or len(setups) != 1:
+            raise ValueError("PlanarController requires exactly one Setup")
+        if not isinstance(operations, list | tuple):
+            raise ValueError("operations must be an array")
+        if not isinstance(product_states, list | tuple):
+            raise ValueError("product_states must be an array")
+        return cls(
+            cad_model,
+            setup=ManufacturingSetup.from_json(setups[0]),
+            operations=tuple(PlanarOperationDefinition.from_json(item) for item in operations),
+            product_states=tuple(PlanarProductState.from_json(item) for item in product_states),
+        )
+
+    def _mark_product_stale(self, operation: PlanarOperationDefinition) -> None:
+        state = self._product_states.get(operation.operation_id)
+        if state is not None:
+            self._product_states[operation.operation_id] = state.stale_for(operation)
+
+    def _mark_all_products_stale(self) -> None:
+        by_id = {item.operation_id: item for item in self._operations}
+        for operation_id, state in tuple(self._product_states.items()):
+            operation = by_id.get(operation_id)
+            if operation is not None:
+                self._product_states[operation_id] = state.stale_for(operation)
+
+    def _operation_by_id(self, operation_id: str | None) -> PlanarOperationDefinition:
+        if operation_id is None:
+            if len(self._operations) == 1:
+                return self._operations[0]
+            raise ValueError(
+                "operation_id is required when there is not exactly one Planar operation"
+            )
+        identifier = str(operation_id).strip()
+        for item in self._operations:
+            if item.operation_id == identifier:
+                return item
+        raise ValueError(f"unknown operation_id: {identifier}")
+
+
+def _ensure_unique_operation_ids(operations: tuple[PlanarOperationDefinition, ...]) -> None:
+    identifiers = tuple(item.operation_id for item in operations)
+    if len(set(identifiers)) != len(identifiers):
+        raise ValueError("operations contain duplicate IDs")
+
+
+__all__ = [
+    "MAX_PLANAR_OPERATIONS",
+    "PLANAR_CONTROLLER_SCHEMA_VERSION",
+    "PlanarController",
+    "PlanarControllerCheckpoint",
+]

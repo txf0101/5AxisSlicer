@@ -1,0 +1,13 @@
+............................................................................................................................................................ [ 26%]
+........................................................................ [ 39%]
+.........................................s.............s........... [ 50%]
+............................ [ 55%]
+........................................s........................ [ 66%]
+.................................................................. [ 77%]
+...................................................................... [ 89%]
+............................................................       [100%]
+=========================== short test summary info ===========================
+SKIPPED [1] tests\test_project_io.py:779: file symlink unavailable: [WinError 1314] 客户端没有所需的特权。: 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmprwhx9vid\\outside.step' -> 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmprwhx9vid\\project\\source\\f6379b826f8fe5c8ea1aedd58d1a9c8901a54cbe2647b1a3b1cedbf11c0ebe77.step'
+SKIPPED [1] tests\test_project_io.py:807: directory symlink unavailable: [WinError 1314] 客户端没有所需的特权。: 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmp07ocsojm\\outside-source' -> 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmp07ocsojm\\project\\source'
+SKIPPED [1] tests\test_setup_config.py:335: file symlink unavailable: [WinError 1314] 客户端没有所需的特权。: 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmpucpen8lx\\target.yaml' -> 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmpucpen8lx\\manufacturing-setup.yaml'
+581 passed, 3 skipped, 130 subtests passed in 272.59s (0:04:32)

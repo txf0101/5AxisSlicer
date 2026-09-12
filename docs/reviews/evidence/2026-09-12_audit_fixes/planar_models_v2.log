@@ -1,0 +1,6 @@
+{"case": "rectangle", "status": "warning", "exportable": true, "seconds": 0.14553779999550898, "error": null, "issues": ["xyzac.rotary_singularity"]}
+{"case": "fan_local", "status": "warning", "exportable": true, "seconds": 3.0075138000102015, "error": null, "issues": ["xyzac.rotary_singularity"]}
+{"case": "fan_full", "status": "warning", "exportable": true, "seconds": 65.66694680000364, "error": null, "issues": ["xyzac.rotary_singularity"]}
+{"case": "fan_spiral", "status": "warning", "exportable": true, "seconds": 104.49380069998733, "error": null, "issues": ["xyzac.rotary_singularity", "planar.spiral_cad_sampled"]}
+{"case": "pipe_local", "status": "error", "exportable": false, "seconds": 15.672247700000298, "error": null, "issues": ["xyzac.rotary_singularity", "planar.material_exceeds_solid_volume"]}
+{"case": "impeller_local", "status": "error", "exportable": false, "seconds": 18.05905999999959, "error": null, "issues": ["xyzac.rotary_singularity", "planar.bead_envelope_outside_region", "planar.material_exceeds_solid_volume"]}

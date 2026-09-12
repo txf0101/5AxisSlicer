@@ -1,0 +1,894 @@
+[
+  {
+    "kind": "normal",
+    "language": "zh",
+    "size": [
+      1366,
+      768
+    ],
+    "status": "路径已生成并完成 G-code 回读，存在警告。请核对下方原因。",
+    "diagnostics": "警告 — MACHINE_REFERENCE_ONLY: 当前为内置参考机型，仅用于离线检查。 (builtin.machine.generic_xyzac_reference.v1)\n警告 — xyzac.rotary_singularity: 路径经过参考机型的回转奇异姿态，请核对轴姿态与连续性。 (point-0000001)",
+    "export_enabled": true,
+    "screenshot": "fan-zh-1366.png",
+    "buttons": {
+      "返回": {
+        "text": "返回",
+        "x": 1088,
+        "y": 19,
+        "width": 112,
+        "height": 34,
+        "text_width": 36,
+        "available_text_width": 100,
+        "text_fits": true
+      },
+      "打开 STEP": {
+        "text": "打开 STEP",
+        "x": 1209,
+        "y": 19,
+        "width": 112,
+        "height": 34,
+        "text_width": 81,
+        "available_text_width": 100,
+        "text_fits": true
+      },
+      "新建操作": {
+        "text": "新建操作",
+        "x": 965,
+        "y": 827,
+        "width": 174,
+        "height": 34,
+        "text_width": 72,
+        "available_text_width": 162,
+        "text_fits": true
+      },
+      "应用": {
+        "text": "应用",
+        "x": 1148,
+        "y": 827,
+        "width": 173,
+        "height": 34,
+        "text_width": 36,
+        "available_text_width": 161,
+        "text_fits": true
+      },
+      "生成预览": {
+        "text": "生成预览",
+        "x": 965,
+        "y": 870,
+        "width": 174,
+        "height": 34,
+        "text_width": 72,
+        "available_text_width": 162,
+        "text_fits": true
+      },
+      "导出结果": {
+        "text": "导出结果",
+        "x": 1148,
+        "y": 870,
+        "width": 173,
+        "height": 34,
+        "text_width": 72,
+        "available_text_width": 161,
+        "text_fits": true
+      },
+      "取消生成": {
+        "text": "取消生成",
+        "x": 965,
+        "y": 913,
+        "width": 356,
+        "height": 34,
+        "text_width": 72,
+        "available_text_width": 344,
+        "text_fits": true
+      }
+    },
+    "collisions": []
+  },
+  {
+    "kind": "normal",
+    "language": "zh",
+    "size": [
+      1600,
+      900
+    ],
+    "status": "路径已生成并完成 G-code 回读，存在警告。请核对下方原因。",
+    "diagnostics": "警告 — MACHINE_REFERENCE_ONLY: 当前为内置参考机型，仅用于离线检查。 (builtin.machine.generic_xyzac_reference.v1)\n警告 — xyzac.rotary_singularity: 路径经过参考机型的回转奇异姿态，请核对轴姿态与连续性。 (point-0000001)",
+    "export_enabled": true,
+    "screenshot": "fan-zh-1600.png",
+    "buttons": {
+      "返回": {
+        "text": "返回",
+        "x": 1322,
+        "y": 19,
+        "width": 112,
+        "height": 34,
+        "text_width": 36,
+        "available_text_width": 100,
+        "text_fits": true
+      },
+      "打开 STEP": {
+        "text": "打开 STEP",
+        "x": 1443,
+        "y": 19,
+        "width": 112,
+        "height": 34,
+        "text_width": 81,
+        "available_text_width": 100,
+        "text_fits": true
+      },
+      "新建操作": {
+        "text": "新建操作",
+        "x": 1199,
+        "y": 827,
+        "width": 174,
+        "height": 34,
+        "text_width": 72,
+        "available_text_width": 162,
+        "text_fits": true
+      },
+      "应用": {
+        "text": "应用",
+        "x": 1382,
+        "y": 827,
+        "width": 173,
+        "height": 34,
+        "text_width": 36,
+        "available_text_width": 161,
+        "text_fits": true
+      },
+      "生成预览": {
+        "text": "生成预览",
+        "x": 1199,
+        "y": 870,
+        "width": 174,
+        "height": 34,
+        "text_width": 72,
+        "available_text_width": 162,
+        "text_fits": true
+      },
+      "导出结果": {
+        "text": "导出结果",
+        "x": 1382,
+        "y": 870,
+        "width": 173,
+        "height": 34,
+        "text_width": 72,
+        "available_text_width": 161,
+        "text_fits": true
+      },
+      "取消生成": {
+        "text": "取消生成",
+        "x": 1199,
+        "y": 913,
+        "width": 356,
+        "height": 34,
+        "text_width": 72,
+        "available_text_width": 344,
+        "text_fits": true
+      }
+    },
+    "collisions": []
+  },
+  {
+    "kind": "normal",
+    "language": "zh",
+    "size": [
+      1920,
+      1080
+    ],
+    "status": "路径已生成并完成 G-code 回读，存在警告。请核对下方原因。",
+    "diagnostics": "警告 — MACHINE_REFERENCE_ONLY: 当前为内置参考机型，仅用于离线检查。 (builtin.machine.generic_xyzac_reference.v1)\n警告 — xyzac.rotary_singularity: 路径经过参考机型的回转奇异姿态，请核对轴姿态与连续性。 (point-0000001)",
+    "export_enabled": true,
+    "screenshot": "fan-zh-1920.png",
+    "buttons": {
+      "返回": {
+        "text": "返回",
+        "x": 1642,
+        "y": 19,
+        "width": 112,
+        "height": 34,
+        "text_width": 36,
+        "available_text_width": 100,
+        "text_fits": true
+      },
+      "打开 STEP": {
+        "text": "打开 STEP",
+        "x": 1763,
+        "y": 19,
+        "width": 112,
+        "height": 34,
+        "text_width": 81,
+        "available_text_width": 100,
+        "text_fits": true
+      },
+      "新建操作": {
+        "text": "新建操作",
+        "x": 1519,
+        "y": 827,
+        "width": 174,
+        "height": 34,
+        "text_width": 72,
+        "available_text_width": 162,
+        "text_fits": true
+      },
+      "应用": {
+        "text": "应用",
+        "x": 1702,
+        "y": 827,
+        "width": 173,
+        "height": 34,
+        "text_width": 36,
+        "available_text_width": 161,
+        "text_fits": true
+      },
+      "生成预览": {
+        "text": "生成预览",
+        "x": 1519,
+        "y": 870,
+        "width": 174,
+        "height": 34,
+        "text_width": 72,
+        "available_text_width": 162,
+        "text_fits": true
+      },
+      "导出结果": {
+        "text": "导出结果",
+        "x": 1702,
+        "y": 870,
+        "width": 173,
+        "height": 34,
+        "text_width": 72,
+        "available_text_width": 161,
+        "text_fits": true
+      },
+      "取消生成": {
+        "text": "取消生成",
+        "x": 1519,
+        "y": 913,
+        "width": 356,
+        "height": 34,
+        "text_width": 72,
+        "available_text_width": 344,
+        "text_fits": true
+      }
+    },
+    "collisions": []
+  },
+  {
+    "kind": "normal",
+    "language": "en",
+    "size": [
+      1366,
+      768
+    ],
+    "status": "Toolpath generated and G-code readback passed, with warnings. Review the reasons below.",
+    "diagnostics": "Warning — MACHINE_REFERENCE_ONLY: The selected built-in reference machine is for offline checks only. (builtin.machine.generic_xyzac_reference.v1)\nWarning — xyzac.rotary_singularity: The path reaches a rotary singularity of the reference machine; review axis orientation and continuity. (point-0000001)",
+    "export_enabled": true,
+    "screenshot": "fan-en-1366.png",
+    "buttons": {
+      "Back": {
+        "text": "Back",
+        "x": 1088,
+        "y": 19,
+        "width": 112,
+        "height": 34,
+        "text_width": 36,
+        "available_text_width": 100,
+        "text_fits": true
+      },
+      "Open STEP": {
+        "text": "Open STEP",
+        "x": 1209,
+        "y": 19,
+        "width": 112,
+        "height": 34,
+        "text_width": 81,
+        "available_text_width": 100,
+        "text_fits": true
+      },
+      "Create operation": {
+        "text": "Create operation",
+        "x": 965,
+        "y": 1232,
+        "width": 174,
+        "height": 34,
+        "text_width": 144,
+        "available_text_width": 162,
+        "text_fits": true
+      },
+      "Apply": {
+        "text": "Apply",
+        "x": 1148,
+        "y": 1232,
+        "width": 173,
+        "height": 34,
+        "text_width": 45,
+        "available_text_width": 161,
+        "text_fits": true
+      },
+      "Generate preview": {
+        "text": "Generate preview",
+        "x": 965,
+        "y": 1275,
+        "width": 174,
+        "height": 34,
+        "text_width": 144,
+        "available_text_width": 162,
+        "text_fits": true
+      },
+      "Export result": {
+        "text": "Export result",
+        "x": 1148,
+        "y": 1275,
+        "width": 173,
+        "height": 34,
+        "text_width": 117,
+        "available_text_width": 161,
+        "text_fits": true
+      },
+      "Cancel generation": {
+        "text": "Cancel generation",
+        "x": 965,
+        "y": 1318,
+        "width": 356,
+        "height": 34,
+        "text_width": 153,
+        "available_text_width": 344,
+        "text_fits": true
+      }
+    },
+    "collisions": []
+  },
+  {
+    "kind": "normal",
+    "language": "en",
+    "size": [
+      1600,
+      900
+    ],
+    "status": "Toolpath generated and G-code readback passed, with warnings. Review the reasons below.",
+    "diagnostics": "Warning — MACHINE_REFERENCE_ONLY: The selected built-in reference machine is for offline checks only. (builtin.machine.generic_xyzac_reference.v1)\nWarning — xyzac.rotary_singularity: The path reaches a rotary singularity of the reference machine; review axis orientation and continuity. (point-0000001)",
+    "export_enabled": true,
+    "screenshot": "fan-en-1600.png",
+    "buttons": {
+      "Back": {
+        "text": "Back",
+        "x": 1322,
+        "y": 19,
+        "width": 112,
+        "height": 34,
+        "text_width": 36,
+        "available_text_width": 100,
+        "text_fits": true
+      },
+      "Open STEP": {
+        "text": "Open STEP",
+        "x": 1443,
+        "y": 19,
+        "width": 112,
+        "height": 34,
+        "text_width": 81,
+        "available_text_width": 100,
+        "text_fits": true
+      },
+      "Create operation": {
+        "text": "Create operation",
+        "x": 1199,
+        "y": 1232,
+        "width": 174,
+        "height": 34,
+        "text_width": 144,
+        "available_text_width": 162,
+        "text_fits": true
+      },
+      "Apply": {
+        "text": "Apply",
+        "x": 1382,
+        "y": 1232,
+        "width": 173,
+        "height": 34,
+        "text_width": 45,
+        "available_text_width": 161,
+        "text_fits": true
+      },
+      "Generate preview": {
+        "text": "Generate preview",
+        "x": 1199,
+        "y": 1275,
+        "width": 174,
+        "height": 34,
+        "text_width": 144,
+        "available_text_width": 162,
+        "text_fits": true
+      },
+      "Export result": {
+        "text": "Export result",
+        "x": 1382,
+        "y": 1275,
+        "width": 173,
+        "height": 34,
+        "text_width": 117,
+        "available_text_width": 161,
+        "text_fits": true
+      },
+      "Cancel generation": {
+        "text": "Cancel generation",
+        "x": 1199,
+        "y": 1318,
+        "width": 356,
+        "height": 34,
+        "text_width": 153,
+        "available_text_width": 344,
+        "text_fits": true
+      }
+    },
+    "collisions": []
+  },
+  {
+    "kind": "normal",
+    "language": "en",
+    "size": [
+      1920,
+      1080
+    ],
+    "status": "Toolpath generated and G-code readback passed, with warnings. Review the reasons below.",
+    "diagnostics": "Warning — MACHINE_REFERENCE_ONLY: The selected built-in reference machine is for offline checks only. (builtin.machine.generic_xyzac_reference.v1)\nWarning — xyzac.rotary_singularity: The path reaches a rotary singularity of the reference machine; review axis orientation and continuity. (point-0000001)",
+    "export_enabled": true,
+    "screenshot": "fan-en-1920.png",
+    "buttons": {
+      "Back": {
+        "text": "Back",
+        "x": 1642,
+        "y": 19,
+        "width": 112,
+        "height": 34,
+        "text_width": 36,
+        "available_text_width": 100,
+        "text_fits": true
+      },
+      "Open STEP": {
+        "text": "Open STEP",
+        "x": 1763,
+        "y": 19,
+        "width": 112,
+        "height": 34,
+        "text_width": 81,
+        "available_text_width": 100,
+        "text_fits": true
+      },
+      "Create operation": {
+        "text": "Create operation",
+        "x": 1519,
+        "y": 1232,
+        "width": 174,
+        "height": 34,
+        "text_width": 144,
+        "available_text_width": 162,
+        "text_fits": true
+      },
+      "Apply": {
+        "text": "Apply",
+        "x": 1702,
+        "y": 1232,
+        "width": 173,
+        "height": 34,
+        "text_width": 45,
+        "available_text_width": 161,
+        "text_fits": true
+      },
+      "Generate preview": {
+        "text": "Generate preview",
+        "x": 1519,
+        "y": 1275,
+        "width": 174,
+        "height": 34,
+        "text_width": 144,
+        "available_text_width": 162,
+        "text_fits": true
+      },
+      "Export result": {
+        "text": "Export result",
+        "x": 1702,
+        "y": 1275,
+        "width": 173,
+        "height": 34,
+        "text_width": 117,
+        "available_text_width": 161,
+        "text_fits": true
+      },
+      "Cancel generation": {
+        "text": "Cancel generation",
+        "x": 1519,
+        "y": 1318,
+        "width": 356,
+        "height": 34,
+        "text_width": 153,
+        "available_text_width": 344,
+        "text_fits": true
+      }
+    },
+    "collisions": []
+  },
+  {
+    "kind": "stale",
+    "language": "zh",
+    "size": [
+      1600,
+      900
+    ],
+    "status": "输入已变化，已有结果已过期，请重新生成。",
+    "diagnostics": "警告 — MACHINE_REFERENCE_ONLY: 当前为内置参考机型，仅用于离线检查。 (builtin.machine.generic_xyzac_reference.v1)\n警告 — xyzac.rotary_singularity: 路径经过参考机型的回转奇异姿态，请核对轴姿态与连续性。 (point-0000001)",
+    "export_enabled": false,
+    "screenshot": "stale-zh.png",
+    "buttons": {
+      "返回": {
+        "text": "返回",
+        "x": 1322,
+        "y": 19,
+        "width": 112,
+        "height": 34,
+        "text_width": 36,
+        "available_text_width": 100,
+        "text_fits": true
+      },
+      "打开 STEP": {
+        "text": "打开 STEP",
+        "x": 1443,
+        "y": 19,
+        "width": 112,
+        "height": 34,
+        "text_width": 81,
+        "available_text_width": 100,
+        "text_fits": true
+      },
+      "新建操作": {
+        "text": "新建操作",
+        "x": 1199,
+        "y": 827,
+        "width": 174,
+        "height": 34,
+        "text_width": 72,
+        "available_text_width": 162,
+        "text_fits": true
+      },
+      "应用": {
+        "text": "应用",
+        "x": 1382,
+        "y": 827,
+        "width": 173,
+        "height": 34,
+        "text_width": 36,
+        "available_text_width": 161,
+        "text_fits": true
+      },
+      "生成预览": {
+        "text": "生成预览",
+        "x": 1199,
+        "y": 870,
+        "width": 174,
+        "height": 34,
+        "text_width": 72,
+        "available_text_width": 162,
+        "text_fits": true
+      },
+      "导出结果": {
+        "text": "导出结果",
+        "x": 1382,
+        "y": 870,
+        "width": 173,
+        "height": 34,
+        "text_width": 72,
+        "available_text_width": 161,
+        "text_fits": true
+      },
+      "取消生成": {
+        "text": "取消生成",
+        "x": 1199,
+        "y": 913,
+        "width": 356,
+        "height": 34,
+        "text_width": 72,
+        "available_text_width": 344,
+        "text_fits": true
+      }
+    },
+    "collisions": []
+  },
+  {
+    "kind": "blocked",
+    "language": "zh",
+    "size": [
+      1600,
+      900
+    ],
+    "status": "生成或检查失败，禁止导出。请查看下方缺陷原因并修正后重新生成。",
+    "diagnostics": "警告 — MACHINE_REFERENCE_ONLY: 当前为内置参考机型，仅用于离线检查。 (builtin.machine.generic_xyzac_reference.v1)\n警告 — xyzac.rotary_singularity: 路径经过参考机型的回转奇异姿态，请核对轴姿态与连续性。 (point-0000001)\n错误 — planar.material_exceeds_solid_volume: 指令材料体积超过目标实体体积；请检查道宽、间距及重复覆盖。 (目标体积 24 mm³; 指令体积 56.64 mm³)",
+    "export_enabled": false,
+    "screenshot": "overfill-zh.png",
+    "buttons": {
+      "返回": {
+        "text": "返回",
+        "x": 1322,
+        "y": 19,
+        "width": 112,
+        "height": 34,
+        "text_width": 36,
+        "available_text_width": 100,
+        "text_fits": true
+      },
+      "打开 STEP": {
+        "text": "打开 STEP",
+        "x": 1443,
+        "y": 19,
+        "width": 112,
+        "height": 34,
+        "text_width": 81,
+        "available_text_width": 100,
+        "text_fits": true
+      },
+      "新建操作": {
+        "text": "新建操作",
+        "x": 1199,
+        "y": 827,
+        "width": 174,
+        "height": 34,
+        "text_width": 72,
+        "available_text_width": 162,
+        "text_fits": true
+      },
+      "应用": {
+        "text": "应用",
+        "x": 1382,
+        "y": 827,
+        "width": 173,
+        "height": 34,
+        "text_width": 36,
+        "available_text_width": 161,
+        "text_fits": true
+      },
+      "生成预览": {
+        "text": "生成预览",
+        "x": 1199,
+        "y": 870,
+        "width": 174,
+        "height": 34,
+        "text_width": 72,
+        "available_text_width": 162,
+        "text_fits": true
+      },
+      "导出结果": {
+        "text": "导出结果",
+        "x": 1382,
+        "y": 870,
+        "width": 173,
+        "height": 34,
+        "text_width": 72,
+        "available_text_width": 161,
+        "text_fits": true
+      },
+      "取消生成": {
+        "text": "取消生成",
+        "x": 1199,
+        "y": 913,
+        "width": 356,
+        "height": 34,
+        "text_width": 72,
+        "available_text_width": 344,
+        "text_fits": true
+      }
+    },
+    "collisions": []
+  },
+  {
+    "kind": "blocked",
+    "language": "en",
+    "size": [
+      1600,
+      900
+    ],
+    "status": "Generation or validation failed. Export is blocked. Review the defects below, correct them and generate again.",
+    "diagnostics": "Warning — MACHINE_REFERENCE_ONLY: The selected built-in reference machine is for offline checks only. (builtin.machine.generic_xyzac_reference.v1)\nWarning — xyzac.rotary_singularity: The path reaches a rotary singularity of the reference machine; review axis orientation and continuity. (point-0000001)\nError — planar.material_exceeds_solid_volume: Commanded material exceeds the target solid volume; check bead width, spacing and overlapping passes. (Target volume 24 mm³; Commanded volume 56.64 mm³)",
+    "export_enabled": false,
+    "screenshot": "overfill-en.png",
+    "buttons": {
+      "Back": {
+        "text": "Back",
+        "x": 1322,
+        "y": 19,
+        "width": 112,
+        "height": 34,
+        "text_width": 36,
+        "available_text_width": 100,
+        "text_fits": true
+      },
+      "Open STEP": {
+        "text": "Open STEP",
+        "x": 1443,
+        "y": 19,
+        "width": 112,
+        "height": 34,
+        "text_width": 81,
+        "available_text_width": 100,
+        "text_fits": true
+      },
+      "Create operation": {
+        "text": "Create operation",
+        "x": 1199,
+        "y": 722,
+        "width": 174,
+        "height": 34,
+        "text_width": 144,
+        "available_text_width": 162,
+        "text_fits": true
+      },
+      "Apply": {
+        "text": "Apply",
+        "x": 1382,
+        "y": 722,
+        "width": 173,
+        "height": 34,
+        "text_width": 45,
+        "available_text_width": 161,
+        "text_fits": true
+      },
+      "Generate preview": {
+        "text": "Generate preview",
+        "x": 1199,
+        "y": 765,
+        "width": 174,
+        "height": 34,
+        "text_width": 144,
+        "available_text_width": 162,
+        "text_fits": true
+      },
+      "Export result": {
+        "text": "Export result",
+        "x": 1382,
+        "y": 765,
+        "width": 173,
+        "height": 34,
+        "text_width": 117,
+        "available_text_width": 161,
+        "text_fits": true
+      },
+      "Cancel generation": {
+        "text": "Cancel generation",
+        "x": 1199,
+        "y": 808,
+        "width": 356,
+        "height": 34,
+        "text_width": 153,
+        "available_text_width": 344,
+        "text_fits": true
+      }
+    },
+    "collisions": []
+  },
+  {
+    "kind": "recovered",
+    "language": "zh",
+    "size": [
+      1600,
+      900
+    ],
+    "status": "路径已生成并完成 G-code 回读，存在警告。请核对下方原因。",
+    "diagnostics": "警告 — MACHINE_REFERENCE_ONLY: 当前为内置参考机型，仅用于离线检查。 (builtin.machine.generic_xyzac_reference.v1)\n警告 — xyzac.rotary_singularity: 路径经过参考机型的回转奇异姿态，请核对轴姿态与连续性。 (point-0000001)",
+    "export_enabled": true,
+    "screenshot": "recovered-zh.png",
+    "buttons": {
+      "返回": {
+        "text": "返回",
+        "x": 1322,
+        "y": 19,
+        "width": 112,
+        "height": 34,
+        "text_width": 36,
+        "available_text_width": 100,
+        "text_fits": true
+      },
+      "打开 STEP": {
+        "text": "打开 STEP",
+        "x": 1443,
+        "y": 19,
+        "width": 112,
+        "height": 34,
+        "text_width": 81,
+        "available_text_width": 100,
+        "text_fits": true
+      },
+      "新建操作": {
+        "text": "新建操作",
+        "x": 1199,
+        "y": 827,
+        "width": 174,
+        "height": 34,
+        "text_width": 72,
+        "available_text_width": 162,
+        "text_fits": true
+      },
+      "应用": {
+        "text": "应用",
+        "x": 1382,
+        "y": 827,
+        "width": 173,
+        "height": 34,
+        "text_width": 36,
+        "available_text_width": 161,
+        "text_fits": true
+      },
+      "生成预览": {
+        "text": "生成预览",
+        "x": 1199,
+        "y": 870,
+        "width": 174,
+        "height": 34,
+        "text_width": 72,
+        "available_text_width": 162,
+        "text_fits": true
+      },
+      "导出结果": {
+        "text": "导出结果",
+        "x": 1382,
+        "y": 870,
+        "width": 173,
+        "height": 34,
+        "text_width": 72,
+        "available_text_width": 161,
+        "text_fits": true
+      },
+      "取消生成": {
+        "text": "取消生成",
+        "x": 1199,
+        "y": 913,
+        "width": 356,
+        "height": 34,
+        "text_width": 72,
+        "available_text_width": 344,
+        "text_fits": true
+      }
+    },
+    "collisions": []
+  },
+  {
+    "kind": "tube-generated",
+    "language": "zh",
+    "size": [
+      1366,
+      768
+    ],
+    "screenshot": "tube-zh.png",
+    "export_enabled": true,
+    "status": "路径已生成，但包含需要核对的警告。",
+    "readback": {
+      "schema_version": 1,
+      "passed": true,
+      "expected_points": 346,
+      "read_points": 346,
+      "coordinate_mismatches": [],
+      "feedrate_mismatches": [],
+      "extrusion_mismatches": [],
+      "order_mismatches": []
+    }
+  },
+  {
+    "kind": "tube-generated",
+    "language": "en",
+    "size": [
+      1920,
+      1080
+    ],
+    "screenshot": "tube-en.png",
+    "export_enabled": true,
+    "status": "路径已生成，但包含需要核对的警告。",
+    "readback": {
+      "schema_version": 1,
+      "passed": true,
+      "expected_points": 346,
+      "read_points": 346,
+      "coordinate_mismatches": [],
+      "feedrate_mismatches": [],
+      "extrusion_mismatches": [],
+      "order_mismatches": []
+    }
+  }
+]

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="8" time="2.864" timestamp="2026-09-12T12:47:38.348212+08:00" hostname="BelongtoTXF"><testcase classname="tests.test_planar_zigzag" name="test_zigzag_clips_hole_and_separates_travel_from_deposition" time="0.013" /><testcase classname="tests.test_planar_zigzag" name="test_empty_or_invalid_input_has_localised_diagnostic" time="0.001" /><testcase classname="tests.test_planar_zigzag" name="test_perimeters_close_each_loop_and_every_transition_is_explicit" time="0.017"><failure message="AssertionError: assert 74 == 14&#10; +  where 74 = len([ToolpathPoint(point_id='point-0000002', position=(7.750000000000001, 0.25, 0.0), tangent=(1.0, 0.0, 0.0), nozzle_axis...te_mm_min=600.0, bead_width_mm=0.5, layer_height_mm=0.2, material_volume_mm3=0.0032701564615071725, issue_ids=()), ...])">def test_perimeters_close_each_loop_and_every_transition_is_explicit():
+        region = PlanarRegion(
+            "concave",
+            _loop((0, 0, 0), (8, 0, 0), (8, 3, 0), (3, 3, 0), (3, 8, 0), (0, 8, 0)),
+            (_loop((1, 1, 0), (2, 1, 0), (2, 2, 0), (1, 2, 0)),),
+        )
+        other = PlanarRegion("island", _loop((20, 0, 0), (22, 0, 0), (22, 2, 0), (20, 2, 0)))
+        path = generate_zigzag_toolpath(
+            "op", (PlanarSliceLayer("layer", 0, (other, region)),), ZigzagParameters(1, 0.5, 0.2)
+        )
+        perimeter = [point for point in path.points if point.extrusion_role == "skin"]
+&gt;       assert len(perimeter) == 14  # 6 + 4 + 4 closed-loop edges
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: assert 74 == 14
+E        +  where 74 = len([ToolpathPoint(point_id='point-0000002', position=(7.750000000000001, 0.25, 0.0), tangent=(1.0, 0.0, 0.0), nozzle_axis...te_mm_min=600.0, bead_width_mm=0.5, layer_height_mm=0.2, material_volume_mm3=0.0032701564615071725, issue_ids=()), ...])
+
+tests\test_planar_zigzag.py:59: AssertionError</failure></testcase><testcase classname="tests.test_planar_spiral" name="test_spiral_has_continuous_z_and_material_after_approach" time="0.006" /><testcase classname="tests.test_planar_spiral" name="test_multiple_islands_are_explicitly_rejected" time="0.001" /><testcase classname="tests.test_planar_spiral" name="test_spiral_checks_correspondence_closure_and_volume" time="0.005" /><testcase classname="tests.test_planar_spiral" name="test_spiral_rejects_holes_topology_changes_and_bad_layer_order" time="0.002" /><testcase classname="tests.test_planar_spiral" name="test_spiral_rejects_degenerate_contour" time="0.000" /></testsuite></testsuites>

@@ -1,0 +1,31 @@
+{
+  "task": "P01",
+  "date": "2026-09-12",
+  "environment": {
+    "python": "tmp/pytest9/Scripts/python.exe",
+    "python_version": "3.12.7",
+    "pytest_version": "9.1.1",
+    "preflight": "passed; QSettings writable"
+  },
+  "verification": {
+    "targeted": "54 passed, 32 subtests passed in 4.24s",
+    "quality": "Ruff, format, context budget and mypy passed (105 source files)",
+    "junit": "pytest.xml",
+    "junit_sha256": "1aad171e3175b08e895967c60b002ed529b6848d527ca05d613317e3de7ce946"
+  },
+  "source_sha256": {
+    "src/five_axis_slicer/algorithms/planar/region.py": "a58b19f6bc6745d87e8c82fdb14df03a87f6ddcaa593cd6858b7d3000e3335f6",
+    "src/five_axis_slicer/manufacturing/planar_parameters.py": "26c213f8e41df3488cd5353d627ed30ca384483a279aef362accf734f470acf6",
+    "src/five_axis_slicer/planar_operation_service.py": "7f0bd5aae7f4c22b8693e7f5d59176c4fd6f09c0be972788baecdee883551a1e",
+    "src/five_axis_slicer/planar_controller.py": "066d36db648e180dd69c73abc1e51d8617eea827d688f46384ec069da0f4d936",
+    "src/five_axis_slicer/postprocessing/planar_product.py": "3c40533fe1648a14b875ff8fd0868783fb59839095a4568b0c522ad6594d1a84",
+    "src/five_axis_slicer/planar_commands.py": "0d4bfd6a799433524428c253d48aedd9de670de6fedb60c0e6a2aa5c53763f47",
+    "src/five_axis_slicer/planar_ui.py": "6572ab02ab0a5067a71a9e03a92c8f4d325eaadb818df14a632fbd823437471b",
+    "src/five_axis_slicer/planar_shell.py": "76f091f8a8e69fb8b09ca003aaab936d438ecc2065fe0c42d46b037da1bff69b"
+  },
+  "boundaries": [
+    "P01 region output is preview-only and cannot be exported as NC.",
+    "P02-P05 deposition algorithms and the P06 six-artifact workflow remain separate tasks.",
+    "Generic XYZAC and real-machine qualification were not claimed."
+  ]
+}

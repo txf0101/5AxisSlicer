@@ -486,7 +486,7 @@ class IndexedValidationTests(unittest.TestCase):
             outer_radius_mm=2.0,
             inner_radius_mm=1.0,
         )
-        self.parameters = TubeProcessParameters(layer_height_mm=1.0, contour_chord_error_mm=0.1)
+        self.parameters = TubeProcessParameters(layer_height_mm=1.0, contour_chord_error_mm=0.001)
         self.plan = plan_indexed_slices(self.feature, self.parameters)
         self.toolpath = generate_indexed_toolpath(
             "tube-op", self.feature, self.plan, self.parameters
@@ -543,12 +543,16 @@ class IndexedValidationTests(unittest.TestCase):
             self.nozzle,
             outer_profile_rz_mm=((0.3, 0.0), (0.05, 2.0), (0.05, 12.5)),
         )
+        # Isolate the deposition contact. The subsequent departure can still
+        # intersect this deliberately surrounding box and must remain checked.
+        contact_path = replace(self.toolpath, points=self.toolpath.points[:2], events=())
+        contact_trajectory = _fake_trajectory(contact_path)
 
         allowed = validate_indexed_tube(
             self.feature,
             self.plan,
-            self.toolpath,
-            self.trajectory,
+            contact_path,
+            contact_trajectory,
             slender_nozzle,
             obstacles=(substrate,),
             check_ipw=False,
@@ -556,8 +560,8 @@ class IndexedValidationTests(unittest.TestCase):
         blocked = validate_indexed_tube(
             self.feature,
             self.plan,
-            self.toolpath,
-            self.trajectory,
+            contact_path,
+            contact_trajectory,
             slender_nozzle,
             obstacles=(fixture,),
             check_ipw=False,

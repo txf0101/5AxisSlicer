@@ -1,0 +1,75 @@
+"""Re-postprocess frozen analytic path solely to qualify complete G-code readback."""
+
+from __future__ import annotations
+
+import csv
+from decimal import Decimal
+import hashlib
+import json
+from pathlib import Path
+import re
+import sys
+
+ROOT = next(parent for parent in Path(__file__).resolve().parents if (parent / "pyproject.toml").is_file())
+sys.path.insert(0, str(ROOT / "src"))
+
+from five_axis_slicer.kinematics.xyzac import MachineAxisSample, MachineAxisTrajectory
+from five_axis_slicer.manufacturing.machine import GENERIC_XYZAC_REFERENCE
+from five_axis_slicer.manufacturing.resources import NozzleProfile
+from five_axis_slicer.manufacturing.toolpath import GeneratedToolpath
+from five_axis_slicer.postprocessing.indexed_tube import (
+    postprocess_indexed_gcode,
+    readback_indexed_gcode,
+)
+
+SOURCE = ROOT / "docs/reviews/evidence/2026-09-12_project_audit/frozen_cases/analytic/product"
+OUTPUT = ROOT / "docs/reviews/evidence/2026-09-12_audit_fixes/gcode"
+OUTPUT.mkdir(parents=True, exist_ok=True)
+path = GeneratedToolpath.from_json(json.loads((SOURCE / "toolpath.json").read_text(encoding="utf-8")))
+with (SOURCE / "machine_axes.csv").open(encoding="utf-8", newline="") as source:
+    samples = tuple(
+        MachineAxisSample(
+            row["source_point_id"], float(row["time_s"]),
+            {axis: float(row[f"{axis}_rad" if axis in "AC" else axis]) for axis in "XYZAC"},
+        )
+        for row in csv.DictReader(source)
+    )
+machine = GENERIC_XYZAC_REFERENCE
+trajectory = MachineAxisTrajectory("frozen-analytic-readback", machine.profile_id,
+                                   path.toolpath_id, samples)
+nozzle = NozzleProfile("frozen-analytic-nozzle", "Readback diameter truth", 0.6, 1.75, "audit")
+gcode = postprocess_indexed_gcode(path, trajectory, machine, nozzle, marker_tag="P02")
+(OUTPUT / "readback_reference.gcode").write_text(gcode, encoding="utf-8")
+variants = {
+    "extrusion_x2": re.sub(r"\bE([-+\d.]+)", lambda m: f"E{Decimal(m[1]) * 2}", gcode),
+    "relative_axes": gcode.replace("G90", "G91"),
+    "relative_extrusion": gcode.replace("M82", "M83"),
+    "events_removed": re.sub(r"; P02 EVENT \S+ (?:retract|prime)\nG1 E[^\n]+\n", "", gcode),
+    "extra_unmarked_move": gcode.replace("M400", "G1 X999 Y999 Z999 E999\nM400"),
+}
+baseline = readback_indexed_gcode(gcode, path, trajectory, machine, nozzle, marker_tag="P02")
+mutations = {}
+for name, text in variants.items():
+    report = readback_indexed_gcode(text, path, trajectory, machine, nozzle, marker_tag="P02")
+    (OUTPUT / f"INVALID_{name}.txt").write_text(text, encoding="utf-8")
+    mutations[name] = report.to_json()
+source_paths = [SOURCE / "toolpath.json", SOURCE / "machine_axes.csv", Path(__file__)] + [
+    ROOT / "src/five_axis_slicer/postprocessing" / name
+    for name in ("indexed_tube.py", "gcode_contract.py", "gcode_readback.py")
+] + [ROOT / "tests/test_generated_gcode_readback.py"]
+summary = {
+    "scope": "Readback qualification on unchanged AUD-01 frozen analytic geometry; does not qualify bead geometry or physical execution.",
+    "nozzle_filament_diameter_mm": nozzle.filament_diameter_mm,
+    "initial_state": ["G21", "G90", "M82", "G92 E0"],
+    "baseline": baseline.to_json(),
+    "mutations": mutations,
+    "source_fingerprints": [
+        {"path": source.relative_to(ROOT).as_posix(), "sha256": hashlib.sha256(source.read_bytes()).hexdigest()}
+        for source in source_paths
+    ],
+}
+(OUTPUT / "mutation_summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+assert baseline.passed, baseline.to_json()
+assert all(not report["passed"] for report in mutations.values())
+print(json.dumps({"points": len(path.points), "baseline_passed": baseline.passed,
+                  "mutation_passed": {name: report["passed"] for name, report in mutations.items()}}, indent=2))

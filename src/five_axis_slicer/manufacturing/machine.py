@@ -1,8 +1,5 @@
 """Machine profiles and forward kinematics.
-
-Transforms use column vectors in a right-handed frame. Linear values are
-millimetres, rotary values are radians, and forward kinematics returns
-``T_machine_from_link``. Only ``PostAxisMap`` converts controller units.
+Right-handed column vectors; mm and rad; FK returns ``T_machine_from_link``.
 """
 
 from __future__ import annotations
@@ -1121,7 +1118,9 @@ def generic_xyzac_reference_profile() -> MachineProfile:
 
 
 def builtin_machine_profiles() -> tuple[MachineProfile, ...]:
-    return CARTESIAN_REFERENCE, GENERIC_XYZAC_REFERENCE
+    from .own_printer import own_ac_profile
+
+    return own_ac_profile(), CARTESIAN_REFERENCE, GENERIC_XYZAC_REFERENCE
 
 
 CARTESIAN_REFERENCE = cartesian_reference_profile()

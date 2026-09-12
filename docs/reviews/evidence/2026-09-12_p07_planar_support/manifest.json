@@ -1,0 +1,79 @@
+{
+  "task": "P07",
+  "date": "2026-09-12",
+  "scope": "Planar buildplate-only Grid/Lines support",
+  "status": "completed",
+  "summary": {
+    "algorithm_version": "planar-support-product-v3",
+    "planar_tests": "211 passed",
+    "full_regression": "741 passed, 3 skipped, 130 subtests passed",
+    "analytic_truth": "33 deposition segments; material volume 61.86 mm3",
+    "readback": "66/66 points passed with zero XYZ, feedrate, extrusion or order mismatches",
+    "motion_check": "Every support travel/deposition centreline segment was checked against the target CAD",
+    "ui_audit": "7 direct Qt/OpenGL captures cover ready, Error/recovery and stale/recovery; horizontal scroll and collisions are zero",
+    "quality": "scripts/check_quality.py exit 0: Ruff, Migrated Ruff, Security Ruff, format, context budget and mypy (120 source files) passed"
+  },
+  "qualification_boundary": {
+    "fan_failure": "The existing fan input fails at Z=57 mm with planar.section_endpoint_gap_exceeds_limit: correction 0.00100791389 mm exceeds the 0.001 mm limit; it was not exported.",
+    "joint_schedule": "Part/support combined layer order, printed-state collision and the full nozzle-body sweep remain unverified; planar.support_joint_schedule_unverified is retained.",
+    "machine": "Generic XYZAC is an offline reference only. Controller semantics, machine calibration, full collision qualification and physical deposition were not verified.",
+    "desktop": "The UI evidence is direct Qt/OpenGL rendering, not human desktop click-through evidence."
+  },
+  "review": {
+    "path": "docs/reviews/2026-09-12_p07_planar_support_review.md",
+    "exists": true,
+    "sha256": "13e244229c9582a56d77dbce6f4268b2d3f02e3ab78ee292502f00564bde4434",
+    "purpose": "P07 implementation, validation and limitation retrospective."
+  },
+  "files": {
+    "input": [
+      {"path": "docs/reviews/evidence/2026-09-12_p07_planar_support/real_model/input/analytic_floating_beam.step", "exists": true, "sha256": "d6ebf6f6ef00fcee18debe2562664982adeb24389d783d91b1ddae519e28204e"}
+    ],
+    "scripts": [
+      {"path": "scripts/planar_p07_real_model_evidence.py", "exists": true, "sha256": "103d0595df1c658cf4bb0d42b39926b29420c83a169783be826b50623d4981ec"},
+      {"path": "scripts/planar_p07_ui_evidence.py", "exists": true, "sha256": "ac8ddce4fb303e84e1e92a6e387386e9f30d513b1970bfa361eceed9e52bd8c5"}
+    ],
+    "core_source": [
+      {"path": "src/five_axis_slicer/algorithms/planar/support.py", "exists": true, "sha256": "fd9638cc9eba6fd11eecebc2f92c112bfb6432e410c3ac20641c6f395c954428"},
+      {"path": "src/five_axis_slicer/algorithms/planar/support_geometry.py", "exists": true, "sha256": "23f13e51c9e1fa79520bc6fc3c32ba9686bde5fda87a447b0b19dfcd391d676c"},
+      {"path": "src/five_axis_slicer/postprocessing/planar_product.py", "exists": true, "sha256": "a4b4043598dbe61c2d17e480107d9ce2e0930f50127730b38fcc3e4c4482a2bc"},
+      {"path": "src/five_axis_slicer/postprocessing/planar_support_product.py", "exists": true, "sha256": "78f078d1916d45fba14015cf65ef7050d638466e51838ca73158877cc598b655"},
+      {"path": "src/five_axis_slicer/planar_controller.py", "exists": true, "sha256": "1a8897fe95512864ba3d89798e858f24eca6f5c8d7584bdb2dfff5d2f1d9da4a"},
+      {"path": "src/five_axis_slicer/planar_ui.py", "exists": true, "sha256": "9d24e26c3ceba6bc94a612be38ccb6302094c8b55b153736954980c81b62410d"},
+      {"path": "src/five_axis_slicer/validation/planar_travel.py", "exists": true, "sha256": "9862b7db4d0971f44fbad78233268daebdf17bc709292cc535b21ebeaa3341f2"}
+    ],
+    "real_model_six_artifacts": [
+      {"path": "docs/reviews/evidence/2026-09-12_p07_planar_support/real_model/analytic_product/main.gcode", "exists": true, "sha256": "5fd7c1f987141c471420ea2bfc35f0573d27470cc454487b1aed6623181c7952"},
+      {"path": "docs/reviews/evidence/2026-09-12_p07_planar_support/real_model/analytic_product/toolpath.json", "exists": true, "sha256": "92365aaf27a005e7e999809335795a9af9c18c7d375db56439273c03b0d9a1e6"},
+      {"path": "docs/reviews/evidence/2026-09-12_p07_planar_support/real_model/analytic_product/machine_axes.csv", "exists": true, "sha256": "a08f944b89c9e9507cdf708af9ac5ea2417a3cf04faad332f9ed88dc92dd9524"},
+      {"path": "docs/reviews/evidence/2026-09-12_p07_planar_support/real_model/analytic_product/warnings.json", "exists": true, "sha256": "af8e360426daaf6340880088fe9541c09cf1790b5cfb22a8c7fe853518150b28"},
+      {"path": "docs/reviews/evidence/2026-09-12_p07_planar_support/real_model/analytic_product/preview.json", "exists": true, "sha256": "535848f7005118fbc55a9a807ad14a3154261311ec3974e773e2032042c9190b"},
+      {"path": "docs/reviews/evidence/2026-09-12_p07_planar_support/real_model/analytic_product/manifest.json", "exists": true, "sha256": "cf928698713f984cf08842c2fac3303a591c67a9acb502763a2c5306c8951f7d"}
+    ],
+    "ui_images": [
+      {"path": "docs/reviews/evidence/2026-09-12_p07_planar_support/ui/01_support_grid_zh_1366x768_ready.png", "exists": true, "sha256": "988ea2f4a65abc3c889f9561b0476de15f78666d19c3e54d599e42cdf6c94715"},
+      {"path": "docs/reviews/evidence/2026-09-12_p07_planar_support/ui/02_support_lines_en_1600x900_ready.png", "exists": true, "sha256": "fcb70e1352bf457c3f15ed24d785d9502964d3416bf076ebfc533d686e5bdde7"},
+      {"path": "docs/reviews/evidence/2026-09-12_p07_planar_support/ui/03_support_grid_en_1920x1080_ready.png", "exists": true, "sha256": "36fee88b9a37dc980186afab92f4de28d902e82f50900964b384ff3c0a3be0e8"},
+      {"path": "docs/reviews/evidence/2026-09-12_p07_planar_support/ui/04_support_error_en_1366x768.png", "exists": true, "sha256": "3352df86a0847cb67cec92f9abf3fc5dc5f936b7c44c16c2821e56b7c1128c98"},
+      {"path": "docs/reviews/evidence/2026-09-12_p07_planar_support/ui/05_support_error_recovered_zh_1600x900.png", "exists": true, "sha256": "363c52992a9eb9fa7557aedcf1e1ff955497cad6bbbd660ac22644d955d5da77"},
+      {"path": "docs/reviews/evidence/2026-09-12_p07_planar_support/ui/06_support_stale_en_1920x1080.png", "exists": true, "sha256": "14bd3aee2edf3418ace32843b3a56dd2f25a68eec5423626cea6ea2328f62f8e"},
+      {"path": "docs/reviews/evidence/2026-09-12_p07_planar_support/ui/07_support_stale_recovered_zh_1600x900.png", "exists": true, "sha256": "953619965dd921e8f6d11260c048cc864e7c5aa33a632b4a267feaaae2aa6ead"}
+    ],
+    "junit": [
+      {"path": "docs/reviews/evidence/2026-09-12_p07_planar_support/tests/pytest_planar.xml", "exists": true, "sha256": "29de258770e3417c416414beb6d3b08eecc57aa00413dcce7ea53bfeb9fa1a99", "result": "211 passed"},
+      {"path": "docs/reviews/evidence/2026-09-12_p07_planar_support/tests/pytest_full.xml", "exists": true, "sha256": "9df71a34a1c4cca195bcf3edd4351ac0403404f4b9dec2a7d2dc9565a1774112", "result": "741 passed, 3 skipped, 130 subtests passed"}
+    ],
+    "quality_logs": [
+      {"path": "docs/reviews/evidence/2026-09-12_p07_planar_support/quality/check_quality.log", "exists": true, "sha256": "dd774e0b71ef187bed67d58d05a14dbbbcfea5ce5182220b092f25892edd6393", "exit_code": 0}
+    ],
+    "evidence_summaries": [
+      {"path": "docs/reviews/evidence/2026-09-12_p07_planar_support/real_model/summary.json", "exists": true, "sha256": "0f03ef03e53f3b55e61e88ba808fa3ed55b2c130431836bf2b1524613bd0a7d2"},
+      {"path": "docs/reviews/evidence/2026-09-12_p07_planar_support/ui/summary.json", "exists": true, "sha256": "afac99bfaf53d6315f0c0fad009188b10b7140a70036282ac4d8eb11d84a1c68"}
+    ],
+    "documentation": [
+      {"path": "docs/guides/planar_workbench_zh.md", "exists": true, "sha256": "b99a1b50543471b12504f8caa5f6eb5fea068629e4f827e82bf17aa245b6a42f"},
+      {"path": "docs/planning/progress_tracker.md", "exists": true, "sha256": "38bea45203fd648c44d8c306f33297d28119cbd40b659621bc5bd393a8368426"},
+      {"path": "README.md", "exists": true, "sha256": "14e18766e1cd6c98ec24cd10597f7ae0aa4670f100a7c57a38605ff1fc1dbc12"}
+    ]
+  }
+}

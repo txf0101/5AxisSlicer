@@ -1,0 +1,163 @@
+{
+  "source_file": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\docs\\reviews\\evidence\\2026-09-12_project_audit\\tube_probe\\ready_setup\\analytic_straight_tube.step",
+  "source_sha256": "88c2daed770abc130cb922f76aab7e076dc68f280cbd13804c09c086c1b27ca1",
+  "tube_body": "body_001",
+  "substrate_body": "body_002",
+  "parameters": {
+    "bead_width_mm": 1.0,
+    "layer_height_mm": 0.5,
+    "max_wedge_angle_deg": 15.0,
+    "max_bead_height_error_mm": 0.05,
+    "safe_clearance_mm": 2.0,
+    "retract_length_mm": 1.0,
+    "deposition_feedrate_mm_min": 1.0,
+    "travel_feedrate_mm_min": 1.0,
+    "contour_chord_error_mm": 0.001
+  },
+  "runs": [
+    {
+      "shift_x_mm": 0,
+      "setup_ready": true,
+      "setup_validation": {
+        "issues": [
+          {
+            "code": "MACHINE_REFERENCE_ONLY",
+            "severity": "warning",
+            "object_id": "builtin.machine.generic_xyzac_reference.v1",
+            "context": {
+              "resource_type": "machine"
+            }
+          }
+        ],
+        "node_states": {
+          "build_cs": "valid",
+          "machine": "valid",
+          "material": "valid",
+          "model_cs": "valid",
+          "nozzle": "valid",
+          "operation": "dirty",
+          "part": "valid",
+          "placement": "valid"
+        },
+        "coordinates_valid": true,
+        "setup_ready": true
+      },
+      "parameters_preserved": true,
+      "exportable": true,
+      "status": "ready",
+      "issue_codes": [],
+      "points": 129,
+      "first_axes": {
+        "X": -50.0,
+        "Y": -20.249999999999996,
+        "Z": 57.5,
+        "A": 1.5707963267948966,
+        "C": 1.5707963267948966
+      },
+      "gcode_sha256": "35d6cb0a29d00eddf6b27d911eadea8b07884f3b86ce7694e213f251f9c238c3",
+      "source_to_machine_origin": [
+        250.0,
+        250.0,
+        250.0
+      ]
+    },
+    {
+      "shift_x_mm": 100,
+      "setup_ready": true,
+      "setup_validation": {
+        "issues": [
+          {
+            "code": "MACHINE_REFERENCE_ONLY",
+            "severity": "warning",
+            "object_id": "builtin.machine.generic_xyzac_reference.v1",
+            "context": {
+              "resource_type": "machine"
+            }
+          }
+        ],
+        "node_states": {
+          "build_cs": "valid",
+          "machine": "valid",
+          "material": "valid",
+          "model_cs": "valid",
+          "nozzle": "valid",
+          "operation": "dirty",
+          "part": "valid",
+          "placement": "valid"
+        },
+        "coordinates_valid": true,
+        "setup_ready": true
+      },
+      "parameters_preserved": true,
+      "exportable": true,
+      "status": "ready",
+      "issue_codes": [],
+      "points": 129,
+      "first_axes": {
+        "X": -50.0,
+        "Y": -20.249999999999996,
+        "Z": 57.5,
+        "A": 1.5707963267948966,
+        "C": 1.5707963267948966
+      },
+      "gcode_sha256": "35d6cb0a29d00eddf6b27d911eadea8b07884f3b86ce7694e213f251f9c238c3",
+      "source_to_machine_origin": [
+        350.0,
+        250.0,
+        250.0
+      ]
+    }
+  ],
+  "identical_machine_axes": true,
+  "identical_gcode": true,
+  "stale": {
+    "before": "ready",
+    "after_placement_change": "ready",
+    "operation_dirty_reasons": [
+      "operation_created",
+      "operation_geometry_changed",
+      "operation_parameters_changed",
+      "placement_changed"
+    ],
+    "operation_hash_unchanged": true,
+    "old_product_export_succeeded": true
+  },
+  "chord_error": {
+    "requested_mm": 0.001,
+    "max_analytic_midpoint_radial_deficit_mm": 0.001656497170882787
+  },
+  "build_cs": {
+    "source_to_build_origin": [
+      -10.0,
+      0.0,
+      0.0
+    ],
+    "setup_validation": {
+      "issues": [
+        {
+          "code": "MACHINE_REFERENCE_ONLY",
+          "severity": "warning",
+          "object_id": "builtin.machine.generic_xyzac_reference.v1",
+          "context": {
+            "resource_type": "machine"
+          }
+        }
+      ],
+      "node_states": {
+        "build_cs": "valid",
+        "machine": "valid",
+        "material": "valid",
+        "model_cs": "valid",
+        "nozzle": "valid",
+        "operation": "dirty",
+        "part": "valid",
+        "placement": "valid"
+      },
+      "coordinates_valid": true,
+      "setup_ready": true
+    },
+    "exportable": true,
+    "gcode_identical_to_identity_build": true,
+    "toolpath_identical_to_identity_build": true
+  }
+}

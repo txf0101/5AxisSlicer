@@ -1,0 +1,9 @@
+{
+  "task": "P04",
+  "date": "2026-09-12",
+  "scope": "Planar thin-wall专项证据",
+  "interpreter": "tmp/pytest9/Scripts/python.exe",
+  "pytest": {"tests": 7, "passed": 7, "failed": 0, "skipped": 0, "junit": "pytest.xml"},
+  "files_sha256": {"pytest.xml": "4b0ad9a4a8fbc7260e445e51022c6828e1e3d3fb073933af5b5d5f84296c2d40"},
+  "qualification_boundary": "Generic XYZAC仅为离线参考；未验证真实控制器、机床标定、碰撞资格或实体试切。"
+}

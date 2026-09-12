@@ -1,0 +1,54 @@
+ M README.md
+ M docs/README.md
+ M docs/guides/README.md
+ M docs/planning/progress_tracker.md
+ M src/five_axis_slicer/automation_routes.py
+ M src/five_axis_slicer/command_kernel.py
+ M src/five_axis_slicer/postprocessing/indexed_tube.py
+ M src/five_axis_slicer/project_io.py
+ M src/five_axis_slicer/restricted_script.py
+ M src/five_axis_slicer/ui.py
+ M src/five_axis_slicer/validation/__init__.py
+?? docs/guides/assets/planar/
+?? docs/guides/planar_workbench_zh.md
+?? docs/planning/planar_handoff.md
+?? docs/reviews/2026-09-12_planar_algorithm_foundation_review.md
+?? docs/reviews/evidence/2026-09-12_p01_planar/
+?? docs/reviews/evidence/2026-09-12_p02_planar/
+?? docs/reviews/evidence/2026-09-12_p03_planar/
+?? docs/reviews/evidence/2026-09-12_p04_planar/
+?? docs/reviews/evidence/2026-09-12_p05_planar/
+?? docs/reviews/evidence/2026-09-12_p06_planar/
+?? docs/reviews/evidence/2026-09-12_project_audit/
+?? scripts/planar_p02_real_model_evidence.py
+?? scripts/planar_p02_ui_evidence.py
+?? scripts/planar_p06_real_model_evidence.py
+?? scripts/planar_p06_ui_evidence.py
+?? src/five_axis_slicer/algorithms/planar/
+?? src/five_axis_slicer/manufacturing/planar_parameters.py
+?? src/five_axis_slicer/planar_commands.py
+?? src/five_axis_slicer/planar_controller.py
+?? src/five_axis_slicer/planar_operation_service.py
+?? src/five_axis_slicer/planar_shell.py
+?? src/five_axis_slicer/planar_ui.py
+?? src/five_axis_slicer/postprocessing/planar_product.py
+?? src/five_axis_slicer/postprocessing/planar_support_product.py
+?? src/five_axis_slicer/validation/planar.py
+?? tests/test_planar_automation.py
+?? tests/test_planar_commands.py
+?? tests/test_planar_controller.py
+?? tests/test_planar_offset.py
+?? tests/test_planar_operation_domain.py
+?? tests/test_planar_path_products.py
+?? tests/test_planar_project_io.py
+?? tests/test_planar_region.py
+?? tests/test_planar_region_product.py
+?? tests/test_planar_spiral.py
+?? tests/test_planar_support.py
+?? tests/test_planar_support_contract.py
+?? tests/test_planar_support_product.py
+?? tests/test_planar_thin_wall.py
+?? tests/test_planar_thin_wall_product.py
+?? tests/test_planar_ui.py
+?? tests/test_planar_zigzag.py
+?? tests/test_planar_zigzag_product.py

@@ -1,0 +1,65 @@
+..........................F..................                            [100%]
+================================== FAILURES ===================================
+_ test_offset_product_handles_holes_concavity_multiple_islands_and_split_necks _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001EDA5D482C0>
+
+    def test_offset_product_handles_holes_concavity_multiple_islands_and_split_necks(
+        monkeypatch,
+    ) -> None:
+        z = 0.5
+        holed = PlanarRegion(
+            "holed",
+            _rect("unused", 0, 0, 20, 20).outer,
+            (_rect("unused", 7, 7, 13, 13).outer,),
+        )
+        concave = PlanarRegion(
+            "concave",
+            (
+                (25, 0, z),
+                (45, 0, z),
+                (45, 20, z),
+                (37, 20, z),
+                (37, 8, z),
+                (33, 8, z),
+                (33, 20, z),
+                (25, 20, z),
+                (25, 0, z),
+            ),
+        )
+        dumbbell = PlanarRegion(
+            "split",
+            tuple(
+                (x + 50, y, z)
+                for x, y in (
+                    (0, 0),
+                    (4, 0),
+                    (4, 1.5),
+                    (8, 1.5),
+                    (8, 0),
+                    (12, 0),
+                    (12, 4),
+                    (8, 4),
+                    (8, 2.5),
+                    (4, 2.5),
+                    (4, 4),
+                    (0, 4),
+                    (0, 0),
+                )
+            ),
+        )
+        layers = (PlanarSliceLayer("l1", z, (holed, concave, dumbbell, _rect("island", 70, 0, 78, 8))),)
+        monkeypatch.setattr(planar_product, "slice_planar_layers", lambda *args, **kwargs: layers)
+    
+        result = generate_planar_path_product(
+            _model(), _offset_operation(), _machine(), _nozzle(), RigidTransform.identity("build")
+        )
+    
+>       assert result.exportable and result.readback.passed
+E       AssertionError: assert (False)
+E        +  where False = PlanarZigzagProductResult(operation_type='planar_offset', layers=(PlanarSliceLayer(layer_id='l1', z_mm=0.5, regions=(P...te_mismatches=(), feedrate_mismatches=(), extrusion_mismatches=(), order_mismatches=('export_blocked_by_validation',))).exportable
+
+tests\test_planar_path_products.py:263: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_planar_path_products.py::test_offset_product_handles_holes_concavity_multiple_islands_and_split_necks
+1 failed, 44 passed in 8.81s

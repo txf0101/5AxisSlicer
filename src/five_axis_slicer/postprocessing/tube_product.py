@@ -74,7 +74,7 @@ ALGORITHM_VERSIONS = {
     "tube_buildup": "tube-buildup-product-v1",
     "tube_continuous": "tube-continuous-product-v1",
 }
-PRODUCT_STATE_SCHEMA_VERSION = 1
+PRODUCT_STATE_SCHEMA_VERSION = 2
 CancelCheck = Callable[[], bool]
 
 
@@ -93,6 +93,8 @@ class TubeProductResult:
     readback: GCodeReadbackReport
     operation_toolpaths: tuple[GeneratedToolpath, ...]
     buildup_sequence: TubeBuildupSequence | None = None
+    generation_context: Mapping[str, Any] | None = None
+    input_semantic_sha256: str | None = None
 
     @property
     def exportable(self) -> bool:
@@ -108,6 +110,8 @@ class TubeProductResult:
             "validation": self.validation.to_json(),
             "readback": self.readback.to_json(),
             "operation_sequence": [item.operation_id for item in self.operation_toolpaths],
+            "generation_context": self.generation_context,
+            "input_semantic_sha256": self.input_semantic_sha256,
         }
 
 
@@ -119,6 +123,7 @@ class TubeProductState:
     parameter_semantic_sha256: str
     status: str
     result_payload: Mapping[str, Any] | None = None
+    input_semantic_sha256: str | None = None
 
     def __post_init__(self) -> None:
         if self.status not in {"ready", "warning", "error", "stale", "draft"}:
@@ -133,11 +138,12 @@ class TubeProductState:
             "parameter_semantic_sha256": self.parameter_semantic_sha256,
             "status": self.status,
             "result": self.result_payload,
+            "input_semantic_sha256": self.input_semantic_sha256,
         }
 
     @classmethod
     def from_json(cls, payload: Mapping[str, Any]) -> "TubeProductState":
-        if int(payload.get("schema_version", 0)) != PRODUCT_STATE_SCHEMA_VERSION:
+        if int(payload.get("schema_version", 0)) not in {1, PRODUCT_STATE_SCHEMA_VERSION}:
             raise ValueError("unsupported Tube product state schema")
         result = payload.get("result")
         if result is not None and not isinstance(result, Mapping):
@@ -145,8 +151,14 @@ class TubeProductState:
         return cls(
             operation_id=str(payload["operation_id"]),
             parameter_semantic_sha256=str(payload["parameter_semantic_sha256"]),
-            status=str(payload["status"]),
+            status=(
+                "stale"
+                if not payload.get("input_semantic_sha256")
+                and payload["status"] in {"ready", "warning"}
+                else str(payload["status"])
+            ),
             result_payload=result,
+            input_semantic_sha256=payload.get("input_semantic_sha256"),
         )
 
     def stale_for(self, operation: TubeOperationDefinition) -> "TubeProductState":
@@ -175,12 +187,43 @@ class TubeProductService:
         nozzle: NozzleProfile,
         **kwargs: Any,
     ) -> TubeProductResult:
-        result = generate_tube_product(model, operation, machine, nozzle, **kwargs)
+        input_sha256 = kwargs.pop("input_semantic_sha256", None)
+        generation_context = kwargs.pop("generation_context", None)
+        result = replace(
+            generate_tube_product(model, operation, machine, nozzle, **kwargs),
+            input_semantic_sha256=input_sha256,
+            generation_context=generation_context,
+        )
+        if generation_context is not None:
+            setup_issues = tuple(
+                ValidationIssue.from_json(item)
+                for item in generation_context.get("setup_issues", ())
+            )
+            validation = replace(
+                result.validation,
+                issues=tuple(_unique_issues([*result.validation.issues, *setup_issues])),
+            )
+            result = replace(
+                result,
+                validation=validation,
+                manifest=replace(
+                    result.manifest,
+                    status=validation.status,
+                    ready_for_export=result.manifest.ready_for_export
+                    and validation.ready_for_export,
+                    issues=tuple(
+                        dict.fromkeys(
+                            (*result.manifest.issues, *(item.code for item in setup_issues))
+                        )
+                    ),
+                ),
+            )
         self.state = TubeProductState(
             operation.operation_id,
             tube_operation_semantic_sha256(operation),
             cast(GeneratedResultStatus, result.manifest.status).value,
             result.to_json(),
+            input_sha256,
         )
         return result
 
@@ -326,7 +369,7 @@ def _generate_buildup_product(
     parameters, plan, sequence = _plan_buildup_sequence(
         model, operation, feature, config, planar_base
     )
-    toolpath = _merge_buildup_sequence(operation.operation_id, sequence)
+    toolpath = _merge_buildup_sequence(operation.operation_id, sequence, parameters)
     _checkpoint(cancelled)
     trajectory = solve_xyzac_trajectory(
         toolpath,
@@ -478,7 +521,7 @@ def _finish_product(
             sequence,
         )
     gcode = postprocess_tube_gcode(operation.operation_type, toolpath, trajectory, machine, nozzle)
-    readback = readback_tube_gcode(gcode, toolpath, trajectory, machine)
+    readback = readback_tube_gcode(gcode, toolpath, trajectory, machine, nozzle)
     if not readback.passed:
         manifest = replace(
             manifest,
@@ -523,10 +566,11 @@ def readback_tube_gcode(
     toolpath: GeneratedToolpath,
     trajectory: MachineAxisTrajectory,
     machine: MachineProfile,
+    nozzle: NozzleProfile,
 ) -> GCodeReadbackReport:
     """Read back the shared restricted dialect and compare axes, F, E and order."""
 
-    return readback_indexed_gcode(gcode, toolpath, trajectory, machine)
+    return readback_indexed_gcode(gcode, toolpath, trajectory, machine, nozzle)
 
 
 def export_tube_product(
@@ -546,6 +590,7 @@ def tube_operation_semantic_sha256(operation: TubeOperationDefinition) -> str:
     payload = {
         "operation_id": operation.operation_id,
         "operation_type": operation.operation_type,
+        "enabled": operation.enabled,
         "geometry": operation.geometry.to_json(),
         "parameters": operation.parameters.to_json(),
         "type_config": None if operation.type_config is None else operation.type_config.to_json(),
@@ -603,11 +648,17 @@ def _base_from_substrate(
     )
 
 
-def _merge_buildup_sequence(operation_id: str, sequence: TubeBuildupSequence) -> GeneratedToolpath:
+def _merge_buildup_sequence(
+    operation_id: str, sequence: TubeBuildupSequence, parameters: TubeBuildupParameters
+) -> GeneratedToolpath:
     points: list[ToolpathPoint] = []
     events: list[ToolpathEvent] = []
     starts: dict[str, int] = {}
     for operation_index, path in enumerate(sequence.operations, start=1):
+        if points:
+            _append_buildup_transition(
+                operation_id, operation_index, points, events, path.points[0], parameters
+            )
         starts[path.operation_id] = len(points)
         prefix = f"op{operation_index:02d}"
         for point in path.points:
@@ -633,18 +684,6 @@ def _merge_buildup_sequence(operation_id: str, sequence: TubeBuildupSequence) ->
                     context=context,
                 )
             )
-    for index, event in enumerate(sequence.transition_events, start=1):
-        target = str(event.context.get("to_operation_id", ""))
-        context = dict(event.context)
-        context["sequence_index"] = starts.get(target, 0)
-        events.append(
-            replace(
-                event,
-                event_id=f"transition-{index:04d}-{event.event_id}",
-                operation_id=operation_id,
-                context=context,
-            )
-        )
     return GeneratedToolpath(
         f"{operation_id}-buildup-sequence-v1",
         operation_id,
@@ -652,6 +691,51 @@ def _merge_buildup_sequence(operation_id: str, sequence: TubeBuildupSequence) ->
         points=tuple(points),
         events=tuple(events),
     )
+
+
+def _append_buildup_transition(operation_id, index, points, events, target, parameters):
+    """Real non-depositing clearance moves precede the target's approach/prime."""
+    start = len(points)
+    previous = points[-1]
+    for label, point in (("depart", previous), ("travel", target)):
+        position = tuple(
+            p - a * parameters.safe_clearance_mm for p, a in zip(point.position, point.nozzle_axis)
+        )
+        points.append(
+            replace(
+                point,
+                point_id=f"transition-{index}-{label}",
+                operation_id=operation_id,
+                stage_id="operation-transition",
+                position=position,
+                point_type=label,
+                extrusion_role="none",
+                bead_width_mm=None,
+                layer_height_mm=None,
+                material_volume_mm3=0.0,
+                feedrate_mm_min=parameters.travel_feedrate_mm_min,
+            )
+        )
+    for label, sequence_index in (
+        ("retract", start),
+        ("safe_depart", start + 1),
+        ("operation_change", start + 2),
+        ("safe_approach", start + 3),
+    ):
+        context = {"sequence_index": sequence_index}
+        if label == "retract":
+            context["extrusion_length_mm"] = -parameters.retract_length_mm
+        events.append(
+            ToolpathEvent(
+                event_id=f"transition-{index}-{label}",
+                event_type=label,
+                operation_id=operation_id,
+                stage_id="operation-transition",
+                layer_id=target.layer_id,
+                region_id=target.region_id,
+                context=context,
+            )
+        )
 
 
 def _validate_buildup(

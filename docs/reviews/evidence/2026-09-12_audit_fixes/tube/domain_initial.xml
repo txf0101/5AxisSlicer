@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="42" time="53.125" timestamp="2026-09-12T12:53:07.882976+08:00" hostname="BelongtoTXF"><testcase classname="tests.test_tube_generation_context" name="test_source_build_mount_and_independent_machine_fk[build0]" time="1.921" /><testcase classname="tests.test_tube_generation_context" name="test_source_build_mount_and_independent_machine_fk[build1]" time="1.876" /><testcase classname="tests.test_tube_generation_context" name="test_placement_changes_axes_and_stale_export_is_blocked" time="2.790" /><testcase classname="tests.test_tube_generation_context" name="test_setup_errors_and_pending_drafts_block_generation" time="0.009" /><testcase classname="tests.test_tube_generation_context" name="test_cancel_preserves_previous_result_and_legacy_reopens_stale" time="1.360" /><testcase classname="tests.test_tube_generation_context" name="test_step_chord_limit_checks_real_segment_interiors" time="1.382" /><testcase classname="tests.test_tube_indexed_pipeline.TubeInputAndGeometryTests" name="test_independently_generated_straight_and_arc_steps_match_truth" time="0.069" /><testcase classname="tests.test_tube_indexed_pipeline.TubeInputAndGeometryTests" name="test_non_circular_port_is_localised" time="0.001" /><testcase classname="tests.test_tube_indexed_pipeline.TubeInputAndGeometryTests" name="test_operation_rejects_role_aliasing_and_invalid_parameter_ranges" time="0.001" /><testcase classname="tests.test_tube_indexed_pipeline.TubeInputAndGeometryTests" name="test_operation_roles_parameters_dirty_and_round_trip" time="0.002" /><testcase classname="tests.test_tube_indexed_pipeline.TubeInputAndGeometryTests" name="test_pipe2_recognition_uses_current_step_topology" time="0.001" /><testcase classname="tests.test_tube_indexed_pipeline.TubeInputAndGeometryTests" name="test_selected_manual_centerline_edges_override_surface_chain" time="0.001" /><testcase classname="tests.test_tube_indexed_pipeline.IndexedPlanningTests" name="test_clearance_failure_is_localised" time="0.001" /><testcase classname="tests.test_tube_indexed_pipeline.IndexedPlanningTests" name="test_exact_occt_section_recovers_outer_inner_and_midwall" time="0.030" /><testcase classname="tests.test_tube_indexed_pipeline.IndexedPlanningTests" name="test_partial_tail_gets_a_centered_owned_layer" time="0.001" /><testcase classname="tests.test_tube_indexed_pipeline.IndexedPlanningTests" name="test_pipe2_toolpath_uses_exact_occt_sections" time="0.712" /><testcase classname="tests.test_tube_indexed_pipeline.IndexedPlanningTests" name="test_toolpath_has_closed_deposition_loops_and_explicit_safe_index_events" time="0.002" /><testcase classname="tests.test_tube_indexed_pipeline.IndexedPlanningTests" name="test_wedge_coverage_height_error_and_half_layer_locations" time="0.001" /><testcase classname="tests.test_tube_indexed_pipeline.XYZACKinematicsTests" name="test_build_transform_and_nonzero_rotary_centres_close_through_fk" time="0.003" /><testcase classname="tests.test_tube_indexed_pipeline.XYZACKinematicsTests" name="test_fk_round_trip_branch_unwrap_and_tool_length" time="0.007" /><testcase classname="tests.test_tube_indexed_pipeline.XYZACKinematicsTests" name="test_rotary_velocity_and_acceleration_limits_are_reported" time="0.006" /><testcase classname="tests.test_tube_indexed_pipeline.XYZACKinematicsTests" name="test_singularity_is_reported_and_unreachable_orientation_rejected" time="0.003" /><testcase classname="tests.test_tube_indexed_pipeline.IndexedValidationTests" name="test_clear_case_and_intermediate_swept_fixture_collision" time="0.102" /><testcase classname="tests.test_tube_indexed_pipeline.IndexedValidationTests" name="test_printed_ipw_collision_blocks_export" time="0.868" /><testcase classname="tests.test_tube_indexed_pipeline.IndexedValidationTests" name="test_substrate_tip_contact_is_allowed_but_fixture_contact_is_not" time="0.044"><failure message="AssertionError: 'tube.nozzle_obstacle_collision' unexpectedly found in {'tube.nozzle_obstacle_collision'}">self = &lt;test_tube_indexed_pipeline.IndexedValidationTests testMethod=test_substrate_tip_contact_is_allowed_but_fixture_contact_is_not&gt;
+
+    def test_substrate_tip_contact_is_allowed_but_fixture_contact_is_not(self) -&gt; None:
+        deposition = next(
+            point for point in self.toolpath.points if point.point_type == "deposition"
+        )
+        bounds = (
+            tuple(value - 0.02 for value in deposition.position),
+            tuple(value + 0.02 for value in deposition.position),
+        )
+        substrate = CollisionBox("substrate", "substrate", *bounds)
+        fixture = CollisionBox("fixture", "fixture", *bounds)
+        slender_nozzle = replace(
+            self.nozzle,
+            outer_profile_rz_mm=((0.3, 0.0), (0.05, 2.0), (0.05, 12.5)),
+        )
+    
+        allowed = validate_indexed_tube(
+            self.feature,
+            self.plan,
+            self.toolpath,
+            self.trajectory,
+            slender_nozzle,
+            obstacles=(substrate,),
+            check_ipw=False,
+        )
+        blocked = validate_indexed_tube(
+            self.feature,
+            self.plan,
+            self.toolpath,
+            self.trajectory,
+            slender_nozzle,
+            obstacles=(fixture,),
+            check_ipw=False,
+        )
+    
+&gt;       self.assertNotIn("tube.nozzle_obstacle_collision", {x.code for x in allowed.issues})
+E       AssertionError: 'tube.nozzle_obstacle_collision' unexpectedly found in {'tube.nozzle_obstacle_collision'}
+
+tests\test_tube_indexed_pipeline.py:566: AssertionError</failure></testcase><testcase classname="tests.test_tube_indexed_product_flow.TubeIndexedProductFlowTests" name="test_cancelled_export_leaves_last_complete_result_in_place" time="4.649" /><testcase classname="tests.test_tube_indexed_product_flow.TubeIndexedProductFlowTests" name="test_changed_parameters_become_stale_and_state_reopens" time="4.662" /><testcase classname="tests.test_tube_indexed_product_flow.TubeIndexedProductFlowTests" name="test_pipe2_generates_exports_and_reads_back" time="4.328" /><testcase classname="tests.test_tube_indexed_product_flow.TubeIndexedProductFlowTests" name="test_validation_error_cannot_be_exported" time="23.961" /><testcase classname="tests.test_tube_multi_product_flow" name="test_indexed_dispatch_reuses_t08_product" time="0.004" /><testcase classname="tests.test_tube_multi_product_flow" name="test_buildup_keeps_base_independent_and_orders_safe_transition[before_tube-expected0]" time="0.057" /><testcase classname="tests.test_tube_multi_product_flow" name="test_buildup_keeps_base_independent_and_orders_safe_transition[after_tube-expected1]" time="0.059" /><testcase classname="tests.test_tube_multi_product_flow" name="test_continuous_reads_back_exports_six_artifacts_and_reopens_state" time="0.069" /><testcase classname="tests.test_tube_multi_product_flow" name="test_continuous_collision_error_blocks_nc_and_export" time="0.055" /><testcase classname="tests.test_tube_three_operations" name="test_three_types_round_trip_and_legacy_defaults_to_indexed" time="0.001" /><testcase classname="tests.test_tube_three_operations" name="test_command_targets_operation_id_and_persists_special_fields" time="0.001" /><testcase classname="tests.test_tube_three_operations" name="test_controller_product_state_becomes_stale_and_reopens" time="0.023"><failure message="ValueError: Generate requires a valid applied Setup: SETUP_PART_MISSING, SETUP_MATERIAL_MISSING, MODEL_CS_MISSING, BUILD_CS_MISSING, PLACEMENT_DIRTY">def test_controller_product_state_becomes_stale_and_reopens() -&gt; None:
+        source = Path(__file__).resolve().parents[1] / "example" / "pipe2" / "弯管新.stp"
+        controller = TubeSetupController(load_step(source))
+        controller.create_operation(operation_id="indexed")
+        controller.configure_operation(
+            tube_body_id="body_002",
+            entry_port_id="body_002_edge_0003",
+            exit_port_id="body_002_edge_0014",
+            substrate_body_id="body_001",
+            parameters=TubeProcessParameters(bead_width_mm=10.0, layer_height_mm=10.0, safe_clearance_mm=15.0),
+        )
+        controller.select_machine(
+            replace(
+                GENERIC_XYZAC_REFERENCE,
+                joints=tuple(
+                    replace(item, soft_limit_min=-1000.0, soft_limit_max=1000.0)
+                    for item in GENERIC_XYZAC_REFERENCE.joints
+                ),
+            )
+        )
+        controller.select_nozzle(
+            NozzleProfile(
+                resource_id="test-nozzle",
+                display_name="Test nozzle",
+                orifice_diameter_mm=0.4,
+                filament_diameter_mm=1.75,
+                interface="M6",
+                length_mm=2.0,
+                outer_profile_rz_mm=((0.2, 0.0), (0.3, 2.0)),
+            )
+        )
+&gt;       controller.generate_operation("indexed")
+
+tests\test_tube_three_operations.py:124: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\five_axis_slicer\tube_generation_service.py:61: in generate_operation
+    context = make_tube_generation_context(self, operation)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+controller = &lt;five_axis_slicer.tube_controller.TubeSetupController object at 0x00000196062D18E0&gt;
+operation = TubeOperationDefinition(operation_id='indexed', setup_id='setup-1', name='Tube Thin-Wall Indexed', operation_type='tub...=1.0, deposition_feedrate_mm_min=1200.0, travel_feedrate_mm_min=3000.0, contour_chord_error_mm=0.02), type_config=None)
+
+    def make_tube_generation_context(
+        controller: Any, operation: TubeOperationDefinition
+    ) -&gt; TubeGenerationContext:
+        report = controller.validation_report()
+        if not report.setup_ready or report.has_errors or controller.draft_nodes:
+            codes = ", ".join(issue.code for issue in report.issues if issue.severity.value == "error")
+&gt;           raise ValueError(f"Generate requires a valid applied Setup: {codes or 'pending drafts'}")
+E           ValueError: Generate requires a valid applied Setup: SETUP_PART_MISSING, SETUP_MATERIAL_MISSING, MODEL_CS_MISSING, BUILD_CS_MISSING, PLACEMENT_DIRTY
+
+src\five_axis_slicer\tube_generation_context.py:86: ValueError</failure></testcase><testcase classname="tests.test_tube_t12_integration" name="test_fork_shares_cancel_event_but_keeps_product_state_and_result_isolated" time="0.001" /><testcase classname="tests.test_tube_t12_integration" name="test_stale_or_error_product_cannot_export[stale]" time="0.001" /><testcase classname="tests.test_tube_t12_integration" name="test_stale_or_error_product_cannot_export[error]" time="0.001" /><testcase classname="tests.test_tube_t12_integration" name="test_command_provider_generation_failure_is_error_payload_and_project_only" time="0.001" /><testcase classname="tests.test_tube_t12_integration" name="test_automation_tube_routes_forward_minimal_payloads" time="0.000" /></testsuite></testsuites>

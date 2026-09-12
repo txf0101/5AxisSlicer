@@ -1,0 +1,9 @@
+{
+  "task": "P03",
+  "date": "2026-09-12",
+  "scope": "Planar offset专项证据",
+  "interpreter": "tmp/pytest9/Scripts/python.exe",
+  "pytest": {"tests": 12, "passed": 12, "failed": 0, "skipped": 0, "deselected": 4, "junit": "pytest.xml"},
+  "files_sha256": {"pytest.xml": "1842dd0f6db75b1109642d8d4086feacc0230e2c89bfa9116d066f2d1f520958"},
+  "qualification_boundary": "Generic XYZAC仅为离线参考；未验证真实控制器、机床标定、碰撞资格或实体试切。"
+}

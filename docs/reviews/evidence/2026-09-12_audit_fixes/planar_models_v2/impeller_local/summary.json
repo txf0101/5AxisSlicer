@@ -1,0 +1,829 @@
+{
+  "operation": {
+    "operation_id": "audit-impeller_local",
+    "setup_id": "setup-1",
+    "name": "Planar Zigzag",
+    "operation_type": "planar_zigzag",
+    "state": "dirty",
+    "dirty_reasons": [
+      "operation_created",
+      "operation_geometry_changed",
+      "operation_parameters_changed"
+    ],
+    "enabled": true,
+    "geometry": {
+      "body": {
+        "object_id": "body_002",
+        "geometry_type": "body",
+        "signature": {
+          "schema_version": 1,
+          "geometry_type": "body",
+          "descriptor": {
+            "kind": "solid",
+            "assembly_path": "叶轮",
+            "bounds_mm": {
+              "minimum": [
+                3.26324676207757,
+                -0.5000001,
+                1.9999999
+              ],
+              "maximum": [
+                52.0000001,
+                25.6785248661409,
+                42.5000001
+              ]
+            },
+            "dimensions_mm": [
+              48.73675333792243,
+              26.178524966140902,
+              40.5000002
+            ],
+            "volume_mm3": 1119.763042775145,
+            "surface_area_mm2": 2398.6928699423215,
+            "centroid_mm": [
+              28.118815736953202,
+              8.607469770771486,
+              23.09243092917619
+            ],
+            "topology": {
+              "face_count": 6,
+              "edge_count": 12,
+              "vertex_count": 8,
+              "surface_types": {
+                "bsplinesurface": 5,
+                "plane": 1
+              },
+              "curve_types": {
+                "bsplinecurve": 12
+              },
+              "vertex_edge_degrees": [
+                3,
+                3,
+                3,
+                3,
+                3,
+                3,
+                3,
+                3
+              ]
+            }
+          },
+          "parent_body": null,
+          "kernel_signature": "a888c72f6a8c1aed1a9d9e4d9246657d2be3a771a5914cd959ef479b205aa80a"
+        },
+        "parent_body_id": null,
+        "assembly_name": "叶轮"
+      }
+    },
+    "parameters": {
+      "first_layer_z_mm": 20.0,
+      "layer_height_mm": 0.6,
+      "last_layer_z_mm": 21.2,
+      "bead_width_mm": 0.6,
+      "feedrate_mm_min": 100.0,
+      "line_spacing_mm": 0.6,
+      "travel_feedrate_mm_min": 100.0,
+      "retract_length_mm": 1.0,
+      "offset_pass_count": 3,
+      "wall_thickness_mm": 0.6,
+      "thin_wall_max_passes": 3,
+      "spiral_samples_per_contour": 64,
+      "support_overhang_angle_deg": 45.0,
+      "support_xy_gap_mm": 0.4,
+      "support_z_gap_mm": 0.2,
+      "support_line_spacing_mm": 2.0,
+      "support_interface_layers": 2,
+      "support_interface_spacing_mm": 0.6,
+      "support_pattern": "lines"
+    }
+  },
+  "source_sha256": "3776fe6e1c384e03a7dab20e7ab8d8028210b86ec7c2ced3d3518a8011fdf21f",
+  "setup": {
+    "setup_id": "setup-1",
+    "name": "Manufacturing Setup 1",
+    "assignments": {
+      "part_body_ids": [
+        "body_002"
+      ],
+      "ignored_body_ids": [
+        "body_001",
+        "body_003",
+        "body_004",
+        "body_005",
+        "body_006",
+        "body_007",
+        "body_008",
+        "body_009"
+      ],
+      "fixture_body_ids": [],
+      "unassigned_body_ids": []
+    },
+    "resources": {
+      "machine": {
+        "schema_version": 1,
+        "resource_type": "machine",
+        "resource_id": "builtin.machine.generic_xyzac_reference.v1",
+        "profile_version": 1,
+        "payload": {
+          "build_surfaces": [
+            {
+              "depth_mm": null,
+              "diameter_mm": 250.0,
+              "id": "xyzac_plate",
+              "name": "XYZAC reference rotary table",
+              "shape": "circle",
+              "thickness_mm": 10.0,
+              "width_mm": null
+            }
+          ],
+          "id": "builtin.machine.generic_xyzac_reference.v1",
+          "joints": [
+            {
+              "T_parent_from_child_zero": {
+                "T_target_from_source": [
+                  [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    1.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                ],
+                "source_frame": "x_carriage",
+                "target_frame": "machine"
+              },
+              "axis_direction": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "child_link_id": "x_carriage",
+              "id": "X",
+              "joint_type": "linear",
+              "max_acceleration": 1000.0,
+              "max_velocity": 300.0,
+              "motion_side": "tool",
+              "name": "X linear axis",
+              "parent_link_id": "machine",
+              "post_axis_map": {
+                "offset": 0.0,
+                "output_unit": "mm",
+                "scale": 1.0,
+                "word": "X"
+              },
+              "rotation_center_mm": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "soft_limit_max": 1000.0,
+              "soft_limit_min": -1000.0,
+              "zero_offset": 0.0
+            },
+            {
+              "T_parent_from_child_zero": {
+                "T_target_from_source": [
+                  [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    1.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                ],
+                "source_frame": "y_carriage",
+                "target_frame": "x_carriage"
+              },
+              "axis_direction": [
+                0.0,
+                1.0,
+                0.0
+              ],
+              "child_link_id": "y_carriage",
+              "id": "Y",
+              "joint_type": "linear",
+              "max_acceleration": 1000.0,
+              "max_velocity": 300.0,
+              "motion_side": "tool",
+              "name": "Y linear axis",
+              "parent_link_id": "x_carriage",
+              "post_axis_map": {
+                "offset": 0.0,
+                "output_unit": "mm",
+                "scale": 1.0,
+                "word": "Y"
+              },
+              "rotation_center_mm": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "soft_limit_max": 1000.0,
+              "soft_limit_min": -1000.0,
+              "zero_offset": 0.0
+            },
+            {
+              "T_parent_from_child_zero": {
+                "T_target_from_source": [
+                  [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    1.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                ],
+                "source_frame": "tool",
+                "target_frame": "y_carriage"
+              },
+              "axis_direction": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "child_link_id": "tool",
+              "id": "Z",
+              "joint_type": "linear",
+              "max_acceleration": 1000.0,
+              "max_velocity": 300.0,
+              "motion_side": "tool",
+              "name": "Z linear axis",
+              "parent_link_id": "y_carriage",
+              "post_axis_map": {
+                "offset": 0.0,
+                "output_unit": "mm",
+                "scale": 1.0,
+                "word": "Z"
+              },
+              "rotation_center_mm": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "soft_limit_max": 1000.0,
+              "soft_limit_min": -1000.0,
+              "zero_offset": 0.0
+            },
+            {
+              "T_parent_from_child_zero": {
+                "T_target_from_source": [
+                  [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    1.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                ],
+                "source_frame": "a_cradle",
+                "target_frame": "machine"
+              },
+              "axis_direction": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "child_link_id": "a_cradle",
+              "id": "A",
+              "joint_type": "rotary",
+              "max_acceleration": 2.0943951023931953,
+              "max_velocity": 1.0471975511965976,
+              "motion_side": "workpiece",
+              "name": "A rotary axis",
+              "parent_link_id": "machine",
+              "post_axis_map": {
+                "offset": 0.0,
+                "output_unit": "deg",
+                "scale": 1.0,
+                "word": "A"
+              },
+              "rotation_center_mm": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "soft_limit_max": 1000.0,
+              "soft_limit_min": -1000.0,
+              "zero_offset": 0.0
+            },
+            {
+              "T_parent_from_child_zero": {
+                "T_target_from_source": [
+                  [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    1.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                ],
+                "source_frame": "c_table",
+                "target_frame": "a_cradle"
+              },
+              "axis_direction": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "child_link_id": "c_table",
+              "id": "C",
+              "joint_type": "rotary",
+              "max_acceleration": 4.1887902047863905,
+              "max_velocity": 2.0943951023931953,
+              "motion_side": "workpiece",
+              "name": "C rotary axis",
+              "parent_link_id": "a_cradle",
+              "post_axis_map": {
+                "offset": 0.0,
+                "output_unit": "deg",
+                "scale": 1.0,
+                "word": "C"
+              },
+              "rotation_center_mm": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "soft_limit_max": 1000.0,
+              "soft_limit_min": -1000.0,
+              "zero_offset": 0.0
+            }
+          ],
+          "manufacturer": "5AxisSclicer",
+          "model": "Generic XYZAC reference template",
+          "mount_datums": [
+            {
+              "T_parent_from_mount": {
+                "T_target_from_source": [
+                  [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    1.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                ],
+                "source_frame": "build_plate_mount",
+                "target_frame": "c_table"
+              },
+              "build_surface_id": "xyzac_plate",
+              "id": "build_plate_mount",
+              "name": "Rotary table center",
+              "parent_link_id": "c_table"
+            }
+          ],
+          "name": "Generic XYZAC Reference",
+          "reference_only": true,
+          "root_link_id": "machine",
+          "source_uri": "builtin://machine/generic-xyzac-reference/v1",
+          "tool_link_id": "tool",
+          "version": 1,
+          "workpiece_link_id": "c_table"
+        },
+        "content_hash": "e79f873227c285c75e7c43229a8a6b8a938a7d917d855305e26088dc3708dd81"
+      },
+      "nozzle": {
+        "schema_version": 1,
+        "resource_type": "nozzle",
+        "resource_id": "planar-p06-nozzle",
+        "profile_version": 1,
+        "payload": {
+          "construction_material": null,
+          "display_name": "Planar P06 evidence nozzle",
+          "filament_diameter_mm": 1.75,
+          "flow_category": null,
+          "interface": "M6",
+          "is_builtin": false,
+          "length_mm": 2.0,
+          "orifice_diameter_mm": 0.6,
+          "outer_profile_rz_mm": [
+            [
+              0.3,
+              0.0
+            ],
+            [
+              0.4,
+              2.0
+            ]
+          ],
+          "profile_version": 1,
+          "resource_id": "planar-p06-nozzle",
+          "schema_version": 1,
+          "source": null,
+          "temperature_limit_c": null,
+          "wear_resistance_rating": null
+        },
+        "content_hash": "e43bc5804f5b01f993e3e6b71ee36ff528e9be97d857c277b2ee2d4159b69af6"
+      },
+      "material": {
+        "schema_version": 1,
+        "resource_type": "material",
+        "resource_id": "aud-02-offline-pla",
+        "profile_version": 1,
+        "payload": {
+          "brand": "Generic",
+          "density_g_cm3": 1.24,
+          "display_name": "Cura Generic PLA 1.75 mm",
+          "filament_diameter_mm": 1.75,
+          "form": "filament",
+          "guid": "0ff92885-617b-4144-a03c-9989872454bc",
+          "is_builtin": false,
+          "material": "PLA",
+          "process": "FFF/FDM",
+          "profile_version": 1,
+          "recommendations": {
+            "build_plate_temperature_c": 60.0,
+            "nozzle_temperature_c": 200.0
+          },
+          "resource_id": "aud-02-offline-pla",
+          "review_confirmed": true,
+          "review_required": true,
+          "schema_version": 1,
+          "source": {
+            "file_path": "generic_pla_175.xml.fdm_material",
+            "revision": "886e7ad927463493cc9c64f427b1ae2cf4ce12c1",
+            "sha256": "5bc7c562e14cb10c15323bca26f1afddedcf6e18166c92adf4d638611907a4be",
+            "title": "Ultimaker fdm_materials: Generic PLA 1.75 mm",
+            "url": "https://github.com/Ultimaker/fdm_materials/blob/886e7ad927463493cc9c64f427b1ae2cf4ce12c1/generic_pla_175.xml.fdm_material"
+          },
+          "upstream_version": 13
+        },
+        "content_hash": "39899b98125a87e1e9966c887b7e88df8feec91cbe5dae4de08f147206b1e1f4"
+      }
+    },
+    "coordinate_systems": {
+      "model": {
+        "frame_id": "model",
+        "name": "model",
+        "origin_reference": {
+          "reference_type": "numeric",
+          "point_in_source_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "geometry": null,
+          "parameter": null,
+          "confirmed": true
+        },
+        "z_direction_reference": {
+          "reference_type": "numeric",
+          "direction_in_source": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "geometry": null,
+          "secondary_geometry": null,
+          "first_point_in_source_mm": null,
+          "second_point_in_source_mm": null,
+          "flipped": false,
+          "confirmed": true
+        },
+        "x_direction_reference": {
+          "reference_type": "numeric",
+          "direction_in_source": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "geometry": null,
+          "secondary_geometry": null,
+          "first_point_in_source_mm": null,
+          "second_point_in_source_mm": null,
+          "flipped": false,
+          "confirmed": true
+        },
+        "T_target_from_source": {
+          "source_frame": "source",
+          "target_frame": "model",
+          "T_target_from_source": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              -0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              -0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        "revision": 1
+      },
+      "build": {
+        "frame_id": "build",
+        "name": "build",
+        "origin_reference": {
+          "reference_type": "numeric",
+          "point_in_source_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "geometry": null,
+          "parameter": null,
+          "confirmed": true
+        },
+        "z_direction_reference": {
+          "reference_type": "numeric",
+          "direction_in_source": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "geometry": null,
+          "secondary_geometry": null,
+          "first_point_in_source_mm": null,
+          "second_point_in_source_mm": null,
+          "flipped": false,
+          "confirmed": true
+        },
+        "x_direction_reference": {
+          "reference_type": "numeric",
+          "direction_in_source": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "geometry": null,
+          "secondary_geometry": null,
+          "first_point_in_source_mm": null,
+          "second_point_in_source_mm": null,
+          "flipped": false,
+          "confirmed": true
+        },
+        "T_target_from_source": {
+          "source_frame": "source",
+          "target_frame": "build",
+          "T_target_from_source": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              -0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              -0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        "revision": 1
+      }
+    },
+    "placement": {
+      "mount_datum_id": "build_plate_mount",
+      "adjustment": {
+        "translation_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "quaternion_xyzw": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      "T_mount_from_build": {
+        "source_frame": "build",
+        "target_frame": "build_plate_mount",
+        "T_target_from_source": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            250.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0,
+            250.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            250.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      }
+    },
+    "draft_nodes": [],
+    "dirty_nodes": [],
+    "invalid_nodes": [],
+    "issues": [],
+    "revision": 1
+  },
+  "scope": "offline software qualification; no machine trial",
+  "status": "error",
+  "exportable": false,
+  "point_count": 1975,
+  "measurement": {
+    "deposition_outside_max_mm": 0.0,
+    "covered_area_mm2": 117.63999999999999,
+    "residual_area_mm2": 0.28000000000000114,
+    "sampled_region_area_mm2": 117.91999999999999,
+    "material_volume_mm3": 83.20144462959543,
+    "geometric_volume_mm3": 83.20144462959543,
+    "volume_difference_mm3": 0.0,
+    "bead_outside_max_mm": 0.04327444442390038,
+    "overlap_area_mm2": 0.0,
+    "geometric_region_area_mm2": 117.55278121293136,
+    "target_solid_volume_mm3": 70.53166872775881,
+    "material_excess_mm3": 12.669775901836616,
+    "sample_grid_mm": 0.19999999999999998
+  },
+  "issues": [
+    {
+      "code": "xyzac.rotary_singularity",
+      "severity": "warning",
+      "object_id": "point-0000001",
+      "context": {
+        "count": 1975,
+        "first_context": {
+          "retained_c_rad": 0.0
+        }
+      }
+    },
+    {
+      "code": "planar.bead_envelope_outside_region",
+      "severity": "error",
+      "object_id": "",
+      "context": {
+        "maximum_mm": 0.04327444442390038,
+        "tolerance_mm": 0.001
+      }
+    },
+    {
+      "code": "planar.material_exceeds_solid_volume",
+      "severity": "error",
+      "object_id": "",
+      "context": {
+        "target_mm3": 70.53166872775881,
+        "commanded_mm3": 83.20144462959543,
+        "excess_mm3": 12.669775901836616,
+        "boundary_uncertainty_mm3": 0.14304426734122197
+      }
+    }
+  ],
+  "readback": {
+    "schema_version": 1,
+    "passed": false,
+    "expected_points": 1975,
+    "read_points": 0,
+    "coordinate_mismatches": [],
+    "feedrate_mismatches": [],
+    "extrusion_mismatches": [],
+    "order_mismatches": [
+      "export_blocked_by_validation"
+    ]
+  },
+  "length_mm": {
+    "deposition": 231.1151239710978,
+    "travel": 1.5873185398780651
+  },
+  "travel_to_deposition_ratio": 0.006868085967738606,
+  "export_rejection": "Planar product is not Ready for export",
+  "seconds": 18.05905999999959
+}

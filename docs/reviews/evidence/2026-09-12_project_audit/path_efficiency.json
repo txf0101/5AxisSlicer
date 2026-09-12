@@ -1,0 +1,28 @@
+[
+  {
+    "case": "fan_zigzag_3layers",
+    "path_lengths_mm": {
+      "deposition": 1323.9756308578376,
+      "travel": 314.6938325297361
+    },
+    "travel_to_deposition_length_ratio": 0.23768853836519477,
+    "point_types": {
+      "deposition": 979,
+      "travel": 213
+    },
+    "same_z_travel_count": 211
+  },
+  {
+    "case": "pipe_zigzag_3layers",
+    "path_lengths_mm": {
+      "deposition": 1069.9931008804183,
+      "travel": 7581.078715735498
+    },
+    "travel_to_deposition_length_ratio": 7.085165978638169,
+    "point_types": {
+      "deposition": 693,
+      "travel": 314
+    },
+    "same_z_travel_count": 312
+  }
+]

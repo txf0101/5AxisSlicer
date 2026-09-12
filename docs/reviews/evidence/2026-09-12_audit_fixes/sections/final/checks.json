@@ -1,0 +1,43 @@
+[
+  {
+    "command": [
+      "F:\\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\\5AxisSclicer_V2.0\\tmp\\pytest9\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_planar_region.py",
+      "tests/test_planar_section_loops.py",
+      "--junitxml=docs\\reviews\\evidence\\2026-09-12_audit_fixes\\sections\\final\\section_tests.xml"
+    ],
+    "exit_code": 0,
+    "stdout": "............                                                             [100%]\n12 passed in 3.44s\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "F:\\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\\5AxisSclicer_V2.0\\tmp\\pytest9\\Scripts\\python.exe",
+      "-m",
+      "ruff",
+      "check",
+      "src/five_axis_slicer/algorithms/planar/section_loops.py",
+      "src/five_axis_slicer/algorithms/planar/region.py",
+      "tests/test_planar_section_loops.py",
+      "scripts/planar_section_recovery_evidence.py"
+    ],
+    "exit_code": 0,
+    "stdout": "All checks passed!\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "F:\\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\\5AxisSclicer_V2.0\\tmp\\pytest9\\Scripts\\python.exe",
+      "-m",
+      "mypy",
+      "src/five_axis_slicer/algorithms/planar/section_loops.py",
+      "src/five_axis_slicer/algorithms/planar/region.py"
+    ],
+    "exit_code": 0,
+    "stdout": "Success: no issues found in 2 source files",
+    "provenance": "Prior tool invocation in this section-fix run, after the final type annotation; not rerun."
+  }
+]

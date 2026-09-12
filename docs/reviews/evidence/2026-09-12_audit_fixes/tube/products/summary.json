@@ -1,0 +1,217 @@
+{
+  "source": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\docs\\reviews\\evidence\\2026-09-12_project_audit\\tube_probe\\ready_setup\\analytic_straight_tube.step",
+  "source_sha256": "88c2daed770abc130cb922f76aab7e076dc68f280cbd13804c09c086c1b27ca1",
+  "cases": [
+    {
+      "case": "placement_0",
+      "setup_ready": true,
+      "status": "warning",
+      "exportable": true,
+      "input_sha256": "f22805c635039b4c79e327f5dbb9d81da496b31cd4008a81510b77f092190437",
+      "gcode_sha256": "1b2d1ac0625a8946273f07d4b8ba742dfeefe6eb32fb787f6edff5cdbbebc67c",
+      "points": 346,
+      "validation": {
+        "schema_version": 1,
+        "report_id": "tube-indexed-v1-validation-v1",
+        "toolpath_id": "tube-indexed-v1",
+        "trajectory_id": "tube-indexed-v1-xyzac-v1",
+        "status": "warning",
+        "ready_for_export": true,
+        "issues": [
+          {
+            "code": "MACHINE_REFERENCE_ONLY",
+            "severity": "warning",
+            "object_id": "builtin.machine.generic_xyzac_reference.v1",
+            "context": {
+              "resource_type": "machine"
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "name": "maximum_radial_error",
+            "value": 0.0003467580539222581,
+            "limit": 0.01,
+            "unit": "mm",
+            "passed": true
+          },
+          {
+            "name": "maximum_sampled_chord_error",
+            "value": 0.00024819959430377736,
+            "limit": 0.001,
+            "unit": "mm",
+            "passed": true
+          },
+          {
+            "name": "maximum_layer_spacing_error",
+            "value": 0.0,
+            "limit": 0.01,
+            "unit": "mm",
+            "passed": true
+          },
+          {
+            "name": "maximum_wedge_height_error",
+            "value": 0.0,
+            "limit": 0.0,
+            "unit": "mm",
+            "passed": true
+          }
+        ],
+        "collision_samples_checked": 690,
+        "motion_sample_error_mm": 0.25
+      },
+      "readback": {
+        "schema_version": 1,
+        "passed": true,
+        "expected_points": 346,
+        "read_points": 346,
+        "coordinate_mismatches": [],
+        "feedrate_mismatches": [],
+        "extrusion_mismatches": [],
+        "order_mismatches": []
+      },
+      "independent_max_fk_error_mm": 1.2710574864626038e-13
+    },
+    {
+      "case": "placement_100",
+      "setup_ready": true,
+      "status": "warning",
+      "exportable": true,
+      "input_sha256": "0a3715743ff44f22ccc9911cd30946e400af7f81e190d14190f4fdc4efce210e",
+      "gcode_sha256": "71c6b8afe10b3ba6531f06d34ab4cd4c1cd5e56a1a3c3ba4e10249c7a544a44a",
+      "points": 346,
+      "validation": {
+        "schema_version": 1,
+        "report_id": "tube-indexed-v1-validation-v1",
+        "toolpath_id": "tube-indexed-v1",
+        "trajectory_id": "tube-indexed-v1-xyzac-v1",
+        "status": "warning",
+        "ready_for_export": true,
+        "issues": [
+          {
+            "code": "MACHINE_REFERENCE_ONLY",
+            "severity": "warning",
+            "object_id": "builtin.machine.generic_xyzac_reference.v1",
+            "context": {
+              "resource_type": "machine"
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "name": "maximum_radial_error",
+            "value": 0.0003467580539222581,
+            "limit": 0.01,
+            "unit": "mm",
+            "passed": true
+          },
+          {
+            "name": "maximum_sampled_chord_error",
+            "value": 0.00024819959430377736,
+            "limit": 0.001,
+            "unit": "mm",
+            "passed": true
+          },
+          {
+            "name": "maximum_layer_spacing_error",
+            "value": 0.0,
+            "limit": 0.01,
+            "unit": "mm",
+            "passed": true
+          },
+          {
+            "name": "maximum_wedge_height_error",
+            "value": 0.0,
+            "limit": 0.0,
+            "unit": "mm",
+            "passed": true
+          }
+        ],
+        "collision_samples_checked": 690,
+        "motion_sample_error_mm": 0.25
+      },
+      "readback": {
+        "schema_version": 1,
+        "passed": true,
+        "expected_points": 346,
+        "read_points": 346,
+        "coordinate_mismatches": [],
+        "feedrate_mismatches": [],
+        "extrusion_mismatches": [],
+        "order_mismatches": []
+      },
+      "independent_max_fk_error_mm": 1.6077746776921858e-13
+    },
+    {
+      "case": "rotated_build",
+      "setup_ready": true,
+      "status": "warning",
+      "exportable": true,
+      "input_sha256": "1b6f90e60ee10157aef9572a7dc749f15616b974f9c9ac55826abcf928e7c8db",
+      "gcode_sha256": "f9699c5ecce049abc41f50da466042c6c95309ffec45a14a88509718eeb4910b",
+      "points": 346,
+      "validation": {
+        "schema_version": 1,
+        "report_id": "tube-indexed-v1-validation-v1",
+        "toolpath_id": "tube-indexed-v1",
+        "trajectory_id": "tube-indexed-v1-xyzac-v1",
+        "status": "warning",
+        "ready_for_export": true,
+        "issues": [
+          {
+            "code": "MACHINE_REFERENCE_ONLY",
+            "severity": "warning",
+            "object_id": "builtin.machine.generic_xyzac_reference.v1",
+            "context": {
+              "resource_type": "machine"
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "name": "maximum_radial_error",
+            "value": 0.0003467580539222581,
+            "limit": 0.01,
+            "unit": "mm",
+            "passed": true
+          },
+          {
+            "name": "maximum_sampled_chord_error",
+            "value": 0.00024819959430377736,
+            "limit": 0.001,
+            "unit": "mm",
+            "passed": true
+          },
+          {
+            "name": "maximum_layer_spacing_error",
+            "value": 0.0,
+            "limit": 0.01,
+            "unit": "mm",
+            "passed": true
+          },
+          {
+            "name": "maximum_wedge_height_error",
+            "value": 0.0,
+            "limit": 0.0,
+            "unit": "mm",
+            "passed": true
+          }
+        ],
+        "collision_samples_checked": 690,
+        "motion_sample_error_mm": 0.25
+      },
+      "readback": {
+        "schema_version": 1,
+        "passed": true,
+        "expected_points": 346,
+        "read_points": 346,
+        "coordinate_mismatches": [],
+        "feedrate_mismatches": [],
+        "extrusion_mismatches": [],
+        "order_mismatches": []
+      },
+      "independent_max_fk_error_mm": 1.2710574864626038e-13
+    }
+  ],
+  "placement_gcodes_differ": true
+}

@@ -1,0 +1,194 @@
+from dataclasses import replace
+from pathlib import Path
+import math
+import sys
+
+import cadquery as cq
+import pytest
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+
+from five_axis_slicer.algorithms.planar import (
+    PlanarRegion,
+    PlanarSliceLayer,
+    PlanarSupportError,
+    SupportParameters,
+    generate_support_plan,
+    generate_support_toolpath,
+)
+from five_axis_slicer.postprocessing.indexed_tube import GenerationCancelled
+
+
+def _rect(z, x0=0, y0=0, x1=10, y1=10, name="part"):
+    return PlanarRegion(name, ((x0, y0, z), (x1, y0, z), (x1, y1, z), (x0, y1, z), (x0, y0, z)))
+
+
+def _layers(regions):
+    return tuple(
+        PlanarSliceLayer(f"layer-{index}", float(index), items)
+        for index, items in enumerate(regions)
+    )
+
+
+def _area(regions):
+    return sum(
+        cq.Face.makeFromWires(
+            cq.Wire.makePolygon(region.outer[:-1], close=True),
+            [cq.Wire.makePolygon(hole[:-1], close=True) for hole in region.holes],
+        ).Area()
+        for region in regions
+    )
+
+
+def _all_regions(layer):
+    return (*layer.body_regions, *layer.interface_regions)
+
+
+def test_straight_wall_needs_no_support_and_preserves_empty_plan():
+    parameters = SupportParameters(1)
+    result = generate_support_plan(_layers([(_rect(z),) for z in range(4)]), parameters)
+    assert result.unsupported_area_mm2 == pytest.approx(0)
+    assert all(not _all_regions(layer) for layer in result.layers)
+    assert not result.diagnostics
+    assert not generate_support_toolpath("support", result, parameters).points
+
+
+def test_cantilever_has_analytic_projection_area_and_quantized_top_gap():
+    parameters = SupportParameters(1, xy_gap_mm=0, z_gap_mm=1, interface_layers=1)
+    layers = _layers([(_rect(z, x1=5),) for z in range(5)] + [(_rect(5),)])
+    plan = generate_support_plan(layers, parameters)
+    # At 45 degrees, a 1 mm layer permits 1 mm of growth beyond x=5.
+    assert plan.unsupported_area_mm2 == pytest.approx(40)
+    assert [_area(_all_regions(layer)) for layer in plan.layers] == pytest.approx(
+        [40, 40, 40, 40, 0, 0]
+    )
+    assert _area(plan.layers[3].interface_regions) == pytest.approx(40)
+    assert all(not layer.interface_regions for layer in plan.layers[:3])
+    assert not plan.diagnostics
+    assert max(layer.z_mm for layer in plan.layers if _all_regions(layer)) == 3
+
+
+def test_floating_holed_island_generates_hole_preserving_plate_columns_and_paths():
+    outer = _rect(4)
+    hole = _rect(4, 3, 3, 7, 7).outer
+    region = replace(outer, holes=(hole,))
+    parameters = SupportParameters(1, xy_gap_mm=0, z_gap_mm=0, pattern="grid")
+    plan = generate_support_plan(_layers([(), (), (), (), (region,)]), parameters)
+    assert plan.unsupported_area_mm2 == pytest.approx(84)
+    assert [_area(_all_regions(layer)) for layer in plan.layers] == pytest.approx(
+        [84, 84, 84, 84, 0]
+    )
+    assert all(len(_all_regions(layer)[0].holes) == 1 for layer in plan.layers[:4])
+    path = generate_support_toolpath("support", plan, parameters)
+    assert {point.stage_id for point in path.points} == {
+        "planar_support",
+        "planar_support_interface",
+    }
+    assert {point.extrusion_role for point in path.points if point.point_type == "deposition"} == {
+        "support"
+    }
+    previous = None
+    measured_volume = 0
+    directions = {}
+    for point in path.points:
+        if point.point_type == "deposition":
+            assert previous is not None
+            middle = tuple((a + b) / 2 for a, b in zip(previous.position, point.position))
+            assert not (3 < middle[0] < 7 and 3 < middle[1] < 7)
+            measured_volume += math.dist(previous.position, point.position) * 0.4
+            directions.setdefault(point.layer_id, set()).add(abs(point.tangent[1]) > 0.9)
+        else:
+            assert point.material_volume_mm3 == 0
+        previous = point
+    assert directions["layer-0"] == {False}
+    assert directions["layer-1"] == {True}
+    assert sum(point.material_volume_mm3 for point in path.points) == pytest.approx(measured_volume)
+    assert {event.event_type for event in path.events} == {"prime", "retract"}
+    assert generate_support_toolpath("support", plan, parameters).to_json() == path.to_json()
+
+
+def test_xy_gap_is_respected_and_bead_envelope_stays_outside_body():
+    layers = _layers([(_rect(z, x1=5),) for z in range(4)] + [(_rect(4),)])
+    parameters = SupportParameters(1, overhang_angle_rad=0, xy_gap_mm=1, z_gap_mm=0)
+    plan = generate_support_plan(layers, parameters)
+    assert _area(_all_regions(plan.layers[0])) == pytest.approx(40)
+    assert not plan.diagnostics
+    path = generate_support_toolpath("support", plan, parameters)
+    deposited = [point for point in path.points if point.point_type == "deposition"]
+    assert all(point.position[0] - parameters.bead_width_mm / 2 >= 6 - 1e-6 for point in deposited)
+
+
+def test_support_blocked_by_solid_is_not_allowed_to_float_above_it():
+    layers = _layers([(_rect(0),), (_rect(1),), (), (), (_rect(4),)])
+    plan = generate_support_plan(layers, SupportParameters(1, xy_gap_mm=0, z_gap_mm=0))
+    assert all(not _all_regions(layer) for layer in plan.layers)
+    assert plan.diagnostics[0].area_mm2 == pytest.approx(100)
+
+
+def test_support_plan_honours_cancellation_during_geometry_work():
+    layers = _layers([(), (), (), (), (_rect(4),)])
+    calls = 0
+
+    def cancel_after_work_starts():
+        nonlocal calls
+        calls += 1
+        return calls >= 5
+
+    with pytest.raises(GenerationCancelled, match="support generation cancelled"):
+        generate_support_plan(
+            layers,
+            SupportParameters(1, xy_gap_mm=0, z_gap_mm=0),
+            cancelled=cancel_after_work_starts,
+        )
+    assert calls == 5
+
+
+def test_fractional_z_gap_rounds_up_and_reports_unreachable_low_contact():
+    layers = _layers([(), (_rect(1),)])
+    plan = generate_support_plan(layers, SupportParameters(1, z_gap_mm=0.1))
+    assert all(not _all_regions(layer) for layer in plan.layers)
+    assert plan.diagnostics[0].area_mm2 == pytest.approx(100)
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"layer_height_mm": 0},
+        {"xy_gap_mm": -1},
+        {"z_gap_mm": float("nan")},
+        {"overhang_angle_rad": math.pi / 2},
+        {"pattern": "tree"},
+        {"interface_layers": True},
+    ],
+)
+def test_invalid_parameters_are_structured_errors(changes):
+    with pytest.raises(PlanarSupportError, match="planar.support_parameter_invalid"):
+        SupportParameters(**({"layer_height_mm": 1} | changes))
+
+
+@pytest.mark.parametrize(
+    "layers",
+    [
+        (),
+        _layers([()]),
+        (PlanarSliceLayer("a", 0, ()), PlanarSliceLayer("b", 2, ())),
+        (PlanarSliceLayer("a", 0, ()), PlanarSliceLayer("a", 1, ())),
+    ],
+)
+def test_missing_unsorted_or_nonuniform_layers_are_rejected(layers):
+    with pytest.raises(PlanarSupportError):
+        generate_support_plan(layers, SupportParameters(1))
+
+
+def test_self_crossing_and_wrong_z_input_are_rejected_before_boolean_operations():
+    crossed = PlanarRegion("cross", ((0, 0, 1), (4, 4, 1), (0, 4, 1), (4, 0, 1), (0, 0, 1)))
+    for region in (crossed, _rect(2)):
+        with pytest.raises(PlanarSupportError, match="planar.support_geometry_invalid"):
+            generate_support_plan(_layers([(), (region,)]), SupportParameters(1))
+
+
+def test_sub_bead_support_is_not_silently_dropped():
+    parameters = SupportParameters(1, z_gap_mm=0)
+    plan = generate_support_plan(_layers([(), (_rect(1, x1=0.1),)]), parameters)
+    with pytest.raises(PlanarSupportError, match="planar.support_region_too_narrow"):
+        generate_support_toolpath("support", plan, parameters)

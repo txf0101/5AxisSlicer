@@ -1,0 +1,91 @@
+"""Frozen Tube audit: new diagnostic artifacts only; no application mutation."""
+from pathlib import Path
+from dataclasses import replace
+import json, sys, hashlib
+
+PROJECT = next(p for p in Path(__file__).resolve().parents if (p/'tmp/project_audit/frozen/src').is_dir())
+ROOT = PROJECT / 'tmp/project_audit'
+FROZEN = ROOT / 'frozen'
+sys.path[:0] = [str(FROZEN/'src'), str(FROZEN/'scripts'), str(FROZEN/'tests')]
+OUT = ROOT.parent.parent / 'docs/reviews/evidence/2026-09-12_project_audit/tube_probe/ready_setup'
+OUT.mkdir(exist_ok=True)
+import cadquery as cq
+from five_axis_slicer.step_loader import load_step
+from five_axis_slicer.tube_controller import TubeSetupController
+from five_axis_slicer.manufacturing.coordinates import RigidTransform, LocalAdjustment, CoordinateFrameDefinition, PointReference, DirectionReference
+from five_axis_slicer.manufacturing.resources import GENERIC_PLA_175, ResourceSnapshot
+from five_axis_slicer.manufacturing.setup import TubeProcessParameters
+from five_axis_slicer.postprocessing.tube_product import tube_operation_semantic_sha256
+from planar_p06_real_model_evidence import _setup
+
+source = OUT/'analytic_straight_tube.step'
+tube = cq.Workplane('XY').circle(6).circle(5).extrude(.5).translate((50,50,20)).val()
+base = cq.Workplane('XY').box(14,14,1).translate((50,50,15)).val()
+cq.exporters.export(cq.Compound.makeCompound([tube,base]), str(source))
+model = load_step(source)
+circles = [e for e in model.edges if e.radius is not None and abs(e.radius-6)<1e-6]
+ports = sorted(circles, key=lambda e:e.center[2])
+body = ports[0].body_id
+substrate = next(b.body_id for b in model.bodies if b.body_id != body)
+params=TubeProcessParameters(bead_width_mm=1,layer_height_mm=.5,safe_clearance_mm=2,
+    contour_chord_error_mm=.001,deposition_feedrate_mm_min=1,travel_feedrate_mm_min=1)
+setup = _setup(model,body)
+setup = replace(setup,material=ResourceSnapshot.capture('material',GENERIC_PLA_175.reviewed_copy('audit-fixture-reviewed-pla')))
+rows=[]; products=[]; controllers=[]
+for shift in (0,100):
+    st=replace(setup,T_mount_from_build=RigidTransform.from_translation((250+shift,250,250),source_frame='build',target_frame='build_plate_mount'))
+    ctrl=TubeSetupController(model, setup=st)
+    op=ctrl.create_operation(operation_id='analytic-tube')
+    op=ctrl.configure_operation(operation_id=op.operation_id,tube_body_id=body,
+        entry_port_id=ports[0].edge_id,exit_port_id=ports[-1].edge_id,
+        substrate_body_id=substrate,parameters=params)
+    result=ctrl.generate_operation(op.operation_id)
+    if result.exportable:
+        ctrl.export_operation_product(op.operation_id,OUT/f'placement_{shift}')
+    rows.append({'shift_x_mm':shift,'setup_ready':ctrl.validation_report().setup_ready,
+        'setup_validation':ctrl.validation_report().to_json(),
+        'parameters_preserved':ctrl.operations[0].parameters==params,
+        'exportable':result.exportable,'status':result.manifest.status.value,
+        'issue_codes':sorted(set(i.code for i in result.validation.issues)),
+        'points':len(result.toolpath.points),'first_axes':dict(result.trajectory.samples[0].joint_positions),
+        'gcode_sha256':hashlib.sha256(result.gcode.encode()).hexdigest(),
+        'source_to_machine_origin':ctrl.T_machine_from_source().transform_point((0,0,0))})
+    controllers.append(ctrl);products.append(result)
+ctrl=controllers[0]; original_hash=tube_operation_semantic_sha256(ctrl.operations[0])
+before=ctrl.product_state('analytic-tube').status
+ctrl.begin_placement_draft()
+ctrl.set_placement_adjustment(LocalAdjustment.from_euler_xyz((100,0,0),(0,0,0)))
+ctrl.apply_placement_draft()
+stale={'before':before,'after_placement_change':ctrl.product_state('analytic-tube').status,
+    'operation_dirty_reasons':ctrl.operations[0].dirty_reasons,
+    'operation_hash_unchanged':original_hash==tube_operation_semantic_sha256(ctrl.operations[0])}
+try:
+    ctrl.export_operation_product('analytic-tube',OUT/'stale_export')
+    stale['old_product_export_succeeded']=True
+except ValueError as exc:
+    stale['old_product_export_succeeded']=False;stale['export_error']=str(exc)
+report={'source_file':str(source),'source_sha256':model.source_hash,'tube_body':body,
+    'substrate_body':substrate,'parameters':params.to_json(),'runs':rows,
+    'identical_machine_axes':all(dict(a.joint_positions)==dict(b.joint_positions)
+        for a,b in zip(products[0].trajectory.samples,products[1].trajectory.samples,strict=True)),
+    'identical_gcode':products[0].gcode==products[1].gcode,'stale':stale}
+
+# Analytic circular sagitta is independent of the section sampler implementation.
+import math
+segments=[(a,b) for a,b in zip(products[0].toolpath.points,products[0].toolpath.points[1:]) if b.point_type=='deposition']
+report['chord_error']={'requested_mm':params.contour_chord_error_mm,
+    'max_analytic_midpoint_radial_deficit_mm':max(5.5-math.hypot((a.position[0]+b.position[0])/2-50,(a.position[1]+b.position[1])/2-50) for a,b in segments)}
+
+# Geometry coordinates must follow nonidentity Source -> Build before IK.
+frame = CoordinateFrameDefinition.from_references('build','build',
+    PointReference('numeric',(10,0,0),confirmed=True),
+    DirectionReference('numeric',(0,0,1),confirmed=True),
+    DirectionReference('numeric',(1,0,0),confirmed=True))
+build_ctrl=TubeSetupController(model,setup=replace(setup,build_coordinate_system=frame),operations=(controllers[1].operations[0],))
+build_result=build_ctrl.generate_operation('analytic-tube')
+report['build_cs']={'source_to_build_origin':frame.T_target_from_source.transform_point((0,0,0)),
+    'setup_validation':build_ctrl.validation_report().to_json(),
+    'exportable':build_result.exportable,'gcode_identical_to_identity_build':build_result.gcode==products[0].gcode,
+    'toolpath_identical_to_identity_build':build_result.toolpath==products[0].toolpath}
+(OUT/'summary.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
+print(json.dumps(report,ensure_ascii=False,indent=2))

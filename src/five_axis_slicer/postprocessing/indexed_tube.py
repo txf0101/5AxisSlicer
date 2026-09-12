@@ -9,12 +9,12 @@ NC as the source of a newly generated result.
 from __future__ import annotations
 
 import csv
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
+from decimal import Decimal
 import hashlib
 import json
-import math
 import os
 from pathlib import Path
 import shutil
@@ -37,9 +37,18 @@ from ..manufacturing.toolpath import (
     GeneratedResultStatus,
     GeneratedToolpath,
     SourceFingerprint,
+    ToolpathEvent,
 )
 from ..models import CadModel
 from ..validation.indexed_tube import CollisionBox, IndexedValidationReport, validate_indexed_tube
+from .gcode_contract import (
+    event_extrusion_mm,
+    event_feedrate_mm_min,
+    events_by_sequence,
+    filament_area_mm2,
+    marker_identifier,
+)
+from .gcode_readback import GCodeReadbackReport, readback_absolute_xyzac
 
 ALGORITHM_VERSION = "tube-indexed-product-v1"
 PRODUCT_STATE_SCHEMA_VERSION = 1
@@ -48,40 +57,6 @@ CancelCheck = Callable[[], bool]
 
 class GenerationCancelled(RuntimeError):
     """Raised before publication when the caller requests cancellation."""
-
-
-@dataclass(frozen=True, slots=True)
-class GCodeReadbackReport:
-    """Evidence that this postprocessor's modal G-code still matches its input."""
-
-    expected_points: int
-    read_points: int
-    coordinate_mismatches: tuple[str, ...]
-    feedrate_mismatches: tuple[str, ...]
-    extrusion_mismatches: tuple[str, ...]
-    order_mismatches: tuple[str, ...]
-
-    @property
-    def passed(self) -> bool:
-        return not (
-            self.coordinate_mismatches
-            or self.feedrate_mismatches
-            or self.extrusion_mismatches
-            or self.order_mismatches
-            or self.expected_points != self.read_points
-        )
-
-    def to_json(self) -> dict[str, Any]:
-        return {
-            "schema_version": 1,
-            "passed": self.passed,
-            "expected_points": self.expected_points,
-            "read_points": self.read_points,
-            "coordinate_mismatches": list(self.coordinate_mismatches),
-            "feedrate_mismatches": list(self.feedrate_mismatches),
-            "extrusion_mismatches": list(self.extrusion_mismatches),
-            "order_mismatches": list(self.order_mismatches),
-        }
 
 
 @dataclass(frozen=True, slots=True)
@@ -255,7 +230,7 @@ def generate_indexed_product(
             _blocked_readback(toolpath),
         )
     gcode = postprocess_indexed_gcode(toolpath, trajectory, machine, nozzle)
-    readback = readback_indexed_gcode(gcode, toolpath, trajectory, machine)
+    readback = readback_indexed_gcode(gcode, toolpath, trajectory, machine, nozzle)
     if not readback.passed:
         manifest = replace(
             manifest,
@@ -339,43 +314,54 @@ def postprocess_indexed_gcode(
     trajectory: MachineAxisTrajectory,
     machine: MachineProfile,
     nozzle: NozzleProfile,
+    *,
+    header: str = "5AxisSclicer T08 Tube Thin-Wall Indexed",
+    marker_tag: str = "T08",
 ) -> str:
     """Emit conservative, absolute-position/absolute-extrusion Generic XYZAC NC."""
 
     if len(toolpath.points) != len(trajectory.samples):
         raise ValueError("toolpath and trajectory sample counts differ")
-    filament_area = math.pi * (nozzle.filament_diameter_mm * 0.5) ** 2
-    events_by_sequence: dict[int, list[Any]] = {}
-    for event in toolpath.events:
-        sequence = int(event.context.get("sequence_index", 0))
-        events_by_sequence.setdefault(sequence, []).append(event)
-    e_position = 0.0
+    filament_area = filament_area_mm2(nozzle)
+    events = events_by_sequence(toolpath)
+    marker_identifier(marker_tag)
+    if "\n" in header or "\r" in header:
+        raise ValueError("G-code header must be a single comment line")
+    e_position = Decimal(0)
     lines = [
-        "; 5AxisSclicer T08 Tube Thin-Wall Indexed",
+        f"; {header}",
         "; reference XYZAC profile; offline simulation only",
         "G21 ; millimetres",
         "G90 ; absolute axes",
         "M82 ; absolute extrusion",
+        "G92 E0 ; known initial extrusion position",
     ]
     for index, (point, sample) in enumerate(
         zip(toolpath.points, trajectory.samples, strict=True), start=1
     ):
-        for event in events_by_sequence.get(index - 1, ()):
-            delta = float(event.context.get("extrusion_length_mm", 0.0))
-            if event.event_type in {"retract", "prime"}:
-                e_position += delta
-                lines.append(f"; T08 EVENT {event.event_id} {event.event_type}")
-                lines.append(f"G1 E{e_position:.6f} F{point.feedrate_mm_min or 1.0:.3f}")
-            else:
-                lines.append(f"; T08 EVENT {event.event_id} {event.event_type}")
+        e_position = _emit_events(
+            lines,
+            events.get(index - 1, ()),
+            e_position,
+            event_feedrate_mm_min(toolpath, index - 1),
+            marker_tag,
+        )
         axes = machine.controller_values(sample.joint_positions)
         if point.point_type == "deposition":
-            e_position += point.material_volume_mm3 / filament_area
+            e_position += Decimal(str(point.material_volume_mm3 / filament_area))
         words = " ".join(f"{axis}{value:.6f}" for axis, value in sorted(axes.items()))
-        e_word = f" E{e_position:.6f}" if point.point_type == "deposition" else ""
+        e_word = f" E{e_position:f}" if point.point_type == "deposition" else ""
         feed = point.feedrate_mm_min or 1.0
-        lines.append(f"; T08 POINT {index} {point.point_id} {point.point_type}")
-        lines.append(f"G1 {words}{e_word} F{feed:.3f}")
+        point_id = marker_identifier(point.point_id)
+        lines.append(f"; {marker_tag} POINT {index} {point_id} {point.point_type}")
+        lines.append(f"G1 {words}{e_word} F{feed:.6f}")
+    _emit_events(
+        lines,
+        events.get(len(toolpath.points), ()),
+        e_position,
+        event_feedrate_mm_min(toolpath, len(toolpath.points)),
+        marker_tag,
+    )
     lines.extend(("M400 ; finish queued motion", "M2"))
     return "\n".join(lines) + "\n"
 
@@ -385,88 +371,38 @@ def readback_indexed_gcode(
     toolpath: GeneratedToolpath,
     trajectory: MachineAxisTrajectory,
     machine: MachineProfile,
+    nozzle: NozzleProfile,
     *,
     tolerance: float = 1.0e-4,
+    marker_tag: str = "T08",
 ) -> GCodeReadbackReport:
-    """Read the restricted emitted dialect and compare order, axes, F and E state."""
-
-    expected = list(zip(toolpath.points, trajectory.samples, strict=True))
-    read = _read_marked_moves(gcode)
-    coordinates: list[str] = []
-    feeds: list[str] = []
-    extrusion: list[str] = []
-    ordering: list[str] = []
-    previous_e = 0.0
-    for index, (point, sample) in enumerate(expected):
-        if index >= len(read):
-            ordering.append(f"missing:{point.point_id}")
-            continue
-        point_id, point_type, words = read[index]
-        _compare_order(index, point, point_id, point_type, ordering)
-        _compare_motion(point, sample, words, machine, tolerance, coordinates, feeds)
-        actual_e = _compare_extrusion(point, words, previous_e, tolerance, extrusion)
-        previous_e = actual_e
-    if len(read) > len(expected):
-        ordering.append("unexpected_extra_points")
-    return GCodeReadbackReport(
-        len(expected),
-        len(read),
-        tuple(coordinates),
-        tuple(feeds),
-        tuple(extrusion),
-        tuple(ordering),
+    """Verify the complete absolute XYZAC stream against path, machine and filament."""
+    return readback_absolute_xyzac(
+        gcode,
+        toolpath,
+        trajectory,
+        machine,
+        nozzle,
+        tolerance=tolerance,
+        marker_tag=marker_tag,
     )
 
 
-def _read_marked_moves(gcode: str) -> list[tuple[str, str, dict[str, float]]]:
-    result: list[tuple[str, str, dict[str, float]]] = []
-    marker: tuple[str, str] | None = None
-    for line in (line.strip() for line in gcode.splitlines()):
-        if line.startswith("; T08 POINT "):
-            fields = line.split()
-            marker = (fields[4], fields[5]) if len(fields) >= 6 else None
-        elif marker is not None and line.startswith("G1 "):
-            result.append((*marker, _words(line)))
-            marker = None
-    return result
-
-
-def _compare_order(index: int, point: Any, read_id: str, read_type: str, issues: list[str]) -> None:
-    if read_id != point.point_id or read_type != point.point_type:
-        issues.append(f"{index + 1}:{read_id}!={point.point_id}")
-
-
-def _compare_motion(
-    point: Any,
-    sample: Any,
-    words: Mapping[str, float],
-    machine: MachineProfile,
-    tolerance: float,
-    coordinates: list[str],
-    feeds: list[str],
-) -> None:
-    for axis, value in machine.controller_values(sample.joint_positions).items():
-        if axis not in words or abs(words[axis] - value) > tolerance:
-            coordinates.append(f"{point.point_id}:{axis}")
-    if "F" not in words or abs(words["F"] - (point.feedrate_mm_min or 1.0)) > tolerance:
-        feeds.append(point.point_id)
-
-
-def _compare_extrusion(
-    point: Any,
-    words: Mapping[str, float],
-    previous_e: float,
-    tolerance: float,
-    issues: list[str],
-) -> float:
-    actual_e = words.get("E", previous_e)
-    if point.point_type == "deposition" and actual_e <= previous_e + tolerance:
-        issues.append(f"{point.point_id}:missing_deposition")
-    elif (
-        point.point_type != "deposition" and "E" in words and abs(actual_e - previous_e) > tolerance
-    ):
-        issues.append(f"{point.point_id}:extrusion_during_{point.point_type}")
-    return actual_e
+def _emit_events(
+    lines: list[str],
+    events: Iterable[ToolpathEvent],
+    e_position: Decimal,
+    feed: float,
+    marker_tag: str,
+) -> Decimal:
+    for event in events:
+        event_id = marker_identifier(event.event_id)
+        lines.append(f"; {marker_tag} EVENT {event_id} {event.event_type}")
+        delta = event_extrusion_mm(event)
+        if delta is not None:
+            e_position += Decimal(str(delta))
+            lines.append(f"G1 E{e_position:f} F{feed:.6f}")
+    return e_position
 
 
 def export_indexed_product(
@@ -607,17 +543,6 @@ def _write_json(path: Path, value: Any) -> None:
     path.write_text(
         json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
-
-
-def _words(line: str) -> dict[str, float]:
-    result: dict[str, float] = {}
-    for token in line.split()[1:]:
-        if len(token) > 1 and token[0].isalpha():
-            try:
-                result[token[0].upper()] = float(token[1:])
-            except ValueError:
-                pass
-    return result
 
 
 def _checkpoint(cancelled: CancelCheck | None) -> None:

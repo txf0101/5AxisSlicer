@@ -1,0 +1,28 @@
+{
+  "captured_at_utc": "2026-09-12T04:29:10.844285+00:00",
+  "live_documents": {
+    "F:\\【项目和任务】\\5AxisSclicer_V2.0\\docs\\planning\\progress_tracker.md": {
+      "mtime_local": "2026-09-12T12:23:06.698937",
+      "sha256": "bfd4451864422745b130cad3d6a920553138aa95faae75cd23e75db9582733e8"
+    },
+    "F:\\【项目和任务】\\5AxisSclicer_V2.0\\docs\\guides\\planar_workbench_zh.md": {
+      "mtime_local": "2026-09-12T12:26:22.195591",
+      "sha256": "4cc30c199fcbcb20afe4de7bba60b4fdda87dc0f92291e9b54d379e427f64f62"
+    },
+    "F:\\【项目和任务】\\5AxisSclicer_V2.0\\docs\\reviews\\evidence\\2026-09-12_p07_planar_support\\real_model\\summary.json": {
+      "mtime_local": "2026-09-12T12:18:52.602438",
+      "sha256": "321b863741f5c95aca51729d1cc11a140c81d0956d72e1caf8f38a59a726b68f"
+    }
+  },
+  "artifacts_sha256": {
+    "executed_support_probe.py.txt": "e8035175c6838264c8f756b2a5a6e976031f52e39a5ca9f3c35f39832cb8d0d0",
+    "pillar_roof.step": "a6d052c6196e644052ce9e8ecd01a7506f0f47b0168815a7f61a933a70b03c79",
+    "product\\machine_axes.csv": "2073ab70542aa13bf767d9e088e0265408063bcc8ecb63d54761e5b73c9b5ff6",
+    "product\\main.gcode": "6b0db8d0c57337ca75aaf17ed293877ca6daf35631dfa2abcb7d5f214c3df52d",
+    "product\\manifest.json": "c0e25ef588da96ac20b4898fdf562f51f6bb6ffbe31a639fef2e035cae49fa2c",
+    "product\\preview.json": "5a4c871e2e99ad979e637c4439e41cfceac4d1c46e70c0fde3d51a1e9b86d76e",
+    "product\\toolpath.json": "3427c5e6d037d0ff160ff9ac6681c91a60ec9487abca364502ec84c4dfcb78fa",
+    "product\\warnings.json": "b1175bbb954eb82bcb4a4a5f717826ff9fd806af2f084d3935fb2bf6a72cf72f",
+    "summary.json": "d7f82e84cb141390b769bc6b888029b1f75859356ad9cf51f7343ccc043d2ecb"
+  }
+}

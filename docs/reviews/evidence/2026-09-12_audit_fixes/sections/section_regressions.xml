@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="12" time="3.979" timestamp="2026-09-12T12:50:48.873478+08:00" hostname="BelongtoTXF"><testcase classname="tests.test_planar_region" name="test_sections_keep_islands_and_holes_separate" time="0.029" /><testcase classname="tests.test_planar_region" name="test_missing_body_and_invalid_layer_height_are_localised" time="0.003" /><testcase classname="tests.test_planar_region" name="test_sections_follow_build_coordinate_system_and_return_build_coordinates" time="0.007" /><testcase classname="tests.test_planar_section_loops" name="test_shared_vertex_cycle_handles_reversed_edges_and_bounded_curve_endpoint_gap" time="0.001" /><testcase classname="tests.test_planar_section_loops" name="test_nearby_but_distinct_vertices_are_not_healed_into_a_cycle" time="0.003"><failure message="OCP.OCP.StdFail.StdFail_NotDone: BRep_API: command not done">def test_nearby_but_distinct_vertices_are_not_healed_into_a_cycle():
+        with pytest.raises(PlanarSectionError, match="planar.section_open_contour"):
+&gt;           _recover_loops(_square(open_endpoint=True), 8)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_planar_section_loops.py:70: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+gap = 0.0, open_endpoint = True, branch = False
+
+    def _square(gap=0.0, *, open_endpoint=False, branch=False):
+        vertices = _vertices([(0, 0, 0), (4, 0, 0), (4, 4, 0), (0, 4, 0)])
+        builder = BRep_Builder()
+        # Deliberately generous kernel tolerance is not the manufacturing budget.
+        for vertex in vertices:
+            builder.UpdateVertex(vertex, 0.1)
+        last_vertex = _vertices([(0.000001, 0, 0)])[0] if open_endpoint else vertices[0]
+        endpoints = [*vertices[1:], last_vertex]
+        curves = [(0, gap, 1, 0), (4, 0, 0, 1), (4, 4, -1, 0), (0, 4, 0, -1)]
+        edges = [
+            BRepBuilderAPI_MakeEdge(
+                Geom_Line(gp_Pnt(x, y, 0), gp_Dir(dx, dy, 0)), start, end, 0.0, 4.0
+&gt;           ).Edge()
+              ^^^^^^
+            for (x, y, dx, dy), start, end in zip(curves, vertices, endpoints)
+        ]
+E       OCP.OCP.StdFail.StdFail_NotDone: BRep_API: command not done
+
+tests\test_planar_section_loops.py:48: StdFail_NotDone</failure></testcase><testcase classname="tests.test_planar_section_loops" name="test_shared_vertex_branch_is_rejected_instead_of_choosing_a_nearest_edge" time="0.001" /><testcase classname="tests.test_planar_section_loops" name="test_large_kernel_vertex_tolerance_does_not_authorise_large_coordinate_repair" time="0.001" /><testcase classname="tests.test_planar_section_loops" name="test_closed_zero_area_cycle_is_rejected" time="0.001" /><testcase classname="tests.test_planar_section_loops" name="test_single_edge_periodic_section_keeps_its_closed_loop" time="0.001" /><testcase classname="tests.test_planar_section_loops" name="test_existing_step_shared_vertex_section_regressions[example/\u4e09\u53f6\u6247/Supportless_sample.stp-67.7]" time="0.116" /><testcase classname="tests.test_planar_section_loops" name="test_existing_step_shared_vertex_section_regressions[example/\u53f6\u8f6e/\u53f6\u8f6e.stp-20.6]" time="0.446" /><testcase classname="tests.test_planar_section_loops" name="test_existing_step_excessive_section_gap_is_localised_and_rejected" time="0.432" /></testsuite></testsuites>

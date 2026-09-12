@@ -1,0 +1,47 @@
+from pathlib import Path
+import sys,json,math
+ROOT=Path(__file__).resolve().parents[2]
+sys.path.insert(0,str(ROOT/'tmp/project_audit/frozen/src'))
+from five_axis_slicer.step_loader import load_step
+from five_axis_slicer.step_topology import sample_edge_points
+from OCP.BRepAlgoAPI import BRepAlgoAPI_Section
+from OCP.BRepBuilderAPI import BRepBuilderAPI_MakeFace
+from OCP.BRepCheck import BRepCheck_Analyzer
+from OCP.BRep import BRep_Tool
+from OCP.TopAbs import TopAbs_EDGE,TopAbs_VERTEX,TopAbs_SOLID
+from OCP.TopExp import TopExp_Explorer,TopExp
+from OCP.TopTools import TopTools_IndexedMapOfShape
+from OCP.TopoDS import TopoDS
+from OCP.gp import gp_Pln,gp_Pnt,gp_Dir
+out=ROOT/'docs/reviews/evidence/2026-09-12_project_audit';data=[]
+for name,z in [('example/三叶扇/Supportless_sample.stp',67.7),('example/叶轮/叶轮.stp',20.6)]:
+    m=load_step(ROOT/name);body=m.shapes['body_002']
+    face=BRepBuilderAPI_MakeFace(gp_Pln(gp_Pnt(0,0,z),gp_Dir(0,0,1)),-1e6,1e6,-1e6,1e6).Face()
+    section=BRepAlgoAPI_Section(body,face,False);section.ComputePCurveOn1(True);section.Approximation(True);section.Build()
+    shape=section.Shape();idx=TopTools_IndexedMapOfShape();TopExp.MapShapes_s(shape,TopAbs_VERTEX,idx)
+    records={i:{'degree':0,'tolerance_mm':BRep_Tool.Tolerance_s(TopoDS.Vertex_s(idx.FindKey(i))),'curve_ends':[]} for i in range(1,idx.Extent()+1)}
+    explorer=TopExp_Explorer(shape,TopAbs_EDGE);edges=[]
+    while explorer.More():
+        edge=TopoDS.Edge_s(explorer.Current());pts=sample_edge_points(edge,64)
+        for vertex,p in [(TopExp.FirstVertex_s(edge),pts[0]),(TopExp.LastVertex_s(edge),pts[-1])]:
+            i=idx.FindIndex(vertex);records[i]['degree']+=1;records[i]['curve_ends'].append(p)
+        edges.append(pts);explorer.Next()
+    pairs=[]
+    for i,d in records.items():
+        ends=d.pop('curve_ends');d['vertex_id']=i
+        d['max_shared_vertex_curve_endpoint_gap_mm']=max((math.dist(a,b) for a in ends for b in ends),default=0)
+        pairs.append(d)
+    result={'model':name,'body':'body_002','z_mm':z,'valid_brep':BRepCheck_Analyzer(body).IsValid(),
+        'section_done':section.IsDone(),'edge_count':len(edges),'vertex_count':idx.Extent(),
+        'all_vertex_degrees_two':all(d['degree']==2 for d in pairs),'vertices':pairs,
+        'largest_shared_endpoint_gap_mm':max(d['max_shared_vertex_curve_endpoint_gap_mm'] for d in pairs)}
+    data.append(result)
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    fig,ax=plt.subplots(figsize=(9,6),layout='constrained')
+    for n,edge in enumerate(edges):ax.plot([p[0] for p in edge],[p[1] for p in edge],label=f'edge {n+1}')
+    ax.set_aspect('equal');ax.set(xlabel='X / mm',ylabel='Y / mm',title=f'Native OCCT section at Z={z} mm\nAll topological vertices have degree 2: {result["all_vertex_degrees_two"]}')
+    ax.legend();fig.savefig(out/f'section_z{z}.png',dpi=150);plt.close(fig)
+(out/'section_topology_probe.json').write_text(json.dumps(data,ensure_ascii=False,indent=2),encoding='utf8')
+print(json.dumps(data,ensure_ascii=False,indent=2))

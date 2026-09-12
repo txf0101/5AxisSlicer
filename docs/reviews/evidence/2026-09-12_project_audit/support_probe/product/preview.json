@@ -1,0 +1,3368 @@
+{
+  "coordinate_frame": "workpiece_build",
+  "segments": [
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 3.4200000000000004,
+      "end": [
+        11.700000000000003,
+        0.7999999999999972,
+        0.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        0.2999999999999999,
+        0.7999999999999972,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        3.2254635649335026,
+        1.7999999999999972,
+        0.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        11.700000000000003,
+        0.7999999999999972,
+        0.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 0.8776390694800508,
+      "end": [
+        0.3,
+        1.7999999999999972,
+        0.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        3.2254635649335026,
+        1.7999999999999972,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        8.774536435066498,
+        1.7999999999999972,
+        0.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        0.3,
+        1.7999999999999972,
+        0.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 0.8776390694800514,
+      "end": [
+        11.700000000000003,
+        1.7999999999999972,
+        0.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        8.774536435066498,
+        1.7999999999999972,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        3.2,
+        2.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        11.700000000000003,
+        1.7999999999999972,
+        0.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 0.8700000000000001,
+      "end": [
+        0.30000000000000004,
+        2.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        3.2,
+        2.799999999999997,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        8.8,
+        2.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        0.30000000000000004,
+        2.799999999999997,
+        0.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 0.8700000000000001,
+      "end": [
+        11.700000000000001,
+        2.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        8.8,
+        2.799999999999997,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        3.2,
+        3.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        11.700000000000001,
+        2.799999999999997,
+        0.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 0.87,
+      "end": [
+        0.30000000000000016,
+        3.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        3.2,
+        3.799999999999997,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        8.8,
+        3.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        0.30000000000000016,
+        3.799999999999997,
+        0.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 0.8700000000000001,
+      "end": [
+        11.700000000000001,
+        3.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        8.8,
+        3.799999999999997,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        3.2,
+        4.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        11.700000000000001,
+        3.799999999999997,
+        0.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 0.87,
+      "end": [
+        0.30000000000000027,
+        4.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        3.2,
+        4.799999999999997,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        8.8,
+        4.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        0.30000000000000027,
+        4.799999999999997,
+        0.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 0.8700000000000001,
+      "end": [
+        11.700000000000001,
+        4.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        8.8,
+        4.799999999999997,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        3.2,
+        5.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        11.700000000000001,
+        4.799999999999997,
+        0.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 0.87,
+      "end": [
+        0.3000000000000003,
+        5.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        3.2,
+        5.799999999999997,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        8.8,
+        5.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        0.3000000000000003,
+        5.799999999999997,
+        0.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 0.8700000000000001,
+      "end": [
+        11.700000000000001,
+        5.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        8.8,
+        5.799999999999997,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        3.2,
+        6.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        11.700000000000001,
+        5.799999999999997,
+        0.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 0.87,
+      "end": [
+        0.30000000000000043,
+        6.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        3.2,
+        6.799999999999997,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        8.8,
+        6.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        0.30000000000000043,
+        6.799999999999997,
+        0.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 0.8700000000000001,
+      "end": [
+        11.700000000000001,
+        6.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        8.8,
+        6.799999999999997,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        3.2,
+        7.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        11.700000000000001,
+        6.799999999999997,
+        0.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 0.8699999999999998,
+      "end": [
+        0.30000000000000054,
+        7.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        3.2,
+        7.799999999999997,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        8.8,
+        7.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        0.30000000000000054,
+        7.799999999999997,
+        0.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 0.8699999999999996,
+      "end": [
+        11.7,
+        7.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        8.8,
+        7.799999999999997,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        3.999999999998697,
+        8.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        11.7,
+        7.799999999999997,
+        0.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 1.1099999999996089,
+      "end": [
+        0.3000000000000006,
+        8.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        3.999999999998697,
+        8.799999999999997,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        8.000000000001302,
+        8.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        0.3000000000000006,
+        8.799999999999997,
+        0.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 1.109999999999609,
+      "end": [
+        11.7,
+        8.799999999999997,
+        0.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        8.000000000001302,
+        8.799999999999997,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        0.7999999999999998,
+        0.29999999999999727,
+        1.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        11.7,
+        8.799999999999997,
+        0.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 2.8200000000000007,
+      "end": [
+        0.7999999999999998,
+        9.7,
+        1.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        0.7999999999999998,
+        0.29999999999999727,
+        1.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        1.7999999999999998,
+        9.7,
+        1.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        0.7999999999999998,
+        9.7,
+        1.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 2.8200000000000007,
+      "end": [
+        1.7999999999999998,
+        0.2999999999999975,
+        1.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        1.7999999999999998,
+        9.7,
+        1.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        2.8,
+        0.29999999999999777,
+        1.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        1.7999999999999998,
+        0.2999999999999975,
+        1.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 2.8200000000000007,
+      "end": [
+        2.8,
+        9.7,
+        1.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        2.8,
+        0.29999999999999777,
+        1.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        3.8,
+        1.225463564933502,
+        1.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        2.8,
+        9.7,
+        1.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 0.2776390694800512,
+      "end": [
+        3.8,
+        0.299999999999998,
+        1.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        3.8,
+        1.225463564933502,
+        1.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        3.8,
+        8.7745364350665,
+        1.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        3.8,
+        0.299999999999998,
+        1.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 0.2776390694800504,
+      "end": [
+        3.8,
+        9.700000000000001,
+        1.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        3.8,
+        8.7745364350665,
+        1.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        4.8,
+        1.2000000000000002,
+        1.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        3.8,
+        9.700000000000001,
+        1.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 0.2700000000000006,
+      "end": [
+        4.8,
+        0.2999999999999982,
+        1.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        4.8,
+        1.2000000000000002,
+        1.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        4.8,
+        8.8,
+        1.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        4.8,
+        0.2999999999999982,
+        1.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 0.2700000000000001,
+      "end": [
+        4.8,
+        9.700000000000001,
+        1.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        4.8,
+        8.8,
+        1.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        5.8,
+        1.2000000000000002,
+        1.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        4.8,
+        9.700000000000001,
+        1.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 0.2700000000000005,
+      "end": [
+        5.8,
+        0.29999999999999843,
+        1.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        5.8,
+        1.2000000000000002,
+        1.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        5.8,
+        8.8,
+        1.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        5.8,
+        0.29999999999999843,
+        1.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 0.2700000000000001,
+      "end": [
+        5.8,
+        9.700000000000001,
+        1.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        5.8,
+        8.8,
+        1.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        6.8,
+        1.2,
+        1.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        5.8,
+        9.700000000000001,
+        1.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 0.27000000000000035,
+      "end": [
+        6.8,
+        0.29999999999999866,
+        1.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        6.8,
+        1.2,
+        1.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        6.8,
+        8.8,
+        1.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        6.8,
+        0.29999999999999866,
+        1.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 0.2700000000000001,
+      "end": [
+        6.8,
+        9.700000000000001,
+        1.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        6.8,
+        8.8,
+        1.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        7.8,
+        1.2,
+        1.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        6.8,
+        9.700000000000001,
+        1.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 0.2700000000000003,
+      "end": [
+        7.8,
+        0.29999999999999893,
+        1.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        7.8,
+        1.2,
+        1.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        7.8,
+        8.8,
+        1.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        7.8,
+        0.29999999999999893,
+        1.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 0.2700000000000001,
+      "end": [
+        7.8,
+        9.700000000000001,
+        1.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        7.8,
+        8.8,
+        1.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        8.8,
+        9.700000000000001,
+        1.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        7.8,
+        9.700000000000001,
+        1.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 2.8200000000000007,
+      "end": [
+        8.8,
+        0.29999999999999916,
+        1.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        8.8,
+        9.700000000000001,
+        1.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        9.8,
+        0.2999999999999994,
+        1.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        8.8,
+        0.29999999999999916,
+        1.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 2.820000000000001,
+      "end": [
+        9.8,
+        9.700000000000003,
+        1.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        9.8,
+        0.2999999999999994,
+        1.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        10.8,
+        9.700000000000003,
+        1.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        9.8,
+        9.700000000000003,
+        1.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support:support-body-0001:support",
+      "delta_e": 2.820000000000001,
+      "end": [
+        10.8,
+        0.2999999999999996,
+        1.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        10.8,
+        9.700000000000003,
+        1.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        0.2999999999999999,
+        0.5999999999999972,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        10.8,
+        0.2999999999999996,
+        1.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 3.4200000000000004,
+      "end": [
+        11.700000000000003,
+        0.5999999999999972,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        0.2999999999999999,
+        0.5999999999999972,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        11.700000000000003,
+        1.199999999999997,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        11.700000000000003,
+        0.5999999999999972,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 3.4200000000000004,
+      "end": [
+        0.29999999999999993,
+        1.199999999999997,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        11.700000000000003,
+        1.199999999999997,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        0.3,
+        1.7999999999999972,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        0.29999999999999993,
+        1.199999999999997,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.8776390694800508,
+      "end": [
+        3.2254635649335026,
+        1.7999999999999972,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        0.3,
+        1.7999999999999972,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        11.700000000000003,
+        1.7999999999999972,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        3.2254635649335026,
+        1.7999999999999972,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.8776390694800514,
+      "end": [
+        8.774536435066498,
+        1.7999999999999972,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        11.700000000000003,
+        1.7999999999999972,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        0.30000000000000004,
+        2.3999999999999972,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        8.774536435066498,
+        1.7999999999999972,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.8700000000000001,
+      "end": [
+        3.2,
+        2.3999999999999972,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        0.30000000000000004,
+        2.3999999999999972,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        11.700000000000003,
+        2.3999999999999972,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        3.2,
+        2.3999999999999972,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.8700000000000007,
+      "end": [
+        8.8,
+        2.3999999999999972,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        11.700000000000003,
+        2.3999999999999972,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        0.3000000000000001,
+        2.999999999999997,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        8.8,
+        2.3999999999999972,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.87,
+      "end": [
+        3.2,
+        2.999999999999997,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        0.3000000000000001,
+        2.999999999999997,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        11.700000000000001,
+        2.999999999999997,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        3.2,
+        2.999999999999997,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.8700000000000001,
+      "end": [
+        8.8,
+        2.999999999999997,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        11.700000000000001,
+        2.999999999999997,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        0.30000000000000016,
+        3.599999999999997,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        8.8,
+        2.999999999999997,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.87,
+      "end": [
+        3.2,
+        3.599999999999997,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        0.30000000000000016,
+        3.599999999999997,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        11.700000000000001,
+        3.599999999999997,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        3.2,
+        3.599999999999997,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.8700000000000001,
+      "end": [
+        8.8,
+        3.599999999999997,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        11.700000000000001,
+        3.599999999999997,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        0.3000000000000002,
+        4.1999999999999975,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        8.8,
+        3.599999999999997,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.87,
+      "end": [
+        3.2,
+        4.1999999999999975,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        0.3000000000000002,
+        4.1999999999999975,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        11.700000000000001,
+        4.1999999999999975,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        3.2,
+        4.1999999999999975,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.8700000000000001,
+      "end": [
+        8.8,
+        4.1999999999999975,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        11.700000000000001,
+        4.1999999999999975,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        0.30000000000000027,
+        4.799999999999997,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        8.8,
+        4.1999999999999975,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.87,
+      "end": [
+        3.2,
+        4.799999999999997,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        0.30000000000000027,
+        4.799999999999997,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        11.700000000000001,
+        4.799999999999997,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        3.2,
+        4.799999999999997,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.8700000000000001,
+      "end": [
+        8.8,
+        4.799999999999997,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        11.700000000000001,
+        4.799999999999997,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        0.3000000000000003,
+        5.399999999999997,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        8.8,
+        4.799999999999997,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.87,
+      "end": [
+        3.2,
+        5.399999999999997,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        0.3000000000000003,
+        5.399999999999997,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        11.700000000000001,
+        5.399999999999997,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        3.2,
+        5.399999999999997,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.8700000000000001,
+      "end": [
+        8.8,
+        5.399999999999997,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        11.700000000000001,
+        5.399999999999997,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        0.3000000000000004,
+        5.999999999999997,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        8.8,
+        5.399999999999997,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.87,
+      "end": [
+        3.2,
+        5.999999999999997,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        0.3000000000000004,
+        5.999999999999997,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        11.700000000000001,
+        5.999999999999997,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        3.2,
+        5.999999999999997,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.8700000000000001,
+      "end": [
+        8.8,
+        5.999999999999997,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        11.700000000000001,
+        5.999999999999997,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        0.30000000000000043,
+        6.599999999999997,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        8.8,
+        5.999999999999997,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.87,
+      "end": [
+        3.2,
+        6.599999999999997,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        0.30000000000000043,
+        6.599999999999997,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        11.700000000000001,
+        6.599999999999997,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        3.2,
+        6.599999999999997,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.8700000000000001,
+      "end": [
+        8.8,
+        6.599999999999997,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        11.700000000000001,
+        6.599999999999997,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        0.3000000000000005,
+        7.199999999999997,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        8.8,
+        6.599999999999997,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.8699999999999998,
+      "end": [
+        3.2,
+        7.199999999999997,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        0.3000000000000005,
+        7.199999999999997,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        11.700000000000001,
+        7.199999999999997,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        3.2,
+        7.199999999999997,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.8700000000000001,
+      "end": [
+        8.8,
+        7.199999999999997,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        11.700000000000001,
+        7.199999999999997,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        0.30000000000000054,
+        7.799999999999997,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        8.8,
+        7.199999999999997,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.8699999999999998,
+      "end": [
+        3.2,
+        7.799999999999997,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        0.30000000000000054,
+        7.799999999999997,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        11.7,
+        7.799999999999997,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        3.2,
+        7.799999999999997,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.8699999999999996,
+      "end": [
+        8.8,
+        7.799999999999997,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        11.7,
+        7.799999999999997,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        0.3000000000000006,
+        8.399999999999997,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        8.8,
+        7.799999999999997,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.9021539030917338,
+      "end": [
+        3.307179676972447,
+        8.399999999999997,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        0.3000000000000006,
+        8.399999999999997,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        11.7,
+        8.399999999999997,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        3.307179676972447,
+        8.399999999999997,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.902153903091734,
+      "end": [
+        8.692820323027552,
+        8.399999999999997,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        11.7,
+        8.399999999999997,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        0.30000000000000066,
+        8.999999999999996,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        8.692820323027552,
+        8.399999999999997,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 3.4199999999999995,
+      "end": [
+        11.7,
+        8.999999999999996,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        0.30000000000000066,
+        8.999999999999996,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        11.7,
+        9.599999999999996,
+        1.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        11.7,
+        8.999999999999996,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 3.4199999999999995,
+      "end": [
+        0.3000000000000007,
+        9.599999999999996,
+        1.5
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        11.7,
+        9.599999999999996,
+        1.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        0.5999999999999999,
+        0.2999999999999972,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        0.3000000000000007,
+        9.599999999999996,
+        1.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 2.8200000000000007,
+      "end": [
+        0.5999999999999999,
+        9.7,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        0.5999999999999999,
+        0.2999999999999972,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        1.1999999999999997,
+        9.7,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        0.5999999999999999,
+        9.7,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 2.8200000000000007,
+      "end": [
+        1.1999999999999997,
+        0.2999999999999974,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        1.1999999999999997,
+        9.7,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        1.7999999999999998,
+        0.2999999999999975,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        1.1999999999999997,
+        0.2999999999999974,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 2.8200000000000007,
+      "end": [
+        1.7999999999999998,
+        9.7,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        1.7999999999999998,
+        0.2999999999999975,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        2.4,
+        9.7,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        1.7999999999999998,
+        9.7,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 2.8200000000000007,
+      "end": [
+        2.4,
+        0.29999999999999766,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        2.4,
+        9.7,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        2.9999999999999996,
+        0.29999999999999777,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        2.4,
+        0.29999999999999766,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 2.8200000000000007,
+      "end": [
+        2.9999999999999996,
+        9.7,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        2.9999999999999996,
+        0.29999999999999777,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        3.5999999999999996,
+        1.3071796769724497,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        2.9999999999999996,
+        9.7,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.3021539030917355,
+      "end": [
+        3.5999999999999996,
+        0.29999999999999793,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        3.5999999999999996,
+        1.3071796769724497,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        3.5999999999999996,
+        8.692820323027549,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        3.5999999999999996,
+        0.29999999999999793,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.3021539030917356,
+      "end": [
+        3.5999999999999996,
+        9.700000000000001,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        3.5999999999999996,
+        8.692820323027549,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        4.199999999999999,
+        1.2000000000000002,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        3.5999999999999996,
+        9.700000000000001,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.27000000000000063,
+      "end": [
+        4.199999999999999,
+        0.29999999999999805,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        4.199999999999999,
+        1.2000000000000002,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        4.199999999999999,
+        8.8,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        4.199999999999999,
+        0.29999999999999805,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.2700000000000001,
+      "end": [
+        4.199999999999999,
+        9.700000000000001,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        4.199999999999999,
+        8.8,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        4.8,
+        1.2000000000000002,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        4.199999999999999,
+        9.700000000000001,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.2700000000000006,
+      "end": [
+        4.8,
+        0.2999999999999982,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        4.8,
+        1.2000000000000002,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        4.8,
+        8.8,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        4.8,
+        0.2999999999999982,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.2700000000000001,
+      "end": [
+        4.8,
+        9.700000000000001,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        4.8,
+        8.8,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        5.3999999999999995,
+        1.2000000000000002,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        4.8,
+        9.700000000000001,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.2700000000000006,
+      "end": [
+        5.3999999999999995,
+        0.2999999999999983,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        5.3999999999999995,
+        1.2000000000000002,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        5.3999999999999995,
+        8.8,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        5.3999999999999995,
+        0.2999999999999983,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.2700000000000001,
+      "end": [
+        5.3999999999999995,
+        9.700000000000001,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        5.3999999999999995,
+        8.8,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        6.0,
+        1.2000000000000002,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        5.3999999999999995,
+        9.700000000000001,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.2700000000000005,
+      "end": [
+        6.0,
+        0.2999999999999985,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        6.0,
+        1.2000000000000002,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        6.0,
+        8.8,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        6.0,
+        0.2999999999999985,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.2700000000000001,
+      "end": [
+        6.0,
+        9.700000000000001,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        6.0,
+        8.8,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        6.6,
+        1.2,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        6.0,
+        9.700000000000001,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.27000000000000035,
+      "end": [
+        6.6,
+        0.29999999999999866,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        6.6,
+        1.2,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        6.6,
+        8.8,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        6.6,
+        0.29999999999999866,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.2700000000000001,
+      "end": [
+        6.6,
+        9.700000000000001,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        6.6,
+        8.8,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        7.199999999999999,
+        1.2,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        6.6,
+        9.700000000000001,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.27000000000000035,
+      "end": [
+        7.199999999999999,
+        0.29999999999999877,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        7.199999999999999,
+        1.2,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        7.199999999999999,
+        8.8,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        7.199999999999999,
+        0.29999999999999877,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.2700000000000001,
+      "end": [
+        7.199999999999999,
+        9.700000000000001,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        7.199999999999999,
+        8.8,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        7.8,
+        1.2,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        7.199999999999999,
+        9.700000000000001,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.2700000000000003,
+      "end": [
+        7.8,
+        0.29999999999999893,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        7.8,
+        1.2,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        7.8,
+        8.8,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        7.8,
+        0.29999999999999893,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.2700000000000001,
+      "end": [
+        7.8,
+        9.700000000000001,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        7.8,
+        8.8,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        8.399999999999999,
+        1.307179676972448,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        7.8,
+        9.700000000000001,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.3021539030917347,
+      "end": [
+        8.399999999999999,
+        0.29999999999999905,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        8.399999999999999,
+        1.307179676972448,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        8.399999999999999,
+        8.692820323027552,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        8.399999999999999,
+        0.29999999999999905,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 0.30215390309173457,
+      "end": [
+        8.399999999999999,
+        9.700000000000001,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        8.399999999999999,
+        8.692820323027552,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        9.0,
+        9.700000000000003,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        8.399999999999999,
+        9.700000000000001,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 2.820000000000001,
+      "end": [
+        9.0,
+        0.2999999999999992,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        9.0,
+        9.700000000000003,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        9.599999999999998,
+        0.2999999999999993,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        9.0,
+        0.2999999999999992,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 2.820000000000001,
+      "end": [
+        9.599999999999998,
+        9.700000000000003,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        9.599999999999998,
+        0.2999999999999993,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        10.2,
+        9.700000000000003,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        9.599999999999998,
+        9.700000000000003,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 2.820000000000001,
+      "end": [
+        10.2,
+        0.2999999999999995,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        10.2,
+        9.700000000000003,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        10.8,
+        0.2999999999999996,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        10.2,
+        0.2999999999999995,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 2.820000000000001,
+      "end": [
+        10.8,
+        9.700000000000003,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        10.8,
+        0.2999999999999996,
+        2.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        11.399999999999999,
+        9.700000000000003,
+        2.0
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        10.8,
+        9.700000000000003,
+        2.0
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_support_interface:support-interface-0001:support",
+      "delta_e": 2.820000000000001,
+      "end": [
+        11.399999999999999,
+        0.29999999999999977,
+        2.0
+      ],
+      "extrusion_role": "support_material",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        11.399999999999999,
+        9.700000000000003,
+        2.0
+      ],
+      "width": 0.6
+    }
+  ]
+}

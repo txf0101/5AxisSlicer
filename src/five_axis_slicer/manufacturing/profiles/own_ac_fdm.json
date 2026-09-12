@@ -1,0 +1,418 @@
+{
+  "schema_version": 1,
+  "resource_type": "machine",
+  "profile": {
+    "id": "builtin.machine.own_ac_fdm.v1",
+    "name": "自有 AC 五轴打印机 / Own AC FDM",
+    "version": 1,
+    "root_link_id": "machine",
+    "tool_link_id": "tool",
+    "workpiece_link_id": "c_table",
+    "reference_only": true,
+    "manufacturer": "自研 / In-house",
+    "model": "AC rotary-table FDM",
+    "source_uri": "manuscript.docx#section-2.1-table-1",
+    "joints": [
+      {
+        "id": "X",
+        "name": "X linear axis",
+        "parent_link_id": "machine",
+        "child_link_id": "x_carriage",
+        "joint_type": "linear",
+        "motion_side": "tool",
+        "axis_direction": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "rotation_center_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "zero_offset": 0.0,
+        "soft_limit_min": null,
+        "soft_limit_max": null,
+        "max_velocity": null,
+        "max_acceleration": null,
+        "T_parent_from_child_zero": {
+          "source_frame": "x_carriage",
+          "target_frame": "machine",
+          "T_target_from_source": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        "post_axis_map": {
+          "word": "X",
+          "output_unit": "mm",
+          "scale": 1.0,
+          "offset": 0.0
+        }
+      },
+      {
+        "id": "Y",
+        "name": "Y linear axis",
+        "parent_link_id": "x_carriage",
+        "child_link_id": "y_carriage",
+        "joint_type": "linear",
+        "motion_side": "tool",
+        "axis_direction": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "rotation_center_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "zero_offset": 0.0,
+        "soft_limit_min": null,
+        "soft_limit_max": null,
+        "max_velocity": null,
+        "max_acceleration": null,
+        "T_parent_from_child_zero": {
+          "source_frame": "y_carriage",
+          "target_frame": "x_carriage",
+          "T_target_from_source": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        "post_axis_map": {
+          "word": "Y",
+          "output_unit": "mm",
+          "scale": 1.0,
+          "offset": 0.0
+        }
+      },
+      {
+        "id": "Z",
+        "name": "Z linear axis",
+        "parent_link_id": "y_carriage",
+        "child_link_id": "tool",
+        "joint_type": "linear",
+        "motion_side": "tool",
+        "axis_direction": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "rotation_center_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "zero_offset": 0.0,
+        "soft_limit_min": null,
+        "soft_limit_max": null,
+        "max_velocity": null,
+        "max_acceleration": null,
+        "T_parent_from_child_zero": {
+          "source_frame": "tool",
+          "target_frame": "y_carriage",
+          "T_target_from_source": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        "post_axis_map": {
+          "word": "Z",
+          "output_unit": "mm",
+          "scale": 1.0,
+          "offset": 0.0
+        }
+      },
+      {
+        "id": "A",
+        "name": "A rotary axis",
+        "parent_link_id": "machine",
+        "child_link_id": "a_cradle",
+        "joint_type": "rotary",
+        "motion_side": "workpiece",
+        "axis_direction": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "rotation_center_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "zero_offset": 0.0,
+        "soft_limit_min": -3.141592653589793,
+        "soft_limit_max": 3.141592653589793,
+        "max_velocity": null,
+        "max_acceleration": null,
+        "T_parent_from_child_zero": {
+          "source_frame": "a_cradle",
+          "target_frame": "machine",
+          "T_target_from_source": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        "post_axis_map": {
+          "word": "A",
+          "output_unit": "deg",
+          "scale": 1.0,
+          "offset": 0.0
+        }
+      },
+      {
+        "id": "C",
+        "name": "C rotary axis",
+        "parent_link_id": "a_cradle",
+        "child_link_id": "c_table",
+        "joint_type": "rotary",
+        "motion_side": "workpiece",
+        "axis_direction": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "rotation_center_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "zero_offset": 0.0,
+        "soft_limit_min": -6.283185307179586,
+        "soft_limit_max": 6.283185307179586,
+        "max_velocity": null,
+        "max_acceleration": null,
+        "T_parent_from_child_zero": {
+          "source_frame": "c_table",
+          "target_frame": "a_cradle",
+          "T_target_from_source": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        "post_axis_map": {
+          "word": "C",
+          "output_unit": "deg",
+          "scale": 1.0,
+          "offset": 0.0
+        }
+      }
+    ],
+    "mount_datums": [
+      {
+        "id": "build_plate_mount",
+        "name": "Rotary table center",
+        "parent_link_id": "c_table",
+        "build_surface_id": "xyzac_plate",
+        "T_parent_from_mount": {
+          "source_frame": "build_plate_mount",
+          "target_frame": "c_table",
+          "T_target_from_source": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      }
+    ],
+    "build_surfaces": [
+      {
+        "id": "xyzac_plate",
+        "name": "Own AC heated table",
+        "shape": "circle",
+        "width_mm": null,
+        "depth_mm": null,
+        "diameter_mm": 180.0,
+        "thickness_mm": 0.0
+      }
+    ]
+  },
+  "provenance": {
+    "source_sha256": "3a4fa546b0468f114b9d86c1125f9b03a363286f67caaafb3d44d34974b25c59",
+    "sections": [
+      "2.1",
+      "2.4"
+    ],
+    "calibration_status": "pending",
+    "unmeasured": [
+      "XYZ travel",
+      "axis speed and acceleration limits",
+      "rotary centers and zero transforms",
+      "axis direction calibration",
+      "plate thickness",
+      "nozzle collision envelope",
+      "controller macros"
+    ],
+    "placeholder_note": "Zero centers, zero offsets, identity transforms and zero plate thickness are uncalibrated model placeholders, not measurements."
+  },
+  "process_reference": {
+    "nozzle_diameter_mm": 0.4,
+    "filament_diameter_mm": 1.75,
+    "layer_height_mm": 0.2,
+    "bead_width_mm": 0.4,
+    "nominal_deposition_speed_mm_s": 150.0,
+    "recommended_diameter_mm": 160.0,
+    "validated_diameter_mm": 150.0,
+    "reorientation_absolute_z_mm": 20.0,
+    "cutter_relative_z_mm": 20.0,
+    "pla_base_multimaterial_bed_c": 45.0,
+    "materials": [
+      {
+        "channel": 0,
+        "material": "PLA",
+        "nozzle_c": 195,
+        "standalone_bed_c": 45
+      },
+      {
+        "channel": 1,
+        "material": "PETG",
+        "nozzle_c": 235,
+        "standalone_bed_c": 80
+      },
+      {
+        "channel": 2,
+        "material": "PA",
+        "nozzle_c": 275,
+        "standalone_bed_c": 95
+      },
+      {
+        "channel": 3,
+        "material": "ABS",
+        "nozzle_c": 250,
+        "standalone_bed_c": 90
+      }
+    ]
+  }
+}

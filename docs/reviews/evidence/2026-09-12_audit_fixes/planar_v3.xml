@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="45" time="8.800" timestamp="2026-09-12T13:14:19.897044+08:00" hostname="BelongtoTXF"><testcase classname="tests.test_planar_zigzag" name="test_zigzag_clips_hole_and_separates_travel_from_deposition" time="0.013" /><testcase classname="tests.test_planar_zigzag" name="test_empty_or_invalid_input_has_localised_diagnostic" time="0.001" /><testcase classname="tests.test_planar_zigzag" name="test_perimeters_close_each_loop_and_every_transition_is_explicit" time="0.049" /><testcase classname="tests.test_planar_spiral" name="test_spiral_has_continuous_z_and_material_after_approach" time="0.005" /><testcase classname="tests.test_planar_spiral" name="test_multiple_islands_are_explicitly_rejected" time="0.000" /><testcase classname="tests.test_planar_spiral" name="test_spiral_checks_correspondence_closure_and_volume" time="0.005" /><testcase classname="tests.test_planar_spiral" name="test_spiral_rejects_holes_topology_changes_and_bad_layer_order" time="0.003" /><testcase classname="tests.test_planar_spiral" name="test_spiral_rejects_degenerate_contour" time="0.000" /><testcase classname="tests.test_planar_bead_measurement" name="test_half_bead_inset_has_independent_exact_box_volume" time="0.020" /><testcase classname="tests.test_planar_bead_measurement" name="test_original_boundary_centreline_and_self_consistent_e_do_not_qualify_bead" time="0.006" /><testcase classname="tests.test_planar_bead_measurement" name="test_dense_overlapping_hatches_cannot_exceed_full_solid_volume" time="0.014" /><testcase classname="tests.test_planar_bead_measurement" name="test_invalid_sampling_grid_is_rejected[0]" time="0.005" /><testcase classname="tests.test_planar_bead_measurement" name="test_invalid_sampling_grid_is_rejected[-1]" time="0.004" /><testcase classname="tests.test_planar_bead_measurement" name="test_invalid_sampling_grid_is_rejected[inf]" time="0.004" /><testcase classname="tests.test_planar_bead_measurement" name="test_invalid_sampling_grid_is_rejected[nan]" time="0.005" /><testcase classname="tests.test_planar_bead_measurement" name="test_missing_provenance_cannot_silently_drop_material" time="0.005" /><testcase classname="tests.test_planar_bead_measurement" name="test_underfilled_island_cannot_hide_narrow_region_overfill" time="0.013" /><testcase classname="tests.test_planar_path_products" name="test_spiral_product_generates_continuous_z_and_six_files" time="0.437" /><testcase classname="tests.test_planar_path_products" name="test_spiral_product_propagates_topology_rejections[layers0-planar.spiral_holes_unsupported]" time="0.003" /><testcase classname="tests.test_planar_path_products" name="test_spiral_product_propagates_topology_rejections[layers1-planar.spiral_multiple_regions]" time="0.003" /><testcase classname="tests.test_planar_path_products" name="test_spiral_product_propagates_topology_rejections[layers2-planar.spiral_topology_changed]" time="0.005" /><testcase classname="tests.test_planar_path_products" name="test_spiral_fabricated_interlayer_sections_cannot_override_actual_cad" time="0.105" /><testcase classname="tests.test_planar_path_products" name="test_spiral_checks_real_solid_between_matching_endpoint_sections" time="0.250" /><testcase classname="tests.test_planar_path_products" name="test_spiral_cad_validation_respects_source_to_build_transform" time="0.427" /><testcase classname="tests.test_planar_path_products" name="test_offset_product_generates_multiple_passes_reads_back_and_exports" time="0.043" /><testcase classname="tests.test_planar_path_products" name="test_controller_generates_and_exports_offset_product" time="0.051" /><testcase classname="tests.test_planar_path_products" name="test_offset_product_handles_holes_concavity_multiple_islands_and_split_necks" time="0.834"><failure message="AssertionError: assert (False)&#10; +  where False = PlanarZigzagProductResult(operation_type='planar_offset', layers=(PlanarSliceLayer(layer_id='l1', z_mm=0.5, regions=(P...te_mismatches=(), feedrate_mismatches=(), extrusion_mismatches=(), order_mismatches=('export_blocked_by_validation',))).exportable">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001EDA5D482C0&gt;
+
+    def test_offset_product_handles_holes_concavity_multiple_islands_and_split_necks(
+        monkeypatch,
+    ) -&gt; None:
+        z = 0.5
+        holed = PlanarRegion(
+            "holed",
+            _rect("unused", 0, 0, 20, 20).outer,
+            (_rect("unused", 7, 7, 13, 13).outer,),
+        )
+        concave = PlanarRegion(
+            "concave",
+            (
+                (25, 0, z),
+                (45, 0, z),
+                (45, 20, z),
+                (37, 20, z),
+                (37, 8, z),
+                (33, 8, z),
+                (33, 20, z),
+                (25, 20, z),
+                (25, 0, z),
+            ),
+        )
+        dumbbell = PlanarRegion(
+            "split",
+            tuple(
+                (x + 50, y, z)
+                for x, y in (
+                    (0, 0),
+                    (4, 0),
+                    (4, 1.5),
+                    (8, 1.5),
+                    (8, 0),
+                    (12, 0),
+                    (12, 4),
+                    (8, 4),
+                    (8, 2.5),
+                    (4, 2.5),
+                    (4, 4),
+                    (0, 4),
+                    (0, 0),
+                )
+            ),
+        )
+        layers = (PlanarSliceLayer("l1", z, (holed, concave, dumbbell, _rect("island", 70, 0, 78, 8))),)
+        monkeypatch.setattr(planar_product, "slice_planar_layers", lambda *args, **kwargs: layers)
+    
+        result = generate_planar_path_product(
+            _model(), _offset_operation(), _machine(), _nozzle(), RigidTransform.identity("build")
+        )
+    
+&gt;       assert result.exportable and result.readback.passed
+E       AssertionError: assert (False)
+E        +  where False = PlanarZigzagProductResult(operation_type='planar_offset', layers=(PlanarSliceLayer(layer_id='l1', z_mm=0.5, regions=(P...te_mismatches=(), feedrate_mismatches=(), extrusion_mismatches=(), order_mismatches=('export_blocked_by_validation',))).exportable
+
+tests\test_planar_path_products.py:263: AssertionError</failure></testcase><testcase classname="tests.test_planar_path_products" name="test_offset_partial_disappearance_is_warning_and_remains_exportable" time="0.041" /><testcase classname="tests.test_planar_path_products" name="test_offset_complete_disappearance_sets_controller_error_and_blocks_export" time="0.010" /><testcase classname="tests.test_planar_zigzag_product" name="test_zigzag_product_generates_reads_back_and_exports_six_files" time="0.124" /><testcase classname="tests.test_planar_zigzag_product" name="test_controller_zigzag_generation_and_export" time="0.142" /><testcase classname="tests.test_planar_zigzag_product" name="test_zigzag_cancel_preserves_ready_then_parameter_change_is_stale" time="0.135" /><testcase classname="tests.test_planar_thin_wall_product" name="test_thin_wall_product_is_exportable_and_contains_p04_bundle" time="0.100" /><testcase classname="tests.test_planar_thin_wall_product" name="test_thin_wall_max_passes_changes_product_semantic_hash" time="0.171" /><testcase classname="tests.test_planar_thin_wall_product" name="test_thin_wall_parameter_change_marks_ready_product_stale" time="0.091" /><testcase classname="tests.test_planar_thin_wall_product" name="test_thin_wall_narrow_reduce_policy_is_a_visible_warning" time="0.058" /><testcase classname="tests.test_planar_support_product" name="test_support_product_matches_analytic_domain_and_exports_p07_bundle" time="0.230" /><testcase classname="tests.test_planar_support_product" name="test_controller_creates_generates_and_exports_support_then_marks_it_stale" time="0.244" /><testcase classname="tests.test_planar_support_product" name="test_support_not_required_sets_controller_error_and_blocks_export" time="0.136" /><testcase classname="tests.test_planar_support_product" name="test_sub_bead_floating_support_is_rejected_instead_of_silently_dropped" time="0.090" /><testcase classname="tests.test_planar_support_product" name="test_attached_cantilever_with_default_xy_gap_remains_exportable" time="0.321" /><testcase classname="tests.test_planar_support_product" name="test_partially_unreachable_support_is_error_and_cannot_be_exported" time="0.456" /><testcase classname="tests.test_planar_support_product" name="test_fully_unreachable_support_keeps_the_real_diagnostic" time="0.053" /><testcase classname="tests.test_planar_support_product" name="test_support_rejects_a_layer_range_that_does_not_start_at_buildplate" time="0.026" /><testcase classname="tests.test_planar_support_product" name="test_support_metadata_source_and_setup_changes_make_results_stale" time="0.779" /></testsuite></testsuites>

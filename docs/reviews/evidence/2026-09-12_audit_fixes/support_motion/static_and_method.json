@@ -1,0 +1,27 @@
+{
+  "ruff": {
+    "result": "All checks passed",
+    "checked_files": [
+      "src/five_axis_slicer/validation/planar_travel.py",
+      "tests/test_planar_support_motion.py",
+      "scripts/planar_support_motion_evidence.py"
+    ]
+  },
+  "mypy": {
+    "exit_code": 0,
+    "stdout": "Success: no issues found in 1 source file\n",
+    "stderr": "",
+    "checked_files": [
+      "src/five_axis_slicer/validation/planar_travel.py"
+    ]
+  },
+  "context_metrics": {
+    "function": 35,
+    "complexity": 6,
+    "class": 6
+  },
+  "method": "BRepExtrema_DistShapeShape over whole 3-D segments and initial point",
+  "contact_tolerance_mm": 1e-07,
+  "InnerSolution_API_documentation": "InnerSolution(self: OCP.OCP.BRepExtrema.BRepExtrema_DistShapeShape) -> bool\n\nTrue if one of the shapes is a solid and the other shape is completely or partially inside the solid.\n",
+  "development_observation": "Boolean Common missed a single-corner touch on the analytic box, so the implemented validator uses extrema plus InnerSolution. Independent tests cover isolated tangent contact."
+}

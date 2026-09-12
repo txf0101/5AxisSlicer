@@ -1,0 +1,103 @@
+........................F...........F.....                               [100%]
+================================== FAILURES ===================================
+_ IndexedValidationTests.test_substrate_tip_contact_is_allowed_but_fixture_contact_is_not _
+
+self = <test_tube_indexed_pipeline.IndexedValidationTests testMethod=test_substrate_tip_contact_is_allowed_but_fixture_contact_is_not>
+
+    def test_substrate_tip_contact_is_allowed_but_fixture_contact_is_not(self) -> None:
+        deposition = next(
+            point for point in self.toolpath.points if point.point_type == "deposition"
+        )
+        bounds = (
+            tuple(value - 0.02 for value in deposition.position),
+            tuple(value + 0.02 for value in deposition.position),
+        )
+        substrate = CollisionBox("substrate", "substrate", *bounds)
+        fixture = CollisionBox("fixture", "fixture", *bounds)
+        slender_nozzle = replace(
+            self.nozzle,
+            outer_profile_rz_mm=((0.3, 0.0), (0.05, 2.0), (0.05, 12.5)),
+        )
+    
+        allowed = validate_indexed_tube(
+            self.feature,
+            self.plan,
+            self.toolpath,
+            self.trajectory,
+            slender_nozzle,
+            obstacles=(substrate,),
+            check_ipw=False,
+        )
+        blocked = validate_indexed_tube(
+            self.feature,
+            self.plan,
+            self.toolpath,
+            self.trajectory,
+            slender_nozzle,
+            obstacles=(fixture,),
+            check_ipw=False,
+        )
+    
+>       self.assertNotIn("tube.nozzle_obstacle_collision", {x.code for x in allowed.issues})
+E       AssertionError: 'tube.nozzle_obstacle_collision' unexpectedly found in {'tube.nozzle_obstacle_collision'}
+
+tests\test_tube_indexed_pipeline.py:566: AssertionError
+___________ test_controller_product_state_becomes_stale_and_reopens ___________
+
+    def test_controller_product_state_becomes_stale_and_reopens() -> None:
+        source = Path(__file__).resolve().parents[1] / "example" / "pipe2" / "弯管新.stp"
+        controller = TubeSetupController(load_step(source))
+        controller.create_operation(operation_id="indexed")
+        controller.configure_operation(
+            tube_body_id="body_002",
+            entry_port_id="body_002_edge_0003",
+            exit_port_id="body_002_edge_0014",
+            substrate_body_id="body_001",
+            parameters=TubeProcessParameters(bead_width_mm=10.0, layer_height_mm=10.0, safe_clearance_mm=15.0),
+        )
+        controller.select_machine(
+            replace(
+                GENERIC_XYZAC_REFERENCE,
+                joints=tuple(
+                    replace(item, soft_limit_min=-1000.0, soft_limit_max=1000.0)
+                    for item in GENERIC_XYZAC_REFERENCE.joints
+                ),
+            )
+        )
+        controller.select_nozzle(
+            NozzleProfile(
+                resource_id="test-nozzle",
+                display_name="Test nozzle",
+                orifice_diameter_mm=0.4,
+                filament_diameter_mm=1.75,
+                interface="M6",
+                length_mm=2.0,
+                outer_profile_rz_mm=((0.2, 0.0), (0.3, 2.0)),
+            )
+        )
+>       controller.generate_operation("indexed")
+
+tests\test_tube_three_operations.py:124: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\five_axis_slicer\tube_generation_service.py:61: in generate_operation
+    context = make_tube_generation_context(self, operation)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+controller = <five_axis_slicer.tube_controller.TubeSetupController object at 0x00000196062D18E0>
+operation = TubeOperationDefinition(operation_id='indexed', setup_id='setup-1', name='Tube Thin-Wall Indexed', operation_type='tub...=1.0, deposition_feedrate_mm_min=1200.0, travel_feedrate_mm_min=3000.0, contour_chord_error_mm=0.02), type_config=None)
+
+    def make_tube_generation_context(
+        controller: Any, operation: TubeOperationDefinition
+    ) -> TubeGenerationContext:
+        report = controller.validation_report()
+        if not report.setup_ready or report.has_errors or controller.draft_nodes:
+            codes = ", ".join(issue.code for issue in report.issues if issue.severity.value == "error")
+>           raise ValueError(f"Generate requires a valid applied Setup: {codes or 'pending drafts'}")
+E           ValueError: Generate requires a valid applied Setup: SETUP_PART_MISSING, SETUP_MATERIAL_MISSING, MODEL_CS_MISSING, BUILD_CS_MISSING, PLACEMENT_DIRTY
+
+src\five_axis_slicer\tube_generation_context.py:86: ValueError
+=========================== short test summary info ===========================
+FAILED tests/test_tube_indexed_pipeline.py::IndexedValidationTests::test_substrate_tip_contact_is_allowed_but_fixture_contact_is_not
+FAILED tests/test_tube_three_operations.py::test_controller_product_state_becomes_stale_and_reopens
+2 failed, 40 passed in 53.13s

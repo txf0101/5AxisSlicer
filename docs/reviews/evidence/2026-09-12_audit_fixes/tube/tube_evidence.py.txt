@@ -1,0 +1,34 @@
+"""Export repaired Tube evidence from the exact AUD-01 analytic STEP."""
+from pathlib import Path
+from dataclasses import replace
+import hashlib, json, math, sys
+
+ROOT = next(p for p in Path(__file__).resolve().parents if (p/'src/five_axis_slicer').is_dir())
+sys.path[:0] = [str(ROOT/'src'), str(ROOT/'tests')]
+from test_tube_generation_context import controller, frame
+from five_axis_slicer.step_loader import load_step
+source=ROOT/'docs/reviews/evidence/2026-09-12_project_audit/tube_probe/ready_setup/analytic_straight_tube.step'
+out=ROOT/'docs/reviews/evidence/2026-09-12_audit_fixes/tube/products'
+out.mkdir(parents=True,exist_ok=True)
+model=load_step(source)
+records=[]
+for name,shift,build in [('placement_0',0,None),('placement_100',100,None),('rotated_build',0,frame('build',(10,0,0),x=(0,1,0)))]:
+    ctrl=controller(model,shift=shift,build=build)
+    result=ctrl.generate_operation('tube')
+    record={'case':name,'setup_ready':ctrl.setup_ready,'status':result.manifest.status.value,
+        'exportable':result.exportable,'input_sha256':result.input_semantic_sha256,
+        'gcode_sha256':hashlib.sha256(result.gcode.encode()).hexdigest(),'points':len(result.toolpath.points),
+        'validation':result.validation.to_json(),'readback':result.readback.to_json()}
+    errors=[]
+    for point,sample in zip(result.toolpath.points,result.trajectory.samples):
+        profile=ctrl.machine_profile()
+        expected=(profile.mount_transform(ctrl.setup.mount_datum_id,sample.joint_positions)@ctrl.setup.T_mount_from_build).transform_point(point.position)
+        tool=profile.link_transform(profile.tool_link_id,sample.joint_positions).translation
+        errors.append(math.dist(expected,(tool[0],tool[1],tool[2]-2)))
+    record['independent_max_fk_error_mm']=max(errors)
+    if result.exportable:ctrl.export_operation_product('tube',out/name)
+    records.append(record)
+report={'source':str(source),'source_sha256':model.source_hash,'cases':records,
+    'placement_gcodes_differ':records[0]['gcode_sha256']!=records[1]['gcode_sha256']}
+(out/'summary.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf8')
+print(json.dumps({r['case']:{k:v for k,v in r.items() if k not in {'validation','readback'}} for r in records},ensure_ascii=False,indent=2))

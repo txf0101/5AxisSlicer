@@ -1,0 +1,50 @@
+{
+  "collision_samples_checked": 690,
+  "issues": [
+    {
+      "code": "MACHINE_REFERENCE_ONLY",
+      "context": {
+        "resource_type": "machine"
+      },
+      "object_id": "builtin.machine.generic_xyzac_reference.v1",
+      "severity": "warning"
+    }
+  ],
+  "metrics": [
+    {
+      "limit": 0.01,
+      "name": "maximum_radial_error",
+      "passed": true,
+      "unit": "mm",
+      "value": 0.0003467580539222581
+    },
+    {
+      "limit": 0.001,
+      "name": "maximum_sampled_chord_error",
+      "passed": true,
+      "unit": "mm",
+      "value": 0.00024819959430377736
+    },
+    {
+      "limit": 0.01,
+      "name": "maximum_layer_spacing_error",
+      "passed": true,
+      "unit": "mm",
+      "value": 0.0
+    },
+    {
+      "limit": 0.0,
+      "name": "maximum_wedge_height_error",
+      "passed": true,
+      "unit": "mm",
+      "value": 0.0
+    }
+  ],
+  "motion_sample_error_mm": 0.25,
+  "ready_for_export": true,
+  "report_id": "tube-indexed-v1-validation-v1",
+  "schema_version": 1,
+  "status": "warning",
+  "toolpath_id": "tube-indexed-v1",
+  "trajectory_id": "tube-indexed-v1-xyzac-v1"
+}

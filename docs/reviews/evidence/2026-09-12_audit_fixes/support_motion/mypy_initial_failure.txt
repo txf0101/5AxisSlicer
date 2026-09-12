@@ -1,0 +1,2 @@
+planar_travel.py:79: Need type annotation for hits [var-annotated]
+Found 1 error in 1 file (checked 1 source file).

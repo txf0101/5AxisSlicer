@@ -1,0 +1,271 @@
+{
+  "coordinate_frame": "workpiece_build",
+  "segments": [
+    {
+      "comment": "generated:planar_offset:region-0001:infill",
+      "delta_e": 17.78395563064504,
+      "end": [
+        34.27191415454088,
+        -48.91214985679951,
+        59.99999999999997
+      ],
+      "extrusion_role": "internal_infill",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        4.784314000705083,
+        -9.278461405436303,
+        59.99999999999997
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_offset:region-0001:infill",
+      "delta_e": 1.2239964864322936,
+      "end": [
+        36.99973784103429,
+        -46.88263967744323,
+        59.99999999999997
+      ],
+      "extrusion_role": "internal_infill",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        34.27191415454088,
+        -48.91214985679951,
+        59.99999999999997
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_offset:region-0001:infill",
+      "delta_e": 17.78395597763787,
+      "end": [
+        7.512137111849206,
+        -7.248950452764689,
+        59.99999999999997
+      ],
+      "extrusion_role": "internal_infill",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        36.99973784103429,
+        -46.88263967744323,
+        59.99999999999997
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_offset:region-0001:infill",
+      "delta_e": 1.223996486432336,
+      "end": [
+        4.784314000705083,
+        -9.278461405436303,
+        59.99999999999997
+      ],
+      "extrusion_role": "internal_infill",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        7.512137111849206,
+        -7.248950452764689,
+        59.99999999999997
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_offset:region-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        5.623845814839063,
+        -9.401693418091158,
+        59.99999999999997
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        4.784314000705083,
+        -9.278461405436303,
+        59.99999999999997
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_offset:region-0001:infill",
+      "delta_e": 17.35195569187924,
+      "end": [
+        34.39514630366353,
+        -48.07261794113305,
+        59.99999999999997
+      ],
+      "extrusion_role": "internal_infill",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        5.623845814839063,
+        -9.401693418091158,
+        59.99999999999997
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_offset:region-0001:infill",
+      "delta_e": 0.7919964864322913,
+      "end": [
+        36.160205925367805,
+        -46.75940752832059,
+        59.99999999999997
+      ],
+      "extrusion_role": "internal_infill",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        34.39514630366353,
+        -48.07261794113305,
+        59.99999999999997
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_offset:region-0001:infill",
+      "delta_e": 17.351955916403657,
+      "end": [
+        7.388905064259102,
+        -8.088482504898977,
+        59.99999999999997
+      ],
+      "extrusion_role": "internal_infill",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        36.160205925367805,
+        -46.75940752832059,
+        59.99999999999997
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_offset:region-0001:infill",
+      "delta_e": 0.7919964864323198,
+      "end": [
+        5.623845814839063,
+        -9.401693418091158,
+        59.99999999999997
+      ],
+      "extrusion_role": "internal_infill",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        7.388905064259102,
+        -8.088482504898977,
+        59.99999999999997
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_offset:region-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        6.46337762897304,
+        -9.524925430746011,
+        59.99999999999997
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        5.623845814839063,
+        -9.401693418091158,
+        59.99999999999997
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar_offset:region-0001:infill",
+      "delta_e": 16.91995575311343,
+      "end": [
+        34.51837845278616,
+        -47.23308602546658,
+        59.99999999999997
+      ],
+      "extrusion_role": "internal_infill",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        6.46337762897304,
+        -9.524925430746011,
+        59.99999999999997
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_offset:region-0001:infill",
+      "delta_e": 0.3599964864322909,
+      "end": [
+        35.32067400970133,
+        -46.63617537919795,
+        59.99999999999997
+      ],
+      "extrusion_role": "internal_infill",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        34.51837845278616,
+        -47.23308602546658,
+        59.99999999999997
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_offset:region-0001:infill",
+      "delta_e": 16.919955855169448,
+      "end": [
+        7.265673016668988,
+        -8.928014557033258,
+        59.99999999999997
+      ],
+      "extrusion_role": "internal_infill",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        35.32067400970133,
+        -46.63617537919795,
+        59.99999999999997
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_offset:region-0001:infill",
+      "delta_e": 0.35999648643230225,
+      "end": [
+        6.46337762897304,
+        -9.524925430746011,
+        59.99999999999997
+      ],
+      "extrusion_role": "internal_infill",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        7.265673016668988,
+        -8.928014557033258,
+        59.99999999999997
+      ],
+      "width": 0.6
+    }
+  ]
+}

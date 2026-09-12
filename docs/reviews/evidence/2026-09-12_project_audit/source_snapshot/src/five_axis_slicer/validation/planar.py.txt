@@ -1,0 +1,176 @@
+"""Independent grid-based checks for generated planar deposition paths."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+import math
+from typing import Mapping
+
+from ..algorithms.planar.region import PlanarRegion, PlanarSliceLayer
+from ..manufacturing.toolpath import GeneratedToolpath
+from ..models import Vector3
+
+DepositionSegment = tuple[str, str, Vector3, Vector3, float]
+
+
+@dataclass(frozen=True, slots=True)
+class PlanarToolpathMeasurement:
+    """Approximate XY coverage plus exact path-volume consistency figures."""
+
+    deposition_outside_max_mm: float
+    covered_area_mm2: float
+    residual_area_mm2: float
+    sampled_region_area_mm2: float
+    material_volume_mm3: float
+    geometric_volume_mm3: float
+    volume_difference_mm3: float
+
+
+def measure_planar_toolpath(
+    toolpath: GeneratedToolpath,
+    layers: tuple[PlanarSliceLayer, ...],
+    *,
+    grid_mm: float | None = None,
+) -> PlanarToolpathMeasurement:
+    """Measure with cell-centre sampling, independent of hatch intersections.
+
+    The area figures model a deposited bead as a centreline swept by half its
+    declared width.  They are a conservative discrete check, not a Boolean
+    polygon reconstruction or a print-process prediction.
+    """
+    regions = {
+        (layer.layer_id, region.region_id): region for layer in layers for region in layer.regions
+    }
+    deposited, material, geometric, outside = _deposition_segments(toolpath, regions)
+    cell = grid_mm or _grid_size(deposited)
+    sampled, covered = _sample_coverage(layers, deposited, cell)
+    return PlanarToolpathMeasurement(
+        outside,
+        covered,
+        max(0.0, sampled - covered),
+        sampled,
+        material,
+        geometric,
+        material - geometric,
+    )
+
+
+def _deposition_segments(
+    toolpath: GeneratedToolpath,
+    regions: Mapping[tuple[str, str], PlanarRegion],
+) -> tuple[list[DepositionSegment], float, float, float]:
+    deposited: list[DepositionSegment] = []
+    material = geometric = outside = 0.0
+    for previous, current in zip(toolpath.points, toolpath.points[1:], strict=False):
+        if current.point_type != "deposition":
+            continue
+        region = regions.get((current.layer_id, current.region_id))
+        if region is None:
+            continue
+        width = current.bead_width_mm or 0.0
+        height = current.layer_height_mm or 0.0
+        length = math.dist(previous.position, current.position)
+        material += current.material_volume_mm3
+        geometric += length * width * height
+        deposited.append(
+            (current.layer_id, current.region_id, previous.position, current.position, width)
+        )
+        for fraction in tuple(index / 16 for index in range(17)):
+            point = _lerp2(previous.position, current.position, fraction)
+            if not _inside_or_boundary(point, region):
+                outside = max(outside, _distance_to_loops(point, region))
+    return deposited, material, geometric, outside
+
+
+def _sample_coverage(
+    layers: tuple[PlanarSliceLayer, ...],
+    deposited: list[DepositionSegment],
+    cell: float,
+) -> tuple[float, float]:
+    sampled = covered = 0.0
+    for layer in layers:
+        for region in layer.regions:
+            bounds = _bounds(region)
+            x = bounds[0] + cell / 2
+            while x < bounds[2]:
+                y = bounds[1] + cell / 2
+                while y < bounds[3]:
+                    point = (x, y)
+                    if _inside_or_boundary(point, region):
+                        sampled += cell * cell
+                        if _point_is_covered(point, layer.layer_id, region.region_id, deposited):
+                            covered += cell * cell
+                    y += cell
+                x += cell
+    return sampled, covered
+
+
+def _point_is_covered(
+    point: tuple[float, float],
+    layer_id: str,
+    region_id: str,
+    deposited: list[DepositionSegment],
+) -> bool:
+    return any(
+        item[0] == layer_id
+        and item[1] == region_id
+        and _distance_point_segment(point, item[2], item[3]) <= item[4] / 2
+        for item in deposited
+    )
+
+
+def _grid_size(deposited: list[DepositionSegment]) -> float:
+    widths = [item[4] for item in deposited if item[4] > 0]
+    return min(0.25, min(widths, default=0.25) / 3)
+
+
+def _bounds(region: PlanarRegion) -> tuple[float, float, float, float]:
+    points = tuple(point for loop in (region.outer, *region.holes) for point in loop[:-1])
+    return (
+        min(p[0] for p in points),
+        min(p[1] for p in points),
+        max(p[0] for p in points),
+        max(p[1] for p in points),
+    )
+
+
+def _inside_or_boundary(point: tuple[float, float], region: PlanarRegion) -> bool:
+    if _distance_to_loops(point, region) <= 1e-8:
+        return True
+    return _inside_loop(point, region.outer) and not any(
+        _inside_loop(point, hole) for hole in region.holes
+    )
+
+
+def _inside_loop(point: tuple[float, float], loop: tuple[tuple[float, float, float], ...]) -> bool:
+    x, y = point
+    crossings = 0
+    for left, right in zip(loop, loop[1:], strict=False):
+        if (left[1] > y) != (right[1] > y) and x < (right[0] - left[0]) * (y - left[1]) / (
+            right[1] - left[1]
+        ) + left[0]:
+            crossings += 1
+    return bool(crossings % 2)
+
+
+def _distance_to_loops(point: tuple[float, float], region: PlanarRegion) -> float:
+    return min(
+        _distance_point_segment(point, left, right)
+        for loop in (region.outer, *region.holes)
+        for left, right in zip(loop, loop[1:], strict=False)
+    )
+
+
+def _distance_point_segment(point, start, end) -> float:
+    dx, dy = end[0] - start[0], end[1] - start[1]
+    length2 = dx * dx + dy * dy
+    ratio = (
+        0.0
+        if length2 <= 1e-16
+        else max(0.0, min(1.0, ((point[0] - start[0]) * dx + (point[1] - start[1]) * dy) / length2))
+    )
+    return math.dist(point, (start[0] + ratio * dx, start[1] + ratio * dy))
+
+
+def _lerp2(start, end, fraction: float) -> tuple[float, float]:
+    return (start[0] + (end[0] - start[0]) * fraction, start[1] + (end[1] - start[1]) * fraction)

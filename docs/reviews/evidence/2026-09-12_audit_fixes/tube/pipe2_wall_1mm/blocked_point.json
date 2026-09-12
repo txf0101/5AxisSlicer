@@ -1,0 +1,59 @@
+{
+  "point": {
+    "point_id": "point-0007377",
+    "position": [
+      0.0,
+      20.59996128959423,
+      27.705451183802975
+    ],
+    "surface_normal": [
+      0.0,
+      0.8450882255407675,
+      -0.5346268708663613
+    ],
+    "tangent": [
+      -0.9999245176135504,
+      -0.010383210635259406,
+      0.00656871465451738
+    ],
+    "nozzle_axis": [
+      -0.0,
+      -0.8450882255407675,
+      0.5346268708663613
+    ],
+    "feedrate_mm_min": 100.0,
+    "bead_width_mm": null,
+    "layer_height_mm": null,
+    "material_volume_mm3": 0.0,
+    "operation_id": "pipe2-wall-1mm",
+    "stage_id": "region-0007",
+    "layer_id": "layer-00034",
+    "region_id": "region-0007",
+    "point_type": "travel",
+    "extrusion_role": "none",
+    "issue_ids": []
+  },
+  "workpiece_nozzle_axis": [
+    0.0,
+    -0.8450882255407675,
+    0.5346268708663613
+  ],
+  "required_A_candidates_deg": [
+    122.31861025385994,
+    -122.31861025385994
+  ],
+  "rotary_limits_deg": {
+    "A": [
+      -119.99999999999999,
+      119.99999999999999
+    ],
+    "C": [
+      -360.0,
+      360.0
+    ]
+  },
+  "toolpath_points": 15479,
+  "layers": 67,
+  "reason": "Neither analytic A branch fits the selected A soft limits; machine/placement eligibility must change before this path can qualify.",
+  "collision_stage": "not reached; configured obstacles and IPW are recorded in inputs.json"
+}

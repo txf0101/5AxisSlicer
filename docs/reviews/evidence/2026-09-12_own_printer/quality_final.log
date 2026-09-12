@@ -1,0 +1,9 @@
+==> Ruff
+All checks passed!
+==> Migrated Ruff
+All checks passed!
+==> Security Ruff
+All checks passed!
+==> Migrated format
+Would reformat: src\five_axis_slicer\manufacturing\machine.py
+1 file would be reformatted, 60 files already formatted

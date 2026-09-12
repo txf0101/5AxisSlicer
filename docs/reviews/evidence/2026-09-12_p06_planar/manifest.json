@@ -1,0 +1,24 @@
+{
+  "task": "P06",
+  "date": "2026-09-12",
+  "interpreter": "tmp/pytest9/Scripts/python.exe",
+  "pytest": {
+    "planar": {"passed": 77, "skipped": 0, "subtests": 0, "junit": "pytest_planar.xml"},
+    "full": {"passed": 542, "skipped": 3, "subtests": 130, "junit": "pytest_full.xml"}
+  },
+  "files_sha256": {
+    "pytest_planar.xml": "ebfc2879df7cf0a9f5e68941e426b8fa8bbeea755e1d48b9c800a834ce36183b",
+    "pytest_full.xml": "31340e98a2b4224edc15cf9246a3d5474f722798dd96de638c48dc3d45ab0028",
+    "real_model/summary.json": "73f7333e3492909d043a4d1c029f83954933c681629fdc6f0d41798a2e6bb1c2",
+    "ui/summary.json": "8d37cd9dcd752b8c62895cda33c3464d9aa8d9c99e2d0978e65a5ad644c34164"
+  },
+  "real_step": {"path": "example/三叶扇/Supportless_sample.stp", "sha256": "291155b64dace255937bbcddb496da4f11f8319a2fe6b9d32aa29a340686befc", "selected_body": "body_002", "body_count": 4},
+  "real_model_artifacts_sha256": {
+    "planar_zigzag": {"machine_axes.csv":"a859e8e680cdeb34e8a37c9f5cf57ee8dbff0326cefe391a363caad11d4ab060","main.gcode":"cc1104fe12154e8020139640fd67895c4c943266c9e6668dfedde98faceff5ee","manifest.json":"04b367e0b42fe1922e3b6e17883c3968087f9d276067f4066b2d5051e3b32789","preview.json":"c039a504ee409e05eea901ba6b62691710474ae9f4ed4ca3d20ecacf983f0ec3","toolpath.json":"f47b798b78737d43c020534c8a705dd1d53bcb1bc29755c298f98be477cbe975","warnings.json":"f5c5a0d3b6530d287604b7f26e480a282d5093e2a37df1ed0d7c4315d504f9a2"},
+    "planar_offset": {"machine_axes.csv":"eddf3dd5aa6c65a6f1d21fa7b93f17ce135846735c7fa1ba715c28681200b0c2","main.gcode":"a412c22b7be08004f002fc471bc8e00ba7858e7e16a70518a212f37025b5d319","manifest.json":"8161b47bb0c235f6146b4e5ab98daa50e580f666a35901fd9f84b31daca96b4f","preview.json":"1ceae093e38ca74988eb9cdc36e27b1ebd08025056163ec583cae3697ee7c04f","toolpath.json":"4d8b12b07d77d7846f1738c850746460069a7ac934becbdefe8c4b68b3b656a4","warnings.json":"f481f240d2929a0557dd0e36cabc214d25feb8847752e417f2b2ef2cbf343902"},
+    "planar_thin_wall": {"machine_axes.csv":"d102a78fe3929b789ce9968937ec59f747133f7e3a35fdd9964bf1d30a75bae5","main.gcode":"1ac2d20865cea56033739a819d2b50455bc716a857cb56d05680a2527aad5dac","manifest.json":"348695908093c3d06b738234c85f1f5af52cc1166225604978767227b5c9315b","preview.json":"b220d2b1ee66f2ab27609e13e88b9b69e39d69f7d853b896866528333edfeb7e","toolpath.json":"7d3797b53bc9b400ca3597965a74b98d3aaf76abb2d728a40f4d83532ec350f4","warnings.json":"d5562a3780268c0f8de97752da783645020f9546a1c5e58ede14802d67ed6d8f"},
+    "planar_spiral": {"machine_axes.csv":"29ed5bf118ad4b7f4beeb38565ac40c731da397299d21dd71e2cf8cf958d7ccb","main.gcode":"34b871355a87e5c4fde1a0a25b30cba4b2d4e368b9eb9a8aed6cd65551d32d2d","manifest.json":"08208b8e6b7fad93bc3d826baf8a384ed06f217bbf91c8432f8a05a51c94ffd9","preview.json":"5920fec6d6edb61bf1fc8e211a3c545890494801cd2209bf1da46507c19935a4","toolpath.json":"f227caf9ac7c913629f50f6eb7508ea6a7cea338ff1d4e5b0f4bd4b7371aea12","warnings.json":"9ffb1c96b981ae57026f7f7fa3772128049dbd25734d61f4438aca801ed2d345"}
+  },
+  "ui": {"summary.json":"8d37cd9dcd752b8c62895cda33c3464d9aa8d9c99e2d0978e65a5ad644c34164","screenshots_sha256":{"01_planar_offset_zh_1366x768.png":"9e019ebed3883328c13f1e2d7effbfa1b6f3d9396e533bfd940c88d13ff89225","02_planar_offset_en_1600x900.png":"e40abeae5f26eed2a9fbaa7a3b6c18c353c53a545a036528f080ecb33b8034e7","03_planar_thin_wall_zh_1600x900.png":"e351eca9fbafd111b89564179a4c51cf4d9c59b40f1ee468fc6105dd850b5b6e","04_planar_thin_wall_en_1920x1080.png":"8b63540cead505f6d67fd407abb657edf489216e9d6dbcdbe94abd9055f2bcb7","05_planar_spiral_zh_1920x1080.png":"d6ab68e004c4310dd906ce92379f58862e5fa4b992829e5fbb4385649b5be689","06_planar_spiral_en_1366x768.png":"08ecf8be4ac5e9640c84742104e84007ca4db03e9fab130371eab2cd121cac6c","07_planar_spiral_error_zh_1366x768.png":"550b31762219f8235b0c7d270c26153b8e6a0eb9f98ed26034f366d57c4023be","08_planar_spiral_recovered_en_1600x900.png":"6d56706a47e39490c9736d9154631aa30fc34565ca7b0e54461a9d37d12f00fb"}},
+  "qualification_boundary": "Generic XYZAC仅为离线参考；未验证真实控制器、机床标定、碰撞资格或实体试切。UI证据为Qt widget grab，不是真人桌面点击。"
+}

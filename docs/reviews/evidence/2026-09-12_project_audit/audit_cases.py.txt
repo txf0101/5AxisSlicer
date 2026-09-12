@@ -1,0 +1,177 @@
+"""Read-only product audit; writes only new diagnostic evidence, never application code."""
+from pathlib import Path
+import sys, json, time, re, math, hashlib, traceback, os
+from dataclasses import asdict, replace
+
+PROJECT = Path(__file__).resolve().parents[2]
+ROOT = Path(os.environ.get('AUDIT_SOURCE_ROOT', str(PROJECT)))
+sys.path[:0] = [str(ROOT / 'src'), str(ROOT / 'scripts'), str(ROOT / 'tests')]
+OUT = PROJECT / 'docs/reviews/evidence/2026-09-12_project_audit' / os.environ.get('AUDIT_EVIDENCE_SUBDIR', '')
+from five_axis_slicer.step_loader import load_step
+from five_axis_slicer.planar_controller import PlanarController
+from five_axis_slicer.manufacturing.planar_parameters import PlanarProcessParameters
+from five_axis_slicer.manufacturing.coordinates import RigidTransform
+from five_axis_slicer.manufacturing.resources import ResourceSnapshot
+from five_axis_slicer.postprocessing.indexed_tube import readback_indexed_gcode
+from planar_p06_real_model_evidence import _setup, _machine, _nozzle
+
+def write(path, value):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value, ensure_ascii=False, indent=2, default=str), encoding='utf8')
+
+def summary(result):
+    manifest=result.manifest.to_json();manifest.pop('toolpath',None)
+    return {'exportable': result.exportable, 'manifest': manifest,
+            'readback': result.readback.to_json(), 'validation': result.validation.to_json(),
+            'points': len(result.toolpath.points), 'events': len(result.toolpath.events)}
+
+def plot_planar(result, out, title):
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    from matplotlib.collections import LineCollection
+    fig, ax = plt.subplots(figsize=(10, 8), layout='constrained')
+    layer = next(x for x in result.layers if x.regions)
+    for region in layer.regions:
+        for loop in (region.outer, *region.holes):
+            ax.plot([p[0] for p in loop], [p[1] for p in loop], color='black', lw=1.3)
+    dep, travel = [], []
+    for a,b in zip(result.toolpath.points, result.toolpath.points[1:]):
+        if b.layer_id != layer.layer_id: continue
+        (dep if b.point_type == 'deposition' else travel).append([a.position[:2], b.position[:2]])
+    ax.add_collection(LineCollection(dep, colors='#0077b6', linewidths=.9, label='Deposition centreline'))
+    ax.add_collection(LineCollection(travel, colors='#e76f51', linewidths=.6, linestyles='dashed', label='Travel'))
+    ax.autoscale(); ax.set_aspect('equal'); ax.set_xlabel('Build X / mm'); ax.set_ylabel('Build Y / mm')
+    ax.set_title(f'{title}\nZ={layer.z_mm:g} mm | black = CAD section'); ax.legend(loc='best')
+    fig.savefig(out / 'path.png', dpi=150); plt.close(fig)
+
+def mutate_readback(result, out, marker='P02'):
+    def e_double(text):
+        return re.sub(r'(?<=\s)E(-?\d+(?:\.\d+)?)', lambda m:f'E{2*float(m[1]):.6f}', text)
+    lines=result.gcode.splitlines(); removed=[]; skip=False
+    for line in lines:
+        if ' EVENT ' in line and (' retract' in line or ' prime' in line): skip=True; continue
+        if skip: skip=False; continue
+        removed.append(line)
+    variants={'extrusion_x2':e_double(result.gcode),
+              'relative_axes':result.gcode.replace('G90 ; absolute axes','G91 ; relative axes'),
+              'relative_extrusion':result.gcode.replace('M82 ; absolute extrusion','M83 ; relative extrusion'),
+              'events_removed':'\n'.join(removed)+'\n',
+              'extra_unmarked_move':result.gcode.replace('M400', 'G1 X999 Y999 Z999 E999\nM400')}
+    records={}
+    for name,code in variants.items():
+        report=readback_indexed_gcode(code,result.toolpath,result.trajectory,_machine(),marker_tag=marker)
+        records[name]=report.to_json()
+        (out / f'INVALID_{name}.txt').write_text(code,encoding='utf8')
+    records['original']=result.readback.to_json()
+    records['extruder_zero_reset_present']=bool(re.search(r'^G92\s+.*E', result.gcode,re.M))
+    return records
+
+def planar(case, model_path, body, first, last, kind='planar_zigzag', default_feed=False):
+    folder=OUT/case; folder.mkdir(parents=True,exist_ok=True)
+    model=load_step(ROOT/model_path)
+    controller=PlanarController(model,setup=_setup(model,body))
+    op=controller.create_operation(kind,operation_id=case)
+    parameters=PlanarProcessParameters(first_layer_z_mm=first,last_layer_z_mm=last,
+        layer_height_mm=.6,bead_width_mm=.6,line_spacing_mm=.6,
+        feedrate_mm_min=1200 if default_feed else 100,travel_feedrate_mm_min=1800 if default_feed else 100)
+    op=controller.configure_operation(operation_id=op.operation_id,body_id=body,parameters=parameters)
+    result=controller.generate_operation(op.operation_id)
+    data=summary(result); data.update(model=model_path,source_sha256=model.source_hash,body=body,
+        parameters=parameters.to_json(),layers=len(result.layers))
+    write(folder/'result.json',result.to_json()); write(folder/'toolpath.json',result.toolpath.to_json())
+    if result.exportable: controller.export_operation_product(op.operation_id,str(folder/'product'))
+    plot_planar(result,folder,case)
+    return data
+
+def analytic():
+    import cadquery as cq
+    folder=OUT/'analytic'; folder.mkdir(parents=True,exist_ok=True)
+    path=folder/'rectangle_8x6x1.step'
+    cq.exporters.export(cq.Workplane('XY').box(8,6,1,centered=False),str(path))
+    model=load_step(path); body=model.bodies[0].body_id
+    controller=PlanarController(model,setup=_setup(model,body))
+    op=controller.create_operation('planar_zigzag',operation_id='analytic-rectangle')
+    op=controller.configure_operation(operation_id=op.operation_id,body_id=body,
+        parameters=PlanarProcessParameters(first_layer_z_mm=.5,last_layer_z_mm=.5,layer_height_mm=.5,
+        bead_width_mm=.6,feedrate_mm_min=100,travel_feedrate_mm_min=100))
+    result=controller.generate_operation(op.operation_id)
+    if result.exportable: controller.export_operation_product(op.operation_id,str(folder/'product'))
+    data=summary(result)
+    data['mutations']=mutate_readback(result,folder)
+    data['expected_xy_bounds_mm']=[0,0,8,6]
+    segments=[(a,b) for a,b in zip(result.toolpath.points,result.toolpath.points[1:]) if b.point_type=='deposition']
+    # Independent analytic bounding box of circular bead sweeps.
+    data['bead_sweep_xy_bounds_mm']=[min(min(a.position[k],b.position[k])-b.bead_width_mm/2 for a,b in segments) for k in (0,1)]+[max(max(a.position[k],b.position[k])+b.bead_width_mm/2 for a,b in segments) for k in (0,1)]
+    data['target_volume_single_layer_mm3']=8*6*.5
+    data['emitted_material_volume_mm3']=sum(p.material_volume_mm3 for p in result.toolpath.points)
+    plot_planar(result,folder,'Analytic 8 x 6 mm rectangle')
+    import matplotlib.pyplot as plt
+    fig,ax=plt.subplots(figsize=(9,6),layout='constrained')
+    from matplotlib.patches import Rectangle
+    ax.add_patch(Rectangle((-.3,-.3),8.6,6.6,facecolor='#e76f51',alpha=.28,label='Outer envelope of boundary beads'))
+    ax.add_patch(Rectangle((0,0),8,6,fill=False,edgecolor='black',lw=2,label='CAD boundary 8 x 6 mm'))
+    ax.set(xlim=(-1,9),ylim=(-1,7),xlabel='X / mm',ylabel='Y / mm',title='Zigzag boundary: bead width 0.6 mm\nMeasured XY overshoot: 0.3 mm per side; internal outside metric: 0')
+    ax.set_aspect('equal');ax.legend();fig.savefig(folder/'bead_envelope.png',dpi=150);plt.close(fig)
+    return data
+
+def tube(case, controller_mode=False):
+    from test_tube_indexed_product_flow import TubeIndexedProductFlowTests as Fixture
+    from five_axis_slicer.postprocessing.indexed_tube import generate_indexed_product,export_indexed_product
+    from five_axis_slicer.tube_controller import TubeSetupController
+    Fixture.setUpClass(); fixture=Fixture(); op=fixture._operation()
+    folder=OUT/case;folder.mkdir(parents=True,exist_ok=True)
+    if not controller_mode:
+        result=generate_indexed_product(fixture.model,op,fixture._machine(),fixture._nozzle(),
+            source_path=fixture.source,T_workpiece_from_build=fixture._placement(),radial_error_limit_mm=.025)
+        if result.exportable:export_indexed_product(result,folder/'product')
+        data=summary(result);data['parameters']=op.parameters.to_json()
+        data['wall_thickness_mm']=result.feature.outer_radius_mm-result.feature.inner_radius_mm
+        data['bead_to_wall_ratio']=op.parameters.bead_width_mm/data['wall_thickness_mm']
+        return data
+    outputs=[]; results=[]
+    op=replace(op,parameters=replace(op.parameters,contour_chord_error_mm=.001,
+        deposition_feedrate_mm_min=100,travel_feedrate_mm_min=100))
+    setup=_setup(fixture.model,'body_002')
+    for shift in (0,100):
+        changed=replace(setup,T_mount_from_build=RigidTransform.from_translation((250+shift,250,250),source_frame='build',target_frame='build_plate_mount'))
+        ctrl=TubeSetupController(fixture.model,setup=changed,operations=(op,))
+        result=ctrl.generate_operation(op.operation_id); results.append(result)
+        write(folder/f'result_x{shift}.json',result.to_json())
+        outputs.append({'shift_x_mm':shift,'status':result.manifest.status.value,'exportable':result.exportable,
+            'first_axes':dict(result.trajectory.samples[0].joint_positions),
+            'issues':sorted(set(i.code for i in result.validation.issues))})
+    def values(r):return [s.joint_positions for s in r.trajectory.samples]
+    return {'runs':outputs,'all_axes_identical':values(results[0])==values(results[1]),
+        'point_count':len(results[0].toolpath.points),
+        'expected':'Changing mounting X by 100 mm must change machine XYZ or be rejected before generation.'}
+
+def full_geometry():
+    from five_axis_slicer.algorithms.planar.region import slice_planar_layers
+    from five_axis_slicer.algorithms.planar.zigzag import generate_zigzag_toolpath,ZigzagParameters
+    folder=OUT/'fan_full_height';folder.mkdir(parents=True,exist_ok=True)
+    model=load_step(ROOT/'example/三叶扇/Supportless_sample.stp');st=time.perf_counter()
+    layers=slice_planar_layers(model,('body_002',),first_layer_z_mm=56.3,last_layer_z_mm=95.9,layer_height_mm=.6)
+    section_time=time.perf_counter()-st;st=time.perf_counter()
+    path=generate_zigzag_toolpath('fan-full-height',layers,ZigzagParameters(.6,.6,.6,100,100))
+    write(folder/'toolpath.json',path.to_json())
+    return {'layers':len(layers),'nonempty_layers':sum(bool(l.regions) for l in layers),'points':len(path.points),
+        'section_seconds':section_time,'path_seconds':time.perf_counter()-st,
+        'stage_boundary':'Full-height geometry only; selected one blade body; no product validation or G-code qualification.'}
+
+CASES={
+ 'analytic':analytic,
+ 'fan_zigzag_3layers':lambda:planar('fan_zigzag_3layers','example/三叶扇/Supportless_sample.stp','body_002',60,61.2),
+ 'fan_default_feed':lambda:planar('fan_default_feed','example/三叶扇/Supportless_sample.stp','body_002',60,60,default_feed=True),
+ 'impeller_thin_3layers':lambda:planar('impeller_thin_3layers','example/叶轮/叶轮.stp','body_002',20,21.2,'planar_thin_wall'),
+ 'pipe_zigzag_3layers':lambda:planar('pipe_zigzag_3layers','example/pipe2/弯管新.stp','body_002',20,21.2),
+ 'tube_baseline':lambda:tube('tube_baseline'),
+ 'tube_placement':lambda:tube('tube_placement',True),
+ 'fan_full_height':full_geometry,
+}
+if __name__=='__main__':
+    case=sys.argv[1];start=time.perf_counter()
+    try:data={'case':case,'completed':True,'data':CASES[case]()}
+    except Exception as exc:data={'case':case,'completed':False,'error':str(exc),'traceback':traceback.format_exc()}
+    data['seconds']=time.perf_counter()-start;write(OUT/case/'summary.json',data)
+    print(json.dumps(data,ensure_ascii=False,default=str),flush=True)

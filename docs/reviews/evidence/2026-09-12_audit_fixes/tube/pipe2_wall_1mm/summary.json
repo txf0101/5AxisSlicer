@@ -1,0 +1,17 @@
+{
+  "completed": false,
+  "exportable": false,
+  "error": "xyzac.orientation_unreachable at point-0007377: ",
+  "traceback": "Traceback (most recent call last):\n  File \"F:\\【项目和任务】\\5AxisSclicer_V2.0\\tmp\\project_audit_fix\\pipe2_evidence.py\", line 51, in <module>\n    result=ctrl.generate_operation(op.operation_id)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"F:\\【项目和任务】\\5AxisSclicer_V2.0\\src\\five_axis_slicer\\tube_generation_service.py\", line 70, in generate_operation\n    result = service.generate(\n             ^^^^^^^^^^^^^^^^^\n  File \"F:\\【项目和任务】\\5AxisSclicer_V2.0\\src\\five_axis_slicer\\postprocessing\\tube_product.py\", line 193, in generate\n    generate_tube_product(model, operation, machine, nozzle, **kwargs),\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"F:\\【项目和任务】\\5AxisSclicer_V2.0\\src\\five_axis_slicer\\postprocessing\\tube_product.py\", line 251, in generate_tube_product\n    return _generate_indexed_tube_product(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"F:\\【项目和任务】\\5AxisSclicer_V2.0\\src\\five_axis_slicer\\postprocessing\\tube_product.py\", line 338, in _generate_indexed_tube_product\n    generate_indexed_product(\n  File \"F:\\【项目和任务】\\5AxisSclicer_V2.0\\src\\five_axis_slicer\\postprocessing\\indexed_tube.py\", line 207, in generate_indexed_product\n    trajectory, validation = _solve_and_validate(\n                             ^^^^^^^^^^^^^^^^^^^^\n  File \"F:\\【项目和任务】\\5AxisSclicer_V2.0\\src\\five_axis_slicer\\postprocessing\\indexed_tube.py\", line 270, in _solve_and_validate\n    trajectory = solve_xyzac_trajectory(\n                 ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"F:\\【项目和任务】\\5AxisSclicer_V2.0\\src\\five_axis_slicer\\kinematics\\xyzac.py\", line 120, in solve_xyzac_trajectory\n    rotary, singular = _solve_rotary(target, axes[\"A\"], axes[\"C\"], fixed_axis, previous)\n                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"F:\\【项目和任务】\\5AxisSclicer_V2.0\\src\\five_axis_slicer\\kinematics\\xyzac.py\", line 227, in _solve_rotary\n    raise XYZACInverseKinematicsError(\"xyzac.orientation_unreachable\", point.point_id)\nfive_axis_slicer.kinematics.xyzac.XYZACInverseKinematicsError: xyzac.orientation_unreachable at point-0007377: \n",
+  "product_state": {
+    "schema_version": 2,
+    "operation_id": "pipe2-wall-1mm",
+    "parameter_semantic_sha256": "5bdc2064d911c44d0dff7f8382dc952c71bce63de0d2af2f287c87732cf754e8",
+    "status": "error",
+    "result": {
+      "error": "xyzac.orientation_unreachable at point-0007377: "
+    },
+    "input_semantic_sha256": "e4175b139ae23a1412bba36d9280528fc2712e4725c81ef525a09e91784d51be"
+  },
+  "elapsed_seconds": 22.519867399998475
+}

@@ -1,0 +1,117 @@
+............................................................................................................................................................ [ 26%]
+.......................................F................................ [ 38%]
+...F.........................................s.............s....... [ 50%]
+............................ [ 54%]
+............................................s.................... [ 65%]
+.................................................................. [ 77%]
+...................................................................... [ 89%]
+................................................................   [100%]
+================================== FAILURES ===================================
+_________ test_support_plan_honours_cancellation_during_geometry_work _________
+
+layers = (PlanarSliceLayer(layer_id='layer-0', z_mm=0.0, regions=()), PlanarSliceLayer(layer_id='layer-1', z_mm=1.0, regions=()...egions=(PlanarRegion(region_id='part', outer=((0, 0, 4), (10, 0, 4), (10, 10, 4), (0, 10, 4), (0, 0, 4)), holes=()),)))
+parameters = SupportParameters(layer_height_mm=1, overhang_angle_rad=0.7853981633974483, xy_gap_mm=0, z_gap_mm=0, interface_layers=2, line_spacing_mm=2.0, interface_spacing_mm=0.4, bead_width_mm=0.4, pattern='lines')
+cancelled = <function test_support_plan_honours_cancellation_during_geometry_work.<locals>.cancel_after_work_starts at 0x000002250C34DDA0>
+
+    def generate_support_plan(
+        layers: tuple[PlanarSliceLayer, ...],
+        parameters: SupportParameters,
+        *,
+        cancelled: Callable[[], bool] | None = None,
+    ) -> SupportPlan:
+        """Detect unsupported cross-sections and preserve only plate-connected columns."""
+        _checkpoint(cancelled)
+        _validate_layers(layers, parameters.layer_height_mm)
+        try:
+            objects = []
+            for layer in layers:
+>               _checkpoint(cancelled)
+
+src\five_axis_slicer\algorithms\planar\support.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cancelled = <function test_support_plan_honours_cancellation_during_geometry_work.<locals>.cancel_after_work_starts at 0x000002250C34DDA0>
+
+    def _checkpoint(cancelled: Callable[[], bool] | None) -> None:
+        if cancelled is not None and cancelled():
+            from ...postprocessing.indexed_tube import GenerationCancelled
+    
+>           raise GenerationCancelled("Planar support generation cancelled")
+E           five_axis_slicer.postprocessing.indexed_tube.GenerationCancelled: Planar support generation cancelled
+
+src\five_axis_slicer\algorithms\planar\support.py:321: GenerationCancelled
+
+The above exception was the direct cause of the following exception:
+
+    def test_support_plan_honours_cancellation_during_geometry_work():
+        layers = _layers([(), (), (), (), (_rect(4),)])
+        calls = 0
+    
+        def cancel_after_work_starts():
+            nonlocal calls
+            calls += 1
+            return calls >= 5
+    
+        with pytest.raises(GenerationCancelled, match="support generation cancelled"):
+>           generate_support_plan(
+                layers,
+                SupportParameters(1, xy_gap_mm=0, z_gap_mm=0),
+                cancelled=cancel_after_work_starts,
+            )
+
+tests\test_planar_support.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+layers = (PlanarSliceLayer(layer_id='layer-0', z_mm=0.0, regions=()), PlanarSliceLayer(layer_id='layer-1', z_mm=1.0, regions=()...egions=(PlanarRegion(region_id='part', outer=((0, 0, 4), (10, 0, 4), (10, 10, 4), (0, 10, 4), (0, 0, 4)), holes=()),)))
+parameters = SupportParameters(layer_height_mm=1, overhang_angle_rad=0.7853981633974483, xy_gap_mm=0, z_gap_mm=0, interface_layers=2, line_spacing_mm=2.0, interface_spacing_mm=0.4, bead_width_mm=0.4, pattern='lines')
+cancelled = <function test_support_plan_honours_cancellation_during_geometry_work.<locals>.cancel_after_work_starts at 0x000002250C34DDA0>
+
+    def generate_support_plan(
+        layers: tuple[PlanarSliceLayer, ...],
+        parameters: SupportParameters,
+        *,
+        cancelled: Callable[[], bool] | None = None,
+    ) -> SupportPlan:
+        """Detect unsupported cross-sections and preserve only plate-connected columns."""
+        _checkpoint(cancelled)
+        _validate_layers(layers, parameters.layer_height_mm)
+        try:
+            objects = []
+            for layer in layers:
+                _checkpoint(cancelled)
+                objects.append(layer_shape(layer))
+            return _generate_plan(layers, objects, parameters, cancelled)
+        except PlanarSupportError:
+            raise
+        except Exception as error:
+>           raise PlanarSupportError("planar.support_kernel_failed", str(error)) from error
+E           five_axis_slicer.algorithms.planar.support_geometry.PlanarSupportError: planar.support_kernel_failed: Planar support generation cancelled
+
+src\five_axis_slicer\algorithms\planar\support.py:117: PlanarSupportError
+__________ test_fully_unreachable_support_keeps_the_real_diagnostic ___________
+
+tmp_path = WindowsPath('F:/【项目和任务】/5AxisSclicer_V2.0/tmp/project_audit/frozen_pytest/test_fully_unreachable_support0')
+
+    def test_fully_unreachable_support_keeps_the_real_diagnostic(tmp_path: Path) -> None:
+        low_island = cq.Workplane("XY").box(8.0, 6.0, 0.2).translate((8.0, 5.0, 1.0))
+        model = _cad_model(tmp_path, low_island, "low-floating-island")
+        operation = _support_operation(last_layer_z_mm=1.5, support_z_gap_mm=0.5)
+        controller = PlanarController(model, setup=_setup(), operations=(operation,))
+    
+        with pytest.raises(ValueError, match="planar.support_unreachable_from_buildplate"):
+            controller.generate_operation(operation.operation_id)
+    
+        state = controller.product_state(operation.operation_id)
+        assert state.status == "error"
+>       assert "planar.support_unreachable_from_buildplate" in state.summary["error"]
+                                                               ^^^^^^^^^^^^^
+E       AttributeError: 'PlanarProductState' object has no attribute 'summary'
+
+tests\test_planar_support_product.py:264: AttributeError
+=========================== short test summary info ===========================
+SKIPPED [1] tests\test_project_io.py:779: file symlink unavailable: [WinError 1314] 客户端没有所需的特权。: 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmpk8nul0ii\\outside.step' -> 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmpk8nul0ii\\project\\source\\d28ec7e7bc6f6754011e427a711414466a9bdb0477704797b05b97957eaa7012.step'
+SKIPPED [1] tests\test_project_io.py:807: directory symlink unavailable: [WinError 1314] 客户端没有所需的特权。: 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmp2ng7nx3a\\outside-source' -> 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmp2ng7nx3a\\project\\source'
+SKIPPED [1] tests\test_setup_config.py:335: file symlink unavailable: [WinError 1314] 客户端没有所需的特权。: 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmpyb2r85h7\\target.yaml' -> 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmpyb2r85h7\\manufacturing-setup.yaml'
+FAILED tests/test_planar_support.py::test_support_plan_honours_cancellation_during_geometry_work
+FAILED tests/test_planar_support_product.py::test_fully_unreachable_support_keeps_the_real_diagnostic
+2 failed, 583 passed, 3 skipped, 130 subtests passed in 285.98s (0:04:45)

@@ -1,0 +1,2437 @@
+{
+  "coordinate_frame": "workpiece_build",
+  "segments": [
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940898872867646,
+      "end": [
+        5.770679022846178,
+        -10.601458066194962,
+        60.009375
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        4.784314659702262,
+        -9.27846090760633,
+        60.0
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940893190044697,
+      "end": [
+        6.757407128581025,
+        -11.924181988193292,
+        60.01875
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        5.770679022846178,
+        -10.601458066194962,
+        60.009375
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940887954108808,
+      "end": [
+        7.744498314301198,
+        -13.246633166581278,
+        60.028125
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        6.757407128581025,
+        -11.924181988193292,
+        60.01875
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940883168027596,
+      "end": [
+        8.731952580006698,
+        -14.568811601358922,
+        60.0375
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        7.744498314301198,
+        -13.246633166581278,
+        60.028125
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940878831802154,
+      "end": [
+        9.719769925697529,
+        -15.890717292526228,
+        60.046875
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        8.731952580006698,
+        -14.568811601358922,
+        60.0375
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940874945433418,
+      "end": [
+        10.707950351373684,
+        -17.212350240083186,
+        60.05625
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        9.719769925697529,
+        -15.890717292526228,
+        60.046875
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940871508922332,
+      "end": [
+        11.696493857035168,
+        -18.533710444029804,
+        60.065625
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        10.707950351373684,
+        -17.212350240083186,
+        60.05625
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940868522269641,
+      "end": [
+        12.68540044268198,
+        -19.85479790436608,
+        60.075
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        11.696493857035168,
+        -18.533710444029804,
+        60.065625
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940865985476047,
+      "end": [
+        13.67467010831412,
+        -21.175612621092018,
+        60.084375
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        12.68540044268198,
+        -19.85479790436608,
+        60.075
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940863898542077,
+      "end": [
+        14.664302853931586,
+        -22.496154594207606,
+        60.09375
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        13.67467010831412,
+        -21.175612621092018,
+        60.084375
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.594086226146827,
+      "end": [
+        15.65429867953438,
+        -23.816423823712856,
+        60.103125
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        14.664302853931586,
+        -22.496154594207606,
+        60.09375
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940861074254952,
+      "end": [
+        16.644657585122502,
+        -25.13642030960776,
+        60.1125
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        15.65429867953438,
+        -23.816423823712856,
+        60.103125
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940860336902419,
+      "end": [
+        17.63537957069595,
+        -26.456144051892327,
+        60.121875
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        16.644657585122502,
+        -25.13642030960776,
+        60.1125
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940860049410813,
+      "end": [
+        18.626464636254724,
+        -27.775595050566547,
+        60.13125
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        17.63537957069595,
+        -26.456144051892327,
+        60.121875
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940860211780241,
+      "end": [
+        19.61791278179883,
+        -29.09477330563043,
+        60.140625
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        18.626464636254724,
+        -27.775595050566547,
+        60.13125
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940860824010601,
+      "end": [
+        20.60972400732826,
+        -30.413678817083962,
+        60.15
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        19.61791278179883,
+        -29.09477330563043,
+        60.140625
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940861886101834,
+      "end": [
+        21.60189831284302,
+        -31.73231158492716,
+        60.159375
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        20.60972400732826,
+        -30.413678817083962,
+        60.15
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940863398053626,
+      "end": [
+        22.594435698343105,
+        -33.05067160916001,
+        60.16875
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        21.60189831284302,
+        -31.73231158492716,
+        60.159375
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940865359865671,
+      "end": [
+        23.58733616382852,
+        -34.36875888978252,
+        60.178125
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        22.594435698343105,
+        -33.05067160916001,
+        60.16875
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940867771537522,
+      "end": [
+        24.58059970929926,
+        -35.68657342679469,
+        60.1875
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        23.58733616382852,
+        -34.36875888978252,
+        60.178125
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940870633068615,
+      "end": [
+        25.574226334755327,
+        -37.00411522019651,
+        60.196875
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        24.58059970929926,
+        -35.68657342679469,
+        60.1875
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940873944458329,
+      "end": [
+        26.56821604019672,
+        -38.321384269987995,
+        60.20625
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        25.574226334755327,
+        -37.00411522019651,
+        60.196875
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.594087770570589,
+      "end": [
+        27.562568825623448,
+        -39.63838057616913,
+        60.215625
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        26.56821604019672,
+        -38.321384269987995,
+        60.20625
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940881916810435,
+      "end": [
+        28.557284691035495,
+        -40.955104138739934,
+        60.225
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        27.562568825623448,
+        -39.63838057616913,
+        60.215625
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940886577771061,
+      "end": [
+        29.55236363643288,
+        -42.271554957700396,
+        60.234375
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        28.557284691035495,
+        -40.955104138739934,
+        60.225
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940891688586586,
+      "end": [
+        30.547805661815584,
+        -43.587733033050505,
+        60.24375
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        29.55236363643288,
+        -42.271554957700396,
+        60.234375
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940897249255988,
+      "end": [
+        31.543610767183615,
+        -44.903638364790275,
+        60.253125
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        30.547805661815584,
+        -43.587733033050505,
+        60.24375
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940903259777953,
+      "end": [
+        32.53977895253698,
+        -46.21927095291971,
+        60.2625
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        31.543610767183615,
+        -44.903638364790275,
+        60.253125
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940909720151083,
+      "end": [
+        33.536310217875666,
+        -47.534630797438794,
+        60.271875
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        32.53977895253698,
+        -46.21927095291971,
+        60.2625
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5594387643288294,
+      "end": [
+        34.5531650061,
+        -48.70971538209256,
+        60.28125
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        33.536310217875666,
+        -47.534630797438794,
+        60.271875
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5969592960413947,
+      "end": [
+        35.879435457065455,
+        -47.71441982124829,
+        60.290625
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        34.5531650061,
+        -48.70971538209256,
+        60.28125
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.596958956588235,
+      "end": [
+        37.20543206214778,
+        -46.71876102492533,
+        60.3
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        35.879435457065455,
+        -47.71441982124829,
+        60.290625
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940935586677808,
+      "end": [
+        36.220959524868064,
+        -45.39434280495904,
+        60.309375
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        37.20543206214778,
+        -46.71876102492533,
+        60.3
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940927556233576,
+      "end": [
+        35.23612390829564,
+        -44.07019732806761,
+        60.31875
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        36.220959524868064,
+        -45.39434280495904,
+        60.309375
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940919975633108,
+      "end": [
+        34.25092521243053,
+        -42.746324594251064,
+        60.328125
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        35.23612390829564,
+        -44.07019732806761,
+        60.31875
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940912844878425,
+      "end": [
+        33.265363437272704,
+        -41.42272460350938,
+        60.3375
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        34.25092521243053,
+        -42.746324594251064,
+        60.328125
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.594090616397089,
+      "end": [
+        32.27943858282219,
+        -40.09939735584257,
+        60.346875000000004
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        33.265363437272704,
+        -41.42272460350938,
+        60.3375
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940899932912186,
+      "end": [
+        31.29315064907896,
+        -38.776342851250625,
+        60.35625
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        32.27943858282219,
+        -40.09939735584257,
+        60.346875000000004
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940894151703584,
+      "end": [
+        30.30649963604304,
+        -37.45356108973356,
+        60.365625
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        31.29315064907896,
+        -38.776342851250625,
+        60.35625
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.594088882034654,
+      "end": [
+        29.319485543714414,
+        -36.131052071291364,
+        60.375
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        30.30649963604304,
+        -37.45356108973356,
+        60.365625
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940883938842203,
+      "end": [
+        28.332108372093085,
+        -34.80881579592403,
+        60.384375
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        29.319485543714414,
+        -36.131052071291364,
+        60.375
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940879507191643,
+      "end": [
+        27.34436812117906,
+        -33.486852263631576,
+        60.393750000000004
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        28.332108372093085,
+        -34.80881579592403,
+        60.384375
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940875525395913,
+      "end": [
+        26.356264790972332,
+        -32.16516147441399,
+        60.403125
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        27.34436812117906,
+        -33.486852263631576,
+        60.393750000000004
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.594087199345592,
+      "end": [
+        25.367798381472905,
+        -30.843743428271278,
+        60.4125
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        26.356264790972332,
+        -32.16516147441399,
+        60.403125
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.594086891137246,
+      "end": [
+        24.378968892680774,
+        -29.522598125203434,
+        60.421875
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        25.367798381472905,
+        -30.843743428271278,
+        60.4125
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940866279146231,
+      "end": [
+        23.38977632459594,
+        -28.20172556521046,
+        60.43125
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        24.378968892680774,
+        -29.522598125203434,
+        60.421875
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940864096777781,
+      "end": [
+        22.40022067721841,
+        -26.881125748292362,
+        60.440625000000004
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        23.38977632459594,
+        -28.20172556521046,
+        60.43125
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940862364267709,
+      "end": [
+        21.410301950548178,
+        -25.56079867444913,
+        60.45
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        22.40022067721841,
+        -26.881125748292362,
+        60.440625000000004
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940861081616325,
+      "end": [
+        20.420020144585244,
+        -24.240744343680774,
+        60.459375
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        21.410301950548178,
+        -25.56079867444913,
+        60.45
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940860248823994,
+      "end": [
+        19.429375259329603,
+        -22.92096275598728,
+        60.46875
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        20.420020144585244,
+        -24.240744343680774,
+        60.459375
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940859865890804,
+      "end": [
+        18.438367294781266,
+        -21.601453911368658,
+        60.478125
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        19.429375259329603,
+        -22.92096275598728,
+        60.46875
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.594085993281686,
+      "end": [
+        17.446996250940234,
+        -20.28221780982492,
+        60.487500000000004
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        18.438367294781266,
+        -21.601453911368658,
+        60.478125
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940860449602284,
+      "end": [
+        16.455262127806495,
+        -18.963254451356043,
+        60.496875
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        17.446996250940234,
+        -20.28221780982492,
+        60.487500000000004
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.594086141624684,
+      "end": [
+        15.463164925380049,
+        -17.644563835962032,
+        60.50625
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        16.455262127806495,
+        -18.963254451356043,
+        60.496875
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940862832750265,
+      "end": [
+        14.470704643660909,
+        -16.326145963642897,
+        60.515625
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        15.463164925380049,
+        -17.644563835962032,
+        60.50625
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940864699112333,
+      "end": [
+        13.477881282649067,
+        -15.008000834398635,
+        60.525
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        14.470704643660909,
+        -16.326145963642897,
+        60.515625
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940867015332583,
+      "end": [
+        12.484694842344524,
+        -13.690128448229244,
+        60.534375000000004
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        13.477881282649067,
+        -15.008000834398635,
+        60.525
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940869781410543,
+      "end": [
+        11.491145322747274,
+        -12.372528805134712,
+        60.54375
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        12.484694842344524,
+        -13.690128448229244,
+        60.534375000000004
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940872997345422,
+      "end": [
+        10.497232723857334,
+        -11.055201905115064,
+        60.553125
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        11.491145322747274,
+        -12.372528805134712,
+        60.54375
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940876663136682,
+      "end": [
+        9.502957045674686,
+        -9.738147748170286,
+        60.5625
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        10.497232723857334,
+        -11.055201905115064,
+        60.553125
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5940880778783377,
+      "end": [
+        8.508318288199343,
+        -8.42136633430038,
+        60.571875
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        9.502957045674686,
+        -9.738147748170286,
+        60.5625
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.55921209066171,
+      "end": [
+        7.493972802565861,
+        -7.244946286589989,
+        60.581250000000004
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        8.508318288199343,
+        -8.42136633430038,
+        60.571875
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5934961002264221,
+      "end": [
+        6.179768536909756,
+        -8.240266403672447,
+        60.590625
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        7.493972802565861,
+        -7.244946286589989,
+        60.581250000000004
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5934967646895742,
+      "end": [
+        4.865837022465434,
+        -9.235949610539173,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        6.179768536909756,
+        -8.240266403672447,
+        60.590625
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155151464,
+      "end": [
+        5.862363996735571,
+        -10.551020064352347,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        4.865837022465434,
+        -9.235949610539173,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158454,
+      "end": [
+        6.858892264969706,
+        -11.866089537633917,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        5.862363996735571,
+        -10.551020064352347,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158448,
+      "end": [
+        7.855420533203841,
+        -13.181159010915485,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        6.858892264969706,
+        -11.866089537633917,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158448,
+      "end": [
+        8.851948801437976,
+        -14.496228484197053,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        7.855420533203841,
+        -13.181159010915485,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158454,
+      "end": [
+        9.84847706967211,
+        -15.811297957478622,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        8.851948801437976,
+        -14.496228484197053,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158448,
+      "end": [
+        10.845005337906246,
+        -17.12636743076019,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        9.84847706967211,
+        -15.811297957478622,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158448,
+      "end": [
+        11.84153360614038,
+        -18.44143690404176,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        10.845005337906246,
+        -17.12636743076019,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158452,
+      "end": [
+        12.838061874374517,
+        -19.756506377323326,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        11.84153360614038,
+        -18.44143690404176,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158444,
+      "end": [
+        13.83459014260865,
+        -21.071575850604894,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        12.838061874374517,
+        -19.756506377323326,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158444,
+      "end": [
+        14.831118410842784,
+        -22.386645323886462,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        13.83459014260865,
+        -21.071575850604894,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158444,
+      "end": [
+        15.827646679076917,
+        -23.70171479716803,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        14.831118410842784,
+        -22.386645323886462,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158452,
+      "end": [
+        16.824174947311054,
+        -25.016784270449598,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        15.827646679076917,
+        -23.70171479716803,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158452,
+      "end": [
+        17.82070321554519,
+        -26.331853743731166,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        16.824174947311054,
+        -25.016784270449598,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158444,
+      "end": [
+        18.817231483779324,
+        -27.646923217012734,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        17.82070321554519,
+        -26.331853743731166,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158444,
+      "end": [
+        19.813759752013457,
+        -28.961992690294302,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        18.817231483779324,
+        -27.646923217012734,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158452,
+      "end": [
+        20.810288020247594,
+        -30.27706216357587,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        19.813759752013457,
+        -28.961992690294302,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158473,
+      "end": [
+        21.80681628848173,
+        -31.592131636857445,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        20.810288020247594,
+        -30.27706216357587,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158444,
+      "end": [
+        22.803344556715864,
+        -32.90720111013901,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        21.80681628848173,
+        -31.592131636857445,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158424,
+      "end": [
+        23.799872824949997,
+        -34.222270583420574,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        22.803344556715864,
+        -32.90720111013901,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158473,
+      "end": [
+        24.796401093184134,
+        -35.53734005670215,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        23.799872824949997,
+        -34.222270583420574,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158452,
+      "end": [
+        25.79292936141827,
+        -36.85240952998372,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        24.796401093184134,
+        -35.53734005670215,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158437,
+      "end": [
+        26.7894576296524,
+        -38.167479003265285,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        25.79292936141827,
+        -36.85240952998372,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158461,
+      "end": [
+        27.78598589788654,
+        -39.48254847654685,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        26.7894576296524,
+        -38.167479003265285,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158444,
+      "end": [
+        28.782514166120674,
+        -40.79761794982842,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        27.78598589788654,
+        -39.48254847654685,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158473,
+      "end": [
+        29.77904243435481,
+        -42.112687423109996,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        28.782514166120674,
+        -40.79761794982842,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158444,
+      "end": [
+        30.775570702588944,
+        -43.427756896391564,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        29.77904243435481,
+        -42.112687423109996,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158452,
+      "end": [
+        31.77209897082308,
+        -44.74282636967313,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        30.775570702588944,
+        -43.427756896391564,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158452,
+      "end": [
+        32.76862723905722,
+        -46.0578958429547,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        31.77209897082308,
+        -44.74282636967313,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158452,
+      "end": [
+        33.765155507291354,
+        -47.37296531623627,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        32.76862723905722,
+        -46.0578958429547,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.559158036506045,
+      "end": [
+        34.78098908194953,
+        -48.54793956157882,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        33.765155507291354,
+        -47.37296531623627,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158462,
+      "end": [
+        36.09605855523111,
+        -47.5514112933447,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        34.78098908194953,
+        -48.54793956157882,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939970548579913,
+      "end": [
+        37.41112662497771,
+        -46.55488283170158,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        36.09605855523111,
+        -47.5514112933447,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158446,
+      "end": [
+        36.41459840357269,
+        -45.23981332293403,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        37.41112662497771,
+        -46.55488283170158,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158466,
+      "end": [
+        35.41807018216767,
+        -43.924743814166476,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        36.41459840357269,
+        -45.23981332293403,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158431,
+      "end": [
+        34.42154196076265,
+        -42.609674305398926,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        35.41807018216767,
+        -43.924743814166476,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158466,
+      "end": [
+        33.42501373935763,
+        -41.29460479663137,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        34.42154196076265,
+        -42.609674305398926,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158431,
+      "end": [
+        32.428485517952616,
+        -39.97953528786382,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        33.42501373935763,
+        -41.29460479663137,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158474,
+      "end": [
+        31.43195729654759,
+        -38.66446577909626,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        32.428485517952616,
+        -39.97953528786382,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158438,
+      "end": [
+        30.435429075142572,
+        -37.34939627032871,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        31.43195729654759,
+        -38.66446577909626,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158431,
+      "end": [
+        29.438900853737557,
+        -36.03432676156116,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        30.435429075142572,
+        -37.34939627032871,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158502,
+      "end": [
+        28.44237263233253,
+        -34.7192572527936,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        29.438900853737557,
+        -36.03432676156116,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158431,
+      "end": [
+        27.445844410927513,
+        -33.404187744026046,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        28.44237263233253,
+        -34.7192572527936,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158438,
+      "end": [
+        26.449316189522495,
+        -32.089118235258496,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        27.445844410927513,
+        -33.404187744026046,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158438,
+      "end": [
+        25.452787968117477,
+        -30.774048726490946,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        26.449316189522495,
+        -32.089118235258496,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158476,
+      "end": [
+        24.456259746712455,
+        -29.458979217723385,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        25.452787968117477,
+        -30.774048726490946,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158455,
+      "end": [
+        23.459731525307433,
+        -28.14390970895583,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        24.456259746712455,
+        -29.458979217723385,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158421,
+      "end": [
+        22.463203303902418,
+        -26.828840200188285,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        23.459731525307433,
+        -28.14390970895583,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158448,
+      "end": [
+        21.4666750824974,
+        -25.51377069142073,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        22.463203303902418,
+        -26.828840200188285,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158438,
+      "end": [
+        20.47014686109238,
+        -24.19870118265318,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        21.4666750824974,
+        -25.51377069142073,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158484,
+      "end": [
+        19.473618639687356,
+        -22.88363167388562,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        20.47014686109238,
+        -24.19870118265318,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158448,
+      "end": [
+        18.477090418282337,
+        -21.568562165118067,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        19.473618639687356,
+        -22.88363167388562,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158421,
+      "end": [
+        17.480562196877322,
+        -20.25349265635052,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        18.477090418282337,
+        -21.568562165118067,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158448,
+      "end": [
+        16.484033975472304,
+        -18.938423147582967,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        17.480562196877322,
+        -20.25349265635052,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158484,
+      "end": [
+        15.487505754067278,
+        -17.623353638815406,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        16.484033975472304,
+        -18.938423147582967,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158438,
+      "end": [
+        14.49097753266226,
+        -16.308284130047856,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        15.487505754067278,
+        -17.623353638815406,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158448,
+      "end": [
+        13.494449311257242,
+        -14.993214621280302,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        14.49097753266226,
+        -16.308284130047856,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158438,
+      "end": [
+        12.497921089852223,
+        -13.678145112512752,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        13.494449311257242,
+        -14.993214621280302,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158494,
+      "end": [
+        11.501392868447198,
+        -12.363075603745187,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        12.497921089852223,
+        -13.678145112512752,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158431,
+      "end": [
+        10.504864647042183,
+        -11.048006094977637,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        11.501392868447198,
+        -12.363075603745187,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158438,
+      "end": [
+        9.508336425637165,
+        -9.732936586210087,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        10.504864647042183,
+        -11.048006094977637,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158431,
+      "end": [
+        8.51180820423215,
+        -8.417867077442537,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        9.508336425637165,
+        -9.732936586210087,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5591583066077713,
+      "end": [
+        7.495974873978656,
+        -7.2428916289880965,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        8.51180820423215,
+        -8.417867077442537,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158436,
+      "end": [
+        6.180905948222041,
+        -8.239420619763637,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        7.495974873978656,
+        -7.2428916289880965,
+        60.6
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar_spiral:region-0001:thin_wall",
+      "delta_e": 0.5939974155158406,
+      "end": [
+        4.865837022465434,
+        -9.235949610539173,
+        60.6
+      ],
+      "extrusion_role": "external_perimeter",
+      "feedrate": 100.0,
+      "height": 0.6,
+      "move_type": "extrude",
+      "start": [
+        6.180905948222041,
+        -8.239420619763637,
+        60.6
+      ],
+      "width": 0.6
+    }
+  ]
+}

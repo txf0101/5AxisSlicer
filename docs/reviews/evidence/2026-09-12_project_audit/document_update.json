@@ -1,0 +1,14 @@
+[
+  {
+    "path": "docs/planning/progress_tracker.md",
+    "before_mtime_ns": 1789186986698937300,
+    "before_sha256": "bfd4451864422745b130cad3d6a920553138aa95faae75cd23e75db9582733e8",
+    "after_sha256": "fc8adbd621672f9f6ebf93eab126266b5c09325038c37c5103e02576e916a2b9"
+  },
+  {
+    "path": "docs/README.md",
+    "before_mtime_ns": 1789186986697430000,
+    "before_sha256": "c761d29cfe55170ba84895fb9bebaf03788b1fd59506db9840ae69ab8718fd03",
+    "after_sha256": "3c8d8305483abddab26b55aa1923734d699b71684d2e3fce7aadd3a92f8591cf"
+  }
+]

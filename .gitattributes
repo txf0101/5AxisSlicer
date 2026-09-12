@@ -15,3 +15,7 @@
 *.stl binary
 *.tif binary
 *.tiff binary
+
+# Generated/frozen evidence preserves tool output verbatim, including traceback spacing.
+docs/reviews/evidence/** -whitespace
+docs/references/own_ac_printer/manuscript_text.txt -whitespace

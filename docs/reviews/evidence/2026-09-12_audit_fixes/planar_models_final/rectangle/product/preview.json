@@ -1,0 +1,385 @@
+{
+  "coordinate_frame": "workpiece_build",
+  "segments": [
+    {
+      "comment": "generated:planar:region-0001:skin",
+      "delta_e": 2.22,
+      "end": [
+        7.7,
+        0.2999999999999998,
+        0.5
+      ],
+      "extrusion_role": "top_solid_infill",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        0.2999999999999998,
+        0.2999999999999998,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar:region-0001:skin",
+      "delta_e": 1.62,
+      "end": [
+        7.7,
+        5.7,
+        0.5
+      ],
+      "extrusion_role": "top_solid_infill",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        7.7,
+        0.2999999999999998,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar:region-0001:skin",
+      "delta_e": 2.22,
+      "end": [
+        0.2999999999999998,
+        5.7,
+        0.5
+      ],
+      "extrusion_role": "top_solid_infill",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        7.7,
+        5.7,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar:region-0001:skin",
+      "delta_e": 1.62,
+      "end": [
+        0.2999999999999998,
+        0.2999999999999998,
+        0.5
+      ],
+      "extrusion_role": "top_solid_infill",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        0.2999999999999998,
+        5.7,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar:region-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        0.6000000000000001,
+        0.9000000000000001,
+        0.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        0.2999999999999998,
+        0.2999999999999998,
+        0.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar:region-0001:infill",
+      "delta_e": 2.0399999999999996,
+      "end": [
+        7.399999999999999,
+        0.9000000000000001,
+        0.5
+      ],
+      "extrusion_role": "internal_infill",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        0.6000000000000001,
+        0.9000000000000001,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar:region-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        7.399999999999999,
+        1.5,
+        0.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        7.399999999999999,
+        0.9000000000000001,
+        0.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar:region-0001:infill",
+      "delta_e": 2.0399999999999996,
+      "end": [
+        0.6000000000000001,
+        1.5,
+        0.5
+      ],
+      "extrusion_role": "internal_infill",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        7.399999999999999,
+        1.5,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar:region-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        0.6000000000000001,
+        2.1,
+        0.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        0.6000000000000001,
+        1.5,
+        0.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar:region-0001:infill",
+      "delta_e": 2.0399999999999996,
+      "end": [
+        7.3999999999999995,
+        2.1,
+        0.5
+      ],
+      "extrusion_role": "internal_infill",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        0.6000000000000001,
+        2.1,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar:region-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        7.3999999999999995,
+        2.7,
+        0.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        7.3999999999999995,
+        2.1,
+        0.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar:region-0001:infill",
+      "delta_e": 2.0399999999999996,
+      "end": [
+        0.6000000000000001,
+        2.7,
+        0.5
+      ],
+      "extrusion_role": "internal_infill",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        7.3999999999999995,
+        2.7,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar:region-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        0.6000000000000001,
+        3.3,
+        0.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        0.6000000000000001,
+        2.7,
+        0.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar:region-0001:infill",
+      "delta_e": 2.0399999999999996,
+      "end": [
+        7.3999999999999995,
+        3.3,
+        0.5
+      ],
+      "extrusion_role": "internal_infill",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        0.6000000000000001,
+        3.3,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar:region-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        7.3999999999999995,
+        3.9,
+        0.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        7.3999999999999995,
+        3.3,
+        0.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar:region-0001:infill",
+      "delta_e": 2.0399999999999996,
+      "end": [
+        0.6000000000000001,
+        3.9,
+        0.5
+      ],
+      "extrusion_role": "internal_infill",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        7.3999999999999995,
+        3.9,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar:region-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        0.6000000000000001,
+        4.5,
+        0.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        0.6000000000000001,
+        3.9,
+        0.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar:region-0001:infill",
+      "delta_e": 2.04,
+      "end": [
+        7.4,
+        4.5,
+        0.5
+      ],
+      "extrusion_role": "internal_infill",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        0.6000000000000001,
+        4.5,
+        0.5
+      ],
+      "width": 0.6
+    },
+    {
+      "comment": "generated:planar:region-0001:none",
+      "delta_e": 0.0,
+      "end": [
+        7.4,
+        5.1,
+        0.5
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 100.0,
+      "height": null,
+      "move_type": "travel",
+      "start": [
+        7.4,
+        4.5,
+        0.5
+      ],
+      "width": null
+    },
+    {
+      "comment": "generated:planar:region-0001:infill",
+      "delta_e": 2.04,
+      "end": [
+        0.6000000000000001,
+        5.1,
+        0.5
+      ],
+      "extrusion_role": "internal_infill",
+      "feedrate": 100.0,
+      "height": 0.5,
+      "move_type": "extrude",
+      "start": [
+        7.4,
+        5.1,
+        0.5
+      ],
+      "width": 0.6
+    }
+  ]
+}

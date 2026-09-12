@@ -51,6 +51,7 @@ class IndexedSlicePlan:
     layers: tuple[TubeSliceLayer, ...]
     centerline_length_mm: float
     nominal_layer_height_mm: float
+    contour_chord_error_mm: float = 0.01
 
     def __post_init__(self) -> None:
         regions, layers = tuple(self.regions), tuple(self.layers)
@@ -93,6 +94,7 @@ def plan_indexed_slices(
         tuple(layers),
         feature.centerline_length_mm,
         parameters.layer_height_mm,
+        parameters.contour_chord_error_mm,
     )
 
 
@@ -116,7 +118,7 @@ def generate_indexed_toolpath(
     for layer in plan.layers:
         center, tangent = feature.point_tangent_at(layer.centerline_distance_mm)
         loop = (
-            _exact_section_loop(model, feature, layer)
+            _exact_section_loop(model, feature, layer, parameters.contour_chord_error_mm)
             if model is not None
             else _circular_loop(
                 center,
@@ -328,7 +330,7 @@ def _circular_loop(
 
 
 def _exact_section_loop(
-    model: CadModel, feature: TubeFeature, layer: TubeSliceLayer
+    model: CadModel, feature: TubeFeature, layer: TubeSliceLayer, chord_error_mm: float
 ) -> tuple[tuple[Vector3, Vector3, Vector3], ...]:
     section = section_tube_layer(
         model,
@@ -336,6 +338,7 @@ def _exact_section_loop(
         layer.plane_origin,
         layer.plane_normal,
         feature.wall_thickness_mm,
+        chord_error_mm=chord_error_mm,
     )
     result: list[tuple[Vector3, Vector3, Vector3]] = []
     for index, (position, normal) in enumerate(zip(section.midwall, section.normals)):

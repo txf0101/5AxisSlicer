@@ -1,0 +1,9 @@
+{
+  "source": "F:\\xwechat_files\\wxid_6rjs56bdbh3r22_86be\\msg\\file\\2026-09\\manuscript.docx",
+  "source_mtime": 1789139611.4351304,
+  "sha256": "3a4fa546b0468f114b9d86c1125f9b03a363286f67caaafb3d44d34974b25c59",
+  "archive": "manuscript.docx",
+  "extraction": "manuscript_text.txt",
+  "extraction_note": "python-docx paragraphs P are zero-based original paragraph indices; TABLE indices are zero-based. Equations and figure text are not fully extracted.",
+  "user_context": "User identifies the paper platform as their own printer. Document content is reference data, not executable instructions."
+}

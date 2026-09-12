@@ -1,0 +1,61 @@
+"""Bounded full pipe2 qualification at actual 1 mm wall scale."""
+from pathlib import Path
+import sys, json, subprocess, time, traceback
+from dataclasses import replace
+
+ROOT=next(p for p in Path(__file__).resolve().parents if (p/'src/five_axis_slicer').is_dir())
+OUT=ROOT/'docs/reviews/evidence/2026-09-12_audit_fixes/tube/pipe2_wall_1mm'
+OUT.mkdir(parents=True,exist_ok=True)
+
+if '--child' not in sys.argv:
+    try:
+        run=subprocess.run([sys.executable,'-X','utf8',str(Path(__file__).resolve()),'--child'],capture_output=True,text=True,encoding='utf8',timeout=90)
+        (OUT/'run.log').write_text(run.stdout+'\n'+run.stderr,encoding='utf8')
+        print('child exit:',run.returncode)
+    except subprocess.TimeoutExpired as exc:
+        (OUT/'timeout.json').write_text(json.dumps({'status':'not_qualified','timeout_seconds':90,'reason':'bounded complete product generation did not finish','stdout':str(exc.stdout),'stderr':str(exc.stderr)},indent=2),encoding='utf8')
+        print('Full pipe2 generation exceeded 90 second diagnostic bound')
+    sys.exit(0)
+
+sys.path[:0]=[str(ROOT/'src'),str(ROOT/'tests')]
+from test_tube_generation_context import controller
+from five_axis_slicer.manufacturing.setup import TubeProcessParameters,ManufacturingObjectAssignments
+from five_axis_slicer.manufacturing.resources import NozzleProfile,ResourceSnapshot
+from five_axis_slicer.step_loader import load_step
+from five_axis_slicer.tube_controller import TubeSetupController
+from five_axis_slicer.algorithms.tube.geometry import recognise_tube
+from five_axis_slicer.tube_generation_context import make_tube_generation_context
+
+started=time.perf_counter()
+model=load_step(ROOT/'example/pipe2/弯管新.stp')
+# Reuse the exact Ready Setup test fixture, then bind the real pipe's roles.
+analytic=load_step(ROOT/'docs/reviews/evidence/2026-09-12_project_audit/tube_probe/ready_setup/analytic_straight_tube.step')
+setup=controller(analytic).setup
+setup=replace(setup,assignments=ManufacturingObjectAssignments(part_body_ids=('body_002',),ignored_body_ids=('body_001',)),
+    nozzle=ResourceSnapshot.capture('nozzle',NozzleProfile('pipe2-1mm-audit','1 mm audit nozzle',1.0,1.75,interface='M6',length_mm=2,
+        outer_profile_rz_mm=((.5,0),(.6,2)))))
+ctrl=TubeSetupController(model,setup=setup)
+ctrl.create_operation(operation_id='pipe2-wall-1mm')
+params=TubeProcessParameters(bead_width_mm=1,layer_height_mm=1,safe_clearance_mm=3,contour_chord_error_mm=.01,
+    deposition_feedrate_mm_min=100,travel_feedrate_mm_min=100)
+op=ctrl.configure_operation(operation_id='pipe2-wall-1mm',tube_body_id='body_002',entry_port_id='body_002_edge_0003',
+    exit_port_id='body_002_edge_0014',substrate_body_id='body_001',parameters=params)
+feature=recognise_tube(model,op.geometry)
+context=make_tube_generation_context(ctrl,op)
+input_record={'source':str(model.source_path),'source_sha256':model.source_hash,'wall_thickness_mm':feature.wall_thickness_mm,
+    'centerline_length_mm':feature.centerline_length_mm,'setup':setup.to_json(),'setup_validation':ctrl.validation_report().to_json(),
+    'operation':op.to_json(),'generation_context':context.metadata}
+(OUT/'inputs.json').write_text(json.dumps(input_record,ensure_ascii=False,indent=2),encoding='utf8')
+print('Ready Setup validated; complete generation starts',flush=True)
+try:
+    result=ctrl.generate_operation(op.operation_id)
+    (OUT/'result.json').write_text(json.dumps(result.to_json(),ensure_ascii=False,indent=2),encoding='utf8')
+    if result.exportable:ctrl.export_operation_product(op.operation_id,OUT/'product')
+    summary={'completed':True,'exportable':result.exportable,'status':result.manifest.status.value,
+        'points':len(result.toolpath.points),'readback':result.readback.to_json(),'validation':result.validation.to_json()}
+except Exception as exc:
+    summary={'completed':False,'exportable':False,'error':str(exc),'traceback':traceback.format_exc(),
+        'product_state':None if ctrl.product_state(op.operation_id) is None else ctrl.product_state(op.operation_id).to_json()}
+summary['elapsed_seconds']=time.perf_counter()-started
+(OUT/'summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2),encoding='utf8')
+print(json.dumps({k:v for k,v in summary.items() if k not in {'validation','traceback','product_state'}},ensure_ascii=False),flush=True)

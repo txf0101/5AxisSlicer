@@ -6,12 +6,14 @@
 
 | 模块 | 手册 | 当前状态 |
 | --- | --- | --- |
+| 机型配置 | [机型选择与自定义](machine_profiles_zh.md) | 自有机型默认、用户配置另存、JSON导入导出及快照重开 |
 | Tube 坐标与装夹 | [管状坐标设置](tube_coordinate_setup_zh.md) | 已有图文步骤 |
 | Tube 设置脚本与 YAML | [设置脚本与 YAML](tube_setup_script_console_zh.md) | 已有命令说明，界面截图仍需随控制台改版补拍 |
 | Tube 三种操作 | [Tube 工作台完整手册](tube_workbench_zh.md) | 覆盖 Indexed、Buildup、Continuous 及生成和导出 |
+| Planar 路径与支撑操作 | [Planar 工作台手册](planar_workbench_zh.md) | 覆盖 Region、Zigzag、Offset、Thin Wall、Spiral、Planar Support（P07）、真实 STEP、离线检查、导出和错误恢复；真人桌面点击仍未验证 |
 | G-code 与成果预览 | [G-code 可视化手册](gcode_preview_zh.md) | 覆盖普通 Preview、成果页和五轴坐标回读边界 |
 
-Planar、Curve、Freeform、Rotary 与 Research 尚未完成对应算法。它们在达到阶段验收前分别建立正式手册，不用入口占位页或尚未实现的设计说明冒充使用手册。
+Planar P01—P07 已完成，手册记录五种路径操作（含 Planar Support）的当前范围和 Warning/Error 恢复方式。Curve、Freeform、Rotary 与 Research 尚未完成对应算法和阶段验收；未完成操作仍需明确标注边界，不能用入口占位页或设计说明冒充已交付能力。
 
 ## 每个模块的交付门槛
 
@@ -44,4 +46,3 @@ Planar、Curve、Freeform、Rotary 与 Research 尚未完成对应算法。它�
 | Rotary | 回转坐标、Spiral、Thin Wall、Around Part | 回转轴、周期接缝、三类路径、轴限问题 |
 | Research | 四种研究操作及可复现实例 | 数据来源、基线、结果图、失败或负结果 |
 | 整体交付 | 安装、项目管理、资源库、自动化和故障排查 | 首次启动、保存重开、资源冲突、API 状态 |
-

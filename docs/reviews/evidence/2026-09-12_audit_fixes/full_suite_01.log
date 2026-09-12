@@ -1,0 +1,47 @@
+..................................................................... [  9%]
+......................................................................................... [ 21%]
+...................................................................... [ 31%]
+........................................................................ [ 41%]
+..............F......................................................... [ 51%]
+............................s.............s............................................... [ 63%]
+................................s..................................... [ 73%]
+.................................................................. [ 82%]
+...................................................................... [ 92%]
+..........................................................         [100%]
+================================== FAILURES ===================================
+_________________ test_qt_support_generation_error_is_visible _________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000024465508FE0>
+
+    def test_qt_support_generation_error_is_visible(monkeypatch: pytest.MonkeyPatch) -> None:
+        from PyQt5.QtWidgets import QApplication
+    
+        from five_axis_slicer.command_kernel import CommandError
+        from five_axis_slicer.planar_ui import PlanarPage
+        from test_planar_ui import _path_controller
+        from test_tube_ui import TubeViewerStub
+    
+        QApplication.instance() or QApplication([])
+        page = PlanarPage(controller=_path_controller(), viewer_factory=TubeViewerStub)
+        page.operation_type_combo.setCurrentIndex(page.operation_type_combo.findData("planar_support"))
+        page.create_button.click()
+        page.apply_button.click()
+    
+        def fail(command_name, *args, **kwargs):
+            if command_name == "generate_operation":
+                raise CommandError("E_DOMAIN_VALIDATION", "support generation failed")
+            return page.commands.execute_command(command_name, *args, **kwargs)
+    
+        monkeypatch.setattr(page.commands, "execute_command", fail)
+        page._generate()
+    
+>       assert page.status_label.text() == "support generation failed"
+E       AssertionError: assert '生成或检查失败，禁止导出...ration failed' == 'support generation failed'
+E         
+E         + 生成或检查失败，禁止导出。请查看下方缺陷原因并修正后重新生成。
+E           support generation failed
+
+tests\test_planar_support_contract.py:216: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_planar_support_contract.py::test_qt_support_generation_error_is_visible
+1 failed, 722 passed, 3 skipped, 130 subtests passed in 322.39s (0:05:22)

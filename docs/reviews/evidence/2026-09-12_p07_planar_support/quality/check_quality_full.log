@@ -1,0 +1,11 @@
+==> Ruff
+All checks passed!
+==> Migrated Ruff
+All checks passed!
+==> Security Ruff
+All checks passed!
+==> Migrated format
+61 files already formatted
+==> Context budget
+==> Mypy
+Success: no issues found in 109 source files

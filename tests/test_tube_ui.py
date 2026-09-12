@@ -238,6 +238,7 @@ class TubeUiTests(unittest.TestCase):
         self.assertEqual(refresh.call_count, 1)
         refresh.reset_mock()
 
+        page.machine_combo.setCurrentIndex(1)  # Select a different machine from the default.
         page._apply_machine()
         self.assertEqual(refresh.call_count, 1)
         self.assertIsNotNone(page.controller.setup.machine)

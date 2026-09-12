@@ -1,0 +1,1369 @@
+{
+  "created_at_utc": "2026-09-12T05:10:15.395829+00:00",
+  "qualification_boundary": "Target CAD is an exclusion domain; no printed-state or nozzle-sweep proof.",
+  "pillar_roof": {
+    "model_path": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\docs\\reviews\\evidence\\2026-09-12_audit_fixes\\support_motion\\pillar_roof\\model.step",
+    "model_sha256": "fb6bfbac42f0be9fe5ea8ff4aa756e41f61eb11b4a11a66e1471eb0cd300207b",
+    "operation": {
+      "operation_id": "support-motion-evidence",
+      "setup_id": "setup-1",
+      "name": "Support motion evidence",
+      "operation_type": "planar_support",
+      "state": "dirty",
+      "dirty_reasons": [],
+      "enabled": true,
+      "geometry": {
+        "body": {
+          "object_id": "body_001",
+          "geometry_type": "body",
+          "signature": {
+            "schema_version": 1
+          },
+          "parent_body_id": null,
+          "assembly_name": null
+        }
+      },
+      "parameters": {
+        "first_layer_z_mm": 0.5,
+        "layer_height_mm": 0.5,
+        "last_layer_z_mm": 3.0,
+        "bead_width_mm": 0.6,
+        "feedrate_mm_min": 100.0,
+        "line_spacing_mm": 0.6,
+        "travel_feedrate_mm_min": 100.0,
+        "retract_length_mm": 1.0,
+        "offset_pass_count": 3,
+        "wall_thickness_mm": 0.6,
+        "thin_wall_max_passes": 3,
+        "spiral_samples_per_contour": 64,
+        "support_overhang_angle_deg": 45.0,
+        "support_xy_gap_mm": 0.4,
+        "support_z_gap_mm": 0.0,
+        "support_line_spacing_mm": 1.0,
+        "support_interface_layers": 2,
+        "support_interface_spacing_mm": 0.6,
+        "support_pattern": "grid"
+      }
+    },
+    "point_count": 178,
+    "exportable": false,
+    "status": "error",
+    "gcode_characters": 0,
+    "readback": {
+      "schema_version": 1,
+      "passed": false,
+      "expected_points": 178,
+      "read_points": 0,
+      "coordinate_mismatches": [],
+      "feedrate_mismatches": [],
+      "extrusion_mismatches": [],
+      "order_mismatches": [
+        "export_blocked_by_validation"
+      ]
+    },
+    "measurement": {
+      "deposition_outside_max_mm": 0.0,
+      "covered_area_mm2": 264.79999999999995,
+      "residual_area_mm2": 84.63999999999999,
+      "sampled_region_area_mm2": 349.43999999999994,
+      "material_volume_mm3": 105.2987578354299,
+      "geometric_volume_mm3": 105.2987578354299,
+      "volume_difference_mm3": 0.0,
+      "bead_outside_max_mm": 3.109695418834768e-06,
+      "overlap_area_mm2": 39.83999999999999,
+      "geometric_region_area_mm2": 340.8673713867189,
+      "target_solid_volume_mm3": 170.43368569335945,
+      "material_excess_mm3": 0.0,
+      "sample_grid_mm": 0.19999999999999998
+    },
+    "issues": [
+      {
+        "code": "xyzac.rotary_singularity",
+        "severity": "warning",
+        "object_id": "point-0000001",
+        "context": {
+          "count": 178,
+          "first_context": {
+            "retained_c_rad": 0.0
+          }
+        }
+      },
+      {
+        "code": "planar.support_joint_schedule_unverified",
+        "severity": "warning",
+        "object_id": "",
+        "context": {
+          "body_id": "body_001",
+          "path_point_count": 178,
+          "scope": "independent_support_operation_with_target_cad_centreline_check",
+          "target_part_toolpath_included": false,
+          "joint_layer_schedule_verified": false,
+          "already_printed_state_available": false,
+          "full_nozzle_sweep_verified": false
+        }
+      },
+      {
+        "code": "planar.support_travel_intersects_target_cad",
+        "severity": "error",
+        "object_id": "point-0000007",
+        "context": {
+          "body_id": "body_001",
+          "intersection_count": 57,
+          "point_ids": [
+            "point-0000007",
+            "point-0000009",
+            "point-0000011",
+            "point-0000013",
+            "point-0000015",
+            "point-0000017",
+            "point-0000019",
+            "point-0000021",
+            "point-0000023",
+            "point-0000025",
+            "point-0000027",
+            "point-0000029",
+            "point-0000035",
+            "point-0000045",
+            "point-0000047",
+            "point-0000049",
+            "point-0000051",
+            "point-0000053",
+            "point-0000055",
+            "point-0000057",
+            "point-0000059",
+            "point-0000075",
+            "point-0000077",
+            "point-0000079",
+            "point-0000081",
+            "point-0000083",
+            "point-0000085",
+            "point-0000087",
+            "point-0000089",
+            "point-0000091",
+            "point-0000093",
+            "point-0000095"
+          ],
+          "point_ids_truncated": true,
+          "first_previous_point_id": "point-0000006",
+          "first_point_type": "travel",
+          "first_start_build_mm": [
+            11.700000000000003,
+            1.7999999999999972,
+            0.5
+          ],
+          "first_end_build_mm": [
+            3.2,
+            2.799999999999997,
+            0.5
+          ],
+          "basis": "selected_target_brep_including_boundary",
+          "contact_tolerance_mm": 1e-07,
+          "already_printed_state_assumed": false
+        }
+      }
+    ],
+    "export_rejection": "validation Error or failed G-code readback blocks export",
+    "independent_pillar_interior_intersections": [
+      {
+        "previous": "point-0000006",
+        "current": "point-0000007",
+        "point_type": "travel",
+        "start_build_mm": [
+          11.700000000000003,
+          1.7999999999999972,
+          0.5
+        ],
+        "end_build_mm": [
+          3.2,
+          2.799999999999997,
+          0.5
+        ],
+        "interior_interval": [
+          0.4352942352941178,
+          0.9058822352941176
+        ]
+      },
+      {
+        "previous": "point-0000008",
+        "current": "point-0000009",
+        "point_type": "travel",
+        "start_build_mm": [
+          0.30000000000000004,
+          2.799999999999997,
+          0.5
+        ],
+        "end_build_mm": [
+          8.8,
+          2.799999999999997,
+          0.5
+        ],
+        "interior_interval": [
+          0.4352942352941177,
+          0.9058822352941176
+        ]
+      },
+      {
+        "previous": "point-0000010",
+        "current": "point-0000011",
+        "point_type": "travel",
+        "start_build_mm": [
+          11.700000000000001,
+          2.799999999999997,
+          0.5
+        ],
+        "end_build_mm": [
+          3.2,
+          3.799999999999997,
+          0.5
+        ],
+        "interior_interval": [
+          0.4352942352941178,
+          0.9058822352941177
+        ]
+      },
+      {
+        "previous": "point-0000012",
+        "current": "point-0000013",
+        "point_type": "travel",
+        "start_build_mm": [
+          0.30000000000000016,
+          3.799999999999997,
+          0.5
+        ],
+        "end_build_mm": [
+          8.8,
+          3.799999999999997,
+          0.5
+        ],
+        "interior_interval": [
+          0.43529423529411765,
+          0.9058822352941176
+        ]
+      },
+      {
+        "previous": "point-0000014",
+        "current": "point-0000015",
+        "point_type": "travel",
+        "start_build_mm": [
+          11.700000000000001,
+          3.799999999999997,
+          0.5
+        ],
+        "end_build_mm": [
+          3.2,
+          4.799999999999997,
+          0.5
+        ],
+        "interior_interval": [
+          0.4352942352941178,
+          0.9058822352941177
+        ]
+      },
+      {
+        "previous": "point-0000016",
+        "current": "point-0000017",
+        "point_type": "travel",
+        "start_build_mm": [
+          0.30000000000000027,
+          4.799999999999997,
+          0.5
+        ],
+        "end_build_mm": [
+          8.8,
+          4.799999999999997,
+          0.5
+        ],
+        "interior_interval": [
+          0.43529423529411765,
+          0.9058822352941176
+        ]
+      },
+      {
+        "previous": "point-0000018",
+        "current": "point-0000019",
+        "point_type": "travel",
+        "start_build_mm": [
+          11.700000000000001,
+          4.799999999999997,
+          0.5
+        ],
+        "end_build_mm": [
+          3.2,
+          5.799999999999997,
+          0.5
+        ],
+        "interior_interval": [
+          0.4352942352941178,
+          0.9058822352941177
+        ]
+      },
+      {
+        "previous": "point-0000020",
+        "current": "point-0000021",
+        "point_type": "travel",
+        "start_build_mm": [
+          0.3000000000000003,
+          5.799999999999997,
+          0.5
+        ],
+        "end_build_mm": [
+          8.8,
+          5.799999999999997,
+          0.5
+        ],
+        "interior_interval": [
+          0.43529423529411765,
+          0.9058822352941176
+        ]
+      },
+      {
+        "previous": "point-0000022",
+        "current": "point-0000023",
+        "point_type": "travel",
+        "start_build_mm": [
+          11.700000000000001,
+          5.799999999999997,
+          0.5
+        ],
+        "end_build_mm": [
+          3.2,
+          6.799999999999997,
+          0.5
+        ],
+        "interior_interval": [
+          0.4352942352941178,
+          0.9058822352941177
+        ]
+      },
+      {
+        "previous": "point-0000024",
+        "current": "point-0000025",
+        "point_type": "travel",
+        "start_build_mm": [
+          0.30000000000000043,
+          6.799999999999997,
+          0.5
+        ],
+        "end_build_mm": [
+          8.8,
+          6.799999999999997,
+          0.5
+        ],
+        "interior_interval": [
+          0.43529423529411765,
+          0.9058822352941176
+        ]
+      },
+      {
+        "previous": "point-0000026",
+        "current": "point-0000027",
+        "point_type": "travel",
+        "start_build_mm": [
+          11.700000000000001,
+          6.799999999999997,
+          0.5
+        ],
+        "end_build_mm": [
+          3.2,
+          7.799999999999997,
+          0.5
+        ],
+        "interior_interval": [
+          0.4352942352941178,
+          0.9058822352941177
+        ]
+      },
+      {
+        "previous": "point-0000028",
+        "current": "point-0000029",
+        "point_type": "travel",
+        "start_build_mm": [
+          0.30000000000000054,
+          7.799999999999997,
+          0.5
+        ],
+        "end_build_mm": [
+          8.8,
+          7.799999999999997,
+          0.5
+        ],
+        "interior_interval": [
+          0.4352942352941176,
+          0.9058822352941176
+        ]
+      },
+      {
+        "previous": "point-0000034",
+        "current": "point-0000035",
+        "point_type": "travel",
+        "start_build_mm": [
+          11.7,
+          8.799999999999997,
+          0.5
+        ],
+        "end_build_mm": [
+          0.7999999999999998,
+          0.29999999999999727,
+          1.0
+        ],
+        "interior_interval": [
+          0.3394496330275229,
+          0.7064219266055046
+        ]
+      },
+      {
+        "previous": "point-0000044",
+        "current": "point-0000045",
+        "point_type": "travel",
+        "start_build_mm": [
+          3.8,
+          9.700000000000001,
+          1.0
+        ],
+        "end_build_mm": [
+          4.8,
+          1.2000000000000002,
+          1.0
+        ],
+        "interior_interval": [
+          0.20000100000000032,
+          0.9058822352941177
+        ]
+      },
+      {
+        "previous": "point-0000046",
+        "current": "point-0000047",
+        "point_type": "travel",
+        "start_build_mm": [
+          4.8,
+          0.2999999999999982,
+          1.0
+        ],
+        "end_build_mm": [
+          4.8,
+          8.8,
+          1.0
+        ],
+        "interior_interval": [
+          0.200000117647059,
+          0.9058822352941177
+        ]
+      },
+      {
+        "previous": "point-0000048",
+        "current": "point-0000049",
+        "point_type": "travel",
+        "start_build_mm": [
+          4.8,
+          9.700000000000001,
+          1.0
+        ],
+        "end_build_mm": [
+          5.8,
+          1.2000000000000002,
+          1.0
+        ],
+        "interior_interval": [
+          0.20000011764705897,
+          0.9058822352941177
+        ]
+      },
+      {
+        "previous": "point-0000050",
+        "current": "point-0000051",
+        "point_type": "travel",
+        "start_build_mm": [
+          5.8,
+          0.29999999999999843,
+          1.0
+        ],
+        "end_build_mm": [
+          5.8,
+          8.8,
+          1.0
+        ],
+        "interior_interval": [
+          0.20000011764705897,
+          0.9058822352941177
+        ]
+      },
+      {
+        "previous": "point-0000052",
+        "current": "point-0000053",
+        "point_type": "travel",
+        "start_build_mm": [
+          5.8,
+          9.700000000000001,
+          1.0
+        ],
+        "end_build_mm": [
+          6.8,
+          1.2,
+          1.0
+        ],
+        "interior_interval": [
+          0.2000001176470589,
+          0.9058822352941176
+        ]
+      },
+      {
+        "previous": "point-0000054",
+        "current": "point-0000055",
+        "point_type": "travel",
+        "start_build_mm": [
+          6.8,
+          0.29999999999999866,
+          1.0
+        ],
+        "end_build_mm": [
+          6.8,
+          8.8,
+          1.0
+        ],
+        "interior_interval": [
+          0.20000011764705894,
+          0.9058822352941176
+        ]
+      },
+      {
+        "previous": "point-0000056",
+        "current": "point-0000057",
+        "point_type": "travel",
+        "start_build_mm": [
+          6.8,
+          9.700000000000001,
+          1.0
+        ],
+        "end_build_mm": [
+          7.8,
+          1.2,
+          1.0
+        ],
+        "interior_interval": [
+          0.2000001176470589,
+          0.9058822352941176
+        ]
+      },
+      {
+        "previous": "point-0000058",
+        "current": "point-0000059",
+        "point_type": "travel",
+        "start_build_mm": [
+          7.8,
+          0.29999999999999893,
+          1.0
+        ],
+        "end_build_mm": [
+          7.8,
+          8.8,
+          1.0
+        ],
+        "interior_interval": [
+          0.2000001176470589,
+          0.9058822352941176
+        ]
+      },
+      {
+        "previous": "point-0000074",
+        "current": "point-0000075",
+        "point_type": "travel",
+        "start_build_mm": [
+          8.774536435066498,
+          1.7999999999999972,
+          1.5
+        ],
+        "end_build_mm": [
+          0.30000000000000004,
+          2.3999999999999972,
+          1.5
+        ],
+        "interior_interval": [
+          0.33333500000000493,
+          0.563397829680702
+        ]
+      },
+      {
+        "previous": "point-0000076",
+        "current": "point-0000077",
+        "point_type": "travel",
+        "start_build_mm": [
+          3.2,
+          2.3999999999999972,
+          1.5
+        ],
+        "end_build_mm": [
+          11.700000000000003,
+          2.3999999999999972,
+          1.5
+        ],
+        "interior_interval": [
+          0.0941177647058823,
+          0.5647057647058821
+        ]
+      },
+      {
+        "previous": "point-0000078",
+        "current": "point-0000079",
+        "point_type": "travel",
+        "start_build_mm": [
+          8.8,
+          2.3999999999999972,
+          1.5
+        ],
+        "end_build_mm": [
+          0.3000000000000001,
+          2.999999999999997,
+          1.5
+        ],
+        "interior_interval": [
+          0.09411776470588246,
+          0.5647057647058824
+        ]
+      },
+      {
+        "previous": "point-0000080",
+        "current": "point-0000081",
+        "point_type": "travel",
+        "start_build_mm": [
+          3.2,
+          2.999999999999997,
+          1.5
+        ],
+        "end_build_mm": [
+          11.700000000000001,
+          2.999999999999997,
+          1.5
+        ],
+        "interior_interval": [
+          0.09411776470588235,
+          0.5647057647058823
+        ]
+      },
+      {
+        "previous": "point-0000082",
+        "current": "point-0000083",
+        "point_type": "travel",
+        "start_build_mm": [
+          8.8,
+          2.999999999999997,
+          1.5
+        ],
+        "end_build_mm": [
+          0.30000000000000016,
+          3.599999999999997,
+          1.5
+        ],
+        "interior_interval": [
+          0.09411776470588246,
+          0.5647057647058824
+        ]
+      },
+      {
+        "previous": "point-0000084",
+        "current": "point-0000085",
+        "point_type": "travel",
+        "start_build_mm": [
+          3.2,
+          3.599999999999997,
+          1.5
+        ],
+        "end_build_mm": [
+          11.700000000000001,
+          3.599999999999997,
+          1.5
+        ],
+        "interior_interval": [
+          0.09411776470588235,
+          0.5647057647058823
+        ]
+      },
+      {
+        "previous": "point-0000086",
+        "current": "point-0000087",
+        "point_type": "travel",
+        "start_build_mm": [
+          8.8,
+          3.599999999999997,
+          1.5
+        ],
+        "end_build_mm": [
+          0.3000000000000002,
+          4.1999999999999975,
+          1.5
+        ],
+        "interior_interval": [
+          0.09411776470588246,
+          0.5647057647058824
+        ]
+      },
+      {
+        "previous": "point-0000088",
+        "current": "point-0000089",
+        "point_type": "travel",
+        "start_build_mm": [
+          3.2,
+          4.1999999999999975,
+          1.5
+        ],
+        "end_build_mm": [
+          11.700000000000001,
+          4.1999999999999975,
+          1.5
+        ],
+        "interior_interval": [
+          0.09411776470588235,
+          0.5647057647058823
+        ]
+      },
+      {
+        "previous": "point-0000090",
+        "current": "point-0000091",
+        "point_type": "travel",
+        "start_build_mm": [
+          8.8,
+          4.1999999999999975,
+          1.5
+        ],
+        "end_build_mm": [
+          0.30000000000000027,
+          4.799999999999997,
+          1.5
+        ],
+        "interior_interval": [
+          0.09411776470588246,
+          0.5647057647058824
+        ]
+      },
+      {
+        "previous": "point-0000092",
+        "current": "point-0000093",
+        "point_type": "travel",
+        "start_build_mm": [
+          3.2,
+          4.799999999999997,
+          1.5
+        ],
+        "end_build_mm": [
+          11.700000000000001,
+          4.799999999999997,
+          1.5
+        ],
+        "interior_interval": [
+          0.09411776470588235,
+          0.5647057647058823
+        ]
+      },
+      {
+        "previous": "point-0000094",
+        "current": "point-0000095",
+        "point_type": "travel",
+        "start_build_mm": [
+          8.8,
+          4.799999999999997,
+          1.5
+        ],
+        "end_build_mm": [
+          0.3000000000000003,
+          5.399999999999997,
+          1.5
+        ],
+        "interior_interval": [
+          0.09411776470588246,
+          0.5647057647058824
+        ]
+      },
+      {
+        "previous": "point-0000096",
+        "current": "point-0000097",
+        "point_type": "travel",
+        "start_build_mm": [
+          3.2,
+          5.399999999999997,
+          1.5
+        ],
+        "end_build_mm": [
+          11.700000000000001,
+          5.399999999999997,
+          1.5
+        ],
+        "interior_interval": [
+          0.09411776470588235,
+          0.5647057647058823
+        ]
+      },
+      {
+        "previous": "point-0000098",
+        "current": "point-0000099",
+        "point_type": "travel",
+        "start_build_mm": [
+          8.8,
+          5.399999999999997,
+          1.5
+        ],
+        "end_build_mm": [
+          0.3000000000000004,
+          5.999999999999997,
+          1.5
+        ],
+        "interior_interval": [
+          0.09411776470588246,
+          0.5647057647058824
+        ]
+      },
+      {
+        "previous": "point-0000100",
+        "current": "point-0000101",
+        "point_type": "travel",
+        "start_build_mm": [
+          3.2,
+          5.999999999999997,
+          1.5
+        ],
+        "end_build_mm": [
+          11.700000000000001,
+          5.999999999999997,
+          1.5
+        ],
+        "interior_interval": [
+          0.09411776470588235,
+          0.5647057647058823
+        ]
+      },
+      {
+        "previous": "point-0000102",
+        "current": "point-0000103",
+        "point_type": "travel",
+        "start_build_mm": [
+          8.8,
+          5.999999999999997,
+          1.5
+        ],
+        "end_build_mm": [
+          0.30000000000000043,
+          6.599999999999997,
+          1.5
+        ],
+        "interior_interval": [
+          0.09411776470588246,
+          0.5647057647058824
+        ]
+      },
+      {
+        "previous": "point-0000104",
+        "current": "point-0000105",
+        "point_type": "travel",
+        "start_build_mm": [
+          3.2,
+          6.599999999999997,
+          1.5
+        ],
+        "end_build_mm": [
+          11.700000000000001,
+          6.599999999999997,
+          1.5
+        ],
+        "interior_interval": [
+          0.09411776470588235,
+          0.5647057647058823
+        ]
+      },
+      {
+        "previous": "point-0000106",
+        "current": "point-0000107",
+        "point_type": "travel",
+        "start_build_mm": [
+          8.8,
+          6.599999999999997,
+          1.5
+        ],
+        "end_build_mm": [
+          0.3000000000000005,
+          7.199999999999997,
+          1.5
+        ],
+        "interior_interval": [
+          0.09411776470588246,
+          0.5647057647058824
+        ]
+      },
+      {
+        "previous": "point-0000108",
+        "current": "point-0000109",
+        "point_type": "travel",
+        "start_build_mm": [
+          3.2,
+          7.199999999999997,
+          1.5
+        ],
+        "end_build_mm": [
+          11.700000000000001,
+          7.199999999999997,
+          1.5
+        ],
+        "interior_interval": [
+          0.09411776470588235,
+          0.5647057647058823
+        ]
+      },
+      {
+        "previous": "point-0000110",
+        "current": "point-0000111",
+        "point_type": "travel",
+        "start_build_mm": [
+          8.8,
+          7.199999999999997,
+          1.5
+        ],
+        "end_build_mm": [
+          0.30000000000000054,
+          7.799999999999997,
+          1.5
+        ],
+        "interior_interval": [
+          0.09411776470588246,
+          0.5647057647058824
+        ]
+      },
+      {
+        "previous": "point-0000112",
+        "current": "point-0000113",
+        "point_type": "travel",
+        "start_build_mm": [
+          3.2,
+          7.799999999999997,
+          1.5
+        ],
+        "end_build_mm": [
+          11.7,
+          7.799999999999997,
+          1.5
+        ],
+        "interior_interval": [
+          0.09411776470588235,
+          0.5647057647058823
+        ]
+      },
+      {
+        "previous": "point-0000114",
+        "current": "point-0000115",
+        "point_type": "travel",
+        "start_build_mm": [
+          8.8,
+          7.799999999999997,
+          1.5
+        ],
+        "end_build_mm": [
+          0.3000000000000006,
+          8.399999999999997,
+          1.5
+        ],
+        "interior_interval": [
+          0.09411776470588246,
+          0.33333166666667136
+        ]
+      },
+      {
+        "previous": "point-0000136",
+        "current": "point-0000137",
+        "point_type": "travel",
+        "start_build_mm": [
+          3.5999999999999996,
+          9.700000000000001,
+          2.0
+        ],
+        "end_build_mm": [
+          4.199999999999999,
+          1.2000000000000002,
+          2.0
+        ],
+        "interior_interval": [
+          0.6666683333333345,
+          0.9058822352941177
+        ]
+      },
+      {
+        "previous": "point-0000138",
+        "current": "point-0000139",
+        "point_type": "travel",
+        "start_build_mm": [
+          4.199999999999999,
+          0.29999999999999805,
+          2.0
+        ],
+        "end_build_mm": [
+          4.199999999999999,
+          8.8,
+          2.0
+        ],
+        "interior_interval": [
+          0.200000117647059,
+          0.9058822352941175
+        ]
+      },
+      {
+        "previous": "point-0000140",
+        "current": "point-0000141",
+        "point_type": "travel",
+        "start_build_mm": [
+          4.199999999999999,
+          9.700000000000001,
+          2.0
+        ],
+        "end_build_mm": [
+          4.8,
+          1.2000000000000002,
+          2.0
+        ],
+        "interior_interval": [
+          0.20000011764705897,
+          0.9058822352941177
+        ]
+      },
+      {
+        "previous": "point-0000142",
+        "current": "point-0000143",
+        "point_type": "travel",
+        "start_build_mm": [
+          4.8,
+          0.2999999999999982,
+          2.0
+        ],
+        "end_build_mm": [
+          4.8,
+          8.8,
+          2.0
+        ],
+        "interior_interval": [
+          0.200000117647059,
+          0.9058822352941177
+        ]
+      },
+      {
+        "previous": "point-0000144",
+        "current": "point-0000145",
+        "point_type": "travel",
+        "start_build_mm": [
+          4.8,
+          9.700000000000001,
+          2.0
+        ],
+        "end_build_mm": [
+          5.3999999999999995,
+          1.2000000000000002,
+          2.0
+        ],
+        "interior_interval": [
+          0.20000011764705897,
+          0.9058822352941177
+        ]
+      },
+      {
+        "previous": "point-0000146",
+        "current": "point-0000147",
+        "point_type": "travel",
+        "start_build_mm": [
+          5.3999999999999995,
+          0.2999999999999983,
+          2.0
+        ],
+        "end_build_mm": [
+          5.3999999999999995,
+          8.8,
+          2.0
+        ],
+        "interior_interval": [
+          0.200000117647059,
+          0.9058822352941177
+        ]
+      },
+      {
+        "previous": "point-0000148",
+        "current": "point-0000149",
+        "point_type": "travel",
+        "start_build_mm": [
+          5.3999999999999995,
+          9.700000000000001,
+          2.0
+        ],
+        "end_build_mm": [
+          6.0,
+          1.2000000000000002,
+          2.0
+        ],
+        "interior_interval": [
+          0.20000011764705897,
+          0.9058822352941177
+        ]
+      },
+      {
+        "previous": "point-0000150",
+        "current": "point-0000151",
+        "point_type": "travel",
+        "start_build_mm": [
+          6.0,
+          0.2999999999999985,
+          2.0
+        ],
+        "end_build_mm": [
+          6.0,
+          8.8,
+          2.0
+        ],
+        "interior_interval": [
+          0.20000011764705897,
+          0.9058822352941177
+        ]
+      },
+      {
+        "previous": "point-0000152",
+        "current": "point-0000153",
+        "point_type": "travel",
+        "start_build_mm": [
+          6.0,
+          9.700000000000001,
+          2.0
+        ],
+        "end_build_mm": [
+          6.6,
+          1.2,
+          2.0
+        ],
+        "interior_interval": [
+          0.2000001176470589,
+          0.9058822352941176
+        ]
+      },
+      {
+        "previous": "point-0000154",
+        "current": "point-0000155",
+        "point_type": "travel",
+        "start_build_mm": [
+          6.6,
+          0.29999999999999866,
+          2.0
+        ],
+        "end_build_mm": [
+          6.6,
+          8.8,
+          2.0
+        ],
+        "interior_interval": [
+          0.20000011764705894,
+          0.9058822352941176
+        ]
+      },
+      {
+        "previous": "point-0000156",
+        "current": "point-0000157",
+        "point_type": "travel",
+        "start_build_mm": [
+          6.6,
+          9.700000000000001,
+          2.0
+        ],
+        "end_build_mm": [
+          7.199999999999999,
+          1.2,
+          2.0
+        ],
+        "interior_interval": [
+          0.2000001176470589,
+          0.9058822352941176
+        ]
+      },
+      {
+        "previous": "point-0000158",
+        "current": "point-0000159",
+        "point_type": "travel",
+        "start_build_mm": [
+          7.199999999999999,
+          0.29999999999999877,
+          2.0
+        ],
+        "end_build_mm": [
+          7.199999999999999,
+          8.8,
+          2.0
+        ],
+        "interior_interval": [
+          0.20000011764705894,
+          0.9058822352941176
+        ]
+      },
+      {
+        "previous": "point-0000160",
+        "current": "point-0000161",
+        "point_type": "travel",
+        "start_build_mm": [
+          7.199999999999999,
+          9.700000000000001,
+          2.0
+        ],
+        "end_build_mm": [
+          7.8,
+          1.2,
+          2.0
+        ],
+        "interior_interval": [
+          0.2000001176470589,
+          0.9058822352941176
+        ]
+      },
+      {
+        "previous": "point-0000162",
+        "current": "point-0000163",
+        "point_type": "travel",
+        "start_build_mm": [
+          7.8,
+          0.29999999999999893,
+          2.0
+        ],
+        "end_build_mm": [
+          7.8,
+          8.8,
+          2.0
+        ],
+        "interior_interval": [
+          0.2000001176470589,
+          0.9058822352941176
+        ]
+      },
+      {
+        "previous": "point-0000164",
+        "current": "point-0000165",
+        "point_type": "travel",
+        "start_build_mm": [
+          7.8,
+          9.700000000000001,
+          2.0
+        ],
+        "end_build_mm": [
+          8.399999999999999,
+          1.307179676972448,
+          2.0
+        ],
+        "interior_interval": [
+          0.2025541992523864,
+          0.3333316666666674
+        ]
+      }
+    ],
+    "independent_intersection_count": 57
+  },
+  "floating_roof": {
+    "model_path": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\docs\\reviews\\evidence\\2026-09-12_audit_fixes\\support_motion\\floating_roof\\model.step",
+    "model_sha256": "584d50dc364ee96419ddaf808fa9b9e978a4387af91c6047b8044b47a2dd52e3",
+    "operation": {
+      "operation_id": "support-motion-evidence",
+      "setup_id": "setup-1",
+      "name": "Support motion evidence",
+      "operation_type": "planar_support",
+      "state": "dirty",
+      "dirty_reasons": [],
+      "enabled": true,
+      "geometry": {
+        "body": {
+          "object_id": "body_001",
+          "geometry_type": "body",
+          "signature": {
+            "schema_version": 1
+          },
+          "parent_body_id": null,
+          "assembly_name": null
+        }
+      },
+      "parameters": {
+        "first_layer_z_mm": 0.5,
+        "layer_height_mm": 0.5,
+        "last_layer_z_mm": 3.0,
+        "bead_width_mm": 0.6,
+        "feedrate_mm_min": 100.0,
+        "line_spacing_mm": 0.6,
+        "travel_feedrate_mm_min": 100.0,
+        "retract_length_mm": 1.0,
+        "offset_pass_count": 3,
+        "wall_thickness_mm": 0.6,
+        "thin_wall_max_passes": 3,
+        "spiral_samples_per_contour": 64,
+        "support_overhang_angle_deg": 45.0,
+        "support_xy_gap_mm": 0.4,
+        "support_z_gap_mm": 0.0,
+        "support_line_spacing_mm": 1.0,
+        "support_interface_layers": 2,
+        "support_interface_spacing_mm": 0.6,
+        "support_pattern": "grid"
+      }
+    },
+    "point_count": 66,
+    "exportable": true,
+    "status": "warning",
+    "gcode_characters": 12529,
+    "readback": {
+      "schema_version": 1,
+      "passed": true,
+      "expected_points": 66,
+      "read_points": 66,
+      "coordinate_mismatches": [],
+      "feedrate_mismatches": [],
+      "extrusion_mismatches": [],
+      "order_mismatches": []
+    },
+    "measurement": {
+      "deposition_outside_max_mm": 0.0,
+      "covered_area_mm2": 151.03999999999996,
+      "residual_area_mm2": 40.96000000000001,
+      "sampled_region_area_mm2": 191.99999999999997,
+      "material_volume_mm3": 61.859999999999964,
+      "geometric_volume_mm3": 61.859999999999964,
+      "volume_difference_mm3": 0.0,
+      "bead_outside_max_mm": 1.6653345369377348e-16,
+      "overlap_area_mm2": 24.479999999999997,
+      "geometric_region_area_mm2": 192.0,
+      "target_solid_volume_mm3": 96.0,
+      "material_excess_mm3": 0.0,
+      "sample_grid_mm": 0.19999999999999998
+    },
+    "issues": [
+      {
+        "code": "xyzac.rotary_singularity",
+        "severity": "warning",
+        "object_id": "point-0000001",
+        "context": {
+          "count": 66,
+          "first_context": {
+            "retained_c_rad": 0.0
+          }
+        }
+      },
+      {
+        "code": "planar.support_joint_schedule_unverified",
+        "severity": "warning",
+        "object_id": "",
+        "context": {
+          "body_id": "body_001",
+          "path_point_count": 66,
+          "scope": "independent_support_operation_with_target_cad_centreline_check",
+          "target_part_toolpath_included": false,
+          "joint_layer_schedule_verified": false,
+          "already_printed_state_available": false,
+          "full_nozzle_sweep_verified": false
+        }
+      }
+    ],
+    "artifacts_sha256": {
+      "machine_axes.csv": "a08f944b89c9e9507cdf708af9ac5ea2417a3cf04faad332f9ed88dc92dd9524",
+      "main.gcode": "2c00f290006cc3f9a1fb8270346fd175f6eb84d4a9d9b96eaabb77ba56039d72",
+      "manifest.json": "83e1b80150582c29e1d3b1d63a2f373f6029cf81f3a1f3f6f34bae6847abaa5e",
+      "preview.json": "535848f7005118fbc55a9a807ad14a3154261311ec3974e773e2032042c9190b",
+      "toolpath.json": "cdabc79bc6b5fbc580ee95ffc091dee5d992a1be64f910f07d2004e3db0121ed",
+      "warnings.json": "26e7e3504eaa260d8ce69bcbe2c4d7d85f362c28ece0b90a3447ae62ebf1f631"
+    }
+  },
+  "source_sha256": {
+    "F:\\【项目和任务】\\5AxisSclicer_V2.0\\src\\five_axis_slicer\\validation\\planar_travel.py": "cab239039e55e15a4137fbd4322e0c76e5228b51a17142e0ac6b548368e915d2",
+    "F:\\【项目和任务】\\5AxisSclicer_V2.0\\src\\five_axis_slicer\\postprocessing\\planar_product.py": "60cc15e20e3d78b05d72088830f9108b025b4b644b954699d26047a876e403ae",
+    "F:\\【项目和任务】\\5AxisSclicer_V2.0\\src\\five_axis_slicer\\algorithms\\planar\\support.py": "fd9638cc9eba6fd11eecebc2f92c112bfb6432e410c3ac20641c6f395c954428",
+    "F:\\【项目和任务】\\5AxisSclicer_V2.0\\src\\five_axis_slicer\\algorithms\\planar\\zigzag.py": "9e6e54045a47fc1d73ee7a988aeaf8b16c0097e7771df07e88ffe377d7be6acb",
+    "F:\\【项目和任务】\\5AxisSclicer_V2.0\\scripts\\planar_support_motion_evidence.py": "45a7937bb47d50ae83e679bbbf94ce4a0b965fc0b58ac1d5ec0feb9f7a709053"
+  }
+}

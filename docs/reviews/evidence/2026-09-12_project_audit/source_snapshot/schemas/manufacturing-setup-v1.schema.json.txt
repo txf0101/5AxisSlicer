@@ -1,0 +1,294 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/txf0101/5AxisSclicer_V2.0/main/schemas/manufacturing-setup-v1.schema.json",
+  "title": "5AxisSclicer Manufacturing Setup YAML v1",
+  "description": "Portable Tube Setup state. Project geometry and generated identifiers are intentionally excluded.",
+  "type": "object",
+  "required": [
+    "format",
+    "schema_version",
+    "units",
+    "coordinate_convention",
+    "part_policy",
+    "metadata",
+    "setup",
+    "operations"
+  ],
+  "properties": {
+    "format": {
+      "const": "five-axis-slicer.manufacturing-setup"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "units": {
+      "type": "object",
+      "required": ["length", "script_angle"],
+      "properties": {
+        "length": {"const": "mm"},
+        "script_angle": {"const": "deg"}
+      },
+      "additionalProperties": false
+    },
+    "coordinate_convention": {
+      "const": "source_mm_right_handed_column_vector"
+    },
+    "part_policy": {
+      "const": "preserve_current"
+    },
+    "metadata": {
+      "$ref": "#/$defs/metadata"
+    },
+    "setup": {
+      "$ref": "#/$defs/setup"
+    },
+    "operations": {
+      "type": "array",
+      "maxItems": 3,
+      "items": {"$ref": "#/$defs/operation"}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nullableSha256": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/sha256"}
+      ]
+    },
+    "vector3": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {"type": "number"}
+    },
+    "quaternion": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {"type": "number"}
+    },
+    "metadata": {
+      "type": "object",
+      "required": [
+        "revision",
+        "content_sha256",
+        "base_project_setup_sha256"
+      ],
+      "properties": {
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "content_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "base_project_setup_sha256": {
+          "$ref": "#/$defs/nullableSha256"
+        }
+      },
+      "additionalProperties": false
+    },
+    "resourceSnapshot": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "resource_type",
+        "resource_id",
+        "profile_version",
+        "payload",
+        "content_hash"
+      ],
+      "properties": {
+        "schema_version": {"const": 1},
+        "resource_type": {
+          "enum": ["machine", "nozzle", "material"]
+        },
+        "resource_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "profile_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "payload": {
+          "type": "object"
+        },
+        "content_hash": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "additionalProperties": false
+    },
+    "resources": {
+      "type": "object",
+      "required": ["machine", "nozzle", "material"],
+      "properties": {
+        "machine": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/resourceSnapshot"}
+          ]
+        },
+        "nozzle": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/resourceSnapshot"}
+          ]
+        },
+        "material": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/resourceSnapshot"}
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["origin", "z_direction", "x_direction", "geometry_resolved"],
+      "properties": {
+        "origin": {
+          "enum": [
+            "vertex",
+            "circle_center",
+            "ellipse_center",
+            "arc_midpoint",
+            "face_centroid",
+            "face_pick",
+            "numeric"
+          ]
+        },
+        "z_direction": {
+          "enum": [
+            "line_edge",
+            "two_points",
+            "plane_normal",
+            "surface_axis",
+            "numeric"
+          ]
+        },
+        "x_direction": {
+          "enum": [
+            "line_edge",
+            "two_points",
+            "plane_normal",
+            "surface_axis",
+            "numeric"
+          ]
+        },
+        "geometry_resolved": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "coordinateFrame": {
+      "type": "object",
+      "required": [
+        "name",
+        "origin_in_source_mm",
+        "z_direction_in_source",
+        "x_direction_in_source",
+        "provenance"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "origin_in_source_mm": {"$ref": "#/$defs/vector3"},
+        "z_direction_in_source": {"$ref": "#/$defs/vector3"},
+        "x_direction_in_source": {"$ref": "#/$defs/vector3"},
+        "provenance": {"$ref": "#/$defs/provenance"}
+      },
+      "additionalProperties": false
+    },
+    "coordinateSystems": {
+      "type": "object",
+      "required": ["model", "build"],
+      "properties": {
+        "model": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/coordinateFrame"}
+          ]
+        },
+        "build": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/coordinateFrame"}
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "transformComponents": {
+      "type": "object",
+      "required": ["translation_mm", "quaternion_xyzw"],
+      "properties": {
+        "translation_mm": {"$ref": "#/$defs/vector3"},
+        "quaternion_xyzw": {"$ref": "#/$defs/quaternion"}
+      },
+      "additionalProperties": false
+    },
+    "placement": {
+      "type": "object",
+      "required": ["mount_datum_id", "reference", "adjustment"],
+      "properties": {
+        "mount_datum_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "reference": {"$ref": "#/$defs/transformComponents"},
+        "adjustment": {"$ref": "#/$defs/transformComponents"}
+      },
+      "additionalProperties": false
+    },
+    "setup": {
+      "type": "object",
+      "required": ["name", "resources", "coordinate_systems", "placement"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "resources": {"$ref": "#/$defs/resources"},
+        "coordinate_systems": {"$ref": "#/$defs/coordinateSystems"},
+        "placement": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/placement"}
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "operation": {
+      "type": "object",
+      "required": ["operation_type", "name", "enabled"],
+      "properties": {
+        "operation_type": {
+          "enum": ["tube_thin_wall_indexed", "tube_buildup", "tube_continuous"]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "enabled": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

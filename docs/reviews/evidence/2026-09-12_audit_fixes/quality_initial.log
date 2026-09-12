@@ -1,0 +1,280 @@
+==> Ruff
+E402 Module level import not at top of file
+  --> docs\reviews\evidence\2026-09-12_audit_fixes\gcode\reproduce_readback.py:16:1
+   |
+14 | sys.path.insert(0, str(ROOT / "src"))
+15 |
+16 | from five_axis_slicer.kinematics.xyzac import MachineAxisSample, MachineAxisTrajectory
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+17 | from five_axis_slicer.manufacturing.machine import GENERIC_XYZAC_REFERENCE
+18 | from five_axis_slicer.manufacturing.resources import NozzleProfile
+   |
+
+E402 Module level import not at top of file
+  --> docs\reviews\evidence\2026-09-12_audit_fixes\gcode\reproduce_readback.py:17:1
+   |
+16 | from five_axis_slicer.kinematics.xyzac import MachineAxisSample, MachineAxisTrajectory
+17 | from five_axis_slicer.manufacturing.machine import GENERIC_XYZAC_REFERENCE
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+18 | from five_axis_slicer.manufacturing.resources import NozzleProfile
+19 | from five_axis_slicer.manufacturing.toolpath import GeneratedToolpath
+   |
+
+E402 Module level import not at top of file
+  --> docs\reviews\evidence\2026-09-12_audit_fixes\gcode\reproduce_readback.py:18:1
+   |
+16 | from five_axis_slicer.kinematics.xyzac import MachineAxisSample, MachineAxisTrajectory
+17 | from five_axis_slicer.manufacturing.machine import GENERIC_XYZAC_REFERENCE
+18 | from five_axis_slicer.manufacturing.resources import NozzleProfile
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+19 | from five_axis_slicer.manufacturing.toolpath import GeneratedToolpath
+20 | from five_axis_slicer.postprocessing.indexed_tube import (
+   |
+
+E402 Module level import not at top of file
+  --> docs\reviews\evidence\2026-09-12_audit_fixes\gcode\reproduce_readback.py:19:1
+   |
+17 | from five_axis_slicer.manufacturing.machine import GENERIC_XYZAC_REFERENCE
+18 | from five_axis_slicer.manufacturing.resources import NozzleProfile
+19 | from five_axis_slicer.manufacturing.toolpath import GeneratedToolpath
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+20 | from five_axis_slicer.postprocessing.indexed_tube import (
+21 |     postprocess_indexed_gcode,
+   |
+
+E402 Module level import not at top of file
+  --> docs\reviews\evidence\2026-09-12_audit_fixes\gcode\reproduce_readback.py:20:1
+   |
+18 |   from five_axis_slicer.manufacturing.resources import NozzleProfile
+19 |   from five_axis_slicer.manufacturing.toolpath import GeneratedToolpath
+20 | / from five_axis_slicer.postprocessing.indexed_tube import (
+21 | |     postprocess_indexed_gcode,
+22 | |     readback_indexed_gcode,
+23 | | )
+   | |_^
+24 |
+25 |   SOURCE = ROOT / "docs/reviews/evidence/2026-09-12_project_audit/frozen_cases/analytic/product"
+   |
+
+E401 [*] Multiple imports on one line
+ --> docs\reviews\evidence\2026-09-12_audit_fixes\tube\pipe2_blocked_point.py:3:1
+  |
+1 | """Locate the physical reason for the retained pipe2 IK rejection."""
+2 | from pathlib import Path
+3 | import json,math,sys
+  | ^^^^^^^^^^^^^^^^^^^^
+4 | ROOT=next(p for p in Path(__file__).resolve().parents if (p/'src/five_axis_slicer').is_dir())
+5 | sys.path.insert(0,str(ROOT/'src'))
+  |
+help: Split imports
+
+E402 Module level import not at top of file
+ --> docs\reviews\evidence\2026-09-12_audit_fixes\tube\pipe2_blocked_point.py:6:1
+  |
+4 | ROOT=next(p for p in Path(__file__).resolve().parents if (p/'src/five_axis_slicer').is_dir())
+5 | sys.path.insert(0,str(ROOT/'src'))
+6 | from five_axis_slicer.manufacturing.setup import ManufacturingSetup,TubeOperationDefinition
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+7 | from five_axis_slicer.step_loader import load_step
+8 | from five_axis_slicer.tube_controller import TubeSetupController
+  |
+
+E402 Module level import not at top of file
+ --> docs\reviews\evidence\2026-09-12_audit_fixes\tube\pipe2_blocked_point.py:7:1
+  |
+5 | sys.path.insert(0,str(ROOT/'src'))
+6 | from five_axis_slicer.manufacturing.setup import ManufacturingSetup,TubeOperationDefinition
+7 | from five_axis_slicer.step_loader import load_step
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+8 | from five_axis_slicer.tube_controller import TubeSetupController
+9 | from five_axis_slicer.tube_generation_context import make_tube_generation_context
+  |
+
+E402 Module level import not at top of file
+  --> docs\reviews\evidence\2026-09-12_audit_fixes\tube\pipe2_blocked_point.py:8:1
+   |
+ 6 | from five_axis_slicer.manufacturing.setup import ManufacturingSetup,TubeOperationDefinition
+ 7 | from five_axis_slicer.step_loader import load_step
+ 8 | from five_axis_slicer.tube_controller import TubeSetupController
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 9 | from five_axis_slicer.tube_generation_context import make_tube_generation_context
+10 | from five_axis_slicer.postprocessing.indexed_tube import _generate_geometry
+   |
+
+E402 Module level import not at top of file
+  --> docs\reviews\evidence\2026-09-12_audit_fixes\tube\pipe2_blocked_point.py:9:1
+   |
+ 7 | from five_axis_slicer.step_loader import load_step
+ 8 | from five_axis_slicer.tube_controller import TubeSetupController
+ 9 | from five_axis_slicer.tube_generation_context import make_tube_generation_context
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+10 | from five_axis_slicer.postprocessing.indexed_tube import _generate_geometry
+11 | OUT=ROOT/'docs/reviews/evidence/2026-09-12_audit_fixes/tube/pipe2_wall_1mm'
+   |
+
+E402 Module level import not at top of file
+  --> docs\reviews\evidence\2026-09-12_audit_fixes\tube\pipe2_blocked_point.py:10:1
+   |
+ 8 | from five_axis_slicer.tube_controller import TubeSetupController
+ 9 | from five_axis_slicer.tube_generation_context import make_tube_generation_context
+10 | from five_axis_slicer.postprocessing.indexed_tube import _generate_geometry
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+11 | OUT=ROOT/'docs/reviews/evidence/2026-09-12_audit_fixes/tube/pipe2_wall_1mm'
+12 | inputs=json.loads((OUT/'inputs.json').read_text(encoding='utf8'))
+   |
+
+E401 [*] Multiple imports on one line
+ --> docs\reviews\evidence\2026-09-12_audit_fixes\tube\pipe2_evidence.py:3:1
+  |
+1 | """Bounded full pipe2 qualification at actual 1 mm wall scale."""
+2 | from pathlib import Path
+3 | import sys, json, subprocess, time, traceback
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 | from dataclasses import replace
+  |
+help: Split imports
+
+E402 Module level import not at top of file
+  --> docs\reviews\evidence\2026-09-12_audit_fixes\tube\pipe2_evidence.py:21:1
+   |
+20 | sys.path[:0]=[str(ROOT/'src'),str(ROOT/'tests')]
+21 | from test_tube_generation_context import controller
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+22 | from five_axis_slicer.manufacturing.setup import TubeProcessParameters,ManufacturingObjectAssignments
+23 | from five_axis_slicer.manufacturing.resources import NozzleProfile,ResourceSnapshot
+   |
+
+E402 Module level import not at top of file
+  --> docs\reviews\evidence\2026-09-12_audit_fixes\tube\pipe2_evidence.py:22:1
+   |
+20 | sys.path[:0]=[str(ROOT/'src'),str(ROOT/'tests')]
+21 | from test_tube_generation_context import controller
+22 | from five_axis_slicer.manufacturing.setup import TubeProcessParameters,ManufacturingObjectAssignments
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+23 | from five_axis_slicer.manufacturing.resources import NozzleProfile,ResourceSnapshot
+24 | from five_axis_slicer.step_loader import load_step
+   |
+
+E402 Module level import not at top of file
+  --> docs\reviews\evidence\2026-09-12_audit_fixes\tube\pipe2_evidence.py:23:1
+   |
+21 | from test_tube_generation_context import controller
+22 | from five_axis_slicer.manufacturing.setup import TubeProcessParameters,ManufacturingObjectAssignments
+23 | from five_axis_slicer.manufacturing.resources import NozzleProfile,ResourceSnapshot
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+24 | from five_axis_slicer.step_loader import load_step
+25 | from five_axis_slicer.tube_controller import TubeSetupController
+   |
+
+E402 Module level import not at top of file
+  --> docs\reviews\evidence\2026-09-12_audit_fixes\tube\pipe2_evidence.py:24:1
+   |
+22 | from five_axis_slicer.manufacturing.setup import TubeProcessParameters,ManufacturingObjectAssignments
+23 | from five_axis_slicer.manufacturing.resources import NozzleProfile,ResourceSnapshot
+24 | from five_axis_slicer.step_loader import load_step
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+25 | from five_axis_slicer.tube_controller import TubeSetupController
+26 | from five_axis_slicer.algorithms.tube.geometry import recognise_tube
+   |
+
+E402 Module level import not at top of file
+  --> docs\reviews\evidence\2026-09-12_audit_fixes\tube\pipe2_evidence.py:25:1
+   |
+23 | from five_axis_slicer.manufacturing.resources import NozzleProfile,ResourceSnapshot
+24 | from five_axis_slicer.step_loader import load_step
+25 | from five_axis_slicer.tube_controller import TubeSetupController
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+26 | from five_axis_slicer.algorithms.tube.geometry import recognise_tube
+27 | from five_axis_slicer.tube_generation_context import make_tube_generation_context
+   |
+
+E402 Module level import not at top of file
+  --> docs\reviews\evidence\2026-09-12_audit_fixes\tube\pipe2_evidence.py:26:1
+   |
+24 | from five_axis_slicer.step_loader import load_step
+25 | from five_axis_slicer.tube_controller import TubeSetupController
+26 | from five_axis_slicer.algorithms.tube.geometry import recognise_tube
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+27 | from five_axis_slicer.tube_generation_context import make_tube_generation_context
+   |
+
+E402 Module level import not at top of file
+  --> docs\reviews\evidence\2026-09-12_audit_fixes\tube\pipe2_evidence.py:27:1
+   |
+25 | from five_axis_slicer.tube_controller import TubeSetupController
+26 | from five_axis_slicer.algorithms.tube.geometry import recognise_tube
+27 | from five_axis_slicer.tube_generation_context import make_tube_generation_context
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+28 |
+29 | started=time.perf_counter()
+   |
+
+E701 Multiple statements on one line (colon)
+  --> docs\reviews\evidence\2026-09-12_audit_fixes\tube\pipe2_evidence.py:53:25
+   |
+51 |     result=ctrl.generate_operation(op.operation_id)
+52 |     (OUT/'result.json').write_text(json.dumps(result.to_json(),ensure_ascii=False,indent=2),encoding='utf8')
+53 |     if result.exportable:ctrl.export_operation_product(op.operation_id,OUT/'product')
+   |                         ^
+54 |     summary={'completed':True,'exportable':result.exportable,'status':result.manifest.status.value,
+55 |         'points':len(result.toolpath.points),'readback':result.readback.to_json(),'validation':result.validation.to_json()}
+   |
+
+F401 [*] `dataclasses.replace` imported but unused
+ --> docs\reviews\evidence\2026-09-12_audit_fixes\tube\tube_evidence.py:3:25
+  |
+1 | """Export repaired Tube evidence from the exact AUD-01 analytic STEP."""
+2 | from pathlib import Path
+3 | from dataclasses import replace
+  |                         ^^^^^^^
+4 | import hashlib, json, math, sys
+  |
+help: Remove unused import: `dataclasses.replace`
+
+E401 [*] Multiple imports on one line
+ --> docs\reviews\evidence\2026-09-12_audit_fixes\tube\tube_evidence.py:4:1
+  |
+2 | from pathlib import Path
+3 | from dataclasses import replace
+4 | import hashlib, json, math, sys
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5 |
+6 | ROOT = next(p for p in Path(__file__).resolve().parents if (p/'src/five_axis_slicer').is_dir())
+  |
+help: Split imports
+
+E402 Module level import not at top of file
+  --> docs\reviews\evidence\2026-09-12_audit_fixes\tube\tube_evidence.py:8:1
+   |
+ 6 | ROOT = next(p for p in Path(__file__).resolve().parents if (p/'src/five_axis_slicer').is_dir())
+ 7 | sys.path[:0] = [str(ROOT/'src'), str(ROOT/'tests')]
+ 8 | from test_tube_generation_context import controller, frame
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 9 | from five_axis_slicer.step_loader import load_step
+10 | source=ROOT/'docs/reviews/evidence/2026-09-12_project_audit/tube_probe/ready_setup/analytic_straight_tube.step'
+   |
+
+E402 Module level import not at top of file
+  --> docs\reviews\evidence\2026-09-12_audit_fixes\tube\tube_evidence.py:9:1
+   |
+ 7 | sys.path[:0] = [str(ROOT/'src'), str(ROOT/'tests')]
+ 8 | from test_tube_generation_context import controller, frame
+ 9 | from five_axis_slicer.step_loader import load_step
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+10 | source=ROOT/'docs/reviews/evidence/2026-09-12_project_audit/tube_probe/ready_setup/analytic_straight_tube.step'
+11 | out=ROOT/'docs/reviews/evidence/2026-09-12_audit_fixes/tube/products'
+   |
+
+E701 Multiple statements on one line (colon)
+  --> docs\reviews\evidence\2026-09-12_audit_fixes\tube\tube_evidence.py:29:25
+   |
+27 |         errors.append(math.dist(expected,(tool[0],tool[1],tool[2]-2)))
+28 |     record['independent_max_fk_error_mm']=max(errors)
+29 |     if result.exportable:ctrl.export_operation_product('tube',out/name)
+   |                         ^
+30 |     records.append(record)
+31 | report={'source':str(source),'source_sha256':model.source_hash,'cases':records,
+   |
+
+Found 25 errors.
+[*] 4 fixable with the `--fix` option.

@@ -1,0 +1,10 @@
+==> Ruff
+All checks passed!
+==> Migrated Ruff
+All checks passed!
+==> Security Ruff
+All checks passed!
+==> Migrated format
+61 files already formatted
+==> Context budget
+function: postprocessing/planar_support_product.py:build_planar_support_geometry is 66; budget is 60

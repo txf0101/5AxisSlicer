@@ -1,0 +1,6 @@
+{"case": "rectangle", "status": "error", "exportable": false, "seconds": 0.0047187000018311664, "error": "Planar path Generate requires a valid applied Setup and reviewed resources", "issues": []}
+{"case": "fan_local", "status": "error", "exportable": false, "seconds": 0.005504299988388084, "error": "Planar path Generate requires a valid applied Setup and reviewed resources", "issues": []}
+{"case": "fan_full", "status": "error", "exportable": false, "seconds": 0.004809299993212335, "error": "Planar path Generate requires a valid applied Setup and reviewed resources", "issues": []}
+{"case": "fan_spiral", "status": "error", "exportable": false, "seconds": 0.004411200003232807, "error": "Planar path Generate requires a valid applied Setup and reviewed resources", "issues": []}
+{"case": "pipe_local", "status": "error", "exportable": false, "seconds": 0.004131599998800084, "error": "Planar path Generate requires a valid applied Setup and reviewed resources", "issues": []}
+{"case": "impeller_local", "status": "error", "exportable": false, "seconds": 0.004706100007751957, "error": "Planar path Generate requires a valid applied Setup and reviewed resources", "issues": []}

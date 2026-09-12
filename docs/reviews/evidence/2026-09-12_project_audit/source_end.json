@@ -1,0 +1,438 @@
+{
+  "src/five_axis_slicer/app.py": {
+    "mtime_ns": 1784956990588115300,
+    "sha256": "8bedd7192bc6c6ad0abf24076f62638bc0f524ab07906787b75f4ad990d9001c"
+  },
+  "src/five_axis_slicer/automation.py": {
+    "mtime_ns": 1784956990589114700,
+    "sha256": "5393dc78dd8ba74bfc1067ba7bfa20ad3535149ec07dc697331904705cf8a98e"
+  },
+  "src/five_axis_slicer/automation_routes.py": {
+    "mtime_ns": 1789186024268267900,
+    "sha256": "7756b2fad4d4f650226607290ee3a270b44b308a74579f40a32c01f871b54eb1"
+  },
+  "src/five_axis_slicer/background_load.py": {
+    "mtime_ns": 1784956990590115200,
+    "sha256": "a52c4f615330b8aa4e055d84366a7cf30eb4a50774a607f68bbe1e074e67d091"
+  },
+  "src/five_axis_slicer/command_kernel.py": {
+    "mtime_ns": 1789186024270268500,
+    "sha256": "9a36d9051c882e297f1278818c7cfc03b6da65e2edbb078c7bf3c868c778aa0d"
+  },
+  "src/five_axis_slicer/gcode_arrays.py": {
+    "mtime_ns": 1784956990591115700,
+    "sha256": "43e4c821ec0fafa01031e0deba8ddc8ba80aaea9bcd821ccfbcf8be26b6fea3c"
+  },
+  "src/five_axis_slicer/gcode_cache.py": {
+    "mtime_ns": 1784956990591115700,
+    "sha256": "50f4ce748b68d698b8680a7a45ee010b2a39830dec3ba78dddf6f2be9adc6f44"
+  },
+  "src/five_axis_slicer/gcode_parser.py": {
+    "mtime_ns": 1784956990592115900,
+    "sha256": "13ccae59e973707bef005a81c84fdecc84b058b6b2c23380a4c8d021e9a303a4"
+  },
+  "src/five_axis_slicer/gcode_preview.py": {
+    "mtime_ns": 1784956990593116200,
+    "sha256": "187b6bf94a03692e5cad585c6f220531005dae6326b2e6f694805adf058553f5"
+  },
+  "src/five_axis_slicer/gcode_source.py": {
+    "mtime_ns": 1789186023906089000,
+    "sha256": "718d9899693386270022c0169dd0e6a0b3c1acf0061f59d5a41f73f19b138b0c"
+  },
+  "src/five_axis_slicer/geometry_vtk.py": {
+    "mtime_ns": 1789126313563181600,
+    "sha256": "a4555772e1e1bccdd70d9f77e4dec4138dec9859fcc33ff3ba56f239bc800f47"
+  },
+  "src/five_axis_slicer/localization.py": {
+    "mtime_ns": 1785149151104010600,
+    "sha256": "b827d28ac9fba19bbdb11f1bfaa0a64198838c4b9a925afd718d0db98d24eb63"
+  },
+  "src/five_axis_slicer/models.py": {
+    "mtime_ns": 1784956990602115500,
+    "sha256": "36edc80ee80dfd0e7f77e7d2a82d177a633563fc76f96589940e41660ed9c666"
+  },
+  "src/five_axis_slicer/model_commit.py": {
+    "mtime_ns": 1784956990601116000,
+    "sha256": "86610cd31efa19d25e5513d3394e2e5def3605f9881bc2c31e39aeec7345ef4e"
+  },
+  "src/five_axis_slicer/native_preview_index.py": {
+    "mtime_ns": 1789186023919088400,
+    "sha256": "5aada1157d7400c9b064b4025bb006295861138a470aeb3fd6b82923e185a8b5"
+  },
+  "src/five_axis_slicer/opengl_picking.py": {
+    "mtime_ns": 1784956990602115500,
+    "sha256": "cd73a1265603ef4eb74204ee41c4a57255486a28c86793dc303005b81d0c63cd"
+  },
+  "src/five_axis_slicer/opengl_scene.py": {
+    "mtime_ns": 1784956990603115400,
+    "sha256": "057390307c67c295740c2a499081453b2de5038179610b49ee5c19027d064e7d"
+  },
+  "src/five_axis_slicer/opengl_viewer.py": {
+    "mtime_ns": 1785165184260017900,
+    "sha256": "ce53327cac62adc765697618c5f63d6d12374a805e82ef1a6a10d653503e30ad"
+  },
+  "src/five_axis_slicer/planar_commands.py": {
+    "mtime_ns": 1789186117717331100,
+    "sha256": "7f92b290c5426d8ecc6df0990c52a55eeb4067d13fc83818c88a46491934925f"
+  },
+  "src/five_axis_slicer/planar_controller.py": {
+    "mtime_ns": 1789186941339078900,
+    "sha256": "c1e4bae056f509b16bae144364d5e2003adf95c146287ffb66d4e1cb79d2ead8"
+  },
+  "src/five_axis_slicer/planar_operation_service.py": {
+    "mtime_ns": 1789186024461297700,
+    "sha256": "573945bffbaad2b3c12706d56aab71f8299fd217ba44c47a957e4f93b1c18141"
+  },
+  "src/five_axis_slicer/planar_shell.py": {
+    "mtime_ns": 1789186024462298000,
+    "sha256": "e9b31a0f66af113ed94154c05429d5aad353c788587cfc335b66164d299a0b2d"
+  },
+  "src/five_axis_slicer/planar_ui.py": {
+    "mtime_ns": 1789187303748046900,
+    "sha256": "fba13146b458174cd3e8bf4ff476a166bae0125af18305b691b5606f51fa5e02"
+  },
+  "src/five_axis_slicer/project_assets.py": {
+    "mtime_ns": 1784956990604115900,
+    "sha256": "60fb2adfd422a0d4b9bc80f06839ccf4f4eaaec553bbf89665140e104467f49a"
+  },
+  "src/five_axis_slicer/project_contract.py": {
+    "mtime_ns": 1784956990605115600,
+    "sha256": "cfc94365b8f44d9a003659bdfa1332753fb45445c740e8fce2086913c01f22f4"
+  },
+  "src/five_axis_slicer/project_io.py": {
+    "mtime_ns": 1789186024273267500,
+    "sha256": "e2e074cf54f9f52bb27a3b4722c0f60e2e5ed3db67dac2826a6ca6294aeecfe1"
+  },
+  "src/five_axis_slicer/project_storage.py": {
+    "mtime_ns": 1784956990606114400,
+    "sha256": "0543db04172c5f47b8ace4df0949bcffe23f6b1600d1897ccd0b6d13d7d5d14f"
+  },
+  "src/five_axis_slicer/qt_load_wait.py": {
+    "mtime_ns": 1785504326821577900,
+    "sha256": "6d8862a5942e44cd05baa0605f1a895af9a4c236db8fce9143870a56956b6416"
+  },
+  "src/five_axis_slicer/restricted_script.py": {
+    "mtime_ns": 1789186024274272400,
+    "sha256": "2de1990afd3087adaba9f06af5eca8008ee9a202f856d914cb5da9f6021d4963"
+  },
+  "src/five_axis_slicer/result_commit.py": {
+    "mtime_ns": 1784956990606114400,
+    "sha256": "5fe90bb323bbe11a0454c308e683f8c2a27c1eac545699f0608dfe0dcc9faa9c"
+  },
+  "src/five_axis_slicer/result_preview.py": {
+    "mtime_ns": 1785080631705896400,
+    "sha256": "6e3ed125816230bea48c1b5f10c3f8c7933824046480c028760ea61e623bab9d"
+  },
+  "src/five_axis_slicer/result_preview_layout.py": {
+    "mtime_ns": 1785080631706895600,
+    "sha256": "8d9c2ab049731ce2db964fb5339278e6ad1bcb5355c417e5938ec7a8624565db"
+  },
+  "src/five_axis_slicer/result_preview_text.py": {
+    "mtime_ns": 1785080631706895600,
+    "sha256": "8f9b1a170ece3e816b7453bb3a55093a2e4fa32cf8913da2c0a50452cc76c4cf"
+  },
+  "src/five_axis_slicer/result_state.py": {
+    "mtime_ns": 1789186023925089700,
+    "sha256": "74167e7a73a69f077ead033dc80ab4cef4f405397aa4b19f69f83e18a9b8bb94"
+  },
+  "src/five_axis_slicer/script_console.py": {
+    "mtime_ns": 1789186023926096500,
+    "sha256": "3280342307013f48e8e7ee13a8b11f949158e9d6bc7692adb63d9122a3ec1d15"
+  },
+  "src/five_axis_slicer/selection_list.py": {
+    "mtime_ns": 1789126313561178600,
+    "sha256": "0364c421b3608f5678ca7dd62307335db307899802774641999d9f9000147fe0"
+  },
+  "src/five_axis_slicer/setup_config.py": {
+    "mtime_ns": 1789186023928088100,
+    "sha256": "89f8e56e2f9e51f01770c599142a28d966b00628e0e8e6d94d10552f11d51b51"
+  },
+  "src/five_axis_slicer/setup_config_io.py": {
+    "mtime_ns": 1785504326825578700,
+    "sha256": "65a707bd373bbe00a544753c3f6db4db38c2941dc858f6a17994a7157f79e2d2"
+  },
+  "src/five_axis_slicer/setup_config_session.py": {
+    "mtime_ns": 1785504326825578700,
+    "sha256": "f0187769f9bd06cb5dc955659dcf84bd204104752d6a20a4ee3c31a5ab5c6365"
+  },
+  "src/five_axis_slicer/step_loader.py": {
+    "mtime_ns": 1784956990610115300,
+    "sha256": "da1564d9b1d839cc27b0d438947901779e966efabe950c90081dc1770d201bf7"
+  },
+  "src/five_axis_slicer/step_reader.py": {
+    "mtime_ns": 1784956990610115300,
+    "sha256": "89e988deb396dddef2c2f49db79f126f2c853067de3b4d0fbcad3d48c2bc938c"
+  },
+  "src/five_axis_slicer/step_topology.py": {
+    "mtime_ns": 1784956990611115000,
+    "sha256": "b6a9e9865e1c830c08369d97e54598f198dc6306a37c5e3ad94fde7e42ff1013"
+  },
+  "src/five_axis_slicer/styles.py": {
+    "mtime_ns": 1785080631707895600,
+    "sha256": "bc6875bbc184760ff6b089c66cfafbac7f82e826e88f7af05cc6f7be81e6f785"
+  },
+  "src/five_axis_slicer/theme.py": {
+    "mtime_ns": 1784636645445218000,
+    "sha256": "fd40ec74631c261cf25ab6b0874d4032da27a6399f7c13aa348d39a8d2a8ed54"
+  },
+  "src/five_axis_slicer/tube_commands.py": {
+    "mtime_ns": 1789186023929091300,
+    "sha256": "fa9c3d2f8cd20f53cc6a8553bf0f9f18561b61d5146299cdf4f2bf1004531d2e"
+  },
+  "src/five_axis_slicer/tube_controller.py": {
+    "mtime_ns": 1789186023931090800,
+    "sha256": "70c1ca8c016cdee1abbab86127beb72bd2fabcdd171e144075dc24a1150208fc"
+  },
+  "src/five_axis_slicer/tube_controller_state.py": {
+    "mtime_ns": 1789186023932090000,
+    "sha256": "3d28c2e21fdfa78797ca98acb95872d71b663a3cd8259303a032dabb01ce9fef"
+  },
+  "src/five_axis_slicer/tube_drafts.py": {
+    "mtime_ns": 1784956990612115400,
+    "sha256": "9b1d0f80e73264b8f710862d679c56f982933e5fbfc67105be3a014820b6def7"
+  },
+  "src/five_axis_slicer/tube_generation_service.py": {
+    "mtime_ns": 1789186023933086200,
+    "sha256": "54cf5225890bc8acfcedb91800ba73e26bcfb925ba373fc2c49b827fcb1bd6ce"
+  },
+  "src/five_axis_slicer/tube_operation_service.py": {
+    "mtime_ns": 1789186023935057200,
+    "sha256": "80edd2aa6044eebb9072f2426631bbc19e54c5b64c72b0fde2e7a9803d9c98e1"
+  },
+  "src/five_axis_slicer/tube_operation_ui.py": {
+    "mtime_ns": 1789186023936056700,
+    "sha256": "b0ed12d74f96c11385004fdfd86057e4a71f1930daba8942566f4c24810b18de"
+  },
+  "src/five_axis_slicer/tube_resource_context.py": {
+    "mtime_ns": 1784956990615115200,
+    "sha256": "36fae1f01477cf7ecab227b57186c18c95873d192650185cfe2f230e78082d89"
+  },
+  "src/five_axis_slicer/tube_resource_selection.py": {
+    "mtime_ns": 1785165468780583600,
+    "sha256": "8ba098321ea9ba948a0c7fba60578d15a07272cce7b583f7d40df95e0c2a2477"
+  },
+  "src/five_axis_slicer/tube_script_service.py": {
+    "mtime_ns": 1789186023938056500,
+    "sha256": "136f62888a9fa48f83b1ad7b30cc612cf003e3a3ec6811802b0458bc0f32bcbb"
+  },
+  "src/five_axis_slicer/tube_serialization.py": {
+    "mtime_ns": 1789186023939056800,
+    "sha256": "18630270d62bc2fccba52f6121056ae6bf2f3e6e7a4d750ec932648c8eb8cb1d"
+  },
+  "src/five_axis_slicer/tube_ui.py": {
+    "mtime_ns": 1789186023941056500,
+    "sha256": "0c92ea6a48505130bd60e0e657fb541eae409dd37fbef062b85835832d33b504"
+  },
+  "src/five_axis_slicer/tube_ui_presenter.py": {
+    "mtime_ns": 1784956990618115300,
+    "sha256": "3d27f4962f97165ed271add3a8b56a52503a2c503b81974c41b4994c8dccad6d"
+  },
+  "src/five_axis_slicer/tube_ui_text.py": {
+    "mtime_ns": 1789186023943066200,
+    "sha256": "fe0e068d3ee07526a14009e5e05d6f5f25a8c25d655c732901a569332dabef43"
+  },
+  "src/five_axis_slicer/tube_validation.py": {
+    "mtime_ns": 1789186023944056900,
+    "sha256": "948eafa86fa30321c76f11559f97a28cca17968bcbe03a8d235ab89724d3c939"
+  },
+  "src/five_axis_slicer/ui.py": {
+    "mtime_ns": 1789186024276281200,
+    "sha256": "77ed5fdffde736e677992a0e0ca2a78557efb2e47de5b58980bc61e84dc6b266"
+  },
+  "src/five_axis_slicer/ui_controls.py": {
+    "mtime_ns": 1785167408832899700,
+    "sha256": "c09fecefb958ed73a0549843445b8e1e765f33cecafd46cbc7c6c84c92128cc5"
+  },
+  "src/five_axis_slicer/viewer.py": {
+    "mtime_ns": 1785149109432062100,
+    "sha256": "b428f379cb8e9e5505146bb370ccc67b88f3bcb760e97f526e5e82d64e31fa9c"
+  },
+  "src/five_axis_slicer/viewer_common.py": {
+    "mtime_ns": 1785148517289681800,
+    "sha256": "f547c27baabe3b60a944a87a779d09b7284ce42759f3a34b457c3546acffc0ba"
+  },
+  "src/five_axis_slicer/viewer_interaction.py": {
+    "mtime_ns": 1785163978692075400,
+    "sha256": "44bee27804623bc3ba7cec9725dbcaaf35854f319f30281dbd12b81a62ae3163"
+  },
+  "src/five_axis_slicer/viewer_overlays.py": {
+    "mtime_ns": 1789186023950056200,
+    "sha256": "91cfcd787a7ae4643e252cc03d8536e2896c10be92c3a2f061514e6dc8a96b36"
+  },
+  "src/five_axis_slicer/workbenches.py": {
+    "mtime_ns": 1785150587084658900,
+    "sha256": "8dc44125f74024817b9cd1f485762cec52a004dd047fc34beb4aff561ef085b9"
+  },
+  "src/five_axis_slicer/__init__.py": {
+    "mtime_ns": 1784956990588115300,
+    "sha256": "f891db9cbb1e49eb3985486b710ee9ae626f13bdb035cb3ce60cea37e01d7850"
+  },
+  "src/five_axis_slicer/__main__.py": {
+    "mtime_ns": 1781158427256351800,
+    "sha256": "812b20184f6ce01e7e4b333ddbf5a496da52a0209a25213c9c44636d474663c2"
+  },
+  "src/five_axis_slicer/algorithms/__init__.py": {
+    "mtime_ns": 1789186023897092500,
+    "sha256": "e8c783fdea2d601a6a39a3c18b2bb80731076d17d7301dd8fd2e523d55f47e24"
+  },
+  "src/five_axis_slicer/kinematics/xyzac.py": {
+    "mtime_ns": 1789186023908089300,
+    "sha256": "6c7b70df76f3acc68faaa691e87f3b74049ae6abac945ca301b382aece3a3582"
+  },
+  "src/five_axis_slicer/kinematics/__init__.py": {
+    "mtime_ns": 1789186023907087900,
+    "sha256": "9d3108901cff34dc39e38341e8f5bf31770ae8babac7e7ca68c5f552c177913a"
+  },
+  "src/five_axis_slicer/manufacturing/coordinates.py": {
+    "mtime_ns": 1785504326820578200,
+    "sha256": "d30fa1c9f049f5bf132fd46d5c70d794e578a13683966cbb0459ab6ae04ae996"
+  },
+  "src/five_axis_slicer/manufacturing/json_contract.py": {
+    "mtime_ns": 1784956990595115500,
+    "sha256": "e4b9928d6722e7e6c7bd91d0145c41cad075123048eff7754afb443705f3a271"
+  },
+  "src/five_axis_slicer/manufacturing/library.py": {
+    "mtime_ns": 1789186023910085500,
+    "sha256": "1298e431565ff3d7ca488f0dd15d4a807acd4979b2173f6d2b2fef2232039d60"
+  },
+  "src/five_axis_slicer/manufacturing/machine.py": {
+    "mtime_ns": 1784956990596114500,
+    "sha256": "4e6625e0c2167d94fbb6fc8220df45c7180abb926913ca733490548de324b258"
+  },
+  "src/five_axis_slicer/manufacturing/nozzle_envelope.py": {
+    "mtime_ns": 1785165511176483300,
+    "sha256": "2682b05d1283e37e19dc9538ea6e838e2d220e886b84df59e3f3ef4f80fe4a15"
+  },
+  "src/five_axis_slicer/manufacturing/planar_parameters.py": {
+    "mtime_ns": 1789186941338079200,
+    "sha256": "cd4e9c78f43d4c02f0edbc9b1b142edb811f4927f72a3f50371fb9907193f862"
+  },
+  "src/five_axis_slicer/manufacturing/preview_kinematics.py": {
+    "mtime_ns": 1789186023912091000,
+    "sha256": "7877fc0bc17ee00a20777d5a3d4cb98d6223716dee1f61a1176b8b220772c96d"
+  },
+  "src/five_axis_slicer/manufacturing/references.py": {
+    "mtime_ns": 1784956990599116400,
+    "sha256": "9f8c98bd90948f354efd396dcd9bee4fc251ea92c2d76003fa82be2f144171aa"
+  },
+  "src/five_axis_slicer/manufacturing/reference_audit.py": {
+    "mtime_ns": 1784956990597114300,
+    "sha256": "3b2079e51d9c0895b1c32294176349b61c244776fb8340ca3308c2d47207b940"
+  },
+  "src/five_axis_slicer/manufacturing/reference_descriptors.py": {
+    "mtime_ns": 1784956990598116900,
+    "sha256": "0ae94fdfd80e4eceed01a066245647aa64d3702b728602974db5f8804434783a"
+  },
+  "src/five_axis_slicer/manufacturing/reference_rebind.py": {
+    "mtime_ns": 1784956990598116900,
+    "sha256": "228e8b9ae96bbe790d16f7418ad64702e807795024ae14bffc8625bbc7f1824e"
+  },
+  "src/five_axis_slicer/manufacturing/resources.py": {
+    "mtime_ns": 1789186023913087700,
+    "sha256": "8f0efab01cddb96553d15f02cd1c94b526757b9e28d84089d9f15a8a50e789c5"
+  },
+  "src/five_axis_slicer/manufacturing/setup.py": {
+    "mtime_ns": 1789186023915095600,
+    "sha256": "24c8601d3991f47fbb79c56ce724bd7faf5f58848302d280f696dc9bf54f11af"
+  },
+  "src/five_axis_slicer/manufacturing/toolpath.py": {
+    "mtime_ns": 1789186023916056200,
+    "sha256": "1e3a4130c2a0de113a73782a0ab8db544bab7eca23d7bdbe1fafcc424d6a371a"
+  },
+  "src/five_axis_slicer/manufacturing/tube_parameters.py": {
+    "mtime_ns": 1789186023917056700,
+    "sha256": "37c863b3c93310f0d7a700034383789e15e5c5920b13cf9cfddf3051e0731278"
+  },
+  "src/five_axis_slicer/manufacturing/__init__.py": {
+    "mtime_ns": 1789186023909100700,
+    "sha256": "a3059899a96e0f4088ae8a608bc64ffaabcc0a7c9e7baa3ffafb618fd394653f"
+  },
+  "src/five_axis_slicer/postprocessing/indexed_tube.py": {
+    "mtime_ns": 1789186024271268500,
+    "sha256": "ba42332a2b2cfdacbccc885e8091c51179045964cb554e90e5b13e95cb0f9d62"
+  },
+  "src/five_axis_slicer/postprocessing/planar_product.py": {
+    "mtime_ns": 1789186658499557600,
+    "sha256": "1da785c4d924dcc52cbab8707e2940979bde4f5a954404501812e0c26e2d6ff1"
+  },
+  "src/five_axis_slicer/postprocessing/planar_support_product.py": {
+    "mtime_ns": 1789187509369910300,
+    "sha256": "78f078d1916d45fba14015cf65ef7050d638466e51838ca73158877cc598b655"
+  },
+  "src/five_axis_slicer/postprocessing/tube_product.py": {
+    "mtime_ns": 1789186023922095000,
+    "sha256": "76bb6bf2a0669a9fee00b58fbe81a94caff7c791a23f2c0ac90b36813294d329"
+  },
+  "src/five_axis_slicer/postprocessing/__init__.py": {
+    "mtime_ns": 1789186023919088400,
+    "sha256": "70cba7732b2f0be8a8ae92731b3b39f37b8871ace397184d001a779f10f0bbe3"
+  },
+  "src/five_axis_slicer/validation/indexed_tube.py": {
+    "mtime_ns": 1789186023948056300,
+    "sha256": "2edd83abfc276f6e9645b29871a56dbbd3279bd07dce980998cd43647964cc89"
+  },
+  "src/five_axis_slicer/validation/planar.py": {
+    "mtime_ns": 1789186024465267400,
+    "sha256": "75aba41c8ddca966b9cd756bdb8396b7849d4d439ba6a2a7402eb7eead985c20"
+  },
+  "src/five_axis_slicer/validation/__init__.py": {
+    "mtime_ns": 1789186024278268200,
+    "sha256": "f9db1e2e8288d31d1c21b335894405f8726addb09f879b428f4e55b11fe23466"
+  },
+  "src/five_axis_slicer/algorithms/planar/offset.py": {
+    "mtime_ns": 1789186024452267600,
+    "sha256": "7c86cfb0d7afe206fa0a7d415548b4f1dd940166fb2e326f5ba863f23f631c48"
+  },
+  "src/five_axis_slicer/algorithms/planar/region.py": {
+    "mtime_ns": 1789186024453268100,
+    "sha256": "a58b19f6bc6745d87e8c82fdb14df03a87f6ddcaa593cd6858b7d3000e3335f6"
+  },
+  "src/five_axis_slicer/algorithms/planar/spiral.py": {
+    "mtime_ns": 1789186024454297900,
+    "sha256": "8c57451baf1868896bbaf62025be8e16668a76a1c2d3a0431940f69c32519e87"
+  },
+  "src/five_axis_slicer/algorithms/planar/support.py": {
+    "mtime_ns": 1789186941336079500,
+    "sha256": "fd9638cc9eba6fd11eecebc2f92c112bfb6432e410c3ac20641c6f395c954428"
+  },
+  "src/five_axis_slicer/algorithms/planar/support_geometry.py": {
+    "mtime_ns": 1789186024456268600,
+    "sha256": "23f13e51c9e1fa79520bc6fc3c32ba9686bde5fda87a447b0b19dfcd391d676c"
+  },
+  "src/five_axis_slicer/algorithms/planar/thin_wall.py": {
+    "mtime_ns": 1789186024457300200,
+    "sha256": "411b3acdfba5824df59e5a39c49e7454310cce23c32c67ac5f9b57d646f56548"
+  },
+  "src/five_axis_slicer/algorithms/planar/zigzag.py": {
+    "mtime_ns": 1789186024458301600,
+    "sha256": "47f7f5befa03bc3230360eecd094a70cdb44afe6e62695d3adb5c2bb5369a273"
+  },
+  "src/five_axis_slicer/algorithms/planar/__init__.py": {
+    "mtime_ns": 1789186024451267400,
+    "sha256": "d6c0575d079697a12130c10e6636e5296ec597bf64e214d36a9a0bf3ebfaf0f9"
+  },
+  "src/five_axis_slicer/algorithms/tube/buildup.py": {
+    "mtime_ns": 1789186023899094900,
+    "sha256": "3f26f712f9e9049da43652a5530987d286898d82a3ed1ab0e33e044531cf1ae1"
+  },
+  "src/five_axis_slicer/algorithms/tube/continuous.py": {
+    "mtime_ns": 1789186023900055900,
+    "sha256": "5f52116e1c967a8b3133cedd482e44389735f187d542e8a6ff369abe5495cca3"
+  },
+  "src/five_axis_slicer/algorithms/tube/geometry.py": {
+    "mtime_ns": 1789186023901092700,
+    "sha256": "395aacb43720583e5ec7e09e35524acdb989e31a9fd0d42806552510b940f5cd"
+  },
+  "src/five_axis_slicer/algorithms/tube/indexed.py": {
+    "mtime_ns": 1789186023902087000,
+    "sha256": "bbbe0241fcf91a9ac34e859502fab64a22876e8e2a3f5559dbcf29d5121924df"
+  },
+  "src/five_axis_slicer/algorithms/tube/section.py": {
+    "mtime_ns": 1789186023903088200,
+    "sha256": "eaddd307562ac77497273e55838e7c359a17cec3c19de80d544e22e0d10cf489"
+  },
+  "src/five_axis_slicer/algorithms/tube/__init__.py": {
+    "mtime_ns": 1789186023898096400,
+    "sha256": "a191075b62a50ffbda80c8b4142cd965e186dedc95f5d7daf3803f9a79b229c9"
+  }
+}

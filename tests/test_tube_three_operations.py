@@ -41,7 +41,9 @@ def test_three_types_round_trip_and_legacy_defaults_to_indexed() -> None:
     assert indexed.type_config is None
     assert buildup.type_config.maximum_pass_spacing_mm == 0.6
     assert continuous.type_config.seam_angle_deg == 0.0
-    restored = TubeSetupController.from_json(json.loads(json.dumps(controller.to_json())), cad_model=None)
+    restored = TubeSetupController.from_json(
+        json.loads(json.dumps(controller.to_json())), cad_model=None
+    )
     assert [item.operation_type for item in restored.operations] == [
         "tube_thin_wall_indexed",
         "tube_buildup",
@@ -62,7 +64,9 @@ def test_command_targets_operation_id_and_persists_special_fields() -> None:
     ):
         provider.invoke(
             controller,
-            CommandInvocation("create_operation", (operation_type,), {"operation_id": operation_id}),
+            CommandInvocation(
+                "create_operation", (operation_type,), {"operation_id": operation_id}
+            ),
         )
 
     provider.invoke(
@@ -79,7 +83,9 @@ def test_command_targets_operation_id_and_persists_special_fields() -> None:
     )
     provider.invoke(
         controller,
-        CommandInvocation("set_operation", kwargs={"operation_id": "continuous", "seam_angle_deg": 35}),
+        CommandInvocation(
+            "set_operation", kwargs={"operation_id": "continuous", "seam_angle_deg": 35}
+        ),
     )
     operations = {item.operation_id: item for item in controller.operations}
     assert operations["buildup"].type_config.maximum_pass_spacing_mm == pytest.approx(0.45)
@@ -87,10 +93,12 @@ def test_command_targets_operation_id_and_persists_special_fields() -> None:
     assert operations["buildup"].type_config.base_order == "after_tube"
     assert operations["continuous"].type_config.seam_angle_deg == pytest.approx(35.0)
     with pytest.raises(Exception, match="operation_id is required"):
-        provider.invoke(controller, CommandInvocation("set_operation", kwargs={"name": "ambiguous"}))
+        provider.invoke(
+            controller, CommandInvocation("set_operation", kwargs={"name": "ambiguous"})
+        )
 
 
-def test_controller_product_state_becomes_stale_and_reopens() -> None:
+def test_invalid_setup_error_reopens_and_parameter_change_invalidates_it() -> None:
     source = Path(__file__).resolve().parents[1] / "example" / "pipe2" / "弯管新.stp"
     controller = TubeSetupController(load_step(source))
     controller.create_operation(operation_id="indexed")
@@ -99,7 +107,9 @@ def test_controller_product_state_becomes_stale_and_reopens() -> None:
         entry_port_id="body_002_edge_0003",
         exit_port_id="body_002_edge_0014",
         substrate_body_id="body_001",
-        parameters=TubeProcessParameters(bead_width_mm=10.0, layer_height_mm=10.0, safe_clearance_mm=15.0),
+        parameters=TubeProcessParameters(
+            bead_width_mm=10.0, layer_height_mm=10.0, safe_clearance_mm=15.0
+        ),
     )
     controller.select_machine(
         replace(
@@ -121,7 +131,9 @@ def test_controller_product_state_becomes_stale_and_reopens() -> None:
             outer_profile_rz_mm=((0.2, 0.0), (0.3, 2.0)),
         )
     )
-    controller.generate_operation("indexed")
+    with pytest.raises(ValueError, match="valid applied Setup"):
+        controller.generate_operation("indexed")
+    assert controller.product_state("indexed").status == "error"
     assert controller.product_state("indexed") is not None
     restored = TubeSetupController.from_json(json.loads(json.dumps(controller.to_json())))
     assert restored.product_state("indexed") is not None
@@ -131,6 +143,8 @@ def test_controller_product_state_becomes_stale_and_reopens() -> None:
         entry_port_id="body_002_edge_0003",
         exit_port_id="body_002_edge_0014",
         substrate_body_id="body_001",
-        parameters=TubeProcessParameters(bead_width_mm=10.0, layer_height_mm=9.0, safe_clearance_mm=15.0),
+        parameters=TubeProcessParameters(
+            bead_width_mm=10.0, layer_height_mm=9.0, safe_clearance_mm=15.0
+        ),
     )
     assert controller.product_state("indexed").status == "stale"

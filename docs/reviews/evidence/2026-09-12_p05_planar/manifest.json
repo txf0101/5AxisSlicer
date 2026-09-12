@@ -1,0 +1,9 @@
+{
+  "task": "P05",
+  "date": "2026-09-12",
+  "scope": "Planar spiral专项证据",
+  "interpreter": "tmp/pytest9/Scripts/python.exe",
+  "pytest": {"tests": 10, "passed": 10, "failed": 0, "skipped": 0, "deselected": 5, "junit": "pytest.xml"},
+  "files_sha256": {"pytest.xml": "19b01c32b0bdf03e37329c879b1b36bbddbe2cc5b3a1fe017949b7fc7930486d"},
+  "qualification_boundary": "Generic XYZAC仅为离线参考；未验证真实控制器、机床标定、碰撞资格或实体试切。"
+}

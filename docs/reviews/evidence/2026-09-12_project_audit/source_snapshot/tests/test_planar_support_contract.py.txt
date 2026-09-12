@@ -1,0 +1,217 @@
+"""P07 support-operation contracts, without assuming support generation is available."""
+
+import os
+from dataclasses import replace
+from pathlib import Path
+import sys
+
+os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+import pytest
+
+from five_axis_slicer.automation_routes import AutomationRouter
+from five_axis_slicer.manufacturing.planar_parameters import (
+    PlanarOperationDefinition,
+    PlanarProcessParameters,
+)
+from five_axis_slicer.models import SelectionState
+from five_axis_slicer.planar_commands import PlanarCommandService
+from five_axis_slicer.planar_controller import MAX_PLANAR_OPERATIONS, PlanarController
+from five_axis_slicer.project_io import load_project, save_project
+from test_planar_zigzag_product import _model
+
+
+SUPPORT_PARAMETERS = {
+    "support_overhang_angle_deg": 52.5,
+    "support_xy_gap_mm": 0.35,
+    "support_z_gap_mm": 0.25,
+    "support_line_spacing_mm": 1.8,
+    "support_interface_layers": 3,
+    "support_interface_spacing_mm": 0.5,
+    "support_pattern": "grid",
+}
+
+
+def test_support_parameters_round_trip_validation_and_semantic_hash() -> None:
+    parameters = PlanarProcessParameters(**SUPPORT_PARAMETERS)
+    restored = PlanarProcessParameters.from_json(parameters.to_json())
+    operation = PlanarOperationDefinition(
+        "support-1", "setup-1", operation_type="planar_support", parameters=parameters
+    )
+
+    assert restored == parameters
+    assert PlanarOperationDefinition.from_json(operation.to_json()) == operation
+    assert (
+        operation.semantic_sha256()
+        != replace(
+            operation, parameters=replace(parameters, support_pattern="lines")
+        ).semantic_sha256()
+    )
+    assert (
+        operation.semantic_sha256()
+        != replace(
+            operation, parameters=replace(parameters, support_xy_gap_mm=0.4)
+        ).semantic_sha256()
+    )
+
+
+@pytest.mark.parametrize(
+    "change",
+    (
+        {"support_overhang_angle_deg": 0.0},
+        {"support_overhang_angle_deg": 90.0},
+        {"support_xy_gap_mm": -0.01},
+        {"support_z_gap_mm": -0.01},
+        {"support_line_spacing_mm": 0.0},
+        {"support_interface_layers": -1},
+        {"support_interface_layers": 101},
+        {"support_interface_layers": True},
+        {"support_interface_spacing_mm": 0.0},
+        {"support_pattern": "organic"},
+    ),
+)
+def test_support_parameters_reject_invalid_values(change: dict[str, object]) -> None:
+    with pytest.raises((TypeError, ValueError)):
+        PlanarProcessParameters(**SUPPORT_PARAMETERS, **change)
+
+
+def test_controller_creates_support_and_enforces_six_operation_limit() -> None:
+    controller = PlanarController()
+    support = controller.create_operation("planar_support", operation_id="support-1")
+
+    assert support.operation_type == "planar_support"
+    assert support.name == "Planar Support"
+    for index in range(2, MAX_PLANAR_OPERATIONS + 1):
+        controller.create_operation(operation_id=f"op-{index}")
+    assert not controller.can_create_operation
+    with pytest.raises(ValueError, match="at most 6 operations"):
+        controller.create_operation("planar_support")
+
+
+def test_restricted_script_sets_support_parameters_through_shared_command() -> None:
+    controller = PlanarController(_model())
+    service = PlanarCommandService(controller)
+    output = service.execute_script(
+        'planar.create_operation("planar_support", operation_id="support-1")\n'
+        'planar.set_operation(operation_id="support-1", body_id="body", '
+        "support_overhang_angle_deg=52.5, support_xy_gap_mm=0.35, "
+        "support_z_gap_mm=0.25, support_line_spacing_mm=1.8, "
+        "support_interface_layers=3, support_interface_spacing_mm=0.5, "
+        'support_pattern="grid")'
+    )
+
+    assert not output.startswith("ERROR:")
+    assert controller.operations[0].parameters == PlanarProcessParameters(**SUPPORT_PARAMETERS)
+
+
+class _PlanarPage:
+    def __init__(self, controller: PlanarController) -> None:
+        self.controller = controller
+
+    def state_json(self):
+        return self.controller.state_json()
+
+
+class _Window:
+    def __init__(self) -> None:
+        controller = PlanarController(_model())
+        self.planar_page = _PlanarPage(controller)
+        self.planar_command_service = PlanarCommandService(controller)
+
+
+def test_http_accepts_only_declared_support_parameters() -> None:
+    window = _Window()
+    router = AutomationRouter(window)
+    router.dispatch(
+        "/planar/operation/create",
+        {"operation_type": "planar_support", "operation_id": "support-1"},
+    )
+    response = router.dispatch(
+        "/planar/operation/set",
+        {"operation_id": "support-1", "body_id": "body", **SUPPORT_PARAMETERS, "ignored": 1},
+    )
+
+    payload = response["command"]["payload"]
+    assert payload["parameters"].items() >= SUPPORT_PARAMETERS.items()
+    assert "ignored" not in payload["parameters"]
+
+
+def test_project_save_reopen_preserves_support_contract(tmp_path: Path) -> None:
+    operation = PlanarOperationDefinition(
+        "support-1",
+        "setup-1",
+        operation_type="planar_support",
+        parameters=PlanarProcessParameters(**SUPPORT_PARAMETERS),
+    )
+    project_json = save_project(
+        tmp_path / "planar-support-project", None, SelectionState(), operations=(operation,)
+    )
+
+    loaded = load_project(project_json)
+
+    assert loaded.operations == (operation,)
+
+
+def test_qt_support_controls_prefill_apply_and_stale_state() -> None:
+    from PyQt5.QtWidgets import QApplication
+
+    from five_axis_slicer.postprocessing.planar_product import PlanarProductState
+    from five_axis_slicer.planar_ui import PlanarPage
+    from test_planar_ui import _path_controller
+    from test_tube_ui import TubeViewerStub
+
+    QApplication.instance() or QApplication([])
+    page = PlanarPage(controller=_path_controller(), viewer_factory=TubeViewerStub)
+    page.operation_type_combo.setCurrentIndex(page.operation_type_combo.findData("planar_support"))
+    page.create_button.click()
+    page.support_angle_spin.setValue(52.5)
+    page.support_xy_gap_spin.setValue(0.35)
+    page.support_z_gap_spin.setValue(0.25)
+    page.support_line_spacing_spin.setValue(1.8)
+    page.support_interface_layers_spin.setValue(3)
+    page.support_interface_spacing_spin.setValue(0.5)
+    page.support_pattern_combo.setCurrentIndex(page.support_pattern_combo.findData("grid"))
+    page.apply_button.click()
+
+    operation = page.controller.operations[-1]
+    assert operation.parameters == PlanarProcessParameters(**SUPPORT_PARAMETERS)
+    page._load_operation_controls(operation)
+    assert page.operation_type_combo.currentData() == "planar_support"
+    assert page.support_pattern_combo.currentData() == "grid"
+    assert page.support_interface_layers_spin.value() == 3
+
+    page.controller._product_states[operation.operation_id] = PlanarProductState(
+        operation.operation_id, operation.semantic_sha256(), "ready", {}
+    )
+    page.support_xy_gap_spin.setValue(0.4)
+    page.apply_button.click()
+    assert page.controller.product_state(operation.operation_id).status == "stale"
+    assert "过期" in page.status_label.text()
+
+
+def test_qt_support_generation_error_is_visible(monkeypatch: pytest.MonkeyPatch) -> None:
+    from PyQt5.QtWidgets import QApplication
+
+    from five_axis_slicer.command_kernel import CommandError
+    from five_axis_slicer.planar_ui import PlanarPage
+    from test_planar_ui import _path_controller
+    from test_tube_ui import TubeViewerStub
+
+    QApplication.instance() or QApplication([])
+    page = PlanarPage(controller=_path_controller(), viewer_factory=TubeViewerStub)
+    page.operation_type_combo.setCurrentIndex(page.operation_type_combo.findData("planar_support"))
+    page.create_button.click()
+    page.apply_button.click()
+
+    def fail(command_name, *args, **kwargs):
+        if command_name == "generate_operation":
+            raise CommandError("E_DOMAIN_VALIDATION", "support generation failed")
+        return page.commands.execute_command(command_name, *args, **kwargs)
+
+    monkeypatch.setattr(page.commands, "execute_command", fail)
+    page._generate()
+
+    assert page.status_label.text() == "support generation failed"
+    assert not page.export_button.isEnabled()

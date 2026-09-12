@@ -1,0 +1,22 @@
+{
+  "scope": "Planar UI validation outcomes, bilingual diagnostic explanations and applied Setup Generate gating",
+  "tests": {
+    "initial_passed": 31,
+    "initial_failed": 1,
+    "fixed_case_passed": 1
+  },
+  "files": [
+    {
+      "path": "src/five_axis_slicer/planar_ui.py",
+      "sha256": "77da8a03b324b1ba4f26a737dcce7753d32ba7251313191ce82a6db6640a3fc5"
+    },
+    {
+      "path": "src/five_axis_slicer/planar_ui_diagnostics.py",
+      "sha256": "fd37fef4b978146a25a4d492fdc77fc7a479f6e5cf41544af2a7fc9fdaa56c05"
+    },
+    {
+      "path": "tests/test_planar_ui_diagnostics.py",
+      "sha256": "97b0fe5799b2943dc06e53dc1748c7c3f2aa7aac8d0ca15e17ecad91dbee1e24"
+    }
+  ]
+}

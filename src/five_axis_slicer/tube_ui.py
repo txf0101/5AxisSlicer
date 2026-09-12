@@ -32,7 +32,7 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
-from . import tube_operation_ui
+from . import machine_profile_ui, tube_operation_ui
 from . import tube_ui_presenter as presenter
 from .command_kernel import CommandInvocation, CommandResult
 from .manufacturing.coordinates import (
@@ -46,6 +46,7 @@ from .manufacturing.library import (
     default_user_resource_library_root,
 )
 from .manufacturing.machine import MachineProfile
+from .manufacturing.own_printer import default_printer_setup
 from .manufacturing.resources import (
     MaterialProfile,
     NozzleProfile,
@@ -134,7 +135,9 @@ class TubeSetupPage(QWidget):
         self.resource_library = resource_library or UserResourceLibrary(
             default_user_resource_library_root()
         )
-        self.controller = TubeSetupController(resource_library=self.resource_library)
+        self.controller = TubeSetupController(
+            setup=default_printer_setup(), resource_library=self.resource_library
+        )
         self._command_executor: CommandExecutor | None = None
         factory = viewer_factory or ModelViewer
         self.viewer = factory(self)
@@ -319,27 +322,7 @@ class TubeSetupPage(QWidget):
         return page
 
     def _build_machine_editor(self) -> QWidget:
-        page = QWidget()
-        layout = QVBoxLayout(page)
-        self.machine_help = _help_label()
-        self.machine_combo = QComboBox()
-        for key, profile in self._machine_profiles.items():
-            self.machine_combo.addItem(
-                self._resource_choice_label("machine", key, profile),
-                key,
-            )
-        self.machine_apply_button = QPushButton()
-        self.machine_apply_button.setObjectName("primaryButton")
-        self.machine_apply_button.clicked.connect(self._apply_machine)
-        self.machine_detail = QLabel()
-        self.machine_detail.setWordWrap(True)
-        self.machine_combo.currentIndexChanged.connect(self._update_machine_detail)
-        layout.addWidget(self.machine_help)
-        layout.addWidget(self.machine_combo)
-        layout.addWidget(self.machine_detail)
-        layout.addWidget(self.machine_apply_button)
-        layout.addStretch(1)
-        return page
+        return machine_profile_ui.build_editor(self)
 
     def _build_nozzle_editor(self) -> QWidget:
         page = QWidget()
@@ -589,7 +572,11 @@ class TubeSetupPage(QWidget):
         return _matching_profile_key(kind, snapshot, profiles)
 
     def _resource_choice_label(self, kind: str, key: str, profile: Any) -> str:
-        name = profile.name if isinstance(profile, MachineProfile) else profile.display_name
+        name = (
+            machine_profile_ui.display_name(profile, self.language)
+            if isinstance(profile, MachineProfile)
+            else profile.display_name
+        )
         origin = self._resource_origins.get(kind, {}).get(key, "user")
         if origin == "builtin":
             qualifier = self._t("resource_origin_builtin")
@@ -900,14 +887,7 @@ class TubeSetupPage(QWidget):
             self._report_error(exc)
 
     def _update_machine_detail(self) -> None:
-        profile = self._machine_profiles.get(str(self.machine_combo.currentData()))
-        if profile is None:
-            self.machine_detail.clear()
-            return
-        axes = ", ".join(joint.joint_id for joint in profile.joints)
-        self.machine_detail.setText(
-            f"{profile.name}\nAxes: {axes}\nMounts: {len(profile.mount_datums)}\nreference_only={profile.reference_only}"
-        )
+        machine_profile_ui.update_detail(self)
 
     def _apply_nozzle(self) -> None:
         try:

@@ -1,0 +1,2735 @@
+from __future__ import annotations
+
+import time
+from collections.abc import Callable, Mapping
+from pathlib import Path
+from typing import Any
+
+from PyQt5.QtCore import QSettings, Qt, QTimer
+from PyQt5.QtWidgets import (
+    QAction,
+    QActionGroup,
+    QApplication,
+    QCheckBox,
+    QComboBox,
+    QDoubleSpinBox,
+    QFileDialog,
+    QFrame,
+    QGridLayout,
+    QGroupBox,
+    QHBoxLayout,
+    QInputDialog,
+    QLabel,
+    QMainWindow,
+    QMessageBox,
+    QPushButton,
+    QScrollArea,
+    QSizePolicy,
+    QSlider,
+    QSpinBox,
+    QStackedWidget,
+    QStatusBar,
+    QTabWidget,
+    QTextEdit,
+    QToolBar,
+    QVBoxLayout,
+    QWidget,
+)
+
+from . import model_commit, planar_shell
+from .automation import AutomationServer
+from .automation_routes import AutomationRouter
+from .background_load import ResultLoadCoordinator
+from .gcode_preview import ROLE_COLORS, rgb_to_hex, role_label
+from .localization import tr
+from .manufacturing.preview_kinematics import (
+    AC_INVERSE_TRANSFORM,
+    MACHINE_COORDINATE_TRANSFORM,
+)
+from .manufacturing.setup import ManufacturingSetup
+from .models import CadModel
+from .project_io import (
+    ProjectFormatError,
+    ProjectLoadCancelled,
+    ProjectLoaded,
+    save_project,
+)
+from .qt_load_wait import wait_for_loader_outcome
+from .result_preview import ResultCommitError, ResultPreviewPage
+from .result_state import LoadRequest, LoadResult
+from .script_console import install_script_console
+from .selection_list import SelectionList, SelectionRow
+from .step_loader import StepLoadCancelled, StepLoadError
+from .styles import APP_STYLE
+from .tube_controller import PendingDraftError, TubeSetupController
+from .tube_script_service import ProjectOpenCancelled, TubeScriptService
+from .tube_ui import TubeSetupPage
+from .ui_controls import action_button
+from .viewer import ModelViewer
+from .workbenches import WORKBENCHES, WorkbenchInfo
+
+ROOT = Path(__file__).resolve().parents[2]
+DEMO_STEP = ROOT / "example" / "叶轮" / "叶轮.stp"
+DEMO_GCODE = ROOT / "example" / "叶轮" / "叶轮完整.gcode"
+
+
+class MainWindow(QMainWindow):
+    def __init__(
+        self,
+        http_host: str = "127.0.0.1",
+        http_port: int = 8765,
+        http_allow_remote: bool = False,
+        http_token: str | None = None,
+        result_viewer_factory: Callable[[QWidget], QWidget] | None = None,
+        model_viewer_factory: Callable[[QWidget], QWidget] | None = None,
+    ) -> None:
+        super().__init__()
+        self.settings = QSettings("5AxisSclicer", "5AxisSclicer V2.0")
+        saved_language = str(self.settings.value("language", "zh"))
+        self.language = saved_language if saved_language in {"zh", "en"} else "zh"
+        self.model: CadModel | None = None
+        self._original_step_path: Path | None = None
+        self.gcode_preview = None
+        self.last_project_dir: Path | None = None
+        self.current_workbench_key = "curve"
+        self.current_operation = "imported_nc_review"
+        self._updating_layer_controls = False
+        self._updating_progress_controls = False
+        self._result_request_sequence = 0
+        self._model_request_sequence = 0
+        self._model_load_outcomes: dict[object, dict[str, Any]] = {}
+        self._model_load_prompt_for_unit: dict[object, bool] = {}
+        self._model_load_show_errors: dict[object, bool] = {}
+        self._model_load_controller_states: dict[object, model_commit.SourceUpdateBaseline] = {}
+        self._latest_model_request_id: object | None = None
+        self._gcode_request_sequence = 0
+        self._gcode_load_outcomes: dict[object, dict[str, Any]] = {}
+        self._gcode_load_show_errors: dict[object, bool] = {}
+        self._latest_gcode_request_id: object | None = None
+        self._project_request_sequence = 0
+        self._project_load_outcomes: dict[object, dict[str, Any]] = {}
+        self._project_load_show_errors: dict[object, bool] = {}
+        self._latest_project_request_id: object | None = None
+        self._close_pending = False
+        self._result_viewer_factory = result_viewer_factory
+        self._model_viewer_factory = model_viewer_factory
+        self._result_load_metrics: dict[str, Any] = {}
+        self.localized_groups: list[tuple[QGroupBox, str]] = []
+        self.localized_labels: list[tuple[QLabel, str]] = []
+        self.viewer = (model_viewer_factory or ModelViewer)(self)
+        self.viewer.set_selection_callback(self._on_viewer_selection)
+        self.progress_timer = QTimer(self)
+        self.progress_timer.setInterval(250)
+        self.progress_timer.timeout.connect(self._advance_progress)
+        # STEP and G-code dependencies share process-wide native state and disk
+        # caches.  One coordinator serializes every load and gives "latest
+        # request wins" a single lifecycle boundary.
+        self.load_coordinator = ResultLoadCoordinator(self)
+        self.result_loader = self.load_coordinator
+        self.model_loader = self.load_coordinator
+        self.gcode_loader = self.load_coordinator
+        self.project_loader = self.load_coordinator
+        self.load_coordinator.progress.connect(self._on_load_progress)
+        self.load_coordinator.completed.connect(self._on_load_completed)
+        self.load_coordinator.failed.connect(self._on_load_failed)
+        self.load_coordinator.cancelled.connect(self._on_load_cancelled)
+        self.load_coordinator.superseded.connect(self._on_load_superseded)
+        self.load_coordinator.busy_changed.connect(self._on_result_busy_changed)
+        self._automation_router = AutomationRouter(self)
+        self.automation = AutomationServer(
+            http_host,
+            http_port,
+            self._automation_router.dispatch,
+            allow_remote=http_allow_remote,
+            token=http_token,
+        )
+        self._build_ui()
+        self._bind_shortcuts()
+        self._apply_style()
+        self.retranslate()
+        self._show_home()
+        self.automation.start()
+        self.statusBar().showMessage(tr(self.language, "http", url=self.automation.url))
+
+    def closeEvent(self, event) -> None:  # noqa: N802 - Qt API
+        load_stopped = self.load_coordinator.shutdown(timeout_ms=100)
+        if not load_stopped:
+            self._close_pending = True
+            event.ignore()
+            self.statusBar().showMessage(tr(self.language, "status_waiting_for_loader_shutdown"))
+            QTimer.singleShot(100, self._retry_close_after_result_loader)
+            return
+        self._close_pending = False
+        self.script_console_manager.save_state()
+        self.result_page.shutdown()
+        self.automation.stop()
+        super().closeEvent(event)
+
+    def _retry_close_after_result_loader(self) -> None:
+        if not self._close_pending:
+            return
+        if self.load_coordinator.wait_for_shutdown(timeout_ms=0):
+            self._close_pending = False
+            self.close()
+            return
+        QTimer.singleShot(100, self._retry_close_after_result_loader)
+
+    def open_model_dialog(self) -> None:
+        path, _ = QFileDialog.getOpenFileName(
+            self,
+            tr(self.language, "open_step"),
+            "",
+            "STEP Files (*.step *.stp)",
+        )
+        if path:
+            self.start_model_load(path, prompt_for_unknown_unit=True)
+
+    def open_project_dialog(self) -> None:
+        path, _ = QFileDialog.getOpenFileName(
+            self,
+            tr(self.language, "open_project"),
+            "",
+            "5AxisSclicer Project (project.json);;JSON (*.json)",
+        )
+        if path:
+            self.open_project(path, wait=False, show_dialog=True)
+
+    def open_gcode_dialog(self) -> None:
+        path, _ = QFileDialog.getOpenFileName(
+            self,
+            tr(self.language, "open_gcode"),
+            "",
+            "NC/G-code Files (*.gcode *.nc *.tap *.txt)",
+        )
+        if path:
+            self.start_gcode_load(path)
+
+    def open_result_model_dialog(self) -> None:
+        path, _ = QFileDialog.getOpenFileName(
+            self,
+            tr(self.language, "dialog_open_step_title"),
+            "",
+            tr(self.language, "file_filter_step"),
+        )
+        if path:
+            self.start_result_load(model_path=path)
+
+    def open_result_gcode_dialog(self) -> None:
+        path, _ = QFileDialog.getOpenFileName(
+            self,
+            tr(self.language, "dialog_open_gcode_title"),
+            "",
+            tr(self.language, "file_filter_gcode"),
+        )
+        if path:
+            self.start_result_load(gcode_path=path)
+
+    def load_results_demo(self) -> dict[str, Any]:
+        return self.start_result_load(
+            model_path=DEMO_STEP if DEMO_STEP.exists() else None,
+            gcode_path=DEMO_GCODE if DEMO_GCODE.exists() else None,
+        )
+
+    def slice_results(self) -> dict[str, Any]:
+        state = self.result_page.state
+        model_path = state.selected_model_path or state.active_model_path
+        gcode_path = state.selected_gcode_path or state.active_gcode_path
+        if gcode_path is None:
+            raise RuntimeError(tr(self.language, "error_invalid_gcode"))
+        return self.start_result_load(model_path=model_path, gcode_path=gcode_path)
+
+    def start_result_load(
+        self,
+        *,
+        model_path: str | Path | None = None,
+        gcode_path: str | Path | None = None,
+    ) -> dict[str, Any]:
+        if model_path is None and gcode_path is None:
+            raise RuntimeError(tr(self.language, "no_project_content"))
+        self._result_request_sequence += 1
+        request = LoadRequest(
+            request_id=self._result_request_sequence,
+            model_path=model_path,
+            gcode_path=gcode_path,
+        )
+        self._result_load_metrics = {
+            "request_id": request.request_id,
+            "started_perf_counter": time.perf_counter(),
+            "status": "loading",
+        }
+        self.result_page.begin_load(request)
+        self._show_results()
+        self.result_loader.start(request)
+        self._update_context_actions()
+        return {
+            "accepted": True,
+            "request_id": request.request_id,
+            "results": self.result_page.state_json(),
+        }
+
+    def cancel_result_load(self) -> None:
+        if self._is_load_active("result"):
+            self.load_coordinator.cancel()
+            self.statusBar().showMessage(tr(self.language, "result_cancel_requested"))
+
+    @staticmethod
+    def _load_kind(request_id: object) -> str:
+        text = str(request_id)
+        for kind in ("model", "gcode", "project"):
+            if text.startswith(f"{kind}-"):
+                return kind
+        return "result"
+
+    def _is_load_active(self, kind: str) -> bool:
+        request_id = self.load_coordinator.active_request_id
+        return request_id is not None and self._load_kind(request_id) == kind
+
+    def _on_load_progress(
+        self,
+        request_id: object,
+        phase: str,
+        fraction: float,
+    ) -> None:
+        handlers = {
+            "result": self._on_result_load_progress,
+            "model": self._on_model_load_progress,
+            "gcode": self._on_gcode_load_progress,
+            "project": self._on_project_load_progress,
+        }
+        handlers[self._load_kind(request_id)](request_id, phase, fraction)
+
+    def _on_load_completed(self, result: LoadResult) -> None:
+        handlers = {
+            "result": self._on_result_load_completed,
+            "model": self._on_model_load_completed,
+            "gcode": self._on_gcode_load_completed,
+            "project": self._on_project_load_completed,
+        }
+        handlers[self._load_kind(result.request_id)](result)
+
+    def _on_load_failed(self, request_id: object, message: str) -> None:
+        handlers = {
+            "result": self._on_result_load_failed,
+            "model": self._on_model_load_failed,
+            "gcode": self._on_gcode_load_failed,
+            "project": self._on_project_load_failed,
+        }
+        handlers[self._load_kind(request_id)](request_id, message)
+
+    def _on_load_cancelled(self, request_id: object) -> None:
+        handlers = {
+            "result": self._on_result_load_cancelled,
+            "model": self._on_model_load_cancelled,
+            "gcode": self._on_gcode_load_cancelled,
+            "project": self._on_project_load_cancelled,
+        }
+        handlers[self._load_kind(request_id)](request_id)
+
+    def _on_load_superseded(
+        self,
+        previous_request_id: object,
+        _replacement_request_id: object,
+    ) -> None:
+        self._on_load_cancelled(previous_request_id)
+
+    def start_model_load(
+        self,
+        path: str | Path,
+        *,
+        length_unit_override: str | None = None,
+        prompt_for_unknown_unit: bool = False,
+        show_dialog: bool = True,
+        intent: str = "import",
+        draft_resolution: str | None = None,
+    ) -> dict[str, Any]:
+        """Load STEP outside the Qt GUI thread and commit it atomically."""
+
+        canonical_intent = str(intent).strip().lower()
+        if canonical_intent not in {"import", "source_update"}:
+            raise ValueError("model load intent must be 'import' or 'source_update'")
+        if canonical_intent != "source_update" and draft_resolution is not None:
+            raise ValueError("draft resolution is valid only for a source update")
+        self._model_request_sequence += 1
+        request = LoadRequest(
+            request_id=f"model-{self._model_request_sequence}",
+            model_path=Path(path),
+            length_unit_override=length_unit_override,
+        )
+        for previous_id, outcome in self._model_load_outcomes.items():
+            if outcome.get("status") == "loading":
+                outcome.update(status="cancelled", message="superseded")
+                self._model_load_prompt_for_unit.pop(previous_id, None)
+                self._model_load_show_errors.pop(previous_id, None)
+                self._model_load_controller_states.pop(previous_id, None)
+        self._latest_model_request_id = request.request_id
+        self._model_load_outcomes[request.request_id] = {
+            "request_id": request.request_id,
+            "status": "loading",
+            "phase": "queued",
+            "progress": 0.0,
+            "path": str(request.model_path),
+            "length_unit_override": request.length_unit_override,
+            "intent": canonical_intent,
+            "draft_resolution": draft_resolution,
+            "message": "",
+        }
+        self._model_load_prompt_for_unit[request.request_id] = bool(prompt_for_unknown_unit)
+        self._model_load_show_errors[request.request_id] = bool(show_dialog)
+        if canonical_intent == "source_update":
+            controller = self.tube_page.controller
+            self._model_load_controller_states[request.request_id] = (
+                model_commit.SourceUpdateBaseline.capture(controller)
+            )
+        self.model_loader.start(request)
+        self.statusBar().showMessage(f"STEP loading: {request.model_path}")
+        return {
+            "accepted": True,
+            "request_id": request.request_id,
+            "model_load": dict(self._model_load_outcomes[request.request_id]),
+        }
+
+    def cancel_model_load(self) -> None:
+        if self._is_load_active("model"):
+            self.load_coordinator.cancel()
+
+    def _wait_for_model_load(
+        self,
+        request_id: object,
+        *,
+        timeout_ms: int,
+    ) -> dict[str, Any]:
+        """Wait for one worker request and its QThread teardown.
+
+        The compatibility API must dispatch GUI-thread completion slots while
+        STEP parsing remains on the worker.  Every temporary Qt connection is
+        scoped to this call; otherwise repeating synchronous opens leaves live
+        timers whose callbacks retain already-finished nested event loops.
+        """
+
+        outcome = wait_for_loader_outcome(
+            self.model_loader,
+            self._model_load_outcomes,
+            request_id,
+            timeout_ms=timeout_ms,
+            timeout_message=f"STEP loading timed out after {timeout_ms} ms",
+            cancel=self.cancel_model_load,
+        )
+        if outcome["status"] == "ready":
+            return self.current_state()
+        if outcome["status"] == "retried" and outcome.get("replacement_request_id") is not None:
+            return self._wait_for_model_load(
+                outcome["replacement_request_id"],
+                timeout_ms=timeout_ms,
+            )
+        if outcome["status"] == "cancelled":
+            raise StepLoadCancelled(outcome.get("message") or "STEP loading cancelled")
+        raise StepLoadError(outcome.get("message") or "STEP loading failed")
+
+    def model_load_state(self) -> dict[str, Any]:
+        request_id = self._latest_model_request_id
+        if request_id is None:
+            return {
+                "request_id": None,
+                "status": "idle",
+                "phase": "",
+                "progress": 0.0,
+                "path": None,
+                "length_unit_override": None,
+                "intent": None,
+                "draft_resolution": None,
+                "message": "",
+            }
+        return dict(self._model_load_outcomes[request_id])
+
+    def _on_model_load_progress(self, request_id: object, phase: str, fraction: float) -> None:
+        outcome = self._model_load_outcomes.get(request_id)
+        if outcome is not None and outcome.get("status") == "loading":
+            outcome.update(
+                phase=str(phase),
+                progress=max(0.0, min(1.0, float(fraction))),
+            )
+        self.statusBar().showMessage(f"STEP {phase}: {fraction * 100.0:.0f}%")
+
+    def _on_model_load_completed(self, result: LoadResult) -> None:
+        outcome = self._model_load_outcomes.get(result.request_id)
+        if outcome is None or outcome.get("status") != "loading":
+            result.close()
+            return
+        try:
+            if result.model is None:
+                raise RuntimeError("STEP worker returned no CAD model")
+            if outcome is not None and outcome.get("intent") == "source_update":
+                baseline = self._model_load_controller_states.get(result.request_id)
+                if baseline is None:
+                    raise RuntimeError("source update edit baseline is unavailable")
+                controller = baseline.require_current(self.tube_page.controller)
+                with model_commit.source_update_transaction(
+                    self,
+                    controller,
+                    outcome.get("draft_resolution"),
+                ):
+                    self._commit_source_update(result.model)
+                self.tube_script_service.synchronize_external_controller(write_config=True)
+            else:
+                self._commit_model(result.model)
+            if outcome is not None:
+                outcome.update(
+                    status="ready",
+                    phase="commit",
+                    progress=1.0,
+                    length_unit_override=result.length_unit_override,
+                    message="",
+                )
+        except Exception as exc:
+            if outcome is not None:
+                outcome.update(status="error", message=str(exc))
+            self.statusBar().showMessage(tr(self.language, "status_error", message=str(exc)))
+            if self._model_load_show_errors.get(result.request_id, False):
+                self.show_error(str(exc))
+        finally:
+            self._model_load_prompt_for_unit.pop(result.request_id, None)
+            self._model_load_show_errors.pop(result.request_id, None)
+            self._model_load_controller_states.pop(result.request_id, None)
+            result.close()
+
+    def _on_model_load_failed(self, request_id: object, message: str) -> None:
+        outcome = self._model_load_outcomes.get(request_id)
+        prompt_enabled = self._model_load_prompt_for_unit.pop(request_id, False)
+        show_errors = self._model_load_show_errors.pop(request_id, False)
+        if (
+            outcome is not None
+            and prompt_enabled
+            and outcome.get("length_unit_override") is None
+            and self._is_unknown_step_unit_error(message)
+        ):
+            outcome.update(
+                status="unit_required",
+                phase="unit_selection",
+                message=str(message),
+            )
+            override = self._prompt_unknown_step_unit(
+                Path(str(outcome["path"])),
+                str(message),
+            )
+            if override is None:
+                outcome.update(
+                    status="cancelled",
+                    message="STEP unit selection cancelled",
+                )
+                self._model_load_controller_states.pop(request_id, None)
+                self.statusBar().showMessage("STEP unit selection cancelled")
+                return
+            outcome.update(status="retried", message="")
+            baseline = self._model_load_controller_states.pop(request_id, None)
+            accepted = self.start_model_load(
+                outcome["path"],
+                length_unit_override=override,
+                prompt_for_unknown_unit=False,
+                show_dialog=show_errors,
+                intent=str(outcome.get("intent", "import")),
+                draft_resolution=outcome.get("draft_resolution"),
+            )
+            if baseline is not None:
+                self._model_load_controller_states[accepted["request_id"]] = baseline
+            outcome["replacement_request_id"] = accepted["request_id"]
+            return
+        if outcome is not None:
+            outcome.update(status="error", message=str(message))
+        self._model_load_controller_states.pop(request_id, None)
+        self.statusBar().showMessage(tr(self.language, "status_error", message=str(message)))
+        if show_errors:
+            self.show_error(message)
+
+    def _on_model_load_cancelled(self, request_id: object) -> None:
+        outcome = self._model_load_outcomes.get(request_id)
+        if outcome is not None:
+            outcome.update(status="cancelled", message="STEP loading cancelled")
+        self._model_load_prompt_for_unit.pop(request_id, None)
+        self._model_load_show_errors.pop(request_id, None)
+        self._model_load_controller_states.pop(request_id, None)
+        self.statusBar().showMessage("STEP loading cancelled")
+
+    @staticmethod
+    def _is_unknown_step_unit_error(message: str) -> bool:
+        normalized = str(message).strip().lower()
+        return (
+            "step length unit is missing or unsupported" in normalized
+            or "provide length_unit_override" in normalized
+        )
+
+    def _prompt_unknown_step_unit(
+        self,
+        source_path: Path,
+        message: str,
+    ) -> str | None:
+        """Ask for a missing STEP unit on the Qt main thread."""
+
+        del message
+        options = (
+            ("mm (millimetre)", "mm"),
+            ("inch", "inch"),
+            ("cm (centimetre)", "cm"),
+            ("m (metre)", "m"),
+        )
+        labels = [label for label, _unit in options]
+        title = "选择 STEP 长度单位" if self.language == "zh" else "Select STEP Length Unit"
+        prompt = (
+            f"{source_path.name} 没有可识别的长度单位，请选择建模单位："
+            if self.language == "zh"
+            else f"{source_path.name} has no recognized length unit. Select its modelling unit:"
+        )
+        selected, accepted = QInputDialog.getItem(
+            self,
+            title,
+            prompt,
+            labels,
+            0,
+            False,
+        )
+        if not accepted:
+            return None
+        return dict(options).get(str(selected))
+
+    def _on_result_load_progress(self, request_id: object, phase: str, fraction: float) -> None:
+        self.result_page.set_load_progress(request_id, phase, fraction)
+
+    def _on_result_load_completed(self, result: LoadResult) -> None:
+        try:
+            accepted = self.result_page.commit_load(result)
+        except ResultCommitError as exc:
+            message = str(exc)
+            self.result_page.fail_load(result.request_id, message)
+            self.statusBar().showMessage(tr(self.language, "error_load_failed", message=message))
+            self._update_context_actions()
+            self._finish_result_load_metric(result.request_id, "error", message)
+            return
+        if not accepted:
+            return
+        if result.model is not None:
+            self.model = result.model
+        if result.gcode_preview is not None:
+            self.gcode_preview = result.gcode_preview
+        preview_summary = None if result.gcode_preview is None else result.gcode_preview.summary()
+        started = self._result_load_metrics.pop("started_perf_counter", time.perf_counter())
+        self._result_load_metrics.update(
+            request_id=result.request_id,
+            status="complete",
+            worker_elapsed_seconds=round(float(result.elapsed_seconds), 6),
+            end_to_end_seconds=round(time.perf_counter() - float(started), 6),
+            cache_format=(None if preview_summary is None else preview_summary.get("cache_format")),
+            cache_hit=(
+                False
+                if preview_summary is None
+                else preview_summary.get("render_index_source") == "cache"
+            ),
+        )
+        self._update_file_labels()
+        self._update_checks()
+        self._update_context_actions()
+        self.statusBar().showMessage(tr(self.language, "result_state_ready_detail"))
+
+    def _on_result_load_failed(self, request_id: object, message: str) -> None:
+        if self.result_page.fail_load(request_id, message):
+            self.statusBar().showMessage(tr(self.language, "error_load_failed", message=message))
+        self._update_context_actions()
+        self._finish_result_load_metric(request_id, "error", message)
+
+    def _on_result_load_cancelled(self, request_id: object) -> None:
+        if self.result_page.cancel_load(request_id):
+            self.statusBar().showMessage(tr(self.language, "error_load_cancelled"))
+        self._update_context_actions()
+        self._finish_result_load_metric(request_id, "cancelled", "")
+
+    def _on_result_busy_changed(self, _busy: bool) -> None:
+        self._update_context_actions()
+
+    def _finish_result_load_metric(self, request_id: object, status: str, message: str) -> None:
+        started = self._result_load_metrics.pop("started_perf_counter", time.perf_counter())
+        self._result_load_metrics.update(
+            request_id=request_id,
+            status=status,
+            end_to_end_seconds=round(time.perf_counter() - float(started), 6),
+            message=message,
+        )
+
+    def _public_load_metrics(self) -> dict[str, Any]:
+        return {
+            key: value
+            for key, value in self._result_load_metrics.items()
+            if key != "started_perf_counter"
+        }
+
+    def open_model(
+        self,
+        path: str | Path,
+        show_dialog: bool = True,
+        *,
+        length_unit_override: str | None = None,
+        timeout_ms: int = 120_000,
+    ) -> dict[str, Any]:
+        """Retain the synchronous API without parsing STEP on the GUI thread."""
+
+        accepted = self.start_model_load(
+            path,
+            length_unit_override=length_unit_override,
+            prompt_for_unknown_unit=False,
+            show_dialog=show_dialog,
+        )
+        return self._wait_for_model_load(
+            accepted["request_id"],
+            timeout_ms=timeout_ms,
+        )
+
+    def _commit_model(self, model: CadModel) -> None:
+        """Publish one fully loaded CAD model to both workbench viewers."""
+
+        with model_commit.publication_transaction(self):
+            previous_controller = self.tube_page.controller
+            previous_planar = self.planar_page.controller
+            previous_source = previous_controller.state_json()["source"]["hash"]
+            previous_operations = previous_controller.operations
+            self.model = model
+            self._original_step_path = Path(model.source_path).expanduser().resolve()
+            self.viewer.load_model(model)
+            if previous_source is None:
+                controller = TubeSetupController(model, operations=previous_operations)
+            elif previous_source == model.source_hash:
+                controller = self.tube_page.controller
+                controller.attach_cad_model(model, mark_modified=False)
+            else:
+                controller = TubeSetupController(model)
+            self.tube_page.set_controller(controller, model)
+            planar_controller = planar_shell.controller_for_model(
+                previous_planar, controller.setup, model
+            )
+            self.planar_page.set_controller(planar_controller)
+            self.planar_command_service = self.planar_page.commands
+            if controller is not previous_controller:
+                self.last_project_dir = None
+            model_commit.refresh_publication_ui(self)
+            self._show_session()
+            message = tr(
+                self.language,
+                "status_loaded",
+                body_count=len(model.bodies),
+                edge_count=len(model.edges),
+            )
+            if len(model.solid_bodies) == 1:
+                message += " | " + tr(self.language, "status_single_body")
+            self.statusBar().showMessage(message)
+        if controller is previous_controller:
+            self.tube_script_service.synchronize_external_controller(write_config=False)
+        else:
+            self.tube_script_service.bind_new_controller(controller)
+
+    def update_model_from_original_source(
+        self,
+        *,
+        path: str | Path | None = None,
+        length_unit_override: str | None = None,
+        draft_resolution: str | None = None,
+        show_dialog: bool = False,
+    ) -> dict[str, Any]:
+        """Queue an explicit STEP refresh while retaining Setup semantics.
+
+        A regular import starts a new manufacturing context when the source
+        hash changes.  This entry point instead asks the Tube controller to
+        rebind every persisted geometry reference uniquely after parsing has
+        completed on the worker thread.
+        """
+
+        controller = self.tube_page.controller
+        if self.model is None:
+            raise RuntimeError("A STEP model must be loaded before source update")
+        if controller.has_drafts:
+            if draft_resolution not in {"apply", "discard"}:
+                raise PendingDraftError(controller.draft_nodes)
+        source_path = (
+            Path(path).expanduser().resolve() if path is not None else self._original_step_path
+        )
+        if source_path is None:
+            raise RuntimeError("The project does not record an original STEP path")
+        if not source_path.is_file():
+            raise RuntimeError(f"Original STEP source does not exist: {source_path}")
+        effective_override = length_unit_override
+        if effective_override is None and self.model.units.override_applied:
+            effective_override = self.model.units.source_length_unit
+        return self.start_model_load(
+            source_path,
+            length_unit_override=effective_override,
+            prompt_for_unknown_unit=show_dialog,
+            show_dialog=show_dialog,
+            intent="source_update",
+            draft_resolution=draft_resolution,
+        )
+
+    def _update_model_from_source_ui(self) -> None:
+        try:
+            self.update_model_from_original_source(show_dialog=True)
+        except Exception as exc:
+            self.show_error(str(exc))
+
+    def _commit_source_update(self, model: CadModel) -> None:
+        """Atomically publish a parsed source revision after unique rebinding."""
+
+        controller = self.tube_page.controller
+        result = controller.update_cad_model(model)
+        planar_controller = self.planar_page.controller
+        planar_shell.sync_source_update(planar_controller, controller.setup, model)
+        self.viewer.load_model(model)
+        self.tube_page.set_controller(controller, model)
+        self.planar_page.set_controller(planar_controller)
+        self.planar_command_service = self.planar_page.commands
+        self.model = model
+        self._original_step_path = Path(model.source_path).expanduser().resolve()
+        model_commit.refresh_publication_ui(self)
+        self._show_session()
+        invalid_count = len(result.invalid_nodes)
+        issue_count = len(result.issues)
+        self.statusBar().showMessage(
+            "STEP source updated; "
+            f"{invalid_count} invalid Setup node(s), {issue_count} rebind issue(s)"
+        )
+
+    def start_project_load(
+        self,
+        path: str | Path,
+        *,
+        length_unit_override: str | None = None,
+        show_dialog: bool = False,
+    ) -> dict[str, Any]:
+        """Queue project verification and embedded STEP parsing on a worker."""
+
+        self._project_request_sequence += 1
+        request = LoadRequest(
+            request_id=f"project-{self._project_request_sequence}",
+            project_path=Path(path),
+            length_unit_override=length_unit_override,
+        )
+        for outcome in self._project_load_outcomes.values():
+            if outcome.get("status") == "loading":
+                outcome.update(status="cancelled", message="superseded")
+        self._latest_project_request_id = request.request_id
+        self._project_load_outcomes[request.request_id] = {
+            "request_id": request.request_id,
+            "status": "loading",
+            "phase": "queued",
+            "progress": 0.0,
+            "path": str(request.project_path),
+            "message": "",
+            "state": None,
+        }
+        self._project_load_show_errors[request.request_id] = bool(show_dialog)
+        self.project_loader.start(request)
+        self.statusBar().showMessage(f"Project loading: {request.project_path}")
+        return {
+            "accepted": True,
+            "request_id": request.request_id,
+            "project_load": dict(self._project_load_outcomes[request.request_id]),
+        }
+
+    def open_project(
+        self,
+        path: str | Path,
+        *,
+        wait: bool = True,
+        timeout_ms: int = 120_000,
+        length_unit_override: str | None = None,
+        show_dialog: bool = False,
+    ) -> dict[str, Any]:
+        """Open a project through the worker coordinator.
+
+        ``wait=True`` retains the historical synchronous API while a nested Qt
+        event loop keeps the GUI responsive. File-dialog callers use
+        ``wait=False`` and receive completion through the coordinator signals.
+        """
+
+        accepted = self.start_project_load(
+            path,
+            length_unit_override=length_unit_override,
+            show_dialog=show_dialog,
+        )
+        if not wait:
+            return accepted
+        return self._wait_for_project_load(
+            accepted["request_id"],
+            timeout_ms=timeout_ms,
+        )
+
+    def cancel_project_load(self) -> None:
+        if self._is_load_active("project"):
+            self.load_coordinator.cancel()
+            self.statusBar().showMessage("Project cancellation requested")
+
+    def project_load_state(self) -> dict[str, Any]:
+        request_id = self._latest_project_request_id
+        if request_id is None:
+            return {
+                "request_id": None,
+                "status": "idle",
+                "phase": "",
+                "progress": 0.0,
+                "path": None,
+                "message": "",
+            }
+        return dict(self._project_load_outcomes[request_id])
+
+    def _wait_for_project_load(
+        self,
+        request_id: object,
+        *,
+        timeout_ms: int,
+    ) -> dict[str, Any]:
+        outcome = wait_for_loader_outcome(
+            self.project_loader,
+            self._project_load_outcomes,
+            request_id,
+            timeout_ms=timeout_ms,
+            timeout_message=f"project loading timed out after {timeout_ms} ms",
+            cancel=self.cancel_project_load,
+        )
+        if outcome["status"] == "ready":
+            return dict(outcome["state"])
+        if outcome["status"] == "cancelled":
+            raise ProjectLoadCancelled(outcome.get("message") or "project loading cancelled")
+        raise RuntimeError(outcome.get("message") or "project loading failed")
+
+    def _on_project_load_progress(
+        self,
+        request_id: object,
+        phase: str,
+        fraction: float,
+    ) -> None:
+        outcome = self._project_load_outcomes.get(request_id)
+        if outcome is None or outcome.get("status") != "loading":
+            return
+        outcome.update(
+            phase=str(phase),
+            progress=max(0.0, min(1.0, float(fraction))),
+        )
+        self.statusBar().showMessage(f"Project {phase}: {float(fraction) * 100.0:.0f}%")
+
+    def _on_project_load_completed(self, result: LoadResult) -> None:
+        request_id = result.request_id
+        outcome = self._project_load_outcomes.get(request_id)
+        if outcome is None or outcome.get("status") != "loading":
+            result.close()
+            return
+        try:
+            if not isinstance(result.project, ProjectLoaded):
+                raise RuntimeError("project worker returned no verified project")
+            state = self._commit_loaded_project(
+                result.project,
+                interactive=bool(self._project_load_show_errors.get(request_id, False)),
+            )
+            outcome.update(
+                status="ready",
+                phase="commit",
+                progress=1.0,
+                message="",
+                state=state,
+                length_unit_override=result.length_unit_override,
+            )
+            self.statusBar().showMessage(f"Project loaded: {result.project.project_json}")
+        except ProjectOpenCancelled as exc:
+            outcome.update(status="cancelled", message=str(exc), state=None)
+            self.statusBar().showMessage(str(exc))
+        except Exception as exc:
+            message = str(exc)
+            outcome.update(status="error", message=message, state=None)
+            self.statusBar().showMessage(f"Project loading failed: {message}")
+            if self._project_load_show_errors.get(request_id, False):
+                self.show_error(message)
+        finally:
+            self._project_load_show_errors.pop(request_id, None)
+            result.close()
+
+    def _on_project_load_failed(self, request_id: object, message: str) -> None:
+        outcome = self._project_load_outcomes.get(request_id)
+        if outcome is None or outcome.get("status") != "loading":
+            return
+        outcome.update(status="error", message=str(message), state=None)
+        self.statusBar().showMessage(f"Project loading failed: {message}")
+        if self._project_load_show_errors.pop(request_id, False):
+            self.show_error(str(message))
+
+    def _on_project_load_cancelled(self, request_id: object) -> None:
+        outcome = self._project_load_outcomes.get(request_id)
+        if outcome is None:
+            return
+        outcome.update(status="cancelled", message="project loading cancelled", state=None)
+        self._project_load_show_errors.pop(request_id, None)
+        self.statusBar().showMessage("Project loading cancelled")
+
+    def _commit_loaded_project(
+        self,
+        loaded: ProjectLoaded,
+        *,
+        interactive: bool = False,
+    ) -> dict[str, Any]:
+        """Publish one fully verified worker result on the Qt main thread."""
+
+        if len(loaded.setups) > 1:
+            raise ProjectFormatError(
+                "this application release can open at most one Manufacturing Setup; "
+                f"the project contains {len(loaded.setups)}"
+            )
+        if loaded.setup is not None and not isinstance(loaded.setup, ManufacturingSetup):
+            raise ProjectFormatError("project Setup was not reconstructed as ManufacturingSetup")
+        setup = loaded.setup or ManufacturingSetup()
+        # Construct and validate the candidate controller before publishing any
+        # model or Viewer state. Structural operation errors therefore leave
+        # the previously committed project untouched.
+        tube_operations, planar_operations = planar_shell.split_operations(loaded.operations)
+        controller = TubeSetupController(
+            loaded.model,
+            setup=setup,
+            operations=tube_operations,
+        )
+        planar_controller = planar_shell.PlanarController(
+            loaded.model, setup=setup, operations=planar_operations
+        )
+        self.tube_script_service.prepare_project_controller(
+            controller,
+            loaded.project_directory,
+            interactive=interactive,
+        )
+        source_payload = loaded.payload.get("source")
+        original_path = (
+            source_payload.get("original_path") if isinstance(source_payload, Mapping) else None
+        )
+        original_step_path = (
+            Path(original_path).expanduser().resolve()
+            if isinstance(original_path, str) and original_path.strip()
+            else None
+        )
+        workbench = str(loaded.workbench.get("workbench", "curve"))
+        if workbench not in {item.key for item in WORKBENCHES}:
+            workbench = "curve"
+        with model_commit.publication_transaction(self):
+            self.model = loaded.model
+            self._original_step_path = original_step_path
+            if loaded.model is None:
+                self.viewer.clear_model()
+            else:
+                self.viewer.load_model(loaded.model)
+                self.viewer.set_selection(
+                    body_ids=list(loaded.selection.body_ids),
+                    face_ids=list(loaded.selection.face_ids),
+                    edge_ids=list(loaded.selection.edge_ids),
+                    vertex_ids=list(loaded.selection.vertex_ids),
+                )
+            self.progress_timer.stop()
+            self.progress_play_button.setText(">")
+            self.progress_play_button.setToolTip(tr(self.language, "progress_play"))
+            self.gcode_preview = loaded.gcode_preview
+            if loaded.gcode_preview is None:
+                self.viewer.clear_gcode_preview()
+            else:
+                self.viewer.load_gcode_preview(loaded.gcode_preview)
+            self.tube_page.set_controller(controller, loaded.model)
+            self.planar_page.set_controller(planar_controller)
+            self.planar_command_service = self.planar_page.commands
+            if loaded.model is not None:
+                self.tube_page.viewer.set_selection(
+                    body_ids=list(loaded.selection.body_ids),
+                    face_ids=list(loaded.selection.face_ids),
+                    edge_ids=list(loaded.selection.edge_ids),
+                    vertex_ids=list(loaded.selection.vertex_ids),
+                )
+            self.current_workbench_key = workbench
+            self.current_operation = str(loaded.workbench.get("operation", "imported_nc_review"))
+            self.last_project_dir = loaded.project_directory
+            model_commit.refresh_publication_ui(self)
+            self._show_session()
+        config_recovered = self.tube_script_service.bind_prepared_project(controller)
+        if not config_recovered:
+            controller.mark_saved()
+        state = self.current_state()
+        state["project"] = {
+            "path": str(loaded.project_json),
+            "migrated_from_v1": loaded.migrated_from_v1,
+        }
+        return state
+
+    def start_gcode_load(
+        self,
+        path: str | Path,
+        *,
+        model_path: str | Path | None = None,
+        show_dialog: bool = True,
+    ) -> dict[str, Any]:
+        self._gcode_request_sequence += 1
+        request = LoadRequest(
+            request_id=f"gcode-{self._gcode_request_sequence}",
+            model_path=model_path,
+            gcode_path=path,
+        )
+        self._latest_gcode_request_id = request.request_id
+        self._gcode_load_outcomes[request.request_id] = {
+            "request_id": request.request_id,
+            "status": "loading",
+            "phase": "queued",
+            "progress": 0.0,
+            "path": str(request.gcode_path),
+            "message": "",
+        }
+        self._gcode_load_show_errors[request.request_id] = bool(show_dialog)
+        self.load_coordinator.start(request)
+        self.statusBar().showMessage(f"G-code loading: {request.gcode_path}")
+        return {
+            "accepted": True,
+            "request_id": request.request_id,
+            "gcode_load": dict(self._gcode_load_outcomes[request.request_id]),
+        }
+
+    def open_gcode(
+        self,
+        path: str | Path,
+        show_dialog: bool = True,
+        *,
+        timeout_ms: int = 120_000,
+        model_path: str | Path | None = None,
+    ) -> dict[str, Any]:
+        """Retain the synchronous API while parsing G-code on the worker."""
+
+        accepted = self.start_gcode_load(
+            path,
+            model_path=model_path,
+            show_dialog=show_dialog,
+        )
+        outcome = wait_for_loader_outcome(
+            self.gcode_loader,
+            self._gcode_load_outcomes,
+            accepted["request_id"],
+            timeout_ms=timeout_ms,
+            timeout_message=f"G-code loading timed out after {timeout_ms} ms",
+            cancel=self.cancel_gcode_load,
+        )
+        if outcome["status"] == "ready":
+            return self.current_state()
+        if outcome["status"] == "cancelled":
+            raise RuntimeError(outcome.get("message") or "G-code loading cancelled")
+        raise RuntimeError(outcome.get("message") or "G-code loading failed")
+
+    def cancel_gcode_load(self) -> None:
+        if self._is_load_active("gcode"):
+            self.load_coordinator.cancel()
+
+    def gcode_load_state(self) -> dict[str, Any]:
+        request_id = self._latest_gcode_request_id
+        if request_id is None:
+            return {
+                "request_id": None,
+                "status": "idle",
+                "phase": "",
+                "progress": 0.0,
+                "path": None,
+                "message": "",
+            }
+        return dict(self._gcode_load_outcomes[request_id])
+
+    def _on_gcode_load_progress(
+        self,
+        request_id: object,
+        phase: str,
+        fraction: float,
+    ) -> None:
+        outcome = self._gcode_load_outcomes.get(request_id)
+        if outcome is None or outcome.get("status") != "loading":
+            return
+        outcome.update(
+            phase=str(phase),
+            progress=max(0.0, min(1.0, float(fraction))),
+        )
+        self.statusBar().showMessage(f"G-code {phase}: {fraction * 100.0:.0f}%")
+
+    def _on_gcode_load_completed(self, result: LoadResult) -> None:
+        outcome = self._gcode_load_outcomes.get(result.request_id)
+        if outcome is None or outcome.get("status") != "loading":
+            result.close()
+            return
+        try:
+            with model_commit.publication_transaction(self):
+                if result.model is not None:
+                    self._commit_model(result.model)
+                if result.gcode_preview is None:
+                    raise RuntimeError("G-code worker returned no preview")
+                self._commit_gcode_preview(result.gcode_preview)
+            outcome.update(
+                status="ready",
+                phase="commit",
+                progress=1.0,
+                message="",
+            )
+        except Exception as exc:
+            outcome.update(status="error", message=str(exc))
+            self.statusBar().showMessage(tr(self.language, "status_error", message=str(exc)))
+            if self._gcode_load_show_errors.get(result.request_id, False):
+                self.show_error(str(exc))
+        finally:
+            self._gcode_load_show_errors.pop(result.request_id, None)
+            result.close()
+
+    def _commit_gcode_preview(self, preview: Any) -> None:
+        with model_commit.publication_transaction(self):
+            self.gcode_preview = preview
+            self.viewer.load_gcode_preview(preview)
+            self._show_session()
+            self.preview_tabs.setCurrentWidget(self.preview_tab)
+            model_commit.refresh_publication_ui(self)
+            QTimer.singleShot(1400, self._update_preview_summary)
+            summary = preview.summary()
+            self.statusBar().showMessage(
+                tr(
+                    self.language,
+                    "status_gcode_loaded",
+                    segment_count=summary["segment_count"],
+                    layer_count=preview.layer_count,
+                )
+            )
+
+    def _on_gcode_load_failed(self, request_id: object, message: str) -> None:
+        outcome = self._gcode_load_outcomes.get(request_id)
+        if outcome is None or outcome.get("status") != "loading":
+            return
+        outcome.update(status="error", message=str(message))
+        self.statusBar().showMessage(tr(self.language, "status_error", message=str(message)))
+        if self._gcode_load_show_errors.pop(request_id, False):
+            self.show_error(str(message))
+
+    def _on_gcode_load_cancelled(self, request_id: object) -> None:
+        outcome = self._gcode_load_outcomes.get(request_id)
+        if outcome is None or outcome.get("status") != "loading":
+            return
+        outcome.update(status="cancelled", message="G-code loading cancelled")
+        self._gcode_load_show_errors.pop(request_id, None)
+        self.statusBar().showMessage("G-code loading cancelled")
+
+    def load_demo(self) -> None:
+        if DEMO_GCODE.exists():
+            self.open_gcode(
+                DEMO_GCODE,
+                model_path=DEMO_STEP if DEMO_STEP.exists() else None,
+            )
+        elif DEMO_STEP.exists():
+            self.open_model(DEMO_STEP)
+        self.preview_tabs.setCurrentWidget(self.preview_tab)
+
+    def save_project_dialog(self) -> None:
+        directory = QFileDialog.getExistingDirectory(self, tr(self.language, "save"), "")
+        if not directory:
+            return
+        draft_resolution: str | None = None
+        if self.tube_page.controller.has_drafts:
+            prompt = QMessageBox(self)
+            prompt.setWindowTitle(tr(self.language, "save"))
+            prompt.setText(
+                "制造 Setup 含未应用草稿，请选择 Apply、Discard 或取消保存。"
+                if self.language == "zh"
+                else "Manufacturing Setup has unapplied drafts. Apply, discard, or cancel saving."
+            )
+            prompt.setStandardButtons(QMessageBox.Apply | QMessageBox.Discard | QMessageBox.Cancel)
+            choice = prompt.exec()
+            if choice == QMessageBox.Cancel:
+                return
+            draft_resolution = "apply" if choice == QMessageBox.Apply else "discard"
+        try:
+            self.save_project_to(directory, draft_resolution=draft_resolution)
+        except Exception as exc:
+            self.show_error(str(exc))
+
+    def save_project_to(
+        self,
+        directory: str | Path,
+        *,
+        draft_resolution: str | None = None,
+    ) -> dict[str, Any]:
+        if self.model is None and self.gcode_preview is None:
+            raise RuntimeError(tr(self.language, "no_project_content"))
+        controller = self.tube_page.controller
+        selection_viewer = (
+            self.tube_page.viewer if self.current_workbench_key == "tube" else self.viewer
+        )
+        with controller.draft_resolution_transaction(draft_resolution):
+            path = save_project(
+                directory,
+                self.model,
+                selection_viewer.selection,
+                self._workbench_state(),
+                self.gcode_preview,
+                self.viewer.preview_settings,
+                result_preview_state=self.result_page.state,
+                setup=controller.setup,
+                operations=controller.operations + self.planar_page.controller.operations,
+                resources=self.tube_page.project_resources(),
+                original_source_path=self._original_step_path,
+            )
+        self.last_project_dir = Path(directory)
+        controller.mark_saved()
+        config_warning = self.tube_script_service.project_saved(directory)
+        if config_warning is None:
+            self.statusBar().showMessage(tr(self.language, "status_saved", path=path))
+        else:
+            self.statusBar().showMessage(config_warning)
+        return {"project_json": str(path), "config_warning": config_warning}
+
+    def refresh_lists(self) -> None:
+        if self.model is None:
+            self.body_list.set_rows([], set())
+            self.edge_list.set_rows([], set())
+            return
+        self.body_list.set_rows(self._body_rows(), self.viewer.selection.body_ids)
+        self.edge_list.set_rows(self._edge_rows(), self.viewer.selection.edge_ids)
+
+    def handle_automation(self, path: str, payload: dict[str, Any]) -> dict[str, Any]:
+        """Compatibility entry point used by tests and in-process clients."""
+
+        return self._automation_router.dispatch(path, payload)
+
+    def benchmark_result_render(
+        self,
+        *,
+        frames: int = 6,
+        width: int = 1280,
+        height: int = 720,
+    ) -> dict[str, Any]:
+        viewer = self.result_page.viewer
+        if not hasattr(viewer, "render_scene_image"):
+            raise RuntimeError(tr(self.language, "error_render_unavailable"))
+        frame_count = max(1, min(int(frames), 30))
+        samples: list[float] = []
+        for _ in range(frame_count):
+            started = time.perf_counter()
+            image = viewer.render_scene_image(int(width), int(height))
+            if image.isNull():
+                raise RuntimeError(tr(self.language, "error_render_unavailable"))
+            samples.append((time.perf_counter() - started) * 1000.0)
+        average = sum(samples) / len(samples)
+        return {
+            "backend": self.result_page.state_json()["viewer"]["capabilities"].get("backend"),
+            "quality_mode": self.result_page.state.quality_mode,
+            "frame_count": frame_count,
+            "frame_size_px": [int(width), int(height)],
+            "frame_ms_average": round(average, 6),
+            "frame_ms_maximum": round(max(samples), 6),
+            "fps_equivalent": round(1000.0 / average, 3) if average > 0.0 else 0.0,
+        }
+
+    def current_state(self) -> dict[str, Any]:
+        model_state = None
+        if self.model is not None:
+            model_state = {
+                "source_path": str(self.model.source_path),
+                "original_source_path": (
+                    None if self._original_step_path is None else str(self._original_step_path)
+                ),
+                "source_hash": self.model.source_hash,
+                "body_count": len(self.model.bodies),
+                "solid_count": len(self.model.solid_bodies),
+                "face_count": len(self.model.faces),
+                "edge_count": len(self.model.edges),
+                "vertex_count": len(self.model.vertices),
+                "units": self.model.units.to_json(),
+                "bodies": [body.to_json() for body in self.model.bodies],
+            }
+        selection_viewer = (
+            self.tube_page.viewer if self.current_workbench_key == "tube" else self.viewer
+        )
+        tube_state = self.tube_page.state_json()
+        tube_state["commands"] = self.tube_script_service.state_json()
+        return {
+            "language": self.language,
+            "page": self._current_page_name(),
+            "workbench": self._workbench_state(),
+            "model": model_state,
+            "selection": selection_viewer.selection.to_json(),
+            "preview": self.viewer.preview_state(),
+            "tube": tube_state,
+            "planar": self.planar_page.state_json(),
+            "results": self.result_page.state_json(),
+            "result_load_metrics": self._public_load_metrics(),
+        }
+
+    def enter_workbench(self, key: str) -> None:
+        if key not in {workbench.key for workbench in WORKBENCHES}:
+            raise RuntimeError(f"Unknown workbench: {key}")
+        if key == "planar" and planar_shell.sync_shared_setup(
+            self.planar_page.controller, self.tube_page.controller.setup
+        ):
+            self.planar_page.refresh()
+        self.current_workbench_key = key
+        if key == "tube":
+            self.current_operation = (
+                self.tube_page.controller.operations[0].operation_type
+                if self.tube_page.controller.operations
+                else "tube_setup"
+            )
+        elif key == "planar":
+            self.current_operation = planar_shell.current_operation(self.planar_page.controller)
+        else:
+            self.current_operation = "imported_nc_review"
+        self._update_operation_combo()
+        self._show_session()
+        if key == "tube":
+            self.tube_page.activate_coordinate_entry()
+        self._update_workbench_texts()
+        self._update_checks()
+
+    def set_mode(self, mode: str) -> None:
+        if mode not in {"body", "face", "edge", "vertex"}:
+            raise RuntimeError(f"Unsupported selection mode: {mode}")
+        viewer = self.tube_page.viewer if self.current_workbench_key == "tube" else self.viewer
+        viewer.set_mode(mode)
+        if self.current_workbench_key == "tube":
+            self.tube_page.refresh()
+        else:
+            self.refresh_lists()
+
+    def clear_selection(self) -> None:
+        viewer = self.tube_page.viewer if self.current_workbench_key == "tube" else self.viewer
+        viewer.clear_selection()
+        if self.current_workbench_key == "tube":
+            self.tube_page.refresh()
+        else:
+            self.refresh_lists()
+
+    def toggle_language(self) -> None:
+        self.set_language("en" if self.language == "zh" else "zh")
+
+    def set_language(self, language: str) -> None:
+        if language not in {"zh", "en"}:
+            raise ValueError(f"Unsupported UI language: {language}")
+        self.language = language
+        self.settings.setValue("language", language)
+        self.retranslate()
+
+    def retranslate(self) -> None:
+        self.setWindowTitle(tr(self.language, "app_title"))
+        self.home_action.setText(tr(self.language, "workbench_home"))
+        self.open_project_action.setText(tr(self.language, "open_project"))
+        self.open_action.setText(tr(self.language, "open_step"))
+        self.open_gcode_action.setText(tr(self.language, "open_gcode"))
+        self.save_action.setText(tr(self.language, "save"))
+        self.clear_action.setText(tr(self.language, "clear"))
+        self.fit_action.setText(tr(self.language, "fit"))
+        self.home_view_action.setText(tr(self.language, "home_view"))
+        self.language_action.setText(tr(self.language, "language"))
+        self.script_console_manager.set_language(self.language)
+        self.tube_script_service.retranslate()
+        self._retranslate_menus()
+        self.home_title.setText(tr(self.language, "home_title"))
+        self.home_subtitle.setText(tr(self.language, "home_subtitle"))
+        self.gcode_viewer_button.setText(tr(self.language, "gcode_viewer_entry"))
+        self.back_button.setText(tr(self.language, "workbench_home"))
+        self.open_button.setText(tr(self.language, "open_step"))
+        self.open_gcode_button.setText(tr(self.language, "open_gcode"))
+        self.save_button.setText(tr(self.language, "save"))
+        self.clear_button.setText(tr(self.language, "clear"))
+        self.language_button.setText(tr(self.language, "language"))
+        self.tube_coordinate_button.setText(tr(self.language, "tube_coordinate_entry"))
+        self.operation_label.setText(tr(self.language, "operation"))
+        self.model_file_title.setText(tr(self.language, "model_file"))
+        self.gcode_file_title.setText(tr(self.language, "gcode_file"))
+        self.preview_tabs.setTabText(0, tr(self.language, "tab_objects"))
+        self.preview_tabs.setTabText(1, tr(self.language, "tab_print"))
+        self.preview_tabs.setTabText(2, tr(self.language, "tab_material"))
+        self.preview_tabs.setTabText(3, tr(self.language, "tab_machine"))
+        self.preview_tabs.setTabText(4, tr(self.language, "tab_preview"))
+        self.preview_tabs.setTabText(5, tr(self.language, "tab_checks"))
+        self.body_label.setText(tr(self.language, "body_list"))
+        self.edge_label.setText(tr(self.language, "edge_list"))
+        self.layer_range_title.setText(tr(self.language, "layer_range"))
+        self.travel_checkbox.setText(tr(self.language, "show_travel"))
+        self.extrusion_checkbox.setText(tr(self.language, "show_extrusion"))
+        self.pose_checkbox.setText(tr(self.language, "show_pose"))
+        self.legend_title.setText(tr(self.language, "feature_legend"))
+        self.preview_summary_title.setText(tr(self.language, "preview_summary"))
+        self.segment_property_title.setText(tr(self.language, "segment_property"))
+        self.preview_progress_title.setText(tr(self.language, "path_progress"))
+        self.path_progress_title.setText(tr(self.language, "path_progress"))
+        self.progress_prev_button.setToolTip(tr(self.language, "progress_prev"))
+        self.progress_play_button.setToolTip(
+            tr(self.language, "progress_pause")
+            if self.progress_timer.isActive()
+            else tr(self.language, "progress_play")
+        )
+        self.progress_next_button.setToolTip(tr(self.language, "progress_next"))
+        self.checks_title.setText(tr(self.language, "checks_title"))
+        self.result_page.retranslate(self.language)
+        self.tube_page.set_language(self.language)
+        self.planar_page.set_language(self.language)
+        for group, key in self.localized_groups:
+            group.setTitle(tr(self.language, key))
+        for label, key in self.localized_labels:
+            label.setText(tr(self.language, key))
+        self._update_workbench_texts()
+        self._update_operation_combo()
+        self._sync_legend_labels()
+        self._update_file_labels()
+        self._sync_progress_controls()
+        self._update_preview_summary()
+        self._update_checks()
+        self._sync_result_actions()
+
+    def _retranslate_menus(self) -> None:
+        self.file_menu.setTitle(tr(self.language, "menu_file"))
+        self.model_menu.setTitle(tr(self.language, "menu_model"))
+        self.slice_menu.setTitle(tr(self.language, "menu_slice"))
+        self.preview_menu.setTitle(tr(self.language, "menu_preview"))
+        self.gcode_menu.setTitle(tr(self.language, "menu_gcode"))
+        self.tools_menu.setTitle(tr(self.language, "menu_tools"))
+        self.help_menu.setTitle(tr(self.language, "menu_help"))
+        self.standard_view_menu.setTitle(tr(self.language, "view_tools"))
+        self.visibility_menu.setTitle(tr(self.language, "visibility_title"))
+        self.quality_menu.setTitle(tr(self.language, "quality_mode"))
+        self.language_menu.setTitle(tr(self.language, "language"))
+
+        action_keys = {
+            self.open_action: "action_open_step",
+            self.open_gcode_action: "action_open_gcode",
+            self.save_action: "action_save_project",
+            self.open_results_action: "action_open_result_preview",
+            self.load_results_demo_action: "action_load_impeller_demo",
+            self.slice_results_action: "action_slice_and_preview",
+            self.cancel_results_action: "action_cancel_loading",
+            self.exit_action: "action_exit",
+            self.fit_action: "action_fit_view",
+            self.home_view_action: "action_home_view",
+            self.search_gcode_action: "action_search_gcode",
+            self.jump_gcode_action: "action_jump_to_line",
+            self.help_action: "action_user_guide",
+            self.about_action: "action_about",
+        }
+        for action, key in action_keys.items():
+            action.setText(tr(self.language, key))
+
+        standard_view_keys = {
+            "isometric": "action_view_isometric",
+            "front": "action_view_front",
+            "back": "action_view_back",
+            "left": "action_view_left",
+            "right": "action_view_right",
+            "top": "action_view_top",
+            "bottom": "action_view_bottom",
+        }
+        for name, action in self.standard_view_actions.items():
+            action.setText(tr(self.language, standard_view_keys[name]))
+
+        visibility_keys = {
+            "show_model": "action_toggle_model",
+            "show_extrusion": "action_toggle_extrusion",
+            "show_start_end": "action_toggle_start_end",
+            "show_axes": "action_toggle_part_axes",
+            "show_orientation_cube": "action_toggle_orientation_cube",
+            "show_travel": "action_toggle_travel",
+            "show_pose_samples": "action_toggle_pose",
+        }
+        for name, action in self.result_visibility_actions.items():
+            action.setText(tr(self.language, visibility_keys[name]))
+        self.quality_actions["interactive"].setText(tr(self.language, "action_quality_interactive"))
+        self.quality_actions["paper"].setText(tr(self.language, "action_quality_paper"))
+        self.language_actions["zh"].setText(tr(self.language, "action_language_chinese"))
+        self.language_actions["en"].setText(tr(self.language, "action_language_english"))
+
+        self.load_results_demo_action.setToolTip(tr(self.language, "tooltip_load_demo"))
+        self.open_action.setToolTip(tr(self.language, "tooltip_open_step"))
+        self.open_gcode_action.setToolTip(tr(self.language, "tooltip_open_gcode"))
+        self.slice_results_action.setToolTip(tr(self.language, "tooltip_slice_preview"))
+        self.cancel_results_action.setToolTip(tr(self.language, "tooltip_cancel_loading"))
+        self.fit_action.setToolTip(tr(self.language, "tooltip_fit_view"))
+        self.home_view_action.setToolTip(tr(self.language, "tooltip_home_view"))
+        self.search_gcode_action.setToolTip(tr(self.language, "tooltip_gcode_search"))
+        self.jump_gcode_action.setToolTip(tr(self.language, "tooltip_gcode_jump"))
+        self.language_action.setToolTip(tr(self.language, "tooltip_language"))
+        self.help_action.setToolTip(tr(self.language, "tooltip_help"))
+
+    def show_error(self, message: str) -> None:
+        self.statusBar().showMessage(tr(self.language, "status_error", message=message))
+        QMessageBox.warning(self, tr(self.language, "app_title"), message)
+
+    def _build_ui(self) -> None:
+        self._build_actions()
+
+        self.stack = QStackedWidget()
+        self.home_page = self._build_home_page()
+        self.session_page = self._build_session_page()
+        self.tube_page = TubeSetupPage(self, viewer_factory=self._model_viewer_factory)
+        self.tube_page.back_requested.connect(self._show_home)
+        self.tube_page.open_step_requested.connect(self.open_model_dialog)
+        self.tube_page.update_source_requested.connect(self._update_model_from_source_ui)
+        self.tube_page.save_requested.connect(self.save_project_dialog)
+        self.tube_page.error_raised.connect(self.show_error)
+        self.planar_page = planar_shell.install_planar_page(self)
+        self.planar_command_service = self.planar_page.commands
+        self.result_page = ResultPreviewPage(
+            viewer_factory=self._result_viewer_factory, parent=self
+        )
+        self.result_page.back_requested.connect(self._show_home)
+        self.result_page.load_demo_requested.connect(self._load_results_demo_from_ui)
+        self.result_page.open_gcode_requested.connect(self.open_result_gcode_dialog)
+        self.result_page.open_step_requested.connect(self.open_result_model_dialog)
+        self.result_page.slice_preview_requested.connect(self._slice_results_from_ui)
+        self.result_page.cancel_loading_requested.connect(self.cancel_result_load)
+        self.result_page.quality_changed.connect(lambda _mode: self._sync_result_actions())
+        self.result_page.display_state_changed.connect(lambda _state: self._sync_result_actions())
+        self.stack.addWidget(self.home_page)
+        self.stack.addWidget(self.session_page)
+        self.stack.addWidget(self.tube_page)
+        self.stack.addWidget(self.planar_page)
+        self.stack.addWidget(self.result_page)
+        self.stack.currentChanged.connect(lambda _index: self._update_context_actions())
+        self.setCentralWidget(self.stack)
+        self.script_console_manager = install_script_console(self)
+        self.tube_script_service = TubeScriptService(self, self.script_console_manager.dock)
+        self.setStatusBar(QStatusBar(self))
+        self.setMinimumSize(1280, 720)
+        self.resize(1600, 900)
+
+    def _build_actions(self) -> None:
+        self.home_action = QAction(self)
+        self.open_project_action = QAction(self)
+        self.open_action = QAction(self)
+        self.open_gcode_action = QAction(self)
+        self.save_action = QAction(self)
+        self.clear_action = QAction(self)
+        self.fit_action = QAction(self)
+        self.home_view_action = QAction(self)
+        self.language_action = QAction(self)
+        self.open_results_action = QAction(self)
+        self.load_results_demo_action = QAction(self)
+        self.slice_results_action = QAction(self)
+        self.cancel_results_action = QAction(self)
+        self.exit_action = QAction(self)
+        self.search_gcode_action = QAction(self)
+        self.jump_gcode_action = QAction(self)
+        self.help_action = QAction(self)
+        self.about_action = QAction(self)
+        self.home_action.triggered.connect(self._show_home)
+        self.open_project_action.triggered.connect(self.open_project_dialog)
+        self.open_action.triggered.connect(self._open_model_from_shell)
+        self.open_gcode_action.triggered.connect(self._open_gcode_from_shell)
+        self.save_action.triggered.connect(self.save_project_dialog)
+        self.clear_action.triggered.connect(self.clear_selection)
+        self.fit_action.triggered.connect(self._fit_active_view)
+        self.home_view_action.triggered.connect(self._home_active_view)
+        self.language_action.triggered.connect(self.toggle_language)
+        self.open_results_action.triggered.connect(self._show_results)
+        self.load_results_demo_action.triggered.connect(self._load_results_demo_from_ui)
+        self.slice_results_action.triggered.connect(self._slice_results_from_ui)
+        self.cancel_results_action.triggered.connect(self.cancel_result_load)
+        self.exit_action.triggered.connect(self.close)
+        self.search_gcode_action.triggered.connect(self._focus_result_gcode_search)
+        self.jump_gcode_action.triggered.connect(self._focus_result_gcode_jump)
+        self.help_action.triggered.connect(self._show_result_help)
+        self.about_action.triggered.connect(self._show_about)
+
+        self.standard_view_actions: dict[str, QAction] = {}
+        for view in ("isometric", "front", "back", "left", "right", "top", "bottom"):
+            action = QAction(self)
+            action.triggered.connect(
+                lambda _checked=False, name=view: self._set_active_standard_view(name)
+            )
+            self.standard_view_actions[view] = action
+
+        self.result_visibility_actions: dict[str, QAction] = {}
+        for name in (
+            "show_model",
+            "show_extrusion",
+            "show_start_end",
+            "show_axes",
+            "show_orientation_cube",
+            "show_travel",
+            "show_pose_samples",
+        ):
+            action = QAction(self)
+            action.setCheckable(True)
+            action.toggled.connect(
+                lambda checked, attribute=name: self._set_result_visibility(attribute, checked)
+            )
+            self.result_visibility_actions[name] = action
+
+        self.quality_action_group = QActionGroup(self)
+        self.quality_action_group.setExclusive(True)
+        self.quality_actions: dict[str, QAction] = {}
+        for mode in ("interactive", "paper"):
+            action = QAction(self)
+            action.setCheckable(True)
+            action.triggered.connect(
+                lambda _checked=False, value=mode: self._set_result_quality_mode(value)
+            )
+            self.quality_action_group.addAction(action)
+            self.quality_actions[mode] = action
+
+        self.language_action_group = QActionGroup(self)
+        self.language_action_group.setExclusive(True)
+        self.language_actions: dict[str, QAction] = {}
+        for language in ("zh", "en"):
+            action = QAction(self)
+            action.setCheckable(True)
+            action.triggered.connect(
+                lambda _checked=False, value=language: self.set_language(value)
+            )
+            self.language_action_group.addAction(action)
+            self.language_actions[language] = action
+
+        menu_bar = self.menuBar()
+        self.file_menu = menu_bar.addMenu("")
+        self.model_menu = menu_bar.addMenu("")
+        self.slice_menu = menu_bar.addMenu("")
+        self.preview_menu = menu_bar.addMenu("")
+        self.gcode_menu = menu_bar.addMenu("")
+        self.tools_menu = menu_bar.addMenu("")
+        self.help_menu = menu_bar.addMenu("")
+
+        self.file_menu.addAction(self.load_results_demo_action)
+        self.file_menu.addSeparator()
+        self.file_menu.addAction(self.open_project_action)
+        self.file_menu.addAction(self.open_action)
+        self.file_menu.addAction(self.open_gcode_action)
+        self.file_menu.addAction(self.save_action)
+        self.file_menu.addSeparator()
+        self.file_menu.addAction(self.exit_action)
+        self.model_menu.addAction(self.open_action)
+        self.model_menu.addAction(self.clear_action)
+        self.model_menu.addAction(self.result_visibility_actions["show_model"])
+        self.slice_menu.addAction(self.open_results_action)
+        self.slice_menu.addAction(self.slice_results_action)
+        self.slice_menu.addAction(self.cancel_results_action)
+        self.preview_menu.addAction(self.fit_action)
+        self.preview_menu.addAction(self.home_view_action)
+        self.standard_view_menu = self.preview_menu.addMenu("")
+        for action in self.standard_view_actions.values():
+            self.standard_view_menu.addAction(action)
+        self.visibility_menu = self.preview_menu.addMenu("")
+        for action in self.result_visibility_actions.values():
+            self.visibility_menu.addAction(action)
+        self.quality_menu = self.preview_menu.addMenu("")
+        for action in self.quality_actions.values():
+            self.quality_menu.addAction(action)
+        self.gcode_menu.addAction(self.open_gcode_action)
+        self.gcode_menu.addAction(self.search_gcode_action)
+        self.gcode_menu.addAction(self.jump_gcode_action)
+        self.language_menu = self.tools_menu.addMenu("")
+        for action in self.language_actions.values():
+            self.language_menu.addAction(action)
+        self.help_menu.addAction(self.help_action)
+        self.help_menu.addAction(self.about_action)
+
+        toolbar = QToolBar("Main", self)
+        toolbar.setObjectName("mainToolbar")
+        toolbar.setMovable(False)
+        self.product_title_label = QLabel("5AxisSclicer V2.0")
+        self.product_title_label.setObjectName("productTitle")
+        toolbar.addWidget(self.product_title_label)
+        toolbar.addSeparator()
+        for action in (
+            self.home_action,
+            self.open_results_action,
+            self.open_project_action,
+            self.open_action,
+            self.open_gcode_action,
+        ):
+            toolbar.addAction(action)
+        toolbar.addSeparator()
+        toolbar.addAction(self.language_action)
+        self.addToolBar(toolbar)
+
+    def _build_home_page(self) -> QWidget:
+        page = QWidget()
+        layout = QVBoxLayout(page)
+        layout.setContentsMargins(28, 24, 28, 28)
+        header = QHBoxLayout()
+        title_box = QVBoxLayout()
+        self.home_title = QLabel()
+        self.home_title.setObjectName("pageTitle")
+        self.home_subtitle = QLabel()
+        self.home_subtitle.setObjectName("mutedText")
+        self.home_subtitle.setWordWrap(True)
+        title_box.addWidget(self.home_title)
+        title_box.addWidget(self.home_subtitle)
+        self.gcode_viewer_button = QPushButton()
+        self.gcode_viewer_button.setObjectName("primaryButton")
+        self.gcode_viewer_button.clicked.connect(self._show_results)
+        header.addLayout(title_box, 1)
+        header.addWidget(self.gcode_viewer_button)
+        layout.addLayout(header)
+
+        grid = QGridLayout()
+        grid.setHorizontalSpacing(14)
+        grid.setVerticalSpacing(14)
+        self.workbench_buttons: dict[str, QPushButton] = {}
+        for index, workbench in enumerate(WORKBENCHES):
+            button = QPushButton()
+            button.setObjectName("workbenchCard")
+            button.setMinimumHeight(128)
+            button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+            button.clicked.connect(
+                lambda _checked=False, key=workbench.key: self.enter_workbench(key)
+            )
+            self.workbench_buttons[workbench.key] = button
+            grid.addWidget(button, index // 3, index % 3)
+        layout.addLayout(grid, 1)
+        return page
+
+    def _build_session_page(self) -> QWidget:
+        page = QWidget()
+        layout = QHBoxLayout(page)
+        layout.setContentsMargins(10, 10, 10, 10)
+        layout.setSpacing(10)
+        layout.addWidget(self._build_left_panel())
+        layout.addWidget(self._build_right_panel())
+        layout.addWidget(self._build_viewer_panel(), 1)
+        return page
+
+    def _build_viewer_panel(self) -> QWidget:
+        panel = QWidget()
+        layout = QVBoxLayout(panel)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(8)
+        layout.addWidget(self.viewer, 1)
+
+        progress_frame = QFrame()
+        progress_frame.setObjectName("progressPanel")
+        progress_layout = QHBoxLayout(progress_frame)
+        progress_layout.setContentsMargins(10, 8, 10, 8)
+        self.path_progress_title = QLabel()
+        self.path_progress_title.setObjectName("mutedText")
+        self.progress_prev_button = QPushButton("|<")
+        self.progress_play_button = QPushButton(">")
+        self.progress_next_button = QPushButton(">|")
+        for button in (
+            self.progress_prev_button,
+            self.progress_play_button,
+            self.progress_next_button,
+        ):
+            button.setFixedWidth(42)
+        self.progress_slider = QSlider(Qt.Horizontal)
+        self.progress_slider.setMinimum(0)
+        self.progress_slider.setMaximum(0)
+        self.progress_slider.setEnabled(False)
+        self.progress_step_label = QLabel()
+        self.progress_step_label.setObjectName("fileText")
+        self.progress_step_label.setMinimumWidth(210)
+        self.progress_prev_button.clicked.connect(lambda: self._nudge_progress(-1))
+        self.progress_next_button.clicked.connect(lambda: self._nudge_progress(1))
+        self.progress_play_button.clicked.connect(self._toggle_progress_playback)
+        self.progress_slider.sliderPressed.connect(self._on_progress_slider_pressed)
+        self.progress_slider.sliderReleased.connect(self._on_progress_slider_released)
+        self.progress_slider.valueChanged.connect(self._on_progress_slider_changed)
+        progress_layout.addWidget(self.path_progress_title)
+        progress_layout.addWidget(self.progress_prev_button)
+        progress_layout.addWidget(self.progress_play_button)
+        progress_layout.addWidget(self.progress_next_button)
+        progress_layout.addWidget(self.progress_slider, 1)
+        progress_layout.addWidget(self.progress_step_label)
+        layout.addWidget(progress_frame)
+        return panel
+
+    def _build_left_panel(self) -> QWidget:
+        panel = QFrame()
+        panel.setObjectName("glassPanel")
+        panel.setFixedWidth(360)
+        layout = QVBoxLayout(panel)
+        self.workbench_title = QLabel()
+        self.workbench_title.setObjectName("panelTitle")
+        self.workbench_summary = QLabel()
+        self.workbench_summary.setObjectName("mutedText")
+        self.workbench_summary.setWordWrap(True)
+        self.operation_label = QLabel()
+        self.operation_combo = QComboBox()
+        self.operation_combo.currentIndexChanged.connect(self._on_operation_changed)
+        self.tube_coordinate_button = action_button(self.enter_workbench, "tube", primary=True)
+        self.back_button = action_button(self._show_home)
+        self.open_button = action_button(self.open_model_dialog)
+        self.open_gcode_button = action_button(self.open_gcode_dialog)
+        self.save_button = action_button(self.save_project_dialog)
+        self.clear_button = action_button(self.clear_selection)
+        self.language_button = action_button(self.toggle_language)
+
+        self.model_file_title = QLabel()
+        self.gcode_file_title = QLabel()
+        self.model_file_label = QLabel()
+        self.gcode_file_label = QLabel()
+        for label in (self.model_file_label, self.gcode_file_label):
+            label.setObjectName("fileText")
+            label.setWordWrap(True)
+            label.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Preferred)
+
+        layout.addWidget(self.workbench_title)
+        layout.addWidget(self.workbench_summary)
+        layout.addSpacing(8)
+        layout.addWidget(self.operation_label)
+        layout.addWidget(self.operation_combo)
+        layout.addWidget(self.tube_coordinate_button)
+        layout.addSpacing(10)
+        for button in (
+            self.back_button,
+            self.open_button,
+            self.open_gcode_button,
+            self.save_button,
+            self.clear_button,
+        ):
+            layout.addWidget(button)
+        layout.addSpacing(10)
+        layout.addWidget(self.model_file_title)
+        layout.addWidget(self.model_file_label)
+        layout.addWidget(self.gcode_file_title)
+        layout.addWidget(self.gcode_file_label)
+        layout.addStretch(1)
+        layout.addWidget(self.language_button)
+        return panel
+
+    def _build_right_panel(self) -> QWidget:
+        panel = QFrame()
+        panel.setObjectName("glassPanel")
+        panel.setFixedWidth(390)
+        layout = QVBoxLayout(panel)
+        self.preview_tabs = QTabWidget()
+        self.objects_tab = self._build_objects_tab()
+        self.print_tab = self._build_print_tab()
+        self.material_tab = self._build_material_tab()
+        self.machine_tab = self._build_machine_tab()
+        self.preview_tab = self._build_preview_tab()
+        self.checks_tab = self._build_checks_tab()
+        for tab in (
+            self.objects_tab,
+            self.print_tab,
+            self.material_tab,
+            self.machine_tab,
+            self.preview_tab,
+            self.checks_tab,
+        ):
+            self.preview_tabs.addTab(tab, "")
+        layout.addWidget(self.preview_tabs)
+        return panel
+
+    def _build_objects_tab(self) -> QWidget:
+        widget = QWidget()
+        layout = QVBoxLayout(widget)
+        self.body_label = QLabel()
+        self.edge_label = QLabel()
+        self.body_list = SelectionList()
+        self.edge_list = SelectionList()
+        self.body_list.itemSelectionChanged.connect(self._on_body_list_selection_changed)
+        self.edge_list.itemSelectionChanged.connect(self._on_edge_list_selection_changed)
+        layout.addWidget(self.body_label)
+        layout.addWidget(self.body_list, 1)
+        layout.addWidget(self.edge_label)
+        layout.addWidget(self.edge_list, 2)
+        return widget
+
+    def _build_print_tab(self) -> QWidget:
+        return self._scroll_with_groups(
+            (
+                self._param_group(
+                    "param_layer_bead",
+                    (
+                        ("param_layer_height", "0.20 mm"),
+                        ("param_bead_width", "0.45 mm"),
+                        ("param_perimeters", "2"),
+                    ),
+                ),
+                self._param_group(
+                    "param_curve_freeform",
+                    (
+                        ("param_sampling_spacing", "0.50 mm"),
+                        ("param_surface_offset", "0.20 mm"),
+                        ("param_toolpath_source", "Imported NC Review"),
+                    ),
+                ),
+            )
+        )
+
+    def _build_material_tab(self) -> QWidget:
+        return self._scroll_with_groups(
+            (
+                self._param_group(
+                    "param_material_profile",
+                    (
+                        ("param_material", "PLA / Resin profile"),
+                        ("param_nozzle_temp", "195 C"),
+                        ("param_platform_temp", "60 C"),
+                    ),
+                ),
+                self._param_group(
+                    "param_extrusion",
+                    (
+                        ("param_extrusion_mode", "Relative E"),
+                        ("param_retraction", "5.0 mm"),
+                        ("param_cooling", "Enabled"),
+                    ),
+                ),
+            )
+        )
+
+    def _build_machine_tab(self) -> QWidget:
+        widget = QWidget()
+        layout = QVBoxLayout(widget)
+        machine_group = QGroupBox()
+        self.localized_groups.append((machine_group, "param_machine_profile"))
+        form = QGridLayout(machine_group)
+        self.axis_map_combo = QComboBox()
+        self.axis_map_combo.addItems(["XYZAC", "XYZAB", "XYZUV"])
+        self.nozzle_spin = QDoubleSpinBox()
+        self.nozzle_spin.setRange(0.1, 3.0)
+        self.nozzle_spin.setSingleStep(0.05)
+        self.nozzle_spin.setValue(0.4)
+        self.travel_spin = QDoubleSpinBox()
+        self.travel_spin.setRange(1.0, 500.0)
+        self.travel_spin.setValue(150.0)
+        for row, (label, widget_item) in enumerate(
+            (
+                ("param_axis_mapping", self.axis_map_combo),
+                ("param_nozzle_diameter", self.nozzle_spin),
+                ("param_max_travel_speed", self.travel_spin),
+                (
+                    "param_rotary_limits",
+                    self._translated_label("param_rotary_metadata"),
+                ),
+            )
+        ):
+            form.addWidget(self._translated_label(label), row, 0)
+            form.addWidget(widget_item, row, 1)
+        layout.addWidget(machine_group)
+        layout.addStretch(1)
+        return widget
+
+    def _build_preview_tab(self) -> QWidget:
+        widget = QWidget()
+        layout = QVBoxLayout(widget)
+        self.preview_summary_title = QLabel()
+        self.preview_summary_title.setObjectName("panelTitle")
+        self.preview_summary = QLabel()
+        self.preview_summary.setObjectName("mutedText")
+        self.preview_summary.setWordWrap(True)
+        self.preview_progress_title = QLabel()
+        self.preview_progress_title.setObjectName("panelTitle")
+        self.preview_progress_slider = QSlider(Qt.Horizontal)
+        self.preview_progress_slider.setMinimum(0)
+        self.preview_progress_slider.setMaximum(0)
+        self.preview_progress_slider.setEnabled(False)
+        self.preview_progress_label = QLabel()
+        self.preview_progress_label.setObjectName("fileText")
+        self.preview_progress_slider.sliderPressed.connect(self._on_progress_slider_pressed)
+        self.preview_progress_slider.sliderReleased.connect(self._on_progress_slider_released)
+        self.preview_progress_slider.valueChanged.connect(self._on_progress_slider_changed)
+        self.segment_property_title = QLabel()
+        self.segment_property_title.setObjectName("panelTitle")
+        self.segment_property = QLabel()
+        self.segment_property.setObjectName("fileText")
+        self.segment_property.setWordWrap(True)
+        self.layer_range_title = QLabel()
+        self.layer_min_slider = QSlider(Qt.Horizontal)
+        self.layer_max_slider = QSlider(Qt.Horizontal)
+        self.layer_min_spin = QSpinBox()
+        self.layer_max_spin = QSpinBox()
+        self.layer_min_slider.valueChanged.connect(self._on_layer_range_changed)
+        self.layer_max_slider.valueChanged.connect(self._on_layer_range_changed)
+        self.layer_min_spin.valueChanged.connect(self._on_layer_spin_changed)
+        self.layer_max_spin.valueChanged.connect(self._on_layer_spin_changed)
+
+        layer_row = QGridLayout()
+        layer_row.addWidget(self._translated_label("layer_min_label"), 0, 0)
+        layer_row.addWidget(self.layer_min_slider, 0, 1)
+        layer_row.addWidget(self.layer_min_spin, 0, 2)
+        layer_row.addWidget(self._translated_label("layer_max_label"), 1, 0)
+        layer_row.addWidget(self.layer_max_slider, 1, 1)
+        layer_row.addWidget(self.layer_max_spin, 1, 2)
+
+        self.travel_checkbox = QCheckBox()
+        self.extrusion_checkbox = QCheckBox()
+        self.pose_checkbox = QCheckBox()
+        for checkbox in (
+            self.travel_checkbox,
+            self.extrusion_checkbox,
+            self.pose_checkbox,
+        ):
+            checkbox.setObjectName("toggleCheck")
+        self.travel_checkbox.setChecked(True)
+        self.extrusion_checkbox.setChecked(True)
+        self.pose_checkbox.setChecked(True)
+        self.travel_checkbox.toggled.connect(self._on_preview_visibility_changed)
+        self.extrusion_checkbox.toggled.connect(self._on_preview_visibility_changed)
+        self.pose_checkbox.toggled.connect(self._on_preview_visibility_changed)
+
+        self.legend_title = QLabel()
+        self.legend_title.setObjectName("panelTitle")
+        self.legend_container = QWidget()
+        self.legend_layout = QVBoxLayout(self.legend_container)
+        self.legend_layout.setContentsMargins(0, 0, 0, 0)
+        self.role_checkboxes: dict[str, QCheckBox] = {}
+        for role, color in ROLE_COLORS.items():
+            checkbox = QCheckBox()
+            checkbox.setObjectName("roleCheck")
+            checkbox.setChecked(True)
+            checkbox.setStyleSheet(f"QCheckBox::indicator {{ background: {rgb_to_hex(color)}; }}")
+            checkbox.toggled.connect(self._on_preview_visibility_changed)
+            self.role_checkboxes[role] = checkbox
+            self.legend_layout.addWidget(checkbox)
+        self.legend_layout.addStretch(1)
+        self.legend_scroll = QScrollArea()
+        self.legend_scroll.setWidgetResizable(True)
+        self.legend_scroll.setWidget(self.legend_container)
+        self.legend_scroll.setMinimumHeight(150)
+        self.legend_scroll.setMaximumHeight(230)
+
+        layout.addWidget(self.preview_summary_title)
+        layout.addWidget(self.preview_summary)
+        layout.addWidget(self.preview_progress_title)
+        layout.addWidget(self.preview_progress_slider)
+        layout.addWidget(self.preview_progress_label)
+        layout.addWidget(self.layer_range_title)
+        layout.addLayout(layer_row)
+        layout.addWidget(self.travel_checkbox)
+        layout.addWidget(self.extrusion_checkbox)
+        layout.addWidget(self.pose_checkbox)
+        layout.addWidget(self.legend_title)
+        layout.addWidget(self.legend_scroll)
+        layout.addWidget(self.segment_property_title)
+        layout.addWidget(self.segment_property)
+        layout.addStretch(1)
+        return widget
+
+    def _build_checks_tab(self) -> QWidget:
+        widget = QWidget()
+        layout = QVBoxLayout(widget)
+        self.checks_title = QLabel()
+        self.checks_title.setObjectName("panelTitle")
+        self.checks_text = QTextEdit()
+        self.checks_text.setReadOnly(True)
+        layout.addWidget(self.checks_title)
+        layout.addWidget(self.checks_text, 1)
+        return widget
+
+    def _scroll_with_groups(self, groups: tuple[QGroupBox, ...]) -> QWidget:
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        inner = QWidget()
+        layout = QVBoxLayout(inner)
+        for group in groups:
+            layout.addWidget(group)
+        layout.addStretch(1)
+        scroll.setWidget(inner)
+        return scroll
+
+    def _translated_label(self, key: str) -> QLabel:
+        label = QLabel()
+        self.localized_labels.append((label, key))
+        return label
+
+    def _param_group(self, title_key: str, rows: tuple[tuple[str, str], ...]) -> QGroupBox:
+        group = QGroupBox()
+        self.localized_groups.append((group, title_key))
+        layout = QGridLayout(group)
+        for row, (name_key, value) in enumerate(rows):
+            layout.addWidget(self._translated_label(name_key), row, 0)
+            label = QLabel(value)
+            label.setObjectName("valueText")
+            layout.addWidget(label, row, 1)
+        return group
+
+    def _bind_shortcuts(self) -> None:
+        self.home_action.setShortcut("Ctrl+W")
+        self.open_project_action.setShortcut("Ctrl+Shift+O")
+        self.open_action.setShortcut("Ctrl+O")
+        self.open_gcode_action.setShortcut("Ctrl+G")
+        self.save_action.setShortcut("Ctrl+S")
+        self.clear_action.setShortcut("Esc")
+        self.fit_action.setShortcut("F")
+        self.home_view_action.setShortcut("H")
+        self.zoom_in_action = QAction(self)
+        self.zoom_in_action.setShortcut("Ctrl++")
+        self.zoom_in_action.triggered.connect(lambda: self.viewer.camera_command("zoom", 1.15))
+        self.zoom_out_action = QAction(self)
+        self.zoom_out_action.setShortcut("Ctrl+-")
+        self.zoom_out_action.triggered.connect(lambda: self.viewer.camera_command("zoom", 0.87))
+        self.addActions([self.zoom_in_action, self.zoom_out_action])
+        self.script_console_manager.add_guarded_actions((self.zoom_in_action, self.zoom_out_action))
+
+    def _apply_style(self) -> None:
+        QApplication.setStyle("Fusion")
+        self.setStyleSheet(APP_STYLE)
+
+    def _show_home(self) -> None:
+        self.stack.setCurrentWidget(self.home_page)
+
+    def _show_session(self) -> None:
+        self.stack.setCurrentWidget(planar_shell.active_session_page(self))
+
+    def _show_results(self) -> None:
+        self.stack.setCurrentWidget(self.result_page)
+        self._update_context_actions()
+
+    def show_results_page(self) -> None:
+        """Public CLI/automation navigation entry for an empty result page."""
+
+        self._show_results()
+
+    def _current_page_name(self) -> str:
+        return planar_shell.page_name(self)
+
+    def _open_model_from_shell(self) -> None:
+        if self.stack.currentWidget() in {self.session_page, self.tube_page, self.planar_page}:
+            self.open_model_dialog()
+        else:
+            self.open_result_model_dialog()
+
+    def _open_gcode_from_shell(self) -> None:
+        if self.stack.currentWidget() is self.session_page:
+            self.open_gcode_dialog()
+        else:
+            self.open_result_gcode_dialog()
+
+    def _load_results_demo_from_ui(self) -> None:
+        try:
+            self.load_results_demo()
+        except Exception as exc:
+            self.show_error(str(exc))
+
+    def _slice_results_from_ui(self) -> None:
+        try:
+            self.slice_results()
+        except Exception as exc:
+            self.show_error(str(exc))
+
+    def _active_viewer(self):
+        if self.stack.currentWidget() is self.result_page:
+            return self.result_page.viewer
+        if self.stack.currentWidget() is self.tube_page:
+            return self.tube_page.viewer
+        return self.viewer
+
+    def _fit_active_view(self) -> None:
+        viewer = self._active_viewer()
+        if hasattr(viewer, "fit_view"):
+            viewer.fit_view()
+
+    def _home_active_view(self) -> None:
+        viewer = self._active_viewer()
+        if hasattr(viewer, "home_view"):
+            viewer.home_view()
+        elif hasattr(viewer, "set_standard_view"):
+            viewer.set_standard_view("isometric")
+
+    def _set_active_standard_view(self, view: str) -> None:
+        viewer = self._active_viewer()
+        if hasattr(viewer, "set_standard_view"):
+            viewer.set_standard_view(view)
+
+    def _set_result_visibility(self, attribute: str, checked: bool) -> None:
+        if not hasattr(self, "result_page"):
+            return
+        self.result_page.set_visibility(**{attribute: checked})
+
+    def _set_result_quality_mode(self, mode: str) -> None:
+        self.result_page.set_quality_mode(mode)
+
+    def _focus_result_gcode_search(self) -> None:
+        self.result_page.focus_gcode_search()
+
+    def _focus_result_gcode_jump(self) -> None:
+        self.result_page.focus_gcode_jump()
+
+    def _update_context_actions(self) -> None:
+        if not hasattr(self, "result_page"):
+            return
+        on_results = self.stack.currentWidget() is self.result_page
+        has_source_index = self.result_page.source_index is not None
+        result_loading = self._is_load_active("result")
+        self.cancel_results_action.setEnabled(result_loading)
+        self.slice_results_action.setEnabled(
+            not result_loading and self.result_page.state.selected_gcode_path is not None
+        )
+        self.search_gcode_action.setEnabled(on_results and has_source_index)
+        self.jump_gcode_action.setEnabled(on_results and has_source_index)
+        for action in self.result_visibility_actions.values():
+            action.setEnabled(on_results)
+        for action in self.quality_actions.values():
+            action.setEnabled(on_results)
+        for action in self.standard_view_actions.values():
+            action.setEnabled(self.stack.currentWidget() is not self.home_page)
+        self._sync_result_actions()
+
+    def _sync_result_actions(self) -> None:
+        if not hasattr(self, "result_page"):
+            return
+        state = self.result_page.state
+        visibility_values = {
+            "show_model": state.show_model,
+            "show_extrusion": state.show_extrusion,
+            "show_start_end": state.show_start_end,
+            "show_axes": state.show_axes,
+            "show_orientation_cube": state.show_orientation_cube,
+            "show_travel": state.show_travel,
+            "show_pose_samples": state.show_pose_samples,
+        }
+        for name, value in visibility_values.items():
+            action = self.result_visibility_actions[name]
+            action.blockSignals(True)
+            action.setChecked(bool(value))
+            action.blockSignals(False)
+        for mode, action in self.quality_actions.items():
+            action.blockSignals(True)
+            action.setChecked(state.quality_mode == mode)
+            action.blockSignals(False)
+        for language, action in self.language_actions.items():
+            action.blockSignals(True)
+            action.setChecked(self.language == language)
+            action.blockSignals(False)
+
+    def _show_result_help(self) -> None:
+        message = (
+            f"{tr(self.language, 'result_preview_subtitle')}\n\n"
+            f"{tr(self.language, 'statistics_coordinate_formula')}"
+        )
+        QMessageBox.information(self, tr(self.language, "action_user_guide"), message)
+
+    def _show_about(self) -> None:
+        QMessageBox.about(
+            self,
+            tr(self.language, "action_about"),
+            "5AxisSclicer V2.0\nPyQt5 · OpenGL/VTK · AC inverse preview",
+        )
+
+    def _on_operation_changed(self, index: int) -> None:
+        data = self.operation_combo.itemData(index)
+        if data:
+            self.current_operation = str(data)
+        self._update_checks()
+
+    def _on_viewer_selection(self, _kind: str | None, _obj_id: str | None) -> None:
+        self.refresh_lists()
+
+    def _on_body_list_selection_changed(self) -> None:
+        if self.model is None:
+            return
+        self.viewer.set_selection(body_ids=self.body_list.selected_ids())
+        self.body_list.sync_marks()
+
+    def _on_edge_list_selection_changed(self) -> None:
+        if self.model is None:
+            return
+        self.viewer.set_selection(edge_ids=self.edge_list.selected_ids())
+        self.edge_list.sync_marks()
+
+    def _on_layer_range_changed(self) -> None:
+        if self._updating_layer_controls or self.gcode_preview is None:
+            return
+        self._updating_layer_controls = True
+        low = min(self.layer_min_slider.value(), self.layer_max_slider.value())
+        high = max(self.layer_min_slider.value(), self.layer_max_slider.value())
+        self.layer_min_spin.setValue(low)
+        self.layer_max_spin.setValue(high)
+        self._updating_layer_controls = False
+        self.viewer.set_preview_layers(low, high)
+        self._sync_progress_controls()
+        self._update_preview_summary()
+
+    def _on_layer_spin_changed(self) -> None:
+        if self._updating_layer_controls or self.gcode_preview is None:
+            return
+        self._updating_layer_controls = True
+        low = min(self.layer_min_spin.value(), self.layer_max_spin.value())
+        high = max(self.layer_min_spin.value(), self.layer_max_spin.value())
+        self.layer_min_slider.setValue(low)
+        self.layer_max_slider.setValue(high)
+        self._updating_layer_controls = False
+        self.viewer.set_preview_layers(low, high)
+        self._sync_progress_controls()
+        self._update_preview_summary()
+
+    def _on_progress_slider_pressed(self) -> None:
+        self.viewer.set_progress_interaction(True)
+
+    def _on_progress_slider_released(self) -> None:
+        if self.gcode_preview is None:
+            return
+        slider = self._progress_sender_slider()
+        self.viewer.set_preview_progress(slider.value(), interactive=False)
+        self._sync_progress_controls()
+        self._update_preview_summary()
+        QTimer.singleShot(250, self._update_preview_summary)
+
+    def _on_progress_slider_changed(self, value: int) -> None:
+        if self._updating_progress_controls or self.gcode_preview is None:
+            return
+        slider = self._progress_sender_slider()
+        self.viewer.set_preview_progress(value, interactive=slider.isSliderDown())
+        self._sync_progress_controls()
+        self._update_preview_summary()
+
+    def _nudge_progress(self, delta: int) -> None:
+        if self.gcode_preview is None:
+            return
+        self.viewer.set_preview_progress(self.viewer.preview_settings.progress_index + delta)
+        self._sync_progress_controls()
+        self._update_preview_summary()
+
+    def _toggle_progress_playback(self) -> None:
+        if self.progress_timer.isActive():
+            self.progress_timer.stop()
+            self.viewer.set_progress_interaction(False)
+            self.progress_play_button.setText(">")
+        else:
+            self.progress_timer.start()
+            self.progress_play_button.setText("||")
+        self.progress_play_button.setToolTip(
+            tr(self.language, "progress_pause")
+            if self.progress_timer.isActive()
+            else tr(self.language, "progress_play")
+        )
+
+    def _advance_progress(self) -> None:
+        if self.gcode_preview is None:
+            self.progress_timer.stop()
+            return
+        state = self.viewer.progress_state()
+        total = int(state.get("layer_step_count", 0))
+        current = int(state.get("progress_index", 0))
+        if total <= 0 or current >= total - 1:
+            self.progress_timer.stop()
+            self.viewer.set_progress_interaction(False)
+            self.progress_play_button.setText(">")
+            return
+        self.viewer.set_preview_progress(current + 1, interactive=True)
+        self._sync_progress_controls()
+        self._update_preview_summary()
+
+    def _on_preview_visibility_changed(self) -> None:
+        if self.gcode_preview is None:
+            return
+        visible_roles = [
+            role for role, checkbox in self.role_checkboxes.items() if checkbox.isChecked()
+        ]
+        self.viewer.set_preview_visibility(
+            show_travel=self.travel_checkbox.isChecked(),
+            show_extrusion=self.extrusion_checkbox.isChecked(),
+            visible_roles=visible_roles,
+            show_pose_samples=self.pose_checkbox.isChecked(),
+        )
+        self._update_preview_summary()
+
+    def _sync_preview_controls(self) -> None:
+        preview = self.gcode_preview
+        if preview is None:
+            self._updating_layer_controls = True
+            for widget in (
+                self.layer_min_slider,
+                self.layer_max_slider,
+                self.layer_min_spin,
+                self.layer_max_spin,
+            ):
+                widget.setMinimum(0)
+                widget.setMaximum(0)
+                widget.setValue(0)
+                widget.setEnabled(False)
+            self._updating_layer_controls = False
+            self._sync_progress_controls()
+            self._update_preview_summary()
+            return
+        self._updating_layer_controls = True
+        for widget in (
+            self.layer_min_slider,
+            self.layer_max_slider,
+            self.layer_min_spin,
+            self.layer_max_spin,
+        ):
+            widget.setMinimum(preview.layer_min)
+            widget.setMaximum(preview.layer_max)
+            widget.setEnabled(True)
+        settings = self.viewer.preview_settings
+        self.layer_min_slider.setValue(settings.layer_min)
+        self.layer_max_slider.setValue(settings.layer_max)
+        self.layer_min_spin.setValue(settings.layer_min)
+        self.layer_max_spin.setValue(settings.layer_max)
+        self._updating_layer_controls = False
+        self._sync_legend_from_settings()
+        self._sync_progress_controls()
+        self._update_preview_summary()
+
+    def _sync_progress_controls(self) -> None:
+        self._updating_progress_controls = True
+        if self.gcode_preview is None:
+            for slider in self._progress_sliders():
+                slider.setMinimum(0)
+                slider.setMaximum(0)
+                slider.setValue(0)
+                slider.setEnabled(False)
+            for label in self._progress_labels():
+                label.setText(tr(self.language, "progress_empty"))
+            self._updating_progress_controls = False
+            return
+        state = self.viewer.progress_state()
+        total = int(state.get("layer_step_count", 0))
+        index = int(state.get("progress_index", 0))
+        for slider in self._progress_sliders():
+            slider.blockSignals(True)
+            slider.setEnabled(total > 0)
+            slider.setMinimum(0)
+            slider.setMaximum(max(0, total - 1))
+            slider.setValue(index)
+            slider.blockSignals(False)
+        current = state.get("current_step") or {}
+        label = tr(
+            self.language,
+            "progress_label_text",
+            current=index + 1 if total else 0,
+            total=total,
+            percent=float(state.get("progress_percent", 0.0)) * 100.0,
+            line=current.get("line_number", "-"),
+            move=current.get("move_type", "-"),
+        )
+        for progress_label in self._progress_labels():
+            progress_label.setText(label)
+        self._updating_progress_controls = False
+
+    def _progress_sender_slider(self) -> QSlider:
+        sender = self.sender()
+        if isinstance(sender, QSlider):
+            return sender
+        return self.progress_slider
+
+    def _progress_sliders(self) -> list[QSlider]:
+        return [self.progress_slider, self.preview_progress_slider]
+
+    def _progress_labels(self) -> list[QLabel]:
+        return [self.progress_step_label, self.preview_progress_label]
+
+    def _sync_legend_from_settings(self) -> None:
+        settings = self.viewer.preview_settings
+        widgets = [
+            self.travel_checkbox,
+            self.extrusion_checkbox,
+            self.pose_checkbox,
+            *self.role_checkboxes.values(),
+        ]
+        for widget in widgets:
+            widget.blockSignals(True)
+        self.travel_checkbox.setChecked(settings.show_travel)
+        self.extrusion_checkbox.setChecked(settings.show_extrusion)
+        self.pose_checkbox.setChecked(settings.show_pose_samples)
+        for role, checkbox in self.role_checkboxes.items():
+            checkbox.setChecked(role in settings.visible_roles)
+        for widget in widgets:
+            widget.blockSignals(False)
+
+    def _sync_legend_labels(self) -> None:
+        for role, checkbox in self.role_checkboxes.items():
+            checkbox.setText(role_label(role, self.language))
+
+    def _update_workbench_texts(self) -> None:
+        current = self._current_workbench()
+        self.workbench_title.setText(
+            current.title_en if self.language == "en" else current.title_zh
+        )
+        self.workbench_summary.setText(
+            current.summary_en if self.language == "en" else current.summary_zh
+        )
+        for workbench in WORKBENCHES:
+            title = workbench.title_en if self.language == "en" else workbench.title_zh
+            summary = workbench.summary_en if self.language == "en" else workbench.summary_zh
+            status = workbench.status_en if self.language == "en" else workbench.status_zh
+            self.workbench_buttons[workbench.key].setText(f"{title}\n{summary}\n[{status}]")
+
+    def _update_operation_combo(self) -> None:
+        current = self.current_operation
+        self.operation_combo.blockSignals(True)
+        self.operation_combo.clear()
+        if self.current_workbench_key == "tube":
+            if self.tube_page.controller.operations:
+                operation = self.tube_page.controller.operations[0]
+                self.operation_combo.addItem(operation.name, operation.operation_type)
+            else:
+                self.operation_combo.addItem("Tube Setup", "tube_setup")
+        elif self.current_workbench_key == "planar":
+            planar_shell.populate_operation_combo(self.operation_combo, self.planar_page.controller)
+        else:
+            self.operation_combo.addItem(
+                tr(self.language, "operation_imported_nc"), "imported_nc_review"
+            )
+            self.operation_combo.addItem(tr(self.language, "operation_curve"), "curve_buildup")
+            self.operation_combo.addItem(
+                tr(self.language, "operation_freeform"), "freeform_coating"
+            )
+        self.operation_combo.setCurrentIndex(max(0, self.operation_combo.findData(current)))
+        self.operation_combo.blockSignals(False)
+
+    def _update_file_labels(self) -> None:
+        self.tube_coordinate_button.setVisible(self.model is not None)
+        self.model_file_label.setText(
+            tr(self.language, "file_none") if self.model is None else str(self.model.source_path)
+        )
+        self.gcode_file_label.setText(
+            tr(self.language, "file_none")
+            if self.gcode_preview is None
+            else str(self.gcode_preview.source_path)
+        )
+
+    def _update_preview_summary(self) -> None:
+        if self.gcode_preview is None:
+            self.preview_summary.setText(tr(self.language, "no_gcode"))
+            self._update_segment_property()
+            return
+        summary = self.gcode_preview.summary()
+        settings = self.viewer.preview_settings
+        self.preview_summary.setText(
+            tr(
+                self.language,
+                "preview_summary_text",
+                segments=summary["segment_count"],
+                visible=self.viewer.visible_path_segment_count,
+                steps=summary.get("timeline_step_count", 0),
+                layers=f"{settings.layer_min}-{settings.layer_max}",
+                roles=len(summary["role_counts"]),
+                axes=", ".join(summary["rotary_axes"]) or "-",
+                coord=self._coordinate_transform_label(
+                    summary.get("coordinate_transform", MACHINE_COORDINATE_TRANSFORM),
+                    summary.get("validation_issues", ()),
+                ),
+                render=self.viewer.path_render_mode,
+            )
+        )
+        self._update_segment_property()
+
+    def _update_segment_property(self) -> None:
+        step = self.viewer.current_progress_step()
+        segment = self.viewer.representative_path_segment()
+        current = step or segment
+        if current is None:
+            self.segment_property.setText(tr(self.language, "segment_property_none"))
+            return
+        rotary = {
+            axis: current.rotary_end.get(axis, 0.0)
+            for axis in set(current.rotary_start) | set(current.rotary_end)
+        }
+        rotary_text = (
+            ", ".join(f"{axis}={value:.3f}" for axis, value in sorted(rotary.items())) or "-"
+        )
+        self.segment_property.setText(
+            tr(
+                self.language,
+                "segment_property_text",
+                step=current.step_index,
+                line=current.line_number,
+                layer=current.layer,
+                move=current.move_type,
+                role=role_label(current.extrusion_role, self.language),
+                start=self._format_point(current.start),
+                end=self._format_point(current.end),
+                machine_start=self._format_point(current.machine_start or current.start),
+                machine_end=self._format_point(current.machine_end or current.end),
+                feedrate="-" if current.feedrate is None else f"{current.feedrate:.1f}",
+                delta_e=f"{current.delta_e:.5f}",
+                width="-" if current.width is None else f"{current.width:.3f}",
+                height="-" if current.height is None else f"{current.height:.3f}",
+                rotary=rotary_text,
+                comment=current.comment or "-",
+            )
+        )
+
+    def _format_point(self, point: tuple[float, float, float]) -> str:
+        return f"X{point[0]:.3f}, Y{point[1]:.3f}, Z{point[2]:.3f}"
+
+    def _coordinate_transform_label(
+        self,
+        transform: str,
+        validation_issues: list[dict[str, Any]] | tuple[dict[str, Any], ...] = (),
+    ) -> str:
+        has_unresolved_kinematics = any(
+            str(issue.get("code", "")).startswith("nc_preview.") for issue in validation_issues
+        )
+        if has_unresolved_kinematics:
+            return tr(self.language, "coord_machine_xyz_unresolved")
+        if transform == AC_INVERSE_TRANSFORM:
+            return tr(self.language, "coord_ac_inverse")
+        if transform != MACHINE_COORDINATE_TRANSFORM:
+            return tr(self.language, "coord_machine_xyz_unresolved")
+        return tr(self.language, "coord_machine_xyz")
+
+    def _update_checks(self) -> None:
+        lines: list[str] = []
+        lines.append(
+            tr(
+                self.language,
+                "check_workbench",
+                workbench=self._current_workbench().title_en,
+            )
+        )
+        if self.model is None:
+            lines.append(tr(self.language, "check_no_model"))
+        else:
+            lines.append(
+                tr(
+                    self.language,
+                    "check_model",
+                    bodies=len(self.model.bodies),
+                    edges=len(self.model.edges),
+                )
+            )
+        if self.gcode_preview is None:
+            lines.append(tr(self.language, "check_no_gcode"))
+        else:
+            summary = self.gcode_preview.summary()
+            lines.append(
+                tr(
+                    self.language,
+                    "check_gcode",
+                    segments=summary["segment_count"],
+                    layers=summary["layer_count"],
+                    axes=", ".join(summary["rotary_axes"]) or "-",
+                )
+            )
+            if "unknown" in summary["role_counts"]:
+                lines.append(
+                    tr(
+                        self.language,
+                        "check_unknown_roles",
+                        count=summary["role_counts"]["unknown"],
+                    )
+                )
+        lines.append(tr(self.language, "check_warning_policy"))
+        self.checks_text.setPlainText("\n".join(lines))
+
+    def _current_workbench(self) -> WorkbenchInfo:
+        return next(
+            workbench for workbench in WORKBENCHES if workbench.key == self.current_workbench_key
+        )
+
+    def _workbench_state(self) -> dict[str, Any]:
+        if self.current_workbench_key == "tube":
+            operation_label = (
+                self.tube_page.controller.operations[0].name
+                if self.tube_page.controller.operations
+                else "Tube Setup"
+            )
+        elif self.current_workbench_key == "planar":
+            operation_label = planar_shell.operation_label(self.planar_page.controller)
+        else:
+            operation_label = (
+                tr(self.language, "operation_imported_nc")
+                if self.current_operation == "imported_nc_review"
+                else self.current_operation
+            )
+        return {
+            "workbench": self.current_workbench_key,
+            "operation": self.current_operation,
+            "operation_label": operation_label,
+        }
+
+    def _body_rows(self) -> list[SelectionRow]:
+        if self.model is None:
+            return []
+        return [
+            (body.body_id, f"{body.body_id}  {body.name}  edges={len(body.edge_ids)}")
+            for body in self.model.bodies
+        ]
+
+    def _edge_rows(self) -> list[SelectionRow]:
+        if self.model is None:
+            return []
+        rows: list[SelectionRow] = []
+        for edge in self.model.edges:
+            length = "" if edge.length_hint is None else f"  len≈{edge.length_hint:.3f}"
+            rows.append((edge.edge_id, f"{edge.edge_id}{length}"))
+        return rows

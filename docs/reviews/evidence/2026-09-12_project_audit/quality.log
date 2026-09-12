@@ -1,0 +1,10 @@
+==> Ruff
+All checks passed!
+==> Migrated Ruff
+All checks passed!
+==> Security Ruff
+All checks passed!
+==> Migrated format
+61 files already formatted
+==> Context budget
+module: postprocessing/planar_product.py is 1004; budget is 1000

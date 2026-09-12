@@ -1,0 +1,326 @@
+from dataclasses import replace
+from pathlib import Path
+import sys
+
+import pytest
+import cadquery as cq
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+
+from five_axis_slicer.algorithms.planar import PlanarRegion, PlanarSliceLayer  # noqa: E402
+from five_axis_slicer.algorithms.planar.spiral import PlanarSpiralError  # noqa: E402
+from five_axis_slicer.manufacturing.planar_parameters import (  # noqa: E402
+    PlanarGeometrySelection,
+    PlanarOperationDefinition,
+)
+from five_axis_slicer.postprocessing import planar_product  # noqa: E402
+from five_axis_slicer.postprocessing.planar_product import (  # noqa: E402
+    export_planar_product,
+    generate_planar_path_product,
+)
+
+from test_planar_zigzag_product import _machine, _model, _nozzle, _setup  # noqa: E402
+from five_axis_slicer.manufacturing.coordinates import GeometryReference, RigidTransform  # noqa: E402
+from five_axis_slicer.planar_controller import PlanarController  # noqa: E402
+
+
+def _loop(z: float, size: float = 8.0):
+    return ((0, 0, z), (size, 0, z), (size, size, z), (0, size, z), (0, 0, z))
+
+
+def _operation() -> PlanarOperationDefinition:
+    return PlanarOperationDefinition(
+        "planar-spiral-1",
+        "setup-1",
+        operation_type="planar_spiral",
+        geometry=PlanarGeometrySelection(GeometryReference("body", "body", {"schema_version": 1})),
+        parameters=replace(
+            __import__("test_planar_zigzag_product")._operation().parameters,
+            first_layer_z_mm=0.5,
+            last_layer_z_mm=1.0,
+            spiral_samples_per_contour=8,
+        ),
+    )
+
+
+def test_spiral_product_generates_continuous_z_and_six_files(tmp_path: Path) -> None:
+    result = generate_planar_path_product(
+        _model(), _operation(), _machine(), _nozzle(), RigidTransform.identity("build")
+    )
+    assert result.operation_type == "planar_spiral"
+    assert result.exportable and result.readback.passed
+    assert result.toolpath.events[-1].event_type == "finish"
+    assert result.toolpath.points[-1].position[2] == pytest.approx(1.0)
+    assert result.validation.measurement.volume_difference_mm3 == pytest.approx(0.0)
+    assert "; P05 POINT" in result.gcode
+    destination = export_planar_product(result, tmp_path / "p05-output")
+    assert {item.name for item in destination.iterdir()} == {
+        "machine_axes.csv",
+        "main.gcode",
+        "manifest.json",
+        "preview.json",
+        "toolpath.json",
+        "warnings.json",
+    }
+
+
+@pytest.mark.parametrize(
+    ("layers", "code"),
+    [
+        (
+            (
+                PlanarSliceLayer("l1", 0, (PlanarRegion("r1", _loop(0), (_loop(0, 2),)),)),
+                PlanarSliceLayer("l2", 1, (PlanarRegion("r1", _loop(1), (_loop(1, 2),)),)),
+            ),
+            "planar.spiral_holes_unsupported",
+        ),
+        (
+            (
+                PlanarSliceLayer(
+                    "l1", 0, (PlanarRegion("r1", _loop(0)), PlanarRegion("r2", _loop(0, 2)))
+                ),
+                PlanarSliceLayer("l2", 1, (PlanarRegion("r1", _loop(1)),)),
+            ),
+            "planar.spiral_multiple_regions",
+        ),
+        (
+            (
+                PlanarSliceLayer("l1", 0, (PlanarRegion("r1", _loop(0)),)),
+                PlanarSliceLayer("l2", 1, (PlanarRegion("r2", _loop(1)),)),
+            ),
+            "planar.spiral_topology_changed",
+        ),
+    ],
+)
+def test_spiral_product_propagates_topology_rejections(monkeypatch, layers, code) -> None:
+    monkeypatch.setattr(planar_product, "slice_planar_layers", lambda *args, **kwargs: layers)
+    with pytest.raises(PlanarSpiralError, match=code):
+        generate_planar_path_product(
+            _model(), _operation(), _machine(), _nozzle(), RigidTransform.identity("build")
+        )
+
+
+def test_spiral_fabricated_interlayer_sections_cannot_override_actual_cad(
+    monkeypatch, tmp_path: Path
+) -> None:
+    layers = (
+        PlanarSliceLayer("l1", 0.5, (PlanarRegion("r1", _loop(0.5, 6.0)),)),
+        PlanarSliceLayer("l2", 1.0, (PlanarRegion("r1", _loop(1.0, 8.0)),)),
+    )
+    monkeypatch.setattr(planar_product, "slice_planar_layers", lambda *args, **kwargs: layers)
+
+    result = generate_planar_path_product(
+        _model(), _operation(), _machine(), _nozzle(), RigidTransform.identity("build")
+    )
+
+    assert result.validation.measurement.deposition_outside_max_mm > 0.0
+    assert "planar.spiral_bead_outside_cad" in result.manifest.issues
+    assert not result.exportable and not result.gcode
+    with pytest.raises(ValueError, match="blocks export"):
+        export_planar_product(result, tmp_path / "p05-continuous")
+
+
+def test_spiral_checks_real_solid_between_matching_endpoint_sections():
+    lower = cq.Workplane("XY").box(8, 6, 0.6).translate((4, 3, 0.3))
+    neck = cq.Workplane("XY").box(4, 2, 0.4).translate((4, 3, 0.7))
+    upper = cq.Workplane("XY").box(8, 6, 0.2).translate((4, 3, 0.9))
+    solid = lower.union(neck).union(upper)
+    model = replace(_model(), shapes={"body": solid.val().wrapped})
+    result = generate_planar_path_product(
+        model, _operation(), _machine(), _nozzle(), RigidTransform.identity("build")
+    )
+    lower_vertices = {point[:2] for point in result.layers[0].regions[0].outer[:-1]}
+    upper_vertices = {point[:2] for point in result.layers[1].regions[0].outer[:-1]}
+    assert lower_vertices == upper_vertices
+    assert "planar.spiral_bead_outside_cad" in result.manifest.issues
+    assert not result.exportable and not result.gcode
+
+
+def test_spiral_cad_validation_respects_source_to_build_transform():
+    model = _model()
+    shape = cq.Shape.cast(model.shapes["body"]).translate((20, 10, 30))
+    model = replace(model, shapes={"body": shape.wrapped})
+    transform = RigidTransform.from_translation(
+        (20, 10, 30), source_frame="build", target_frame="source"
+    )
+    result = generate_planar_path_product(model, _operation(), _machine(), _nozzle(), transform)
+    assert result.exportable and result.readback.passed
+    assert "planar.spiral_cad_sampled" in result.manifest.issues
+
+
+def _offset_operation() -> PlanarOperationDefinition:
+    baseline = __import__("test_planar_zigzag_product")._operation()
+    return replace(
+        baseline,
+        operation_id="planar-offset-1",
+        operation_type="planar_offset",
+        name="Planar Offset",
+        parameters=replace(baseline.parameters, offset_pass_count=3),
+    )
+
+
+def _rect(region_id: str, x0: float, y0: float, x1: float, y1: float, z: float = 0.5):
+    return PlanarRegion(
+        region_id,
+        ((x0, y0, z), (x1, y0, z), (x1, y1, z), (x0, y1, z), (x0, y0, z)),
+    )
+
+
+def test_offset_product_generates_multiple_passes_reads_back_and_exports(
+    monkeypatch, tmp_path: Path
+) -> None:
+    operation = _offset_operation()
+    layers = (PlanarSliceLayer("l1", 0.5, (_rect("region", 0, 0, 8, 6),)),)
+    monkeypatch.setattr(planar_product, "slice_planar_layers", lambda *args, **kwargs: layers)
+    result = generate_planar_path_product(
+        _model(), operation, _machine(), _nozzle(), RigidTransform.identity("build")
+    )
+
+    assert result.operation_type == "planar_offset"
+    assert result.exportable and result.readback.passed
+    assert len({point.region_id for point in result.toolpath.points}) == 1
+    assert sum(point.point_type == "approach" for point in result.toolpath.points) >= 1
+    assert sum(point.point_type == "travel" for point in result.toolpath.points) >= 2
+    assert "; P03 POINT" in result.gcode
+    destination = export_planar_product(result, tmp_path / "p03-output")
+    assert {item.name for item in destination.iterdir()} == {
+        "machine_axes.csv",
+        "main.gcode",
+        "manifest.json",
+        "preview.json",
+        "toolpath.json",
+        "warnings.json",
+    }
+
+
+def test_controller_generates_and_exports_offset_product(monkeypatch, tmp_path: Path) -> None:
+    operation = _offset_operation()
+    layers = (PlanarSliceLayer("l1", 0.5, (_rect("region", 0, 0, 8, 6),)),)
+    monkeypatch.setattr(planar_product, "slice_planar_layers", lambda *args, **kwargs: layers)
+    controller = PlanarController(_model(), setup=_setup(), operations=(operation,))
+
+    result = controller.generate_operation(operation.operation_id)
+    destination = controller.export_operation_product(
+        operation.operation_id, str(tmp_path / "p03-controller-output")
+    )
+
+    assert result.exportable and result.readback.passed
+    assert controller.product_state(operation.operation_id).status in {"ready", "warning"}
+    assert (destination / "main.gcode").is_file()
+
+
+@pytest.mark.parametrize("pass_count,exportable", [(2, True), (3, False)])
+def test_offset_product_handles_islands_and_blocks_local_narrow_neck_overfill(
+    monkeypatch,
+    pass_count,
+    exportable,
+) -> None:
+    z = 0.5
+    holed = PlanarRegion(
+        "holed",
+        _rect("unused", 0, 0, 20, 20).outer,
+        (_rect("unused", 7, 7, 13, 13).outer,),
+    )
+    concave = PlanarRegion(
+        "concave",
+        (
+            (25, 0, z),
+            (45, 0, z),
+            (45, 20, z),
+            (37, 20, z),
+            (37, 8, z),
+            (33, 8, z),
+            (33, 20, z),
+            (25, 20, z),
+            (25, 0, z),
+        ),
+    )
+    dumbbell = PlanarRegion(
+        "split",
+        tuple(
+            (x + 50, y, z)
+            for x, y in (
+                (0, 0),
+                (4, 0),
+                (4, 1.5),
+                (8, 1.5),
+                (8, 0),
+                (12, 0),
+                (12, 4),
+                (8, 4),
+                (8, 2.5),
+                (4, 2.5),
+                (4, 4),
+                (0, 4),
+                (0, 0),
+            )
+        ),
+    )
+    layers = (PlanarSliceLayer("l1", z, (holed, concave, dumbbell, _rect("island", 70, 0, 78, 8))),)
+    monkeypatch.setattr(planar_product, "slice_planar_layers", lambda *args, **kwargs: layers)
+
+    operation = _offset_operation()
+    operation = replace(
+        operation, parameters=replace(operation.parameters, offset_pass_count=pass_count)
+    )
+    result = generate_planar_path_product(
+        _model(), operation, _machine(), _nozzle(), RigidTransform.identity("build")
+    )
+
+    assert result.exportable is exportable
+    if exportable:
+        assert result.readback.passed
+    else:
+        assert not result.gcode
+        issues = [
+            i for i in result.validation.issues if i.code == "planar.material_exceeds_solid_volume"
+        ]
+        assert len(issues) == 1 and issues[0].context["region_id"] == "split"
+    assert {point.region_id for point in result.toolpath.points} == {
+        "concave",
+        "holed",
+        "island",
+        "split",
+    }
+    split_approaches = [
+        point
+        for point in result.toolpath.points
+        if point.region_id == "split" and point.point_type in {"approach", "travel"}
+    ]
+    assert len(split_approaches) > pass_count
+
+
+def test_offset_partial_disappearance_is_warning_and_remains_exportable(
+    monkeypatch, tmp_path: Path
+) -> None:
+    layers = (
+        PlanarSliceLayer(
+            "l1",
+            0.5,
+            (_rect("printable", 0, 0, 8, 8), _rect("vanished", 10, 0, 10.4, 5)),
+        ),
+    )
+    monkeypatch.setattr(planar_product, "slice_planar_layers", lambda *args, **kwargs: layers)
+    result = generate_planar_path_product(
+        _model(), _offset_operation(), _machine(), _nozzle(), RigidTransform.identity("build")
+    )
+
+    assert result.manifest.status.value == "warning"
+    assert "planar.offset_region_disappeared" in result.manifest.issues
+    assert result.exportable and result.readback.passed
+    assert export_planar_product(result, tmp_path / "p03-warning").is_dir()
+
+
+def test_offset_complete_disappearance_sets_controller_error_and_blocks_export(
+    monkeypatch, tmp_path: Path
+) -> None:
+    operation = _offset_operation()
+    layers = (PlanarSliceLayer("l1", 0.5, (_rect("vanished", 0, 0, 0.4, 5),)),)
+    monkeypatch.setattr(planar_product, "slice_planar_layers", lambda *args, **kwargs: layers)
+    controller = PlanarController(_model(), setup=_setup(), operations=(operation,))
+
+    with pytest.raises(ValueError, match="produced no printable path"):
+        controller.generate_operation(operation.operation_id)
+    assert controller.product_state(operation.operation_id).status == "error"
+    with pytest.raises(ValueError, match="no exportable generated result"):
+        controller.export_operation_product(operation.operation_id, str(tmp_path / "p03-blocked"))

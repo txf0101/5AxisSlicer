@@ -1,0 +1,26 @@
+[
+  {
+    "path": "src/five_axis_slicer/validation/planar_travel.py",
+    "sha256": "9862b7db4d0971f44fbad78233268daebdf17bc709292cc535b21ebeaa3341f2",
+    "snapshot": "F:\\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\\5AxisSclicer_V2.0\\docs\\reviews\\evidence\\2026-09-12_audit_fixes\\support_motion\\final\\source_snapshot\\planar_travel.py.txt",
+    "mtime_ns": 1789189974834364000
+  },
+  {
+    "path": "tests/test_planar_support_motion.py",
+    "sha256": "80b39c5fe9f5bc563673eb7ca65c8ec50013ef7e486d60ab7e0c46830a62a348",
+    "snapshot": "F:\\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\\5AxisSclicer_V2.0\\docs\\reviews\\evidence\\2026-09-12_audit_fixes\\support_motion\\final\\source_snapshot\\test_planar_support_motion.py.txt",
+    "mtime_ns": 1789189787287982500
+  },
+  {
+    "path": "scripts/planar_support_motion_evidence.py",
+    "sha256": "45a7937bb47d50ae83e679bbbf94ce4a0b965fc0b58ac1d5ec0feb9f7a709053",
+    "snapshot": "F:\\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\\5AxisSclicer_V2.0\\docs\\reviews\\evidence\\2026-09-12_audit_fixes\\support_motion\\final\\source_snapshot\\planar_support_motion_evidence.py.txt",
+    "mtime_ns": 1789189791257796200
+  },
+  {
+    "path": "src/five_axis_slicer/postprocessing/planar_product.py",
+    "sha256": "60cc15e20e3d78b05d72088830f9108b025b4b644b954699d26047a876e403ae",
+    "snapshot": "F:\\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\\5AxisSclicer_V2.0\\docs\\reviews\\evidence\\2026-09-12_audit_fixes\\support_motion\\final\\source_snapshot\\planar_product.py.txt",
+    "mtime_ns": 1789189577458417500
+  }
+]

@@ -1,0 +1,25 @@
+....................................F.................. [ 87%]
+........                                                                 [100%]
+================================== FAILURES ===================================
+_________ TubeUiTests.test_command_adapters_publish_one_full_refresh __________
+
+self = <test_tube_ui.TubeUiTests testMethod=test_command_adapters_publish_one_full_refresh>
+
+    def test_command_adapters_publish_one_full_refresh(self) -> None:
+        window = self._window()
+        page = window.tube_page
+        refresh = mock.Mock(wraps=page.refresh)
+        page.refresh = refresh
+    
+        page._create_operation()
+        self.assertEqual(refresh.call_count, 1)
+        refresh.reset_mock()
+    
+        page._apply_machine()
+>       self.assertEqual(refresh.call_count, 1)
+E       AssertionError: 0 != 1
+
+tests\test_tube_ui.py:242: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_tube_ui.py::TubeUiTests::test_command_adapters_publish_one_full_refresh
+1 failed, 62 passed, 17 subtests passed in 106.93s (0:01:46)

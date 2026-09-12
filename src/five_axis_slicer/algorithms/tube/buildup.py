@@ -484,6 +484,7 @@ def _midwall_loop(
         layer.plane_origin,
         layer.plane_normal,
         feature.wall_thickness_mm,
+        chord_error_mm=parameters.contour_chord_error_mm,
     )
     return _section_loop(section.midwall, section.normals)
 

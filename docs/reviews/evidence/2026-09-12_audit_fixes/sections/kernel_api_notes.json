@@ -1,0 +1,19 @@
+{
+  "cadquery_ocp": "7.8.1.1.post1",
+  "TopExp.FirstVertex_s": "FirstVertex_s(E: OCP.OCP.TopoDS.TopoDS_Edge, CumOri: bool = False) -> OCP.OCP.TopoDS.TopoDS_Vertex\n\nReturns the Vertex of orientation FORWARD in E. If there is none returns a Null Shape. CumOri = True : taking account the edge orientation\n",
+  "TopExp.MapShapes_s": "MapShapes_s(*args, **kwargs)\nOverloaded function.\n\n1. MapShapes_s(S: OCP.OCP.TopoDS.TopoDS_Shape, T: OCP.OCP.TopAbs.TopAbs_ShapeEnum, M: OCP.OCP.TopTools.TopTools_IndexedMapOfShape) -> None\n\nTool to explore a topological data structure. Stores in the map <M> all the sub-shapes of <S> of type <T>.\n\n2. MapShapes_s(S: OCP.OCP.TopoDS.TopoDS_Shape, M: OCP.OCP.TopTools.TopTools_IndexedMapOfShape, cumOri: bool = True, cumLoc: bool = True) -> None\n\nStores in the map <M> all the sub-shapes of <S>. - If cumOri is true, the function composes all sub-shapes with the orientation of S. - If cumLoc is true, the function multiplies all sub-shapes by the location of S, i.e. it applies to each sub-shape the transformation that is associated with S.\n\n3. MapShapes_s(S: OCP.OCP.TopoDS.TopoDS_Shape, M: OCP.OCP.TopTools.TopTools_MapOfShape, cumOri: bool = True, cumLoc: bool = True) -> None\n\nStores in the map <M> all the sub-shapes of <S>. - If cumOri is true, the function composes all sub-shapes with the orientation of S. - If cumLoc is true, the function multiplies all sub-shapes by the location of S, i.e. it applies to each sub-shape the transformation that is associated with S.\n",
+  "BRepAlgoAPI_Section.__init__": "__init__(*args, **kwargs)\nOverloaded function.\n\n1. __init__(self: OCP.OCP.BRepAlgoAPI.BRepAlgoAPI_Section) -> None\n\n2. __init__(self: OCP.OCP.BRepAlgoAPI.BRepAlgoAPI_Section, PF: OCP.OCP.BOPAlgo.BOPAlgo_PaveFiller) -> None\n\n3. __init__(self: OCP.OCP.BRepAlgoAPI.BRepAlgoAPI_Section, S1: OCP.OCP.TopoDS.TopoDS_Shape, S2: OCP.OCP.TopoDS.TopoDS_Shape, PerformNow: bool = True) -> None\n\n4. __init__(self: OCP.OCP.BRepAlgoAPI.BRepAlgoAPI_Section, S1: OCP.OCP.TopoDS.TopoDS_Shape, S2: OCP.OCP.TopoDS.TopoDS_Shape, aDSF: OCP.OCP.BOPAlgo.BOPAlgo_PaveFiller, PerformNow: bool = True) -> None\n\n5. __init__(self: OCP.OCP.BRepAlgoAPI.BRepAlgoAPI_Section, S1: OCP.OCP.TopoDS.TopoDS_Shape, Pl: OCP.OCP.gp.gp_Pln, PerformNow: bool = True) -> None\n\n6. __init__(self: OCP.OCP.BRepAlgoAPI.BRepAlgoAPI_Section, S1: OCP.OCP.TopoDS.TopoDS_Shape, Sf: OCP.OCP.Geom.Geom_Surface, PerformNow: bool = True) -> None\n\n7. __init__(self: OCP.OCP.BRepAlgoAPI.BRepAlgoAPI_Section, Sf: OCP.OCP.Geom.Geom_Surface, S2: OCP.OCP.TopoDS.TopoDS_Shape, PerformNow: bool = True) -> None\n\n8. __init__(self: OCP.OCP.BRepAlgoAPI.BRepAlgoAPI_Section, Sf1: OCP.OCP.Geom.Geom_Surface, Sf2: OCP.OCP.Geom.Geom_Surface, PerformNow: bool = True) -> None\n",
+  "BRepAlgoAPI_Section.Approximation": "Approximation(self: OCP.OCP.BRepAlgoAPI.BRepAlgoAPI_Section, B: bool) -> None\n\nNone\n",
+  "tested_flags": {
+    "ComputePCurveOn1": true,
+    "Approximation": [
+      true,
+      false
+    ],
+    "plane_input": [
+      "gp_Pln",
+      "bounded planar face"
+    ]
+  },
+  "interpretation": "The topology/curve mismatch persists for excessive-gap impeller layers across tested approximation and plane-input modes. No attempt was made to inflate OCCT tolerances."
+}

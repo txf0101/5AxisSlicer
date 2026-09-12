@@ -1,0 +1,8369 @@
+{
+  "coordinate_frame": "workpiece_build",
+  "events": [
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 1
+      },
+      "duration_s": null,
+      "event_id": "event-0000001",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 2
+      },
+      "duration_s": null,
+      "event_id": "event-0000002",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 3
+      },
+      "duration_s": null,
+      "event_id": "event-0000003",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 4
+      },
+      "duration_s": null,
+      "event_id": "event-0000004",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 5
+      },
+      "duration_s": null,
+      "event_id": "event-0000005",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 6
+      },
+      "duration_s": null,
+      "event_id": "event-0000006",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 7
+      },
+      "duration_s": null,
+      "event_id": "event-0000007",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 8
+      },
+      "duration_s": null,
+      "event_id": "event-0000008",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 9
+      },
+      "duration_s": null,
+      "event_id": "event-0000009",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 10
+      },
+      "duration_s": null,
+      "event_id": "event-0000010",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 11
+      },
+      "duration_s": null,
+      "event_id": "event-0000011",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 12
+      },
+      "duration_s": null,
+      "event_id": "event-0000012",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 13
+      },
+      "duration_s": null,
+      "event_id": "event-0000013",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 14
+      },
+      "duration_s": null,
+      "event_id": "event-0000014",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 15
+      },
+      "duration_s": null,
+      "event_id": "event-0000015",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 16
+      },
+      "duration_s": null,
+      "event_id": "event-0000016",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 17
+      },
+      "duration_s": null,
+      "event_id": "event-0000017",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 18
+      },
+      "duration_s": null,
+      "event_id": "event-0000018",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 19
+      },
+      "duration_s": null,
+      "event_id": "event-0000019",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 20
+      },
+      "duration_s": null,
+      "event_id": "event-0000020",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 21
+      },
+      "duration_s": null,
+      "event_id": "event-0000021",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 22
+      },
+      "duration_s": null,
+      "event_id": "event-0000022",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 23
+      },
+      "duration_s": null,
+      "event_id": "event-0000023",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 24
+      },
+      "duration_s": null,
+      "event_id": "event-0000024",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 25
+      },
+      "duration_s": null,
+      "event_id": "event-0000025",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 26
+      },
+      "duration_s": null,
+      "event_id": "event-0000026",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 27
+      },
+      "duration_s": null,
+      "event_id": "event-0000027",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 28
+      },
+      "duration_s": null,
+      "event_id": "event-0000028",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 29
+      },
+      "duration_s": null,
+      "event_id": "event-0000029",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 30
+      },
+      "duration_s": null,
+      "event_id": "event-0000030",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 31
+      },
+      "duration_s": null,
+      "event_id": "event-0000031",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 32
+      },
+      "duration_s": null,
+      "event_id": "event-0000032",
+      "event_type": "retract",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 33
+      },
+      "duration_s": null,
+      "event_id": "event-0000033",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 34
+      },
+      "duration_s": null,
+      "event_id": "event-0000034",
+      "event_type": "retract",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 35
+      },
+      "duration_s": null,
+      "event_id": "event-0000035",
+      "event_type": "prime",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 36
+      },
+      "duration_s": null,
+      "event_id": "event-0000036",
+      "event_type": "retract",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 37
+      },
+      "duration_s": null,
+      "event_id": "event-0000037",
+      "event_type": "prime",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 38
+      },
+      "duration_s": null,
+      "event_id": "event-0000038",
+      "event_type": "retract",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 39
+      },
+      "duration_s": null,
+      "event_id": "event-0000039",
+      "event_type": "prime",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 40
+      },
+      "duration_s": null,
+      "event_id": "event-0000040",
+      "event_type": "retract",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 41
+      },
+      "duration_s": null,
+      "event_id": "event-0000041",
+      "event_type": "prime",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 42
+      },
+      "duration_s": null,
+      "event_id": "event-0000042",
+      "event_type": "retract",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 43
+      },
+      "duration_s": null,
+      "event_id": "event-0000043",
+      "event_type": "prime",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 44
+      },
+      "duration_s": null,
+      "event_id": "event-0000044",
+      "event_type": "retract",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 45
+      },
+      "duration_s": null,
+      "event_id": "event-0000045",
+      "event_type": "prime",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 46
+      },
+      "duration_s": null,
+      "event_id": "event-0000046",
+      "event_type": "retract",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 47
+      },
+      "duration_s": null,
+      "event_id": "event-0000047",
+      "event_type": "prime",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 48
+      },
+      "duration_s": null,
+      "event_id": "event-0000048",
+      "event_type": "retract",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 49
+      },
+      "duration_s": null,
+      "event_id": "event-0000049",
+      "event_type": "prime",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 50
+      },
+      "duration_s": null,
+      "event_id": "event-0000050",
+      "event_type": "retract",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 51
+      },
+      "duration_s": null,
+      "event_id": "event-0000051",
+      "event_type": "prime",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 52
+      },
+      "duration_s": null,
+      "event_id": "event-0000052",
+      "event_type": "retract",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 53
+      },
+      "duration_s": null,
+      "event_id": "event-0000053",
+      "event_type": "prime",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 54
+      },
+      "duration_s": null,
+      "event_id": "event-0000054",
+      "event_type": "retract",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 55
+      },
+      "duration_s": null,
+      "event_id": "event-0000055",
+      "event_type": "prime",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 56
+      },
+      "duration_s": null,
+      "event_id": "event-0000056",
+      "event_type": "retract",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 57
+      },
+      "duration_s": null,
+      "event_id": "event-0000057",
+      "event_type": "prime",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 58
+      },
+      "duration_s": null,
+      "event_id": "event-0000058",
+      "event_type": "retract",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 59
+      },
+      "duration_s": null,
+      "event_id": "event-0000059",
+      "event_type": "prime",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 60
+      },
+      "duration_s": null,
+      "event_id": "event-0000060",
+      "event_type": "retract",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 61
+      },
+      "duration_s": null,
+      "event_id": "event-0000061",
+      "event_type": "prime",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 62
+      },
+      "duration_s": null,
+      "event_id": "event-0000062",
+      "event_type": "retract",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 63
+      },
+      "duration_s": null,
+      "event_id": "event-0000063",
+      "event_type": "prime",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 64
+      },
+      "duration_s": null,
+      "event_id": "event-0000064",
+      "event_type": "retract",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 65
+      },
+      "duration_s": null,
+      "event_id": "event-0000065",
+      "event_type": "prime",
+      "layer_id": "layer-00002",
+      "operation_id": "audit-p07",
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 66
+      },
+      "duration_s": null,
+      "event_id": "event-0000066",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 67
+      },
+      "duration_s": null,
+      "event_id": "event-0000067",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 68
+      },
+      "duration_s": null,
+      "event_id": "event-0000068",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 69
+      },
+      "duration_s": null,
+      "event_id": "event-0000069",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 70
+      },
+      "duration_s": null,
+      "event_id": "event-0000070",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 71
+      },
+      "duration_s": null,
+      "event_id": "event-0000071",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 72
+      },
+      "duration_s": null,
+      "event_id": "event-0000072",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 73
+      },
+      "duration_s": null,
+      "event_id": "event-0000073",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 74
+      },
+      "duration_s": null,
+      "event_id": "event-0000074",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 75
+      },
+      "duration_s": null,
+      "event_id": "event-0000075",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 76
+      },
+      "duration_s": null,
+      "event_id": "event-0000076",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 77
+      },
+      "duration_s": null,
+      "event_id": "event-0000077",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 78
+      },
+      "duration_s": null,
+      "event_id": "event-0000078",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 79
+      },
+      "duration_s": null,
+      "event_id": "event-0000079",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 80
+      },
+      "duration_s": null,
+      "event_id": "event-0000080",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 81
+      },
+      "duration_s": null,
+      "event_id": "event-0000081",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 82
+      },
+      "duration_s": null,
+      "event_id": "event-0000082",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 83
+      },
+      "duration_s": null,
+      "event_id": "event-0000083",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 84
+      },
+      "duration_s": null,
+      "event_id": "event-0000084",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 85
+      },
+      "duration_s": null,
+      "event_id": "event-0000085",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 86
+      },
+      "duration_s": null,
+      "event_id": "event-0000086",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 87
+      },
+      "duration_s": null,
+      "event_id": "event-0000087",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 88
+      },
+      "duration_s": null,
+      "event_id": "event-0000088",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 89
+      },
+      "duration_s": null,
+      "event_id": "event-0000089",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 90
+      },
+      "duration_s": null,
+      "event_id": "event-0000090",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 91
+      },
+      "duration_s": null,
+      "event_id": "event-0000091",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 92
+      },
+      "duration_s": null,
+      "event_id": "event-0000092",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 93
+      },
+      "duration_s": null,
+      "event_id": "event-0000093",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 94
+      },
+      "duration_s": null,
+      "event_id": "event-0000094",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 95
+      },
+      "duration_s": null,
+      "event_id": "event-0000095",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 96
+      },
+      "duration_s": null,
+      "event_id": "event-0000096",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 97
+      },
+      "duration_s": null,
+      "event_id": "event-0000097",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 98
+      },
+      "duration_s": null,
+      "event_id": "event-0000098",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 99
+      },
+      "duration_s": null,
+      "event_id": "event-0000099",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 100
+      },
+      "duration_s": null,
+      "event_id": "event-0000100",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 101
+      },
+      "duration_s": null,
+      "event_id": "event-0000101",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 102
+      },
+      "duration_s": null,
+      "event_id": "event-0000102",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 103
+      },
+      "duration_s": null,
+      "event_id": "event-0000103",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 104
+      },
+      "duration_s": null,
+      "event_id": "event-0000104",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 105
+      },
+      "duration_s": null,
+      "event_id": "event-0000105",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 106
+      },
+      "duration_s": null,
+      "event_id": "event-0000106",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 107
+      },
+      "duration_s": null,
+      "event_id": "event-0000107",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 108
+      },
+      "duration_s": null,
+      "event_id": "event-0000108",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 109
+      },
+      "duration_s": null,
+      "event_id": "event-0000109",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 110
+      },
+      "duration_s": null,
+      "event_id": "event-0000110",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 111
+      },
+      "duration_s": null,
+      "event_id": "event-0000111",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 112
+      },
+      "duration_s": null,
+      "event_id": "event-0000112",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 113
+      },
+      "duration_s": null,
+      "event_id": "event-0000113",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 114
+      },
+      "duration_s": null,
+      "event_id": "event-0000114",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 115
+      },
+      "duration_s": null,
+      "event_id": "event-0000115",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 116
+      },
+      "duration_s": null,
+      "event_id": "event-0000116",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 117
+      },
+      "duration_s": null,
+      "event_id": "event-0000117",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 118
+      },
+      "duration_s": null,
+      "event_id": "event-0000118",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 119
+      },
+      "duration_s": null,
+      "event_id": "event-0000119",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 120
+      },
+      "duration_s": null,
+      "event_id": "event-0000120",
+      "event_type": "retract",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 121
+      },
+      "duration_s": null,
+      "event_id": "event-0000121",
+      "event_type": "prime",
+      "layer_id": "layer-00003",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 122
+      },
+      "duration_s": null,
+      "event_id": "event-0000122",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 123
+      },
+      "duration_s": null,
+      "event_id": "event-0000123",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 124
+      },
+      "duration_s": null,
+      "event_id": "event-0000124",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 125
+      },
+      "duration_s": null,
+      "event_id": "event-0000125",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 126
+      },
+      "duration_s": null,
+      "event_id": "event-0000126",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 127
+      },
+      "duration_s": null,
+      "event_id": "event-0000127",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 128
+      },
+      "duration_s": null,
+      "event_id": "event-0000128",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 129
+      },
+      "duration_s": null,
+      "event_id": "event-0000129",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 130
+      },
+      "duration_s": null,
+      "event_id": "event-0000130",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 131
+      },
+      "duration_s": null,
+      "event_id": "event-0000131",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 132
+      },
+      "duration_s": null,
+      "event_id": "event-0000132",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 133
+      },
+      "duration_s": null,
+      "event_id": "event-0000133",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 134
+      },
+      "duration_s": null,
+      "event_id": "event-0000134",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 135
+      },
+      "duration_s": null,
+      "event_id": "event-0000135",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 136
+      },
+      "duration_s": null,
+      "event_id": "event-0000136",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 137
+      },
+      "duration_s": null,
+      "event_id": "event-0000137",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 138
+      },
+      "duration_s": null,
+      "event_id": "event-0000138",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 139
+      },
+      "duration_s": null,
+      "event_id": "event-0000139",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 140
+      },
+      "duration_s": null,
+      "event_id": "event-0000140",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 141
+      },
+      "duration_s": null,
+      "event_id": "event-0000141",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 142
+      },
+      "duration_s": null,
+      "event_id": "event-0000142",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 143
+      },
+      "duration_s": null,
+      "event_id": "event-0000143",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 144
+      },
+      "duration_s": null,
+      "event_id": "event-0000144",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 145
+      },
+      "duration_s": null,
+      "event_id": "event-0000145",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 146
+      },
+      "duration_s": null,
+      "event_id": "event-0000146",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 147
+      },
+      "duration_s": null,
+      "event_id": "event-0000147",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 148
+      },
+      "duration_s": null,
+      "event_id": "event-0000148",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 149
+      },
+      "duration_s": null,
+      "event_id": "event-0000149",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 150
+      },
+      "duration_s": null,
+      "event_id": "event-0000150",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 151
+      },
+      "duration_s": null,
+      "event_id": "event-0000151",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 152
+      },
+      "duration_s": null,
+      "event_id": "event-0000152",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 153
+      },
+      "duration_s": null,
+      "event_id": "event-0000153",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 154
+      },
+      "duration_s": null,
+      "event_id": "event-0000154",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 155
+      },
+      "duration_s": null,
+      "event_id": "event-0000155",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 156
+      },
+      "duration_s": null,
+      "event_id": "event-0000156",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 157
+      },
+      "duration_s": null,
+      "event_id": "event-0000157",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 158
+      },
+      "duration_s": null,
+      "event_id": "event-0000158",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 159
+      },
+      "duration_s": null,
+      "event_id": "event-0000159",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 160
+      },
+      "duration_s": null,
+      "event_id": "event-0000160",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 161
+      },
+      "duration_s": null,
+      "event_id": "event-0000161",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 162
+      },
+      "duration_s": null,
+      "event_id": "event-0000162",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 163
+      },
+      "duration_s": null,
+      "event_id": "event-0000163",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 164
+      },
+      "duration_s": null,
+      "event_id": "event-0000164",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 165
+      },
+      "duration_s": null,
+      "event_id": "event-0000165",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 166
+      },
+      "duration_s": null,
+      "event_id": "event-0000166",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 167
+      },
+      "duration_s": null,
+      "event_id": "event-0000167",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 168
+      },
+      "duration_s": null,
+      "event_id": "event-0000168",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 169
+      },
+      "duration_s": null,
+      "event_id": "event-0000169",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 170
+      },
+      "duration_s": null,
+      "event_id": "event-0000170",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 171
+      },
+      "duration_s": null,
+      "event_id": "event-0000171",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 172
+      },
+      "duration_s": null,
+      "event_id": "event-0000172",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 173
+      },
+      "duration_s": null,
+      "event_id": "event-0000173",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 174
+      },
+      "duration_s": null,
+      "event_id": "event-0000174",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 175
+      },
+      "duration_s": null,
+      "event_id": "event-0000175",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 176
+      },
+      "duration_s": null,
+      "event_id": "event-0000176",
+      "event_type": "retract",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 177
+      },
+      "duration_s": null,
+      "event_id": "event-0000177",
+      "event_type": "prime",
+      "layer_id": "layer-00004",
+      "operation_id": "audit-p07",
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface"
+    }
+  ],
+  "operation_id": "audit-p07",
+  "points": [
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000001",
+      "point_type": "approach",
+      "position": [
+        0.2999999999999999,
+        0.7999999999999972,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 3.4200000000000004,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000002",
+      "point_type": "deposition",
+      "position": [
+        11.700000000000003,
+        0.7999999999999972,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000003",
+      "point_type": "travel",
+      "position": [
+        3.2254635649335026,
+        1.7999999999999972,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.8776390694800508,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000004",
+      "point_type": "deposition",
+      "position": [
+        0.3,
+        1.7999999999999972,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000005",
+      "point_type": "travel",
+      "position": [
+        8.774536435066498,
+        1.7999999999999972,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.8776390694800514,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000006",
+      "point_type": "deposition",
+      "position": [
+        11.700000000000003,
+        1.7999999999999972,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000007",
+      "point_type": "travel",
+      "position": [
+        3.2,
+        2.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.8700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000008",
+      "point_type": "deposition",
+      "position": [
+        0.30000000000000004,
+        2.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000009",
+      "point_type": "travel",
+      "position": [
+        8.8,
+        2.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.8700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000010",
+      "point_type": "deposition",
+      "position": [
+        11.700000000000001,
+        2.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000011",
+      "point_type": "travel",
+      "position": [
+        3.2,
+        3.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.87,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000012",
+      "point_type": "deposition",
+      "position": [
+        0.30000000000000016,
+        3.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000013",
+      "point_type": "travel",
+      "position": [
+        8.8,
+        3.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.8700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000014",
+      "point_type": "deposition",
+      "position": [
+        11.700000000000001,
+        3.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000015",
+      "point_type": "travel",
+      "position": [
+        3.2,
+        4.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.87,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000016",
+      "point_type": "deposition",
+      "position": [
+        0.30000000000000027,
+        4.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000017",
+      "point_type": "travel",
+      "position": [
+        8.8,
+        4.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.8700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000018",
+      "point_type": "deposition",
+      "position": [
+        11.700000000000001,
+        4.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000019",
+      "point_type": "travel",
+      "position": [
+        3.2,
+        5.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.87,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000020",
+      "point_type": "deposition",
+      "position": [
+        0.3000000000000003,
+        5.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000021",
+      "point_type": "travel",
+      "position": [
+        8.8,
+        5.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.8700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000022",
+      "point_type": "deposition",
+      "position": [
+        11.700000000000001,
+        5.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000023",
+      "point_type": "travel",
+      "position": [
+        3.2,
+        6.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.87,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000024",
+      "point_type": "deposition",
+      "position": [
+        0.30000000000000043,
+        6.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000025",
+      "point_type": "travel",
+      "position": [
+        8.8,
+        6.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.8700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000026",
+      "point_type": "deposition",
+      "position": [
+        11.700000000000001,
+        6.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000027",
+      "point_type": "travel",
+      "position": [
+        3.2,
+        7.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.8699999999999998,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000028",
+      "point_type": "deposition",
+      "position": [
+        0.30000000000000054,
+        7.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000029",
+      "point_type": "travel",
+      "position": [
+        8.8,
+        7.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.8699999999999996,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000030",
+      "point_type": "deposition",
+      "position": [
+        11.7,
+        7.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000031",
+      "point_type": "travel",
+      "position": [
+        3.999999999998697,
+        8.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.1099999999996089,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000032",
+      "point_type": "deposition",
+      "position": [
+        0.3000000000000006,
+        8.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000033",
+      "point_type": "travel",
+      "position": [
+        8.000000000001302,
+        8.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 1.109999999999609,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000034",
+      "point_type": "deposition",
+      "position": [
+        11.7,
+        8.799999999999997,
+        0.5
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000035",
+      "point_type": "travel",
+      "position": [
+        0.7999999999999998,
+        0.29999999999999727,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 2.8200000000000007,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000036",
+      "point_type": "deposition",
+      "position": [
+        0.7999999999999998,
+        9.7,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000037",
+      "point_type": "travel",
+      "position": [
+        1.7999999999999998,
+        9.7,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 2.8200000000000007,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000038",
+      "point_type": "deposition",
+      "position": [
+        1.7999999999999998,
+        0.2999999999999975,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000039",
+      "point_type": "travel",
+      "position": [
+        2.8,
+        0.29999999999999777,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 2.8200000000000007,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000040",
+      "point_type": "deposition",
+      "position": [
+        2.8,
+        9.7,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000041",
+      "point_type": "travel",
+      "position": [
+        3.8,
+        1.225463564933502,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.2776390694800512,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000042",
+      "point_type": "deposition",
+      "position": [
+        3.8,
+        0.299999999999998,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000043",
+      "point_type": "travel",
+      "position": [
+        3.8,
+        8.7745364350665,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.2776390694800504,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000044",
+      "point_type": "deposition",
+      "position": [
+        3.8,
+        9.700000000000001,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000045",
+      "point_type": "travel",
+      "position": [
+        4.8,
+        1.2000000000000002,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.2700000000000006,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000046",
+      "point_type": "deposition",
+      "position": [
+        4.8,
+        0.2999999999999982,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000047",
+      "point_type": "travel",
+      "position": [
+        4.8,
+        8.8,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.2700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000048",
+      "point_type": "deposition",
+      "position": [
+        4.8,
+        9.700000000000001,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000049",
+      "point_type": "travel",
+      "position": [
+        5.8,
+        1.2000000000000002,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.2700000000000005,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000050",
+      "point_type": "deposition",
+      "position": [
+        5.8,
+        0.29999999999999843,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000051",
+      "point_type": "travel",
+      "position": [
+        5.8,
+        8.8,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.2700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000052",
+      "point_type": "deposition",
+      "position": [
+        5.8,
+        9.700000000000001,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000053",
+      "point_type": "travel",
+      "position": [
+        6.8,
+        1.2,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.27000000000000035,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000054",
+      "point_type": "deposition",
+      "position": [
+        6.8,
+        0.29999999999999866,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000055",
+      "point_type": "travel",
+      "position": [
+        6.8,
+        8.8,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.2700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000056",
+      "point_type": "deposition",
+      "position": [
+        6.8,
+        9.700000000000001,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000057",
+      "point_type": "travel",
+      "position": [
+        7.8,
+        1.2,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.2700000000000003,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000058",
+      "point_type": "deposition",
+      "position": [
+        7.8,
+        0.29999999999999893,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000059",
+      "point_type": "travel",
+      "position": [
+        7.8,
+        8.8,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.2700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000060",
+      "point_type": "deposition",
+      "position": [
+        7.8,
+        9.700000000000001,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000061",
+      "point_type": "travel",
+      "position": [
+        8.8,
+        9.700000000000001,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 2.8200000000000007,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000062",
+      "point_type": "deposition",
+      "position": [
+        8.8,
+        0.29999999999999916,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000063",
+      "point_type": "travel",
+      "position": [
+        9.8,
+        0.2999999999999994,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 2.820000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000064",
+      "point_type": "deposition",
+      "position": [
+        9.8,
+        9.700000000000003,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000065",
+      "point_type": "travel",
+      "position": [
+        10.8,
+        9.700000000000003,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00002",
+      "material_volume_mm3": 2.820000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000066",
+      "point_type": "deposition",
+      "position": [
+        10.8,
+        0.2999999999999996,
+        1.0
+      ],
+      "region_id": "support-body-0001",
+      "stage_id": "planar_support",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000067",
+      "point_type": "travel",
+      "position": [
+        0.2999999999999999,
+        0.5999999999999972,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 3.4200000000000004,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000068",
+      "point_type": "deposition",
+      "position": [
+        11.700000000000003,
+        0.5999999999999972,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000069",
+      "point_type": "travel",
+      "position": [
+        11.700000000000003,
+        1.199999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 3.4200000000000004,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000070",
+      "point_type": "deposition",
+      "position": [
+        0.29999999999999993,
+        1.199999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000071",
+      "point_type": "travel",
+      "position": [
+        0.3,
+        1.7999999999999972,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.8776390694800508,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000072",
+      "point_type": "deposition",
+      "position": [
+        3.2254635649335026,
+        1.7999999999999972,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000073",
+      "point_type": "travel",
+      "position": [
+        11.700000000000003,
+        1.7999999999999972,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.8776390694800514,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000074",
+      "point_type": "deposition",
+      "position": [
+        8.774536435066498,
+        1.7999999999999972,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000075",
+      "point_type": "travel",
+      "position": [
+        0.30000000000000004,
+        2.3999999999999972,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.8700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000076",
+      "point_type": "deposition",
+      "position": [
+        3.2,
+        2.3999999999999972,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000077",
+      "point_type": "travel",
+      "position": [
+        11.700000000000003,
+        2.3999999999999972,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.8700000000000007,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000078",
+      "point_type": "deposition",
+      "position": [
+        8.8,
+        2.3999999999999972,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000079",
+      "point_type": "travel",
+      "position": [
+        0.3000000000000001,
+        2.999999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.87,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000080",
+      "point_type": "deposition",
+      "position": [
+        3.2,
+        2.999999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000081",
+      "point_type": "travel",
+      "position": [
+        11.700000000000001,
+        2.999999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.8700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000082",
+      "point_type": "deposition",
+      "position": [
+        8.8,
+        2.999999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000083",
+      "point_type": "travel",
+      "position": [
+        0.30000000000000016,
+        3.599999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.87,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000084",
+      "point_type": "deposition",
+      "position": [
+        3.2,
+        3.599999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000085",
+      "point_type": "travel",
+      "position": [
+        11.700000000000001,
+        3.599999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.8700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000086",
+      "point_type": "deposition",
+      "position": [
+        8.8,
+        3.599999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000087",
+      "point_type": "travel",
+      "position": [
+        0.3000000000000002,
+        4.1999999999999975,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.87,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000088",
+      "point_type": "deposition",
+      "position": [
+        3.2,
+        4.1999999999999975,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000089",
+      "point_type": "travel",
+      "position": [
+        11.700000000000001,
+        4.1999999999999975,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.8700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000090",
+      "point_type": "deposition",
+      "position": [
+        8.8,
+        4.1999999999999975,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000091",
+      "point_type": "travel",
+      "position": [
+        0.30000000000000027,
+        4.799999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.87,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000092",
+      "point_type": "deposition",
+      "position": [
+        3.2,
+        4.799999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000093",
+      "point_type": "travel",
+      "position": [
+        11.700000000000001,
+        4.799999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.8700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000094",
+      "point_type": "deposition",
+      "position": [
+        8.8,
+        4.799999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000095",
+      "point_type": "travel",
+      "position": [
+        0.3000000000000003,
+        5.399999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.87,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000096",
+      "point_type": "deposition",
+      "position": [
+        3.2,
+        5.399999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000097",
+      "point_type": "travel",
+      "position": [
+        11.700000000000001,
+        5.399999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.8700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000098",
+      "point_type": "deposition",
+      "position": [
+        8.8,
+        5.399999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000099",
+      "point_type": "travel",
+      "position": [
+        0.3000000000000004,
+        5.999999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.87,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000100",
+      "point_type": "deposition",
+      "position": [
+        3.2,
+        5.999999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000101",
+      "point_type": "travel",
+      "position": [
+        11.700000000000001,
+        5.999999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.8700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000102",
+      "point_type": "deposition",
+      "position": [
+        8.8,
+        5.999999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000103",
+      "point_type": "travel",
+      "position": [
+        0.30000000000000043,
+        6.599999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.87,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000104",
+      "point_type": "deposition",
+      "position": [
+        3.2,
+        6.599999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000105",
+      "point_type": "travel",
+      "position": [
+        11.700000000000001,
+        6.599999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.8700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000106",
+      "point_type": "deposition",
+      "position": [
+        8.8,
+        6.599999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000107",
+      "point_type": "travel",
+      "position": [
+        0.3000000000000005,
+        7.199999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.8699999999999998,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000108",
+      "point_type": "deposition",
+      "position": [
+        3.2,
+        7.199999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000109",
+      "point_type": "travel",
+      "position": [
+        11.700000000000001,
+        7.199999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.8700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000110",
+      "point_type": "deposition",
+      "position": [
+        8.8,
+        7.199999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000111",
+      "point_type": "travel",
+      "position": [
+        0.30000000000000054,
+        7.799999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.8699999999999998,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000112",
+      "point_type": "deposition",
+      "position": [
+        3.2,
+        7.799999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000113",
+      "point_type": "travel",
+      "position": [
+        11.7,
+        7.799999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.8699999999999996,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000114",
+      "point_type": "deposition",
+      "position": [
+        8.8,
+        7.799999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000115",
+      "point_type": "travel",
+      "position": [
+        0.3000000000000006,
+        8.399999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.9021539030917338,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000116",
+      "point_type": "deposition",
+      "position": [
+        3.307179676972447,
+        8.399999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000117",
+      "point_type": "travel",
+      "position": [
+        11.7,
+        8.399999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.902153903091734,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000118",
+      "point_type": "deposition",
+      "position": [
+        8.692820323027552,
+        8.399999999999997,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000119",
+      "point_type": "travel",
+      "position": [
+        0.30000000000000066,
+        8.999999999999996,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 3.4199999999999995,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000120",
+      "point_type": "deposition",
+      "position": [
+        11.7,
+        8.999999999999996,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000121",
+      "point_type": "travel",
+      "position": [
+        11.7,
+        9.599999999999996,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00003",
+      "material_volume_mm3": 3.4199999999999995,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000122",
+      "point_type": "deposition",
+      "position": [
+        0.3000000000000007,
+        9.599999999999996,
+        1.5
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000123",
+      "point_type": "travel",
+      "position": [
+        0.5999999999999999,
+        0.2999999999999972,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 2.8200000000000007,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000124",
+      "point_type": "deposition",
+      "position": [
+        0.5999999999999999,
+        9.7,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000125",
+      "point_type": "travel",
+      "position": [
+        1.1999999999999997,
+        9.7,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 2.8200000000000007,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000126",
+      "point_type": "deposition",
+      "position": [
+        1.1999999999999997,
+        0.2999999999999974,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000127",
+      "point_type": "travel",
+      "position": [
+        1.7999999999999998,
+        0.2999999999999975,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 2.8200000000000007,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000128",
+      "point_type": "deposition",
+      "position": [
+        1.7999999999999998,
+        9.7,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000129",
+      "point_type": "travel",
+      "position": [
+        2.4,
+        9.7,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 2.8200000000000007,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000130",
+      "point_type": "deposition",
+      "position": [
+        2.4,
+        0.29999999999999766,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000131",
+      "point_type": "travel",
+      "position": [
+        2.9999999999999996,
+        0.29999999999999777,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 2.8200000000000007,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000132",
+      "point_type": "deposition",
+      "position": [
+        2.9999999999999996,
+        9.7,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000133",
+      "point_type": "travel",
+      "position": [
+        3.5999999999999996,
+        1.3071796769724497,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.3021539030917355,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000134",
+      "point_type": "deposition",
+      "position": [
+        3.5999999999999996,
+        0.29999999999999793,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000135",
+      "point_type": "travel",
+      "position": [
+        3.5999999999999996,
+        8.692820323027549,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.3021539030917356,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000136",
+      "point_type": "deposition",
+      "position": [
+        3.5999999999999996,
+        9.700000000000001,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000137",
+      "point_type": "travel",
+      "position": [
+        4.199999999999999,
+        1.2000000000000002,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.27000000000000063,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000138",
+      "point_type": "deposition",
+      "position": [
+        4.199999999999999,
+        0.29999999999999805,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000139",
+      "point_type": "travel",
+      "position": [
+        4.199999999999999,
+        8.8,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.2700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000140",
+      "point_type": "deposition",
+      "position": [
+        4.199999999999999,
+        9.700000000000001,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000141",
+      "point_type": "travel",
+      "position": [
+        4.8,
+        1.2000000000000002,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.2700000000000006,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000142",
+      "point_type": "deposition",
+      "position": [
+        4.8,
+        0.2999999999999982,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000143",
+      "point_type": "travel",
+      "position": [
+        4.8,
+        8.8,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.2700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000144",
+      "point_type": "deposition",
+      "position": [
+        4.8,
+        9.700000000000001,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000145",
+      "point_type": "travel",
+      "position": [
+        5.3999999999999995,
+        1.2000000000000002,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.2700000000000006,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000146",
+      "point_type": "deposition",
+      "position": [
+        5.3999999999999995,
+        0.2999999999999983,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000147",
+      "point_type": "travel",
+      "position": [
+        5.3999999999999995,
+        8.8,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.2700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000148",
+      "point_type": "deposition",
+      "position": [
+        5.3999999999999995,
+        9.700000000000001,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000149",
+      "point_type": "travel",
+      "position": [
+        6.0,
+        1.2000000000000002,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.2700000000000005,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000150",
+      "point_type": "deposition",
+      "position": [
+        6.0,
+        0.2999999999999985,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000151",
+      "point_type": "travel",
+      "position": [
+        6.0,
+        8.8,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.2700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000152",
+      "point_type": "deposition",
+      "position": [
+        6.0,
+        9.700000000000001,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000153",
+      "point_type": "travel",
+      "position": [
+        6.6,
+        1.2,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.27000000000000035,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000154",
+      "point_type": "deposition",
+      "position": [
+        6.6,
+        0.29999999999999866,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000155",
+      "point_type": "travel",
+      "position": [
+        6.6,
+        8.8,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.2700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000156",
+      "point_type": "deposition",
+      "position": [
+        6.6,
+        9.700000000000001,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000157",
+      "point_type": "travel",
+      "position": [
+        7.199999999999999,
+        1.2,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.27000000000000035,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000158",
+      "point_type": "deposition",
+      "position": [
+        7.199999999999999,
+        0.29999999999999877,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000159",
+      "point_type": "travel",
+      "position": [
+        7.199999999999999,
+        8.8,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.2700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000160",
+      "point_type": "deposition",
+      "position": [
+        7.199999999999999,
+        9.700000000000001,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000161",
+      "point_type": "travel",
+      "position": [
+        7.8,
+        1.2,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.2700000000000003,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000162",
+      "point_type": "deposition",
+      "position": [
+        7.8,
+        0.29999999999999893,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000163",
+      "point_type": "travel",
+      "position": [
+        7.8,
+        8.8,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.2700000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000164",
+      "point_type": "deposition",
+      "position": [
+        7.8,
+        9.700000000000001,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000165",
+      "point_type": "travel",
+      "position": [
+        8.399999999999999,
+        1.307179676972448,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.3021539030917347,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000166",
+      "point_type": "deposition",
+      "position": [
+        8.399999999999999,
+        0.29999999999999905,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000167",
+      "point_type": "travel",
+      "position": [
+        8.399999999999999,
+        8.692820323027552,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.30215390309173457,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000168",
+      "point_type": "deposition",
+      "position": [
+        8.399999999999999,
+        9.700000000000001,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000169",
+      "point_type": "travel",
+      "position": [
+        9.0,
+        9.700000000000003,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 2.820000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000170",
+      "point_type": "deposition",
+      "position": [
+        9.0,
+        0.2999999999999992,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000171",
+      "point_type": "travel",
+      "position": [
+        9.599999999999998,
+        0.2999999999999993,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 2.820000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000172",
+      "point_type": "deposition",
+      "position": [
+        9.599999999999998,
+        9.700000000000003,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000173",
+      "point_type": "travel",
+      "position": [
+        10.2,
+        9.700000000000003,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 2.820000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000174",
+      "point_type": "deposition",
+      "position": [
+        10.2,
+        0.2999999999999995,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000175",
+      "point_type": "travel",
+      "position": [
+        10.8,
+        0.2999999999999996,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 2.820000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000176",
+      "point_type": "deposition",
+      "position": [
+        10.8,
+        9.700000000000003,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000177",
+      "point_type": "travel",
+      "position": [
+        11.399999999999999,
+        9.700000000000003,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 0.6,
+      "extrusion_role": "support",
+      "feedrate_mm_min": 100.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00004",
+      "material_volume_mm3": 2.820000000000001,
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "operation_id": "audit-p07",
+      "point_id": "point-0000178",
+      "point_type": "deposition",
+      "position": [
+        11.399999999999999,
+        0.29999999999999977,
+        2.0
+      ],
+      "region_id": "support-interface-0001",
+      "stage_id": "planar_support_interface",
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "toolpath_id": "audit-p07-support-v1",
+  "units": {
+    "angle": "rad",
+    "feedrate": "mm_min",
+    "length": "mm",
+    "material_volume": "mm3"
+  }
+}

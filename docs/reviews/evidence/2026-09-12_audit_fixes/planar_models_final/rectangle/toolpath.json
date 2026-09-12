@@ -1,0 +1,951 @@
+{
+  "schema_version": 1,
+  "toolpath_id": "audit-rectangle-zigzag-v3",
+  "operation_id": "audit-rectangle",
+  "coordinate_frame": "workpiece_build",
+  "units": {
+    "length": "mm",
+    "angle": "rad",
+    "feedrate": "mm_min",
+    "material_volume": "mm3"
+  },
+  "points": [
+    {
+      "point_id": "point-0000001",
+      "position": [
+        0.2999999999999998,
+        0.2999999999999998,
+        0.5
+      ],
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "feedrate_mm_min": 100.0,
+      "bead_width_mm": null,
+      "layer_height_mm": null,
+      "material_volume_mm3": 0.0,
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "point_type": "approach",
+      "extrusion_role": "none",
+      "issue_ids": []
+    },
+    {
+      "point_id": "point-0000002",
+      "position": [
+        7.7,
+        0.2999999999999998,
+        0.5
+      ],
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "feedrate_mm_min": 100.0,
+      "bead_width_mm": 0.6,
+      "layer_height_mm": 0.5,
+      "material_volume_mm3": 2.22,
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "point_type": "deposition",
+      "extrusion_role": "skin",
+      "issue_ids": []
+    },
+    {
+      "point_id": "point-0000003",
+      "position": [
+        7.7,
+        5.7,
+        0.5
+      ],
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "feedrate_mm_min": 100.0,
+      "bead_width_mm": 0.6,
+      "layer_height_mm": 0.5,
+      "material_volume_mm3": 1.62,
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "point_type": "deposition",
+      "extrusion_role": "skin",
+      "issue_ids": []
+    },
+    {
+      "point_id": "point-0000004",
+      "position": [
+        0.2999999999999998,
+        5.7,
+        0.5
+      ],
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "feedrate_mm_min": 100.0,
+      "bead_width_mm": 0.6,
+      "layer_height_mm": 0.5,
+      "material_volume_mm3": 2.22,
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "point_type": "deposition",
+      "extrusion_role": "skin",
+      "issue_ids": []
+    },
+    {
+      "point_id": "point-0000005",
+      "position": [
+        0.2999999999999998,
+        0.2999999999999998,
+        0.5
+      ],
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ],
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "feedrate_mm_min": 100.0,
+      "bead_width_mm": 0.6,
+      "layer_height_mm": 0.5,
+      "material_volume_mm3": 1.62,
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "point_type": "deposition",
+      "extrusion_role": "skin",
+      "issue_ids": []
+    },
+    {
+      "point_id": "point-0000006",
+      "position": [
+        0.6000000000000001,
+        0.9000000000000001,
+        0.5
+      ],
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "feedrate_mm_min": 100.0,
+      "bead_width_mm": null,
+      "layer_height_mm": null,
+      "material_volume_mm3": 0.0,
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "point_type": "travel",
+      "extrusion_role": "none",
+      "issue_ids": []
+    },
+    {
+      "point_id": "point-0000007",
+      "position": [
+        7.399999999999999,
+        0.9000000000000001,
+        0.5
+      ],
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "feedrate_mm_min": 100.0,
+      "bead_width_mm": 0.6,
+      "layer_height_mm": 0.5,
+      "material_volume_mm3": 2.0399999999999996,
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "point_type": "deposition",
+      "extrusion_role": "infill",
+      "issue_ids": []
+    },
+    {
+      "point_id": "point-0000008",
+      "position": [
+        7.399999999999999,
+        1.5,
+        0.5
+      ],
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "feedrate_mm_min": 100.0,
+      "bead_width_mm": null,
+      "layer_height_mm": null,
+      "material_volume_mm3": 0.0,
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "point_type": "travel",
+      "extrusion_role": "none",
+      "issue_ids": []
+    },
+    {
+      "point_id": "point-0000009",
+      "position": [
+        0.6000000000000001,
+        1.5,
+        0.5
+      ],
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "feedrate_mm_min": 100.0,
+      "bead_width_mm": 0.6,
+      "layer_height_mm": 0.5,
+      "material_volume_mm3": 2.0399999999999996,
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "point_type": "deposition",
+      "extrusion_role": "infill",
+      "issue_ids": []
+    },
+    {
+      "point_id": "point-0000010",
+      "position": [
+        0.6000000000000001,
+        2.1,
+        0.5
+      ],
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "feedrate_mm_min": 100.0,
+      "bead_width_mm": null,
+      "layer_height_mm": null,
+      "material_volume_mm3": 0.0,
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "point_type": "travel",
+      "extrusion_role": "none",
+      "issue_ids": []
+    },
+    {
+      "point_id": "point-0000011",
+      "position": [
+        7.3999999999999995,
+        2.1,
+        0.5
+      ],
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "feedrate_mm_min": 100.0,
+      "bead_width_mm": 0.6,
+      "layer_height_mm": 0.5,
+      "material_volume_mm3": 2.0399999999999996,
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "point_type": "deposition",
+      "extrusion_role": "infill",
+      "issue_ids": []
+    },
+    {
+      "point_id": "point-0000012",
+      "position": [
+        7.3999999999999995,
+        2.7,
+        0.5
+      ],
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "feedrate_mm_min": 100.0,
+      "bead_width_mm": null,
+      "layer_height_mm": null,
+      "material_volume_mm3": 0.0,
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "point_type": "travel",
+      "extrusion_role": "none",
+      "issue_ids": []
+    },
+    {
+      "point_id": "point-0000013",
+      "position": [
+        0.6000000000000001,
+        2.7,
+        0.5
+      ],
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "feedrate_mm_min": 100.0,
+      "bead_width_mm": 0.6,
+      "layer_height_mm": 0.5,
+      "material_volume_mm3": 2.0399999999999996,
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "point_type": "deposition",
+      "extrusion_role": "infill",
+      "issue_ids": []
+    },
+    {
+      "point_id": "point-0000014",
+      "position": [
+        0.6000000000000001,
+        3.3,
+        0.5
+      ],
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "feedrate_mm_min": 100.0,
+      "bead_width_mm": null,
+      "layer_height_mm": null,
+      "material_volume_mm3": 0.0,
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "point_type": "travel",
+      "extrusion_role": "none",
+      "issue_ids": []
+    },
+    {
+      "point_id": "point-0000015",
+      "position": [
+        7.3999999999999995,
+        3.3,
+        0.5
+      ],
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "feedrate_mm_min": 100.0,
+      "bead_width_mm": 0.6,
+      "layer_height_mm": 0.5,
+      "material_volume_mm3": 2.0399999999999996,
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "point_type": "deposition",
+      "extrusion_role": "infill",
+      "issue_ids": []
+    },
+    {
+      "point_id": "point-0000016",
+      "position": [
+        7.3999999999999995,
+        3.9,
+        0.5
+      ],
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "feedrate_mm_min": 100.0,
+      "bead_width_mm": null,
+      "layer_height_mm": null,
+      "material_volume_mm3": 0.0,
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "point_type": "travel",
+      "extrusion_role": "none",
+      "issue_ids": []
+    },
+    {
+      "point_id": "point-0000017",
+      "position": [
+        0.6000000000000001,
+        3.9,
+        0.5
+      ],
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "feedrate_mm_min": 100.0,
+      "bead_width_mm": 0.6,
+      "layer_height_mm": 0.5,
+      "material_volume_mm3": 2.0399999999999996,
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "point_type": "deposition",
+      "extrusion_role": "infill",
+      "issue_ids": []
+    },
+    {
+      "point_id": "point-0000018",
+      "position": [
+        0.6000000000000001,
+        4.5,
+        0.5
+      ],
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "feedrate_mm_min": 100.0,
+      "bead_width_mm": null,
+      "layer_height_mm": null,
+      "material_volume_mm3": 0.0,
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "point_type": "travel",
+      "extrusion_role": "none",
+      "issue_ids": []
+    },
+    {
+      "point_id": "point-0000019",
+      "position": [
+        7.4,
+        4.5,
+        0.5
+      ],
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "feedrate_mm_min": 100.0,
+      "bead_width_mm": 0.6,
+      "layer_height_mm": 0.5,
+      "material_volume_mm3": 2.04,
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "point_type": "deposition",
+      "extrusion_role": "infill",
+      "issue_ids": []
+    },
+    {
+      "point_id": "point-0000020",
+      "position": [
+        7.4,
+        5.1,
+        0.5
+      ],
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "feedrate_mm_min": 100.0,
+      "bead_width_mm": null,
+      "layer_height_mm": null,
+      "material_volume_mm3": 0.0,
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "point_type": "travel",
+      "extrusion_role": "none",
+      "issue_ids": []
+    },
+    {
+      "point_id": "point-0000021",
+      "position": [
+        0.6000000000000001,
+        5.1,
+        0.5
+      ],
+      "surface_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "nozzle_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "feedrate_mm_min": 100.0,
+      "bead_width_mm": 0.6,
+      "layer_height_mm": 0.5,
+      "material_volume_mm3": 2.04,
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "point_type": "deposition",
+      "extrusion_role": "infill",
+      "issue_ids": []
+    }
+  ],
+  "events": [
+    {
+      "event_id": "event-0000001",
+      "event_type": "prime",
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "duration_s": null,
+      "context": {
+        "sequence_index": 1,
+        "extrusion_length_mm": 1.0
+      }
+    },
+    {
+      "event_id": "event-0000002",
+      "event_type": "retract",
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "duration_s": null,
+      "context": {
+        "sequence_index": 5,
+        "extrusion_length_mm": -1.0
+      }
+    },
+    {
+      "event_id": "event-0000003",
+      "event_type": "prime",
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "duration_s": null,
+      "context": {
+        "sequence_index": 6,
+        "extrusion_length_mm": 1.0
+      }
+    },
+    {
+      "event_id": "event-0000004",
+      "event_type": "retract",
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "duration_s": null,
+      "context": {
+        "sequence_index": 7,
+        "extrusion_length_mm": -1.0
+      }
+    },
+    {
+      "event_id": "event-0000005",
+      "event_type": "prime",
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "duration_s": null,
+      "context": {
+        "sequence_index": 8,
+        "extrusion_length_mm": 1.0
+      }
+    },
+    {
+      "event_id": "event-0000006",
+      "event_type": "retract",
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "duration_s": null,
+      "context": {
+        "sequence_index": 9,
+        "extrusion_length_mm": -1.0
+      }
+    },
+    {
+      "event_id": "event-0000007",
+      "event_type": "prime",
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "duration_s": null,
+      "context": {
+        "sequence_index": 10,
+        "extrusion_length_mm": 1.0
+      }
+    },
+    {
+      "event_id": "event-0000008",
+      "event_type": "retract",
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "duration_s": null,
+      "context": {
+        "sequence_index": 11,
+        "extrusion_length_mm": -1.0
+      }
+    },
+    {
+      "event_id": "event-0000009",
+      "event_type": "prime",
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "duration_s": null,
+      "context": {
+        "sequence_index": 12,
+        "extrusion_length_mm": 1.0
+      }
+    },
+    {
+      "event_id": "event-0000010",
+      "event_type": "retract",
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "duration_s": null,
+      "context": {
+        "sequence_index": 13,
+        "extrusion_length_mm": -1.0
+      }
+    },
+    {
+      "event_id": "event-0000011",
+      "event_type": "prime",
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "duration_s": null,
+      "context": {
+        "sequence_index": 14,
+        "extrusion_length_mm": 1.0
+      }
+    },
+    {
+      "event_id": "event-0000012",
+      "event_type": "retract",
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "duration_s": null,
+      "context": {
+        "sequence_index": 15,
+        "extrusion_length_mm": -1.0
+      }
+    },
+    {
+      "event_id": "event-0000013",
+      "event_type": "prime",
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "duration_s": null,
+      "context": {
+        "sequence_index": 16,
+        "extrusion_length_mm": 1.0
+      }
+    },
+    {
+      "event_id": "event-0000014",
+      "event_type": "retract",
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "duration_s": null,
+      "context": {
+        "sequence_index": 17,
+        "extrusion_length_mm": -1.0
+      }
+    },
+    {
+      "event_id": "event-0000015",
+      "event_type": "prime",
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "duration_s": null,
+      "context": {
+        "sequence_index": 18,
+        "extrusion_length_mm": 1.0
+      }
+    },
+    {
+      "event_id": "event-0000016",
+      "event_type": "retract",
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "duration_s": null,
+      "context": {
+        "sequence_index": 19,
+        "extrusion_length_mm": -1.0
+      }
+    },
+    {
+      "event_id": "event-0000017",
+      "event_type": "prime",
+      "operation_id": "audit-rectangle",
+      "stage_id": "planar",
+      "layer_id": "layer-00001",
+      "region_id": "region-0001",
+      "duration_s": null,
+      "context": {
+        "sequence_index": 20,
+        "extrusion_length_mm": 1.0
+      }
+    }
+  ]
+}

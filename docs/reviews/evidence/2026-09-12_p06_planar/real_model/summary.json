@@ -1,0 +1,595 @@
+{
+  "generic_xyzac_boundary": "Generic XYZAC is an offline reference only; controller semantics, real machine calibration, collision qualification and physical trial deposition were not verified.",
+  "model": {
+    "body_count": 4,
+    "path": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\三叶扇\\Supportless_sample.stp",
+    "selected_body": "body_002",
+    "sha256": "291155b64dace255937bbcddb496da4f11f8319a2fe6b9d32aa29a340686befc"
+  },
+  "operations": [
+    {
+      "artifacts": {
+        "machine_axes.csv": "a859e8e680cdeb34e8a37c9f5cf57ee8dbff0326cefe391a363caad11d4ab060",
+        "main.gcode": "cc1104fe12154e8020139640fd67895c4c943266c9e6668dfedde98faceff5ee",
+        "manifest.json": "04b367e0b42fe1922e3b6e17883c3968087f9d276067f4066b2d5051e3b32789",
+        "preview.json": "c039a504ee409e05eea901ba6b62691710474ae9f4ed4ca3d20ecacf983f0ec3",
+        "toolpath.json": "f47b798b78737d43c020534c8a705dd1d53bcb1bc29755c298f98be477cbe975",
+        "warnings.json": "f5c5a0d3b6530d287604b7f26e480a282d5093e2a37df1ed0d7c4315d504f9a2"
+      },
+      "exportable": true,
+      "issues": [
+        {
+          "code": "xyzac.rotary_singularity",
+          "context": {
+            "count": 399,
+            "first_context": {
+              "retained_c_rad": 0.0
+            }
+          },
+          "object_id": "point-0000001",
+          "severity": "warning"
+        }
+      ],
+      "measurement": {
+        "covered_area_mm2": 199.9999999999945,
+        "deposition_outside_max_mm": 0.0,
+        "geometric_volume_mm3": 158.8780047904194,
+        "material_volume_mm3": 158.8780047904194,
+        "residual_area_mm2": 0.0,
+        "sampled_region_area_mm2": 199.9999999999945,
+        "volume_difference_mm3": 0.0
+      },
+      "operation": {
+        "dirty_reasons": [
+          "operation_created",
+          "operation_geometry_changed",
+          "operation_parameters_changed"
+        ],
+        "enabled": true,
+        "geometry": {
+          "body": {
+            "assembly_name": "Document",
+            "geometry_type": "body",
+            "object_id": "body_002",
+            "parent_body_id": null,
+            "signature": {
+              "descriptor": {
+                "assembly_path": "Document",
+                "bounds_mm": {
+                  "maximum": [
+                    52.401546397120605,
+                    -3.4552711951320503,
+                    96.0000001000001
+                  ],
+                  "minimum": [
+                    3.80980349912531,
+                    -51.275592388034404,
+                    55.9999998999999
+                  ]
+                },
+                "centroid_mm": [
+                  25.809497467435722,
+                  -23.177377209302634,
+                  75.99998798190909
+                ],
+                "dimensions_mm": [
+                  48.591742897995296,
+                  47.820321192902355,
+                  40.000000200000194
+                ],
+                "kind": "solid",
+                "surface_area_mm2": 5077.756202816643,
+                "topology": {
+                  "curve_types": {
+                    "bsplinecurve": 12
+                  },
+                  "edge_count": 12,
+                  "face_count": 6,
+                  "surface_types": {
+                    "bsplinesurface": 4,
+                    "plane": 2
+                  },
+                  "vertex_count": 8,
+                  "vertex_edge_degrees": [
+                    3,
+                    3,
+                    3,
+                    3,
+                    3,
+                    3,
+                    3,
+                    3
+                  ]
+                },
+                "volume_mm3": 8000.001755379692
+              },
+              "geometry_type": "body",
+              "kernel_signature": "0da6f6caa6e502398238b3da203759190cb780b5f38390df60c6562dc04fabdc",
+              "parent_body": null,
+              "schema_version": 1
+            }
+          }
+        },
+        "name": "P06 real STEP planar_zigzag",
+        "operation_id": "p06-planar_zigzag",
+        "operation_type": "planar_zigzag",
+        "parameters": {
+          "bead_width_mm": 0.6,
+          "feedrate_mm_min": 100.0,
+          "first_layer_z_mm": 60.0,
+          "last_layer_z_mm": 60.0,
+          "layer_height_mm": 0.6,
+          "line_spacing_mm": 0.6,
+          "offset_pass_count": 3,
+          "retract_length_mm": 1.0,
+          "spiral_samples_per_contour": 64,
+          "thin_wall_max_passes": 3,
+          "travel_feedrate_mm_min": 100.0,
+          "wall_thickness_mm": 0.6
+        },
+        "setup_id": "setup-1",
+        "state": "dirty"
+      },
+      "readback": {
+        "coordinate_mismatches": [],
+        "expected_points": 399,
+        "extrusion_mismatches": [],
+        "feedrate_mismatches": [],
+        "order_mismatches": [],
+        "passed": true,
+        "read_points": 399,
+        "schema_version": 1
+      },
+      "status": "warning",
+      "toolpath_point_count": 399,
+      "trajectory_sample_count": 399
+    },
+    {
+      "artifacts": {
+        "machine_axes.csv": "eddf3dd5aa6c65a6f1d21fa7b93f17ce135846735c7fa1ba715c28681200b0c2",
+        "main.gcode": "a412c22b7be08004f002fc471bc8e00ba7858e7e16a70518a212f37025b5d319",
+        "manifest.json": "8161b47bb0c235f6146b4e5ab98daa50e580f666a35901fd9f84b31daca96b4f",
+        "preview.json": "1ceae093e38ca74988eb9cdc36e27b1ebd08025056163ec583cae3697ee7c04f",
+        "toolpath.json": "4d8b12b07d77d7846f1738c850746460069a7ac934becbdefe8c4b68b3b656a4",
+        "warnings.json": "f481f240d2929a0557dd0e36cabc214d25feb8847752e417f2b2ef2cbf343902"
+      },
+      "exportable": true,
+      "issues": [
+        {
+          "code": "xyzac.rotary_singularity",
+          "context": {
+            "count": 15,
+            "first_context": {
+              "retained_c_rad": 0.0
+            }
+          },
+          "object_id": "point-0000001",
+          "severity": "warning"
+        }
+      ],
+      "measurement": {
+        "covered_area_mm2": 181.19999999999823,
+        "deposition_outside_max_mm": 0.0,
+        "geometric_volume_mm3": 108.86371374344253,
+        "material_volume_mm3": 108.86371374344253,
+        "residual_area_mm2": 18.79999999999626,
+        "sampled_region_area_mm2": 199.9999999999945,
+        "volume_difference_mm3": 0.0
+      },
+      "operation": {
+        "dirty_reasons": [
+          "operation_created",
+          "operation_geometry_changed",
+          "operation_parameters_changed"
+        ],
+        "enabled": true,
+        "geometry": {
+          "body": {
+            "assembly_name": "Document",
+            "geometry_type": "body",
+            "object_id": "body_002",
+            "parent_body_id": null,
+            "signature": {
+              "descriptor": {
+                "assembly_path": "Document",
+                "bounds_mm": {
+                  "maximum": [
+                    52.401546397120605,
+                    -3.4552711951320503,
+                    96.0000001000001
+                  ],
+                  "minimum": [
+                    3.80980349912531,
+                    -51.275592388034404,
+                    55.9999998999999
+                  ]
+                },
+                "centroid_mm": [
+                  25.809497467435722,
+                  -23.177377209302634,
+                  75.99998798190909
+                ],
+                "dimensions_mm": [
+                  48.591742897995296,
+                  47.820321192902355,
+                  40.000000200000194
+                ],
+                "kind": "solid",
+                "surface_area_mm2": 5077.756202816643,
+                "topology": {
+                  "curve_types": {
+                    "bsplinecurve": 12
+                  },
+                  "edge_count": 12,
+                  "face_count": 6,
+                  "surface_types": {
+                    "bsplinesurface": 4,
+                    "plane": 2
+                  },
+                  "vertex_count": 8,
+                  "vertex_edge_degrees": [
+                    3,
+                    3,
+                    3,
+                    3,
+                    3,
+                    3,
+                    3,
+                    3
+                  ]
+                },
+                "volume_mm3": 8000.001755379692
+              },
+              "geometry_type": "body",
+              "kernel_signature": "0da6f6caa6e502398238b3da203759190cb780b5f38390df60c6562dc04fabdc",
+              "parent_body": null,
+              "schema_version": 1
+            }
+          }
+        },
+        "name": "P06 real STEP planar_offset",
+        "operation_id": "p06-planar_offset",
+        "operation_type": "planar_offset",
+        "parameters": {
+          "bead_width_mm": 0.6,
+          "feedrate_mm_min": 100.0,
+          "first_layer_z_mm": 60.0,
+          "last_layer_z_mm": 60.0,
+          "layer_height_mm": 0.6,
+          "line_spacing_mm": 0.6,
+          "offset_pass_count": 3,
+          "retract_length_mm": 1.0,
+          "spiral_samples_per_contour": 64,
+          "thin_wall_max_passes": 3,
+          "travel_feedrate_mm_min": 100.0,
+          "wall_thickness_mm": 0.6
+        },
+        "setup_id": "setup-1",
+        "state": "dirty"
+      },
+      "readback": {
+        "coordinate_mismatches": [],
+        "expected_points": 15,
+        "extrusion_mismatches": [],
+        "feedrate_mismatches": [],
+        "order_mismatches": [],
+        "passed": true,
+        "read_points": 15,
+        "schema_version": 1
+      },
+      "status": "warning",
+      "toolpath_point_count": 15,
+      "trajectory_sample_count": 15
+    },
+    {
+      "artifacts": {
+        "machine_axes.csv": "d102a78fe3929b789ce9968937ec59f747133f7e3a35fdd9964bf1d30a75bae5",
+        "main.gcode": "1ac2d20865cea56033739a819d2b50455bc716a857cb56d05680a2527aad5dac",
+        "manifest.json": "348695908093c3d06b738234c85f1f5af52cc1166225604978767227b5c9315b",
+        "preview.json": "b220d2b1ee66f2ab27609e13e88b9b69e39d69f7d853b896866528333edfeb7e",
+        "toolpath.json": "7d3797b53bc9b400ca3597965a74b98d3aaf76abb2d728a40f4d83532ec350f4",
+        "warnings.json": "d5562a3780268c0f8de97752da783645020f9546a1c5e58ede14802d67ed6d8f"
+      },
+      "exportable": true,
+      "issues": [
+        {
+          "code": "xyzac.rotary_singularity",
+          "context": {
+            "count": 5,
+            "first_context": {
+              "retained_c_rad": 0.0
+            }
+          },
+          "object_id": "point-0000001",
+          "severity": "warning"
+        },
+        {
+          "code": "planar.coverage_residual_high",
+          "context": {
+            "residual_area_mm2": 136.79999999999566,
+            "sampled_region_area_mm2": 199.9999999999945
+          },
+          "object_id": "",
+          "severity": "warning"
+        }
+      ],
+      "measurement": {
+        "covered_area_mm2": 63.19999999999883,
+        "deposition_outside_max_mm": 0.0,
+        "geometric_volume_mm3": 38.01590458114754,
+        "material_volume_mm3": 38.01590458114754,
+        "residual_area_mm2": 136.79999999999566,
+        "sampled_region_area_mm2": 199.9999999999945,
+        "volume_difference_mm3": 0.0
+      },
+      "operation": {
+        "dirty_reasons": [
+          "operation_created",
+          "operation_geometry_changed",
+          "operation_parameters_changed"
+        ],
+        "enabled": true,
+        "geometry": {
+          "body": {
+            "assembly_name": "Document",
+            "geometry_type": "body",
+            "object_id": "body_002",
+            "parent_body_id": null,
+            "signature": {
+              "descriptor": {
+                "assembly_path": "Document",
+                "bounds_mm": {
+                  "maximum": [
+                    52.401546397120605,
+                    -3.4552711951320503,
+                    96.0000001000001
+                  ],
+                  "minimum": [
+                    3.80980349912531,
+                    -51.275592388034404,
+                    55.9999998999999
+                  ]
+                },
+                "centroid_mm": [
+                  25.809497467435722,
+                  -23.177377209302634,
+                  75.99998798190909
+                ],
+                "dimensions_mm": [
+                  48.591742897995296,
+                  47.820321192902355,
+                  40.000000200000194
+                ],
+                "kind": "solid",
+                "surface_area_mm2": 5077.756202816643,
+                "topology": {
+                  "curve_types": {
+                    "bsplinecurve": 12
+                  },
+                  "edge_count": 12,
+                  "face_count": 6,
+                  "surface_types": {
+                    "bsplinesurface": 4,
+                    "plane": 2
+                  },
+                  "vertex_count": 8,
+                  "vertex_edge_degrees": [
+                    3,
+                    3,
+                    3,
+                    3,
+                    3,
+                    3,
+                    3,
+                    3
+                  ]
+                },
+                "volume_mm3": 8000.001755379692
+              },
+              "geometry_type": "body",
+              "kernel_signature": "0da6f6caa6e502398238b3da203759190cb780b5f38390df60c6562dc04fabdc",
+              "parent_body": null,
+              "schema_version": 1
+            }
+          }
+        },
+        "name": "P06 real STEP planar_thin_wall",
+        "operation_id": "p06-planar_thin_wall",
+        "operation_type": "planar_thin_wall",
+        "parameters": {
+          "bead_width_mm": 0.6,
+          "feedrate_mm_min": 100.0,
+          "first_layer_z_mm": 60.0,
+          "last_layer_z_mm": 60.0,
+          "layer_height_mm": 0.6,
+          "line_spacing_mm": 0.6,
+          "offset_pass_count": 3,
+          "retract_length_mm": 1.0,
+          "spiral_samples_per_contour": 64,
+          "thin_wall_max_passes": 3,
+          "travel_feedrate_mm_min": 100.0,
+          "wall_thickness_mm": 0.6
+        },
+        "setup_id": "setup-1",
+        "state": "dirty"
+      },
+      "readback": {
+        "coordinate_mismatches": [],
+        "expected_points": 5,
+        "extrusion_mismatches": [],
+        "feedrate_mismatches": [],
+        "order_mismatches": [],
+        "passed": true,
+        "read_points": 5,
+        "schema_version": 1
+      },
+      "status": "warning",
+      "toolpath_point_count": 5,
+      "trajectory_sample_count": 5
+    },
+    {
+      "artifacts": {
+        "machine_axes.csv": "29ed5bf118ad4b7f4beeb38565ac40c731da397299d21dd71e2cf8cf958d7ccb",
+        "main.gcode": "34b871355a87e5c4fde1a0a25b30cba4b2d4e368b9eb9a8aed6cd65551d32d2d",
+        "manifest.json": "08208b8e6b7fad93bc3d826baf8a384ed06f217bbf91c8432f8a05a51c94ffd9",
+        "preview.json": "5920fec6d6edb61bf1fc8e211a3c545890494801cd2209bf1da46507c19935a4",
+        "toolpath.json": "f227caf9ac7c913629f50f6eb7508ea6a7cea338ff1d4e5b0f4bd4b7371aea12",
+        "warnings.json": "9ffb1c96b981ae57026f7f7fa3772128049dbd25734d61f4438aca801ed2d345"
+      },
+      "exportable": true,
+      "issues": [
+        {
+          "code": "xyzac.rotary_singularity",
+          "context": {
+            "count": 129,
+            "first_context": {
+              "retained_c_rad": 0.0
+            }
+          },
+          "object_id": "point-0000001",
+          "severity": "warning"
+        },
+        {
+          "code": "planar.spiral_discrete_layer_projection_only",
+          "context": {
+            "maximum_mm": 0.264886168945413
+          },
+          "object_id": "",
+          "severity": "warning"
+        }
+      ],
+      "measurement": {
+        "covered_area_mm2": 59.239999999998915,
+        "deposition_outside_max_mm": 0.264886168945413,
+        "geometric_volume_mm3": 77.11721335095604,
+        "material_volume_mm3": 77.11721335095604,
+        "residual_area_mm2": 340.7600000000581,
+        "sampled_region_area_mm2": 400.000000000057,
+        "volume_difference_mm3": 0.0
+      },
+      "operation": {
+        "dirty_reasons": [
+          "operation_created",
+          "operation_geometry_changed",
+          "operation_parameters_changed"
+        ],
+        "enabled": true,
+        "geometry": {
+          "body": {
+            "assembly_name": "Document",
+            "geometry_type": "body",
+            "object_id": "body_002",
+            "parent_body_id": null,
+            "signature": {
+              "descriptor": {
+                "assembly_path": "Document",
+                "bounds_mm": {
+                  "maximum": [
+                    52.401546397120605,
+                    -3.4552711951320503,
+                    96.0000001000001
+                  ],
+                  "minimum": [
+                    3.80980349912531,
+                    -51.275592388034404,
+                    55.9999998999999
+                  ]
+                },
+                "centroid_mm": [
+                  25.809497467435722,
+                  -23.177377209302634,
+                  75.99998798190909
+                ],
+                "dimensions_mm": [
+                  48.591742897995296,
+                  47.820321192902355,
+                  40.000000200000194
+                ],
+                "kind": "solid",
+                "surface_area_mm2": 5077.756202816643,
+                "topology": {
+                  "curve_types": {
+                    "bsplinecurve": 12
+                  },
+                  "edge_count": 12,
+                  "face_count": 6,
+                  "surface_types": {
+                    "bsplinesurface": 4,
+                    "plane": 2
+                  },
+                  "vertex_count": 8,
+                  "vertex_edge_degrees": [
+                    3,
+                    3,
+                    3,
+                    3,
+                    3,
+                    3,
+                    3,
+                    3
+                  ]
+                },
+                "volume_mm3": 8000.001755379692
+              },
+              "geometry_type": "body",
+              "kernel_signature": "0da6f6caa6e502398238b3da203759190cb780b5f38390df60c6562dc04fabdc",
+              "parent_body": null,
+              "schema_version": 1
+            }
+          }
+        },
+        "name": "P06 real STEP planar_spiral",
+        "operation_id": "p06-planar_spiral",
+        "operation_type": "planar_spiral",
+        "parameters": {
+          "bead_width_mm": 0.6,
+          "feedrate_mm_min": 100.0,
+          "first_layer_z_mm": 60.0,
+          "last_layer_z_mm": 60.6,
+          "layer_height_mm": 0.6,
+          "line_spacing_mm": 0.6,
+          "offset_pass_count": 3,
+          "retract_length_mm": 1.0,
+          "spiral_samples_per_contour": 64,
+          "thin_wall_max_passes": 3,
+          "travel_feedrate_mm_min": 100.0,
+          "wall_thickness_mm": 0.6
+        },
+        "setup_id": "setup-1",
+        "state": "dirty"
+      },
+      "readback": {
+        "coordinate_mismatches": [],
+        "expected_points": 129,
+        "extrusion_mismatches": [],
+        "feedrate_mismatches": [],
+        "order_mismatches": [],
+        "passed": true,
+        "read_points": 129,
+        "schema_version": 1
+      },
+      "selection_attempts": [
+        {
+          "first_z_mm": 60.0,
+          "last_z_mm": 60.6,
+          "selected": true,
+          "status": "ok"
+        }
+      ],
+      "status": "warning",
+      "toolpath_point_count": 129,
+      "trajectory_sample_count": 129
+    }
+  ],
+  "schema_version": 1,
+  "source_sha256": {
+    "F:\\【项目和任务】\\5AxisSclicer_V2.0\\scripts\\planar_p06_real_model_evidence.py": "882132fa823e4b22791231afd7cce08f8eebe336a470b97fe842d648edc3a077",
+    "F:\\【项目和任务】\\5AxisSclicer_V2.0\\src\\five_axis_slicer\\algorithms\\planar\\offset.py": "7c86cfb0d7afe206fa0a7d415548b4f1dd940166fb2e326f5ba863f23f631c48",
+    "F:\\【项目和任务】\\5AxisSclicer_V2.0\\src\\five_axis_slicer\\algorithms\\planar\\region.py": "a58b19f6bc6745d87e8c82fdb14df03a87f6ddcaa593cd6858b7d3000e3335f6",
+    "F:\\【项目和任务】\\5AxisSclicer_V2.0\\src\\five_axis_slicer\\algorithms\\planar\\spiral.py": "8c57451baf1868896bbaf62025be8e16668a76a1c2d3a0431940f69c32519e87",
+    "F:\\【项目和任务】\\5AxisSclicer_V2.0\\src\\five_axis_slicer\\algorithms\\planar\\thin_wall.py": "411b3acdfba5824df59e5a39c49e7454310cce23c32c67ac5f9b57d646f56548",
+    "F:\\【项目和任务】\\5AxisSclicer_V2.0\\src\\five_axis_slicer\\algorithms\\planar\\zigzag.py": "47f7f5befa03bc3230360eecd094a70cdb44afe6e62695d3adb5c2bb5369a273",
+    "F:\\【项目和任务】\\5AxisSclicer_V2.0\\src\\five_axis_slicer\\postprocessing\\planar_product.py": "189b99e5c26e1a87ed0c0153e0b6063c1b541df56c214ba2bf1557aa4a2be30c"
+  },
+  "task": "P06"
+}

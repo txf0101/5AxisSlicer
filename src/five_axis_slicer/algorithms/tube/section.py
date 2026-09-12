@@ -6,7 +6,9 @@ from dataclasses import dataclass
 import math
 
 from OCP.BRepAlgoAPI import BRepAlgoAPI_Section
+from OCP.BRepAdaptor import BRepAdaptor_Curve
 from OCP.BRepBuilderAPI import BRepBuilderAPI_MakeFace
+from OCP.GCPnts import GCPnts_QuasiUniformDeflection
 from OCP.TopAbs import TopAbs_EDGE
 from OCP.TopExp import TopExp_Explorer
 from OCP.TopoDS import TopoDS
@@ -40,6 +42,7 @@ def section_tube_layer(
     wall_thickness_mm: float,
     *,
     sample_segments: int = 128,
+    chord_error_mm: float | None = None,
 ) -> TubeSectionContours:
     """Intersect one selected body and return the nearest closed annular pair."""
 
@@ -56,7 +59,9 @@ def section_tube_layer(
     section.Build()
     if not section.IsDone():
         raise TubeSectionError("tube.section_kernel_failed", body_id)
-    loops = _section_loops(section.Shape(), sample_segments)
+    if chord_error_mm is not None and (not math.isfinite(chord_error_mm) or chord_error_mm <= 0):
+        raise ValueError("chord_error_mm must be finite and positive")
+    loops = _section_loops(section.Shape(), sample_segments, chord_error_mm)
     if len(loops) < 2:
         raise TubeSectionError("tube.section_not_annular", f"recovered {len(loops)} loops")
     paired = _nearest_annular_pair(loops, plane_origin, normal)
@@ -65,12 +70,27 @@ def section_tube_layer(
     return TubeSectionContours(outer, inner, midwall, normals, error)
 
 
-def _section_loops(shape: object, sample_segments: int) -> list[tuple[Vector3, ...]]:
+def _section_loops(
+    shape: object, sample_segments: int, chord_error_mm: float | None
+) -> list[tuple[Vector3, ...]]:
     chains: list[list[Vector3]] = []
     explorer = TopExp_Explorer(shape, TopAbs_EDGE)
     while explorer.More():
         edge = TopoDS.Edge_s(explorer.Current())
-        points = sample_edge_points(edge, sample_segments)
+        if chord_error_mm is None:
+            points = sample_edge_points(edge, sample_segments)
+        else:
+            # Each boundary uses a quarter of the requested mid-wall budget;
+            # the remaining budget covers inner-boundary projection and averaging.
+            sampler = GCPnts_QuasiUniformDeflection(BRepAdaptor_Curve(edge), chord_error_mm * 0.25)
+            if not sampler.IsDone() or sampler.NbPoints() < 2:
+                raise TubeSectionError(
+                    "tube.section_sampling_failed", "OCCT deflection sampling failed"
+                )
+            points = [
+                (sampler.Value(i).X(), sampler.Value(i).Y(), sampler.Value(i).Z())
+                for i in range(1, sampler.NbPoints() + 1)
+            ]
         if len(points) >= 2:
             chains.append(points)
         explorer.Next()
@@ -142,7 +162,10 @@ def _midwall(
     normals: list[Vector3] = []
     errors: list[float] = []
     for outer_point in outer[:-1]:
-        inner_point = min(inner[:-1], key=lambda item: math.dist(item, outer_point))
+        inner_point = min(
+            (_nearest_segment_point(outer_point, a, b) for a, b in zip(inner, inner[1:])),
+            key=lambda item: math.dist(item, outer_point),
+        )
         distance = math.dist(outer_point, inner_point)
         points.append(_scale(_add(outer_point, inner_point), 0.5))
         normals.append(_unit(_subtract(outer_point, inner_point)))
@@ -150,6 +173,17 @@ def _midwall(
     points.append(points[0])
     normals.append(normals[0])
     return tuple(points), tuple(normals), max(errors, default=0.0)
+
+
+def _nearest_segment_point(point: Vector3, start: Vector3, end: Vector3) -> Vector3:
+    delta = _subtract(end, start)
+    length2 = _dot(delta, delta)
+    fraction = (
+        0.0
+        if length2 <= 1.0e-24
+        else max(0.0, min(1.0, _dot(_subtract(point, start), delta) / length2))
+    )
+    return _add(start, _scale(delta, fraction))
 
 
 def _signed_area(points: tuple[Vector3, ...], origin: Vector3, u: Vector3, v: Vector3) -> float:

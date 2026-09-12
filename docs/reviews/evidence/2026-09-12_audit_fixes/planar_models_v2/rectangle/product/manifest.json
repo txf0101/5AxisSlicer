@@ -1,0 +1,2899 @@
+{
+  "layers": [
+    {
+      "layer_id": "layer-00001",
+      "regions": [
+        {
+          "holes": [],
+          "outer": [
+            [
+              0.0,
+              6.0,
+              0.5
+            ],
+            [
+              0.0,
+              5.90625,
+              0.5
+            ],
+            [
+              0.0,
+              5.8125,
+              0.5
+            ],
+            [
+              0.0,
+              5.71875,
+              0.5
+            ],
+            [
+              0.0,
+              5.625,
+              0.5
+            ],
+            [
+              0.0,
+              5.53125,
+              0.5
+            ],
+            [
+              0.0,
+              5.4375,
+              0.5
+            ],
+            [
+              0.0,
+              5.34375,
+              0.5
+            ],
+            [
+              0.0,
+              5.25,
+              0.5
+            ],
+            [
+              0.0,
+              5.15625,
+              0.5
+            ],
+            [
+              0.0,
+              5.0625,
+              0.5
+            ],
+            [
+              0.0,
+              4.96875,
+              0.5
+            ],
+            [
+              0.0,
+              4.875,
+              0.5
+            ],
+            [
+              0.0,
+              4.78125,
+              0.5
+            ],
+            [
+              0.0,
+              4.6875,
+              0.5
+            ],
+            [
+              0.0,
+              4.59375,
+              0.5
+            ],
+            [
+              0.0,
+              4.5,
+              0.5
+            ],
+            [
+              0.0,
+              4.40625,
+              0.5
+            ],
+            [
+              0.0,
+              4.3125,
+              0.5
+            ],
+            [
+              0.0,
+              4.21875,
+              0.5
+            ],
+            [
+              0.0,
+              4.125,
+              0.5
+            ],
+            [
+              0.0,
+              4.03125,
+              0.5
+            ],
+            [
+              0.0,
+              3.9375,
+              0.5
+            ],
+            [
+              0.0,
+              3.84375,
+              0.5
+            ],
+            [
+              0.0,
+              3.75,
+              0.5
+            ],
+            [
+              0.0,
+              3.65625,
+              0.5
+            ],
+            [
+              0.0,
+              3.5625,
+              0.5
+            ],
+            [
+              0.0,
+              3.46875,
+              0.5
+            ],
+            [
+              0.0,
+              3.375,
+              0.5
+            ],
+            [
+              0.0,
+              3.28125,
+              0.5
+            ],
+            [
+              0.0,
+              3.1875,
+              0.5
+            ],
+            [
+              0.0,
+              3.09375,
+              0.5
+            ],
+            [
+              0.0,
+              3.0,
+              0.5
+            ],
+            [
+              0.0,
+              2.90625,
+              0.5
+            ],
+            [
+              0.0,
+              2.8125,
+              0.5
+            ],
+            [
+              0.0,
+              2.71875,
+              0.5
+            ],
+            [
+              0.0,
+              2.625,
+              0.5
+            ],
+            [
+              0.0,
+              2.53125,
+              0.5
+            ],
+            [
+              0.0,
+              2.4375,
+              0.5
+            ],
+            [
+              0.0,
+              2.34375,
+              0.5
+            ],
+            [
+              0.0,
+              2.25,
+              0.5
+            ],
+            [
+              0.0,
+              2.15625,
+              0.5
+            ],
+            [
+              0.0,
+              2.0625,
+              0.5
+            ],
+            [
+              0.0,
+              1.96875,
+              0.5
+            ],
+            [
+              0.0,
+              1.875,
+              0.5
+            ],
+            [
+              0.0,
+              1.78125,
+              0.5
+            ],
+            [
+              0.0,
+              1.6875,
+              0.5
+            ],
+            [
+              0.0,
+              1.59375,
+              0.5
+            ],
+            [
+              0.0,
+              1.5,
+              0.5
+            ],
+            [
+              0.0,
+              1.40625,
+              0.5
+            ],
+            [
+              0.0,
+              1.3125,
+              0.5
+            ],
+            [
+              0.0,
+              1.21875,
+              0.5
+            ],
+            [
+              0.0,
+              1.125,
+              0.5
+            ],
+            [
+              0.0,
+              1.03125,
+              0.5
+            ],
+            [
+              0.0,
+              0.9375,
+              0.5
+            ],
+            [
+              0.0,
+              0.84375,
+              0.5
+            ],
+            [
+              0.0,
+              0.75,
+              0.5
+            ],
+            [
+              0.0,
+              0.65625,
+              0.5
+            ],
+            [
+              0.0,
+              0.5625,
+              0.5
+            ],
+            [
+              0.0,
+              0.46875,
+              0.5
+            ],
+            [
+              0.0,
+              0.375,
+              0.5
+            ],
+            [
+              0.0,
+              0.28125,
+              0.5
+            ],
+            [
+              0.0,
+              0.1875,
+              0.5
+            ],
+            [
+              0.0,
+              0.09375,
+              0.5
+            ],
+            [
+              0.0,
+              0.0,
+              0.5
+            ],
+            [
+              0.125,
+              0.0,
+              0.5
+            ],
+            [
+              0.25,
+              0.0,
+              0.5
+            ],
+            [
+              0.375,
+              0.0,
+              0.5
+            ],
+            [
+              0.5,
+              0.0,
+              0.5
+            ],
+            [
+              0.625,
+              0.0,
+              0.5
+            ],
+            [
+              0.75,
+              0.0,
+              0.5
+            ],
+            [
+              0.875,
+              0.0,
+              0.5
+            ],
+            [
+              1.0,
+              0.0,
+              0.5
+            ],
+            [
+              1.125,
+              0.0,
+              0.5
+            ],
+            [
+              1.25,
+              0.0,
+              0.5
+            ],
+            [
+              1.375,
+              0.0,
+              0.5
+            ],
+            [
+              1.5,
+              0.0,
+              0.5
+            ],
+            [
+              1.625,
+              0.0,
+              0.5
+            ],
+            [
+              1.75,
+              0.0,
+              0.5
+            ],
+            [
+              1.875,
+              0.0,
+              0.5
+            ],
+            [
+              2.0,
+              0.0,
+              0.5
+            ],
+            [
+              2.125,
+              0.0,
+              0.5
+            ],
+            [
+              2.25,
+              0.0,
+              0.5
+            ],
+            [
+              2.375,
+              0.0,
+              0.5
+            ],
+            [
+              2.5,
+              0.0,
+              0.5
+            ],
+            [
+              2.625,
+              0.0,
+              0.5
+            ],
+            [
+              2.75,
+              0.0,
+              0.5
+            ],
+            [
+              2.875,
+              0.0,
+              0.5
+            ],
+            [
+              3.0,
+              0.0,
+              0.5
+            ],
+            [
+              3.125,
+              0.0,
+              0.5
+            ],
+            [
+              3.25,
+              0.0,
+              0.5
+            ],
+            [
+              3.375,
+              0.0,
+              0.5
+            ],
+            [
+              3.5,
+              0.0,
+              0.5
+            ],
+            [
+              3.625,
+              0.0,
+              0.5
+            ],
+            [
+              3.75,
+              0.0,
+              0.5
+            ],
+            [
+              3.875,
+              0.0,
+              0.5
+            ],
+            [
+              4.0,
+              0.0,
+              0.5
+            ],
+            [
+              4.125,
+              0.0,
+              0.5
+            ],
+            [
+              4.25,
+              0.0,
+              0.5
+            ],
+            [
+              4.375,
+              0.0,
+              0.5
+            ],
+            [
+              4.5,
+              0.0,
+              0.5
+            ],
+            [
+              4.625,
+              0.0,
+              0.5
+            ],
+            [
+              4.75,
+              0.0,
+              0.5
+            ],
+            [
+              4.875,
+              0.0,
+              0.5
+            ],
+            [
+              5.0,
+              0.0,
+              0.5
+            ],
+            [
+              5.125,
+              0.0,
+              0.5
+            ],
+            [
+              5.25,
+              0.0,
+              0.5
+            ],
+            [
+              5.375,
+              0.0,
+              0.5
+            ],
+            [
+              5.5,
+              0.0,
+              0.5
+            ],
+            [
+              5.625,
+              0.0,
+              0.5
+            ],
+            [
+              5.75,
+              0.0,
+              0.5
+            ],
+            [
+              5.875,
+              0.0,
+              0.5
+            ],
+            [
+              6.0,
+              0.0,
+              0.5
+            ],
+            [
+              6.125,
+              0.0,
+              0.5
+            ],
+            [
+              6.25,
+              0.0,
+              0.5
+            ],
+            [
+              6.375,
+              0.0,
+              0.5
+            ],
+            [
+              6.5,
+              0.0,
+              0.5
+            ],
+            [
+              6.625,
+              0.0,
+              0.5
+            ],
+            [
+              6.75,
+              0.0,
+              0.5
+            ],
+            [
+              6.875,
+              0.0,
+              0.5
+            ],
+            [
+              7.0,
+              0.0,
+              0.5
+            ],
+            [
+              7.125,
+              0.0,
+              0.5
+            ],
+            [
+              7.25,
+              0.0,
+              0.5
+            ],
+            [
+              7.375,
+              0.0,
+              0.5
+            ],
+            [
+              7.5,
+              0.0,
+              0.5
+            ],
+            [
+              7.625,
+              0.0,
+              0.5
+            ],
+            [
+              7.75,
+              0.0,
+              0.5
+            ],
+            [
+              7.875,
+              0.0,
+              0.5
+            ],
+            [
+              8.0,
+              0.0,
+              0.5
+            ],
+            [
+              8.0,
+              0.09375,
+              0.5
+            ],
+            [
+              8.0,
+              0.1875,
+              0.5
+            ],
+            [
+              8.0,
+              0.28125,
+              0.5
+            ],
+            [
+              8.0,
+              0.375,
+              0.5
+            ],
+            [
+              8.0,
+              0.46875,
+              0.5
+            ],
+            [
+              8.0,
+              0.5625,
+              0.5
+            ],
+            [
+              8.0,
+              0.65625,
+              0.5
+            ],
+            [
+              8.0,
+              0.75,
+              0.5
+            ],
+            [
+              8.0,
+              0.84375,
+              0.5
+            ],
+            [
+              8.0,
+              0.9375,
+              0.5
+            ],
+            [
+              8.0,
+              1.03125,
+              0.5
+            ],
+            [
+              8.0,
+              1.125,
+              0.5
+            ],
+            [
+              8.0,
+              1.21875,
+              0.5
+            ],
+            [
+              8.0,
+              1.3125,
+              0.5
+            ],
+            [
+              8.0,
+              1.40625,
+              0.5
+            ],
+            [
+              8.0,
+              1.5,
+              0.5
+            ],
+            [
+              8.0,
+              1.59375,
+              0.5
+            ],
+            [
+              8.0,
+              1.6875,
+              0.5
+            ],
+            [
+              8.0,
+              1.78125,
+              0.5
+            ],
+            [
+              8.0,
+              1.875,
+              0.5
+            ],
+            [
+              8.0,
+              1.96875,
+              0.5
+            ],
+            [
+              8.0,
+              2.0625,
+              0.5
+            ],
+            [
+              8.0,
+              2.15625,
+              0.5
+            ],
+            [
+              8.0,
+              2.25,
+              0.5
+            ],
+            [
+              8.0,
+              2.34375,
+              0.5
+            ],
+            [
+              8.0,
+              2.4375,
+              0.5
+            ],
+            [
+              8.0,
+              2.53125,
+              0.5
+            ],
+            [
+              8.0,
+              2.625,
+              0.5
+            ],
+            [
+              8.0,
+              2.71875,
+              0.5
+            ],
+            [
+              8.0,
+              2.8125,
+              0.5
+            ],
+            [
+              8.0,
+              2.90625,
+              0.5
+            ],
+            [
+              8.0,
+              3.0,
+              0.5
+            ],
+            [
+              8.0,
+              3.09375,
+              0.5
+            ],
+            [
+              8.0,
+              3.1875,
+              0.5
+            ],
+            [
+              8.0,
+              3.28125,
+              0.5
+            ],
+            [
+              8.0,
+              3.375,
+              0.5
+            ],
+            [
+              8.0,
+              3.46875,
+              0.5
+            ],
+            [
+              8.0,
+              3.5625,
+              0.5
+            ],
+            [
+              8.0,
+              3.65625,
+              0.5
+            ],
+            [
+              8.0,
+              3.75,
+              0.5
+            ],
+            [
+              8.0,
+              3.84375,
+              0.5
+            ],
+            [
+              8.0,
+              3.9375,
+              0.5
+            ],
+            [
+              8.0,
+              4.03125,
+              0.5
+            ],
+            [
+              8.0,
+              4.125,
+              0.5
+            ],
+            [
+              8.0,
+              4.21875,
+              0.5
+            ],
+            [
+              8.0,
+              4.3125,
+              0.5
+            ],
+            [
+              8.0,
+              4.40625,
+              0.5
+            ],
+            [
+              8.0,
+              4.5,
+              0.5
+            ],
+            [
+              8.0,
+              4.59375,
+              0.5
+            ],
+            [
+              8.0,
+              4.6875,
+              0.5
+            ],
+            [
+              8.0,
+              4.78125,
+              0.5
+            ],
+            [
+              8.0,
+              4.875,
+              0.5
+            ],
+            [
+              8.0,
+              4.96875,
+              0.5
+            ],
+            [
+              8.0,
+              5.0625,
+              0.5
+            ],
+            [
+              8.0,
+              5.15625,
+              0.5
+            ],
+            [
+              8.0,
+              5.25,
+              0.5
+            ],
+            [
+              8.0,
+              5.34375,
+              0.5
+            ],
+            [
+              8.0,
+              5.4375,
+              0.5
+            ],
+            [
+              8.0,
+              5.53125,
+              0.5
+            ],
+            [
+              8.0,
+              5.625,
+              0.5
+            ],
+            [
+              8.0,
+              5.71875,
+              0.5
+            ],
+            [
+              8.0,
+              5.8125,
+              0.5
+            ],
+            [
+              8.0,
+              5.90625,
+              0.5
+            ],
+            [
+              8.0,
+              6.0,
+              0.5
+            ],
+            [
+              7.875,
+              6.0,
+              0.5
+            ],
+            [
+              7.75,
+              6.0,
+              0.5
+            ],
+            [
+              7.625,
+              6.0,
+              0.5
+            ],
+            [
+              7.5,
+              6.0,
+              0.5
+            ],
+            [
+              7.375,
+              6.0,
+              0.5
+            ],
+            [
+              7.25,
+              6.0,
+              0.5
+            ],
+            [
+              7.125,
+              6.0,
+              0.5
+            ],
+            [
+              7.0,
+              6.0,
+              0.5
+            ],
+            [
+              6.875,
+              6.0,
+              0.5
+            ],
+            [
+              6.75,
+              6.0,
+              0.5
+            ],
+            [
+              6.625,
+              6.0,
+              0.5
+            ],
+            [
+              6.5,
+              6.0,
+              0.5
+            ],
+            [
+              6.375,
+              6.0,
+              0.5
+            ],
+            [
+              6.25,
+              6.0,
+              0.5
+            ],
+            [
+              6.125,
+              6.0,
+              0.5
+            ],
+            [
+              6.0,
+              6.0,
+              0.5
+            ],
+            [
+              5.875,
+              6.0,
+              0.5
+            ],
+            [
+              5.75,
+              6.0,
+              0.5
+            ],
+            [
+              5.625,
+              6.0,
+              0.5
+            ],
+            [
+              5.5,
+              6.0,
+              0.5
+            ],
+            [
+              5.375,
+              6.0,
+              0.5
+            ],
+            [
+              5.25,
+              6.0,
+              0.5
+            ],
+            [
+              5.125,
+              6.0,
+              0.5
+            ],
+            [
+              5.0,
+              6.0,
+              0.5
+            ],
+            [
+              4.875,
+              6.0,
+              0.5
+            ],
+            [
+              4.75,
+              6.0,
+              0.5
+            ],
+            [
+              4.625,
+              6.0,
+              0.5
+            ],
+            [
+              4.5,
+              6.0,
+              0.5
+            ],
+            [
+              4.375,
+              6.0,
+              0.5
+            ],
+            [
+              4.25,
+              6.0,
+              0.5
+            ],
+            [
+              4.125,
+              6.0,
+              0.5
+            ],
+            [
+              4.0,
+              6.0,
+              0.5
+            ],
+            [
+              3.875,
+              6.0,
+              0.5
+            ],
+            [
+              3.75,
+              6.0,
+              0.5
+            ],
+            [
+              3.625,
+              6.0,
+              0.5
+            ],
+            [
+              3.5,
+              6.0,
+              0.5
+            ],
+            [
+              3.375,
+              6.0,
+              0.5
+            ],
+            [
+              3.25,
+              6.0,
+              0.5
+            ],
+            [
+              3.125,
+              6.0,
+              0.5
+            ],
+            [
+              3.0,
+              6.0,
+              0.5
+            ],
+            [
+              2.875,
+              6.0,
+              0.5
+            ],
+            [
+              2.75,
+              6.0,
+              0.5
+            ],
+            [
+              2.625,
+              6.0,
+              0.5
+            ],
+            [
+              2.5,
+              6.0,
+              0.5
+            ],
+            [
+              2.375,
+              6.0,
+              0.5
+            ],
+            [
+              2.25,
+              6.0,
+              0.5
+            ],
+            [
+              2.125,
+              6.0,
+              0.5
+            ],
+            [
+              2.0,
+              6.0,
+              0.5
+            ],
+            [
+              1.875,
+              6.0,
+              0.5
+            ],
+            [
+              1.75,
+              6.0,
+              0.5
+            ],
+            [
+              1.625,
+              6.0,
+              0.5
+            ],
+            [
+              1.5,
+              6.0,
+              0.5
+            ],
+            [
+              1.375,
+              6.0,
+              0.5
+            ],
+            [
+              1.25,
+              6.0,
+              0.5
+            ],
+            [
+              1.125,
+              6.0,
+              0.5
+            ],
+            [
+              1.0,
+              6.0,
+              0.5
+            ],
+            [
+              0.875,
+              6.0,
+              0.5
+            ],
+            [
+              0.75,
+              6.0,
+              0.5
+            ],
+            [
+              0.625,
+              6.0,
+              0.5
+            ],
+            [
+              0.5,
+              6.0,
+              0.5
+            ],
+            [
+              0.375,
+              6.0,
+              0.5
+            ],
+            [
+              0.25,
+              6.0,
+              0.5
+            ],
+            [
+              0.125,
+              6.0,
+              0.5
+            ],
+            [
+              0.0,
+              6.0,
+              0.5
+            ]
+          ],
+          "region_id": "region-0001"
+        }
+      ],
+      "z_mm": 0.5
+    }
+  ],
+  "machine_trajectory": {
+    "issues": [
+      {
+        "code": "xyzac.rotary_singularity",
+        "context": {
+          "retained_c_rad": 0.0
+        },
+        "object_id": "point-0000001",
+        "severity": "warning"
+      },
+      {
+        "code": "xyzac.rotary_singularity",
+        "context": {
+          "retained_c_rad": 0.0
+        },
+        "object_id": "point-0000002",
+        "severity": "warning"
+      },
+      {
+        "code": "xyzac.rotary_singularity",
+        "context": {
+          "retained_c_rad": 0.0
+        },
+        "object_id": "point-0000003",
+        "severity": "warning"
+      },
+      {
+        "code": "xyzac.rotary_singularity",
+        "context": {
+          "retained_c_rad": 0.0
+        },
+        "object_id": "point-0000004",
+        "severity": "warning"
+      },
+      {
+        "code": "xyzac.rotary_singularity",
+        "context": {
+          "retained_c_rad": 0.0
+        },
+        "object_id": "point-0000005",
+        "severity": "warning"
+      },
+      {
+        "code": "xyzac.rotary_singularity",
+        "context": {
+          "retained_c_rad": 0.0
+        },
+        "object_id": "point-0000006",
+        "severity": "warning"
+      },
+      {
+        "code": "xyzac.rotary_singularity",
+        "context": {
+          "retained_c_rad": 0.0
+        },
+        "object_id": "point-0000007",
+        "severity": "warning"
+      },
+      {
+        "code": "xyzac.rotary_singularity",
+        "context": {
+          "retained_c_rad": 0.0
+        },
+        "object_id": "point-0000008",
+        "severity": "warning"
+      },
+      {
+        "code": "xyzac.rotary_singularity",
+        "context": {
+          "retained_c_rad": 0.0
+        },
+        "object_id": "point-0000009",
+        "severity": "warning"
+      },
+      {
+        "code": "xyzac.rotary_singularity",
+        "context": {
+          "retained_c_rad": 0.0
+        },
+        "object_id": "point-0000010",
+        "severity": "warning"
+      },
+      {
+        "code": "xyzac.rotary_singularity",
+        "context": {
+          "retained_c_rad": 0.0
+        },
+        "object_id": "point-0000011",
+        "severity": "warning"
+      },
+      {
+        "code": "xyzac.rotary_singularity",
+        "context": {
+          "retained_c_rad": 0.0
+        },
+        "object_id": "point-0000012",
+        "severity": "warning"
+      },
+      {
+        "code": "xyzac.rotary_singularity",
+        "context": {
+          "retained_c_rad": 0.0
+        },
+        "object_id": "point-0000013",
+        "severity": "warning"
+      },
+      {
+        "code": "xyzac.rotary_singularity",
+        "context": {
+          "retained_c_rad": 0.0
+        },
+        "object_id": "point-0000014",
+        "severity": "warning"
+      },
+      {
+        "code": "xyzac.rotary_singularity",
+        "context": {
+          "retained_c_rad": 0.0
+        },
+        "object_id": "point-0000015",
+        "severity": "warning"
+      },
+      {
+        "code": "xyzac.rotary_singularity",
+        "context": {
+          "retained_c_rad": 0.0
+        },
+        "object_id": "point-0000016",
+        "severity": "warning"
+      },
+      {
+        "code": "xyzac.rotary_singularity",
+        "context": {
+          "retained_c_rad": 0.0
+        },
+        "object_id": "point-0000017",
+        "severity": "warning"
+      },
+      {
+        "code": "xyzac.rotary_singularity",
+        "context": {
+          "retained_c_rad": 0.0
+        },
+        "object_id": "point-0000018",
+        "severity": "warning"
+      },
+      {
+        "code": "xyzac.rotary_singularity",
+        "context": {
+          "retained_c_rad": 0.0
+        },
+        "object_id": "point-0000019",
+        "severity": "warning"
+      },
+      {
+        "code": "xyzac.rotary_singularity",
+        "context": {
+          "retained_c_rad": 0.0
+        },
+        "object_id": "point-0000020",
+        "severity": "warning"
+      },
+      {
+        "code": "xyzac.rotary_singularity",
+        "context": {
+          "retained_c_rad": 0.0
+        },
+        "object_id": "point-0000021",
+        "severity": "warning"
+      }
+    ],
+    "machine_profile_id": "builtin.machine.generic_xyzac_reference.v1",
+    "samples": [
+      {
+        "fk_orientation_error_rad": 0.0,
+        "fk_position_error_mm": 0.0,
+        "joint_positions": {
+          "A": 0.0,
+          "C": 0.0,
+          "X": 250.3,
+          "Y": 250.3,
+          "Z": 252.5
+        },
+        "singular": true,
+        "source_point_id": "point-0000001",
+        "time_s": 0.0,
+        "tool_tip_machine_mm": [
+          250.3,
+          250.3,
+          250.5
+        ]
+      },
+      {
+        "fk_orientation_error_rad": 0.0,
+        "fk_position_error_mm": 0.0,
+        "joint_positions": {
+          "A": 0.0,
+          "C": 0.0,
+          "X": 257.7,
+          "Y": 250.3,
+          "Z": 252.5
+        },
+        "singular": true,
+        "source_point_id": "point-0000002",
+        "time_s": 4.439999999999986,
+        "tool_tip_machine_mm": [
+          257.7,
+          250.3,
+          250.5
+        ]
+      },
+      {
+        "fk_orientation_error_rad": 0.0,
+        "fk_position_error_mm": 0.0,
+        "joint_positions": {
+          "A": 0.0,
+          "C": 0.0,
+          "X": 257.7,
+          "Y": 255.7,
+          "Z": 252.5
+        },
+        "singular": true,
+        "source_point_id": "point-0000003",
+        "time_s": 7.679999999999972,
+        "tool_tip_machine_mm": [
+          257.7,
+          255.7,
+          250.5
+        ]
+      },
+      {
+        "fk_orientation_error_rad": 0.0,
+        "fk_position_error_mm": 0.0,
+        "joint_positions": {
+          "A": 0.0,
+          "C": 0.0,
+          "X": 250.3,
+          "Y": 255.7,
+          "Z": 252.5
+        },
+        "singular": true,
+        "source_point_id": "point-0000004",
+        "time_s": 12.119999999999958,
+        "tool_tip_machine_mm": [
+          250.3,
+          255.7,
+          250.5
+        ]
+      },
+      {
+        "fk_orientation_error_rad": 0.0,
+        "fk_position_error_mm": 0.0,
+        "joint_positions": {
+          "A": 0.0,
+          "C": 0.0,
+          "X": 250.3,
+          "Y": 250.3,
+          "Z": 252.5
+        },
+        "singular": true,
+        "source_point_id": "point-0000005",
+        "time_s": 15.359999999999944,
+        "tool_tip_machine_mm": [
+          250.3,
+          250.3,
+          250.5
+        ]
+      },
+      {
+        "fk_orientation_error_rad": 0.0,
+        "fk_position_error_mm": 0.0,
+        "joint_positions": {
+          "A": 0.0,
+          "C": 0.0,
+          "X": 250.6,
+          "Y": 250.9,
+          "Z": 252.5
+        },
+        "singular": true,
+        "source_point_id": "point-0000006",
+        "time_s": 15.7624922359499,
+        "tool_tip_machine_mm": [
+          250.6,
+          250.9,
+          250.5
+        ]
+      },
+      {
+        "fk_orientation_error_rad": 0.0,
+        "fk_position_error_mm": 0.0,
+        "joint_positions": {
+          "A": 0.0,
+          "C": 0.0,
+          "X": 257.4,
+          "Y": 250.9,
+          "Z": 252.5
+        },
+        "singular": true,
+        "source_point_id": "point-0000007",
+        "time_s": 19.84249223594989,
+        "tool_tip_machine_mm": [
+          257.4,
+          250.9,
+          250.5
+        ]
+      },
+      {
+        "fk_orientation_error_rad": 0.0,
+        "fk_position_error_mm": 0.0,
+        "joint_positions": {
+          "A": 0.0,
+          "C": 0.0,
+          "X": 257.4,
+          "Y": 251.5,
+          "Z": 252.5
+        },
+        "singular": true,
+        "source_point_id": "point-0000008",
+        "time_s": 20.202492235949887,
+        "tool_tip_machine_mm": [
+          257.4,
+          251.5,
+          250.5
+        ]
+      },
+      {
+        "fk_orientation_error_rad": 0.0,
+        "fk_position_error_mm": 0.0,
+        "joint_positions": {
+          "A": 0.0,
+          "C": 0.0,
+          "X": 250.6,
+          "Y": 251.5,
+          "Z": 252.5
+        },
+        "singular": true,
+        "source_point_id": "point-0000009",
+        "time_s": 24.282492235949874,
+        "tool_tip_machine_mm": [
+          250.6,
+          251.5,
+          250.5
+        ]
+      },
+      {
+        "fk_orientation_error_rad": 0.0,
+        "fk_position_error_mm": 0.0,
+        "joint_positions": {
+          "A": 0.0,
+          "C": 0.0,
+          "X": 250.6,
+          "Y": 252.1,
+          "Z": 252.5
+        },
+        "singular": true,
+        "source_point_id": "point-0000010",
+        "time_s": 24.64249223594987,
+        "tool_tip_machine_mm": [
+          250.6,
+          252.1,
+          250.5
+        ]
+      },
+      {
+        "fk_orientation_error_rad": 0.0,
+        "fk_position_error_mm": 0.0,
+        "joint_positions": {
+          "A": 0.0,
+          "C": 0.0,
+          "X": 257.4,
+          "Y": 252.1,
+          "Z": 252.5
+        },
+        "singular": true,
+        "source_point_id": "point-0000011",
+        "time_s": 28.722492235949858,
+        "tool_tip_machine_mm": [
+          257.4,
+          252.1,
+          250.5
+        ]
+      },
+      {
+        "fk_orientation_error_rad": 0.0,
+        "fk_position_error_mm": 0.0,
+        "joint_positions": {
+          "A": 0.0,
+          "C": 0.0,
+          "X": 257.4,
+          "Y": 252.7,
+          "Z": 252.5
+        },
+        "singular": true,
+        "source_point_id": "point-0000012",
+        "time_s": 29.082492235949854,
+        "tool_tip_machine_mm": [
+          257.4,
+          252.7,
+          250.5
+        ]
+      },
+      {
+        "fk_orientation_error_rad": 0.0,
+        "fk_position_error_mm": 0.0,
+        "joint_positions": {
+          "A": 0.0,
+          "C": 0.0,
+          "X": 250.6,
+          "Y": 252.7,
+          "Z": 252.5
+        },
+        "singular": true,
+        "source_point_id": "point-0000013",
+        "time_s": 33.16249223594984,
+        "tool_tip_machine_mm": [
+          250.6,
+          252.7,
+          250.5
+        ]
+      },
+      {
+        "fk_orientation_error_rad": 0.0,
+        "fk_position_error_mm": 0.0,
+        "joint_positions": {
+          "A": 0.0,
+          "C": 0.0,
+          "X": 250.6,
+          "Y": 253.3,
+          "Z": 252.5
+        },
+        "singular": true,
+        "source_point_id": "point-0000014",
+        "time_s": 33.522492235949855,
+        "tool_tip_machine_mm": [
+          250.6,
+          253.3,
+          250.5
+        ]
+      },
+      {
+        "fk_orientation_error_rad": 0.0,
+        "fk_position_error_mm": 0.0,
+        "joint_positions": {
+          "A": 0.0,
+          "C": 0.0,
+          "X": 257.4,
+          "Y": 253.3,
+          "Z": 252.5
+        },
+        "singular": true,
+        "source_point_id": "point-0000015",
+        "time_s": 37.602492235949846,
+        "tool_tip_machine_mm": [
+          257.4,
+          253.3,
+          250.5
+        ]
+      },
+      {
+        "fk_orientation_error_rad": 0.0,
+        "fk_position_error_mm": 0.0,
+        "joint_positions": {
+          "A": 0.0,
+          "C": 0.0,
+          "X": 257.4,
+          "Y": 253.9,
+          "Z": 252.5
+        },
+        "singular": true,
+        "source_point_id": "point-0000016",
+        "time_s": 37.962492235949846,
+        "tool_tip_machine_mm": [
+          257.4,
+          253.9,
+          250.5
+        ]
+      },
+      {
+        "fk_orientation_error_rad": 0.0,
+        "fk_position_error_mm": 0.0,
+        "joint_positions": {
+          "A": 0.0,
+          "C": 0.0,
+          "X": 250.6,
+          "Y": 253.9,
+          "Z": 252.5
+        },
+        "singular": true,
+        "source_point_id": "point-0000017",
+        "time_s": 42.04249223594984,
+        "tool_tip_machine_mm": [
+          250.6,
+          253.9,
+          250.5
+        ]
+      },
+      {
+        "fk_orientation_error_rad": 0.0,
+        "fk_position_error_mm": 0.0,
+        "joint_positions": {
+          "A": 0.0,
+          "C": 0.0,
+          "X": 250.6,
+          "Y": 254.5,
+          "Z": 252.5
+        },
+        "singular": true,
+        "source_point_id": "point-0000018",
+        "time_s": 42.402492235949836,
+        "tool_tip_machine_mm": [
+          250.6,
+          254.5,
+          250.5
+        ]
+      },
+      {
+        "fk_orientation_error_rad": 0.0,
+        "fk_position_error_mm": 0.0,
+        "joint_positions": {
+          "A": 0.0,
+          "C": 0.0,
+          "X": 257.4,
+          "Y": 254.5,
+          "Z": 252.5
+        },
+        "singular": true,
+        "source_point_id": "point-0000019",
+        "time_s": 46.48249223594983,
+        "tool_tip_machine_mm": [
+          257.4,
+          254.5,
+          250.5
+        ]
+      },
+      {
+        "fk_orientation_error_rad": 0.0,
+        "fk_position_error_mm": 0.0,
+        "joint_positions": {
+          "A": 0.0,
+          "C": 0.0,
+          "X": 257.4,
+          "Y": 255.1,
+          "Z": 252.5
+        },
+        "singular": true,
+        "source_point_id": "point-0000020",
+        "time_s": 46.84249223594983,
+        "tool_tip_machine_mm": [
+          257.4,
+          255.1,
+          250.5
+        ]
+      },
+      {
+        "fk_orientation_error_rad": 0.0,
+        "fk_position_error_mm": 0.0,
+        "joint_positions": {
+          "A": 0.0,
+          "C": 0.0,
+          "X": 250.6,
+          "Y": 255.1,
+          "Z": 252.5
+        },
+        "singular": true,
+        "source_point_id": "point-0000021",
+        "time_s": 50.92249223594982,
+        "tool_tip_machine_mm": [
+          250.6,
+          255.1,
+          250.5
+        ]
+      }
+    ],
+    "schema_version": 1,
+    "source_toolpath_id": "audit-rectangle-zigzag-v3",
+    "tool_length_mm": 2.0,
+    "trajectory_id": "audit-rectangle-zigzag-v3-xyzac-v1"
+  },
+  "manifest": {
+    "algorithm_version": "planar-zigzag-product-v2",
+    "generated_at_utc": "2026-09-12T05:08:51.928625+00:00",
+    "input_sources": [
+      {
+        "path": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\docs\\reviews\\evidence\\2026-09-12_audit_fixes\\planar_models_v2\\rectangle.step",
+        "role": "planar_step",
+        "sha256": "28c6ec2a1e6a13d34b4ac5f1c30cdfd87ba8c5051f2acfd4324b7e710d75e996",
+        "source_id": "cad_source"
+      }
+    ],
+    "issues": [
+      "xyzac.rotary_singularity"
+    ],
+    "machine_profile_id": "builtin.machine.generic_xyzac_reference.v1",
+    "operation_id": "audit-rectangle",
+    "parameter_semantic_sha256": "b0db217b14a24114af5efea31f5fe3015536c803a802546a8d2dce0fd8b86a49",
+    "ready_for_export": true,
+    "result_id": "audit-rectangle-zigzag-v3-result-v1",
+    "schema_version": 1,
+    "status": "warning",
+    "toolpath": {
+      "coordinate_frame": "workpiece_build",
+      "events": [
+        {
+          "context": {
+            "extrusion_length_mm": 1.0,
+            "sequence_index": 1
+          },
+          "duration_s": null,
+          "event_id": "event-0000001",
+          "event_type": "prime",
+          "layer_id": "layer-00001",
+          "operation_id": "audit-rectangle",
+          "region_id": "region-0001",
+          "stage_id": "planar"
+        },
+        {
+          "context": {
+            "extrusion_length_mm": -1.0,
+            "sequence_index": 5
+          },
+          "duration_s": null,
+          "event_id": "event-0000002",
+          "event_type": "retract",
+          "layer_id": "layer-00001",
+          "operation_id": "audit-rectangle",
+          "region_id": "region-0001",
+          "stage_id": "planar"
+        },
+        {
+          "context": {
+            "extrusion_length_mm": 1.0,
+            "sequence_index": 6
+          },
+          "duration_s": null,
+          "event_id": "event-0000003",
+          "event_type": "prime",
+          "layer_id": "layer-00001",
+          "operation_id": "audit-rectangle",
+          "region_id": "region-0001",
+          "stage_id": "planar"
+        },
+        {
+          "context": {
+            "extrusion_length_mm": -1.0,
+            "sequence_index": 7
+          },
+          "duration_s": null,
+          "event_id": "event-0000004",
+          "event_type": "retract",
+          "layer_id": "layer-00001",
+          "operation_id": "audit-rectangle",
+          "region_id": "region-0001",
+          "stage_id": "planar"
+        },
+        {
+          "context": {
+            "extrusion_length_mm": 1.0,
+            "sequence_index": 8
+          },
+          "duration_s": null,
+          "event_id": "event-0000005",
+          "event_type": "prime",
+          "layer_id": "layer-00001",
+          "operation_id": "audit-rectangle",
+          "region_id": "region-0001",
+          "stage_id": "planar"
+        },
+        {
+          "context": {
+            "extrusion_length_mm": -1.0,
+            "sequence_index": 9
+          },
+          "duration_s": null,
+          "event_id": "event-0000006",
+          "event_type": "retract",
+          "layer_id": "layer-00001",
+          "operation_id": "audit-rectangle",
+          "region_id": "region-0001",
+          "stage_id": "planar"
+        },
+        {
+          "context": {
+            "extrusion_length_mm": 1.0,
+            "sequence_index": 10
+          },
+          "duration_s": null,
+          "event_id": "event-0000007",
+          "event_type": "prime",
+          "layer_id": "layer-00001",
+          "operation_id": "audit-rectangle",
+          "region_id": "region-0001",
+          "stage_id": "planar"
+        },
+        {
+          "context": {
+            "extrusion_length_mm": -1.0,
+            "sequence_index": 11
+          },
+          "duration_s": null,
+          "event_id": "event-0000008",
+          "event_type": "retract",
+          "layer_id": "layer-00001",
+          "operation_id": "audit-rectangle",
+          "region_id": "region-0001",
+          "stage_id": "planar"
+        },
+        {
+          "context": {
+            "extrusion_length_mm": 1.0,
+            "sequence_index": 12
+          },
+          "duration_s": null,
+          "event_id": "event-0000009",
+          "event_type": "prime",
+          "layer_id": "layer-00001",
+          "operation_id": "audit-rectangle",
+          "region_id": "region-0001",
+          "stage_id": "planar"
+        },
+        {
+          "context": {
+            "extrusion_length_mm": -1.0,
+            "sequence_index": 13
+          },
+          "duration_s": null,
+          "event_id": "event-0000010",
+          "event_type": "retract",
+          "layer_id": "layer-00001",
+          "operation_id": "audit-rectangle",
+          "region_id": "region-0001",
+          "stage_id": "planar"
+        },
+        {
+          "context": {
+            "extrusion_length_mm": 1.0,
+            "sequence_index": 14
+          },
+          "duration_s": null,
+          "event_id": "event-0000011",
+          "event_type": "prime",
+          "layer_id": "layer-00001",
+          "operation_id": "audit-rectangle",
+          "region_id": "region-0001",
+          "stage_id": "planar"
+        },
+        {
+          "context": {
+            "extrusion_length_mm": -1.0,
+            "sequence_index": 15
+          },
+          "duration_s": null,
+          "event_id": "event-0000012",
+          "event_type": "retract",
+          "layer_id": "layer-00001",
+          "operation_id": "audit-rectangle",
+          "region_id": "region-0001",
+          "stage_id": "planar"
+        },
+        {
+          "context": {
+            "extrusion_length_mm": 1.0,
+            "sequence_index": 16
+          },
+          "duration_s": null,
+          "event_id": "event-0000013",
+          "event_type": "prime",
+          "layer_id": "layer-00001",
+          "operation_id": "audit-rectangle",
+          "region_id": "region-0001",
+          "stage_id": "planar"
+        },
+        {
+          "context": {
+            "extrusion_length_mm": -1.0,
+            "sequence_index": 17
+          },
+          "duration_s": null,
+          "event_id": "event-0000014",
+          "event_type": "retract",
+          "layer_id": "layer-00001",
+          "operation_id": "audit-rectangle",
+          "region_id": "region-0001",
+          "stage_id": "planar"
+        },
+        {
+          "context": {
+            "extrusion_length_mm": 1.0,
+            "sequence_index": 18
+          },
+          "duration_s": null,
+          "event_id": "event-0000015",
+          "event_type": "prime",
+          "layer_id": "layer-00001",
+          "operation_id": "audit-rectangle",
+          "region_id": "region-0001",
+          "stage_id": "planar"
+        },
+        {
+          "context": {
+            "extrusion_length_mm": -1.0,
+            "sequence_index": 19
+          },
+          "duration_s": null,
+          "event_id": "event-0000016",
+          "event_type": "retract",
+          "layer_id": "layer-00001",
+          "operation_id": "audit-rectangle",
+          "region_id": "region-0001",
+          "stage_id": "planar"
+        },
+        {
+          "context": {
+            "extrusion_length_mm": 1.0,
+            "sequence_index": 20
+          },
+          "duration_s": null,
+          "event_id": "event-0000017",
+          "event_type": "prime",
+          "layer_id": "layer-00001",
+          "operation_id": "audit-rectangle",
+          "region_id": "region-0001",
+          "stage_id": "planar"
+        }
+      ],
+      "operation_id": "audit-rectangle",
+      "points": [
+        {
+          "bead_width_mm": null,
+          "extrusion_role": "none",
+          "feedrate_mm_min": 100.0,
+          "issue_ids": [],
+          "layer_height_mm": null,
+          "layer_id": "layer-00001",
+          "material_volume_mm3": 0.0,
+          "nozzle_axis": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "operation_id": "audit-rectangle",
+          "point_id": "point-0000001",
+          "point_type": "approach",
+          "position": [
+            0.2999999999999998,
+            0.2999999999999998,
+            0.5
+          ],
+          "region_id": "region-0001",
+          "stage_id": "planar",
+          "surface_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "tangent": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "bead_width_mm": 0.6,
+          "extrusion_role": "skin",
+          "feedrate_mm_min": 100.0,
+          "issue_ids": [],
+          "layer_height_mm": 0.5,
+          "layer_id": "layer-00001",
+          "material_volume_mm3": 2.22,
+          "nozzle_axis": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "operation_id": "audit-rectangle",
+          "point_id": "point-0000002",
+          "point_type": "deposition",
+          "position": [
+            7.7,
+            0.2999999999999998,
+            0.5
+          ],
+          "region_id": "region-0001",
+          "stage_id": "planar",
+          "surface_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "tangent": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "bead_width_mm": 0.6,
+          "extrusion_role": "skin",
+          "feedrate_mm_min": 100.0,
+          "issue_ids": [],
+          "layer_height_mm": 0.5,
+          "layer_id": "layer-00001",
+          "material_volume_mm3": 1.62,
+          "nozzle_axis": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "operation_id": "audit-rectangle",
+          "point_id": "point-0000003",
+          "point_type": "deposition",
+          "position": [
+            7.7,
+            5.7,
+            0.5
+          ],
+          "region_id": "region-0001",
+          "stage_id": "planar",
+          "surface_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "tangent": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "bead_width_mm": 0.6,
+          "extrusion_role": "skin",
+          "feedrate_mm_min": 100.0,
+          "issue_ids": [],
+          "layer_height_mm": 0.5,
+          "layer_id": "layer-00001",
+          "material_volume_mm3": 2.22,
+          "nozzle_axis": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "operation_id": "audit-rectangle",
+          "point_id": "point-0000004",
+          "point_type": "deposition",
+          "position": [
+            0.2999999999999998,
+            5.7,
+            0.5
+          ],
+          "region_id": "region-0001",
+          "stage_id": "planar",
+          "surface_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "tangent": [
+            -1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "bead_width_mm": 0.6,
+          "extrusion_role": "skin",
+          "feedrate_mm_min": 100.0,
+          "issue_ids": [],
+          "layer_height_mm": 0.5,
+          "layer_id": "layer-00001",
+          "material_volume_mm3": 1.62,
+          "nozzle_axis": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "operation_id": "audit-rectangle",
+          "point_id": "point-0000005",
+          "point_type": "deposition",
+          "position": [
+            0.2999999999999998,
+            0.2999999999999998,
+            0.5
+          ],
+          "region_id": "region-0001",
+          "stage_id": "planar",
+          "surface_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "tangent": [
+            0.0,
+            -1.0,
+            0.0
+          ]
+        },
+        {
+          "bead_width_mm": null,
+          "extrusion_role": "none",
+          "feedrate_mm_min": 100.0,
+          "issue_ids": [],
+          "layer_height_mm": null,
+          "layer_id": "layer-00001",
+          "material_volume_mm3": 0.0,
+          "nozzle_axis": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "operation_id": "audit-rectangle",
+          "point_id": "point-0000006",
+          "point_type": "travel",
+          "position": [
+            0.6000000000000001,
+            0.9000000000000001,
+            0.5
+          ],
+          "region_id": "region-0001",
+          "stage_id": "planar",
+          "surface_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "tangent": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "bead_width_mm": 0.6,
+          "extrusion_role": "infill",
+          "feedrate_mm_min": 100.0,
+          "issue_ids": [],
+          "layer_height_mm": 0.5,
+          "layer_id": "layer-00001",
+          "material_volume_mm3": 2.0399999999999996,
+          "nozzle_axis": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "operation_id": "audit-rectangle",
+          "point_id": "point-0000007",
+          "point_type": "deposition",
+          "position": [
+            7.399999999999999,
+            0.9000000000000001,
+            0.5
+          ],
+          "region_id": "region-0001",
+          "stage_id": "planar",
+          "surface_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "tangent": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "bead_width_mm": null,
+          "extrusion_role": "none",
+          "feedrate_mm_min": 100.0,
+          "issue_ids": [],
+          "layer_height_mm": null,
+          "layer_id": "layer-00001",
+          "material_volume_mm3": 0.0,
+          "nozzle_axis": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "operation_id": "audit-rectangle",
+          "point_id": "point-0000008",
+          "point_type": "travel",
+          "position": [
+            7.399999999999999,
+            1.5,
+            0.5
+          ],
+          "region_id": "region-0001",
+          "stage_id": "planar",
+          "surface_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "tangent": [
+            -1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "bead_width_mm": 0.6,
+          "extrusion_role": "infill",
+          "feedrate_mm_min": 100.0,
+          "issue_ids": [],
+          "layer_height_mm": 0.5,
+          "layer_id": "layer-00001",
+          "material_volume_mm3": 2.0399999999999996,
+          "nozzle_axis": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "operation_id": "audit-rectangle",
+          "point_id": "point-0000009",
+          "point_type": "deposition",
+          "position": [
+            0.6000000000000001,
+            1.5,
+            0.5
+          ],
+          "region_id": "region-0001",
+          "stage_id": "planar",
+          "surface_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "tangent": [
+            -1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "bead_width_mm": null,
+          "extrusion_role": "none",
+          "feedrate_mm_min": 100.0,
+          "issue_ids": [],
+          "layer_height_mm": null,
+          "layer_id": "layer-00001",
+          "material_volume_mm3": 0.0,
+          "nozzle_axis": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "operation_id": "audit-rectangle",
+          "point_id": "point-0000010",
+          "point_type": "travel",
+          "position": [
+            0.6000000000000001,
+            2.1,
+            0.5
+          ],
+          "region_id": "region-0001",
+          "stage_id": "planar",
+          "surface_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "tangent": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "bead_width_mm": 0.6,
+          "extrusion_role": "infill",
+          "feedrate_mm_min": 100.0,
+          "issue_ids": [],
+          "layer_height_mm": 0.5,
+          "layer_id": "layer-00001",
+          "material_volume_mm3": 2.0399999999999996,
+          "nozzle_axis": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "operation_id": "audit-rectangle",
+          "point_id": "point-0000011",
+          "point_type": "deposition",
+          "position": [
+            7.3999999999999995,
+            2.1,
+            0.5
+          ],
+          "region_id": "region-0001",
+          "stage_id": "planar",
+          "surface_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "tangent": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "bead_width_mm": null,
+          "extrusion_role": "none",
+          "feedrate_mm_min": 100.0,
+          "issue_ids": [],
+          "layer_height_mm": null,
+          "layer_id": "layer-00001",
+          "material_volume_mm3": 0.0,
+          "nozzle_axis": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "operation_id": "audit-rectangle",
+          "point_id": "point-0000012",
+          "point_type": "travel",
+          "position": [
+            7.3999999999999995,
+            2.7,
+            0.5
+          ],
+          "region_id": "region-0001",
+          "stage_id": "planar",
+          "surface_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "tangent": [
+            -1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "bead_width_mm": 0.6,
+          "extrusion_role": "infill",
+          "feedrate_mm_min": 100.0,
+          "issue_ids": [],
+          "layer_height_mm": 0.5,
+          "layer_id": "layer-00001",
+          "material_volume_mm3": 2.0399999999999996,
+          "nozzle_axis": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "operation_id": "audit-rectangle",
+          "point_id": "point-0000013",
+          "point_type": "deposition",
+          "position": [
+            0.6000000000000001,
+            2.7,
+            0.5
+          ],
+          "region_id": "region-0001",
+          "stage_id": "planar",
+          "surface_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "tangent": [
+            -1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "bead_width_mm": null,
+          "extrusion_role": "none",
+          "feedrate_mm_min": 100.0,
+          "issue_ids": [],
+          "layer_height_mm": null,
+          "layer_id": "layer-00001",
+          "material_volume_mm3": 0.0,
+          "nozzle_axis": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "operation_id": "audit-rectangle",
+          "point_id": "point-0000014",
+          "point_type": "travel",
+          "position": [
+            0.6000000000000001,
+            3.3,
+            0.5
+          ],
+          "region_id": "region-0001",
+          "stage_id": "planar",
+          "surface_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "tangent": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "bead_width_mm": 0.6,
+          "extrusion_role": "infill",
+          "feedrate_mm_min": 100.0,
+          "issue_ids": [],
+          "layer_height_mm": 0.5,
+          "layer_id": "layer-00001",
+          "material_volume_mm3": 2.0399999999999996,
+          "nozzle_axis": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "operation_id": "audit-rectangle",
+          "point_id": "point-0000015",
+          "point_type": "deposition",
+          "position": [
+            7.3999999999999995,
+            3.3,
+            0.5
+          ],
+          "region_id": "region-0001",
+          "stage_id": "planar",
+          "surface_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "tangent": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "bead_width_mm": null,
+          "extrusion_role": "none",
+          "feedrate_mm_min": 100.0,
+          "issue_ids": [],
+          "layer_height_mm": null,
+          "layer_id": "layer-00001",
+          "material_volume_mm3": 0.0,
+          "nozzle_axis": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "operation_id": "audit-rectangle",
+          "point_id": "point-0000016",
+          "point_type": "travel",
+          "position": [
+            7.3999999999999995,
+            3.9,
+            0.5
+          ],
+          "region_id": "region-0001",
+          "stage_id": "planar",
+          "surface_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "tangent": [
+            -1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "bead_width_mm": 0.6,
+          "extrusion_role": "infill",
+          "feedrate_mm_min": 100.0,
+          "issue_ids": [],
+          "layer_height_mm": 0.5,
+          "layer_id": "layer-00001",
+          "material_volume_mm3": 2.0399999999999996,
+          "nozzle_axis": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "operation_id": "audit-rectangle",
+          "point_id": "point-0000017",
+          "point_type": "deposition",
+          "position": [
+            0.6000000000000001,
+            3.9,
+            0.5
+          ],
+          "region_id": "region-0001",
+          "stage_id": "planar",
+          "surface_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "tangent": [
+            -1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "bead_width_mm": null,
+          "extrusion_role": "none",
+          "feedrate_mm_min": 100.0,
+          "issue_ids": [],
+          "layer_height_mm": null,
+          "layer_id": "layer-00001",
+          "material_volume_mm3": 0.0,
+          "nozzle_axis": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "operation_id": "audit-rectangle",
+          "point_id": "point-0000018",
+          "point_type": "travel",
+          "position": [
+            0.6000000000000001,
+            4.5,
+            0.5
+          ],
+          "region_id": "region-0001",
+          "stage_id": "planar",
+          "surface_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "tangent": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "bead_width_mm": 0.6,
+          "extrusion_role": "infill",
+          "feedrate_mm_min": 100.0,
+          "issue_ids": [],
+          "layer_height_mm": 0.5,
+          "layer_id": "layer-00001",
+          "material_volume_mm3": 2.04,
+          "nozzle_axis": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "operation_id": "audit-rectangle",
+          "point_id": "point-0000019",
+          "point_type": "deposition",
+          "position": [
+            7.4,
+            4.5,
+            0.5
+          ],
+          "region_id": "region-0001",
+          "stage_id": "planar",
+          "surface_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "tangent": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "bead_width_mm": null,
+          "extrusion_role": "none",
+          "feedrate_mm_min": 100.0,
+          "issue_ids": [],
+          "layer_height_mm": null,
+          "layer_id": "layer-00001",
+          "material_volume_mm3": 0.0,
+          "nozzle_axis": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "operation_id": "audit-rectangle",
+          "point_id": "point-0000020",
+          "point_type": "travel",
+          "position": [
+            7.4,
+            5.1,
+            0.5
+          ],
+          "region_id": "region-0001",
+          "stage_id": "planar",
+          "surface_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "tangent": [
+            -1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "bead_width_mm": 0.6,
+          "extrusion_role": "infill",
+          "feedrate_mm_min": 100.0,
+          "issue_ids": [],
+          "layer_height_mm": 0.5,
+          "layer_id": "layer-00001",
+          "material_volume_mm3": 2.04,
+          "nozzle_axis": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "operation_id": "audit-rectangle",
+          "point_id": "point-0000021",
+          "point_type": "deposition",
+          "position": [
+            0.6000000000000001,
+            5.1,
+            0.5
+          ],
+          "region_id": "region-0001",
+          "stage_id": "planar",
+          "surface_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "tangent": [
+            -1.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "schema_version": 1,
+      "toolpath_id": "audit-rectangle-zigzag-v3",
+      "units": {
+        "angle": "rad",
+        "feedrate": "mm_min",
+        "length": "mm",
+        "material_volume": "mm3"
+      }
+    }
+  },
+  "operation_type": "planar_zigzag",
+  "preview_only": false,
+  "readback": {
+    "coordinate_mismatches": [],
+    "expected_points": 21,
+    "extrusion_mismatches": [],
+    "feedrate_mismatches": [],
+    "order_mismatches": [],
+    "passed": true,
+    "read_points": 21,
+    "schema_version": 1
+  },
+  "schema_version": 1,
+  "validation": {
+    "issues": [
+      {
+        "code": "xyzac.rotary_singularity",
+        "context": {
+          "count": 21,
+          "first_context": {
+            "retained_c_rad": 0.0
+          }
+        },
+        "object_id": "point-0000001",
+        "severity": "warning"
+      }
+    ],
+    "measurement": {
+      "bead_outside_max_mm": 1.6653345369377348e-16,
+      "covered_area_mm2": 47.99999999999999,
+      "deposition_outside_max_mm": 0.0,
+      "geometric_region_area_mm2": 48.0,
+      "geometric_volume_mm3": 23.999999999999996,
+      "material_excess_mm3": 0.0,
+      "material_volume_mm3": 23.999999999999996,
+      "overlap_area_mm2": 2.5599999999999996,
+      "residual_area_mm2": 0.0,
+      "sample_grid_mm": 0.19999999999999998,
+      "sampled_region_area_mm2": 47.99999999999999,
+      "target_solid_volume_mm3": 24.0,
+      "volume_difference_mm3": 0.0
+    },
+    "ready_for_export": true,
+    "schema_version": 1,
+    "status": "warning",
+    "trajectory_id": "audit-rectangle-zigzag-v3-xyzac-v1"
+  }
+}

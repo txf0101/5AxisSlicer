@@ -1,0 +1,4415 @@
+{
+  "coordinate_frame": "workpiece_build",
+  "events": [
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 1
+      },
+      "duration_s": null,
+      "event_id": "event-0000001",
+      "event_type": "prime",
+      "layer_id": "layer-00001",
+      "operation_id": "analytic-tube",
+      "region_id": "region-0001",
+      "stage_id": "region-0001"
+    }
+  ],
+  "operation_id": "analytic-tube",
+  "points": [
+    {
+      "bead_width_mm": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -1.0,
+        -0.0,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000001",
+      "point_type": "approach",
+      "position": [
+        55.5,
+        50.0,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "tangent": [
+        -0.024541228522907587,
+        0.9996988186962044,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601718,
+      "nozzle_axis": [
+        -0.9987954562051724,
+        -0.04906767432741786,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000002",
+      "point_type": "deposition",
+      "position": [
+        55.49337500912845,
+        50.2698722088008,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.9987954562051724,
+        0.04906767432741786,
+        0.0
+      ],
+      "tangent": [
+        -0.049067674327408245,
+        0.9987954562051728,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601615,
+      "nozzle_axis": [
+        -0.995184726672197,
+        -0.09801714032955973,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000003",
+      "point_type": "deposition",
+      "position": [
+        55.47351599669709,
+        50.53909427181258,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.995184726672197,
+        0.09801714032955973,
+        0.0
+      ],
+      "tangent": [
+        -0.09801714032956052,
+        0.9951847266721969,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687602398,
+      "nozzle_axis": [
+        -0.9891765099647811,
+        -0.14673047445536053,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000004",
+      "point_type": "deposition",
+      "position": [
+        55.440470804806296,
+        50.8070176095045,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.9891765099647811,
+        0.14673047445536053,
+        0.0
+      ],
+      "tangent": [
+        -0.14673047445537107,
+        0.9891765099647797,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.134976756876016,
+      "nozzle_axis": [
+        -0.9807852804032303,
+        -0.195090322016129,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000005",
+      "point_type": "deposition",
+      "position": [
+        55.39431904221777,
+        51.07299677108871,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.9807852804032303,
+        0.195090322016129,
+        0.0
+      ],
+      "tangent": [
+        -0.19509032201613602,
+        0.980785280403229,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760184,
+      "nozzle_axis": [
+        -0.970031253194544,
+        -0.2429801799032638,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000006",
+      "point_type": "deposition",
+      "position": [
+        55.33517189256999,
+        51.33639098946796,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.970031253194544,
+        0.2429801799032638,
+        0.0
+      ],
+      "tangent": [
+        -0.2429801799032748,
+        0.9700312531945413,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601385,
+      "nozzle_axis": [
+        -0.9569403357322087,
+        -0.2902846772544629,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000007",
+      "point_type": "deposition",
+      "position": [
+        55.26317184652714,
+        51.59656572489954,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.9569403357322087,
+        0.2902846772544629,
+        0.0
+      ],
+      "tangent": [
+        -0.29028467725445756,
+        0.9569403357322104,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601549,
+      "nozzle_axis": [
+        -0.9415440651830228,
+        -0.3368898533922145,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000008",
+      "point_type": "deposition",
+      "position": [
+        55.17849235850662,
+        51.85289419365721,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.9415440651830228,
+        0.3368898533922145,
+        0.0
+      ],
+      "tangent": [
+        -0.3368898533922073,
+        0.9415440651830254,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760222,
+      "nozzle_axis": [
+        -0.9238795325112861,
+        -0.3826834323650914,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000009",
+      "point_type": "deposition",
+      "position": [
+        55.08133742881208,
+        52.104758878008,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.9238795325112861,
+        0.3826834323650914,
+        0.0
+      ],
+      "tangent": [
+        -0.38268343236509117,
+        0.9238795325112862,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601407,
+      "nozzle_axis": [
+        -0.903989293123445,
+        -0.42755509343027864,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000010",
+      "point_type": "deposition",
+      "position": [
+        54.97194111217894,
+        52.35155301386655,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.903989293123445,
+        0.42755509343027864,
+        0.0
+      ],
+      "tangent": [
+        -0.42755509343029047,
+        0.9039892931234395,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760172,
+      "nozzle_axis": [
+        -0.8819212643483524,
+        -0.4713967368260029,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000011",
+      "point_type": "deposition",
+      "position": [
+        54.85056695391595,
+        52.59268205254298,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.8819212643483524,
+        0.4713967368260029,
+        0.0
+      ],
+      "tangent": [
+        -0.47139673682599254,
+        0.8819212643483578,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601637,
+      "nozzle_axis": [
+        -0.8577286100002744,
+        -0.5141027441932179,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000012",
+      "point_type": "deposition",
+      "position": [
+        54.7175073550015,
+        52.82756509306272,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.8577286100002744,
+        0.5141027441932179,
+        0.0
+      ],
+      "tangent": [
+        -0.5141027441932123,
+        0.8577286100002778,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687602254,
+      "nozzle_axis": [
+        -0.8314696123025445,
+        -0.5555702330196034,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000013",
+      "point_type": "deposition",
+      "position": [
+        54.573082867664,
+        53.05563628160782,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.8314696123025445,
+        0.5555702330196034,
+        0.0
+      ],
+      "tangent": [
+        -0.5555702330196055,
+        0.8314696123025431,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601282,
+      "nozzle_axis": [
+        -0.8032075314806444,
+        -0.5956993044924342,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000014",
+      "point_type": "deposition",
+      "position": [
+        54.41764142314355,
+        53.27634617470838,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.8032075314806444,
+        0.5956993044924342,
+        0.0
+      ],
+      "tangent": [
+        -0.5956993044924369,
+        0.8032075314806423,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601798,
+      "nozzle_axis": [
+        -0.7730104533627382,
+        -0.6343932841636442,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000015",
+      "point_type": "deposition",
+      "position": [
+        54.251557493495056,
+        53.48916306290005,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.7730104533627382,
+        0.6343932841636442,
+        0.0
+      ],
+      "tangent": [
+        -0.6343932841636438,
+        0.7730104533627383,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760205,
+      "nozzle_axis": [
+        -0.7409511253549584,
+        -0.6715589548470191,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000016",
+      "point_type": "deposition",
+      "position": [
+        54.075231189452275,
+        53.6935742516586,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.7409511253549584,
+        0.6715589548470191,
+        0.0
+      ],
+      "tangent": [
+        -0.6715589548470132,
+        0.7409511253549639,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601685,
+      "nozzle_axis": [
+        -0.7071067811865476,
+        -0.7071067811865476,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000017",
+      "point_type": "deposition",
+      "position": [
+        53.889087296526014,
+        53.889087296526014,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.7071067811865476,
+        0.7071067811865476,
+        0.0
+      ],
+      "tangent": [
+        -0.7071067811865476,
+        0.7071067811865476,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601685,
+      "nozzle_axis": [
+        -0.671558954847023,
+        -0.740951125354955,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000018",
+      "point_type": "deposition",
+      "position": [
+        53.6935742516586,
+        54.075231189452275,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.671558954847023,
+        0.740951125354955,
+        0.0
+      ],
+      "tangent": [
+        -0.7409511253549639,
+        0.6715589548470132,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760205,
+      "nozzle_axis": [
+        -0.6343932841636442,
+        -0.7730104533627382,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000019",
+      "point_type": "deposition",
+      "position": [
+        53.48916306290005,
+        54.251557493495056,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.6343932841636442,
+        0.7730104533627382,
+        0.0
+      ],
+      "tangent": [
+        -0.7730104533627383,
+        0.6343932841636438,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601798,
+      "nozzle_axis": [
+        -0.5956993044924296,
+        -0.8032075314806477,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000020",
+      "point_type": "deposition",
+      "position": [
+        53.27634617470838,
+        54.41764142314355,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.5956993044924296,
+        0.8032075314806477,
+        0.0
+      ],
+      "tangent": [
+        -0.8032075314806516,
+        0.5956993044924244,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601865,
+      "nozzle_axis": [
+        -0.5555702330196002,
+        -0.8314696123025467,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000021",
+      "point_type": "deposition",
+      "position": [
+        53.0556362816078,
+        54.573082867664,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.5555702330196002,
+        0.8314696123025467,
+        0.0
+      ],
+      "tangent": [
+        -0.8314696123025431,
+        0.5555702330196055,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601654,
+      "nozzle_axis": [
+        -0.5141027441932231,
+        -0.8577286100002712,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000022",
+      "point_type": "deposition",
+      "position": [
+        52.82756509306272,
+        54.7175073550015,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.5141027441932231,
+        0.8577286100002712,
+        0.0
+      ],
+      "tangent": [
+        -0.857728610000265,
+        0.5141027441932337,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601812,
+      "nozzle_axis": [
+        -0.4713967368259999,
+        -0.8819212643483538,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000023",
+      "point_type": "deposition",
+      "position": [
+        52.59268205254298,
+        54.85056695391596,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.4713967368259999,
+        0.8819212643483538,
+        0.0
+      ],
+      "tangent": [
+        -0.8819212643483578,
+        0.47139673682599254,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760156,
+      "nozzle_axis": [
+        -0.42755509343027864,
+        -0.903989293123445,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000024",
+      "point_type": "deposition",
+      "position": [
+        52.35155301386655,
+        54.97194111217894,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.42755509343027864,
+        0.903989293123445,
+        0.0
+      ],
+      "tangent": [
+        -0.9039892931234444,
+        0.4275550934302797,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601407,
+      "nozzle_axis": [
+        -0.3826834323650914,
+        -0.9238795325112861,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000025",
+      "point_type": "deposition",
+      "position": [
+        52.104758878008,
+        55.08133742881208,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.3826834323650914,
+        0.9238795325112861,
+        0.0
+      ],
+      "tangent": [
+        -0.9238795325112862,
+        0.38268343236509117,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760222,
+      "nozzle_axis": [
+        -0.33688985339222083,
+        -0.9415440651830206,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000026",
+      "point_type": "deposition",
+      "position": [
+        51.85289419365721,
+        55.17849235850662,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.33688985339222083,
+        0.9415440651830206,
+        0.0
+      ],
+      "tangent": [
+        -0.9415440651830254,
+        0.3368898533922073,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601549,
+      "nozzle_axis": [
+        -0.2902846772544629,
+        -0.9569403357322087,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000027",
+      "point_type": "deposition",
+      "position": [
+        51.59656572489954,
+        55.26317184652714,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.2902846772544629,
+        0.9569403357322087,
+        0.0
+      ],
+      "tangent": [
+        -0.9569403357322126,
+        0.29028467725445023,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687602068,
+      "nozzle_axis": [
+        -0.2429801799032638,
+        -0.970031253194544,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000028",
+      "point_type": "deposition",
+      "position": [
+        51.336390989467944,
+        55.33517189256999,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.2429801799032638,
+        0.970031253194544,
+        0.0
+      ],
+      "tangent": [
+        -0.9700312531945421,
+        0.2429801799032717,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601493,
+      "nozzle_axis": [
+        -0.195090322016129,
+        -0.9807852804032303,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000029",
+      "point_type": "deposition",
+      "position": [
+        51.072996771088704,
+        55.39431904221777,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.195090322016129,
+        0.9807852804032303,
+        0.0
+      ],
+      "tangent": [
+        -0.9807852804032284,
+        0.19509032201613852,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.134976756876016,
+      "nozzle_axis": [
+        -0.1467304744553675,
+        -0.9891765099647802,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000030",
+      "point_type": "deposition",
+      "position": [
+        50.80701760950449,
+        55.440470804806296,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.1467304744553675,
+        0.9891765099647802,
+        0.0
+      ],
+      "tangent": [
+        -0.9891765099647793,
+        0.14673047445537296,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687602045,
+      "nozzle_axis": [
+        -0.09801714032955973,
+        -0.995184726672197,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000031",
+      "point_type": "deposition",
+      "position": [
+        50.53909427181258,
+        55.47351599669709,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.09801714032955973,
+        0.995184726672197,
+        0.0
+      ],
+      "tangent": [
+        -0.9951847266721968,
+        0.0980171403295618,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601615,
+      "nozzle_axis": [
+        -0.04906767432741786,
+        -0.9987954562051724,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000032",
+      "point_type": "deposition",
+      "position": [
+        50.2698722088008,
+        55.49337500912845,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.04906767432741786,
+        0.9987954562051724,
+        0.0
+      ],
+      "tangent": [
+        -0.9987954562051728,
+        0.049067674327408245,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601718,
+      "nozzle_axis": [
+        -0.0,
+        -1.0,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000033",
+      "point_type": "deposition",
+      "position": [
+        50.0,
+        55.5,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "tangent": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601718,
+      "nozzle_axis": [
+        0.04906767432741786,
+        -0.9987954562051724,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000034",
+      "point_type": "deposition",
+      "position": [
+        49.7301277911992,
+        55.49337500912845,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.04906767432741786,
+        0.9987954562051724,
+        0.0
+      ],
+      "tangent": [
+        -0.9987954562051728,
+        -0.049067674327408245,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601615,
+      "nozzle_axis": [
+        0.09801714032955973,
+        -0.995184726672197,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000035",
+      "point_type": "deposition",
+      "position": [
+        49.46090572818742,
+        55.47351599669709,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.09801714032955973,
+        0.995184726672197,
+        0.0
+      ],
+      "tangent": [
+        -0.9951847266721969,
+        -0.09801714032956052,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687602398,
+      "nozzle_axis": [
+        0.14673047445536053,
+        -0.9891765099647811,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000036",
+      "point_type": "deposition",
+      "position": [
+        49.1929823904955,
+        55.440470804806296,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.14673047445536053,
+        0.9891765099647811,
+        0.0
+      ],
+      "tangent": [
+        -0.9891765099647797,
+        -0.14673047445537107,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.134976756876016,
+      "nozzle_axis": [
+        0.19509032201613585,
+        -0.980785280403229,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000037",
+      "point_type": "deposition",
+      "position": [
+        48.92700322891129,
+        55.39431904221777,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.19509032201613585,
+        0.980785280403229,
+        0.0
+      ],
+      "tangent": [
+        -0.980785280403229,
+        -0.19509032201613602,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760184,
+      "nozzle_axis": [
+        0.2429801799032638,
+        -0.970031253194544,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000038",
+      "point_type": "deposition",
+      "position": [
+        48.66360901053204,
+        55.33517189256999,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.2429801799032638,
+        0.970031253194544,
+        0.0
+      ],
+      "tangent": [
+        -0.9700312531945413,
+        -0.2429801799032748,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601385,
+      "nozzle_axis": [
+        0.2902846772544629,
+        -0.9569403357322087,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000039",
+      "point_type": "deposition",
+      "position": [
+        48.40343427510046,
+        55.26317184652714,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.2902846772544629,
+        0.9569403357322087,
+        0.0
+      ],
+      "tangent": [
+        -0.9569403357322104,
+        -0.29028467725445756,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601549,
+      "nozzle_axis": [
+        0.3368898533922145,
+        -0.9415440651830228,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000040",
+      "point_type": "deposition",
+      "position": [
+        48.14710580634279,
+        55.17849235850662,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.3368898533922145,
+        0.9415440651830228,
+        0.0
+      ],
+      "tangent": [
+        -0.9415440651830254,
+        -0.3368898533922073,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760222,
+      "nozzle_axis": [
+        0.3826834323650914,
+        -0.9238795325112861,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000041",
+      "point_type": "deposition",
+      "position": [
+        47.895241121992,
+        55.08133742881208,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.3826834323650914,
+        0.9238795325112861,
+        0.0
+      ],
+      "tangent": [
+        -0.9238795325112862,
+        -0.38268343236509117,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601407,
+      "nozzle_axis": [
+        0.42755509343027864,
+        -0.903989293123445,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000042",
+      "point_type": "deposition",
+      "position": [
+        47.64844698613345,
+        54.97194111217894,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.42755509343027864,
+        0.903989293123445,
+        0.0
+      ],
+      "tangent": [
+        -0.9039892931234395,
+        -0.42755509343029047,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760172,
+      "nozzle_axis": [
+        0.4713967368260029,
+        -0.8819212643483524,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000043",
+      "point_type": "deposition",
+      "position": [
+        47.40731794745702,
+        54.85056695391595,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.4713967368260029,
+        0.8819212643483524,
+        0.0
+      ],
+      "tangent": [
+        -0.8819212643483578,
+        -0.47139673682599254,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601637,
+      "nozzle_axis": [
+        0.5141027441932179,
+        -0.8577286100002744,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000044",
+      "point_type": "deposition",
+      "position": [
+        47.17243490693728,
+        54.7175073550015,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.5141027441932179,
+        0.8577286100002744,
+        0.0
+      ],
+      "tangent": [
+        -0.8577286100002778,
+        -0.5141027441932123,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687602254,
+      "nozzle_axis": [
+        0.5555702330196034,
+        -0.8314696123025445,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000045",
+      "point_type": "deposition",
+      "position": [
+        46.94436371839218,
+        54.573082867664,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.5555702330196034,
+        0.8314696123025445,
+        0.0
+      ],
+      "tangent": [
+        -0.8314696123025431,
+        -0.5555702330196055,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601282,
+      "nozzle_axis": [
+        0.5956993044924342,
+        -0.8032075314806444,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000046",
+      "point_type": "deposition",
+      "position": [
+        46.72365382529162,
+        54.41764142314355,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.5956993044924342,
+        0.8032075314806444,
+        0.0
+      ],
+      "tangent": [
+        -0.8032075314806423,
+        -0.5956993044924369,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601798,
+      "nozzle_axis": [
+        0.6343932841636442,
+        -0.7730104533627382,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000047",
+      "point_type": "deposition",
+      "position": [
+        46.51083693709995,
+        54.251557493495056,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.6343932841636442,
+        0.7730104533627382,
+        0.0
+      ],
+      "tangent": [
+        -0.7730104533627383,
+        -0.6343932841636438,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760205,
+      "nozzle_axis": [
+        0.6715589548470191,
+        -0.7409511253549584,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000048",
+      "point_type": "deposition",
+      "position": [
+        46.3064257483414,
+        54.075231189452275,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.6715589548470191,
+        0.7409511253549584,
+        0.0
+      ],
+      "tangent": [
+        -0.7409511253549639,
+        -0.6715589548470132,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601685,
+      "nozzle_axis": [
+        0.7071067811865476,
+        -0.7071067811865476,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000049",
+      "point_type": "deposition",
+      "position": [
+        46.110912703473986,
+        53.889087296526014,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.7071067811865476,
+        0.7071067811865476,
+        0.0
+      ],
+      "tangent": [
+        -0.7071067811865476,
+        -0.7071067811865476,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601685,
+      "nozzle_axis": [
+        0.740951125354955,
+        -0.671558954847023,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000050",
+      "point_type": "deposition",
+      "position": [
+        45.924768810547725,
+        53.6935742516586,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.740951125354955,
+        0.671558954847023,
+        0.0
+      ],
+      "tangent": [
+        -0.6715589548470132,
+        -0.7409511253549639,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760205,
+      "nozzle_axis": [
+        0.7730104533627382,
+        -0.6343932841636442,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000051",
+      "point_type": "deposition",
+      "position": [
+        45.748442506504944,
+        53.48916306290005,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.7730104533627382,
+        0.6343932841636442,
+        0.0
+      ],
+      "tangent": [
+        -0.6343932841636438,
+        -0.7730104533627383,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601798,
+      "nozzle_axis": [
+        0.8032075314806444,
+        -0.5956993044924342,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000052",
+      "point_type": "deposition",
+      "position": [
+        45.58235857685645,
+        53.27634617470838,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.8032075314806444,
+        0.5956993044924342,
+        0.0
+      ],
+      "tangent": [
+        -0.5956993044924369,
+        -0.8032075314806423,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601282,
+      "nozzle_axis": [
+        0.8314696123025467,
+        -0.5555702330196002,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000053",
+      "point_type": "deposition",
+      "position": [
+        45.426917132336,
+        53.05563628160782,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.8314696123025467,
+        0.5555702330196002,
+        0.0
+      ],
+      "tangent": [
+        -0.5555702330196055,
+        -0.8314696123025431,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687602254,
+      "nozzle_axis": [
+        0.8577286100002712,
+        -0.5141027441932231,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000054",
+      "point_type": "deposition",
+      "position": [
+        45.2824926449985,
+        52.82756509306272,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.8577286100002712,
+        0.5141027441932231,
+        0.0
+      ],
+      "tangent": [
+        -0.514102744193222,
+        -0.8577286100002719,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601812,
+      "nozzle_axis": [
+        0.8819212643483538,
+        -0.4713967368259999,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000055",
+      "point_type": "deposition",
+      "position": [
+        45.14943304608404,
+        52.59268205254298,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.8819212643483538,
+        0.4713967368259999,
+        0.0
+      ],
+      "tangent": [
+        -0.47139673682599254,
+        -0.8819212643483578,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760156,
+      "nozzle_axis": [
+        0.9039892931234422,
+        -0.42755509343028447,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000056",
+      "point_type": "deposition",
+      "position": [
+        45.02805888782106,
+        52.35155301386655,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.9039892931234422,
+        0.42755509343028447,
+        0.0
+      ],
+      "tangent": [
+        -0.4275550934302797,
+        -0.9039892931234444,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601407,
+      "nozzle_axis": [
+        0.9238795325112861,
+        -0.3826834323650914,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000057",
+      "point_type": "deposition",
+      "position": [
+        44.91866257118792,
+        52.104758878008,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.9238795325112861,
+        0.3826834323650914,
+        0.0
+      ],
+      "tangent": [
+        -0.38268343236509117,
+        -0.9238795325112862,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760222,
+      "nozzle_axis": [
+        0.9415440651830228,
+        -0.3368898533922145,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000058",
+      "point_type": "deposition",
+      "position": [
+        44.82150764149338,
+        51.85289419365721,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.9415440651830228,
+        0.3368898533922145,
+        0.0
+      ],
+      "tangent": [
+        -0.3368898533922073,
+        -0.9415440651830254,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601549,
+      "nozzle_axis": [
+        0.9569403357322087,
+        -0.2902846772544629,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000059",
+      "point_type": "deposition",
+      "position": [
+        44.73682815347286,
+        51.59656572489954,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.9569403357322087,
+        0.2902846772544629,
+        0.0
+      ],
+      "tangent": [
+        -0.29028467725445384,
+        -0.9569403357322114,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601726,
+      "nozzle_axis": [
+        0.9700312531945423,
+        -0.24298017990327048,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000060",
+      "point_type": "deposition",
+      "position": [
+        44.66482810743001,
+        51.33639098946795,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.9700312531945423,
+        0.24298017990327048,
+        0.0
+      ],
+      "tangent": [
+        -0.2429801799032717,
+        -0.9700312531945421,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760184,
+      "nozzle_axis": [
+        0.9807852804032303,
+        -0.195090322016129,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000061",
+      "point_type": "deposition",
+      "position": [
+        44.60568095778223,
+        51.072996771088704,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.9807852804032303,
+        0.195090322016129,
+        0.0
+      ],
+      "tangent": [
+        -0.1950903220161335,
+        -0.9807852804032294,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760195,
+      "nozzle_axis": [
+        0.9891765099647811,
+        -0.14673047445536053,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000062",
+      "point_type": "deposition",
+      "position": [
+        44.559529195193704,
+        50.807017609504484,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.9891765099647811,
+        0.14673047445536053,
+        0.0
+      ],
+      "tangent": [
+        -0.14673047445537296,
+        -0.9891765099647793,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601693,
+      "nozzle_axis": [
+        0.995184726672197,
+        -0.09801714032955973,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000063",
+      "point_type": "deposition",
+      "position": [
+        44.52648400330291,
+        50.53909427181258,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.995184726672197,
+        0.09801714032955973,
+        0.0
+      ],
+      "tangent": [
+        -0.09801714032956306,
+        -0.9951847266721966,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601615,
+      "nozzle_axis": [
+        0.9987954562051724,
+        -0.04906767432741786,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000064",
+      "point_type": "deposition",
+      "position": [
+        44.50662499087155,
+        50.2698722088008,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.9987954562051724,
+        0.04906767432741786,
+        0.0
+      ],
+      "tangent": [
+        -0.049067674327408245,
+        -0.9987954562051728,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601718,
+      "nozzle_axis": [
+        1.0,
+        -0.0,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000065",
+      "point_type": "deposition",
+      "position": [
+        44.5,
+        50.0,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "tangent": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601718,
+      "nozzle_axis": [
+        0.9987954562051724,
+        0.04906767432741786,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000066",
+      "point_type": "deposition",
+      "position": [
+        44.50662499087155,
+        49.7301277911992,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.9987954562051724,
+        -0.04906767432741786,
+        0.0
+      ],
+      "tangent": [
+        0.0490676743274076,
+        -0.998795456205173,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601968,
+      "nozzle_axis": [
+        0.995184726672197,
+        0.09801714032955973,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000067",
+      "point_type": "deposition",
+      "position": [
+        44.52648400330291,
+        49.46090572818741,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.995184726672197,
+        -0.09801714032955973,
+        0.0
+      ],
+      "tangent": [
+        0.09801714032956306,
+        -0.9951847266721966,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601338,
+      "nozzle_axis": [
+        0.9891765099647811,
+        0.14673047445536053,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000068",
+      "point_type": "deposition",
+      "position": [
+        44.559529195193704,
+        49.192982390495516,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.9891765099647811,
+        -0.14673047445536053,
+        0.0
+      ],
+      "tangent": [
+        0.14673047445537296,
+        -0.9891765099647793,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.134976756876023,
+      "nozzle_axis": [
+        0.980785280403229,
+        0.19509032201613585,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000069",
+      "point_type": "deposition",
+      "position": [
+        44.60568095778223,
+        48.92700322891129,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.980785280403229,
+        -0.19509032201613585,
+        0.0
+      ],
+      "tangent": [
+        0.195090322016131,
+        -0.98078528040323,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760184,
+      "nozzle_axis": [
+        0.970031253194544,
+        0.2429801799032638,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000070",
+      "point_type": "deposition",
+      "position": [
+        44.66482810743001,
+        48.66360901053204,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.970031253194544,
+        -0.2429801799032638,
+        0.0
+      ],
+      "tangent": [
+        0.2429801799032748,
+        -0.9700312531945413,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601385,
+      "nozzle_axis": [
+        0.9569403357322087,
+        0.2902846772544629,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000071",
+      "point_type": "deposition",
+      "position": [
+        44.73682815347286,
+        48.40343427510046,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.9569403357322087,
+        -0.2902846772544629,
+        0.0
+      ],
+      "tangent": [
+        0.29028467725445384,
+        -0.9569403357322114,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601887,
+      "nozzle_axis": [
+        0.9415440651830198,
+        0.3368898533922231,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000072",
+      "point_type": "deposition",
+      "position": [
+        44.82150764149338,
+        48.147105806342786,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.9415440651830198,
+        -0.3368898533922231,
+        0.0
+      ],
+      "tangent": [
+        0.3368898533922073,
+        -0.9415440651830254,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760189,
+      "nozzle_axis": [
+        0.9238795325112851,
+        0.38268343236509395,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000073",
+      "point_type": "deposition",
+      "position": [
+        44.91866257118792,
+        47.895241121992,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.9238795325112851,
+        -0.38268343236509395,
+        0.0
+      ],
+      "tangent": [
+        0.3826834323650958,
+        -0.9238795325112843,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601407,
+      "nozzle_axis": [
+        0.9039892931234422,
+        0.42755509343028447,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000074",
+      "point_type": "deposition",
+      "position": [
+        45.02805888782106,
+        47.64844698613345,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.9039892931234422,
+        -0.42755509343028447,
+        0.0
+      ],
+      "tangent": [
+        0.42755509343029047,
+        -0.9039892931234395,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760172,
+      "nozzle_axis": [
+        0.8819212643483524,
+        0.4713967368260029,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000075",
+      "point_type": "deposition",
+      "position": [
+        45.14943304608405,
+        47.40731794745702,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.8819212643483524,
+        -0.4713967368260029,
+        0.0
+      ],
+      "tangent": [
+        0.47139673682599254,
+        -0.8819212643483578,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601637,
+      "nozzle_axis": [
+        0.8577286100002744,
+        0.5141027441932179,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000076",
+      "point_type": "deposition",
+      "position": [
+        45.2824926449985,
+        47.17243490693728,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.8577286100002744,
+        -0.5141027441932179,
+        0.0
+      ],
+      "tangent": [
+        0.5141027441932123,
+        -0.8577286100002778,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687602254,
+      "nozzle_axis": [
+        0.8314696123025445,
+        0.5555702330196034,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000077",
+      "point_type": "deposition",
+      "position": [
+        45.426917132336,
+        46.94436371839218,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.8314696123025445,
+        -0.5555702330196034,
+        0.0
+      ],
+      "tangent": [
+        0.5555702330196055,
+        -0.8314696123025431,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601282,
+      "nozzle_axis": [
+        0.8032075314806444,
+        0.5956993044924342,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000078",
+      "point_type": "deposition",
+      "position": [
+        45.58235857685645,
+        46.72365382529162,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.8032075314806444,
+        -0.5956993044924342,
+        0.0
+      ],
+      "tangent": [
+        0.5956993044924369,
+        -0.8032075314806423,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601798,
+      "nozzle_axis": [
+        0.7730104533627382,
+        0.6343932841636442,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000079",
+      "point_type": "deposition",
+      "position": [
+        45.748442506504944,
+        46.51083693709995,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.7730104533627382,
+        -0.6343932841636442,
+        0.0
+      ],
+      "tangent": [
+        0.6343932841636438,
+        -0.7730104533627383,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760205,
+      "nozzle_axis": [
+        0.7409511253549584,
+        0.6715589548470191,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000080",
+      "point_type": "deposition",
+      "position": [
+        45.924768810547725,
+        46.3064257483414,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.7409511253549584,
+        -0.6715589548470191,
+        0.0
+      ],
+      "tangent": [
+        0.6715589548470132,
+        -0.7409511253549639,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601685,
+      "nozzle_axis": [
+        0.7071067811865476,
+        0.7071067811865476,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000081",
+      "point_type": "deposition",
+      "position": [
+        46.110912703473986,
+        46.110912703473986,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.7071067811865476,
+        -0.7071067811865476,
+        0.0
+      ],
+      "tangent": [
+        0.7071067811865476,
+        -0.7071067811865476,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601685,
+      "nozzle_axis": [
+        0.671558954847023,
+        0.740951125354955,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000082",
+      "point_type": "deposition",
+      "position": [
+        46.3064257483414,
+        45.924768810547725,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.671558954847023,
+        -0.740951125354955,
+        0.0
+      ],
+      "tangent": [
+        0.7409511253549639,
+        -0.6715589548470132,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760205,
+      "nozzle_axis": [
+        0.6343932841636442,
+        0.7730104533627382,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000083",
+      "point_type": "deposition",
+      "position": [
+        46.51083693709995,
+        45.748442506504944,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.6343932841636442,
+        -0.7730104533627382,
+        0.0
+      ],
+      "tangent": [
+        0.7730104533627383,
+        -0.6343932841636438,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601798,
+      "nozzle_axis": [
+        0.5956993044924342,
+        0.8032075314806444,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000084",
+      "point_type": "deposition",
+      "position": [
+        46.72365382529162,
+        45.58235857685645,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.5956993044924342,
+        -0.8032075314806444,
+        0.0
+      ],
+      "tangent": [
+        0.8032075314806423,
+        -0.5956993044924369,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601282,
+      "nozzle_axis": [
+        0.5555702330196034,
+        0.8314696123025445,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000085",
+      "point_type": "deposition",
+      "position": [
+        46.94436371839218,
+        45.426917132336,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.5555702330196034,
+        -0.8314696123025445,
+        0.0
+      ],
+      "tangent": [
+        0.8314696123025431,
+        -0.5555702330196055,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687602254,
+      "nozzle_axis": [
+        0.5141027441932231,
+        0.8577286100002712,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000086",
+      "point_type": "deposition",
+      "position": [
+        47.17243490693728,
+        45.2824926449985,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.5141027441932231,
+        -0.8577286100002712,
+        0.0
+      ],
+      "tangent": [
+        0.8577286100002719,
+        -0.514102744193222,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601812,
+      "nozzle_axis": [
+        0.4713967368259999,
+        0.8819212643483538,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000087",
+      "point_type": "deposition",
+      "position": [
+        47.40731794745702,
+        45.14943304608404,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.4713967368259999,
+        -0.8819212643483538,
+        0.0
+      ],
+      "tangent": [
+        0.8819212643483578,
+        -0.47139673682599254,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760156,
+      "nozzle_axis": [
+        0.42755509343028447,
+        0.9039892931234422,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000088",
+      "point_type": "deposition",
+      "position": [
+        47.64844698613345,
+        45.02805888782106,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.42755509343028447,
+        -0.9039892931234422,
+        0.0
+      ],
+      "tangent": [
+        0.9039892931234444,
+        -0.4275550934302797,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601407,
+      "nozzle_axis": [
+        0.38268343236509395,
+        0.9238795325112851,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000089",
+      "point_type": "deposition",
+      "position": [
+        47.895241121992,
+        44.91866257118792,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.38268343236509395,
+        -0.9238795325112851,
+        0.0
+      ],
+      "tangent": [
+        0.9238795325112862,
+        -0.38268343236509117,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760222,
+      "nozzle_axis": [
+        0.3368898533922145,
+        0.9415440651830228,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000090",
+      "point_type": "deposition",
+      "position": [
+        48.14710580634279,
+        44.82150764149338,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.3368898533922145,
+        -0.9415440651830228,
+        0.0
+      ],
+      "tangent": [
+        0.9415440651830254,
+        -0.3368898533922073,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601549,
+      "nozzle_axis": [
+        0.2902846772544629,
+        0.9569403357322087,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000091",
+      "point_type": "deposition",
+      "position": [
+        48.40343427510046,
+        44.73682815347286,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.2902846772544629,
+        -0.9569403357322087,
+        0.0
+      ],
+      "tangent": [
+        0.9569403357322104,
+        -0.29028467725445756,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601385,
+      "nozzle_axis": [
+        0.2429801799032638,
+        0.970031253194544,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000092",
+      "point_type": "deposition",
+      "position": [
+        48.66360901053204,
+        44.66482810743001,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.2429801799032638,
+        -0.970031253194544,
+        0.0
+      ],
+      "tangent": [
+        0.9700312531945421,
+        -0.2429801799032717,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687602187,
+      "nozzle_axis": [
+        0.195090322016129,
+        0.9807852804032303,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000093",
+      "point_type": "deposition",
+      "position": [
+        48.927003228911296,
+        44.60568095778223,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.195090322016129,
+        -0.9807852804032303,
+        0.0
+      ],
+      "tangent": [
+        0.98078528040323,
+        -0.195090322016131,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760195,
+      "nozzle_axis": [
+        0.14673047445536053,
+        0.9891765099647811,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000094",
+      "point_type": "deposition",
+      "position": [
+        49.192982390495516,
+        44.559529195193704,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.14673047445536053,
+        -0.9891765099647811,
+        0.0
+      ],
+      "tangent": [
+        0.989176509964779,
+        -0.14673047445537488,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601338,
+      "nozzle_axis": [
+        0.09801714032956675,
+        0.9951847266721963,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000095",
+      "point_type": "deposition",
+      "position": [
+        49.46090572818741,
+        44.52648400330291,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.09801714032956675,
+        -0.9951847266721963,
+        0.0
+      ],
+      "tangent": [
+        0.9951847266721966,
+        -0.09801714032956306,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601968,
+      "nozzle_axis": [
+        0.04906767432741786,
+        0.9987954562051724,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000096",
+      "point_type": "deposition",
+      "position": [
+        49.7301277911992,
+        44.50662499087155,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        -0.04906767432741786,
+        -0.9987954562051724,
+        0.0
+      ],
+      "tangent": [
+        0.998795456205173,
+        -0.0490676743274076,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601718,
+      "nozzle_axis": [
+        -0.0,
+        1.0,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000097",
+      "point_type": "deposition",
+      "position": [
+        50.0,
+        44.5,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.0,
+        -1.0,
+        0.0
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601718,
+      "nozzle_axis": [
+        -0.04906767432741786,
+        0.9987954562051724,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000098",
+      "point_type": "deposition",
+      "position": [
+        50.2698722088008,
+        44.50662499087155,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.04906767432741786,
+        -0.9987954562051724,
+        0.0
+      ],
+      "tangent": [
+        0.998795456205173,
+        0.0490676743274076,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601968,
+      "nozzle_axis": [
+        -0.09801714032955973,
+        0.995184726672197,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000099",
+      "point_type": "deposition",
+      "position": [
+        50.53909427181259,
+        44.52648400330291,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.09801714032955973,
+        -0.995184726672197,
+        0.0
+      ],
+      "tangent": [
+        0.9951847266721966,
+        0.09801714032956306,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601338,
+      "nozzle_axis": [
+        -0.14673047445536053,
+        0.9891765099647811,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000100",
+      "point_type": "deposition",
+      "position": [
+        50.807017609504484,
+        44.559529195193704,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.14673047445536053,
+        -0.9891765099647811,
+        0.0
+      ],
+      "tangent": [
+        0.989176509964779,
+        0.14673047445537488,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760195,
+      "nozzle_axis": [
+        -0.195090322016129,
+        0.9807852804032303,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000101",
+      "point_type": "deposition",
+      "position": [
+        51.072996771088704,
+        44.60568095778223,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.195090322016129,
+        -0.9807852804032303,
+        0.0
+      ],
+      "tangent": [
+        0.98078528040323,
+        0.195090322016131,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687602187,
+      "nozzle_axis": [
+        -0.2429801799032638,
+        0.970031253194544,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000102",
+      "point_type": "deposition",
+      "position": [
+        51.33639098946796,
+        44.66482810743001,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.2429801799032638,
+        -0.970031253194544,
+        0.0
+      ],
+      "tangent": [
+        0.9700312531945421,
+        0.2429801799032717,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601385,
+      "nozzle_axis": [
+        -0.2902846772544629,
+        0.9569403357322087,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000103",
+      "point_type": "deposition",
+      "position": [
+        51.59656572489954,
+        44.73682815347286,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.2902846772544629,
+        -0.9569403357322087,
+        0.0
+      ],
+      "tangent": [
+        0.9569403357322104,
+        0.29028467725445756,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601549,
+      "nozzle_axis": [
+        -0.3368898533922145,
+        0.9415440651830228,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000104",
+      "point_type": "deposition",
+      "position": [
+        51.85289419365721,
+        44.82150764149338,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.3368898533922145,
+        -0.9415440651830228,
+        0.0
+      ],
+      "tangent": [
+        0.9415440651830254,
+        0.3368898533922073,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760222,
+      "nozzle_axis": [
+        -0.38268343236509395,
+        0.9238795325112851,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000105",
+      "point_type": "deposition",
+      "position": [
+        52.104758878008,
+        44.91866257118792,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.38268343236509395,
+        -0.9238795325112851,
+        0.0
+      ],
+      "tangent": [
+        0.9238795325112862,
+        0.38268343236509117,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601407,
+      "nozzle_axis": [
+        -0.42755509343027864,
+        0.903989293123445,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000106",
+      "point_type": "deposition",
+      "position": [
+        52.35155301386655,
+        45.02805888782106,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.42755509343027864,
+        -0.903989293123445,
+        0.0
+      ],
+      "tangent": [
+        0.9039892931234395,
+        0.42755509343029047,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760172,
+      "nozzle_axis": [
+        -0.4713967368260029,
+        0.8819212643483524,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000107",
+      "point_type": "deposition",
+      "position": [
+        52.59268205254298,
+        45.14943304608405,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.4713967368260029,
+        -0.8819212643483524,
+        0.0
+      ],
+      "tangent": [
+        0.8819212643483578,
+        0.47139673682599254,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601637,
+      "nozzle_axis": [
+        -0.5141027441932231,
+        0.8577286100002712,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000108",
+      "point_type": "deposition",
+      "position": [
+        52.82756509306272,
+        45.2824926449985,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.5141027441932231,
+        -0.8577286100002712,
+        0.0
+      ],
+      "tangent": [
+        0.8577286100002778,
+        0.5141027441932123,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687602254,
+      "nozzle_axis": [
+        -0.5555702330196034,
+        0.8314696123025445,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000109",
+      "point_type": "deposition",
+      "position": [
+        53.05563628160782,
+        45.426917132336,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.5555702330196034,
+        -0.8314696123025445,
+        0.0
+      ],
+      "tangent": [
+        0.8314696123025431,
+        0.5555702330196055,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601282,
+      "nozzle_axis": [
+        -0.5956993044924342,
+        0.8032075314806444,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000110",
+      "point_type": "deposition",
+      "position": [
+        53.27634617470838,
+        45.58235857685645,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.5956993044924342,
+        -0.8032075314806444,
+        0.0
+      ],
+      "tangent": [
+        0.8032075314806423,
+        0.5956993044924369,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601798,
+      "nozzle_axis": [
+        -0.6343932841636442,
+        0.7730104533627382,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000111",
+      "point_type": "deposition",
+      "position": [
+        53.48916306290005,
+        45.748442506504944,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.6343932841636442,
+        -0.7730104533627382,
+        0.0
+      ],
+      "tangent": [
+        0.7730104533627383,
+        0.6343932841636438,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760205,
+      "nozzle_axis": [
+        -0.671558954847023,
+        0.740951125354955,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000112",
+      "point_type": "deposition",
+      "position": [
+        53.6935742516586,
+        45.924768810547725,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.671558954847023,
+        -0.740951125354955,
+        0.0
+      ],
+      "tangent": [
+        0.7409511253549639,
+        0.6715589548470132,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601685,
+      "nozzle_axis": [
+        -0.7071067811865476,
+        0.7071067811865476,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000113",
+      "point_type": "deposition",
+      "position": [
+        53.889087296526014,
+        46.110912703473986,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.7071067811865476,
+        -0.7071067811865476,
+        0.0
+      ],
+      "tangent": [
+        0.7071067811865476,
+        0.7071067811865476,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601685,
+      "nozzle_axis": [
+        -0.740951125354955,
+        0.671558954847023,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000114",
+      "point_type": "deposition",
+      "position": [
+        54.075231189452275,
+        46.3064257483414,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.740951125354955,
+        -0.671558954847023,
+        0.0
+      ],
+      "tangent": [
+        0.6715589548470132,
+        0.7409511253549639,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760205,
+      "nozzle_axis": [
+        -0.7730104533627382,
+        0.6343932841636442,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000115",
+      "point_type": "deposition",
+      "position": [
+        54.251557493495056,
+        46.51083693709995,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.7730104533627382,
+        -0.6343932841636442,
+        0.0
+      ],
+      "tangent": [
+        0.6343932841636438,
+        0.7730104533627383,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601798,
+      "nozzle_axis": [
+        -0.8032075314806444,
+        0.5956993044924342,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000116",
+      "point_type": "deposition",
+      "position": [
+        54.41764142314355,
+        46.72365382529162,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.8032075314806444,
+        -0.5956993044924342,
+        0.0
+      ],
+      "tangent": [
+        0.5956993044924369,
+        0.8032075314806423,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601282,
+      "nozzle_axis": [
+        -0.8314696123025445,
+        0.5555702330196034,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000117",
+      "point_type": "deposition",
+      "position": [
+        54.573082867664,
+        46.94436371839218,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.8314696123025445,
+        -0.5555702330196034,
+        0.0
+      ],
+      "tangent": [
+        0.5555702330196055,
+        0.8314696123025431,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687602254,
+      "nozzle_axis": [
+        -0.8577286100002712,
+        0.5141027441932231,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000118",
+      "point_type": "deposition",
+      "position": [
+        54.7175073550015,
+        47.17243490693728,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.8577286100002712,
+        -0.5141027441932231,
+        0.0
+      ],
+      "tangent": [
+        0.514102744193222,
+        0.8577286100002719,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601812,
+      "nozzle_axis": [
+        -0.8819212643483538,
+        0.4713967368259999,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000119",
+      "point_type": "deposition",
+      "position": [
+        54.85056695391596,
+        47.40731794745702,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.8819212643483538,
+        -0.4713967368259999,
+        0.0
+      ],
+      "tangent": [
+        0.47139673682599254,
+        0.8819212643483578,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760156,
+      "nozzle_axis": [
+        -0.903989293123445,
+        0.42755509343027864,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000120",
+      "point_type": "deposition",
+      "position": [
+        54.97194111217894,
+        47.64844698613345,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.903989293123445,
+        -0.42755509343027864,
+        0.0
+      ],
+      "tangent": [
+        0.4275550934302797,
+        0.9039892931234444,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601407,
+      "nozzle_axis": [
+        -0.9238795325112851,
+        0.38268343236509395,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000121",
+      "point_type": "deposition",
+      "position": [
+        55.08133742881208,
+        47.895241121992,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.9238795325112851,
+        -0.38268343236509395,
+        0.0
+      ],
+      "tangent": [
+        0.38268343236509117,
+        0.9238795325112862,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760222,
+      "nozzle_axis": [
+        -0.9415440651830228,
+        0.3368898533922145,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000122",
+      "point_type": "deposition",
+      "position": [
+        55.17849235850662,
+        48.14710580634279,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.9415440651830228,
+        -0.3368898533922145,
+        0.0
+      ],
+      "tangent": [
+        0.3368898533922073,
+        0.9415440651830254,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601549,
+      "nozzle_axis": [
+        -0.9569403357322087,
+        0.2902846772544629,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000123",
+      "point_type": "deposition",
+      "position": [
+        55.26317184652714,
+        48.40343427510046,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.9569403357322087,
+        -0.2902846772544629,
+        0.0
+      ],
+      "tangent": [
+        0.29028467725445756,
+        0.9569403357322104,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601385,
+      "nozzle_axis": [
+        -0.970031253194544,
+        0.2429801799032638,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000124",
+      "point_type": "deposition",
+      "position": [
+        55.33517189256999,
+        48.66360901053204,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.970031253194544,
+        -0.2429801799032638,
+        0.0
+      ],
+      "tangent": [
+        0.2429801799032717,
+        0.9700312531945421,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687602187,
+      "nozzle_axis": [
+        -0.9807852804032303,
+        0.195090322016129,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000125",
+      "point_type": "deposition",
+      "position": [
+        55.39431904221777,
+        48.927003228911296,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.9807852804032303,
+        -0.195090322016129,
+        0.0
+      ],
+      "tangent": [
+        0.195090322016131,
+        0.98078528040323,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.1349767568760195,
+      "nozzle_axis": [
+        -0.9891765099647811,
+        0.14673047445536053,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000126",
+      "point_type": "deposition",
+      "position": [
+        55.440470804806296,
+        49.192982390495516,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.9891765099647811,
+        -0.14673047445536053,
+        0.0
+      ],
+      "tangent": [
+        0.14673047445537488,
+        0.989176509964779,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601338,
+      "nozzle_axis": [
+        -0.9951847266721963,
+        0.09801714032956675,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000127",
+      "point_type": "deposition",
+      "position": [
+        55.47351599669709,
+        49.46090572818741,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.9951847266721963,
+        -0.09801714032956675,
+        0.0
+      ],
+      "tangent": [
+        0.09801714032956306,
+        0.9951847266721966,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601968,
+      "nozzle_axis": [
+        -0.9987954562051724,
+        0.04906767432741786,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000128",
+      "point_type": "deposition",
+      "position": [
+        55.49337500912845,
+        49.7301277911992,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        0.9987954562051724,
+        -0.04906767432741786,
+        0.0
+      ],
+      "tangent": [
+        0.0490676743274076,
+        0.998795456205173,
+        0.0
+      ]
+    },
+    {
+      "bead_width_mm": 1.0,
+      "extrusion_role": "thin_wall",
+      "feedrate_mm_min": 1.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.5,
+      "layer_id": "layer-00001",
+      "material_volume_mm3": 0.13497675687601718,
+      "nozzle_axis": [
+        -1.0,
+        -0.0,
+        -0.0
+      ],
+      "operation_id": "analytic-tube",
+      "point_id": "point-0000129",
+      "point_type": "deposition",
+      "position": [
+        55.5,
+        50.0,
+        20.25
+      ],
+      "region_id": "region-0001",
+      "stage_id": "region-0001",
+      "surface_normal": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "tangent": [
+        0.024541228522907587,
+        0.9996988186962044,
+        0.0
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "toolpath_id": "analytic-tube-indexed-v1",
+  "units": {
+    "angle": "rad",
+    "feedrate": "mm_min",
+    "length": "mm",
+    "material_volume": "mm3"
+  }
+}

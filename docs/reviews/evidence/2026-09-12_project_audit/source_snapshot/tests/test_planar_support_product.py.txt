@@ -1,0 +1,273 @@
+from dataclasses import replace
+import hashlib
+import math
+from pathlib import Path
+import sys
+
+import cadquery as cq
+import pytest
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+
+from five_axis_slicer.manufacturing.coordinates import GeometryReference, RigidTransform  # noqa: E402
+from five_axis_slicer.manufacturing.planar_parameters import (  # noqa: E402
+    PlanarGeometrySelection,
+    PlanarOperationDefinition,
+    PlanarProcessParameters,
+)
+from five_axis_slicer.models import BodyInfo, BoundingBox, CadModel  # noqa: E402
+from five_axis_slicer.planar_controller import PlanarController  # noqa: E402
+from five_axis_slicer.postprocessing.planar_product import (  # noqa: E402
+    export_planar_product,
+    generate_planar_path_product,
+)
+from five_axis_slicer.postprocessing.indexed_tube import GenerationCancelled  # noqa: E402
+
+from test_planar_zigzag_product import _machine, _nozzle, _setup  # noqa: E402
+
+
+SIX_FILE_BUNDLE = {
+    "machine_axes.csv",
+    "main.gcode",
+    "manifest.json",
+    "preview.json",
+    "toolpath.json",
+    "warnings.json",
+}
+
+
+def _cad_model(tmp_path: Path, shape: cq.Workplane, name: str) -> CadModel:
+    """Create a real STEP fingerprint and a matching in-memory OCCT authority."""
+
+    step_path = tmp_path / f"{name}.step"
+    cq.exporters.export(shape, str(step_path))
+    digest = hashlib.sha256(step_path.read_bytes()).hexdigest()
+    bounding_box = shape.val().BoundingBox()
+    bounds = BoundingBox(
+        (bounding_box.xmin, bounding_box.ymin, bounding_box.zmin),
+        (bounding_box.xmax, bounding_box.ymax, bounding_box.zmax),
+    )
+    return CadModel(
+        step_path,
+        digest,
+        [BodyInfo("body", 1, name, (0.8, 0.8, 0.8), bounds=bounds)],
+        [],
+        {"body": shape.val().wrapped},
+        {},
+        bounds=bounds,
+        source_size_bytes=step_path.stat().st_size,
+        source_mtime_ns=step_path.stat().st_mtime_ns,
+    )
+
+
+def _floating_beam() -> cq.Workplane:
+    # X=4..12, Y=2..8, Z=2.2..3.2.  With 0.5 mm layers the requested
+    # platform range therefore contains four explicit empty layers.
+    return cq.Workplane("XY").box(8.0, 6.0, 1.0).translate((8.0, 5.0, 2.7))
+
+
+def _support_operation(**changes: object) -> PlanarOperationDefinition:
+    parameters = PlanarProcessParameters(
+        first_layer_z_mm=0.5,
+        layer_height_mm=0.5,
+        last_layer_z_mm=3.0,
+        bead_width_mm=0.6,
+        feedrate_mm_min=100.0,
+        line_spacing_mm=0.6,
+        travel_feedrate_mm_min=100.0,
+        support_overhang_angle_deg=45.0,
+        support_xy_gap_mm=0.0,
+        support_z_gap_mm=0.0,
+        support_line_spacing_mm=1.0,
+        support_interface_layers=2,
+        support_interface_spacing_mm=0.6,
+        support_pattern="grid",
+    )
+    if changes:
+        parameters = replace(parameters, **changes)
+    return PlanarOperationDefinition(
+        "planar-support-1",
+        "setup-1",
+        "Planar Support",
+        "planar_support",
+        geometry=PlanarGeometrySelection(GeometryReference("body", "body", {"schema_version": 1})),
+        parameters=parameters,
+    )
+
+
+def _generate(model: CadModel, operation: PlanarOperationDefinition):
+    return generate_planar_path_product(
+        model,
+        operation,
+        _machine(),
+        _nozzle(),
+        RigidTransform.identity("build"),
+        T_workpiece_from_build=RigidTransform.from_translation(
+            (250.0, 250.0, 250.0), source_frame="build", target_frame="workpiece"
+        ),
+        source_path=model.source_path,
+    )
+
+
+def test_support_product_matches_analytic_domain_and_exports_p07_bundle(tmp_path: Path) -> None:
+    model = _cad_model(tmp_path, _floating_beam(), "floating-beam")
+    operation = _support_operation()
+
+    result = _generate(model, operation)
+
+    assert result.operation_type == "planar_support"
+    assert [layer.z_mm for layer in result.layers] == pytest.approx([0.5, 1.0, 1.5, 2.0, 2.5, 3.0])
+    assert all(not layer.regions for layer in result.layers[:4])
+    assert all(layer.regions for layer in result.layers[4:])
+    assert result.exportable and result.readback.passed
+    assert result.manifest.algorithm_version == "planar-support-product-v1"
+    assert result.validation.measurement.deposition_outside_max_mm == pytest.approx(0.0)
+    assert result.validation.measurement.volume_difference_mm3 == pytest.approx(0.0)
+    assert "; P07" in result.gcode
+    assert "; P07 POINT" in result.gcode
+
+    stages = {point.stage_id for point in result.toolpath.points}
+    assert stages == {"planar_support", "planar_support_interface"}
+    assert {
+        point.extrusion_role for point in result.toolpath.points if point.point_type == "deposition"
+    } == {"support"}
+
+    # Independent truth for this floating rectangle: support occupies the
+    # same XY projection below the object, with its centreline inset by half
+    # the 0.6 mm bead.  Every support layer is outside the selected part.
+    by_layer = {layer.layer_id: layer for layer in result.layers}
+    measured_volume = 0.0
+    for previous, current in zip(result.toolpath.points, result.toolpath.points[1:]):
+        if current.point_type != "deposition":
+            continue
+        middle = tuple(
+            (left + right) / 2.0 for left, right in zip(previous.position, current.position)
+        )
+        assert 4.3 - 1.0e-6 <= middle[0] <= 11.7 + 1.0e-6
+        assert 2.3 - 1.0e-6 <= middle[1] <= 7.7 + 1.0e-6
+        assert middle[2] < 2.2
+        assert not by_layer[current.layer_id].regions
+        expected_stage = (
+            "planar_support" if middle[2] <= 1.0 + 1.0e-9 else "planar_support_interface"
+        )
+        assert current.stage_id == expected_stage
+        measured_volume += math.dist(previous.position, current.position) * 0.6 * 0.5
+    assert sum(point.material_volume_mm3 for point in result.toolpath.points) == pytest.approx(
+        measured_volume
+    )
+
+    destination = export_planar_product(result, tmp_path / "p07-output")
+    assert {item.name for item in destination.iterdir()} == SIX_FILE_BUNDLE
+    assert model.source_hash in (destination / "manifest.json").read_text(encoding="utf-8")
+
+
+def test_controller_creates_generates_and_exports_support_then_marks_it_stale(
+    tmp_path: Path,
+) -> None:
+    model = _cad_model(tmp_path, _floating_beam(), "controller-floating-beam")
+    controller = PlanarController(model, setup=_setup())
+    created = controller.create_operation(
+        "planar_support", operation_id="planar-support-1", name="Planar Support"
+    )
+    operation = controller.configure_operation(
+        operation_id=created.operation_id,
+        body_id="body",
+        parameters=_support_operation().parameters,
+    )
+
+    result = controller.generate_operation(operation.operation_id)
+    destination = controller.export_operation_product(
+        operation.operation_id, str(tmp_path / "controller-p07-output")
+    )
+
+    assert result.exportable and result.readback.passed
+    assert controller.product_state(operation.operation_id).status in {"ready", "warning"}
+    assert {item.name for item in destination.iterdir()} == SIX_FILE_BUNDLE
+
+    with pytest.raises(GenerationCancelled):
+        controller.generate_operation(operation.operation_id, cancelled=lambda: True)
+    assert controller.product_result(operation.operation_id) is result
+    assert controller.product_state(operation.operation_id).status in {"ready", "warning"}
+
+    controller.configure_operation(
+        operation_id=operation.operation_id,
+        body_id="body",
+        parameters=replace(operation.parameters, support_line_spacing_mm=1.2),
+    )
+    assert controller.product_state(operation.operation_id).status == "stale"
+    with pytest.raises(ValueError, match="not Ready for export"):
+        controller.export_operation_product(
+            operation.operation_id, str(tmp_path / "stale-p07-output")
+        )
+
+
+def test_support_not_required_sets_controller_error_and_blocks_export(tmp_path: Path) -> None:
+    solid_from_plate = cq.Workplane("XY").box(8.0, 6.0, 3.2).translate((8.0, 5.0, 1.6))
+    model = _cad_model(tmp_path, solid_from_plate, "straight-wall")
+    operation = _support_operation()
+    controller = PlanarController(model, setup=_setup(), operations=(operation,))
+
+    with pytest.raises(ValueError, match="planar.support_not_required"):
+        controller.generate_operation(operation.operation_id)
+
+    assert controller.product_state(operation.operation_id).status == "error"
+    assert controller.product_result(operation.operation_id) is None
+    with pytest.raises(ValueError, match="no exportable generated result"):
+        controller.export_operation_product(
+            operation.operation_id, str(tmp_path / "no-support-output")
+        )
+
+
+def test_sub_bead_floating_support_is_rejected_instead_of_silently_dropped(
+    tmp_path: Path,
+) -> None:
+    narrow = cq.Workplane("XY").box(0.4, 4.0, 1.0).translate((4.2, 4.0, 2.7))
+    model = _cad_model(tmp_path, narrow, "narrow-floating-beam")
+
+    with pytest.raises(ValueError, match="planar.support_region_too_narrow"):
+        _generate(model, _support_operation())
+
+
+def test_partially_unreachable_support_is_error_and_cannot_be_exported(tmp_path: Path) -> None:
+    pillar = cq.Workplane("XY").box(4.0, 6.0, 2.2).translate((6.0, 5.0, 1.1))
+    beam = cq.Workplane("XY").box(8.0, 6.0, 0.8).translate((8.0, 5.0, 2.8))
+    lower_obstacle = cq.Workplane("XY").box(1.0, 6.0, 1.0).translate((10.0, 5.0, 0.5))
+    obstructed = pillar.union(beam).union(lower_obstacle)
+    model = _cad_model(tmp_path, obstructed, "obstructed-cantilever")
+    operation = _support_operation(
+        support_overhang_angle_deg=0.01,
+        support_xy_gap_mm=0.4,
+    )
+
+    result = _generate(model, operation)
+
+    assert result.manifest.status.value == "error"
+    assert "planar.support_unreachable_from_buildplate" in result.manifest.issues
+    assert not result.exportable
+    assert result.gcode == ""
+    assert "export_blocked_by_validation" in result.readback.order_mismatches
+    with pytest.raises(ValueError, match="blocks export"):
+        export_planar_product(result, tmp_path / "unreachable-output")
+
+
+def test_fully_unreachable_support_keeps_the_real_diagnostic(tmp_path: Path) -> None:
+    low_island = cq.Workplane("XY").box(8.0, 6.0, 0.2).translate((8.0, 5.0, 1.0))
+    model = _cad_model(tmp_path, low_island, "low-floating-island")
+    operation = _support_operation(last_layer_z_mm=1.5, support_z_gap_mm=0.5)
+    controller = PlanarController(model, setup=_setup(), operations=(operation,))
+
+    with pytest.raises(ValueError, match="planar.support_unreachable_from_buildplate"):
+        controller.generate_operation(operation.operation_id)
+
+    state = controller.product_state(operation.operation_id)
+    assert state.status == "error"
+    assert "planar.support_unreachable_from_buildplate" in state.summary["error"]
+    assert controller.product_result(operation.operation_id) is None
+
+
+def test_support_rejects_a_layer_range_that_does_not_start_at_buildplate(tmp_path: Path) -> None:
+    model = _cad_model(tmp_path, _floating_beam(), "truncated-floating-beam")
+    operation = _support_operation(first_layer_z_mm=1.0)
+
+    with pytest.raises(ValueError, match="planar.support_buildplate_first_layer_required"):
+        _generate(model, operation)

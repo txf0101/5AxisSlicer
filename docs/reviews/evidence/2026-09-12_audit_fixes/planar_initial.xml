@@ -1,0 +1,621 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="18" skipped="0" tests="42" time="6.377" timestamp="2026-09-12T13:01:23.937757+08:00" hostname="BelongtoTXF"><testcase classname="tests.test_planar_zigzag" name="test_zigzag_clips_hole_and_separates_travel_from_deposition" time="0.014" /><testcase classname="tests.test_planar_zigzag" name="test_empty_or_invalid_input_has_localised_diagnostic" time="0.001" /><testcase classname="tests.test_planar_zigzag" name="test_perimeters_close_each_loop_and_every_transition_is_explicit" time="0.050"><failure message="assert 0.25 &lt;= 0.001&#10; +  where 0.25 = PlanarToolpathMeasurement(deposition_outside_max_mm=0.0, covered_area_mm2=28.305555555555554, residual_area_mm2=13.694...ometric_region_area_mm2=42.0, target_solid_volume_mm3=8.4, material_excess_mm3=0.0, sample_grid_mm=0.16666666666666666).bead_outside_max_mm">def test_perimeters_close_each_loop_and_every_transition_is_explicit():
+        region = PlanarRegion(
+            "concave",
+            _loop((0, 0, 0), (8, 0, 0), (8, 3, 0), (3, 3, 0), (3, 8, 0), (0, 8, 0)),
+            (_loop((1, 1, 0), (2, 1, 0), (2, 2, 0), (1, 2, 0)),),
+        )
+        other = PlanarRegion("island", _loop((20, 0, 0), (22, 0, 0), (22, 2, 0), (20, 2, 0)))
+        path = generate_zigzag_toolpath(
+            "op", (PlanarSliceLayer("layer", 0, (other, region)),), ZigzagParameters(1, 0.5, 0.2)
+        )
+        skin_starts = []
+        skin_ends = []
+        for index, point in enumerate(path.points):
+            if point.extrusion_role != "skin":
+                continue
+            assert point.point_type == "deposition"
+            if index == 0 or path.points[index - 1].extrusion_role != "skin":
+                assert index &gt; 0
+                start = path.points[index - 1]
+                assert start.point_type in {"approach", "travel"}
+                skin_starts.append(start.position)
+            if index + 1 == len(path.points) or path.points[index + 1].extrusion_role != "skin":
+                skin_ends.append(point.position)
+        assert len(skin_starts) == len(skin_ends) == 3
+        assert all(
+            end == pytest.approx(start) for start, end in zip(skin_starts, skin_ends, strict=True)
+        )
+        event_types = [event.event_type for event in path.events]
+        assert event_types.count("retract") == event_types.count("prime") - 1
+        assert all(
+            point.material_volume_mm3 == 0 for point in path.points if point.point_type != "deposition"
+        )
+        measurement = measure_planar_toolpath(path, (PlanarSliceLayer("layer", 0, (other, region)),))
+        assert measurement.deposition_outside_max_mm == pytest.approx(0)
+&gt;       assert measurement.bead_outside_max_mm &lt;= 0.001
+E       assert 0.25 &lt;= 0.001
+E        +  where 0.25 = PlanarToolpathMeasurement(deposition_outside_max_mm=0.0, covered_area_mm2=28.305555555555554, residual_area_mm2=13.694...ometric_region_area_mm2=42.0, target_solid_volume_mm3=8.4, material_excess_mm3=0.0, sample_grid_mm=0.16666666666666666).bead_outside_max_mm
+
+tests\test_planar_zigzag.py:82: AssertionError</failure></testcase><testcase classname="tests.test_planar_spiral" name="test_spiral_has_continuous_z_and_material_after_approach" time="0.006" /><testcase classname="tests.test_planar_spiral" name="test_multiple_islands_are_explicitly_rejected" time="0.000" /><testcase classname="tests.test_planar_spiral" name="test_spiral_checks_correspondence_closure_and_volume" time="0.005" /><testcase classname="tests.test_planar_spiral" name="test_spiral_rejects_holes_topology_changes_and_bad_layer_order" time="0.003" /><testcase classname="tests.test_planar_spiral" name="test_spiral_rejects_degenerate_contour" time="0.000" /><testcase classname="tests.test_planar_bead_measurement" name="test_half_bead_inset_has_independent_exact_box_volume" time="0.020" /><testcase classname="tests.test_planar_bead_measurement" name="test_original_boundary_centreline_and_self_consistent_e_do_not_qualify_bead" time="0.007" /><testcase classname="tests.test_planar_bead_measurement" name="test_dense_overlapping_hatches_cannot_exceed_full_solid_volume" time="0.013" /><testcase classname="tests.test_planar_bead_measurement" name="test_invalid_sampling_grid_is_rejected[0]" time="0.005" /><testcase classname="tests.test_planar_bead_measurement" name="test_invalid_sampling_grid_is_rejected[-1]" time="0.005" /><testcase classname="tests.test_planar_bead_measurement" name="test_invalid_sampling_grid_is_rejected[inf]" time="0.005" /><testcase classname="tests.test_planar_bead_measurement" name="test_invalid_sampling_grid_is_rejected[nan]" time="0.004" /><testcase classname="tests.test_planar_bead_measurement" name="test_missing_provenance_cannot_silently_drop_material" time="0.004" /><testcase classname="tests.test_planar_path_products" name="test_spiral_product_generates_continuous_z_and_six_files" time="0.438" /><testcase classname="tests.test_planar_path_products" name="test_spiral_product_propagates_topology_rejections[layers0-planar.spiral_holes_unsupported]" time="0.003" /><testcase classname="tests.test_planar_path_products" name="test_spiral_product_propagates_topology_rejections[layers1-planar.spiral_multiple_regions]" time="0.003" /><testcase classname="tests.test_planar_path_products" name="test_spiral_product_propagates_topology_rejections[layers2-planar.spiral_topology_changed]" time="0.005" /><testcase classname="tests.test_planar_path_products" name="test_spiral_interlayer_geometry_uses_continuous_validation_semantics" time="0.097"><failure message="AssertionError: assert 'planar.spiral_discrete_layer_projection_only' in ('xyzac.rotary_singularity', 'planar.spiral_bead_outside_cad')&#10; +  where ('xyzac.rotary_singularity', 'planar.spiral_bead_outside_cad') = GeneratedResultManifest(result_id='planar-spiral-1-spiral-v3-result-v1', operation_id='planar-spiral-1', status=&lt;Gener...T05:01:27.698265+00:00', ready_for_export=False, issues=('xyzac.rotary_singularity', 'planar.spiral_bead_outside_cad')).issues&#10; +    where GeneratedResultManifest(result_id='planar-spiral-1-spiral-v3-result-v1', operation_id='planar-spiral-1', status=&lt;Gener...T05:01:27.698265+00:00', ready_for_export=False, issues=('xyzac.rotary_singularity', 'planar.spiral_bead_outside_cad')) = PlanarZigzagProductResult(operation_type='planar_spiral', layers=(PlanarSliceLayer(layer_id='l1', z_mm=0.5, regions=(P...te_mismatches=(), feedrate_mismatches=(), extrusion_mismatches=(), order_mismatches=('export_blocked_by_validation',))).manifest">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002AFC0045E20&gt;
+tmp_path = WindowsPath('F:/【项目和任务】/5AxisSclicer_V2.0/tmp/project_audit_fix/planar_initial/test_spiral_interlayer_geometr0')
+
+    def test_spiral_interlayer_geometry_uses_continuous_validation_semantics(
+        monkeypatch, tmp_path: Path
+    ) -&gt; None:
+        layers = (
+            PlanarSliceLayer("l1", 0.5, (PlanarRegion("r1", _loop(0.5, 6.0)),)),
+            PlanarSliceLayer("l2", 1.0, (PlanarRegion("r1", _loop(1.0, 8.0)),)),
+        )
+        monkeypatch.setattr(planar_product, "slice_planar_layers", lambda *args, **kwargs: layers)
+    
+        result = generate_planar_path_product(
+            _model(), _operation(), _machine(), _nozzle(), RigidTransform.identity("build")
+        )
+    
+        assert result.validation.measurement.deposition_outside_max_mm &gt; 0.0
+&gt;       assert "planar.spiral_discrete_layer_projection_only" in result.manifest.issues
+E       AssertionError: assert 'planar.spiral_discrete_layer_projection_only' in ('xyzac.rotary_singularity', 'planar.spiral_bead_outside_cad')
+E        +  where ('xyzac.rotary_singularity', 'planar.spiral_bead_outside_cad') = GeneratedResultManifest(result_id='planar-spiral-1-spiral-v3-result-v1', operation_id='planar-spiral-1', status=&lt;Gener...T05:01:27.698265+00:00', ready_for_export=False, issues=('xyzac.rotary_singularity', 'planar.spiral_bead_outside_cad')).issues
+E        +    where GeneratedResultManifest(result_id='planar-spiral-1-spiral-v3-result-v1', operation_id='planar-spiral-1', status=&lt;Gener...T05:01:27.698265+00:00', ready_for_export=False, issues=('xyzac.rotary_singularity', 'planar.spiral_bead_outside_cad')) = PlanarZigzagProductResult(operation_type='planar_spiral', layers=(PlanarSliceLayer(layer_id='l1', z_mm=0.5, regions=(P...te_mismatches=(), feedrate_mismatches=(), extrusion_mismatches=(), order_mismatches=('export_blocked_by_validation',))).manifest
+
+tests\test_planar_path_products.py:116: AssertionError</failure></testcase><testcase classname="tests.test_planar_path_products" name="test_offset_product_generates_multiple_passes_reads_back_and_exports" time="0.031"><failure message="ValueError: event-0000001: sequence_index must be an integer in [0, 15]">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002AFC00460F0&gt;
+tmp_path = WindowsPath('F:/【项目和任务】/5AxisSclicer_V2.0/tmp/project_audit_fix/planar_initial/test_offset_product_generates_0')
+
+    def test_offset_product_generates_multiple_passes_reads_back_and_exports(
+        monkeypatch, tmp_path: Path
+    ) -&gt; None:
+        operation = _offset_operation()
+        layers = (PlanarSliceLayer("l1", 0.5, (_rect("region", 0, 0, 8, 6),)),)
+        monkeypatch.setattr(planar_product, "slice_planar_layers", lambda *args, **kwargs: layers)
+&gt;       result = generate_planar_path_product(
+            _model(), operation, _machine(), _nozzle(), RigidTransform.identity("build")
+        )
+
+tests\test_planar_path_products.py:146: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\five_axis_slicer\postprocessing\planar_product.py:342: in generate_planar_path_product
+    return _postprocess_path(
+src\five_axis_slicer\postprocessing\planar_product.py:647: in _postprocess_path
+    gcode = postprocess_indexed_gcode(
+src\five_axis_slicer\postprocessing\indexed_tube.py:326: in postprocess_indexed_gcode
+    events = events_by_sequence(toolpath)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+toolpath = GeneratedToolpath(toolpath_id='planar-offset-1-planar_offset-v1', operation_id='planar-offset-1', coordinate_frame='wo...anar_offset', layer_id='l1', region_id='region', duration_s=None, context=mappingproxy({'extrusion_length_mm': 1.0}))))
+
+    def events_by_sequence(toolpath: GeneratedToolpath) -&gt; dict[int, list[ToolpathEvent]]:
+        """Sequence N executes after N path points, including terminal events at len(points)."""
+        result: dict[int, list[ToolpathEvent]] = {}
+        count = len(toolpath.points)
+        for event in toolpath.events:
+            default = count if event.event_type == "finish" else None
+            sequence = event.context.get("sequence_index", default)
+            if (
+                isinstance(sequence, bool)
+                or not isinstance(sequence, int)
+                or not 0 &lt;= sequence &lt;= count
+            ):
+&gt;               raise ValueError(f"{event.event_id}: sequence_index must be an integer in [0, {count}]")
+E               ValueError: event-0000001: sequence_index must be an integer in [0, 15]
+
+src\five_axis_slicer\postprocessing\gcode_contract.py:51: ValueError</failure></testcase><testcase classname="tests.test_planar_path_products" name="test_controller_generates_and_exports_offset_product" time="0.008"><failure message="ValueError: Planar path Generate requires a valid applied Setup and reviewed resources">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002AFC0047B00&gt;
+tmp_path = WindowsPath('F:/【项目和任务】/5AxisSclicer_V2.0/tmp/project_audit_fix/planar_initial/test_controller_generates_and_0')
+
+    def test_controller_generates_and_exports_offset_product(monkeypatch, tmp_path: Path) -&gt; None:
+        operation = _offset_operation()
+        layers = (PlanarSliceLayer("l1", 0.5, (_rect("region", 0, 0, 8, 6),)),)
+        monkeypatch.setattr(planar_product, "slice_planar_layers", lambda *args, **kwargs: layers)
+        controller = PlanarController(_model(), setup=_setup(), operations=(operation,))
+    
+&gt;       result = controller.generate_operation(operation.operation_id)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_planar_path_products.py:173: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\five_axis_slicer\planar_controller.py:258: in generate_operation
+    validate_planar_generation_inputs(self._setup, self._cad_model, operation)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+setup = ManufacturingSetup(setup_id='setup-1', name='Manufacturing Setup 1', assignments=ManufacturingObjectAssignments(part_b...uild_plate_mount'), draft_nodes=frozenset(), dirty_nodes=frozenset(), invalid_nodes=frozenset(), issues=(), revision=1)
+model = CadModel(source_path=WindowsPath('planar-zigzag.step'), source_hash='bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb..._declaration'), bounds=BoundingBox(minimum=(0, 0, 0), maximum=(8, 6, 1)), source_size_bytes=None, source_mtime_ns=None)
+operation = PlanarOperationDefinition(operation_id='planar-offset-1', setup_id='setup-1', name='Planar Offset', operation_type='pl...2, support_line_spacing_mm=2.0, support_interface_layers=2, support_interface_spacing_mm=0.6, support_pattern='lines'))
+
+    def validate_planar_generation_inputs(
+        setup: ManufacturingSetup, model: CadModel, operation: PlanarOperationDefinition
+    ) -&gt; None:
+        if not operation.enabled or operation.setup_id != setup.setup_id:
+            raise ValueError("Planar Generate requires an enabled operation in the current Setup")
+        if operation.geometry.body is None:
+            raise ValueError("Planar Generate requires a selected body")
+        source = Path(model.source_path)
+        if source.is_file() and hashlib.sha256(source.read_bytes()).hexdigest() != model.source_hash:
+            raise ValueError("CAD source changed on disk; update the model before Generate")
+        if operation.operation_type == "planar_region":
+            return
+        report = setup.validation_report()
+        if not report.setup_ready or report.has_errors or setup.draft_nodes:
+&gt;           raise ValueError("Planar path Generate requires a valid applied Setup and reviewed resources")
+E           ValueError: Planar path Generate requires a valid applied Setup and reviewed resources
+
+src\five_axis_slicer\planar_generation_context.py:128: ValueError</failure></testcase><testcase classname="tests.test_planar_path_products" name="test_offset_product_handles_holes_concavity_multiple_islands_and_split_necks" time="0.792"><failure message="ValueError: event-0000001: sequence_index must be an integer in [0, 465]">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002AFC009B4D0&gt;
+
+    def test_offset_product_handles_holes_concavity_multiple_islands_and_split_necks(
+        monkeypatch,
+    ) -&gt; None:
+        z = 0.5
+        holed = PlanarRegion(
+            "holed",
+            _rect("unused", 0, 0, 20, 20).outer,
+            (_rect("unused", 7, 7, 13, 13).outer,),
+        )
+        concave = PlanarRegion(
+            "concave",
+            (
+                (25, 0, z),
+                (45, 0, z),
+                (45, 20, z),
+                (37, 20, z),
+                (37, 8, z),
+                (33, 8, z),
+                (33, 20, z),
+                (25, 20, z),
+                (25, 0, z),
+            ),
+        )
+        dumbbell = PlanarRegion(
+            "split",
+            tuple(
+                (x + 50, y, z)
+                for x, y in (
+                    (0, 0),
+                    (4, 0),
+                    (4, 1.5),
+                    (8, 1.5),
+                    (8, 0),
+                    (12, 0),
+                    (12, 4),
+                    (8, 4),
+                    (8, 2.5),
+                    (4, 2.5),
+                    (4, 4),
+                    (0, 4),
+                    (0, 0),
+                )
+            ),
+        )
+        layers = (PlanarSliceLayer("l1", z, (holed, concave, dumbbell, _rect("island", 70, 0, 78, 8))),)
+        monkeypatch.setattr(planar_product, "slice_planar_layers", lambda *args, **kwargs: layers)
+    
+&gt;       result = generate_planar_path_product(
+            _model(), _offset_operation(), _machine(), _nozzle(), RigidTransform.identity("build")
+        )
+
+tests\test_planar_path_products.py:230: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\five_axis_slicer\postprocessing\planar_product.py:342: in generate_planar_path_product
+    return _postprocess_path(
+src\five_axis_slicer\postprocessing\planar_product.py:647: in _postprocess_path
+    gcode = postprocess_indexed_gcode(
+src\five_axis_slicer\postprocessing\indexed_tube.py:326: in postprocess_indexed_gcode
+    events = events_by_sequence(toolpath)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+toolpath = GeneratedToolpath(toolpath_id='planar-offset-1-planar_offset-v1', operation_id='planar-offset-1', coordinate_frame='wo...lanar_offset', layer_id='l1', region_id='split', duration_s=None, context=mappingproxy({'extrusion_length_mm': 1.0}))))
+
+    def events_by_sequence(toolpath: GeneratedToolpath) -&gt; dict[int, list[ToolpathEvent]]:
+        """Sequence N executes after N path points, including terminal events at len(points)."""
+        result: dict[int, list[ToolpathEvent]] = {}
+        count = len(toolpath.points)
+        for event in toolpath.events:
+            default = count if event.event_type == "finish" else None
+            sequence = event.context.get("sequence_index", default)
+            if (
+                isinstance(sequence, bool)
+                or not isinstance(sequence, int)
+                or not 0 &lt;= sequence &lt;= count
+            ):
+&gt;               raise ValueError(f"{event.event_id}: sequence_index must be an integer in [0, {count}]")
+E               ValueError: event-0000001: sequence_index must be an integer in [0, 465]
+
+src\five_axis_slicer\postprocessing\gcode_contract.py:51: ValueError</failure></testcase><testcase classname="tests.test_planar_path_products" name="test_offset_partial_disappearance_is_warning_and_remains_exportable" time="0.031"><failure message="ValueError: event-0000001: sequence_index must be an integer in [0, 15]">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002AFC0132270&gt;
+tmp_path = WindowsPath('F:/【项目和任务】/5AxisSclicer_V2.0/tmp/project_audit_fix/planar_initial/test_offset_partial_disappeara0')
+
+    def test_offset_partial_disappearance_is_warning_and_remains_exportable(
+        monkeypatch, tmp_path: Path
+    ) -&gt; None:
+        layers = (
+            PlanarSliceLayer(
+                "l1",
+                0.5,
+                (_rect("printable", 0, 0, 8, 8), _rect("vanished", 10, 0, 10.4, 5)),
+            ),
+        )
+        monkeypatch.setattr(planar_product, "slice_planar_layers", lambda *args, **kwargs: layers)
+&gt;       result = generate_planar_path_product(
+            _model(), _offset_operation(), _machine(), _nozzle(), RigidTransform.identity("build")
+        )
+
+tests\test_planar_path_products.py:260: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\five_axis_slicer\postprocessing\planar_product.py:342: in generate_planar_path_product
+    return _postprocess_path(
+src\five_axis_slicer\postprocessing\planar_product.py:647: in _postprocess_path
+    gcode = postprocess_indexed_gcode(
+src\five_axis_slicer\postprocessing\indexed_tube.py:326: in postprocess_indexed_gcode
+    events = events_by_sequence(toolpath)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+toolpath = GeneratedToolpath(toolpath_id='planar-offset-1-planar_offset-v1', operation_id='planar-offset-1', coordinate_frame='wo...r_offset', layer_id='l1', region_id='printable', duration_s=None, context=mappingproxy({'extrusion_length_mm': 1.0}))))
+
+    def events_by_sequence(toolpath: GeneratedToolpath) -&gt; dict[int, list[ToolpathEvent]]:
+        """Sequence N executes after N path points, including terminal events at len(points)."""
+        result: dict[int, list[ToolpathEvent]] = {}
+        count = len(toolpath.points)
+        for event in toolpath.events:
+            default = count if event.event_type == "finish" else None
+            sequence = event.context.get("sequence_index", default)
+            if (
+                isinstance(sequence, bool)
+                or not isinstance(sequence, int)
+                or not 0 &lt;= sequence &lt;= count
+            ):
+&gt;               raise ValueError(f"{event.event_id}: sequence_index must be an integer in [0, {count}]")
+E               ValueError: event-0000001: sequence_index must be an integer in [0, 15]
+
+src\five_axis_slicer\postprocessing\gcode_contract.py:51: ValueError</failure></testcase><testcase classname="tests.test_planar_path_products" name="test_offset_complete_disappearance_sets_controller_error_and_blocks_export" time="0.010"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: 'produced no printable path'&#10;  Actual message: 'Planar path Generate requires a valid applied Setup and reviewed resources'">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002AFC01326F0&gt;
+tmp_path = WindowsPath('F:/【项目和任务】/5AxisSclicer_V2.0/tmp/project_audit_fix/planar_initial/test_offset_complete_disappear0')
+
+    def test_offset_complete_disappearance_sets_controller_error_and_blocks_export(
+        monkeypatch, tmp_path: Path
+    ) -&gt; None:
+        operation = _offset_operation()
+        layers = (PlanarSliceLayer("l1", 0.5, (_rect("vanished", 0, 0, 0.4, 5),)),)
+        monkeypatch.setattr(planar_product, "slice_planar_layers", lambda *args, **kwargs: layers)
+        controller = PlanarController(_model(), setup=_setup(), operations=(operation,))
+    
+&gt;       with pytest.raises(ValueError, match="produced no printable path"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'produced no printable path'
+E         Actual message: 'Planar path Generate requires a valid applied Setup and reviewed resources'
+
+tests\test_planar_path_products.py:278: AssertionError</failure></testcase><testcase classname="tests.test_planar_zigzag_product" name="test_zigzag_product_generates_reads_back_and_exports_six_files" time="0.134" /><testcase classname="tests.test_planar_zigzag_product" name="test_controller_zigzag_generation_and_export" time="0.008"><failure message="ValueError: Planar path Generate requires a valid applied Setup and reviewed resources">tmp_path = WindowsPath('F:/【项目和任务】/5AxisSclicer_V2.0/tmp/project_audit_fix/planar_initial/test_controller_zigzag_generat0')
+
+    def test_controller_zigzag_generation_and_export(tmp_path: Path) -&gt; None:
+        controller = PlanarController(_model(), setup=_setup(), operations=(_operation(),))
+    
+&gt;       result = controller.generate_operation("planar-zigzag-1")
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_planar_zigzag_product.py:147: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\five_axis_slicer\planar_controller.py:258: in generate_operation
+    validate_planar_generation_inputs(self._setup, self._cad_model, operation)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+setup = ManufacturingSetup(setup_id='setup-1', name='Manufacturing Setup 1', assignments=ManufacturingObjectAssignments(part_b...uild_plate_mount'), draft_nodes=frozenset(), dirty_nodes=frozenset(), invalid_nodes=frozenset(), issues=(), revision=1)
+model = CadModel(source_path=WindowsPath('planar-zigzag.step'), source_hash='bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb..._declaration'), bounds=BoundingBox(minimum=(0, 0, 0), maximum=(8, 6, 1)), source_size_bytes=None, source_mtime_ns=None)
+operation = PlanarOperationDefinition(operation_id='planar-zigzag-1', setup_id='setup-1', name='Planar Region', operation_type='pl...2, support_line_spacing_mm=2.0, support_interface_layers=2, support_interface_spacing_mm=0.6, support_pattern='lines'))
+
+    def validate_planar_generation_inputs(
+        setup: ManufacturingSetup, model: CadModel, operation: PlanarOperationDefinition
+    ) -&gt; None:
+        if not operation.enabled or operation.setup_id != setup.setup_id:
+            raise ValueError("Planar Generate requires an enabled operation in the current Setup")
+        if operation.geometry.body is None:
+            raise ValueError("Planar Generate requires a selected body")
+        source = Path(model.source_path)
+        if source.is_file() and hashlib.sha256(source.read_bytes()).hexdigest() != model.source_hash:
+            raise ValueError("CAD source changed on disk; update the model before Generate")
+        if operation.operation_type == "planar_region":
+            return
+        report = setup.validation_report()
+        if not report.setup_ready or report.has_errors or setup.draft_nodes:
+&gt;           raise ValueError("Planar path Generate requires a valid applied Setup and reviewed resources")
+E           ValueError: Planar path Generate requires a valid applied Setup and reviewed resources
+
+src\five_axis_slicer\planar_generation_context.py:128: ValueError</failure></testcase><testcase classname="tests.test_planar_zigzag_product" name="test_zigzag_cancel_preserves_ready_then_parameter_change_is_stale" time="0.006"><failure message="ValueError: Planar path Generate requires a valid applied Setup and reviewed resources">def test_zigzag_cancel_preserves_ready_then_parameter_change_is_stale() -&gt; None:
+        controller = PlanarController(_model(), setup=_setup(), operations=(_operation(),))
+&gt;       ready = controller.generate_operation("planar-zigzag-1")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_planar_zigzag_product.py:159: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\five_axis_slicer\planar_controller.py:258: in generate_operation
+    validate_planar_generation_inputs(self._setup, self._cad_model, operation)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+setup = ManufacturingSetup(setup_id='setup-1', name='Manufacturing Setup 1', assignments=ManufacturingObjectAssignments(part_b...uild_plate_mount'), draft_nodes=frozenset(), dirty_nodes=frozenset(), invalid_nodes=frozenset(), issues=(), revision=1)
+model = CadModel(source_path=WindowsPath('planar-zigzag.step'), source_hash='bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb..._declaration'), bounds=BoundingBox(minimum=(0, 0, 0), maximum=(8, 6, 1)), source_size_bytes=None, source_mtime_ns=None)
+operation = PlanarOperationDefinition(operation_id='planar-zigzag-1', setup_id='setup-1', name='Planar Region', operation_type='pl...2, support_line_spacing_mm=2.0, support_interface_layers=2, support_interface_spacing_mm=0.6, support_pattern='lines'))
+
+    def validate_planar_generation_inputs(
+        setup: ManufacturingSetup, model: CadModel, operation: PlanarOperationDefinition
+    ) -&gt; None:
+        if not operation.enabled or operation.setup_id != setup.setup_id:
+            raise ValueError("Planar Generate requires an enabled operation in the current Setup")
+        if operation.geometry.body is None:
+            raise ValueError("Planar Generate requires a selected body")
+        source = Path(model.source_path)
+        if source.is_file() and hashlib.sha256(source.read_bytes()).hexdigest() != model.source_hash:
+            raise ValueError("CAD source changed on disk; update the model before Generate")
+        if operation.operation_type == "planar_region":
+            return
+        report = setup.validation_report()
+        if not report.setup_ready or report.has_errors or setup.draft_nodes:
+&gt;           raise ValueError("Planar path Generate requires a valid applied Setup and reviewed resources")
+E           ValueError: Planar path Generate requires a valid applied Setup and reviewed resources
+
+src\five_axis_slicer\planar_generation_context.py:128: ValueError</failure></testcase><testcase classname="tests.test_planar_thin_wall_product" name="test_thin_wall_product_is_exportable_and_contains_p04_bundle" time="0.084"><failure message="ValueError: event-0000001: sequence_index must be an integer in [0, 10]">tmp_path = WindowsPath('F:/【项目和任务】/5AxisSclicer_V2.0/tmp/project_audit_fix/planar_initial/test_thin_wall_product_is_expo0')
+
+    def test_thin_wall_product_is_exportable_and_contains_p04_bundle(tmp_path: Path):
+&gt;       result = generate_planar_path_product(
+            _model(), _thin_operation(), _machine(), _nozzle(), RigidTransform.identity("build")
+        )
+
+tests\test_planar_thin_wall_product.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\five_axis_slicer\postprocessing\planar_product.py:342: in generate_planar_path_product
+    return _postprocess_path(
+src\five_axis_slicer\postprocessing\planar_product.py:647: in _postprocess_path
+    gcode = postprocess_indexed_gcode(
+src\five_axis_slicer\postprocessing\indexed_tube.py:326: in postprocess_indexed_gcode
+    events = events_by_sequence(toolpath)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+toolpath = GeneratedToolpath(toolpath_id='planar-thin-wall-1-planar_thin_wall-v1', operation_id='planar-thin-wall-1', coordinate_...layer_id='layer-00001', region_id='region-0001', duration_s=None, context=mappingproxy({'extrusion_length_mm': 1.0}))))
+
+    def events_by_sequence(toolpath: GeneratedToolpath) -&gt; dict[int, list[ToolpathEvent]]:
+        """Sequence N executes after N path points, including terminal events at len(points)."""
+        result: dict[int, list[ToolpathEvent]] = {}
+        count = len(toolpath.points)
+        for event in toolpath.events:
+            default = count if event.event_type == "finish" else None
+            sequence = event.context.get("sequence_index", default)
+            if (
+                isinstance(sequence, bool)
+                or not isinstance(sequence, int)
+                or not 0 &lt;= sequence &lt;= count
+            ):
+&gt;               raise ValueError(f"{event.event_id}: sequence_index must be an integer in [0, {count}]")
+E               ValueError: event-0000001: sequence_index must be an integer in [0, 10]
+
+src\five_axis_slicer\postprocessing\gcode_contract.py:51: ValueError</failure></testcase><testcase classname="tests.test_planar_thin_wall_product" name="test_thin_wall_max_passes_changes_product_semantic_hash" time="0.080"><failure message="ValueError: event-0000001: sequence_index must be an integer in [0, 10]">def test_thin_wall_max_passes_changes_product_semantic_hash():
+&gt;       first = generate_planar_path_product(
+            _model(), _thin_operation(), _machine(), _nozzle(), RigidTransform.identity("build")
+        )
+
+tests\test_planar_thin_wall_product.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\five_axis_slicer\postprocessing\planar_product.py:342: in generate_planar_path_product
+    return _postprocess_path(
+src\five_axis_slicer\postprocessing\planar_product.py:647: in _postprocess_path
+    gcode = postprocess_indexed_gcode(
+src\five_axis_slicer\postprocessing\indexed_tube.py:326: in postprocess_indexed_gcode
+    events = events_by_sequence(toolpath)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+toolpath = GeneratedToolpath(toolpath_id='planar-thin-wall-1-planar_thin_wall-v1', operation_id='planar-thin-wall-1', coordinate_...layer_id='layer-00001', region_id='region-0001', duration_s=None, context=mappingproxy({'extrusion_length_mm': 1.0}))))
+
+    def events_by_sequence(toolpath: GeneratedToolpath) -&gt; dict[int, list[ToolpathEvent]]:
+        """Sequence N executes after N path points, including terminal events at len(points)."""
+        result: dict[int, list[ToolpathEvent]] = {}
+        count = len(toolpath.points)
+        for event in toolpath.events:
+            default = count if event.event_type == "finish" else None
+            sequence = event.context.get("sequence_index", default)
+            if (
+                isinstance(sequence, bool)
+                or not isinstance(sequence, int)
+                or not 0 &lt;= sequence &lt;= count
+            ):
+&gt;               raise ValueError(f"{event.event_id}: sequence_index must be an integer in [0, {count}]")
+E               ValueError: event-0000001: sequence_index must be an integer in [0, 10]
+
+src\five_axis_slicer\postprocessing\gcode_contract.py:51: ValueError</failure></testcase><testcase classname="tests.test_planar_thin_wall_product" name="test_thin_wall_parameter_change_marks_ready_product_stale" time="0.007"><failure message="ValueError: Planar path Generate requires a valid applied Setup and reviewed resources">def test_thin_wall_parameter_change_marks_ready_product_stale():
+        operation = _thin_operation()
+        controller = PlanarController(_model(), setup=_setup(), operations=(operation,))
+&gt;       controller.generate_operation(operation.operation_id)
+
+tests\test_planar_thin_wall_product.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\five_axis_slicer\planar_controller.py:258: in generate_operation
+    validate_planar_generation_inputs(self._setup, self._cad_model, operation)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+setup = ManufacturingSetup(setup_id='setup-1', name='Manufacturing Setup 1', assignments=ManufacturingObjectAssignments(part_b...uild_plate_mount'), draft_nodes=frozenset(), dirty_nodes=frozenset(), invalid_nodes=frozenset(), issues=(), revision=1)
+model = CadModel(source_path=WindowsPath('planar-zigzag.step'), source_hash='bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb..._declaration'), bounds=BoundingBox(minimum=(0, 0, 0), maximum=(8, 6, 1)), source_size_bytes=None, source_mtime_ns=None)
+operation = PlanarOperationDefinition(operation_id='planar-thin-wall-1', setup_id='setup-1', name='Planar Region', operation_type=...2, support_line_spacing_mm=2.0, support_interface_layers=2, support_interface_spacing_mm=0.6, support_pattern='lines'))
+
+    def validate_planar_generation_inputs(
+        setup: ManufacturingSetup, model: CadModel, operation: PlanarOperationDefinition
+    ) -&gt; None:
+        if not operation.enabled or operation.setup_id != setup.setup_id:
+            raise ValueError("Planar Generate requires an enabled operation in the current Setup")
+        if operation.geometry.body is None:
+            raise ValueError("Planar Generate requires a selected body")
+        source = Path(model.source_path)
+        if source.is_file() and hashlib.sha256(source.read_bytes()).hexdigest() != model.source_hash:
+            raise ValueError("CAD source changed on disk; update the model before Generate")
+        if operation.operation_type == "planar_region":
+            return
+        report = setup.validation_report()
+        if not report.setup_ready or report.has_errors or setup.draft_nodes:
+&gt;           raise ValueError("Planar path Generate requires a valid applied Setup and reviewed resources")
+E           ValueError: Planar path Generate requires a valid applied Setup and reviewed resources
+
+src\five_axis_slicer\planar_generation_context.py:128: ValueError</failure></testcase><testcase classname="tests.test_planar_thin_wall_product" name="test_thin_wall_narrow_reduce_policy_is_a_visible_warning" time="0.054"><failure message="ValueError: event-0000001: sequence_index must be an integer in [0, 5]">def test_thin_wall_narrow_reduce_policy_is_a_visible_warning():
+        operation = replace(
+            _thin_operation(),
+            parameters=replace(_thin_operation().parameters, wall_thickness_mm=0.3),
+        )
+    
+&gt;       result = generate_planar_path_product(
+            _model(), operation, _machine(), _nozzle(), RigidTransform.identity("build")
+        )
+
+tests\test_planar_thin_wall_product.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\five_axis_slicer\postprocessing\planar_product.py:342: in generate_planar_path_product
+    return _postprocess_path(
+src\five_axis_slicer\postprocessing\planar_product.py:647: in _postprocess_path
+    gcode = postprocess_indexed_gcode(
+src\five_axis_slicer\postprocessing\indexed_tube.py:326: in postprocess_indexed_gcode
+    events = events_by_sequence(toolpath)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+toolpath = GeneratedToolpath(toolpath_id='planar-thin-wall-1-planar_thin_wall-v1', operation_id='planar-thin-wall-1', coordinate_...ayer_id='layer-00001', region_id='region-0001', duration_s=None, context=mappingproxy({'extrusion_length_mm': 1.0})),))
+
+    def events_by_sequence(toolpath: GeneratedToolpath) -&gt; dict[int, list[ToolpathEvent]]:
+        """Sequence N executes after N path points, including terminal events at len(points)."""
+        result: dict[int, list[ToolpathEvent]] = {}
+        count = len(toolpath.points)
+        for event in toolpath.events:
+            default = count if event.event_type == "finish" else None
+            sequence = event.context.get("sequence_index", default)
+            if (
+                isinstance(sequence, bool)
+                or not isinstance(sequence, int)
+                or not 0 &lt;= sequence &lt;= count
+            ):
+&gt;               raise ValueError(f"{event.event_id}: sequence_index must be an integer in [0, {count}]")
+E               ValueError: event-0000001: sequence_index must be an integer in [0, 5]
+
+src\five_axis_slicer\postprocessing\gcode_contract.py:51: ValueError</failure></testcase><testcase classname="tests.test_planar_support_product" name="test_support_product_matches_analytic_domain_and_exports_p07_bundle" time="0.197"><failure message="AssertionError: assert 'planar-support-product-v2' == 'planar-support-product-v1'&#10;  &#10;  - planar-support-product-v1&#10;  ?                         ^&#10;  + planar-support-product-v2&#10;  ?                         ^">tmp_path = WindowsPath('F:/【项目和任务】/5AxisSclicer_V2.0/tmp/project_audit_fix/planar_initial/test_support_product_matches_a0')
+
+    def test_support_product_matches_analytic_domain_and_exports_p07_bundle(tmp_path: Path) -&gt; None:
+        model = _cad_model(tmp_path, _floating_beam(), "floating-beam")
+        operation = _support_operation()
+    
+        result = _generate(model, operation)
+    
+        assert result.operation_type == "planar_support"
+        assert [layer.z_mm for layer in result.layers] == pytest.approx([0.5, 1.0, 1.5, 2.0, 2.5, 3.0])
+        assert all(not layer.regions for layer in result.layers[:4])
+        assert all(layer.regions for layer in result.layers[4:])
+        assert result.exportable and result.readback.passed
+&gt;       assert result.manifest.algorithm_version == "planar-support-product-v1"
+E       AssertionError: assert 'planar-support-product-v2' == 'planar-support-product-v1'
+E         
+E         - planar-support-product-v1
+E         ?                         ^
+E         + planar-support-product-v2
+E         ?                         ^
+
+tests\test_planar_support_product.py:123: AssertionError</failure></testcase><testcase classname="tests.test_planar_support_product" name="test_controller_creates_generates_and_exports_support_then_marks_it_stale" time="0.020"><failure message="ValueError: Planar path Generate requires a valid applied Setup and reviewed resources">tmp_path = WindowsPath('F:/【项目和任务】/5AxisSclicer_V2.0/tmp/project_audit_fix/planar_initial/test_controller_creates_genera0')
+
+    def test_controller_creates_generates_and_exports_support_then_marks_it_stale(
+        tmp_path: Path,
+    ) -&gt; None:
+        model = _cad_model(tmp_path, _floating_beam(), "controller-floating-beam")
+        controller = PlanarController(model, setup=_setup())
+        created = controller.create_operation(
+            "planar_support", operation_id="planar-support-1", name="Planar Support"
+        )
+        operation = controller.configure_operation(
+            operation_id=created.operation_id,
+            body_id="body",
+            parameters=_support_operation().parameters,
+        )
+    
+&gt;       result = controller.generate_operation(operation.operation_id)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_planar_support_product.py:178: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\five_axis_slicer\planar_controller.py:258: in generate_operation
+    validate_planar_generation_inputs(self._setup, self._cad_model, operation)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+setup = ManufacturingSetup(setup_id='setup-1', name='Manufacturing Setup 1', assignments=ManufacturingObjectAssignments(part_b...uild_plate_mount'), draft_nodes=frozenset(), dirty_nodes=frozenset(), invalid_nodes=frozenset(), issues=(), revision=1)
+model = CadModel(source_path=WindowsPath('F:/【项目和任务】/5AxisSclicer_V2.0/tmp/project_audit_fix/planar_initial/test_controller_cr...ngBox(minimum=(4.0, 2.0, 2.2), maximum=(12.0, 8.0, 3.2)), source_size_bytes=15398, source_mtime_ns=1789189289409778700)
+operation = PlanarOperationDefinition(operation_id='planar-support-1', setup_id='setup-1', name='Planar Support', operation_type='....0, support_line_spacing_mm=1.0, support_interface_layers=2, support_interface_spacing_mm=0.6, support_pattern='grid'))
+
+    def validate_planar_generation_inputs(
+        setup: ManufacturingSetup, model: CadModel, operation: PlanarOperationDefinition
+    ) -&gt; None:
+        if not operation.enabled or operation.setup_id != setup.setup_id:
+            raise ValueError("Planar Generate requires an enabled operation in the current Setup")
+        if operation.geometry.body is None:
+            raise ValueError("Planar Generate requires a selected body")
+        source = Path(model.source_path)
+        if source.is_file() and hashlib.sha256(source.read_bytes()).hexdigest() != model.source_hash:
+            raise ValueError("CAD source changed on disk; update the model before Generate")
+        if operation.operation_type == "planar_region":
+            return
+        report = setup.validation_report()
+        if not report.setup_ready or report.has_errors or setup.draft_nodes:
+&gt;           raise ValueError("Planar path Generate requires a valid applied Setup and reviewed resources")
+E           ValueError: Planar path Generate requires a valid applied Setup and reviewed resources
+
+src\five_axis_slicer\planar_generation_context.py:128: ValueError</failure></testcase><testcase classname="tests.test_planar_support_product" name="test_support_not_required_sets_controller_error_and_blocks_export" time="0.022"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: 'planar.support_not_required'&#10;  Actual message: 'Planar path Generate requires a valid applied Setup and reviewed resources'">tmp_path = WindowsPath('F:/【项目和任务】/5AxisSclicer_V2.0/tmp/project_audit_fix/planar_initial/test_support_not_required_sets0')
+
+    def test_support_not_required_sets_controller_error_and_blocks_export(tmp_path: Path) -&gt; None:
+        solid_from_plate = cq.Workplane("XY").box(8.0, 6.0, 3.2).translate((8.0, 5.0, 1.6))
+        model = _cad_model(tmp_path, solid_from_plate, "straight-wall")
+        operation = _support_operation()
+        controller = PlanarController(model, setup=_setup(), operations=(operation,))
+    
+&gt;       with pytest.raises(ValueError, match="planar.support_not_required"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'planar.support_not_required'
+E         Actual message: 'Planar path Generate requires a valid applied Setup and reviewed resources'
+
+tests\test_planar_support_product.py:210: AssertionError</failure></testcase><testcase classname="tests.test_planar_support_product" name="test_sub_bead_floating_support_is_rejected_instead_of_silently_dropped" time="0.086" /><testcase classname="tests.test_planar_support_product" name="test_attached_cantilever_with_default_xy_gap_remains_exportable" time="0.277" /><testcase classname="tests.test_planar_support_product" name="test_partially_unreachable_support_is_error_and_cannot_be_exported" time="0.381" /><testcase classname="tests.test_planar_support_product" name="test_fully_unreachable_support_keeps_the_real_diagnostic" time="0.024"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: 'planar.support_unreachable_from_buildplate'&#10;  Actual message: 'Planar path Generate requires a valid applied Setup and reviewed resources'">tmp_path = WindowsPath('F:/【项目和任务】/5AxisSclicer_V2.0/tmp/project_audit_fix/planar_initial/test_fully_unreachable_support0')
+
+    def test_fully_unreachable_support_keeps_the_real_diagnostic(tmp_path: Path) -&gt; None:
+        low_island = cq.Workplane("XY").box(8.0, 6.0, 0.2).translate((8.0, 5.0, 1.0))
+        model = _cad_model(tmp_path, low_island, "low-floating-island")
+        operation = _support_operation(last_layer_z_mm=1.5, support_z_gap_mm=0.5)
+        controller = PlanarController(model, setup=_setup(), operations=(operation,))
+    
+&gt;       with pytest.raises(ValueError, match="planar.support_unreachable_from_buildplate"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'planar.support_unreachable_from_buildplate'
+E         Actual message: 'Planar path Generate requires a valid applied Setup and reviewed resources'
+
+tests\test_planar_support_product.py:276: AssertionError</failure></testcase><testcase classname="tests.test_planar_support_product" name="test_support_rejects_a_layer_range_that_does_not_start_at_buildplate" time="0.025" /><testcase classname="tests.test_planar_support_product" name="test_support_metadata_source_and_setup_changes_make_results_stale" time="0.019"><failure message="ValueError: Planar path Generate requires a valid applied Setup and reviewed resources">tmp_path = WindowsPath('F:/【项目和任务】/5AxisSclicer_V2.0/tmp/project_audit_fix/planar_initial/test_support_metadata_source_a0')
+
+    def test_support_metadata_source_and_setup_changes_make_results_stale(tmp_path: Path) -&gt; None:
+        model = _cad_model(tmp_path, _floating_beam(), "stale-input-beam")
+        operation = _support_operation()
+        controller = PlanarController(model, setup=_setup(), operations=(operation,))
+&gt;       result = controller.generate_operation(operation.operation_id)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_planar_support_product.py:299: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\five_axis_slicer\planar_controller.py:258: in generate_operation
+    validate_planar_generation_inputs(self._setup, self._cad_model, operation)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+setup = ManufacturingSetup(setup_id='setup-1', name='Manufacturing Setup 1', assignments=ManufacturingObjectAssignments(part_b...uild_plate_mount'), draft_nodes=frozenset(), dirty_nodes=frozenset(), invalid_nodes=frozenset(), issues=(), revision=1)
+model = CadModel(source_path=WindowsPath('F:/【项目和任务】/5AxisSclicer_V2.0/tmp/project_audit_fix/planar_initial/test_support_metad...ngBox(minimum=(4.0, 2.0, 2.2), maximum=(12.0, 8.0, 3.2)), source_size_bytes=15398, source_mtime_ns=1789189290283784700)
+operation = PlanarOperationDefinition(operation_id='planar-support-1', setup_id='setup-1', name='Planar Support', operation_type='....0, support_line_spacing_mm=1.0, support_interface_layers=2, support_interface_spacing_mm=0.6, support_pattern='grid'))
+
+    def validate_planar_generation_inputs(
+        setup: ManufacturingSetup, model: CadModel, operation: PlanarOperationDefinition
+    ) -&gt; None:
+        if not operation.enabled or operation.setup_id != setup.setup_id:
+            raise ValueError("Planar Generate requires an enabled operation in the current Setup")
+        if operation.geometry.body is None:
+            raise ValueError("Planar Generate requires a selected body")
+        source = Path(model.source_path)
+        if source.is_file() and hashlib.sha256(source.read_bytes()).hexdigest() != model.source_hash:
+            raise ValueError("CAD source changed on disk; update the model before Generate")
+        if operation.operation_type == "planar_region":
+            return
+        report = setup.validation_report()
+        if not report.setup_ready or report.has_errors or setup.draft_nodes:
+&gt;           raise ValueError("Planar path Generate requires a valid applied Setup and reviewed resources")
+E           ValueError: Planar path Generate requires a valid applied Setup and reviewed resources
+
+src\five_axis_slicer\planar_generation_context.py:128: ValueError</failure></testcase></testsuite></testsuites>

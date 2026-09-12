@@ -1,0 +1,1 @@
+{"case": "fan_full_sparse", "status": "warning", "exportable": true, "seconds": 63.41221019999648, "error": null, "issues": ["xyzac.rotary_singularity"]}

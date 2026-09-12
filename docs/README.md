@@ -2,6 +2,9 @@
 
 ## 六个工作台算法开发
 
+- [当前完成情况与算法独立审查（AUD-01）](reviews/2026-09-12_project_algorithm_audit.md)：真实模型、坐标/道宽/截层/回读/空移反例及本轮验证边界。
+- [算法审查后的修改方案](planning/2026-09-12_algorithm_audit_fix_plan.md)：六步修复顺序、具体改动范围和验收矩阵；尚未实施。
+
 - [开发进度台账](planning/progress_tracker.md)：任务主表；每轮更新依赖、状态、验收证据、下一步和日期。
 - [开发计划](planning/development_plan.md)：管状优先，六个工作台、20 种操作、当前 UI 接入、算法接口和完成条件。
 - [参考资料检索](planning/reference_research.md)：NX 官方资料、公开参考项目、研究论文与当前源码依据。
@@ -20,6 +23,12 @@
 - [T08—T12 来源与实现边界](planning/reference_research.md#8-t08t12-新实现的可核对来源边界)：RMF、G-code 语义、时间参数化、FCL/OCCT 参考及 Generic XYZAC 离线资格边界。
 - [图文使用手册体系复盘](reviews/2026-09-11_user_manual_framework_review.md)：手册范围、图片依据、检查结果和待补成功流程。
 - [工作台开发复用 Skill 建立复盘](reviews/2026-09-11_workbench_development_skill_review.md)：Tube 经验提炼、Skill 结构、调用登记方式、校验和文件指纹。
+- [P01—P06 平面算法与工作台复盘](reviews/2026-09-12_planar_algorithm_foundation_review.md)：区域、填充、偏置、薄壁、螺旋、产品接入与阶段验收；P07 使用说明见下方手册。
+- [Planar 工作台图文手册](guides/planar_workbench_zh.md)：P01—P07 的五操作参数、正常流程、错误恢复、导出、保存重开、截图与能力边界。
+- [P07 Planar Grid/Lines 支撑实施复盘](reviews/2026-09-12_p07_planar_support_review.md)：clean-room 来源边界、支撑领域链、代码审查修复、解析真值、UI、测试、质量门禁和实机限制。
+- [Planar P01—P06 阶段完成总结](planning/planar_handoff.md)：四操作的真实 STEP、六件套、回读、UI 证据和离线参考边界；下一项为 C01。
+- [多对话工作台开发启动提示词](planning/workbench_multi_chat_prompts.md)：P07、Curve、Rotary、Freeform、Research 与最终集成的可复制任务提示词及统一完成条件。
+- [多对话工作台提示词编制复盘](reviews/2026-09-12_multi_chat_workbench_prompt_review.md)：依赖、工作树、多 Agent、完整验收和 Planar Support 计数边界。
 
 以上计划采用 2026-09-10 用户确定的“管状优先”和“自用、暂无开源计划”。旧目标中的开发顺序与定位在本阶段按最新决定执行，原始资料保留。
 
@@ -27,6 +36,7 @@
 
 - [图文使用手册索引与交付要求](guides/README.md)：当前手册入口、图片要求和后续各工作台的手册门槛。
 - [Tube 工作台完整图文手册](guides/tube_workbench_zh.md)：三种操作、生成、检查、预览、导出及错误处理。
+- [Planar 工作台图文手册](guides/planar_workbench_zh.md)：Region、Zigzag、Offset、Thin Wall、Spiral 与 buildplate-only Planar Support 的离线生成链与恢复说明。
 - [G-code 可视化图文手册](guides/gcode_preview_zh.md)：普通 Preview、成果页、分色、层范围与五轴回读边界。
 - [根目录 README](../README.md)：启动、当前能力、自动化接口和验证入口。
 - [项目结构](project_structure.md)：现有模块及职责；该文档有自身的核查日期。
@@ -48,3 +58,11 @@
 - [脚本控制台与开放配置](reviews/2026-07-31_tube_script_console_review.md)。
 
 后续算法任务使用台账编号关联代码、样例和复盘。同一任务更新同一份记录；其余既有评审仍可从 `docs/reviews/` 文件名按日期查找。
+
+## 自有打印机参考资料
+
+- [自有 AC 五轴打印机参数依据](planning/own_ac_printer_parameters.md)：论文设备规格、材料工艺、选取依据及待标定项。
+- [参数归档复盘](reviews/2026-09-12_own_ac_printer_parameters_review.md)：来源核验、复用方式与边界。
+
+- [机型选择与自定义配置](guides/machine_profiles_zh.md)：默认自有 AC、用户库与 JSON 文件交换。
+- [I01-OWN 默认机型实施复盘](reviews/2026-09-12_own_printer_profile_review.md)。

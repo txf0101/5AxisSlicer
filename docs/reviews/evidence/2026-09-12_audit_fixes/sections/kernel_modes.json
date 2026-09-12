@@ -1,0 +1,198 @@
+[
+  {
+    "z": 20.6,
+    "approximation": true,
+    "direct_plane": true,
+    "max_endpoint_gap": 0.000290902733967955,
+    "degrees": [
+      2,
+      2,
+      2,
+      2
+    ]
+  },
+  {
+    "z": 20.6,
+    "approximation": true,
+    "direct_plane": false,
+    "max_endpoint_gap": 0.000290902733967955,
+    "degrees": [
+      2,
+      2,
+      2,
+      2
+    ]
+  },
+  {
+    "z": 20.6,
+    "approximation": false,
+    "direct_plane": true,
+    "max_endpoint_gap": 0.00029090273396544376,
+    "degrees": [
+      2,
+      2,
+      2,
+      2
+    ]
+  },
+  {
+    "z": 20.6,
+    "approximation": false,
+    "direct_plane": false,
+    "max_endpoint_gap": 0.00029090273396544376,
+    "degrees": [
+      2,
+      2,
+      2,
+      2
+    ]
+  },
+  {
+    "z": 22.4,
+    "approximation": true,
+    "direct_plane": true,
+    "max_endpoint_gap": 0.030476672699302137,
+    "degrees": [
+      2,
+      2,
+      2,
+      2
+    ]
+  },
+  {
+    "z": 22.4,
+    "approximation": true,
+    "direct_plane": false,
+    "max_endpoint_gap": 0.030476672699302137,
+    "degrees": [
+      2,
+      2,
+      2,
+      2
+    ]
+  },
+  {
+    "z": 22.4,
+    "approximation": false,
+    "direct_plane": true,
+    "max_endpoint_gap": 0.006007255263172569,
+    "degrees": [
+      2,
+      2,
+      2,
+      2
+    ]
+  },
+  {
+    "z": 22.4,
+    "approximation": false,
+    "direct_plane": false,
+    "max_endpoint_gap": 0.006007255263172569,
+    "degrees": [
+      2,
+      2,
+      2,
+      2
+    ]
+  },
+  {
+    "z": 33.2,
+    "approximation": true,
+    "direct_plane": true,
+    "max_endpoint_gap": 0.020009924836484495,
+    "degrees": [
+      2,
+      2,
+      2,
+      2
+    ]
+  },
+  {
+    "z": 33.2,
+    "approximation": true,
+    "direct_plane": false,
+    "max_endpoint_gap": 0.020009924836484495,
+    "degrees": [
+      2,
+      2,
+      2,
+      2
+    ]
+  },
+  {
+    "z": 33.2,
+    "approximation": false,
+    "direct_plane": true,
+    "max_endpoint_gap": 0.020011705338675023,
+    "degrees": [
+      2,
+      2,
+      2,
+      2
+    ]
+  },
+  {
+    "z": 33.2,
+    "approximation": false,
+    "direct_plane": false,
+    "max_endpoint_gap": 0.020011705338675023,
+    "degrees": [
+      2,
+      2,
+      2,
+      2
+    ]
+  },
+  {
+    "z": 41.6,
+    "approximation": true,
+    "direct_plane": true,
+    "max_endpoint_gap": 0.4851113199357641,
+    "degrees": [
+      2,
+      2,
+      2,
+      2,
+      2
+    ]
+  },
+  {
+    "z": 41.6,
+    "approximation": true,
+    "direct_plane": false,
+    "max_endpoint_gap": 0.4851113199357641,
+    "degrees": [
+      2,
+      2,
+      2,
+      2,
+      2
+    ]
+  },
+  {
+    "z": 41.6,
+    "approximation": false,
+    "direct_plane": true,
+    "max_endpoint_gap": 0.48511154757353575,
+    "degrees": [
+      2,
+      2,
+      2,
+      2,
+      2
+    ]
+  },
+  {
+    "z": 41.6,
+    "approximation": false,
+    "direct_plane": false,
+    "max_endpoint_gap": 0.48511154757353575,
+    "degrees": [
+      2,
+      2,
+      2,
+      2,
+      2
+    ]
+  }
+]

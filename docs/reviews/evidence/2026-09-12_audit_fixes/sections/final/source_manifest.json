@@ -1,0 +1,26 @@
+[
+  {
+    "path": "src/five_axis_slicer/algorithms/planar/region.py",
+    "sha256": "79bd27c34a9f1a006ddc8d490bce28520174978d95a81dae33e5703a0de31f5e",
+    "mtime_ns": 1789188644210604300,
+    "snapshot": "F:\\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\\5AxisSclicer_V2.0\\docs\\reviews\\evidence\\2026-09-12_audit_fixes\\sections\\final\\source_snapshot\\region.py.txt"
+  },
+  {
+    "path": "src/five_axis_slicer/algorithms/planar/section_loops.py",
+    "sha256": "a3a5feb910bc89864d9ec322fe2072bf1f2f9beab1d571681180c43cc5d05276",
+    "mtime_ns": 1789188816189334700,
+    "snapshot": "F:\\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\\5AxisSclicer_V2.0\\docs\\reviews\\evidence\\2026-09-12_audit_fixes\\sections\\final\\source_snapshot\\section_loops.py.txt"
+  },
+  {
+    "path": "tests/test_planar_section_loops.py",
+    "sha256": "88851c69e01a4c94a61535a03b040c7b799c3acb68b903192de5bf1c6a66593d",
+    "mtime_ns": 1789188672063710800,
+    "snapshot": "F:\\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\\5AxisSclicer_V2.0\\docs\\reviews\\evidence\\2026-09-12_audit_fixes\\sections\\final\\source_snapshot\\test_planar_section_loops.py.txt"
+  },
+  {
+    "path": "scripts/planar_section_recovery_evidence.py",
+    "sha256": "5c06b57d2a07cf1f659ceb609b722fc101db1d908effa9110b1b9c8aa2aeb999",
+    "mtime_ns": 1789188764350312300,
+    "snapshot": "F:\\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\\5AxisSclicer_V2.0\\docs\\reviews\\evidence\\2026-09-12_audit_fixes\\sections\\final\\source_snapshot\\planar_section_recovery_evidence.py.txt"
+  }
+]

@@ -1,0 +1,29 @@
+"""Locate the physical reason for the retained pipe2 IK rejection."""
+from pathlib import Path
+import json,math,sys
+ROOT=next(p for p in Path(__file__).resolve().parents if (p/'src/five_axis_slicer').is_dir())
+sys.path.insert(0,str(ROOT/'src'))
+from five_axis_slicer.manufacturing.setup import ManufacturingSetup,TubeOperationDefinition
+from five_axis_slicer.step_loader import load_step
+from five_axis_slicer.tube_controller import TubeSetupController
+from five_axis_slicer.tube_generation_context import make_tube_generation_context
+from five_axis_slicer.postprocessing.indexed_tube import _generate_geometry
+OUT=ROOT/'docs/reviews/evidence/2026-09-12_audit_fixes/tube/pipe2_wall_1mm'
+inputs=json.loads((OUT/'inputs.json').read_text(encoding='utf8'))
+model=load_step(inputs['source'])
+operation=TubeOperationDefinition.from_json(inputs['operation'])
+controller=TubeSetupController(model,setup=ManufacturingSetup.from_json(inputs['setup']),operations=(operation,))
+context=make_tube_generation_context(controller,operation)
+feature,plan,path=_generate_geometry(context.model_in_build,operation,None)
+point=next(point for point in path.points if point.point_id=='point-0007377')
+axis=context.T_workpiece_from_build.transform_vector(point.nozzle_axis)
+angle=math.degrees(math.acos(max(-1,min(1,-axis[2]))))
+profile=controller.machine_profile()
+limits={name:[math.degrees(profile.joint_map[name].soft_limit_min),math.degrees(profile.joint_map[name].soft_limit_max)] for name in ('A','C')}
+report={'point':point.to_json(),'workpiece_nozzle_axis':axis,'required_A_candidates_deg':[angle,-angle],
+    'rotary_limits_deg':limits,'toolpath_points':len(path.points),'layers':len(plan.layers),
+    'reason':'Neither analytic A branch fits the selected A soft limits; machine/placement eligibility must change before this path can qualify.',
+    'collision_stage':'not reached; configured obstacles and IPW are recorded in inputs.json'}
+(OUT/'blocked_point.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf8')
+(OUT/'geometry_only_toolpath.json').write_text(json.dumps(path.to_json(),ensure_ascii=False),encoding='utf8')
+print(json.dumps(report,ensure_ascii=False,indent=2))
