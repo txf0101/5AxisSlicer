@@ -273,8 +273,7 @@ def _sync_directory(directory: Path) -> None:
 def _lock_stream(stream: Any) -> None:
     stream.seek(0)
     if os.name == "nt":
-        import msvcrt
-
+        msvcrt = importlib.import_module("msvcrt")
         msvcrt.locking(stream.fileno(), msvcrt.LK_NBLCK, 1)
         return
     fcntl = importlib.import_module("fcntl")
@@ -284,8 +283,7 @@ def _lock_stream(stream: Any) -> None:
 def _unlock_stream(stream: Any) -> None:
     stream.seek(0)
     if os.name == "nt":
-        import msvcrt
-
+        msvcrt = importlib.import_module("msvcrt")
         msvcrt.locking(stream.fileno(), msvcrt.LK_UNLCK, 1)
         return
     fcntl = importlib.import_module("fcntl")

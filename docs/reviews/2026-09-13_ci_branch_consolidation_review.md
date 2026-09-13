@@ -11,6 +11,8 @@ GitHub 仓库的默认分支经远端配置和 API 核对为 `master`。处理�
 - 三个 Actions job 均在安装依赖前创建隔离虚拟环境，避免 runner 预装包参与 `pip check`。
 - 开发依赖固定 `mypy==1.11.2`，CAD 测试依赖固定 `casadi==3.7.2`，避免未审查升级改变静态门禁结果。
 - PyQt5 固定为项目既有验证版本 `5.15.10`。干净环境会加载 PyQt 类型存根，因此把已有动态 Qt 界面模块明确列入 mypy 的 legacy `ignore_errors` 清单；其余源码仍由同一仓库级 mypy 门禁检查。
+- Linux mypy 会静态解析 Windows 专用 `msvcrt` 分支；锁操作改为与 POSIX `fcntl` 一致的运行时平台导入，保留原执行语义并消除跨平台存根误判。
+- Windows 托管 runner 的完整 GUI 回归在 VTK `render()` 中发生原生访问冲突。Windows CI 改跑与 Linux 对齐的 13 个无头领域测试文件；完整 Qt/VTK 桌面回归仍按项目验证规范在具备真实显示上下文的本机串行执行，不能由该 CI 子集替代。
 
 ## 本地验证
 
@@ -19,8 +21,10 @@ GitHub 仓库的默认分支经远端配置和 API 核对为 `master`。处理�
 - `python -m pip check`：通过，输出 `No broken requirements found.`；
 - `python scripts/check_quality.py`：Ruff、格式、上下文预算及 mypy 全部通过，mypy 检查 148 个源码文件；
 - `python -X faulthandler -m pytest -q tests/test_preview_index.py tests/test_machine_profiles.py`：27 passed、23 subtests passed。
+- `python -X faulthandler -m pytest -q tests/test_project_io.py`：33 passed、2 skipped、14 subtests passed；
+- 与 Windows CI 相同的 13 文件无头领域集：161 passed、2 skipped、89 subtests passed。
 
-本机没有 Python 3.10 解释器。该矩阵项由提交后的 GitHub Actions 验证；远端结果不能由 Python 3.12 本地检查替代。
+提交 `fdc0ff4` 的首次远端运行确认 Windows 3.10/3.12 均已通过隔离安装、`pip check` 和质量门禁；Linux 暴露 `msvcrt` 的平台存根误判，Windows 完整回归暴露托管 runner 的 VTK 原生访问冲突。本机干净环境复现完整回归时同样在 GUI/VTK 阶段异常退出，未生成完整 JUnit，因此不把该次尝试记录为测试通过。后续修复提交的 GitHub Actions 是最终远端判据。
 
 ## 可复用判断
 

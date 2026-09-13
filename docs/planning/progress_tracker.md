@@ -38,7 +38,7 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 
 | 日期 | 任务 | Skill | 本轮用途 | 证据 |
 | --- | --- | --- | --- | --- |
-| 2026-09-13 | CI-BRANCH | `five-axis-slicer-validation`、`gh-fix-ci` | 核对默认分支和全部分支祖先关系；读取 Actions 原始日志；用隔离 Python 3.12 环境修复 runner 预装包、CasADi/PyQt/mypy 漂移并执行质量与专项验证 | [CI 与分支复盘](../reviews/2026-09-13_ci_branch_consolidation_review.md)；远端 Python 3.10/Linux 结果以本轮 Actions 为准 |
+| 2026-09-13 | CI-BRANCH | `five-axis-slicer-validation`、`gh-fix-ci` | 核对默认分支和全部分支祖先关系；读取 Actions 原始日志；用隔离 Python 3.12 环境修复 runner 预装包、CasADi/PyQt/mypy 漂移、Linux 平台存根和托管 VTK 崩溃边界 | [CI 与分支复盘](../reviews/2026-09-13_ci_branch_consolidation_review.md)；干净环境质量通过，13文件领域集161 passed、2 skipped、89 subtests；最终远端结果以本轮 Actions 为准 |
 | 2026-09-13 | AUD-02-TUBE、T04/T07、PC05子项 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`artifact-package-verify` | 原反例复核；修复末层材料、固定方向姿态和IPW性能；独立体积/候选对照、串行Qt/全仓、六件套压缩逐文件核验；区分缺陷关闭与整阶段验收 | [同一AUD-02复盘](../reviews/2026-09-12_algorithm_audit_fixes.md)、[当前证据](../reviews/evidence/2026-09-13_tube_recheck/validation_manifest.json) |
 | 2026-09-13 | PC00 | `five-axis-workbench-development` | 按阶段门重排论文核心范围；批判性核对论文/当前代码、固定开源版本与许可；保留原阶段资格和延期范围 | [核心范围/研究](paper_core_ac_scope.md)、[复盘](../reviews/2026-09-13_paper_core_ac_planning_review.md)；本轮仅文档检查，未运行产品测试 |
 | 2026-09-13 | I01-AXIS | `five-axis-workbench-development`、`five-axis-slicer-validation` | 按共享机型/后处理契约分离内部关节与控制器地址；复用已验证解释器、Qt 串行、WinError 5 诊断、JUnit、质量和构建规则 | [实施复盘](../reviews/2026-09-13_custom_rotary_axis_words_review.md)；[验证清单](../reviews/evidence/2026-09-13_custom_rotary_axis_words/validation_manifest.json) |
@@ -197,7 +197,7 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 
 | 日期 | 变更依据 | 变更内容 | 影响 |
 | --- | --- | --- | --- |
-| 2026-09-13 | 用户要求按 GitHub 默认主线统一本地与远端分支，并解决当前 CI 依赖冲突 | 确认默认分支为 `master`，所有功能分支均已进入同一提交；Actions 改用隔离虚拟环境，固定 mypy、CasADi 与 PyQt5 的已验证版本，并明确 legacy Qt 类型债务范围 | 默认主线统一为 `master`；干净 Python 3.12 的依赖、质量和专项门禁通过；Python 3.10/Linux 等待 GitHub Actions 最终验证 |
+| 2026-09-13 | 用户要求按 GitHub 默认主线统一本地与远端分支，并解决当前 CI 依赖冲突 | 确认默认分支为 `master`，所有功能分支均已进入主线后删除其引用；Actions 改用隔离虚拟环境，固定 mypy、CasADi 与 PyQt5，修复 Linux 平台存根，并把托管 Windows 回归限定为无头领域集 | 本地和远端均只保留 `master`；干净 Python 3.12 的依赖、质量和161项领域测试通过；完整 Qt/VTK 桌面回归仍须在真实显示环境执行 |
 | 2026-09-13 | 用户要求再检查旧错误，存在则修复、消失则标记完成 | AUD-02-TUBE原反例通过；新增末层材料、固定打印方向与IPW性能修复；当前pipe2全链通过，撤回旧A≈±122.3°固有需求解释；839 passed、3 skipped、141 subtests，质量通过，六件套压缩校验 | T04/T07受限离线资格恢复；T08/T12仍待当前实际界面与整阶段门；PC05仅复核子项先行，整体仍依赖PC04 |
 | 2026-09-13 | 用户要求资源优先完成论文案例，并批判性核对论文、寻找可复用项目 | 新增PC00—PC07；四例能力矩阵、材料事件、自有AC后处理、Tube收口和本地封装；核对7个项目固定commit/许可；README纠正Tube全完成声明 | PC00已完成，PC01—PC07未开始；完整F/X/I共16项暂缓，Tube4项待验证保留；论文实验数字和旧NC不作为当前软件能力真值 |
 | 2026-09-13 | 用户要求客户可定义原生 A/B/C 对应的固件轴名，并在所有工作台最终 G-code 中生效 | 新增 I01-AXIS：机型领域校验/不可变映射、客户友好双语 UI、用户库副本、共享 Setup 发布、受限脚本与 HTTP 命令、G-code 审计头、严格回读、图文教程和当前回归证据 | I01-AXIS 已完成；Tube/Planar/Curve/Rotary 共用映射。I01 第二运动学仍未开始，轴字改名不增加物理 B 轴或异形机构 IK，也不取得实机资格 |

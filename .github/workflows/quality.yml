@@ -44,7 +44,24 @@ jobs:
           recurse: true
           severity: '"Error", "Warning"'
           enableExit: true
-      - run: python -X faulthandler -m pytest -q
+      # Hosted Windows runners have no stable VTK display context; desktop/VTK
+      # qualification remains a local gate and the CI matrix runs headless-safe domains.
+      - name: Headless domain regression
+        run: >-
+          python -X faulthandler -m pytest -q
+          tests/test_gcode_preview.py
+          tests/test_geometry_rebinding.py
+          tests/test_machine_profiles.py
+          tests/test_manufacturing_coordinates.py
+          tests/test_manufacturing_resources.py
+          tests/test_manufacturing_resource_library.py
+          tests/test_manufacturing_setup.py
+          tests/test_preview_index.py
+          tests/test_preview_kinematics.py
+          tests/test_project_io.py
+          tests/test_step_loader.py
+          tests/test_step_topology.py
+          tests/test_tube_controller.py
 
   linux-static-domain:
     runs-on: ubuntu-latest
