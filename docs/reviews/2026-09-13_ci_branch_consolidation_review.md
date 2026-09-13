@@ -26,6 +26,17 @@ GitHub 仓库的默认分支经远端配置和 API 核对为 `master`。处理�
 
 提交 `fdc0ff4` 的首次远端运行确认 Windows 3.10/3.12 均已通过隔离安装、`pip check` 和质量门禁；Linux 暴露 `msvcrt` 的平台存根误判，Windows 完整回归暴露托管 runner 的 VTK 原生访问冲突。本机干净环境复现完整回归时同样在 GUI/VTK 阶段异常退出，未生成完整 JUnit，因此不把该次尝试记录为测试通过。修复提交 `7e0ff13` 的 GitHub Actions 运行 `34747228928` 最终四项全部通过：Linux static/domain、Windows Python 3.10/3.12 regression 和 Windows native smoke 均为 success。
 
+## 2026-09-14 新增界面后的质量门修复
+
+提交 `68bf8bc` 新增 Freeform 界面后，Actions 运行 `34758493547` 的 Windows Python 3.10、Windows Python 3.12 和 Linux 三个任务都在 `python scripts/check_quality.py` 的 Mypy 阶段失败。三项日志指向同一处：`freeform_ui.py` 使用 `QFormLayout.WrapAllRows` 和 `QFormLayout.AllNonFixedFieldsGrow`，PyQt5 5.15.10 运行时接受这种旧式访问，类型存根却只声明带类型的枚举成员。Windows native smoke 不执行仓库质量脚本，因此仍为 success。Actions 的 Node.js 20 弃用提示只是一项独立警告。
+
+Freeform 是新增且需要继续接受静态检查的模块，所以没有把它加入 legacy `ignore_errors` 清单。两处访问改为 `QFormLayout.RowWrapPolicy.WrapAllRows` 和 `QFormLayout.FieldGrowthPolicy.AllNonFixedFieldsGrow`；运行时探测确认这两个成员均存在。修复后的本地结果为：
+
+- `python scripts/check_quality.py`：Ruff、格式、上下文预算及 Mypy 全部通过，Mypy 检查 162 个源码文件；
+- 与 Actions 相同的 13 文件无头领域集：161 passed、2 skipped、89 subtests passed；
+- `tests/test_paper_core_ac.py`：9 passed；
+- Freeform Qt 专项在当前无头 Windows 会话中以 `0xC0000409` 原生退出，没有产生 Python 断言失败；该限制与前述 Qt/VTK 桌面资格边界一致，不记录为测试通过。枚举本身已由运行时探测和 Mypy 双向核对。
+
 ## 可复用判断
 
 共享 GitHub runner 上的 `pip check` 应在项目隔离环境内执行。静态检查依赖应固定已验证版本；第三方类型存根异常与项目自身类型错误需分开记录。新增受 mypy 检查的领域模块不应加入 legacy Qt 豁免清单。

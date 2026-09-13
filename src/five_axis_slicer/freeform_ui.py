@@ -35,8 +35,10 @@ class FreeformPage(CurvePage):
     def _build_parameter_form(self, layout):
         super()._build_parameter_form(layout)
         extra = QFormLayout()
-        extra.setRowWrapPolicy(QFormLayout.WrapAllRows)
-        extra.setFieldGrowthPolicy(QFormLayout.AllNonFixedFieldsGrow)
+        extra.setRowWrapPolicy(QFormLayout.RowWrapPolicy.WrapAllRows)
+        extra.setFieldGrowthPolicy(
+            QFormLayout.FieldGrowthPolicy.AllNonFixedFieldsGrow
+        )
         self.face_ids_edit = QLineEdit()
         self.guides_json_edit = QLineEdit()
         guides_example = '[{"edge_ids":["..."],"reversed_flags":[false],"face_id":"..."}]'
