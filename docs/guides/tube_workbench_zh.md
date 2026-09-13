@@ -88,11 +88,11 @@ Buildup 另有“最大道间距”（默认 0.6 mm）、“包含平面底座�
 4. 在 Preview 中检查模型叠加、路径段、层范围、Feature Type 图例，以及 travel、extrusion、五轴姿态抽样开关。点击路径段可查看属性。
 5. 只有验证通过且 NC 回读通过的结果才可导出。导出目录会写入产品清单和六件套文件。
 
-![Indexed 页面证据（1366×768）](../reviews/evidence/2026-09-11_t08_t12/ui/01-zh-1366x768-indexed.png)
+![Indexed 页面证据（1366×768）](../reviews/evidence/2026-09-13_paper_core_ac/tube_ui/01-zh-1366x768-indexed.png)
 
-![Buildup 页面证据（1600×900）](../reviews/evidence/2026-09-11_t08_t12/ui/02-zh-1600x900-buildup.png)
+![Buildup 页面证据（1600×900）](../reviews/evidence/2026-09-13_paper_core_ac/tube_ui/02-zh-1600x900-buildup.png)
 
-![Continuous 页面证据（1920×1080，英文界面）](../reviews/evidence/2026-09-11_t08_t12/ui/03-en-1920x1080-continuous.png)
+![Continuous 页面证据（1920×1080，英文界面）](../reviews/evidence/2026-09-13_paper_core_ac/tube_ui/03-en-1920x1080-continuous.png)
 
 以上三图用于说明不同窗口尺寸下的操作树、字段和按钮位置。截图保留了 Setup 缺失、结果过期或生成失败等 UI 冒烟状态，因此属于界面布局与错误态示例；成功产品以问题列表无 Error、产品状态可导出且 NC 回读通过为准。
 
@@ -107,7 +107,7 @@ Tube 产品目录通常包含：
 - `warnings.json`：警告及需复核事项；
 - `manifest.json`：产品版本、输入和验证状态。
 
-仓库中的 `docs/reviews/evidence/2026-09-11_t08_t12/product/pipe2-indexed/` 是阶段验收归档。它用于验证软件流程和文件契约，参数与点数是测试案例数据，不是用户项目的保证值。
+当前 pipe2 六件套保存在 `docs/reviews/evidence/2026-09-13_paper_core_ac/products/pipe2/`。同一证据目录还保存自有 AC 离线方言输出和严格回读；参数与点数是当前测试案例数据，不是所有模型的保证值。
 
 ## 6. 保存、重开与错误处理
 
@@ -125,6 +125,6 @@ Tube 产品目录通常包含：
 
 ## 7. 能力边界
 
-当前证据覆盖软件内的 Indexed、Buildup、Continuous 生成、检查、回读、UI/脚本/HTTP 路由和保存重开。`Generic XYZAC` 只用于离线参考运动学；通过测试不等于已验证具体控制器语义、后处理器、真实设备参数、机床标定、现场碰撞或试切。导出的 NC 在投入设备前必须由负责工程师按实际机床和控制器重新核对。
+当前证据覆盖软件内的 Indexed、Buildup、Continuous 生成、检查、回读、UI/脚本/HTTP 路由和保存重开。pipe2 已增加自有 AC 离线后处理，仍缺控制器/宏版本、累计 C 限值、机床标定、现场碰撞和试切。导出的 NC 在投入设备前必须由负责工程师按实际机床和控制器重新核对。
 
-本版本的 pipe2 生成产物和“1171 points / readback passed”等数字属于流程测试参数与归档证据，不代表所有模型的性能、精度或生产资格。
+本版本的 pipe2 证据为 1,591 点，现有六件套回读与自有 AC 25 个事件回读均通过。该数字属于本轮流程参数与归档证据，不代表所有模型的性能、精度或生产资格。

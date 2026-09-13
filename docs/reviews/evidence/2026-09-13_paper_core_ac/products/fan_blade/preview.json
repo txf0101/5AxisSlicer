@@ -1,0 +1,3299 @@
+{
+  "coordinate_frame": "workpiece_build",
+  "segments": [
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398981326201445,
+      "end": [
+        52.28714022642336,
+        53.583967711436955,
+        57.69360827485967
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        49.503603281289905,
+        54.685013280265764,
+        57.872444228601836
+      ],
+      "step_index": 0,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989825178755664,
+      "end": [
+        54.99988200759573,
+        52.3183545288404,
+        57.51577182641473
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        52.28714022642336,
+        53.583967711436955,
+        57.69360827485967
+      ],
+      "step_index": 1,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989806360550717,
+      "end": [
+        57.6320145797442,
+        50.89254577000634,
+        57.33884274492048
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        54.99988200759573,
+        52.3183545288404,
+        57.51577182641473
+      ],
+      "step_index": 2,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398981867421003,
+      "end": [
+        60.17407397101588,
+        49.3116326961394,
+        57.16273615941159
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        57.6320145797442,
+        50.89254577000634,
+        57.33884274492048
+      ],
+      "step_index": 3,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989815797036249,
+      "end": [
+        62.61699069525972,
+        47.58138134341066,
+        56.98737480916335
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        60.17407397101588,
+        49.3116326961394,
+        57.16273615941159
+      ],
+      "step_index": 4,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989815446259588,
+      "end": [
+        64.9519256126351,
+        45.70790204397038,
+        56.812682360586045
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        62.61699069525972,
+        47.58138134341066,
+        56.98737480916335
+      ],
+      "step_index": 5,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989819248747232,
+      "end": [
+        67.17057194397856,
+        43.698010014139804,
+        56.63858887737833
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        64.9519256126351,
+        45.70790204397038,
+        56.812682360586045
+      ],
+      "step_index": 6,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398981315286194,
+      "end": [
+        69.26493373111037,
+        41.55887805423318,
+        56.46502433955518
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        67.17057194397856,
+        43.698010014139804,
+        56.63858887737833
+      ],
+      "step_index": 7,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989817552665024,
+      "end": [
+        71.22749162287751,
+        39.298177504725686,
+        56.29192225564885
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        69.26493373111037,
+        41.55887805423318,
+        56.46502433955518
+      ],
+      "step_index": 8,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989817258138824,
+      "end": [
+        73.05121704242917,
+        36.924032602028205,
+        56.11921979819843
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        71.22749162287751,
+        39.298177504725686,
+        56.29192225564885
+      ],
+      "step_index": 9,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989809636513237,
+      "end": [
+        74.72944259131818,
+        34.4448777559067,
+        55.94685650179166
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        73.05121704242917,
+        36.924032602028205,
+        56.11921979819843
+      ],
+      "step_index": 10,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989823236354396,
+      "end": [
+        76.25627064837248,
+        31.869697321173845,
+        55.77477844318592
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        74.72944259131818,
+        34.4448777559067,
+        55.94685650179166
+      ],
+      "step_index": 11,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398981822370602,
+      "end": [
+        77.62636355417446,
+        29.207803339433244,
+        55.60293215417989
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        76.25627064837248,
+        31.869697321173845,
+        55.77477844318592
+      ],
+      "step_index": 12,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398982472588562,
+      "end": [
+        78.83474338709603,
+        26.46869417467968,
+        55.4312658350638
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        77.62636355417446,
+        29.207803339433244,
+        55.60293215417989
+      ],
+      "step_index": 13,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989810236253192,
+      "end": [
+        79.8770653418842,
+        23.662184017759486,
+        55.259728721808195
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        78.83474338709603,
+        26.46869417467968,
+        55.4312658350638
+      ],
+      "step_index": 14,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989816077767095,
+      "end": [
+        80.7493112817611,
+        20.79824399879597,
+        55.08826949348521
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        79.8770653418842,
+        23.662184017759486,
+        55.259728721808195
+      ],
+      "step_index": 15,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989822789254892,
+      "end": [
+        81.44861270055382,
+        17.887237654352226,
+        54.91683933688215
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        80.7493112817611,
+        20.79824399879597,
+        55.08826949348521
+      ],
+      "step_index": 16,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989814502349596,
+      "end": [
+        81.97251073118551,
+        14.939611729921491,
+        54.74539033311731
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        81.44861270055382,
+        17.887237654352226,
+        54.91683933688215
+      ],
+      "step_index": 17,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989824988865635,
+      "end": [
+        82.31906784115033,
+        11.965918649930094,
+        54.57387358506369
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        81.97251073118551,
+        14.939611729921491,
+        54.74539033311731
+      ],
+      "step_index": 18,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989814801746887,
+      "end": [
+        82.48713123993885,
+        8.976828587222519,
+        54.40224021642284
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        82.31906784115033,
+        11.965918649930094,
+        54.57387358506369
+      ],
+      "step_index": 19,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989816078561566,
+      "end": [
+        82.47584518759473,
+        5.983048188928571,
+        54.23044024192172
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        82.48713123993885,
+        8.976828587222519,
+        54.40224021642284
+      ],
+      "step_index": 20,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989821014756063,
+      "end": [
+        82.28543296821334,
+        2.9953200252140766,
+        54.05841993364981
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        82.47584518759473,
+        5.983048188928571,
+        54.23044024192172
+      ],
+      "step_index": 21,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989816509522632,
+      "end": [
+        81.9165889311563,
+        0.024355084278066208,
+        53.88612542252025
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        82.28543296821334,
+        2.9953200252140766,
+        54.05841993364981
+      ],
+      "step_index": 22,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398982953220227,
+      "end": [
+        81.37072491355755,
+        -2.9192153385983053,
+        53.713500380202184
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        81.9165889311563,
+        0.024355084278066208,
+        53.88612542252025
+      ],
+      "step_index": 23,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989814589648445,
+      "end": [
+        80.64982443348029,
+        -5.824853114917879,
+        53.54048542748646
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        81.37072491355755,
+        -2.9192153385983053,
+        53.713500380202184
+      ],
+      "step_index": 24,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398981488204798,
+      "end": [
+        79.75614436957412,
+        -8.682056270458483,
+        53.367024037643475
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        80.64982443348029,
+        -5.824853114917879,
+        53.54048542748646
+      ],
+      "step_index": 25,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989820780915025,
+      "end": [
+        78.69306524904663,
+        -11.480620730728887,
+        53.19305004561013
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        79.75614436957412,
+        -8.682056270458483,
+        53.367024037643475
+      ],
+      "step_index": 26,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989825548809074,
+      "end": [
+        77.4645630972259,
+        -14.210581050741492,
+        53.01849377036672
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        78.69306524904663,
+        -11.480620730728887,
+        53.19305004561013
+      ],
+      "step_index": 27,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989833637612756,
+      "end": [
+        76.07514893636007,
+        -16.86222327732994,
+        52.84328351128126
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        77.4645630972259,
+        -14.210581050741492,
+        53.01849377036672
+      ],
+      "step_index": 28,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398981244995079,
+      "end": [
+        74.52969479453434,
+        -19.4260056395285,
+        52.6673504162839
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        76.07514893636007,
+        -16.86222327732994,
+        52.84328351128126
+      ],
+      "step_index": 29,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989821469560657,
+      "end": [
+        72.83347214366914,
+        -21.892575137169032,
+        52.49062647064987
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        74.52969479453434,
+        -19.4260056395285,
+        52.6673504162839
+      ],
+      "step_index": 30,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989827952530846,
+      "end": [
+        70.99282563808516,
+        -24.253263608435624,
+        52.31302308037825
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        72.83347214366914,
+        -21.892575137169032,
+        52.49062647064987
+      ],
+      "step_index": 31,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989815278930868,
+      "end": [
+        69.0143023230131,
+        -26.499576233491048,
+        52.13445051196561
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        70.99282563808516,
+        -24.253263608435624,
+        52.31302308037825
+      ],
+      "step_index": 32,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989831768974673,
+      "end": [
+        66.90500143399682,
+        -28.62347691755419,
+        51.95480896310607
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        69.0143023230131,
+        -26.499576233491048,
+        52.13445051196561
+      ],
+      "step_index": 33,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398982460900009,
+      "end": [
+        64.67260236039193,
+        -30.617484943962992,
+        51.77398738993033
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        66.90500143399682,
+        -28.62347691755419,
+        51.95480896310607
+      ],
+      "step_index": 34,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989824470882454,
+      "end": [
+        62.32490340571836,
+        -32.47423348112069,
+        51.591876272797286
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        64.67260236039193,
+        -30.617484943962992,
+        51.77398738993033
+      ],
+      "step_index": 35,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989836344100313,
+      "end": [
+        59.87055546070965,
+        -34.18737936750902,
+        51.408338241538125
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        62.32490340571836,
+        -32.47423348112069,
+        51.591876272797286
+      ],
+      "step_index": 36,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398980830030474,
+      "end": [
+        57.31820709513281,
+        -35.750586914181724,
+        51.22324951964606
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        59.87055546070965,
+        -34.18737936750902,
+        51.408338241538125
+      ],
+      "step_index": 37,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989844555432727,
+      "end": [
+        54.67703397255938,
+        -37.15831671243786,
+        51.03647056010845
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        57.31820709513281,
+        -35.750586914181724,
+        51.22324951964606
+      ],
+      "step_index": 38,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-01-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989824878027644,
+      "end": [
+        51.95664467501798,
+        -38.40582391810947,
+        50.847848933975236
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        54.67703397255938,
+        -37.15831671243786,
+        51.03647056010845
+      ],
+      "step_index": 39,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:none",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.0,
+      "end": [
+        -59.23874150386393,
+        -25.79286222491205,
+        50.847848933975236
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 3000.0,
+      "height": null,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "travel",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        51.95664467501798,
+        -38.40582391810947,
+        50.847848933975236
+      ],
+      "step_index": 40,
+      "width": null
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989824878027732,
+      "end": [
+        -59.5185632211189,
+        -28.77254206760202,
+        51.03647056010845
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -59.23874150386393,
+        -25.79286222491205,
+        50.847848933975236
+      ],
+      "step_index": 41,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398984455543278,
+      "end": [
+        -59.620020015451445,
+        -31.76372998667136,
+        51.22324951964607
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -59.5185632211189,
+        -28.77254206760202,
+        51.03647056010845
+      ],
+      "step_index": 42,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.239898083003046,
+      "end": [
+        -59.54241675143379,
+        -34.75573228390493,
+        51.408338241538125
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -59.620020015451445,
+        -31.76372998667136,
+        51.22324951964607
+      ],
+      "step_index": 43,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989836344100512,
+      "end": [
+        -59.285962865937044,
+        -37.73783289720279,
+        51.59187627279729
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -59.54241675143379,
+        -34.75573228390493,
+        51.408338241538125
+      ],
+      "step_index": 44,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989824470882232,
+      "end": [
+        -58.85182094165569,
+        -40.699374100967106,
+        51.77398738993033
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -59.285962865937044,
+        -37.73783289720279,
+        51.59187627279729
+      ],
+      "step_index": 45,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989824608999943,
+      "end": [
+        -58.24115887223805,
+        -43.62969242329817,
+        51.95480896310607
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -58.85182094165569,
+        -40.699374100967106,
+        51.77398738993033
+      ],
+      "step_index": 46,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989831768974867,
+      "end": [
+        -57.456457369232375,
+        -46.518350919442966,
+        52.13445051196561
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -58.24115887223805,
+        -43.62969242329817,
+        51.95480896310607
+      ],
+      "step_index": 47,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989815278930926,
+      "end": [
+        -56.500355228628734,
+        -49.35495868480291,
+        52.31302308037825
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -57.456457369232375,
+        -46.518350919442966,
+        52.13445051196561
+      ],
+      "step_index": 48,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989827952530773,
+      "end": [
+        -55.37626229488281,
+        -52.129349553658976,
+        52.49062647064987
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -56.500355228628734,
+        -49.35495868480291,
+        52.31302308037825
+      ],
+      "step_index": 49,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398982146956061,
+      "end": [
+        -54.08826177515887,
+        -54.83160620860307,
+        52.6673504162839
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -55.37626229488281,
+        -52.129349553658976,
+        52.49062647064987
+      ],
+      "step_index": 50,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989812449950787,
+      "end": [
+        -52.64068819063333,
+        -57.451899936907324,
+        52.84328351128126
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -54.08826177515887,
+        -54.83160620860307,
+        52.6673504162839
+      ],
+      "step_index": 51,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398983363761282,
+      "end": [
+        -51.03900574109312,
+        -59.980989009889214,
+        53.01849377036672
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -52.64068819063333,
+        -57.451899936907324,
+        52.84328351128126
+      ],
+      "step_index": 52,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989825548809063,
+      "end": [
+        -49.289041828549095,
+        -62.409883241976125,
+        53.19305004561013
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -51.03900574109312,
+        -59.980989009889214,
+        53.01849377036672
+      ],
+      "step_index": 53,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989820780914833,
+      "end": [
+        -47.3969534720904,
+        -64.72981899672094,
+        53.367024037643475
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -49.289041828549095,
+        -62.409883241976125,
+        53.19305004561013
+      ],
+      "step_index": 54,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989814882048047,
+      "end": [
+        -45.36938298757227,
+        -66.9323702126897,
+        53.54048542748646
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -47.3969534720904,
+        -64.72981899672094,
+        53.367024037643475
+      ],
+      "step_index": 55,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989814589648342,
+      "end": [
+        -43.213477099122436,
+        -69.00950723019679,
+        53.713500380202184
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -45.36938298757227,
+        -66.9323702126897,
+        53.54048542748646
+      ],
+      "step_index": 56,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989829532202306,
+      "end": [
+        -40.93720234388239,
+        -70.95402454788736,
+        53.88612542252025
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -43.213477099122436,
+        -69.00950723019679,
+        53.713500380202184
+      ],
+      "step_index": 57,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398981650952257,
+      "end": [
+        -38.548693249807414,
+        -72.75893532448119,
+        54.05841993364981
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -40.93720234388239,
+        -70.95402454788736,
+        53.88612542252025
+      ],
+      "step_index": 58,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989821014756157,
+      "end": [
+        -36.05645087011912,
+        -74.41770122551371,
+        54.23044024192171
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -38.548693249807414,
+        -72.75893532448119,
+        54.05841993364981
+      ],
+      "step_index": 59,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989816078561652,
+      "end": [
+        -33.46940401801673,
+        -75.92436543269916,
+        54.40224021642283
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -36.05645087011912,
+        -74.41770122551371,
+        54.23044024192171
+      ],
+      "step_index": 60,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989814801746723,
+      "end": [
+        -30.79674439011812,
+        -77.27336329125575,
+        54.57387358506369
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -33.46940401801673,
+        -75.92436543269916,
+        54.40224021642283
+      ],
+      "step_index": 61,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989824988865532,
+      "end": [
+        -28.048172084805174,
+        -78.46008257015977,
+        54.74539033311731
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -30.79674439011812,
+        -77.27336329125575,
+        54.57387358506369
+      ],
+      "step_index": 62,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989814502349663,
+      "end": [
+        -25.233504138078715,
+        -79.48018652885546,
+        54.91683933688215
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -28.048172084805174,
+        -78.46008257015977,
+        54.74539033311731
+      ],
+      "step_index": 63,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398982278925501,
+      "end": [
+        -22.362847983816387,
+        -80.33007690750036,
+        55.08826949348521
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -25.233504138078715,
+        -79.48018652885546,
+        54.91683933688215
+      ],
+      "step_index": 64,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989816077767134,
+      "end": [
+        -19.446480202540652,
+        -81.00665977470092,
+        55.25972872180819
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -22.362847983816387,
+        -80.33007690750036,
+        55.08826949348521
+      ],
+      "step_index": 65,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989810236253117,
+      "end": [
+        -16.494810133274644,
+        -81.50723756139226,
+        55.4312658350638
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -19.446480202540652,
+        -81.00665977470092,
+        55.25972872180819
+      ],
+      "step_index": 66,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.239898247258856,
+      "end": [
+        -13.5184820963985,
+        -81.83030451103816,
+        55.60293215417989
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -16.494810133274644,
+        -81.50723756139226,
+        55.4312658350638
+      ],
+      "step_index": 67,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989818223706033,
+      "end": [
+        -10.528167833129235,
+        -81.97471623993907,
+        55.77477844318592
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -13.5184820963985,
+        -81.83030451103816,
+        55.60293215417989
+      ],
+      "step_index": 68,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989823236354477,
+      "end": [
+        -7.534582128794764,
+        -81.9400345726857,
+        55.94685650179166
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -10.528167833129235,
+        -81.97471623993907,
+        55.77477844318592
+      ],
+      "step_index": 69,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398980963651321,
+      "end": [
+        -4.548458277693743,
+        -81.7262260371285,
+        56.11921979819843
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -7.534582128794764,
+        -81.9400345726857,
+        55.94685650179166
+      ],
+      "step_index": 70,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989817258138754,
+      "end": [
+        -1.5805257699165676,
+        -81.33390594561806,
+        56.29192225564885
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -4.548458277693743,
+        -81.7262260371285,
+        56.11921979819843
+      ],
+      "step_index": 71,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989817552665083,
+      "end": [
+        1.358577282189945,
+        -80.76463122970387,
+        56.46502433955518
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -1.5805257699165676,
+        -81.33390594561806,
+        56.29192225564885
+      ],
+      "step_index": 72,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398981315286195,
+      "end": [
+        4.25830079508219,
+        -80.02042669728567,
+        56.63858887737833
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        1.358577282189945,
+        -80.76463122970387,
+        56.46502433955518
+      ],
+      "step_index": 73,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398981924874719,
+      "end": [
+        7.108241517451078,
+        -79.10396862724441,
+        56.812682360586045
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        4.25830079508219,
+        -80.02042669728567,
+        56.63858887737833
+      ],
+      "step_index": 74,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989815446259768,
+      "end": [
+        9.898189642918336,
+        -78.01859532233414,
+        56.98737480916335
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        7.108241517451078,
+        -79.10396862724441,
+        56.812682360586045
+      ],
+      "step_index": 75,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398981579703619,
+      "end": [
+        12.618089631435737,
+        -76.7680930561735,
+        57.16273615941159
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        9.898189642918336,
+        -78.01859532233414,
+        56.98737480916335
+      ],
+      "step_index": 76,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989818674210103,
+      "end": [
+        15.258230210215308,
+        -75.3570615823369,
+        57.33884274492048
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        12.618089631435737,
+        -76.7680930561735,
+        57.16273615941159
+      ],
+      "step_index": 77,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989806360550797,
+      "end": [
+        17.809083102378207,
+        -73.79047228814487,
+        57.51577182641473
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        15.258230210215308,
+        -75.3570615823369,
+        57.33884274492048
+      ],
+      "step_index": 78,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989825178755764,
+      "end": [
+        20.26150716045749,
+        -72.07397558304042,
+        57.69360827485967
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        17.809083102378207,
+        -73.79047228814487,
+        57.51577182641473
+      ],
+      "step_index": 79,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-02-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398981326201442,
+      "end": [
+        22.60680906635427,
+        -70.21388466059675,
+        57.872444228601836
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        20.26150716045749,
+        -72.07397558304042,
+        57.69360827485967
+      ],
+      "step_index": 80,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:none",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.0,
+      "end": [
+        -72.11041234764436,
+        15.528871380331541,
+        57.872444228601836
+      ],
+      "extrusion_role": "unknown",
+      "feedrate": 3000.0,
+      "height": null,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "travel",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        22.60680906635427,
+        -70.21388466059675,
+        57.872444228601836
+      ],
+      "step_index": 81,
+      "width": null
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398981326427304,
+      "end": [
+        -72.54864738691394,
+        18.490007871884075,
+        57.69360827484287
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -72.11041234764436,
+        15.528871380331541,
+        57.872444228601836
+      ],
+      "step_index": 82,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989825181014068,
+      "end": [
+        -72.80896511000631,
+        21.472117759868016,
+        57.515771826381325
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -72.54864738691394,
+        18.490007871884075,
+        57.69360827484287
+      ],
+      "step_index": 83,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989806362808974,
+      "end": [
+        -72.89024478995725,
+        24.464515813176945,
+        57.33884274487062
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -72.80896511000631,
+        21.472117759868016,
+        57.515771826381325
+      ],
+      "step_index": 84,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989818676468377,
+      "end": [
+        -72.79216360238104,
+        27.45646036116023,
+        57.1627361593454
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -72.89024478995725,
+        24.464515813176945,
+        57.33884274487062
+      ],
+      "step_index": 85,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989815799294495,
+      "end": [
+        -72.51518033800573,
+        30.437213980323204,
+        56.98737480908095
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -72.79216360238104,
+        27.45646036116023,
+        57.1627361593454
+      ],
+      "step_index": 86,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989815448518056,
+      "end": [
+        -72.0601671297792,
+        33.39606658493819,
+        56.81268236048752
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -72.51518033800573,
+        30.437213980323204,
+        56.98737480908095
+      ],
+      "step_index": 87,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989819251005612,
+      "end": [
+        -71.42887273858706,
+        36.32241668506242,
+        56.638588877263764
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -72.0601671297792,
+        33.39606658493819,
+        56.81268236048752
+      ],
+      "step_index": 88,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989813172847302,
+      "end": [
+        -70.62351109695778,
+        39.20575320354843,
+        56.46502434050148
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -71.42887273858706,
+        36.32241668506242,
+        56.638588877263764
+      ],
+      "step_index": 89,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989817562939947,
+      "end": [
+        -69.64696585278983,
+        42.03572844134462,
+        56.29192225562097
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -70.62351109695778,
+        39.20575320354843,
+        56.46502434050148
+      ],
+      "step_index": 90,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989817260396853,
+      "end": [
+        -68.50275876442204,
+        44.80219343579863,
+        56.11921979815436
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -69.64696585278983,
+        42.03572844134462,
+        56.29192225562097
+      ],
+      "step_index": 91,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989809615359522,
+      "end": [
+        -67.19486046973049,
+        47.495156818199334,
+        55.94685650196558
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -68.50275876442204,
+        44.80219343579863,
+        56.11921979815436
+      ],
+      "step_index": 92,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989823240095945,
+      "end": [
+        -65.72810281618692,
+        50.10501891719839,
+        55.774778443291005
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -67.19486046973049,
+        47.495156818199334,
+        55.94685650196558
+      ],
+      "step_index": 93,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989818225964266,
+      "end": [
+        -64.10788145865214,
+        52.62250117032974,
+        55.60293215426867
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -65.72810281618692,
+        50.10501891719839,
+        55.774778443291005
+      ],
+      "step_index": 94,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989824728143963,
+      "end": [
+        -62.33993325459904,
+        55.03854338571452,
+        55.43126583513634
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -64.10788145865214,
+        52.62250117032974,
+        55.60293215426867
+      ],
+      "step_index": 95,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989810238511527,
+      "end": [
+        -60.43058513999333,
+        57.344475756203465,
+        55.25972872186454
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -62.33993325459904,
+        55.03854338571452,
+        55.43126583513634
+      ],
+      "step_index": 96,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989816080025395,
+      "end": [
+        -58.38646329843891,
+        59.53183290820679,
+        55.088269493525395
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -60.43058513999333,
+        57.344475756203465,
+        55.25972872186454
+      ],
+      "step_index": 97,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989822791513216,
+      "end": [
+        -56.21510856278802,
+        61.59294887422403,
+        54.91683933690619
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -58.38646329843891,
+        59.53183290820679,
+        55.088269493525395
+      ],
+      "step_index": 98,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989814504608084,
+      "end": [
+        -53.92433864648835,
+        63.52047084015332,
+        54.74539033312521
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -56.21510856278802,
+        61.59294887422403,
+        54.91683933690619
+      ],
+      "step_index": 99,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989824991123979,
+      "end": [
+        -51.52232345091397,
+        65.30744464140872,
+        54.57387358505544
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -53.92433864648835,
+        63.52047084015332,
+        54.74539033312521
+      ],
+      "step_index": 100,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989814804005116,
+      "end": [
+        -49.0177272215587,
+        66.94753684569977,
+        54.40224021639841
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -51.52232345091397,
+        65.30744464140872,
+        54.57387358505544
+      ],
+      "step_index": 101,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989816057942495,
+      "end": [
+        -46.419394322695084,
+        68.43465304137933,
+        54.230440242015504
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -49.0177272215587,
+        66.94753684569977,
+        54.40224021639841
+      ],
+      "step_index": 102,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989821018425214,
+      "end": [
+        -43.73673972030479,
+        69.76361529839662,
+        54.05841993376994
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -46.419394322695084,
+        68.43465304137933,
+        54.230440242015504
+      ],
+      "step_index": 103,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989816511780826,
+      "end": [
+        -40.97938658895862,
+        70.92966946295601,
+        53.88612542262435
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -43.73673972030479,
+        69.76361529839662,
+        54.05841993376994
+      ],
+      "step_index": 104,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398982953446075,
+      "end": [
+        -38.15724781588736,
+        71.92872256832983,
+        53.71350038029023
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -40.97938658895862,
+        70.92966946295601,
+        53.88612542262435
+      ],
+      "step_index": 105,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989814591906625,
+      "end": [
+        -35.28044144711239,
+        72.75722332729997,
+        53.54048542755841
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -38.15724781588736,
+        71.92872256832983,
+        53.71350038029023
+      ],
+      "step_index": 106,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398981486207771,
+      "end": [
+        -32.35919090253897,
+        73.41187527264016,
+        53.367024037787495
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -35.28044144711239,
+        72.75722332729997,
+        53.54048542755841
+      ],
+      "step_index": 107,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398982078450922,
+      "end": [
+        -29.404023424131093,
+        73.89050397222798,
+        53.19305004582343
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -32.35919090253897,
+        73.41187527264016,
+        53.367024037787495
+      ],
+      "step_index": 108,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989825551067412,
+      "end": [
+        -26.42555735950709,
+        74.19157006039171,
+        53.01849377056432
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -29.404023424131093,
+        73.89050397222798,
+        53.19305004582343
+      ],
+      "step_index": 109,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398983363987108,
+      "end": [
+        -23.434460748827355,
+        74.31412321420335,
+        52.843283511463106
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -26.42555735950709,
+        74.19157006039171,
+        53.01849377056432
+      ],
+      "step_index": 110,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.239898124522091,
+      "end": [
+        -20.441433022190914,
+        74.25761184826972,
+        52.66735041644993
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -23.434460748827355,
+        74.31412321420335,
+        52.843283511463106
+      ],
+      "step_index": 111,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989821471818915,
+      "end": [
+        -17.457209851308214,
+        74.02192469110376,
+        52.490626470799995
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -20.441433022190914,
+        74.25761184826972,
+        52.66735041644993
+      ],
+      "step_index": 112,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.239898279547891,
+      "end": [
+        -14.49247041167938,
+        73.60822229361723,
+        52.3130230805124
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -17.457209851308214,
+        74.02192469110376,
+        52.490626470799995
+      ],
+      "step_index": 113,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398981528118921,
+      "end": [
+        -11.557844955702375,
+        73.01792715338127,
+        52.13445051208366
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -14.49247041167938,
+        73.60822229361723,
+        52.3130230805124
+      ],
+      "step_index": 114,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398983177123305,
+      "end": [
+        -8.663842563379948,
+        72.25316934133352,
+        51.95480896320789
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -11.557844955702375,
+        73.01792715338127,
+        52.13445051208366
+      ],
+      "step_index": 115,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989824611258342,
+      "end": [
+        -5.820781420060738,
+        71.31685904541118,
+        51.77398739001577
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -8.663842563379948,
+        72.25316934133352,
+        51.95480896320789
+      ],
+      "step_index": 116,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989824473140742,
+      "end": [
+        -3.038940540815883,
+        70.21206637877104,
+        51.591876272866145
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -5.820781420060738,
+        71.31685904541118,
+        51.77398739001577
+      ],
+      "step_index": 117,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989836346358642,
+      "end": [
+        -0.32813871003022776,
+        68.94311165179545,
+        51.40833824159019
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -3.038940540815883,
+        70.21206637877104,
+        51.591876272866145
+      ],
+      "step_index": 118,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989808302562876,
+      "end": [
+        2.3018129198320283,
+        67.51431690113715,
+        51.223249519681076
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        -0.32813871003022776,
+        68.94311165179545,
+        51.40833824159019
+      ],
+      "step_index": 119,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.2398984455769111,
+      "end": [
+        4.84152924832534,
+        65.93085878019627,
+        51.03647056012612
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        2.3018129198320283,
+        67.51431690113715,
+        51.223249519681076
+      ],
+      "step_index": 120,
+      "width": 0.4
+    },
+    {
+      "comment": "generated:freeform_thin_wall:guide-03-pass-01:buildup",
+      "coordinate_transform": "workpiece_build",
+      "delta_e": 0.23989824880285973,
+      "end": [
+        7.282096828846406,
+        64.1986861430217,
+        50.847848933975236
+      ],
+      "extrusion_role": "solid_infill",
+      "feedrate": 900.0,
+      "height": 0.2,
+      "layer": 0,
+      "line_number": 0,
+      "machine_end": null,
+      "machine_start": null,
+      "move_type": "extrude",
+      "rotary_end": {},
+      "rotary_start": {},
+      "start": [
+        4.84152924832534,
+        65.93085878019627,
+        51.03647056012612
+      ],
+      "step_index": 121,
+      "width": 0.4
+    }
+  ]
+}

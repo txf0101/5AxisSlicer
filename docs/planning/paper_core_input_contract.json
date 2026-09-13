@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "contract_id": "paper-core-ac-pc01-2026-09-13",
+  "scope": "offline_only",
+  "units": {
+    "internal_length": "mm",
+    "internal_angle": "rad",
+    "controller_linear": "mm",
+    "controller_rotary": "deg"
+  },
+  "frames": {
+    "cad": "source",
+    "generated_toolpath": "workpiece_build",
+    "machine_axes": "machine",
+    "rotary_order": "A_about_machine_X_then_C_about_table_Z",
+    "historical_inverse_candidate": "P_part=Rz(-C)*Rx(-A)*P_machine",
+    "historical_inverse_status": "comparison_only_not_calibration"
+  },
+  "controller": {
+    "machine_profile": "src/five_axis_slicer/manufacturing/profiles/own_ac_fdm.json",
+    "machine_profile_sha256": "21abb106660a582d9bc6ab1b4699f18be5585ff9b60c21406d711551a5dd3af9",
+    "axis_mode": "G90_absolute",
+    "extrusion_mode": "M83_relative",
+    "feed_mode": "G94_units_per_minute",
+    "inverse_time_support": "unknown",
+    "controller_version": "unknown",
+    "macro_version": "unknown",
+    "coordinated_xyzac_verified": false,
+    "machine_executable": false,
+    "reorientation_absolute_z_mm": 20.0,
+    "cutter_relative_z_mm": 20.0
+  },
+  "tolerances": {
+    "curve_chord_error_mm": 0.05,
+    "chain_gap_mm": 0.01,
+    "trim_classifier_mm": 0.0000001,
+    "fk_position_mm": 0.01,
+    "fk_orientation_rad": 0.00017453292519943296,
+    "gcode_readback_axis": 0.0001
+  },
+  "cases": [
+    {
+      "case_id": "hemisphere_pattern",
+      "cad_path": "example/球形NEU校徽/球形测试件.STEP",
+      "cad_sha256": "0812eebe0c43c57b0e280a981d4c1521889a26e85d1ec567cbf97d22aeac64c0",
+      "historical_nc_path": "example/球形NEU校徽/NEU校徽划线.gcode",
+      "historical_nc_sha256": "7fc667f26ebe31d0b93b3bda3dd7faabd08c4d73de6d502f189190ebcfb92218",
+      "source_status": "local_user_asset_untracked_redistribution_license_unknown",
+      "selection": "one_explicit_trimmed_face_plus_explicit_guide_edges",
+      "material_regions": "single_PLA"
+    },
+    {
+      "case_id": "fan_blade",
+      "cad_path": "example/扇叶/风扇扇叶(1).STEP",
+      "cad_sha256": "294b882a7231d6b0fcfaf4aa8c6355422b212590f443158ea0a624fec2b901ef",
+      "historical_nc_path": "example/扇叶/风扇扇叶完整新.gcode",
+      "historical_nc_sha256": "1de2cef4dbdb995e6d34bf0e143db166b3dcff3364339763f70a8536c9d6651e",
+      "source_status": "local_user_asset_redistribution_license_unknown",
+      "selection": "three_explicit_bspline_blade_faces_and_guides",
+      "material_regions": "predefined_T0_T1_T2_T3"
+    },
+    {
+      "case_id": "pipe2",
+      "cad_path": "example/pipe2/弯管新.stp",
+      "cad_sha256": "116e99fd43492bd1f4f519c80c93cd1f7cd0bf2cb6861b3e123148e4031a0d4b",
+      "historical_nc_path": "example/pipe2/弯管.gcode",
+      "historical_nc_sha256": "4d6630c01f63d6f802ae6955752fa41b35abfea23509c661fcd855f7064ff70a",
+      "source_status": "cad_tracked_historical_nc_local_only",
+      "selection": "tube_body_body_002_base_body_001",
+      "material_regions": "single_PETG"
+    },
+    {
+      "case_id": "impeller",
+      "cad_path": "example/叶轮/叶轮.stp",
+      "cad_sha256": "3776fe6e1c384e03a7dab20e7ab8d8028210b86ec7c2ced3d3518a8011fdf21f",
+      "historical_nc_path": "example/叶轮/叶轮完整.gcode",
+      "historical_nc_sha256": "5b33b1fa3569f2027e7628c0b7211e125267fc73b25e88e6b774cb1de338fe33",
+      "source_status": "cad_and_historical_nc_tracked_origin_and_redistribution_license_unknown",
+      "selection": "finite_explicit_face_group_and_guides",
+      "material_regions": "predefined_T0_T1_T2_T3"
+    },
+    {
+      "case_id": "dual_channel_preloaded",
+      "cad_path": "generated_analytic_fixture",
+      "cad_sha256": null,
+      "historical_nc_path": null,
+      "historical_nc_sha256": null,
+      "source_status": "generated_during_pc06",
+      "selection": "two_explicit_regions",
+      "material_regions": "T0_T1_no_prepare_pause"
+    }
+  ],
+  "materials": [
+    {"material_id": "PLA", "channel_id": "T0", "nozzle_c": 195.0, "standalone_bed_c": 45.0},
+    {"material_id": "PETG", "channel_id": "T1", "nozzle_c": 235.0, "standalone_bed_c": 80.0},
+    {"material_id": "PA", "channel_id": "T2", "nozzle_c": 275.0, "standalone_bed_c": 95.0},
+    {"material_id": "ABS", "channel_id": "T3", "nozzle_c": 250.0, "standalone_bed_c": 90.0}
+  ],
+  "failure_matrix": [
+    {"code": "freeform.geometry_incomplete", "severity": "error", "effect": "block_generation"},
+    {"code": "curve.offset_outside_face", "severity": "error", "effect": "block_generation"},
+    {"code": "freeform.normal_discontinuity", "severity": "error", "effect": "block_generation"},
+    {"code": "material.region_unassigned", "severity": "error", "effect": "block_generation"},
+    {"code": "controller.version_unknown", "severity": "warning", "effect": "offline_export_only"},
+    {"code": "controller.macros_unverified", "severity": "warning", "effect": "offline_export_only"},
+    {"code": "controller.xyzac_coordination_unverified", "severity": "warning", "effect": "offline_export_only"},
+    {"code": "xyzac.axis_limit", "severity": "error", "effect": "block_export"},
+    {"code": "freeform.gcode_readback_failed", "severity": "error", "effect": "block_export"},
+    {"code": "generation.cancelled", "severity": "cancelled", "effect": "preserve_previous_valid_result"}
+  ],
+  "known_unknowns": [
+    "hemisphere_asset_origin_authorship_and_redistribution_license",
+    "controller_and_firmware_version",
+    "actual_T0_T3_macro_files_and_hashes",
+    "XYZ_travel_velocity_acceleration",
+    "rotary_centres_zero_offsets_axis_signs",
+    "tool_and_fixture_swept_envelopes",
+    "sensor_protocol_temperature_tolerance_and_timeout",
+    "load_retract_purge_lengths",
+    "historical_NC_manual_edit_ranges"
+  ]
+}

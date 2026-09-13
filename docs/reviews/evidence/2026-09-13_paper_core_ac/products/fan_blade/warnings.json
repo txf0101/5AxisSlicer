@@ -1,0 +1,104 @@
+{
+  "controller_qualification": {
+    "axis_mode": "absolute",
+    "controller_family": "custom-klipper-derived",
+    "controller_version": null,
+    "coordinated_xyzac_verified": false,
+    "cumulative_c_span_rad": 3.565304366007418,
+    "cumulative_c_travel_rad": 6.5071228932358816,
+    "cutter_relative_z_mm": 20.0,
+    "extrusion_mode": "relative",
+    "feed_mode": "units_per_minute",
+    "machine_executable": false,
+    "machine_profile_id": "builtin.machine.own_ac_fdm.v1",
+    "macro_version": null,
+    "maximum_cumulative_c_rad": null,
+    "profile_id": "builtin.controller.own_ac.offline.v1",
+    "qualification_issues": [
+      "controller.version_unknown",
+      "controller.macros_unverified",
+      "controller.xyzac_coordination_unverified",
+      "controller.cumulative_c_limit_unknown"
+    ],
+    "reorientation_absolute_z_mm": 20.0,
+    "schema_version": 1
+  },
+  "issues": [
+    {
+      "code": "controller.version_unknown",
+      "context": {
+        "offline_only": true
+      },
+      "object_id": "",
+      "severity": "warning"
+    },
+    {
+      "code": "controller.macros_unverified",
+      "context": {
+        "offline_only": true
+      },
+      "object_id": "",
+      "severity": "warning"
+    },
+    {
+      "code": "controller.xyzac_coordination_unverified",
+      "context": {
+        "offline_only": true
+      },
+      "object_id": "",
+      "severity": "warning"
+    },
+    {
+      "code": "controller.cumulative_c_limit_unknown",
+      "context": {
+        "offline_only": true
+      },
+      "object_id": "",
+      "severity": "warning"
+    }
+  ],
+  "material_statistics": {
+    "deposition_volume_mm3_by_material": {
+      "PA": 9.59592805853496,
+      "PETG": 9.595928058017082,
+      "PLA": 9.59592805801708
+    },
+    "effective_channel_transition_count": 2,
+    "purge_length_mm": 18.0,
+    "selection_command_count": 3
+  },
+  "metrics": [
+    {
+      "limit": 3.0,
+      "name": "freeform_path_count",
+      "passed": true,
+      "unit": "count",
+      "value": 3.0
+    },
+    {
+      "limit": 0.17453292519943295,
+      "name": "freeform_max_normal_change",
+      "passed": true,
+      "unit": "rad",
+      "value": 0.003277891504467681
+    },
+    {
+      "limit": 0.01,
+      "name": "freeform_fk_position_error",
+      "passed": true,
+      "unit": "mm",
+      "value": 2.864289338439558e-14
+    },
+    {
+      "limit": 0.00017453292519943296,
+      "name": "freeform_fk_orientation_error",
+      "passed": true,
+      "unit": "rad",
+      "value": 0.0
+    }
+  ],
+  "ready_for_offline_export": true,
+  "report_id": "pc06-fan_blade-freeform_thin_wall-v1-validation-v1",
+  "schema_version": 1,
+  "status": "warning"
+}

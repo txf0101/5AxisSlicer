@@ -5,6 +5,9 @@
 - [CI 依赖修复与分支统一复盘](reviews/2026-09-13_ci_branch_consolidation_review.md)：默认 `master` 主线、Actions 隔离环境、依赖漂移原因和本轮验证边界。
 - [论文核心 AC 范围与开源复用研究](planning/paper_core_ac_scope.md)：当前优先路线、四例覆盖缺口、论文批判性核对、固定版本及许可边界；状态统一见台账PC00—PC07。
 - [论文核心范围调整复盘](reviews/2026-09-13_paper_core_ac_planning_review.md)：资源取舍、证据限制和本轮实际Skill使用。
+- [PC01 输入、材料与控制器契约](planning/paper_core_input_contract.md)：单位、frame、G90/M83/G94、两种 Z20、T0—T3、容差、输入指纹和失败矩阵。
+- [PC01—PC07 实施与验收复盘](reviews/2026-09-13_paper_core_ac_implementation_review.md)：受限 Freeform、多材料、自有 AC、Tube 收口、五个产品、测试/构建/封装及实机边界。
+- [PC01—PC07 机器可读证据](reviews/evidence/2026-09-13_paper_core_ac/validation_manifest.json)：五个产品六件套、四个可重开项目、失败案例、双语多尺寸 UI 和逐文件 SHA-256。
 
 - [AUD-02 缺陷修复、真实模型与 Skill 更新](reviews/2026-09-12_algorithm_audit_fixes.md)：含2026-09-13 Tube再检查、末层材料/固定喷嘴姿态修复、IPW加速与pipe2当前六件套；更正旧轴限解释。
 
@@ -54,6 +57,9 @@
 - [Planar 工作台图文手册](guides/planar_workbench_zh.md)：Region、Zigzag、Offset、Thin Wall、Spiral 与 buildplate-only Planar Support 的离线生成链与恢复说明。
 - [Curve 工作台图文手册](guides/curve_workbench_zh.md)：Buildup、Multi-pass Buildup 与 Offset Buildup 的完整离线工作流。
 - [Rotary 工作台图文手册](guides/rotary_workbench_zh.md)：Spiral、Thin Wall 与 Around Part 的完整离线工作流。
+- [Freeform 工作台图文手册](guides/freeform_workbench_zh.md)：受限面组、多导引线、曲面贴合/薄壁、三入口、六件套和错误恢复。
+- [多材料通道指南](guides/material_channels_zh.md)：显式材料区域、T0—T3 事件链、温控/传感器门禁和统计口径。
+- [自有 AC 离线控制器指南](guides/paper_core_ac_controller_zh.md)：模式、Z20、宏展开、累计 C、严格回读和实机资格缺口。
 - [机型选择与旋转轴输出字指南](guides/machine_profiles_zh.md)：把内部 A/B/C 映射到固件轴字，并说明保存、重开、Stale 与安全限制。
 - [pipe2 与扇叶回转特征对比报告](reviews/2026-09-13_pipe2_model_manual_gcode_comparison.md)：用当前 STEP 与手工 G-code 说明固定轴 Rotary、中心线随动 Tube 和自由曲面多轴路径的差异。
 - [G-code 可视化图文手册](guides/gcode_preview_zh.md)：普通 Preview、成果页、分色、层范围与五轴回读边界。

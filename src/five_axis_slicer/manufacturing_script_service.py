@@ -18,6 +18,7 @@ class ManufacturingScriptService:
             "tube": self._window.tube_script_service,
             "planar": self._window.planar_command_service,
             "curve": self._window.curve_command_service,
+            "freeform": self._window.freeform_command_service,
             "rotary": self._window.rotary_command_service,
         }
 

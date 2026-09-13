@@ -266,6 +266,14 @@ def _face_normal(model: CadModel, face_id: str, point: Vector3) -> Vector3:
     return _unit(normal, "curve.normal_undefined")
 
 
+def face_normal_at(model: CadModel, face_id: str, point: Vector3) -> Vector3:
+    """Evaluate the oriented trimmed-face normal for shared surface workflows."""
+
+    if face_id not in model.face_shapes:
+        raise CurveGeometryError("curve.normal_face_missing", face_id)
+    return _face_normal(model, face_id, point)
+
+
 def project_point_to_face(model: CadModel, face_id: str, point: Vector3) -> Vector3:
     """Project to the authoritative surface and reject points outside its trim."""
 
@@ -312,5 +320,6 @@ __all__ = [
     "CurvePlan",
     "CurveSample",
     "build_curve_plan",
+    "face_normal_at",
     "project_point_to_face",
 ]

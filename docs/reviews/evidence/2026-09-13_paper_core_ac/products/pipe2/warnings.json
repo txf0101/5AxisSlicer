@@ -1,0 +1,1482 @@
+{
+  "collision_samples_checked": 5824,
+  "issues": [
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000001",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000002",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000003",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000004",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000005",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000006",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000007",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000008",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000009",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000010",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000011",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000012",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000013",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000014",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000015",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000016",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000017",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000018",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000019",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000020",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000021",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000022",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000023",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000024",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000025",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000026",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000027",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000028",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000029",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000030",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000031",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000032",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000033",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000034",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000035",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000036",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000037",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000038",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000039",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000040",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000041",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000042",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000043",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000044",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000045",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000046",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000047",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000048",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000049",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000050",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000051",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000052",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000053",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000054",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000055",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000056",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000057",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000058",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000059",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000060",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000061",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000062",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000063",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000064",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000065",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000066",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000067",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000068",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000069",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000070",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000071",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000072",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000073",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000074",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000075",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000076",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000077",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000078",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000079",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000080",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000081",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000082",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000083",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000084",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000085",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000086",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000087",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000088",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000089",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000090",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000091",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000092",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000093",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000094",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000095",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000096",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000097",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000098",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000099",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000100",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000101",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000102",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000103",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000104",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000105",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000106",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000107",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000108",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000109",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000110",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000111",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000112",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000113",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000114",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000115",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000116",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000117",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000118",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000119",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000120",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000121",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000122",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000123",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000124",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000125",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000126",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000127",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000128",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000129",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000130",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000131",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000132",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000133",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000134",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000135",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000136",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000137",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000138",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000139",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000140",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000141",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000142",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000143",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000144",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000145",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000146",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000147",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000148",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000149",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000150",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000151",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000152",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000153",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000154",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000155",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000156",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000157",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000158",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000159",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000160",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000161",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000162",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000163",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000164",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000165",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000166",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000167",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000168",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000169",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000170",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000171",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000172",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000173",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000174",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000175",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000176",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000177",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000178",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000179",
+      "severity": "warning"
+    },
+    {
+      "code": "xyzac.rotary_singularity",
+      "context": {
+        "retained_c_rad": 0.0
+      },
+      "object_id": "point-0000180",
+      "severity": "warning"
+    }
+  ],
+  "metrics": [
+    {
+      "limit": 0.025,
+      "name": "maximum_radial_error",
+      "passed": true,
+      "unit": "mm",
+      "value": 0.0036448098755563763
+    },
+    {
+      "limit": 0.01,
+      "name": "maximum_sampled_chord_error",
+      "passed": true,
+      "unit": "mm",
+      "value": 0.0024820621392880327
+    },
+    {
+      "limit": 0.01,
+      "name": "maximum_layer_spacing_error",
+      "passed": true,
+      "unit": "mm",
+      "value": 0.0
+    },
+    {
+      "limit": 0.046006331115617805,
+      "name": "maximum_wedge_height_error",
+      "passed": true,
+      "unit": "mm",
+      "value": 0.046006331115617805
+    }
+  ],
+  "motion_sample_error_mm": 0.25,
+  "ready_for_export": true,
+  "report_id": "pc06-pipe2-indexed-indexed-v1-validation-v1",
+  "schema_version": 1,
+  "status": "warning",
+  "toolpath_id": "pc06-pipe2-indexed-indexed-v1",
+  "trajectory_id": "pc06-pipe2-indexed-indexed-v1-xyzac-v1"
+}

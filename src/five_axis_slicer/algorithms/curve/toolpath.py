@@ -242,6 +242,16 @@ def _height_offset(samples: tuple[CurveSample, ...], distance: float) -> tuple[C
     )
 
 
+def height_offset_curve_samples(
+    samples: tuple[CurveSample, ...], distance_mm: float
+) -> tuple[CurveSample, ...]:
+    """Return a checked normal offset for the restricted Freeform workflow."""
+
+    if not math.isfinite(distance_mm) or distance_mm < 0.0:
+        raise ValueError("distance_mm must be finite and non-negative")
+    return _height_offset(samples, distance_mm)
+
+
 def _lateral_offset(
     samples: tuple[CurveSample, ...],
     distance: float,
@@ -287,6 +297,20 @@ def _lateral_offset(
             detail=f"offset {distance:.9g} mm creates a self-intersection",
         )
     return result
+
+
+def offset_curve_samples(
+    samples: tuple[CurveSample, ...],
+    distance_mm: float,
+    bead_width_mm: float,
+    *,
+    project_point: ProjectPoint | None,
+) -> tuple[CurveSample, ...]:
+    """Return a trim-checked lateral offset without duplicating Curve logic."""
+
+    if not math.isfinite(distance_mm) or distance_mm < 0.0:
+        raise ValueError("distance_mm must be finite and non-negative")
+    return _lateral_offset(samples, distance_mm, bead_width_mm, project_point=project_point)
 
 
 def _reverse_samples(samples: tuple[CurveSample, ...]) -> tuple[CurveSample, ...]:
@@ -409,4 +433,10 @@ def _checkpoint(cancelled: CancelCheck | None) -> None:
         raise GenerationCancelled("Curve generation cancelled")
 
 
-__all__ = ["CurvePathDefinition", "curve_paths", "generate_curve_toolpath"]
+__all__ = [
+    "CurvePathDefinition",
+    "curve_paths",
+    "generate_curve_toolpath",
+    "height_offset_curve_samples",
+    "offset_curve_samples",
+]

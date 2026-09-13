@@ -114,6 +114,12 @@ def _make_spin(low: float, high: float, value: float, decimals: int) -> QDoubleS
     return spin
 
 
+def _set_compact_tree_actions(*buttons: QPushButton) -> None:
+    for button in buttons:
+        button.setStyleSheet("min-height: 14px; padding: 4px 10px;")
+        button.setFixedHeight(30)
+
+
 class TubeSetupPage(QWidget):
     back_requested = pyqtSignal()
     open_step_requested = pyqtSignal()
@@ -196,6 +202,7 @@ class TubeSetupPage(QWidget):
 
     def _build_tree_panel(self) -> QWidget:
         panel = QFrame()
+        self.tree_panel = panel
         panel.setObjectName("glassPanel")
         panel.setFixedWidth(340)
         layout = QVBoxLayout(panel)
@@ -208,6 +215,7 @@ class TubeSetupPage(QWidget):
         layout.addWidget(self.subtitle_label)
 
         buttons = QGridLayout()
+        buttons.setVerticalSpacing(6)
         self.back_button, self.open_button = QPushButton(), QPushButton()
         self.update_source_button = QPushButton()
         self.save_button = QPushButton()
@@ -215,6 +223,13 @@ class TubeSetupPage(QWidget):
         self.operation_type_combo = QComboBox()
         self.update_source_button.setMinimumWidth(180)
         self.create_operation_button.setObjectName("primaryButton")
+        _set_compact_tree_actions(
+            self.back_button,
+            self.open_button,
+            self.update_source_button,
+            self.save_button,
+            self.create_operation_button,
+        )
         self.back_button.clicked.connect(self.back_requested)
         self.open_button.clicked.connect(self.open_step_requested)
         self.update_source_button.clicked.connect(self.update_source_requested)
@@ -222,14 +237,14 @@ class TubeSetupPage(QWidget):
         self.create_operation_button.clicked.connect(self._create_operation)
         buttons.addWidget(self.back_button, 0, 0)
         buttons.addWidget(self.open_button, 0, 1)
-        buttons.addWidget(self.update_source_button, 1, 0)
-        buttons.addWidget(self.save_button, 1, 1)
+        buttons.addWidget(self.update_source_button, 1, 0, 1, 2)
+        buttons.addWidget(self.save_button, 2, 0, 1, 2)
         for operation_type in self.controller.available_operation_types:
             self.operation_type_combo.addItem(
                 self._t(f"operation_type_{operation_type}"), operation_type
             )
-        buttons.addWidget(self.operation_type_combo, 2, 0, 1, 2)
-        buttons.addWidget(self.create_operation_button, 3, 0, 1, 2)
+        buttons.addWidget(self.operation_type_combo, 3, 0, 1, 2)
+        buttons.addWidget(self.create_operation_button, 4, 0, 1, 2)
         layout.addLayout(buttons)
 
         self.tree = QTreeWidget()
@@ -267,6 +282,7 @@ class TubeSetupPage(QWidget):
 
     def _build_editor_panel(self) -> QWidget:
         panel = QFrame()
+        self.editor_panel = panel
         panel.setObjectName("glassPanel")
         panel.setFixedWidth(460)
         layout = QVBoxLayout(panel)
@@ -608,6 +624,12 @@ class TubeSetupPage(QWidget):
             operation_type = self.operation_type_combo.itemData(index)
             self.operation_type_combo.setItemText(index, t(f"operation_type_{operation_type}"))
         tube_operation_ui.retranslate(self, t)
+        english = self.language == "en"
+        self.tree_panel.setFixedWidth(380 if english else 340)
+        self.editor_panel.setFixedWidth(580 if english else 460)
+        view_width = 220 if english else 128
+        self.model_view_button.setMinimumWidth(view_width)
+        self.machine_view_button.setMinimumWidth(view_width)
         self.part_table.setHorizontalHeaderLabels((t("body"), t("kind"), t("role")))
         self.coordinate_help.setText(
             t(

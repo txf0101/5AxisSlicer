@@ -23,9 +23,21 @@ from .rotary_product import (
     export_rotary_product,
     generate_rotary_product,
 )
+from .freeform_product import (
+    FreeformProductResult,
+    FreeformProductState,
+    FreeformValidationReport,
+    export_freeform_product,
+    generate_freeform_product,
+    state_from_freeform_result,
+)
+from .own_ac import OwnACReadbackReport, postprocess_own_ac, readback_own_ac
 
 __all__ = [
     "GenerationCancelled",
+    "FreeformProductResult",
+    "FreeformProductState",
+    "FreeformValidationReport",
     "IndexedProductResult",
     "IndexedProductState",
     "TubeIndexedProductService",
@@ -36,10 +48,16 @@ __all__ = [
     "RotaryProductState",
     "RotaryValidationReport",
     "export_indexed_product",
+    "export_freeform_product",
     "export_tube_product",
     "export_rotary_product",
     "generate_tube_product",
+    "generate_freeform_product",
     "generate_rotary_product",
     "readback_indexed_gcode",
     "readback_tube_gcode",
+    "OwnACReadbackReport",
+    "postprocess_own_ac",
+    "readback_own_ac",
+    "state_from_freeform_result",
 ]

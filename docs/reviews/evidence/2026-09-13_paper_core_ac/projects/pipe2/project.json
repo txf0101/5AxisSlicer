@@ -1,0 +1,2573 @@
+{
+  "version": 2,
+  "created_at": "2026-09-13T09:50:07.421708+00:00",
+  "updated_at": "2026-09-13T12:25:34.094785+00:00",
+  "workbench": {
+    "workbench": "tube",
+    "case": "pipe2"
+  },
+  "source": {
+    "original_path": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\pipe2\\弯管新.stp",
+    "project_path": "source/116e99fd43492bd1f4f519c80c93cd1f7cd0bf2cb6861b3e123148e4031a0d4b.stp",
+    "sha256": "116e99fd43492bd1f4f519c80c93cd1f7cd0bf2cb6861b3e123148e4031a0d4b"
+  },
+  "gcode": null,
+  "model": {
+    "body_count": 2,
+    "face_count": 11,
+    "edge_count": 17,
+    "vertex_count": 10,
+    "units": {
+      "source_length_unit": "millimetre",
+      "internal_length_unit": "millimetre",
+      "scale_to_mm": 1.0,
+      "angle_unit": "DEGREE",
+      "solid_angle_unit": "steradian",
+      "override_applied": false,
+      "declared_length_unit": "millimetre",
+      "conversion_source": "step_declaration"
+    },
+    "bounds": {
+      "minimum": [
+        -25.0000001,
+        -25.0000001,
+        -1e-07
+      ],
+      "maximum": [
+        25.0000001,
+        36.90979707706259,
+        71.68262115462142
+      ]
+    },
+    "bodies": [
+      {
+        "id": "body_001",
+        "index": 1,
+        "name": "弯管新",
+        "color": [
+          0.86,
+          0.86,
+          0.84
+        ],
+        "kind": "solid",
+        "assembly_path": "弯管新",
+        "bounds": {
+          "minimum": [
+            -25.0000001,
+            -25.0000001,
+            -1e-07
+          ],
+          "maximum": [
+            25.0000001,
+            25.0000001,
+            5.0000001
+          ]
+        },
+        "volume": 9817.477042468103,
+        "surface_area": 4712.38898038469,
+        "centroid": [
+          4.076176262485909e-15,
+          -8.833467290969567e-16,
+          2.5
+        ],
+        "edge_ids": [
+          "body_001_edge_0001",
+          "body_001_edge_0002",
+          "body_001_edge_0003"
+        ],
+        "face_ids": [
+          "body_001_face_0001",
+          "body_001_face_0002",
+          "body_001_face_0003"
+        ],
+        "vertex_ids": [
+          "body_001_vertex_0001",
+          "body_001_vertex_0002"
+        ],
+        "triangle_count": 0,
+        "signature": "1fbbc584ef346458e81366b4bb4beed1917f090a5d59942cfe31500ea130d3cc"
+      },
+      {
+        "id": "body_002",
+        "index": 2,
+        "name": "弯管新",
+        "color": [
+          0.72,
+          0.78,
+          0.84
+        ],
+        "kind": "solid",
+        "assembly_path": "弯管新",
+        "bounds": {
+          "minimum": [
+            -16.0000001,
+            -20.202002314912093,
+            4.999999899999994
+          ],
+          "maximum": [
+            16.0000001,
+            36.90979707706259,
+            71.68262115462142
+          ]
+        },
+        "volume": 6473.071995018587,
+        "surface_area": 13140.922734559752,
+        "centroid": [
+          -6.3451069811293996e-15,
+          7.215000693790886,
+          36.05307012202093
+        ],
+        "edge_ids": [
+          "body_002_edge_0001",
+          "body_002_edge_0002",
+          "body_002_edge_0003",
+          "body_002_edge_0004",
+          "body_002_edge_0005",
+          "body_002_edge_0006",
+          "body_002_edge_0007",
+          "body_002_edge_0008",
+          "body_002_edge_0009",
+          "body_002_edge_0010",
+          "body_002_edge_0011",
+          "body_002_edge_0012",
+          "body_002_edge_0013",
+          "body_002_edge_0014"
+        ],
+        "face_ids": [
+          "body_002_face_0001",
+          "body_002_face_0002",
+          "body_002_face_0003",
+          "body_002_face_0004",
+          "body_002_face_0005",
+          "body_002_face_0006",
+          "body_002_face_0007",
+          "body_002_face_0008"
+        ],
+        "vertex_ids": [
+          "body_002_vertex_0001",
+          "body_002_vertex_0002",
+          "body_002_vertex_0003",
+          "body_002_vertex_0004",
+          "body_002_vertex_0005",
+          "body_002_vertex_0006",
+          "body_002_vertex_0007",
+          "body_002_vertex_0008"
+        ],
+        "triangle_count": 0,
+        "signature": "3543ea00cbca0d0bd7d38f72e0a213daa064f8eb6da3521eec518783e9891d84"
+      }
+    ],
+    "faces": [
+      {
+        "id": "body_001_face_0001",
+        "body_id": "body_001",
+        "index": 1,
+        "surface_type": "cylinder",
+        "area": 785.3981633974481,
+        "centroid": [
+          0.0,
+          8.060219158778638e-16,
+          2.5
+        ],
+        "bounds": {
+          "minimum": [
+            -25.0000001,
+            -25.0000001,
+            -1e-07
+          ],
+          "maximum": [
+            25.0000001,
+            25.0000001,
+            5.0000001
+          ]
+        },
+        "edge_ids": [
+          "body_001_edge_0001",
+          "body_001_edge_0002",
+          "body_001_edge_0003"
+        ],
+        "normal": null,
+        "axis_origin": [
+          0.0,
+          0.0,
+          5.0
+        ],
+        "axis_direction": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "radius": 25.0,
+        "secondary_radius": null,
+        "semi_angle_rad": null,
+        "orientation": "forward",
+        "signature": "3e4ca9c3989e1d3d3de281b498c54482fc227ee072eca41968633ac1d8cac7cd"
+      },
+      {
+        "id": "body_001_face_0002",
+        "body_id": "body_001",
+        "index": 2,
+        "surface_type": "plane",
+        "area": 1963.4954084936207,
+        "centroid": [
+          -3.552713678800501e-15,
+          -1.4608758647227658e-15,
+          5.000000000000001
+        ],
+        "bounds": {
+          "minimum": [
+            -25.0000001,
+            -25.0000001,
+            4.9999999
+          ],
+          "maximum": [
+            25.0000001,
+            25.0000001,
+            5.0000001
+          ]
+        },
+        "edge_ids": [
+          "body_001_edge_0001"
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "axis_origin": [
+          0.0,
+          0.0,
+          5.0
+        ],
+        "axis_direction": null,
+        "radius": null,
+        "secondary_radius": null,
+        "semi_angle_rad": null,
+        "orientation": "forward",
+        "signature": "888f01bff20e727a2175cec93d6cdb2b3c4d72852c7b319b20a6109e2edcc956"
+      },
+      {
+        "id": "body_001_face_0003",
+        "body_id": "body_001",
+        "index": 3,
+        "surface_type": "plane",
+        "area": 1963.4954084936207,
+        "centroid": [
+          -3.552713678800501e-15,
+          -1.4608758647227658e-15,
+          0.0
+        ],
+        "bounds": {
+          "minimum": [
+            -25.0000001,
+            -25.0000001,
+            -1e-07
+          ],
+          "maximum": [
+            25.0000001,
+            25.0000001,
+            1e-07
+          ]
+        },
+        "edge_ids": [
+          "body_001_edge_0003"
+        ],
+        "normal": [
+          -0.0,
+          -0.0,
+          -1.0
+        ],
+        "axis_origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis_direction": null,
+        "radius": null,
+        "secondary_radius": null,
+        "semi_angle_rad": null,
+        "orientation": "reversed",
+        "signature": "2b7039642640763fafe69af5aec62f200f119785cd569720e459b77b7a5b0299"
+      },
+      {
+        "id": "body_002_face_0001",
+        "body_id": "body_002",
+        "index": 1,
+        "surface_type": "cylinder",
+        "area": 1472.0384539459517,
+        "centroid": [
+          -4.3975240116012065e-16,
+          -3.552713678800501e-15,
+          12.321318636464044
+        ],
+        "bounds": {
+          "minimum": [
+            -16.0000001,
+            -16.0000001,
+            4.999999899999994
+          ],
+          "maximum": [
+            16.0000001,
+            16.0000001,
+            19.642637372928093
+          ]
+        },
+        "edge_ids": [
+          "body_002_edge_0001",
+          "body_002_edge_0002",
+          "body_002_edge_0003"
+        ],
+        "normal": null,
+        "axis_origin": [
+          0.0,
+          0.0,
+          19.6426372729281
+        ],
+        "axis_direction": [
+          0.0,
+          6.93889390390722e-18,
+          -1.0
+        ],
+        "radius": 16.0,
+        "secondary_radius": null,
+        "semi_angle_rad": null,
+        "orientation": "forward",
+        "signature": "a557d9edbee6a387c418bf1a3bee840a34d95c4c94990bfde086e72d91a1ca77"
+      },
+      {
+        "id": "body_002_face_0002",
+        "body_id": "body_002",
+        "index": 2,
+        "surface_type": "cylinder",
+        "area": 1380.0360505743301,
+        "centroid": [
+          4.625929269271503e-18,
+          -1.7763568394002505e-15,
+          12.321318636464044
+        ],
+        "bounds": {
+          "minimum": [
+            -15.0000001,
+            -15.0000001,
+            4.999999899999994
+          ],
+          "maximum": [
+            15.0000001,
+            15.0000001,
+            19.642637372928096
+          ]
+        },
+        "edge_ids": [
+          "body_002_edge_0004",
+          "body_002_edge_0005",
+          "body_002_edge_0006"
+        ],
+        "normal": null,
+        "axis_origin": [
+          0.0,
+          0.0,
+          19.6426372729281
+        ],
+        "axis_direction": [
+          0.0,
+          6.93889390390722e-18,
+          -1.0
+        ],
+        "radius": 15.0,
+        "secondary_radius": null,
+        "semi_angle_rad": null,
+        "orientation": "reversed",
+        "signature": "adf48bd204cb72b832c2fb99871e3a6508ed41374750e52bafc95c0119c741f5"
+      },
+      {
+        "id": "body_002_face_0003",
+        "body_id": "body_002",
+        "index": 3,
+        "surface_type": "torus",
+        "area": 4330.285160708122,
+        "centroid": [
+          -4.1239516676273423e-16,
+          5.388290972197545,
+          40.57529023987935
+        ],
+        "bounds": {
+          "minimum": [
+            -16.0000001,
+            -20.202002314912093,
+            19.642637172928097
+          ],
+          "maximum": [
+            16.0000001,
+            28.661837251623894,
+            71.68262115462142
+          ]
+        },
+        "edge_ids": [
+          "body_002_edge_0007",
+          "body_002_edge_0008",
+          "body_002_edge_0001"
+        ],
+        "normal": null,
+        "axis_origin": [
+          0.0,
+          35.0,
+          19.6426372729281
+        ],
+        "axis_direction": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "radius": 35.0,
+        "secondary_radius": 16.0,
+        "semi_angle_rad": null,
+        "orientation": "forward",
+        "signature": "e7c321f7c2ddc60fd566f72902d70a76c44ef369a30ce793114bde9853c5f8e2"
+      },
+      {
+        "id": "body_002_face_0004",
+        "body_id": "body_002",
+        "index": 4,
+        "surface_type": "torus",
+        "area": 4059.642338163864,
+        "centroid": [
+          -1.1437092624886498e-15,
+          5.727523411170891,
+          40.33548527240874
+        ],
+        "bounds": {
+          "minimum": [
+            -15.0000001,
+            -19.119610114619704,
+            19.642637172928097
+          ],
+          "maximum": [
+            15.0000001,
+            28.328249733288306,
+            70.66222931576468
+          ]
+        },
+        "edge_ids": [
+          "body_002_edge_0009",
+          "body_002_edge_0010",
+          "body_002_edge_0004"
+        ],
+        "normal": null,
+        "axis_origin": [
+          0.0,
+          35.0,
+          19.6426372729281
+        ],
+        "axis_direction": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "radius": 35.0,
+        "secondary_radius": 15.0,
+        "semi_angle_rad": null,
+        "orientation": "reversed",
+        "signature": "5f6da7e74f601dce1719772ba24041bc5638fa2f8547025ada17f2d236b63c55"
+      },
+      {
+        "id": "body_002_face_0005",
+        "body_id": "body_002",
+        "index": 5,
+        "surface_type": "cylinder",
+        "area": 824.5848322475406,
+        "centroid": [
+          -3.0623651762577234e-16,
+          27.44841677097385,
+          54.09710508110815
+        ],
+        "bounds": {
+          "minimum": [
+            -15.0000001,
+            18.320623983220695,
+            38.49701987415387
+          ],
+          "maximum": [
+            15.0000001,
+            36.57620955872701,
+            69.69719028806242
+          ]
+        },
+        "edge_ids": [
+          "body_002_edge_0009",
+          "body_002_edge_0011",
+          "body_002_edge_0012"
+        ],
+        "normal": null,
+        "axis_origin": [
+          0.0,
+          23.3244368582545,
+          52.6378070000732
+        ],
+        "axis_direction": [
+          0.0,
+          0.9427191350612888,
+          0.3335875183355869
+        ],
+        "radius": 15.0,
+        "secondary_radius": null,
+        "semi_angle_rad": null,
+        "orientation": "reversed",
+        "signature": "a061e20cb26e5e9c83b6ba4fbbcdb4cf45d3bba503866db14f5403d4ac60dc45"
+      },
+      {
+        "id": "body_002_face_0006",
+        "body_id": "body_002",
+        "index": 6,
+        "surface_type": "cylinder",
+        "area": 879.5571543973766,
+        "centroid": [
+          -2.1510571102112403e-16,
+          27.44841677097385,
+          54.09710508110813
+        ],
+        "bounds": {
+          "minimum": [
+            -16.0000001,
+            17.987036464885108,
+            37.55430073909258
+          ],
+          "maximum": [
+            16.0000001,
+            36.90979707706259,
+            70.6399094231237
+          ]
+        },
+        "edge_ids": [
+          "body_002_edge_0007",
+          "body_002_edge_0013",
+          "body_002_edge_0014"
+        ],
+        "normal": null,
+        "axis_origin": [
+          0.0,
+          23.3244368582545,
+          52.6378070000732
+        ],
+        "axis_direction": [
+          0.0,
+          0.9427191350612888,
+          0.3335875183355869
+        ],
+        "radius": 16.0,
+        "secondary_radius": null,
+        "semi_angle_rad": null,
+        "orientation": "forward",
+        "signature": "ad60dda640b2fc7bf340010189b3098435527a88d9fafd6c22f503325f4d60a5"
+      },
+      {
+        "id": "body_002_face_0007",
+        "body_id": "body_002",
+        "index": 7,
+        "surface_type": "plane",
+        "area": 97.38937226128326,
+        "centroid": [
+          -1.5500145969605463e-14,
+          -1.0658141036401503e-14,
+          5.000000000000001
+        ],
+        "bounds": {
+          "minimum": [
+            -16.0000001,
+            -16.0000001,
+            4.999999899999994
+          ],
+          "maximum": [
+            16.0000001,
+            16.0000001,
+            5.000000100000006
+          ]
+        },
+        "edge_ids": [
+          "body_002_edge_0006",
+          "body_002_edge_0003"
+        ],
+        "normal": [
+          0.0,
+          -3.33066907387547e-16,
+          -1.0
+        ],
+        "axis_origin": [
+          0.0,
+          1.01603706510246e-16,
+          5.0
+        ],
+        "axis_direction": null,
+        "radius": null,
+        "secondary_radius": null,
+        "semi_angle_rad": null,
+        "orientation": "forward",
+        "signature": "aa5b6fe03b44b93033090dd63e91632e7ef103f0aadf4f447ed41ea6b617b25b"
+      },
+      {
+        "id": "body_002_face_0008",
+        "body_id": "body_002",
+        "index": 8,
+        "surface_type": "plane",
+        "area": 97.38937226128337,
+        "centroid": [
+          -1.2520450626095344e-14,
+          31.57239668369319,
+          55.55640316214308
+        ],
+        "bounds": {
+          "minimum": [
+            -16.0000001,
+            26.234996290323807,
+            40.47289690116248
+          ],
+          "maximum": [
+            16.0000001,
+            36.90979707706259,
+            70.63990942312371
+          ]
+        },
+        "edge_ids": [
+          "body_002_edge_0012",
+          "body_002_edge_0014"
+        ],
+        "normal": [
+          -0.0,
+          0.9427191350612888,
+          0.3335875183355869
+        ],
+        "axis_origin": [
+          0.0,
+          31.5723966836932,
+          55.5564031621431
+        ],
+        "axis_direction": null,
+        "radius": null,
+        "secondary_radius": null,
+        "semi_angle_rad": null,
+        "orientation": "reversed",
+        "signature": "f71411d30fe8c2e0067f10da7ad1ee3b30c274c12a0ada9ef8dad50531422916"
+      }
+    ],
+    "edges": [
+      {
+        "id": "body_001_edge_0001",
+        "body_id": "body_001",
+        "index": 1,
+        "point_count": 17,
+        "length_hint": 156.0722576129026,
+        "curve_type": "circle",
+        "exact_length": 157.07963267948963,
+        "vertex_ids": [
+          "body_001_vertex_0001"
+        ],
+        "face_ids": [
+          "body_001_face_0001",
+          "body_001_face_0002"
+        ],
+        "endpoints": [
+          [
+            25.0,
+            0.0,
+            5.0
+          ],
+          [
+            25.0,
+            -6.123233995736766e-15,
+            5.0
+          ]
+        ],
+        "arc_length_midpoint": [
+          -25.0,
+          -3.954812113897942e-14,
+          5.0
+        ],
+        "center": [
+          0.0,
+          0.0,
+          5.0
+        ],
+        "axis_direction": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "radius": 25.0,
+        "signature": "c80feb14cad669a7624a483799a4a18e6d93a9bf26db04b92fbe8efd813b3c3a"
+      },
+      {
+        "id": "body_001_edge_0002",
+        "body_id": "body_001",
+        "index": 2,
+        "point_count": 17,
+        "length_hint": 5.0,
+        "curve_type": "bsplinecurve",
+        "exact_length": 5.0,
+        "vertex_ids": [
+          "body_001_vertex_0001",
+          "body_001_vertex_0002"
+        ],
+        "face_ids": [
+          "body_001_face_0001"
+        ],
+        "endpoints": [
+          [
+            25.0,
+            0.0,
+            5.0
+          ],
+          [
+            25.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "arc_length_midpoint": [
+          25.0,
+          3.061616997868383e-15,
+          2.5
+        ],
+        "center": null,
+        "axis_direction": null,
+        "radius": null,
+        "signature": "01f0623475aed5354b7e5a2c9cd57ed1d5ebf92acaffa84a3ac733ad205e3ecc"
+      },
+      {
+        "id": "body_001_edge_0003",
+        "body_id": "body_001",
+        "index": 3,
+        "point_count": 17,
+        "length_hint": 156.0722576129026,
+        "curve_type": "circle",
+        "exact_length": 157.07963267948963,
+        "vertex_ids": [
+          "body_001_vertex_0002"
+        ],
+        "face_ids": [
+          "body_001_face_0001",
+          "body_001_face_0003"
+        ],
+        "endpoints": [
+          [
+            25.0,
+            0.0,
+            0.0
+          ],
+          [
+            25.0,
+            -6.123233995736766e-15,
+            0.0
+          ]
+        ],
+        "arc_length_midpoint": [
+          -25.0,
+          -3.954812113897942e-14,
+          0.0
+        ],
+        "center": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis_direction": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "radius": 25.0,
+        "signature": "bc4ea8b297ca27d6efb5b2600cb9ccda4e63b16174c450a8258b2d26f9cad2d6"
+      },
+      {
+        "id": "body_002_edge_0001",
+        "body_id": "body_002",
+        "index": 1,
+        "point_count": 17,
+        "length_hint": 99.88624487225768,
+        "curve_type": "circle",
+        "exact_length": 100.53096491487338,
+        "vertex_ids": [
+          "body_002_vertex_0001"
+        ],
+        "face_ids": [
+          "body_002_face_0001",
+          "body_002_face_0003"
+        ],
+        "endpoints": [
+          [
+            0.0,
+            16.0,
+            19.64263727292809
+          ],
+          [
+            -3.91886975727153e-15,
+            16.0,
+            19.64263727292809
+          ]
+        ],
+        "arc_length_midpoint": [
+          -2.6447057212596108e-14,
+          -15.999999999999998,
+          19.642637272928106
+        ],
+        "center": [
+          0.0,
+          0.0,
+          19.6426372729281
+        ],
+        "axis_direction": [
+          0.0,
+          -3.33066907387547e-16,
+          -1.0
+        ],
+        "radius": 16.0,
+        "signature": "02da9b9f346be5207eee471f19d84549a1e5522721cbe59978e58e1d6e4fc0b3"
+      },
+      {
+        "id": "body_002_edge_0002",
+        "body_id": "body_002",
+        "index": 2,
+        "point_count": 17,
+        "length_hint": 14.642637272928097,
+        "curve_type": "bsplinecurve",
+        "exact_length": 14.642637272928097,
+        "vertex_ids": [
+          "body_002_vertex_0001",
+          "body_002_vertex_0002"
+        ],
+        "face_ids": [
+          "body_002_face_0001"
+        ],
+        "endpoints": [
+          [
+            0.0,
+            16.0,
+            19.6426372729281
+          ],
+          [
+            0.0,
+            16.0,
+            5.0
+          ]
+        ],
+        "arc_length_midpoint": [
+          0.0,
+          16.0,
+          12.321318636464042
+        ],
+        "center": null,
+        "axis_direction": null,
+        "radius": null,
+        "signature": "41fc642e364b2a59ba674b7a5f30f53c4967eb77ae9973003754afa15eb25212"
+      },
+      {
+        "id": "body_002_edge_0003",
+        "body_id": "body_002",
+        "index": 3,
+        "point_count": 17,
+        "length_hint": 99.88624487225768,
+        "curve_type": "circle",
+        "exact_length": 100.53096491487338,
+        "vertex_ids": [
+          "body_002_vertex_0002"
+        ],
+        "face_ids": [
+          "body_002_face_0001",
+          "body_002_face_0007"
+        ],
+        "endpoints": [
+          [
+            0.0,
+            16.0,
+            4.999999999999995
+          ],
+          [
+            -3.91886975727153e-15,
+            16.0,
+            4.999999999999995
+          ]
+        ],
+        "arc_length_midpoint": [
+          -1.934543418978814e-14,
+          -16.0,
+          5.000000000000005
+        ],
+        "center": [
+          0.0,
+          1.01603706510246e-16,
+          5.0
+        ],
+        "axis_direction": [
+          0.0,
+          -3.33066907387547e-16,
+          -1.0
+        ],
+        "radius": 16.0,
+        "signature": "a278d960b655ac03a038d484040cb5d4ce55367538dbf1af6250b5d33a3d8a4c"
+      },
+      {
+        "id": "body_002_edge_0004",
+        "body_id": "body_002",
+        "index": 4,
+        "point_count": 17,
+        "length_hint": 93.64335456774157,
+        "curve_type": "circle",
+        "exact_length": 94.2477796076938,
+        "vertex_ids": [
+          "body_002_vertex_0003"
+        ],
+        "face_ids": [
+          "body_002_face_0002",
+          "body_002_face_0004"
+        ],
+        "endpoints": [
+          [
+            0.0,
+            15.0,
+            19.642637272928095
+          ],
+          [
+            -3.67394039744206e-15,
+            15.0,
+            19.642637272928095
+          ]
+        ],
+        "arc_length_midpoint": [
+          2.1760371282653068e-14,
+          -15.0,
+          19.642637272928102
+        ],
+        "center": [
+          0.0,
+          0.0,
+          19.6426372729281
+        ],
+        "axis_direction": [
+          0.0,
+          -3.33066907387547e-16,
+          -1.0
+        ],
+        "radius": 15.0,
+        "signature": "2b2b4111d323857d0144bfdb8ead366828977f0a69a39cc231173414bc5a6a51"
+      },
+      {
+        "id": "body_002_edge_0005",
+        "body_id": "body_002",
+        "index": 5,
+        "point_count": 17,
+        "length_hint": 14.6426372729281,
+        "curve_type": "bsplinecurve",
+        "exact_length": 14.6426372729281,
+        "vertex_ids": [
+          "body_002_vertex_0003",
+          "body_002_vertex_0004"
+        ],
+        "face_ids": [
+          "body_002_face_0002"
+        ],
+        "endpoints": [
+          [
+            0.0,
+            15.0,
+            19.6426372729281
+          ],
+          [
+            0.0,
+            15.0,
+            5.0
+          ]
+        ],
+        "arc_length_midpoint": [
+          0.0,
+          15.0,
+          12.321318636464046
+        ],
+        "center": null,
+        "axis_direction": null,
+        "radius": null,
+        "signature": "5ef432fcab4d1530824ca64cddbe86037c9a6188b1230b8658686d9bf6133c1f"
+      },
+      {
+        "id": "body_002_edge_0006",
+        "body_id": "body_002",
+        "index": 6,
+        "point_count": 17,
+        "length_hint": 93.64335456774157,
+        "curve_type": "circle",
+        "exact_length": 94.2477796076938,
+        "vertex_ids": [
+          "body_002_vertex_0004"
+        ],
+        "face_ids": [
+          "body_002_face_0002",
+          "body_002_face_0007"
+        ],
+        "endpoints": [
+          [
+            0.0,
+            15.0,
+            4.999999999999995
+          ],
+          [
+            -3.67394039744206e-15,
+            15.0,
+            4.999999999999995
+          ]
+        ],
+        "arc_length_midpoint": [
+          2.1760371282653068e-14,
+          -15.0,
+          5.000000000000005
+        ],
+        "center": [
+          0.0,
+          1.01603706510246e-16,
+          5.0
+        ],
+        "axis_direction": [
+          0.0,
+          -3.33066907387547e-16,
+          -1.0
+        ],
+        "radius": 15.0,
+        "signature": "4c29a417785510be367922832ea4042cd4016504871c67f4c897cccf642ad23d"
+      },
+      {
+        "id": "body_002_edge_0007",
+        "body_id": "body_002",
+        "index": 7,
+        "point_count": 17,
+        "length_hint": 99.88624487225768,
+        "curve_type": "circle",
+        "exact_length": 100.53096491487338,
+        "vertex_ids": [
+          "body_002_vertex_0005"
+        ],
+        "face_ids": [
+          "body_002_face_0003",
+          "body_002_face_0006"
+        ],
+        "endpoints": [
+          [
+            0.0,
+            28.661837151623892,
+            37.55430083909258
+          ],
+          [
+            -3.91886975727153e-15,
+            28.661837151623892,
+            37.55430083909258
+          ]
+        ],
+        "arc_length_midpoint": [
+          -1.2243811166980167e-14,
+          17.98703656488511,
+          67.72131316105383
+        ],
+        "center": [
+          0.0,
+          23.3244368582545,
+          52.6378070000732
+        ],
+        "axis_direction": [
+          0.0,
+          -0.9427191350612888,
+          -0.3335875183355869
+        ],
+        "radius": 16.0,
+        "signature": "3a023a73c9456975b3dcf4aebcad2f869ad115536ef0d993ee322bee11db3f33"
+      },
+      {
+        "id": "body_002_edge_0008",
+        "body_id": "body_002",
+        "index": 8,
+        "point_count": 17,
+        "length_hint": 23.377342315746603,
+        "curve_type": "bsplinecurve",
+        "exact_length": 23.383106210998964,
+        "vertex_ids": [
+          "body_002_vertex_0005",
+          "body_002_vertex_0001"
+        ],
+        "face_ids": [
+          "body_002_face_0003"
+        ],
+        "endpoints": [
+          [
+            0.0,
+            28.6618371516238,
+            37.5543008390926
+          ],
+          [
+            0.0,
+            16.0,
+            19.6426372729281
+          ]
+        ],
+        "arc_length_midpoint": [
+          1.959434878635765e-15,
+          19.48508630189736,
+          30.610200946799665
+        ],
+        "center": null,
+        "axis_direction": null,
+        "radius": null,
+        "signature": "f3ef8678370f59d32a6ff447a17a9119417619926bdfa2e76c2489e4fd9fed9a"
+      },
+      {
+        "id": "body_002_edge_0009",
+        "body_id": "body_002",
+        "index": 9,
+        "point_count": 17,
+        "length_hint": 93.64335456774157,
+        "curve_type": "circle",
+        "exact_length": 94.2477796076938,
+        "vertex_ids": [
+          "body_002_vertex_0006"
+        ],
+        "face_ids": [
+          "body_002_face_0004",
+          "body_002_face_0005"
+        ],
+        "endpoints": [
+          [
+            0.0,
+            28.328249633288305,
+            38.49701997415387
+          ],
+          [
+            -3.67394039744206e-15,
+            28.328249633288305,
+            38.49701997415387
+          ]
+        ],
+        "arc_length_midpoint": [
+          7.327471962526033e-15,
+          18.320624083220697,
+          66.77859402599253
+        ],
+        "center": [
+          0.0,
+          23.3244368582545,
+          52.6378070000732
+        ],
+        "axis_direction": [
+          0.0,
+          -0.9427191350612888,
+          -0.3335875183355869
+        ],
+        "radius": 15.0,
+        "signature": "cfa618eb398d1017a3d3ee3e22dfa6906d79a4fa58dfce31a1729e8c28a91a89"
+      },
+      {
+        "id": "body_002_edge_0010",
+        "body_id": "body_002",
+        "index": 10,
+        "point_count": 17,
+        "length_hint": 24.60772875341748,
+        "curve_type": "bsplinecurve",
+        "exact_length": 24.613796011577858,
+        "vertex_ids": [
+          "body_002_vertex_0006",
+          "body_002_vertex_0003"
+        ],
+        "face_ids": [
+          "body_002_face_0004"
+        ],
+        "endpoints": [
+          [
+            0.0,
+            28.3282496332883,
+            38.4970199741539
+          ],
+          [
+            0.0,
+            15.0,
+            19.6426372729281
+          ]
+        ],
+        "arc_length_midpoint": [
+          8.49830834647197e-15,
+          18.66851189673406,
+          31.187441140161326
+        ],
+        "center": null,
+        "axis_direction": null,
+        "radius": null,
+        "signature": "d4b52624cc36a081c1ca3edd68cea6d34920884f9c24425fc78fb2abf225b543"
+      },
+      {
+        "id": "body_002_edge_0011",
+        "body_id": "body_002",
+        "index": 11,
+        "point_count": 17,
+        "length_hint": 8.749116803386492,
+        "curve_type": "bsplinecurve",
+        "exact_length": 8.749116803386492,
+        "vertex_ids": [
+          "body_002_vertex_0006",
+          "body_002_vertex_0007"
+        ],
+        "face_ids": [
+          "body_002_face_0005"
+        ],
+        "endpoints": [
+          [
+            0.0,
+            28.3282496332883,
+            38.4970199741539
+          ],
+          [
+            0.0,
+            36.576209458727,
+            41.4156161362238
+          ]
+        ],
+        "arc_length_midpoint": [
+          1.83697019872103e-15,
+          32.45222954600766,
+          39.95631805518882
+        ],
+        "center": null,
+        "axis_direction": null,
+        "radius": null,
+        "signature": "cba7a66c9d36795a615c8a375970bcf2047319df6f3245841c816d5f34745991"
+      },
+      {
+        "id": "body_002_edge_0012",
+        "body_id": "body_002",
+        "index": 12,
+        "point_count": 17,
+        "length_hint": 93.64335456774157,
+        "curve_type": "circle",
+        "exact_length": 94.2477796076938,
+        "vertex_ids": [
+          "body_002_vertex_0007"
+        ],
+        "face_ids": [
+          "body_002_face_0005",
+          "body_002_face_0008"
+        ],
+        "endpoints": [
+          [
+            0.0,
+            36.57620945872701,
+            41.41561613622377
+          ],
+          [
+            -3.67394039744206e-15,
+            36.57620945872701,
+            41.41561613622377
+          ]
+        ],
+        "arc_length_midpoint": [
+          5.551115123125783e-16,
+          26.568583908659395,
+          69.69719018806244
+        ],
+        "center": [
+          0.0,
+          31.5723966836932,
+          55.5564031621431
+        ],
+        "axis_direction": [
+          0.0,
+          -0.9427191350612888,
+          -0.3335875183355869
+        ],
+        "radius": 15.0,
+        "signature": "c02edb5c8e819cca9624092a9c80f63b053162cef3e3e409e8e796bc7204038b"
+      },
+      {
+        "id": "body_002_edge_0013",
+        "body_id": "body_002",
+        "index": 13,
+        "point_count": 17,
+        "length_hint": 8.749116803386496,
+        "curve_type": "bsplinecurve",
+        "exact_length": 8.749116803386494,
+        "vertex_ids": [
+          "body_002_vertex_0005",
+          "body_002_vertex_0008"
+        ],
+        "face_ids": [
+          "body_002_face_0006"
+        ],
+        "endpoints": [
+          [
+            0.0,
+            28.6618371516238,
+            37.5543008390926
+          ],
+          [
+            0.0,
+            36.9097969770626,
+            40.4728970011625
+          ]
+        ],
+        "arc_length_midpoint": [
+          1.959434878635765e-15,
+          32.78581706434325,
+          39.01359892012753
+        ],
+        "center": null,
+        "axis_direction": null,
+        "radius": null,
+        "signature": "6547370fb1c5db3c6ff874a2478fa9883c62674f7f0614fd1dce888215e18135"
+      },
+      {
+        "id": "body_002_edge_0014",
+        "body_id": "body_002",
+        "index": 14,
+        "point_count": 17,
+        "length_hint": 99.88624487225766,
+        "curve_type": "circle",
+        "exact_length": 100.53096491487338,
+        "vertex_ids": [
+          "body_002_vertex_0008"
+        ],
+        "face_ids": [
+          "body_002_face_0006",
+          "body_002_face_0008"
+        ],
+        "endpoints": [
+          [
+            0.0,
+            36.90979697706259,
+            40.47289700116248
+          ],
+          [
+            -3.91886975727153e-15,
+            36.90979697706259,
+            40.47289700116248
+          ]
+        ],
+        "arc_length_midpoint": [
+          -5.142188144172203e-15,
+          26.234996390323808,
+          70.63990932312372
+        ],
+        "center": [
+          0.0,
+          31.5723966836932,
+          55.5564031621431
+        ],
+        "axis_direction": [
+          0.0,
+          -0.9427191350612888,
+          -0.3335875183355869
+        ],
+        "radius": 16.0,
+        "signature": "10cab3f8c6ba4a05312c6a103eeeb11fdfe8ede32951936cd0d5bb437d5b3456"
+      }
+    ],
+    "vertices": [
+      {
+        "id": "body_001_vertex_0001",
+        "body_id": "body_001",
+        "index": 1,
+        "point": [
+          25.0,
+          0.0,
+          5.0
+        ],
+        "edge_ids": [
+          "body_001_edge_0001",
+          "body_001_edge_0002"
+        ],
+        "signature": "41d8a7d0dde7730c2ae72bddbe16975e8f35524858f5a88d58fb3d437c65d2c7"
+      },
+      {
+        "id": "body_001_vertex_0002",
+        "body_id": "body_001",
+        "index": 2,
+        "point": [
+          25.0,
+          0.0,
+          0.0
+        ],
+        "edge_ids": [
+          "body_001_edge_0002",
+          "body_001_edge_0003"
+        ],
+        "signature": "fea43e12824580219ff363f9eca5e43f4089e07e91605b6a5470fd98eb69de5e"
+      },
+      {
+        "id": "body_002_vertex_0001",
+        "body_id": "body_002",
+        "index": 1,
+        "point": [
+          0.0,
+          16.0,
+          19.6426372729281
+        ],
+        "edge_ids": [
+          "body_002_edge_0001",
+          "body_002_edge_0002",
+          "body_002_edge_0008"
+        ],
+        "signature": "85eb9bd4a31fcb97e946d6cbd23d85812490715bf210024cb558f711468445e0"
+      },
+      {
+        "id": "body_002_vertex_0002",
+        "body_id": "body_002",
+        "index": 2,
+        "point": [
+          0.0,
+          16.0,
+          5.0
+        ],
+        "edge_ids": [
+          "body_002_edge_0002",
+          "body_002_edge_0003"
+        ],
+        "signature": "55f501949b6a0f165749b14ce591001fcbffe770322038223bbe772b915b3375"
+      },
+      {
+        "id": "body_002_vertex_0003",
+        "body_id": "body_002",
+        "index": 3,
+        "point": [
+          0.0,
+          15.0,
+          19.6426372729281
+        ],
+        "edge_ids": [
+          "body_002_edge_0004",
+          "body_002_edge_0005",
+          "body_002_edge_0010"
+        ],
+        "signature": "3e8d27161290309d0bf0f0e7e9621de9ea43f960423039c0cdcd06f21dc03e1e"
+      },
+      {
+        "id": "body_002_vertex_0004",
+        "body_id": "body_002",
+        "index": 4,
+        "point": [
+          0.0,
+          15.0,
+          5.0
+        ],
+        "edge_ids": [
+          "body_002_edge_0005",
+          "body_002_edge_0006"
+        ],
+        "signature": "077433276a6e08beaf65dc29978c586b53ba6b72e53c8a17468efcfd56705576"
+      },
+      {
+        "id": "body_002_vertex_0005",
+        "body_id": "body_002",
+        "index": 5,
+        "point": [
+          0.0,
+          28.6618371516238,
+          37.5543008390926
+        ],
+        "edge_ids": [
+          "body_002_edge_0007",
+          "body_002_edge_0008",
+          "body_002_edge_0013"
+        ],
+        "signature": "a95c00b4774acc3547c6d9a7dac56ee489248edfbdb5dc6d32e2ce461d0dada7"
+      },
+      {
+        "id": "body_002_vertex_0006",
+        "body_id": "body_002",
+        "index": 6,
+        "point": [
+          0.0,
+          28.3282496332883,
+          38.4970199741539
+        ],
+        "edge_ids": [
+          "body_002_edge_0009",
+          "body_002_edge_0010",
+          "body_002_edge_0011"
+        ],
+        "signature": "5e003b6c0d04302f42eea7121f8ebdd0f98be71d7e31d6c08fbd47c20a6efb42"
+      },
+      {
+        "id": "body_002_vertex_0007",
+        "body_id": "body_002",
+        "index": 7,
+        "point": [
+          0.0,
+          36.576209458727,
+          41.4156161362238
+        ],
+        "edge_ids": [
+          "body_002_edge_0011",
+          "body_002_edge_0012"
+        ],
+        "signature": "d643c1fe13a478db6875617979ab913cc440ac5308deea88412c8768c91f1ccc"
+      },
+      {
+        "id": "body_002_vertex_0008",
+        "body_id": "body_002",
+        "index": 8,
+        "point": [
+          0.0,
+          36.9097969770626,
+          40.4728970011625
+        ],
+        "edge_ids": [
+          "body_002_edge_0013",
+          "body_002_edge_0014"
+        ],
+        "signature": "0421f76fde16ca99911bc109c3678a63fa5aec6225adcecab6ec0a594ed7dc8b"
+      }
+    ]
+  },
+  "selection": {
+    "mode": "edge",
+    "body_ids": [
+      "body_001",
+      "body_002"
+    ],
+    "face_ids": [],
+    "edge_ids": [],
+    "vertex_ids": []
+  },
+  "setups": [
+    {
+      "setup_id": "setup-1",
+      "name": "Manufacturing Setup 1",
+      "assignments": {
+        "part_body_ids": [
+          "body_001",
+          "body_002"
+        ],
+        "ignored_body_ids": [],
+        "fixture_body_ids": [],
+        "unassigned_body_ids": []
+      },
+      "resources": {
+        "machine": {
+          "schema_version": 1,
+          "resource_type": "machine",
+          "resource_id": "builtin.machine.own_ac_fdm.v1",
+          "profile_version": 1,
+          "payload": {
+            "build_surfaces": [
+              {
+                "depth_mm": null,
+                "diameter_mm": 180.0,
+                "id": "xyzac_plate",
+                "name": "Own AC heated table",
+                "shape": "circle",
+                "thickness_mm": 0.0,
+                "width_mm": null
+              }
+            ],
+            "id": "builtin.machine.own_ac_fdm.v1",
+            "joints": [
+              {
+                "T_parent_from_child_zero": {
+                  "T_target_from_source": [
+                    [
+                      1.0,
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      1.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      1.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0,
+                      1.0
+                    ]
+                  ],
+                  "source_frame": "x_carriage",
+                  "target_frame": "machine"
+                },
+                "axis_direction": [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "child_link_id": "x_carriage",
+                "id": "X",
+                "joint_type": "linear",
+                "max_acceleration": null,
+                "max_velocity": null,
+                "motion_side": "tool",
+                "name": "X linear axis",
+                "parent_link_id": "machine",
+                "post_axis_map": {
+                  "offset": 0.0,
+                  "output_unit": "mm",
+                  "scale": 1.0,
+                  "word": "X"
+                },
+                "rotation_center_mm": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "soft_limit_max": null,
+                "soft_limit_min": null,
+                "zero_offset": 0.0
+              },
+              {
+                "T_parent_from_child_zero": {
+                  "T_target_from_source": [
+                    [
+                      1.0,
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      1.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      1.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0,
+                      1.0
+                    ]
+                  ],
+                  "source_frame": "y_carriage",
+                  "target_frame": "x_carriage"
+                },
+                "axis_direction": [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                "child_link_id": "y_carriage",
+                "id": "Y",
+                "joint_type": "linear",
+                "max_acceleration": null,
+                "max_velocity": null,
+                "motion_side": "tool",
+                "name": "Y linear axis",
+                "parent_link_id": "x_carriage",
+                "post_axis_map": {
+                  "offset": 0.0,
+                  "output_unit": "mm",
+                  "scale": 1.0,
+                  "word": "Y"
+                },
+                "rotation_center_mm": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "soft_limit_max": null,
+                "soft_limit_min": null,
+                "zero_offset": 0.0
+              },
+              {
+                "T_parent_from_child_zero": {
+                  "T_target_from_source": [
+                    [
+                      1.0,
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      1.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      1.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0,
+                      1.0
+                    ]
+                  ],
+                  "source_frame": "tool",
+                  "target_frame": "y_carriage"
+                },
+                "axis_direction": [
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "child_link_id": "tool",
+                "id": "Z",
+                "joint_type": "linear",
+                "max_acceleration": null,
+                "max_velocity": null,
+                "motion_side": "tool",
+                "name": "Z linear axis",
+                "parent_link_id": "y_carriage",
+                "post_axis_map": {
+                  "offset": 0.0,
+                  "output_unit": "mm",
+                  "scale": 1.0,
+                  "word": "Z"
+                },
+                "rotation_center_mm": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "soft_limit_max": null,
+                "soft_limit_min": null,
+                "zero_offset": 0.0
+              },
+              {
+                "T_parent_from_child_zero": {
+                  "T_target_from_source": [
+                    [
+                      1.0,
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      1.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      1.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0,
+                      1.0
+                    ]
+                  ],
+                  "source_frame": "a_cradle",
+                  "target_frame": "machine"
+                },
+                "axis_direction": [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "child_link_id": "a_cradle",
+                "id": "A",
+                "joint_type": "rotary",
+                "max_acceleration": null,
+                "max_velocity": null,
+                "motion_side": "workpiece",
+                "name": "A rotary axis",
+                "parent_link_id": "machine",
+                "post_axis_map": {
+                  "offset": 0.0,
+                  "output_unit": "deg",
+                  "scale": 1.0,
+                  "word": "A"
+                },
+                "rotation_center_mm": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "soft_limit_max": 3.141592653589793,
+                "soft_limit_min": -3.141592653589793,
+                "zero_offset": 0.0
+              },
+              {
+                "T_parent_from_child_zero": {
+                  "T_target_from_source": [
+                    [
+                      1.0,
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      1.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      1.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0,
+                      1.0
+                    ]
+                  ],
+                  "source_frame": "c_table",
+                  "target_frame": "a_cradle"
+                },
+                "axis_direction": [
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "child_link_id": "c_table",
+                "id": "C",
+                "joint_type": "rotary",
+                "max_acceleration": null,
+                "max_velocity": null,
+                "motion_side": "workpiece",
+                "name": "C rotary axis",
+                "parent_link_id": "a_cradle",
+                "post_axis_map": {
+                  "offset": 0.0,
+                  "output_unit": "deg",
+                  "scale": 1.0,
+                  "word": "C"
+                },
+                "rotation_center_mm": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "soft_limit_max": 6.283185307179586,
+                "soft_limit_min": -6.283185307179586,
+                "zero_offset": 0.0
+              }
+            ],
+            "manufacturer": "自研 / In-house",
+            "model": "AC rotary-table FDM",
+            "mount_datums": [
+              {
+                "T_parent_from_mount": {
+                  "T_target_from_source": [
+                    [
+                      1.0,
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      1.0,
+                      0.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      1.0,
+                      0.0
+                    ],
+                    [
+                      0.0,
+                      0.0,
+                      0.0,
+                      1.0
+                    ]
+                  ],
+                  "source_frame": "build_plate_mount",
+                  "target_frame": "c_table"
+                },
+                "build_surface_id": "xyzac_plate",
+                "id": "build_plate_mount",
+                "name": "Rotary table center",
+                "parent_link_id": "c_table"
+              }
+            ],
+            "name": "自有 AC 五轴打印机 / Own AC FDM",
+            "reference_only": true,
+            "root_link_id": "machine",
+            "source_uri": "manuscript.docx#section-2.1-table-1",
+            "tool_link_id": "tool",
+            "version": 1,
+            "workpiece_link_id": "c_table"
+          },
+          "content_hash": "a98ffc8688ac1378780c3ed7f345b5d7f4408edf6bc5807470f66faa2ba44eed"
+        },
+        "nozzle": {
+          "schema_version": 1,
+          "resource_type": "nozzle",
+          "resource_id": "paper-core-ac-nozzle",
+          "profile_version": 1,
+          "payload": {
+            "construction_material": null,
+            "display_name": "Paper Core AC evidence nozzle",
+            "filament_diameter_mm": 1.75,
+            "flow_category": null,
+            "interface": "M6",
+            "is_builtin": false,
+            "length_mm": 2.0,
+            "orifice_diameter_mm": 0.6,
+            "outer_profile_rz_mm": [
+              [
+                0.3,
+                0.0
+              ],
+              [
+                0.4,
+                2.0
+              ]
+            ],
+            "profile_version": 1,
+            "resource_id": "paper-core-ac-nozzle",
+            "schema_version": 1,
+            "source": null,
+            "temperature_limit_c": null,
+            "wear_resistance_rating": null
+          },
+          "content_hash": "0dcf17cb1b5c7e74906298c336e0a2461147212845483a75f472fc36e643bb08"
+        },
+        "material": {
+          "schema_version": 1,
+          "resource_type": "material",
+          "resource_id": "paper-core-ac-pla",
+          "profile_version": 1,
+          "payload": {
+            "brand": "Generic",
+            "density_g_cm3": 1.24,
+            "display_name": "Cura Generic PLA 1.75 mm",
+            "filament_diameter_mm": 1.75,
+            "form": "filament",
+            "guid": "0ff92885-617b-4144-a03c-9989872454bc",
+            "is_builtin": false,
+            "material": "PLA",
+            "process": "FFF/FDM",
+            "profile_version": 1,
+            "recommendations": {
+              "build_plate_temperature_c": 60.0,
+              "nozzle_temperature_c": 200.0
+            },
+            "resource_id": "paper-core-ac-pla",
+            "review_confirmed": true,
+            "review_required": true,
+            "schema_version": 1,
+            "source": {
+              "file_path": "generic_pla_175.xml.fdm_material",
+              "revision": "886e7ad927463493cc9c64f427b1ae2cf4ce12c1",
+              "sha256": "5bc7c562e14cb10c15323bca26f1afddedcf6e18166c92adf4d638611907a4be",
+              "title": "Ultimaker fdm_materials: Generic PLA 1.75 mm",
+              "url": "https://github.com/Ultimaker/fdm_materials/blob/886e7ad927463493cc9c64f427b1ae2cf4ce12c1/generic_pla_175.xml.fdm_material"
+            },
+            "upstream_version": 13
+          },
+          "content_hash": "fc36d36af13b975a5c678a58de537ebb562d254679dcfb0805a2dbe6cce38a63"
+        }
+      },
+      "coordinate_systems": {
+        "model": {
+          "frame_id": "model",
+          "name": "model",
+          "origin_reference": {
+            "reference_type": "numeric",
+            "point_in_source_mm": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "geometry": null,
+            "parameter": null,
+            "confirmed": true
+          },
+          "z_direction_reference": {
+            "reference_type": "numeric",
+            "direction_in_source": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "geometry": null,
+            "secondary_geometry": null,
+            "first_point_in_source_mm": null,
+            "second_point_in_source_mm": null,
+            "flipped": false,
+            "confirmed": true
+          },
+          "x_direction_reference": {
+            "reference_type": "numeric",
+            "direction_in_source": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "geometry": null,
+            "secondary_geometry": null,
+            "first_point_in_source_mm": null,
+            "second_point_in_source_mm": null,
+            "flipped": false,
+            "confirmed": true
+          },
+          "T_target_from_source": {
+            "source_frame": "source",
+            "target_frame": "model",
+            "T_target_from_source": [
+              [
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                1.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ]
+            ]
+          },
+          "revision": 1
+        },
+        "build": {
+          "frame_id": "build",
+          "name": "build",
+          "origin_reference": {
+            "reference_type": "numeric",
+            "point_in_source_mm": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "geometry": null,
+            "parameter": null,
+            "confirmed": true
+          },
+          "z_direction_reference": {
+            "reference_type": "numeric",
+            "direction_in_source": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "geometry": null,
+            "secondary_geometry": null,
+            "first_point_in_source_mm": null,
+            "second_point_in_source_mm": null,
+            "flipped": false,
+            "confirmed": true
+          },
+          "x_direction_reference": {
+            "reference_type": "numeric",
+            "direction_in_source": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "geometry": null,
+            "secondary_geometry": null,
+            "first_point_in_source_mm": null,
+            "second_point_in_source_mm": null,
+            "flipped": false,
+            "confirmed": true
+          },
+          "T_target_from_source": {
+            "source_frame": "source",
+            "target_frame": "build",
+            "T_target_from_source": [
+              [
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                1.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ]
+            ]
+          },
+          "revision": 1
+        }
+      },
+      "placement": {
+        "mount_datum_id": "build_plate_mount",
+        "adjustment": {
+          "translation_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "quaternion_xyzw": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        "T_mount_from_build": {
+          "source_frame": "build",
+          "target_frame": "build_plate_mount",
+          "T_target_from_source": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              250.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              250.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              250.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      },
+      "draft_nodes": [],
+      "dirty_nodes": [],
+      "invalid_nodes": [],
+      "issues": [],
+      "revision": 1
+    }
+  ],
+  "operations": [
+    {
+      "operation_id": "pc06-pipe2-indexed",
+      "setup_id": "setup-1",
+      "name": "Tube Thin-Wall Indexed",
+      "operation_type": "tube_thin_wall_indexed",
+      "state": "dirty",
+      "dirty_reasons": [
+        "operation_created",
+        "operation_geometry_changed",
+        "operation_parameters_changed"
+      ],
+      "enabled": true,
+      "geometry": {
+        "tube_body": {
+          "object_id": "body_002",
+          "geometry_type": "body",
+          "signature": {
+            "schema_version": 1,
+            "geometry_type": "body",
+            "descriptor": {
+              "kind": "solid",
+              "assembly_path": "弯管新",
+              "bounds_mm": {
+                "minimum": [
+                  -16.0000001,
+                  -20.202002314912093,
+                  4.999999899999994
+                ],
+                "maximum": [
+                  16.0000001,
+                  36.90979707706259,
+                  71.68262115462142
+                ]
+              },
+              "dimensions_mm": [
+                32.0000002,
+                57.111799391974685,
+                66.68262125462142
+              ],
+              "volume_mm3": 6473.071995018587,
+              "surface_area_mm2": 13140.922734559752,
+              "centroid_mm": [
+                -6.3451069811293996e-15,
+                7.215000693790886,
+                36.05307012202093
+              ],
+              "topology": {
+                "face_count": 8,
+                "edge_count": 14,
+                "vertex_count": 8,
+                "surface_types": {
+                  "cylinder": 4,
+                  "plane": 2,
+                  "torus": 2
+                },
+                "curve_types": {
+                  "bsplinecurve": 6,
+                  "circle": 8
+                },
+                "vertex_edge_degrees": [
+                  2,
+                  2,
+                  2,
+                  2,
+                  3,
+                  3,
+                  3,
+                  3
+                ]
+              }
+            },
+            "parent_body": null,
+            "kernel_signature": "3543ea00cbca0d0bd7d38f72e0a213daa064f8eb6da3521eec518783e9891d84"
+          },
+          "parent_body_id": null,
+          "assembly_name": "弯管新"
+        },
+        "entry_port": {
+          "object_id": "body_002_edge_0003",
+          "geometry_type": "edge",
+          "signature": {
+            "schema_version": 1,
+            "geometry_type": "edge",
+            "descriptor": {
+              "curve_type": "circle",
+              "length_mm": 100.53096491487338,
+              "bounds_mm": {
+                "minimum": [
+                  -1.934543418978814e-14,
+                  -16.0,
+                  4.999999999999995
+                ],
+                "maximum": [
+                  0.0,
+                  16.0,
+                  5.000000000000005
+                ]
+              },
+              "endpoints_mm": [
+                [
+                  -3.91886975727153e-15,
+                  16.0,
+                  4.999999999999995
+                ],
+                [
+                  0.0,
+                  16.0,
+                  4.999999999999995
+                ]
+              ],
+              "arc_length_midpoint_mm": [
+                -1.934543418978814e-14,
+                -16.0,
+                5.000000000000005
+              ],
+              "center_mm": [
+                0.0,
+                1.01603706510246e-16,
+                5.0
+              ],
+              "axis_direction": [
+                0.0,
+                3.33066907387547e-16,
+                1.0
+              ],
+              "radius_mm": 16.0,
+              "adjacency": {
+                "vertex_count": 1,
+                "face_count": 2,
+                "face_surface_types": [
+                  "cylinder",
+                  "plane"
+                ],
+                "vertex_edge_degrees": [
+                  2
+                ]
+              }
+            },
+            "parent_body": {
+              "kind": "solid",
+              "assembly_path": "弯管新",
+              "bounds_mm": {
+                "minimum": [
+                  -16.0000001,
+                  -20.202002314912093,
+                  4.999999899999994
+                ],
+                "maximum": [
+                  16.0000001,
+                  36.90979707706259,
+                  71.68262115462142
+                ]
+              },
+              "dimensions_mm": [
+                32.0000002,
+                57.111799391974685,
+                66.68262125462142
+              ],
+              "volume_mm3": 6473.071995018587,
+              "surface_area_mm2": 13140.922734559752,
+              "centroid_mm": [
+                -6.3451069811293996e-15,
+                7.215000693790886,
+                36.05307012202093
+              ],
+              "topology": {
+                "face_count": 8,
+                "edge_count": 14,
+                "vertex_count": 8,
+                "surface_types": {
+                  "cylinder": 4,
+                  "plane": 2,
+                  "torus": 2
+                },
+                "curve_types": {
+                  "bsplinecurve": 6,
+                  "circle": 8
+                },
+                "vertex_edge_degrees": [
+                  2,
+                  2,
+                  2,
+                  2,
+                  3,
+                  3,
+                  3,
+                  3
+                ]
+              }
+            },
+            "kernel_signature": "a278d960b655ac03a038d484040cb5d4ce55367538dbf1af6250b5d33a3d8a4c"
+          },
+          "parent_body_id": "body_002",
+          "assembly_name": "弯管新"
+        },
+        "exit_port": {
+          "object_id": "body_002_edge_0014",
+          "geometry_type": "edge",
+          "signature": {
+            "schema_version": 1,
+            "geometry_type": "edge",
+            "descriptor": {
+              "curve_type": "circle",
+              "length_mm": 100.53096491487338,
+              "bounds_mm": {
+                "minimum": [
+                  -5.142188144172203e-15,
+                  26.234996390323808,
+                  40.47289700116248
+                ],
+                "maximum": [
+                  0.0,
+                  36.90979697706259,
+                  70.63990932312372
+                ]
+              },
+              "endpoints_mm": [
+                [
+                  -3.91886975727153e-15,
+                  36.90979697706259,
+                  40.47289700116248
+                ],
+                [
+                  0.0,
+                  36.90979697706259,
+                  40.47289700116248
+                ]
+              ],
+              "arc_length_midpoint_mm": [
+                -5.142188144172203e-15,
+                26.234996390323808,
+                70.63990932312372
+              ],
+              "center_mm": [
+                0.0,
+                31.5723966836932,
+                55.5564031621431
+              ],
+              "axis_direction": [
+                0.0,
+                0.9427191350612888,
+                0.3335875183355869
+              ],
+              "radius_mm": 16.0,
+              "adjacency": {
+                "vertex_count": 1,
+                "face_count": 2,
+                "face_surface_types": [
+                  "cylinder",
+                  "plane"
+                ],
+                "vertex_edge_degrees": [
+                  2
+                ]
+              }
+            },
+            "parent_body": {
+              "kind": "solid",
+              "assembly_path": "弯管新",
+              "bounds_mm": {
+                "minimum": [
+                  -16.0000001,
+                  -20.202002314912093,
+                  4.999999899999994
+                ],
+                "maximum": [
+                  16.0000001,
+                  36.90979707706259,
+                  71.68262115462142
+                ]
+              },
+              "dimensions_mm": [
+                32.0000002,
+                57.111799391974685,
+                66.68262125462142
+              ],
+              "volume_mm3": 6473.071995018587,
+              "surface_area_mm2": 13140.922734559752,
+              "centroid_mm": [
+                -6.3451069811293996e-15,
+                7.215000693790886,
+                36.05307012202093
+              ],
+              "topology": {
+                "face_count": 8,
+                "edge_count": 14,
+                "vertex_count": 8,
+                "surface_types": {
+                  "cylinder": 4,
+                  "plane": 2,
+                  "torus": 2
+                },
+                "curve_types": {
+                  "bsplinecurve": 6,
+                  "circle": 8
+                },
+                "vertex_edge_degrees": [
+                  2,
+                  2,
+                  2,
+                  2,
+                  3,
+                  3,
+                  3,
+                  3
+                ]
+              }
+            },
+            "kernel_signature": "10cab3f8c6ba4a05312c6a103eeeb11fdfe8ede32951936cd0d5bb437d5b3456"
+          },
+          "parent_body_id": "body_002",
+          "assembly_name": "弯管新"
+        },
+        "substrate_body": {
+          "object_id": "body_001",
+          "geometry_type": "body",
+          "signature": {
+            "schema_version": 1,
+            "geometry_type": "body",
+            "descriptor": {
+              "kind": "solid",
+              "assembly_path": "弯管新",
+              "bounds_mm": {
+                "minimum": [
+                  -25.0000001,
+                  -25.0000001,
+                  -1e-07
+                ],
+                "maximum": [
+                  25.0000001,
+                  25.0000001,
+                  5.0000001
+                ]
+              },
+              "dimensions_mm": [
+                50.0000002,
+                50.0000002,
+                5.000000200000001
+              ],
+              "volume_mm3": 9817.477042468103,
+              "surface_area_mm2": 4712.38898038469,
+              "centroid_mm": [
+                4.076176262485909e-15,
+                -8.833467290969567e-16,
+                2.5
+              ],
+              "topology": {
+                "face_count": 3,
+                "edge_count": 3,
+                "vertex_count": 2,
+                "surface_types": {
+                  "cylinder": 1,
+                  "plane": 2
+                },
+                "curve_types": {
+                  "bsplinecurve": 1,
+                  "circle": 2
+                },
+                "vertex_edge_degrees": [
+                  2,
+                  2
+                ]
+              }
+            },
+            "parent_body": null,
+            "kernel_signature": "1fbbc584ef346458e81366b4bb4beed1917f090a5d59942cfe31500ea130d3cc"
+          },
+          "parent_body_id": null,
+          "assembly_name": "弯管新"
+        },
+        "manual_centerline_edges": []
+      },
+      "parameters": {
+        "bead_width_mm": 10.0,
+        "layer_height_mm": 10.0,
+        "max_wedge_angle_deg": 15.0,
+        "max_bead_height_error_mm": 0.05,
+        "safe_clearance_mm": 10.0,
+        "retract_length_mm": 1.0,
+        "deposition_feedrate_mm_min": 1200.0,
+        "travel_feedrate_mm_min": 3000.0,
+        "contour_chord_error_mm": 0.01
+      },
+      "type_config": null
+    }
+  ],
+  "resources": {},
+  "manufacturable_feature_groups": [],
+  "preview": {
+    "glb": null,
+    "gcode": null
+  }
+}

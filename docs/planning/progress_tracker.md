@@ -2,9 +2,9 @@
 
 最近更新：2026-09-13。关联[开发计划](development_plan.md)、[参考资料](reference_research.md)与[文档索引](../README.md)。**下方主表是任务进度的唯一维护位置**，计划和复盘引用任务编号，不另行维护一份状态表。
 
-当前优先版本：**论文核心 AC（Paper Core AC）**。用户于 2026-09-13 将资源集中到半球贴面、扇叶、弯管、叶轮及预定义材料区域切换，要求批判性核对论文。执行顺序改为 **PC01 契约/来源 → PC02 受限 Freeform → PC03 多材料 → PC04 自有 AC 后处理 → PC05 Tube 收口 → PC06 四例回归 → PC07 本地封装**；PC00 本轮调研与重排已完成。范围和许可证依据见[论文核心说明](paper_core_ac_scope.md)。六工作台完整目标保留为后续路线，不作为核心版前置依赖。
+当前优先版本：**论文核心 AC（Paper Core AC）**。PC00—PC07 已于 2026-09-13 按 **契约/来源 → 受限 Freeform → 多材料 → 自有 AC 后处理 → Tube 收口 → 四例与双通道回归 → 本地封装** 完成受限离线验收。范围和许可证依据见[论文核心说明](paper_core_ac_scope.md)，实施、失败和验收见[本轮复盘](../reviews/2026-09-13_paper_core_ac_implementation_review.md)。六工作台完整目标保留为后续路线，不作为核心版前置依赖。
 
-Planar P01—P07、Curve C01—C05、Rotary R01—R05 保留既有离线阶段验收。2026-09-13 按用户要求优先完成 PC05 的缺陷复核子项：T04、T07恢复为已完成（受限离线算法/检查），T08、T12仍待当前实际界面与整阶段验收。F01—F06 中论文需要的子集由 PC02 优先实施，原完整阶段暂缓；X01—X06、完整 I01—I04 暂缓。原编号和完成判据不删除，子集通过不自动关闭完整父阶段。8项核心任务中 PC00已完成、PC05进行中，其余6项未开始；完整路线 F/X/I 的16项暂缓，Tube 2项待验证。PC05整体关闭仍依赖PC04，不将本轮离线结果升级为真实控制器资格。
+Planar P01—P07、Curve C01—C05、Rotary R01—R05 保留既有离线阶段验收。PC05 已使 T04、T07、T08、T12 在受限离线范围内统一为已完成：当前 pipe2 六件套与自有 AC 回读通过，Tube 三操作的双语多尺寸证据、长 Warning、Ready/Stale/Error 展示和首页标签已收口。F01—F06 中论文需要的子集由 PC02 交付，原完整阶段仍暂缓；X01—X06、完整 I01—I04 暂缓。原编号和完成判据不删除，子集通过不自动关闭完整父阶段。当前 PC00—PC07 八项全部完成；完整路线 F/X/I 的 16 项仍暂缓，不将离线结果升级为真实控制器资格。
 
 本表保留规划、基础、算法、工作台和整体验收任务的唯一状态。2026-09-12 的 AUD-01 已完成检查和修改方案，确认的 Planar 缺陷已在 AUD-02 和 P07 最终验收中修复。P07 以 clean-room 独立实现的 Grid/Lines 支撑首版关闭：解析悬垂真值为 33 段、61.86 mm³、66/66 回读，复杂 STEP 为 9,662/9,662 回读；9 张 Qt/OpenGL UI 图覆盖参数、正常、错误恢复和 Stale 恢复；最终 Planar 223 passed，全仓 753 passed、3 skipped、130 subtests，官方质量脚本全绿。Tree/Organic、桥接专用路径、双材料不在首版范围。Generic XYZAC 仍仅为离线参考，真实控制器语义、机床标定、完整喷嘴扫掠和现场试切未验证。
 
@@ -38,6 +38,7 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 
 | 日期 | 任务 | Skill | 本轮用途 | 证据 |
 | --- | --- | --- | --- | --- |
+| 2026-09-13 | PC01—PC07 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`artifact-package-verify`、`computer-use` | 完成受限 Freeform、显式多材料、自有 AC 离线后处理、Tube 收口、五产品证据、严格回读、串行 Qt/全仓、质量/构建/原生 wheel/隔离安装和显式清单 ZIP；Computer Use 在应用启动后仍无法枚举 Windows 窗口，不将其冒充为真人桌面操作通过 | [实施复盘](../reviews/2026-09-13_paper_core_ac_implementation_review.md)、[验证清单](../reviews/evidence/2026-09-13_paper_core_ac/validation_manifest.json) |
 | 2026-09-13 | CI-BRANCH | `five-axis-slicer-validation`、`gh-fix-ci` | 核对默认分支和全部分支祖先关系；读取 Actions 原始日志；用隔离 Python 3.12 环境修复 runner 预装包、CasADi/PyQt/mypy 漂移、Linux 平台存根和托管 VTK 崩溃边界 | [CI 与分支复盘](../reviews/2026-09-13_ci_branch_consolidation_review.md)；干净环境质量通过，13文件领域集161 passed、2 skipped、89 subtests；Actions `34747228928` 四项全部通过 |
 | 2026-09-13 | AUD-02-TUBE、T04/T07、PC05子项 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`artifact-package-verify` | 原反例复核；修复末层材料、固定方向姿态和IPW性能；独立体积/候选对照、串行Qt/全仓、六件套压缩逐文件核验；区分缺陷关闭与整阶段验收 | [同一AUD-02复盘](../reviews/2026-09-12_algorithm_audit_fixes.md)、[当前证据](../reviews/evidence/2026-09-13_tube_recheck/validation_manifest.json) |
 | 2026-09-13 | PC00 | `five-axis-workbench-development` | 按阶段门重排论文核心范围；批判性核对论文/当前代码、固定开源版本与许可；保留原阶段资格和延期范围 | [核心范围/研究](paper_core_ac_scope.md)、[复盘](../reviews/2026-09-13_paper_core_ac_planning_review.md)；本轮仅文档检查，未运行产品测试 |
@@ -89,13 +90,13 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 | AUD-02 | 跨工作台缺陷修复与重新验证 | AUD-01 | 已完成 | 原始反例拒绝、正确解析/真实模型通过、旧资格失效、全仓与图文证据齐全 | [修改方案](2026-09-12_algorithm_audit_fix_plan.md)；[本轮证据](../reviews/evidence/2026-09-12_audit_fixes/) | [修复复盘](../reviews/2026-09-12_algorithm_audit_fixes.md)；窄壁实心、自适应道宽、联合调度和实机资格保留 | 2026-09-12 |
 | AUD-02-TUBE | Tube 原缺陷复核与本轮发现修复 | AUD-02、用户本轮授权 | 已完成 | 原坐标/Stale/碰撞漏接/弦高/NC反例；末层体积与固定姿态；真实pipe2当前生成/碰撞/回读；失败与回归归档 | [同一复盘](../reviews/2026-09-12_algorithm_audit_fixes.md)；839 passed、3 skipped、141 subtests，质量通过；pipe2 15479/15479回读，六件套ZIP逐文件核验 | T04/T07恢复受限离线资格；T08/T12保留实际界面与整阶段门，实机未验证 | 2026-09-13 |
 | PC00 | 论文批判性审查、核心范围和复用研究 | 用户本轮授权、当前源码与论文存档 | 已完成 | 四例能力差距、论文与代码冲突、候选代码/许可证、延期范围及依赖可核对 | [范围/研究](paper_core_ac_scope.md)、[复盘](../reviews/2026-09-13_paper_core_ac_planning_review.md)；原件/存档 SHA 一致，7个候选项目固定 commit；未执行上游或实验 | PC01；本行完成不表示论文实验主张全部核实 | 2026-09-13 |
-| PC01 | 四例输入、材料、控制器与独立真值契约 | PC00 | 未开始 | CAD/选择/材料区域/历史NC/宏/标定来源、frame、E/F模式、几何容差、失败矩阵冻结；论文差异逐项定论或列未知 | [契约要求](paper_core_ac_scope.md)；宏和实测参数尚未完成盘点；论文不能代替原始证据 | 优先登记半球、扇叶、pipe2、叶轮及双通道例；可先完成离线契约 | 2026-09-13 |
-| PC02 | 论文所需受限 Freeform 核心 | PC01 | 未开始 | 单修剪面/有限连续面组与边界/导引线；贴面、薄壁、有限多层；三维道距/trim/周期/法向/投影多解/覆盖和事件；三入口、取消、Stale、重开 | 复用 F01—F05 所需子集、现有 OCP/Toolpath；[候选来源](paper_core_ac_scope.md#4-本轮开源资料核查与采用决定) | 半球局部图案→扇叶薄壁→有限叶轮面组；不自动关闭 F06 | 2026-09-13 |
-| PC03 | 预定义材料区域与四通道事件链 | PC01,PC02 | 未开始 | material_id/channel_id、准备暂停、switch/cut/retract/park/load/温控等待/purge/prime/resume；hash/Stale/撤销/重开；传感/温控失败阻断与恢复 | 当前无完整材料区域调度；T0—T3选择次数与有效切换次数分开 | 显式区域与通道状态机；不开发自动材料分区/优化 | 2026-09-13 |
-| PC04 | 自有 AC 控制器后处理封装 | PC01,PC03,I01-OWN,I01-AXIS | 未开始 | 真实机型/宏版本、A±180°/C±360°按来源确认；累计C、工具长度、IK/FK、轴限/动态/扫掠；E/F模式、两种20mm动作、宏展开/模式恢复和严格回读 | [论文冲突清单](paper_core_ac_scope.md#1-证据基线与论文可信边界)；未知机床限值保持未知；现有 G93/M82 不能直接证明固件兼容 | 完成离线注册与失败矩阵；实测参数/现场资格另列，不扩展XYZAB | 2026-09-13 |
-| PC05 | Tube 论文案例收口与状态统一 | PC04,AUD-02 | 进行中 | 自有AC真实pipe2几何/体积/覆盖/运动/回读；逐项决定T04/T07/T08/T12资格；README与中英首页标签一致 | 用户优先授权的AUD-02-TUBE子项完成，T04/T07离线恢复，pipe2当前六件套/回读通过；`workbenches.py`旧标签与T08/T12实际界面仍待收口 | 整体关闭仍需PC04；T12必须三操作阶段门；仅Indexed通过不关闭整个Tube | 2026-09-13 |
-| PC06 | 四论文案例及多材料完整回归 | PC02,PC03,PC04,PC05 | 未开始 | 当前CAD生成四例六件套并严格回读；增加预装双通道案例；独立法向/道距/体积/AC连续/材料切换/NC差异；三入口、project I/O、真实Viewer、双语三尺寸 | 旧手工NC与历史实验仅作对照；不当作当前generated路径或实测真值 | 保存失败与恢复、输入/源码/产物指纹及真实图文教程；实验原始数据缺口单列 | 2026-09-13 |
-| PC07 | 论文核心 AC 本地封装与交付 | PC06 | 未开始 | 范围内最终pytest/质量/包检查/干净环境启动；4例项目、指南/截图、许可通知、证据索引；论文声明与验证边界一致 | 不依赖X01—X06或完整第二机型；仅离线达标时明确离线交付 | 完成后交付本地提交；独立列明真实控制器/标定/现场碰撞/试切资格 | 2026-09-13 |
+| PC01 | 四例输入、材料、控制器与独立真值契约 | PC00 | 已完成 | CAD/选择/材料区域/历史NC/宏/标定来源、frame、E/F模式、几何容差、失败矩阵冻结；论文差异逐项定论或列未知 | [人读契约](paper_core_input_contract.md)与[机器契约](paper_core_input_contract.json)；半球 CAD/NC 本机资产指纹已核对，再分发许可仍未知 | PC02—PC07已完成；保留宏版本、标定与现场参数未知项 | 2026-09-13 |
+| PC02 | 论文所需受限 Freeform 核心 | PC01 | 已完成 | 单修剪面/有限连续面组与边界/导引线；贴面、薄壁、有限多层；三维道距/trim/周期/法向/投影多解/覆盖和事件；三入口、取消、Stale、重开 | [实施复盘](../reviews/2026-09-13_paper_core_ac_implementation_review.md)与[产品清单](../reviews/evidence/2026-09-13_paper_core_ac/validation_manifest.json)；最多16面/32导引线，trim越界反例保留 | 只关闭论文子集；通用 F01—F06 仍按原判据暂缓 | 2026-09-13 |
+| PC03 | 预定义材料区域与四通道事件链 | PC01,PC02 | 已完成 | material_id/channel_id、准备暂停、switch/cut/retract/park/load/温控等待/purge/prime/resume；hash/Stale/撤销/重开；传感/温控失败阻断与恢复 | [多材料指南](../guides/material_channels_zh.md)；五个产品包含 T0—T3 选择和分口径统计，双通道事件链及传感/温控失败恢复有直接测试 | 显式区域完成；自动材料分区/优化不在范围 | 2026-09-13 |
+| PC04 | 自有 AC 控制器后处理封装 | PC01,PC03,I01-OWN,I01-AXIS | 已完成 | 真实机型/宏版本、A±180°/C±360°按来源确认；累计C、工具长度、IK/FK、轴限/动态/扫掠；E/F模式、两种20mm动作、宏展开/模式恢复和严格回读 | [控制器指南](../guides/paper_core_ac_controller_zh.md)；G90/M83/G94、Indexed绝对Z20、材料park相对Z+20、宏展开、完整命令回读和累计C门禁通过 | 离线注册完成；控制器/宏版本、协调XYZAC和累计C上限未知，`machine_executable=false` | 2026-09-13 |
+| PC05 | Tube 论文案例收口与状态统一 | PC04,AUD-02 | 已完成 | 自有AC真实pipe2几何/体积/覆盖/运动/回读；逐项决定T04/T07/T08/T12资格；README与中英首页标签一致 | pipe2 1,591点，原六件套与自有AC 25/25事件严格回读；三操作双语多尺寸证据无截断/碰撞；笔记本尺寸顶部动作重叠已修复 | T04/T07/T08/T12均关闭到受限离线资格；实机限制不变 | 2026-09-13 |
+| PC06 | 四论文案例及多材料完整回归 | PC02,PC03,PC04,PC05 | 已完成 | 当前CAD生成四例六件套并严格回读；增加预装双通道案例；独立法向/道距/体积/AC连续/材料切换/NC差异；三入口、project I/O、真实Viewer、双语三尺寸 | [验证清单](../reviews/evidence/2026-09-13_paper_core_ac/validation_manifest.json)：半球7路径30点、扇叶3路径123点、叶轮16路径384点、pipe2 1,591点、双通道48点；五套六件套和四项目重开通过 | 生产VTK/OpenGL截图受无显示会话限制；Qt证据绘制器不冒充生产Viewer资格 | 2026-09-13 |
+| PC07 | 论文核心 AC 本地封装与交付 | PC06 | 已完成 | 范围内最终pytest/质量/包检查/干净环境启动；4例项目、指南/截图、许可通知、证据索引；论文声明与验证边界一致 | 57 passed/6 subtests 联合回归；全仓 856 passed、3 skipped、141 subtests；质量门 162 源码无问题；wheel/sdist、Twine、原生wheel及包隔离安装/命令入口通过；[实施复盘](../reviews/2026-09-13_paper_core_ac_implementation_review.md) | 已本地封装；隔离环境继承已验证依赖，不声称完全无缓存干净安装；实机资格单列 | 2026-09-13 |
 | Q00 | 资料检索、计划与台账 | 无 | 已完成 | 六入口、20 操作、依赖与验收完整；来源、链接和台账一致 | [本轮复盘](../reviews/2026-09-10_six_workbench_plan_review.md)；51 行、20 操作、59 链接及依赖检查通过 | A01—A03 已完成；按台账进入 T01 | 2026-09-11 |
 | B01 | 既有 STEP、选择与 NC 预览 | 无 | 已完成 | 已有导入、拓扑选择和路径预览可复用 | [本轮验收](../reviews/2026-09-11_b01_b03_acceptance_review.md)；真实 STEP、四级选择、NC 解析与坐标回退、VTK 离屏通过；全仓 402 passed、3 skipped | T01 复用已核验环境、输入指纹与预览入口 | 2026-09-11 |
 | B02 | Tube Setup 与坐标闭环 | B01 | 已完成 | Part、资源、Model/Build CS、Placement、项目重开 | [本轮验收](../reviews/2026-09-11_b01_b03_acceptance_review.md)；pipe2 GUI 达到 Ready，坐标/装夹、资源与保存重开通过；符号链接权限边界单列 | T01 接入几何节点时回归 | 2026-09-11 |
@@ -110,11 +111,11 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 | T05 | 区段连接与安全转位 | T04 | 已完成 | 回抽/退离/转位/接近/恢复事件完整；无沉积旋转混入 Indexed | 原事件/零材料测试保留；2026-09-13修正径向姿态误用，分区内固定喷嘴轴，退离保留前段轴向、接近采用新层轴向；当前pipe2回读通过 | [当前更正](../reviews/2026-09-12_algorithm_audit_fixes.md)；实际控制器与现场安全另行验证 | 2026-09-13 |
 | T06 | 参考 XYZAC 逆运动学与轴轨迹 | T05 | 已完成 | FK 回代、分支/角展开/行程/速度/加速度检查；刀长与回转中心生效 | Generic XYZAC 两分支、C 展开、软限、速度/加速度、刀长、装夹变换、非零回转中心和 FK 回代测试通过 | T08 生成参考轴轨迹；真实机型参数仍需独立标定 | 2026-09-11 |
 | T07 | Indexed 路径、IPW 与运动检查 | T06 | 已完成 | 几何误差、沉积近似、喷嘴/基体/夹具/已打印体及转位扫掠检查 | [当前复核](../reviews/2026-09-12_algorithm_audit_fixes.md)：真实相交夹具/IPW/段内失败与Error禁止导出通过；保守空间筛选与暴力遍历一致；pipe2当前52380运动采样、无碰撞Error、FK约1.27e-13 mm | 限AABB/喷嘴球/bead capsule离散模型；未标定的真实机床、完整物理扫掠/动态跟随不在本资格内 | 2026-09-13 |
-| T08 | Indexed 输出与当前 UI 完整流程 | T07 | 待验证 | STEP→生成→检查→NC→回读；改参、取消、保存重开；pipe2 通过 | [当前复核](../reviews/2026-09-12_algorithm_audit_fixes.md)：原软件缺陷已修复；pipe2 15479点、52380运动采样、六件套/回读通过，保留奇异/参考机型Warning；领域/Qt/脚本/HTTP/重开回归通过 | 尚需当前pipe2实际Viewer、双语三尺寸长Warning与Stale/重开视觉证据及首页状态统一；不再引用旧1171点为当前资格 | 2026-09-13 |
+| T08 | Indexed 输出与当前 UI 完整流程 | T07 | 已完成 | STEP→生成→检查→NC→回读；改参、取消、保存重开；pipe2 通过 | [PC05/PC06证据](../reviews/evidence/2026-09-13_paper_core_ac/validation_manifest.json)：pipe2当前1,591点，六件套和自有AC 25/25事件严格回读；双语多尺寸、长Warning、Stale/错误展示与首页状态统一通过 | 限受支持的恒定圆截面离线流程；真实Viewer/OpenGL、控制器和实机另行验证 | 2026-09-13 |
 | T09 | Tube Buildup 与底座多工序 | T08 | 已完成 | 多道厚壁/加厚及底座独立生成、工序顺序、跨操作衔接和格式迁移 | 同上；专项测试覆盖 multi-pass、底座独立操作和安全排序 | P01 复用多工序状态边界 | 2026-09-11 |
 | T10 | Tube Continuous 几何与标架 | T09 | 已完成 | 空间中心线 RMF、连续螺旋、接缝与多层路径；低曲率无翻转 | 同上；专项测试覆盖 RMF 退化拒绝、螺旋 seam/volume 和 G1 空间链 | P01 复用连续路径契约 | 2026-09-11 |
 | T11 | Tube Continuous 运动与输出 | T10 | 已完成 | 连续姿态、轴速/加速度、奇异、全运动碰撞和 NC 回读通过 | 同上；连续 FK/C 展开、运动限制、碰撞阻止导出及六件套 readback 通过 | P01 复用离线运动检查边界 | 2026-09-11 |
-| T12 | 整个 Tube 工作台验收 | T08,T09,T11 | 待验证 | 三操作、错误样例、UI/脚本/HTTP、保存重开和帮助均验证 | [当前复核](../reviews/2026-09-12_algorithm_audit_fixes.md)：已消除原缺陷并修正同源Indexed/Buildup姿态；当前全仓通过、Indexed真实pipe2成功；历史三尺寸图不冒充当前三操作验收 | 等T08实际界面收口及三操作当前完整案例/双语多尺寸手册证据；实机资格单列 | 2026-09-13 |
+| T12 | 整个 Tube 工作台验收 | T08,T09,T11 | 已完成 | 三操作、错误样例、UI/脚本/HTTP、保存重开和帮助均验证 | [PC05实施复盘](../reviews/2026-09-13_paper_core_ac_implementation_review.md)与[Tube UI证据](../reviews/evidence/2026-09-13_paper_core_ac/validation_manifest.json)：Indexed/Buildup/Continuous、Ready/Stale/Error、1366×768/1600×900/1920×1080、中英界面与当前手册通过；笔记本尺寸动作按钮重叠回归已修复 | Tube阶段关闭到受限离线资格；生产VTK/OpenGL、真实控制器/标定/现场碰撞/试切单列未验证 | 2026-09-13 |
 | P01 | Planar Region 与层截面 | T12 | 已完成 | 通用 Setup 接入、平面区域及实体分层、孔/岛拓扑有效 | [最终证据](../reviews/evidence/2026-09-12_p07_planar_final/manifest.json)；当前源码重新覆盖稳定引用、Build CS、截层、保存重开→Stale、GUI/脚本/HTTP、问题定位和错误恢复；Planar 223 passed | P02—P07 已完成；进入 C01 | 2026-09-12 |
 | P02 | Planar Zigzag Fill | P01 | 已完成 | 轮廓/填充、带孔裁剪、路径排序、覆盖/残余/越界和材料用量可核对；离线轨迹、G-code、回读和使用手册齐全 | [最终证据](../reviews/evidence/2026-09-12_p07_planar_final/manifest.json)；当前真实 STEP 142 点，六件套和 142/142 回读通过；三尺寸中英 Qt/OpenGL 图、独立覆盖/材料检查和错误恢复已复核 | P03—P07 已完成；进入 C01 | 2026-09-12 |
 | P03 | Planar Offset Fill | P02 | 已完成 | 多轮偏置、窄区/消失区、多岛、接缝正确 | [P03 复盘](../reviews/2026-09-12_planar_algorithm_foundation_review.md#p03-offset-fill-产品接入与关闭)与[证据](../reviews/evidence/2026-09-12_p03_planar/manifest.json)；OCCT 偏置覆盖孔、凹区、多岛、窄颈分裂，部分消失为可导出 Warning、全部消失为阻止导出的 Error；12 passed | 进入 P04；沿用共享 Toolpath、状态和残余量测 | 2026-09-12 |
@@ -153,7 +154,7 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 
 ## 模型分工与悲观 token 预算
 
-以下为六工作台全范围的历史预算，**不再作为当前版本必须执行或消耗的预算**。当前仅排 PC01—PC07 的7项核心任务；F/X/I 完整16项暂缓，Tube 4项待验证。此前“7项待验证”包含后来已关闭的Planar项，现予更正。核心版不预填未经校准的新 token/工期总额；逐项复用已有代码和专项验证，最终封装再做一次所需全仓回归。单位为百万 token（M）；下表保留供完整路线恢复时参考。
+以下为六工作台全范围的历史预算，**不再作为当前版本必须执行或消耗的预算**。PC00—PC07 已完成；F/X/I 完整 16 项暂缓，Tube T01—T12 已关闭到受限离线资格。此前“7项待验证”包含后来已关闭的 Planar 项，现予更正。核心版不预填未经校准的新 token/工期总额；单位为百万 token（M），下表保留供完整路线恢复时参考。
 
 模型选择依据为 [OpenAI Codex Models](https://developers.openai.com/codex/models)：Luna 适合明确、重复且高吞吐的任务，Terra 适合日常开发，Sol 适合复杂开放问题，Astra 用于最困难的跨步骤判断。官方说明也建议从较低推理强度开始，只在任务确有更深规划或检查需求时提高；模型可用性随账户和发布批次变化。
 
@@ -197,6 +198,7 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 
 | 日期 | 变更依据 | 变更内容 | 影响 |
 | --- | --- | --- | --- |
+| 2026-09-13 | 用户要求检查并完成 PC00—PC07，发现问题必须修复 | 冻结输入契约，完成受限 Freeform、T0—T3 多材料事件、自有 AC 离线后处理、Tube 收口、五产品/四项目证据及本地封装；修复质量门发现的可空CAD/输入类型问题和1366×768 Tube顶部按钮重叠 | PC00—PC07、T08、T12改为已完成（受限离线）；57 passed/6 subtests、全仓856 passed/3 skipped/141 subtests、质量/构建/Twine/原生包隔离安装通过；真实控制器、标定、生产VTK/OpenGL、现场碰撞和试切未验证 |
 | 2026-09-13 | 用户要求按 GitHub 默认主线统一本地与远端分支，并解决当前 CI 依赖冲突 | 确认默认分支为 `master`，所有功能分支均已进入主线后删除其引用；Actions 改用隔离虚拟环境，固定 mypy、CasADi 与 PyQt5，修复 Linux 平台存根，并把托管 Windows 回归限定为无头领域集 | 本地和远端均只保留 `master`；干净 Python 3.12 的依赖、质量和161项领域测试通过；完整 Qt/VTK 桌面回归仍须在真实显示环境执行 |
 | 2026-09-13 | 用户要求再检查旧错误，存在则修复、消失则标记完成 | AUD-02-TUBE原反例通过；新增末层材料、固定打印方向与IPW性能修复；当前pipe2全链通过，撤回旧A≈±122.3°固有需求解释；839 passed、3 skipped、141 subtests，质量通过，六件套压缩校验 | T04/T07受限离线资格恢复；T08/T12仍待当前实际界面与整阶段门；PC05仅复核子项先行，整体仍依赖PC04 |
 | 2026-09-13 | 用户要求资源优先完成论文案例，并批判性核对论文、寻找可复用项目 | 新增PC00—PC07；四例能力矩阵、材料事件、自有AC后处理、Tube收口和本地封装；核对7个项目固定commit/许可；README纠正Tube全完成声明 | PC00已完成，PC01—PC07未开始；完整F/X/I共16项暂缓，Tube4项待验证保留；论文实验数字和旧NC不作为当前软件能力真值 |

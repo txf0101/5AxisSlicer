@@ -140,6 +140,8 @@ class ToolpathPoint:
     bead_width_mm: float | None = None
     layer_height_mm: float | None = None
     material_volume_mm3: float = 0.0
+    material_id: str | None = None
+    channel_id: str | None = None
     issue_ids: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
@@ -174,6 +176,16 @@ class ToolpathPoint:
             self.material_volume_mm3,
             "material_volume_mm3",
         )
+        material_id = _optional_identifier(self.material_id, "material_id")
+        channel_id = _optional_identifier(self.channel_id, "channel_id")
+        if (material_id is None) != (channel_id is None):
+            raise GeneratedToolpathError(
+                "material_id and channel_id must either both be set or both be absent"
+            )
+        if point_type != "deposition" and (material_id is not None or channel_id is not None):
+            raise GeneratedToolpathError(
+                "only deposition points can carry material/channel identity"
+            )
         if point_type == "deposition" and extrusion_role == "none":
             raise GeneratedToolpathError("deposition points require an extrusion_role")
         if point_type != "deposition" and material_volume > 0.0:
@@ -189,6 +201,8 @@ class ToolpathPoint:
         object.__setattr__(self, "bead_width_mm", bead_width)
         object.__setattr__(self, "layer_height_mm", layer_height)
         object.__setattr__(self, "material_volume_mm3", material_volume)
+        object.__setattr__(self, "material_id", material_id)
+        object.__setattr__(self, "channel_id", channel_id)
         object.__setattr__(self, "issue_ids", issue_ids)
 
     def to_json(self) -> dict[str, Any]:
@@ -202,6 +216,8 @@ class ToolpathPoint:
             "bead_width_mm": self.bead_width_mm,
             "layer_height_mm": self.layer_height_mm,
             "material_volume_mm3": self.material_volume_mm3,
+            "material_id": self.material_id,
+            "channel_id": self.channel_id,
             "operation_id": self.operation_id,
             "stage_id": self.stage_id,
             "layer_id": self.layer_id,
@@ -225,6 +241,8 @@ class ToolpathPoint:
             bead_width_mm=_optional_float(payload.get("bead_width_mm")),
             layer_height_mm=_optional_float(payload.get("layer_height_mm")),
             material_volume_mm3=float(payload.get("material_volume_mm3", 0.0)),
+            material_id=_optional_string(payload.get("material_id")),
+            channel_id=_optional_string(payload.get("channel_id")),
             operation_id=str(payload.get("operation_id", "")),
             stage_id=str(payload.get("stage_id", "")),
             layer_id=str(payload.get("layer_id", "")),

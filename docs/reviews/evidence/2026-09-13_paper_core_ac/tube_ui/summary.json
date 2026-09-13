@@ -1,0 +1,386 @@
+{
+  "model": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\pipe2\\弯管新.stp",
+  "cases": [
+    {
+      "language": "zh",
+      "requested_size": [
+        1366,
+        768
+      ],
+      "rendered_size": [
+        1366,
+        768
+      ],
+      "operation_id": "indexed",
+      "product_status": "ready",
+      "screenshot": "01-zh-1366x768-indexed.png",
+      "buttons": {
+        "工作台": {
+          "x": 19,
+          "y": 85,
+          "width": 158,
+          "height": 25,
+          "text": "工作台",
+          "text_width": 51,
+          "available_text_width": 146,
+          "text_fits": true
+        },
+        "打开 STEP": {
+          "x": 183,
+          "y": 85,
+          "width": 158,
+          "height": 25,
+          "text": "打开 STEP",
+          "text_width": 119,
+          "available_text_width": 146,
+          "text_fits": true
+        },
+        "从原文件更新": {
+          "x": 19,
+          "y": 116,
+          "width": 322,
+          "height": 25,
+          "text": "从原文件更新",
+          "text_width": 102,
+          "available_text_width": 310,
+          "text_fits": true
+        },
+        "保存项目": {
+          "x": 19,
+          "y": 147,
+          "width": 322,
+          "height": 25,
+          "text": "保存项目",
+          "text_width": 68,
+          "available_text_width": 310,
+          "text_fits": true
+        },
+        "primaryButton": {
+          "x": 905,
+          "y": 632,
+          "width": 442,
+          "height": 25,
+          "text": "应用",
+          "text_width": 34,
+          "available_text_width": 430,
+          "text_fits": true
+        },
+        "模型视图": {
+          "x": 368,
+          "y": 16,
+          "width": 128,
+          "height": 25,
+          "text": "模型视图",
+          "text_width": 68,
+          "available_text_width": 116,
+          "text_fits": true
+        },
+        "机床视图": {
+          "x": 502,
+          "y": 16,
+          "width": 128,
+          "height": 25,
+          "text": "机床视图",
+          "text_width": 68,
+          "available_text_width": 116,
+          "text_fits": true
+        },
+        "生成": {
+          "x": 914,
+          "y": 512,
+          "width": 202,
+          "height": 25,
+          "text": "生成",
+          "text_width": 34,
+          "available_text_width": 190,
+          "text_fits": true
+        },
+        "取消生成": {
+          "x": 1122,
+          "y": 512,
+          "width": 202,
+          "height": 25,
+          "text": "取消生成",
+          "text_width": 68,
+          "available_text_width": 190,
+          "text_fits": true
+        },
+        "查看路径": {
+          "x": 914,
+          "y": 543,
+          "width": 202,
+          "height": 25,
+          "text": "查看路径",
+          "text_width": 68,
+          "available_text_width": 190,
+          "text_fits": true
+        },
+        "导出结果": {
+          "x": 1122,
+          "y": 543,
+          "width": 202,
+          "height": 25,
+          "text": "导出结果",
+          "text_width": 68,
+          "available_text_width": 190,
+          "text_fits": true
+        }
+      },
+      "collisions": []
+    },
+    {
+      "language": "zh",
+      "requested_size": [
+        1600,
+        900
+      ],
+      "rendered_size": [
+        1600,
+        900
+      ],
+      "operation_id": "buildup",
+      "product_status": "stale",
+      "screenshot": "02-zh-1600x900-buildup.png",
+      "buttons": {
+        "工作台": {
+          "x": 19,
+          "y": 85,
+          "width": 158,
+          "height": 25,
+          "text": "工作台",
+          "text_width": 51,
+          "available_text_width": 146,
+          "text_fits": true
+        },
+        "打开 STEP": {
+          "x": 183,
+          "y": 85,
+          "width": 158,
+          "height": 25,
+          "text": "打开 STEP",
+          "text_width": 119,
+          "available_text_width": 146,
+          "text_fits": true
+        },
+        "从原文件更新": {
+          "x": 19,
+          "y": 116,
+          "width": 322,
+          "height": 25,
+          "text": "从原文件更新",
+          "text_width": 102,
+          "available_text_width": 310,
+          "text_fits": true
+        },
+        "保存项目": {
+          "x": 19,
+          "y": 147,
+          "width": 322,
+          "height": 25,
+          "text": "保存项目",
+          "text_width": 68,
+          "available_text_width": 310,
+          "text_fits": true
+        },
+        "primaryButton": {
+          "x": 1139,
+          "y": 764,
+          "width": 442,
+          "height": 25,
+          "text": "应用",
+          "text_width": 34,
+          "available_text_width": 430,
+          "text_fits": true
+        },
+        "模型视图": {
+          "x": 368,
+          "y": 16,
+          "width": 128,
+          "height": 25,
+          "text": "模型视图",
+          "text_width": 68,
+          "available_text_width": 116,
+          "text_fits": true
+        },
+        "机床视图": {
+          "x": 502,
+          "y": 16,
+          "width": 128,
+          "height": 25,
+          "text": "机床视图",
+          "text_width": 68,
+          "available_text_width": 116,
+          "text_fits": true
+        },
+        "生成": {
+          "x": 1148,
+          "y": 644,
+          "width": 202,
+          "height": 25,
+          "text": "生成",
+          "text_width": 34,
+          "available_text_width": 190,
+          "text_fits": true
+        },
+        "取消生成": {
+          "x": 1356,
+          "y": 644,
+          "width": 202,
+          "height": 25,
+          "text": "取消生成",
+          "text_width": 68,
+          "available_text_width": 190,
+          "text_fits": true
+        },
+        "查看路径": {
+          "x": 1148,
+          "y": 675,
+          "width": 202,
+          "height": 25,
+          "text": "查看路径",
+          "text_width": 68,
+          "available_text_width": 190,
+          "text_fits": true
+        },
+        "导出结果": {
+          "x": 1356,
+          "y": 675,
+          "width": 202,
+          "height": 25,
+          "text": "导出结果",
+          "text_width": 68,
+          "available_text_width": 190,
+          "text_fits": true
+        }
+      },
+      "collisions": []
+    },
+    {
+      "language": "en",
+      "requested_size": [
+        1920,
+        1080
+      ],
+      "rendered_size": [
+        1920,
+        1080
+      ],
+      "operation_id": "continuous",
+      "product_status": "error",
+      "screenshot": "03-en-1920x1080-continuous.png",
+      "buttons": {
+        "Workbench": {
+          "x": 19,
+          "y": 145,
+          "width": 178,
+          "height": 25,
+          "text": "Workbench",
+          "text_width": 153,
+          "available_text_width": 166,
+          "text_fits": true
+        },
+        "Open STEP": {
+          "x": 203,
+          "y": 145,
+          "width": 178,
+          "height": 25,
+          "text": "Open STEP",
+          "text_width": 153,
+          "available_text_width": 166,
+          "text_fits": true
+        },
+        "Update from Source": {
+          "x": 19,
+          "y": 176,
+          "width": 362,
+          "height": 25,
+          "text": "Update from Source",
+          "text_width": 306,
+          "available_text_width": 350,
+          "text_fits": true
+        },
+        "Save Project": {
+          "x": 19,
+          "y": 207,
+          "width": 362,
+          "height": 25,
+          "text": "Save Project",
+          "text_width": 204,
+          "available_text_width": 350,
+          "text_fits": true
+        },
+        "primaryButton": {
+          "x": 1339,
+          "y": 944,
+          "width": 562,
+          "height": 25,
+          "text": "Apply",
+          "text_width": 85,
+          "available_text_width": 550,
+          "text_fits": true
+        },
+        "Model View": {
+          "x": 408,
+          "y": 16,
+          "width": 220,
+          "height": 25,
+          "text": "Model View",
+          "text_width": 170,
+          "available_text_width": 208,
+          "text_fits": true
+        },
+        "Machine View": {
+          "x": 634,
+          "y": 16,
+          "width": 220,
+          "height": 25,
+          "text": "Machine View",
+          "text_width": 204,
+          "available_text_width": 208,
+          "text_fits": true
+        },
+        "Generate": {
+          "x": 1348,
+          "y": 709,
+          "width": 269,
+          "height": 25,
+          "text": "Generate",
+          "text_width": 136,
+          "available_text_width": 257,
+          "text_fits": true
+        },
+        "Cancel Generate": {
+          "x": 1623,
+          "y": 709,
+          "width": 269,
+          "height": 25,
+          "text": "Cancel Generate",
+          "text_width": 255,
+          "available_text_width": 257,
+          "text_fits": true
+        },
+        "Preview Path": {
+          "x": 1348,
+          "y": 740,
+          "width": 269,
+          "height": 25,
+          "text": "Preview Path",
+          "text_width": 204,
+          "available_text_width": 257,
+          "text_fits": true
+        },
+        "Export Result": {
+          "x": 1623,
+          "y": 740,
+          "width": 269,
+          "height": 25,
+          "text": "Export Result",
+          "text_width": 221,
+          "available_text_width": 257,
+          "text_fits": true
+        }
+      },
+      "collisions": []
+    }
+  ]
+}

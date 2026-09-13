@@ -2,27 +2,37 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
-from . import curve_shell, planar_shell, rotary_shell
+from . import curve_shell, freeform_shell, planar_shell, rotary_shell
+from .localization import tr
 from .workbenches import WORKBENCHES
+
+
+_SHELLS = {
+    "planar": planar_shell,
+    "curve": curve_shell,
+    "freeform": freeform_shell,
+    "rotary": rotary_shell,
+}
+
+
+def _page(host: Any, key: str) -> Any | None:
+    return getattr(host, f"{key}_page", None)
 
 
 def enter_workbench(host: Any, key: str) -> None:
     if key not in {workbench.key for workbench in WORKBENCHES}:
         raise RuntimeError(f"Unknown workbench: {key}")
-    if key == "planar" and planar_shell.sync_shared_setup(
-        host.planar_page.controller, host.tube_page.controller.setup
+    shell = _SHELLS.get(key)
+    page = _page(host, key)
+    if shell is not None and page is None:
+        raise RuntimeError(f"Workbench page is unavailable: {key}")
+    page = cast(Any, page)
+    if shell is not None and shell.sync_shared_setup(
+        page.controller, host.tube_page.controller.setup
     ):
-        host.planar_page.refresh()
-    if key == "curve" and curve_shell.sync_shared_setup(
-        host.curve_page.controller, host.tube_page.controller.setup
-    ):
-        host.curve_page.refresh()
-    if key == "rotary" and rotary_shell.sync_shared_setup(
-        host.rotary_page.controller, host.tube_page.controller.setup
-    ):
-        host.rotary_page.refresh()
+        page.refresh()
     host.current_workbench_key = key
     if key == "tube":
         host.current_operation = (
@@ -30,12 +40,8 @@ def enter_workbench(host: Any, key: str) -> None:
             if host.tube_page.controller.operations
             else "tube_setup"
         )
-    elif key == "planar":
-        host.current_operation = planar_shell.current_operation(host.planar_page.controller)
-    elif key == "curve":
-        host.current_operation = curve_shell.current_operation(host.curve_page.controller)
-    elif key == "rotary":
-        host.current_operation = rotary_shell.current_operation(host.rotary_page.controller)
+    elif shell is not None:
+        host.current_operation = shell.current_operation(page.controller)
     else:
         host.current_operation = "imported_nc_review"
     host._update_operation_combo()
@@ -51,6 +57,7 @@ def active_workbench_viewer(host: Any) -> Any:
         "tube": host.tube_page,
         "planar": host.planar_page,
         "curve": host.curve_page,
+        "freeform": host.freeform_page,
         "rotary": host.rotary_page,
     }
     page = pages.get(host.current_workbench_key)
@@ -62,6 +69,7 @@ def refresh_active_workbench(host: Any) -> None:
         "tube": host.tube_page,
         "planar": host.planar_page,
         "curve": host.curve_page,
+        "freeform": host.freeform_page,
         "rotary": host.rotary_page,
     }
     page = pages.get(host.current_workbench_key)
@@ -76,6 +84,7 @@ def show_session(host: Any) -> None:
         "tube": host.tube_page,
         "planar": host.planar_page,
         "curve": host.curve_page,
+        "freeform": host.freeform_page,
         "rotary": host.rotary_page,
     }
     host.stack.setCurrentWidget(pages.get(host.current_workbench_key, host.session_page))
@@ -102,13 +111,59 @@ def open_gcode_from_shell(host: Any) -> None:
 def current_page_name(host: Any) -> str:
     if host.stack.currentWidget() is host.curve_page:
         return "curve"
+    if host.stack.currentWidget() is host.freeform_page:
+        return "freeform"
     if host.stack.currentWidget() is host.rotary_page:
         return "rotary"
     return planar_shell.page_name(host)
 
 
+def populate_operation_combo(host: Any, combo: Any, language: str) -> None:
+    key = host.current_workbench_key
+    if key == "tube":
+        operations = host.tube_page.controller.operations
+        if operations:
+            combo.addItem(operations[0].name, operations[0].operation_type)
+        else:
+            combo.addItem("Tube Setup", "tube_setup")
+        return
+    shell = _SHELLS.get(key)
+    if shell is not None:
+        page = _page(host, key)
+        if page is None:
+            raise RuntimeError(f"Workbench page is unavailable: {key}")
+        shell.populate_operation_combo(combo, page.controller)
+        return
+    combo.addItem(tr(language, "operation_imported_nc"), "imported_nc_review")
+    combo.addItem(tr(language, "operation_curve"), "curve_buildup")
+    combo.addItem(tr(language, "operation_freeform"), "freeform_coating")
+
+
+def operation_label(host: Any, language: str) -> str:
+    key = host.current_workbench_key
+    if key == "tube":
+        operations = host.tube_page.controller.operations
+        return operations[0].name if operations else "Tube Setup"
+    shell = _SHELLS.get(key)
+    if shell is not None:
+        page = _page(host, key)
+        if page is None:
+            raise RuntimeError(f"Workbench page is unavailable: {key}")
+        return shell.operation_label(page.controller)
+    if host.current_operation == "imported_nc_review":
+        return tr(language, "operation_imported_nc")
+    return host.current_operation
+
+
 def active_viewer(host: Any) -> Any:
-    pages = (host.result_page, host.tube_page, host.planar_page, host.curve_page, host.rotary_page)
+    pages = (
+        host.result_page,
+        host.tube_page,
+        host.planar_page,
+        host.curve_page,
+        host.freeform_page,
+        host.rotary_page,
+    )
     current = host.stack.currentWidget()
     for page in pages:
         if current is page:
@@ -123,6 +178,8 @@ __all__ = [
     "enter_workbench",
     "refresh_active_workbench",
     "open_gcode_from_shell",
+    "operation_label",
+    "populate_operation_combo",
     "show_home",
     "show_after_model_import",
     "show_session",

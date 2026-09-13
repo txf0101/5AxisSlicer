@@ -1,0 +1,2429 @@
+{
+  "coordinate_frame": "workpiece_build",
+  "events": [
+    {
+      "context": {
+        "channel_id": "T0",
+        "extrusion_length_mm": -1.0,
+        "material_id": "PLA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 1,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0001-retract",
+      "event_type": "retract",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-01-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T0",
+        "material_id": "PLA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 1,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0001-cut",
+      "event_type": "cut",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-01-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T0",
+        "material_id": "PLA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 1,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0001-park",
+      "event_type": "park",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-01-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T0",
+        "material_id": "PLA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 1,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0001-switch",
+      "event_type": "switch",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-01-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T0",
+        "extrusion_length_mm": 0.0,
+        "material_id": "PLA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 1,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0001-load",
+      "event_type": "load",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-01-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T0",
+        "material_id": "PLA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 1,
+        "target_temperature_c": 195.0,
+        "timeout_s": 180.0,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0001-temperature_wait",
+      "event_type": "temperature_wait",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-01-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T0",
+        "extrusion_length_mm": 5.0,
+        "material_id": "PLA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 1,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0001-purge",
+      "event_type": "purge",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-01-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T0",
+        "extrusion_length_mm": 1.0,
+        "material_id": "PLA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 1,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0001-prime",
+      "event_type": "prime",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-01-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T0",
+        "material_id": "PLA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 1,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0001-resume",
+      "event_type": "resume",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-01-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 1
+      },
+      "duration_s": null,
+      "event_id": "event-0000001",
+      "event_type": "prime",
+      "layer_id": "layer-001",
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_surface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 9
+      },
+      "duration_s": null,
+      "event_id": "event-0000002",
+      "event_type": "retract",
+      "layer_id": "layer-001",
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_surface"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "extrusion_length_mm": -1.0,
+        "material_id": "PETG",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 10,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0002-retract",
+      "event_type": "retract",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-02-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "material_id": "PETG",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 10,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0002-cut",
+      "event_type": "cut",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-02-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "material_id": "PETG",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 10,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0002-park",
+      "event_type": "park",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-02-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "material_id": "PETG",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 10,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0002-switch",
+      "event_type": "switch",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-02-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "extrusion_length_mm": 0.0,
+        "material_id": "PETG",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 10,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0002-load",
+      "event_type": "load",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-02-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "material_id": "PETG",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 10,
+        "target_temperature_c": 235.0,
+        "timeout_s": 180.0,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0002-temperature_wait",
+      "event_type": "temperature_wait",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-02-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "extrusion_length_mm": 6.0,
+        "material_id": "PETG",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 10,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0002-purge",
+      "event_type": "purge",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-02-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "extrusion_length_mm": 1.0,
+        "material_id": "PETG",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 10,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0002-prime",
+      "event_type": "prime",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-02-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "material_id": "PETG",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 10,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0002-resume",
+      "event_type": "resume",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-02-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 10
+      },
+      "duration_s": null,
+      "event_id": "event-0000003",
+      "event_type": "prime",
+      "layer_id": "layer-001",
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_surface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 11
+      },
+      "duration_s": null,
+      "event_id": "event-0000004",
+      "event_type": "retract",
+      "layer_id": "layer-001",
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_surface"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "material_id": "PA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 12,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0003-prepare_pause",
+      "event_type": "prepare_pause",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-03-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "extrusion_length_mm": -1.0,
+        "material_id": "PA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 12,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0003-retract",
+      "event_type": "retract",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-03-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "material_id": "PA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 12,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0003-cut",
+      "event_type": "cut",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-03-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "material_id": "PA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 12,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0003-park",
+      "event_type": "park",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-03-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "material_id": "PA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 12,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0003-switch",
+      "event_type": "switch",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-03-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "extrusion_length_mm": 0.0,
+        "material_id": "PA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 12,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0003-load",
+      "event_type": "load",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-03-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "material_id": "PA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 12,
+        "target_temperature_c": 275.0,
+        "timeout_s": 180.0,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0003-temperature_wait",
+      "event_type": "temperature_wait",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-03-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "extrusion_length_mm": 7.0,
+        "material_id": "PA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 12,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0003-purge",
+      "event_type": "purge",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-03-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "extrusion_length_mm": 1.0,
+        "material_id": "PA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 12,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0003-prime",
+      "event_type": "prime",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-03-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "material_id": "PA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 12,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0003-resume",
+      "event_type": "resume",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-03-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 12
+      },
+      "duration_s": null,
+      "event_id": "event-0000005",
+      "event_type": "prime",
+      "layer_id": "layer-001",
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_surface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 13
+      },
+      "duration_s": null,
+      "event_id": "event-0000006",
+      "event_type": "retract",
+      "layer_id": "layer-001",
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-04-pass-01",
+      "stage_id": "freeform_surface"
+    },
+    {
+      "context": {
+        "channel_id": "T3",
+        "material_id": "ABS",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 14,
+        "tool_command": "T3"
+      },
+      "duration_s": null,
+      "event_id": "material-0004-prepare_pause",
+      "event_type": "prepare_pause",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-04-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T3",
+        "extrusion_length_mm": -1.0,
+        "material_id": "ABS",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 14,
+        "tool_command": "T3"
+      },
+      "duration_s": null,
+      "event_id": "material-0004-retract",
+      "event_type": "retract",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-04-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T3",
+        "material_id": "ABS",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 14,
+        "tool_command": "T3"
+      },
+      "duration_s": null,
+      "event_id": "material-0004-cut",
+      "event_type": "cut",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-04-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T3",
+        "material_id": "ABS",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 14,
+        "tool_command": "T3"
+      },
+      "duration_s": null,
+      "event_id": "material-0004-park",
+      "event_type": "park",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-04-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T3",
+        "material_id": "ABS",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 14,
+        "tool_command": "T3"
+      },
+      "duration_s": null,
+      "event_id": "material-0004-switch",
+      "event_type": "switch",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-04-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T3",
+        "extrusion_length_mm": 0.0,
+        "material_id": "ABS",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 14,
+        "tool_command": "T3"
+      },
+      "duration_s": null,
+      "event_id": "material-0004-load",
+      "event_type": "load",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-04-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T3",
+        "material_id": "ABS",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 14,
+        "target_temperature_c": 250.0,
+        "timeout_s": 180.0,
+        "tool_command": "T3"
+      },
+      "duration_s": null,
+      "event_id": "material-0004-temperature_wait",
+      "event_type": "temperature_wait",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-04-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T3",
+        "extrusion_length_mm": 8.0,
+        "material_id": "ABS",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 14,
+        "tool_command": "T3"
+      },
+      "duration_s": null,
+      "event_id": "material-0004-purge",
+      "event_type": "purge",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-04-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T3",
+        "extrusion_length_mm": 1.0,
+        "material_id": "ABS",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 14,
+        "tool_command": "T3"
+      },
+      "duration_s": null,
+      "event_id": "material-0004-prime",
+      "event_type": "prime",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-04-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T3",
+        "material_id": "ABS",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 14,
+        "tool_command": "T3"
+      },
+      "duration_s": null,
+      "event_id": "material-0004-resume",
+      "event_type": "resume",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-04-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 14
+      },
+      "duration_s": null,
+      "event_id": "event-0000007",
+      "event_type": "prime",
+      "layer_id": "layer-001",
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-04-pass-01",
+      "stage_id": "freeform_surface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 15
+      },
+      "duration_s": null,
+      "event_id": "event-0000008",
+      "event_type": "retract",
+      "layer_id": "layer-001",
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-05-pass-01",
+      "stage_id": "freeform_surface"
+    },
+    {
+      "context": {
+        "channel_id": "T0",
+        "extrusion_length_mm": -1.0,
+        "material_id": "PLA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 16,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0005-retract",
+      "event_type": "retract",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-05-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T0",
+        "material_id": "PLA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 16,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0005-cut",
+      "event_type": "cut",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-05-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T0",
+        "material_id": "PLA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 16,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0005-park",
+      "event_type": "park",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-05-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T0",
+        "material_id": "PLA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 16,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0005-switch",
+      "event_type": "switch",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-05-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T0",
+        "extrusion_length_mm": 0.0,
+        "material_id": "PLA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 16,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0005-load",
+      "event_type": "load",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-05-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T0",
+        "material_id": "PLA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 16,
+        "target_temperature_c": 195.0,
+        "timeout_s": 180.0,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0005-temperature_wait",
+      "event_type": "temperature_wait",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-05-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T0",
+        "extrusion_length_mm": 5.0,
+        "material_id": "PLA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 16,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0005-purge",
+      "event_type": "purge",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-05-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T0",
+        "extrusion_length_mm": 1.0,
+        "material_id": "PLA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 16,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0005-prime",
+      "event_type": "prime",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-05-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T0",
+        "material_id": "PLA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 16,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0005-resume",
+      "event_type": "resume",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-05-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 16
+      },
+      "duration_s": null,
+      "event_id": "event-0000009",
+      "event_type": "prime",
+      "layer_id": "layer-001",
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-05-pass-01",
+      "stage_id": "freeform_surface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 19
+      },
+      "duration_s": null,
+      "event_id": "event-0000010",
+      "event_type": "retract",
+      "layer_id": "layer-001",
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-06-pass-01",
+      "stage_id": "freeform_surface"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "extrusion_length_mm": -1.0,
+        "material_id": "PETG",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 20,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0006-retract",
+      "event_type": "retract",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-06-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "material_id": "PETG",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 20,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0006-cut",
+      "event_type": "cut",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-06-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "material_id": "PETG",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 20,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0006-park",
+      "event_type": "park",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-06-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "material_id": "PETG",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 20,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0006-switch",
+      "event_type": "switch",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-06-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "extrusion_length_mm": 0.0,
+        "material_id": "PETG",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 20,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0006-load",
+      "event_type": "load",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-06-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "material_id": "PETG",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 20,
+        "target_temperature_c": 235.0,
+        "timeout_s": 180.0,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0006-temperature_wait",
+      "event_type": "temperature_wait",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-06-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "extrusion_length_mm": 6.0,
+        "material_id": "PETG",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 20,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0006-purge",
+      "event_type": "purge",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-06-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "extrusion_length_mm": 1.0,
+        "material_id": "PETG",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 20,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0006-prime",
+      "event_type": "prime",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-06-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "material_id": "PETG",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 20,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0006-resume",
+      "event_type": "resume",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-06-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 20
+      },
+      "duration_s": null,
+      "event_id": "event-0000011",
+      "event_type": "prime",
+      "layer_id": "layer-001",
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-06-pass-01",
+      "stage_id": "freeform_surface"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 24
+      },
+      "duration_s": null,
+      "event_id": "event-0000012",
+      "event_type": "retract",
+      "layer_id": "layer-001",
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-07-pass-01",
+      "stage_id": "freeform_surface"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "material_id": "PA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 25,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0007-prepare_pause",
+      "event_type": "prepare_pause",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-07-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "extrusion_length_mm": -1.0,
+        "material_id": "PA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 25,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0007-retract",
+      "event_type": "retract",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-07-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "material_id": "PA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 25,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0007-cut",
+      "event_type": "cut",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-07-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "material_id": "PA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 25,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0007-park",
+      "event_type": "park",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-07-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "material_id": "PA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 25,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0007-switch",
+      "event_type": "switch",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-07-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "extrusion_length_mm": 0.0,
+        "material_id": "PA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 25,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0007-load",
+      "event_type": "load",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-07-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "material_id": "PA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 25,
+        "target_temperature_c": 275.0,
+        "timeout_s": 180.0,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0007-temperature_wait",
+      "event_type": "temperature_wait",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-07-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "extrusion_length_mm": 7.0,
+        "material_id": "PA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 25,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0007-purge",
+      "event_type": "purge",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-07-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "extrusion_length_mm": 1.0,
+        "material_id": "PA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 25,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0007-prime",
+      "event_type": "prime",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-07-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "material_id": "PA",
+        "material_plan_id": "hemisphere_pattern-materials",
+        "sensor_required": true,
+        "sequence_index": 25,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0007-resume",
+      "event_type": "resume",
+      "layer_id": null,
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-07-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 25
+      },
+      "duration_s": null,
+      "event_id": "event-0000013",
+      "event_type": "prime",
+      "layer_id": "layer-001",
+      "operation_id": "pc06-hemisphere_pattern",
+      "region_id": "guide-07-pass-01",
+      "stage_id": "freeform_surface"
+    }
+  ],
+  "operation_id": "pc06-hemisphere_pattern",
+  "points": [
+    {
+      "bead_width_mm": null,
+      "channel_id": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 3000.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-001",
+      "material_id": null,
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -9.594519965896413e-17,
+        0.23112802626344595,
+        -0.9729233451179821
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000001",
+      "point_type": "approach",
+      "position": [
+        3.885780586188048e-15,
+        -9.360685063669559,
+        39.403395477278266
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        9.594519965896413e-17,
+        -0.23112802626344595,
+        0.9729233451179821
+      ],
+      "tangent": [
+        0.9213593956796566,
+        -0.3693598631051416,
+        -0.12112041743557955
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.21041509678398299,
+      "nozzle_axis": [
+        -0.059835779757644245,
+        0.25511533840646655,
+        -0.9650574301929128
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000002",
+      "point_type": "deposition",
+      "position": [
+        2.423349080184592,
+        -10.332171205461897,
+        39.08482592281297
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.059835779757644245,
+        -0.25511533840646655,
+        0.9650574301929128
+      ],
+      "tangent": [
+        0.9213593956796566,
+        -0.3693598631051416,
+        -0.12112041743557955
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.2103321426536543,
+      "nozzle_axis": [
+        -0.11990068746559683,
+        0.27681519244442376,
+        -0.9534134330799173
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000003",
+      "point_type": "deposition",
+      "position": [
+        4.855977842356671,
+        -11.211015293999159,
+        38.61324403973665
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.11990068746559683,
+        -0.27681519244442376,
+        0.9534134330799173
+      ],
+      "tangent": [
+        0.9252523105525697,
+        -0.33426905748187813,
+        -0.17936654935440993
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.21026892572463765,
+      "nozzle_axis": [
+        -0.1820744481330427,
+        0.2894177150878749,
+        -0.9397267057662891
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000004",
+      "point_type": "deposition",
+      "position": [
+        7.37401514938823,
+        -11.721417461058936,
+        38.058931583534715
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.1820744481330427,
+        -0.2894177150878749,
+        0.9397267057662891
+      ],
+      "tangent": [
+        0.9580254612910749,
+        -0.19419024101666274,
+        -0.21089657610286996
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.2103604229931836,
+      "nozzle_axis": [
+        -0.244802066288725,
+        0.29450155975393005,
+        -0.9237644611280914
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000005",
+      "point_type": "deposition",
+      "position": [
+        9.914483684693362,
+        -11.927313170034166,
+        37.4124606756877
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.244802066288725,
+        -0.29450155975393005,
+        0.9237644611280914
+      ],
+      "tangent": [
+        0.9661393523200711,
+        -0.07830207072055648,
+        -0.2458526746232929
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.21037594227563755,
+      "nozzle_axis": [
+        -0.3069956045905386,
+        0.29414795388326115,
+        -0.9051136282193417
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000006",
+      "point_type": "deposition",
+      "position": [
+        12.43332198591681,
+        -11.912992132272075,
+        36.65710194288334
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.3069956045905386,
+        -0.29414795388326115,
+        0.9051136282193417
+      ],
+      "tangent": [
+        0.9578427167962889,
+        0.005445884204127262,
+        -0.28724148764678764
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.21029139843680156,
+      "nozzle_axis": [
+        -0.3680818067832815,
+        0.2865733334555664,
+        -0.884528975255938
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000007",
+      "point_type": "deposition",
+      "position": [
+        14.907313174722905,
+        -11.606220004950442,
+        35.82342349786549
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.3680818067832815,
+        -0.2865733334555664,
+        0.884528975255938
+      ],
+      "tangent": [
+        0.9411668597751411,
+        0.11670363299764787,
+        -0.3171517051919323
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.21041377402077843,
+      "nozzle_axis": [
+        -0.42748987979898534,
+        0.27403506089899005,
+        -0.8614854543563321
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000008",
+      "point_type": "deposition",
+      "position": [
+        17.3133401318589,
+        -11.098419966409098,
+        34.89016090143145
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.42748987979898534,
+        -0.27403506089899005,
+        0.8614854543563321
+      ],
+      "tangent": [
+        0.914779260372337,
+        0.19306722324792244,
+        -0.3548294690410833
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.20954482120244144,
+      "nozzle_axis": [
+        -0.48402676786612564,
+        0.25385237295595725,
+        -0.8374228685280224
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000009",
+      "point_type": "deposition",
+      "position": [
+        19.603084098578083,
+        -10.281021104716269,
+        33.91562617538491
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.48402676786612564,
+        -0.25385237295595725,
+        0.8374228685280224
+      ],
+      "tangent": [
+        0.8741782129779516,
+        0.3120664522281427,
+        -0.3720577661444731
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "channel_id": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 3000.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-001",
+      "material_id": null,
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.015566115692658285,
+        0.3334978689500314,
+        -0.9426223355342428
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000010",
+      "point_type": "travel",
+      "position": [
+        0.6304276855526605,
+        -13.50666369247627,
+        38.17620458913683
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.015566115692658285,
+        -0.3334978689500314,
+        0.9426223355342428
+      ],
+      "tangent": [
+        -0.9080202902300973,
+        0.39304654232905734,
+        0.14496057427322243
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.05554304830724896,
+      "nozzle_axis": [
+        -1.0142778249661923e-16,
+        0.3267599050341117,
+        -0.9451073825032257
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000011",
+      "point_type": "deposition",
+      "position": [
+        4.107825191113079e-15,
+        -13.23377615388152,
+        38.27684899138063
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        1.0142778249661923e-16,
+        -0.3267599050341117,
+        0.9451073825032257
+      ],
+      "tangent": [
+        -0.9080202902300973,
+        0.39304654232905734,
+        0.14496057427322243
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "channel_id": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 3000.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-001",
+      "material_id": null,
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -1.631068394202391e-16,
+        0.38110234591395814,
+        -0.924532856062389
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000012",
+      "point_type": "travel",
+      "position": [
+        6.605826996519683e-15,
+        -15.434645009515302,
+        37.44358067052675
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        1.631068394202391e-16,
+        -0.38110234591395814,
+        0.924532856062389
+      ],
+      "tangent": [
+        0.8914367304850213,
+        -0.4115750966220599,
+        -0.18959561013567186
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.11945968188390128,
+      "nozzle_axis": [
+        -0.032867514889927826,
+        0.3962772317515525,
+        -0.9175424143113422
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000013",
+      "point_type": "deposition",
+      "position": [
+        1.3311343530420776,
+        -16.049227885937892,
+        37.160467779609355
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.032867514889927826,
+        -0.3962772317515525,
+        0.9175424143113422
+      ],
+      "tangent": [
+        0.8914367304850213,
+        -0.4115750966220599,
+        -0.18959561013567186
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "channel_id": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 3000.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-001",
+      "material_id": null,
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.046214308556391845,
+        0.44175519535580476,
+        -0.8959445211958212
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000014",
+      "point_type": "travel",
+      "position": [
+        1.8716794965338694,
+        -17.891085411910094,
+        36.28575310843076
+      ],
+      "region_id": "guide-04-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.046214308556391845,
+        -0.44175519535580476,
+        0.8959445211958212
+      ],
+      "tangent": [
+        -0.891062427694499,
+        0.4001065052531696,
+        0.21429543720126518
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T3",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "ABS",
+      "material_volume_mm3": 0.16804025741510176,
+      "nozzle_axis": [
+        -1.5077102803551502e-16,
+        0.42100396074586677,
+        -0.9070587991063714
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000015",
+      "point_type": "deposition",
+      "position": [
+        6.106226635438358e-15,
+        -17.050660410207602,
+        36.73588136380804
+      ],
+      "region_id": "guide-04-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        1.5077102803551502e-16,
+        -0.42100396074586677,
+        0.9070587991063714
+      ],
+      "tangent": [
+        -0.891062427694499,
+        0.4001065052531696,
+        0.21429543720126518
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "channel_id": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 3000.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-001",
+      "material_id": null,
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.09861283183955287,
+        0.46053957162712594,
+        -0.8821444396254433
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000016",
+      "point_type": "travel",
+      "position": [
+        3.9938196895018927,
+        -18.651852650898604,
+        35.72684980483046
+      ],
+      "region_id": "guide-05-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.09861283183955287,
+        -0.46053957162712594,
+        0.8821444396254433
+      ],
+      "tangent": [
+        0.9500689791442146,
+        -0.1975295653664328,
+        -0.24155952822030852
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.18423431055212547,
+      "nozzle_axis": [
+        -0.15263607361411952,
+        0.4717715849879117,
+        -0.8684087750763799
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000017",
+      "point_type": "deposition",
+      "position": [
+        6.181760981371843,
+        -19.106749192010426,
+        35.17055539059339
+      ],
+      "region_id": "guide-05-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.15263607361411952,
+        -0.4717715849879117,
+        0.8684087750763799
+      ],
+      "tangent": [
+        0.9500689791442146,
+        -0.1975295653664328,
+        -0.24155952822030852
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.18430704216799984,
+      "nozzle_axis": [
+        -0.20725119464117117,
+        0.47778367258446963,
+        -0.8536800949603451
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000018",
+      "point_type": "deposition",
+      "position": [
+        8.393673382967432,
+        -19.350238739671017,
+        34.574043845893975
+      ],
+      "region_id": "guide-05-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.20725119464117117,
+        -0.47778367258446963,
+        0.8536800949603451
+      ],
+      "tangent": [
+        0.960098919966122,
+        -0.10568865727383116,
+        -0.2589207824867309
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.1842899027150078,
+      "nozzle_axis": [
+        -0.2617200099258836,
+        0.47981827358979734,
+        -0.8374228685280226
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000019",
+      "point_type": "deposition",
+      "position": [
+        10.599660401998287,
+        -19.432640080386793,
+        33.915626175384915
+      ],
+      "region_id": "guide-05-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.2617200099258836,
+        -0.47981827358979734,
+        0.8374228685280226
+      ],
+      "tangent": [
+        0.9576160110919455,
+        -0.035770311667353664,
+        -0.2858182291309837
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "channel_id": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 3000.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-001",
+      "material_id": null,
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.32098509875334386,
+        0.44237032636084905,
+        -0.8374228685280228
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000020",
+      "point_type": "travel",
+      "position": [
+        12.999896499510424,
+        -17.915998217614398,
+        33.915626175384915
+      ],
+      "region_id": "guide-06-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.32098509875334386,
+        -0.44237032636084905,
+        0.8374228685280228
+      ],
+      "tangent": [
+        -0.9515214750993959,
+        -0.04410158321765482,
+        0.30440422596009753
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.20087949970592353,
+      "nozzle_axis": [
+        -0.2619909142232793,
+        0.44510461771054094,
+        -0.8562958835339591
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000021",
+      "point_type": "deposition",
+      "position": [
+        10.610632026042811,
+        -18.02673701727692,
+        34.67998328312533
+      ],
+      "region_id": "guide-06-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.2619909142232793,
+        -0.44510461771054094,
+        0.8562958835339591
+      ],
+      "tangent": [
+        -0.9515214750993959,
+        -0.04410158321765482,
+        0.30440422596009753
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.20098111178546044,
+      "nozzle_axis": [
+        -0.2027441413893818,
+        0.4411365774520883,
+        -0.874238716350483
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000022",
+      "point_type": "deposition",
+      "position": [
+        8.211137726269962,
+        -17.86603138680957,
+        35.40666801219455
+      ],
+      "region_id": "guide-06-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.2027441413893818,
+        -0.4411365774520883,
+        0.874238716350483
+      ],
+      "tangent": [
+        -0.9551123599452339,
+        0.06396845118018646,
+        0.28925493450147804
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.20098712676674158,
+      "nozzle_axis": [
+        -0.14320674659982943,
+        0.4333047559698061,
+        -0.889797064606441
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000023",
+      "point_type": "deposition",
+      "position": [
+        5.799873237293092,
+        -17.548842616777147,
+        36.03678111656087
+      ],
+      "region_id": "guide-06-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.14320674659982943,
+        -0.4333047559698061,
+        0.889797064606441
+      ],
+      "tangent": [
+        -0.9597687285814269,
+        0.12625237253151692,
+        0.2508073485114707
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.20082344975673358,
+      "nozzle_axis": [
+        -0.08477171248173673,
+        0.4185218878623274,
+        -0.9042417741638944
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000024",
+      "point_type": "deposition",
+      "position": [
+        3.4332543555103365,
+        -16.950136458424268,
+        36.62179185363771
+      ],
+      "region_id": "guide-06-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.08477171248173673,
+        -0.4185218878623274,
+        0.9042417741638944
+      ],
+      "tangent": [
+        -0.9427659507490971,
+        0.23850049745808824,
+        0.23304479144661344
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "channel_id": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 3000.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-001",
+      "material_id": null,
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.06780453574895687,
+        0.35506866695112516,
+        -0.9323780277770489
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000025",
+      "point_type": "travel",
+      "position": [
+        2.746083697832752,
+        -14.380281011520566,
+        37.76131012497048
+      ],
+      "region_id": "guide-07-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.06780453574895687,
+        -0.35506866695112516,
+        0.9323780277770489
+      ],
+      "tangent": [
+        0.9375766762036607,
+        -0.2766706730847893,
+        -0.2107209408049083
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.22461323887404686,
+      "nozzle_axis": [
+        -0.13280210795107655,
+        0.37424888176070453,
+        -0.9177697830200191
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000026",
+      "point_type": "deposition",
+      "position": [
+        5.3784853720185986,
+        -15.15707971130853,
+        37.16967621231077
+      ],
+      "region_id": "guide-07-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.13280210795107655,
+        -0.37424888176070453,
+        0.9177697830200191
+      ],
+      "tangent": [
+        0.9375766762036607,
+        -0.2766706730847893,
+        -0.2107209408049083
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.22465701413456196,
+      "nozzle_axis": [
+        -0.19905329304295702,
+        0.3857737558344701,
+        -0.900864249395058
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000027",
+      "point_type": "deposition",
+      "position": [
+        8.06165836823976,
+        -15.62383711129604,
+        36.48500210049985
+      ],
+      "region_id": "guide-07-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.19905329304295702,
+        -0.3857737558344701,
+        0.900864249395058
+      ],
+      "tangent": [
+        0.9554735716781251,
+        -0.16621155650468644,
+        -0.24381134573464033
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.2246565545017336,
+      "nozzle_axis": [
+        -0.2655302871587354,
+        0.39013579719065866,
+        -0.881639226867662
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000028",
+      "point_type": "deposition",
+      "position": [
+        10.753976629928783,
+        -15.800499786221677,
+        35.70638868814031
+      ],
+      "region_id": "guide-07-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.2655302871587354,
+        -0.39013579719065866,
+        0.881639226867662
+      ],
+      "tangent": [
+        0.9587321474453565,
+        -0.06290942200816935,
+        -0.2772635462469116
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.22465168996656054,
+      "nozzle_axis": [
+        -0.3314579485083829,
+        0.38716556472184455,
+        -0.8603711140340716
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000029",
+      "point_type": "deposition",
+      "position": [
+        13.424046914589505,
+        -15.680205371234706,
+        34.8450301183799
+      ],
+      "region_id": "guide-07-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.3314579485083829,
+        -0.38716556472184455,
+        0.8603711140340716
+      ],
+      "tangent": [
+        0.9508302510640053,
+        0.04283766216221257,
+        -0.3067356652918547
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.2246438456843991,
+      "nozzle_axis": [
+        -0.39603679480572757,
+        0.3766666914213471,
+        -0.8374228685280226
+      ],
+      "operation_id": "pc06-hemisphere_pattern",
+      "point_id": "point-0000030",
+      "point_type": "deposition",
+      "position": [
+        16.039490189631962,
+        -15.255001002564553,
+        33.91562617538491
+      ],
+      "region_id": "guide-07-pass-01",
+      "stage_id": "freeform_surface",
+      "surface_normal": [
+        0.39603679480572757,
+        -0.3766666914213471,
+        0.8374228685280226
+      ],
+      "tangent": [
+        0.9314097226476008,
+        0.15142346495172462,
+        -0.33097864405356
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "toolpath_id": "pc06-hemisphere_pattern-freeform_surface-v1",
+  "units": {
+    "angle": "rad",
+    "feedrate": "mm_min",
+    "length": "mm",
+    "material_volume": "mm3"
+  }
+}

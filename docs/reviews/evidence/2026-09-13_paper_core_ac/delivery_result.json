@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "task": "PC00-PC07 paper core AC local delivery",
+  "status": "passed_offline_only",
+  "archive": "dist/5AxisSclicer_Paper_Core_AC_PC00-PC07_20260913_R1.zip",
+  "archive_sha256": "88fc5ad959e6d957d51f1e415b75c29df48d0201bd1994f28c87586ea8206dbb",
+  "files": 63,
+  "source_bytes": 23788882,
+  "archive_bytes": 6794121,
+  "artifact_integrity_passed": true,
+  "qualification_not_assessed_by_packager": true,
+  "entry": "README.md",
+  "limits": [
+    "Generated NC is qualified for offline review only and machine_executable remains false.",
+    "Real controller and macro versions, calibration, site collision and trial builds are unverified.",
+    "The isolated wheel smoke reused validated system dependencies via --system-site-packages.",
+    "Redistribution licences for local user CAD and historical NC assets remain unknown."
+  ]
+}

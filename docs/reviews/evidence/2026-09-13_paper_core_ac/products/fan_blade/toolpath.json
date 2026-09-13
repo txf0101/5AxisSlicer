@@ -1,0 +1,5003 @@
+{
+  "coordinate_frame": "workpiece_build",
+  "events": [
+    {
+      "context": {
+        "channel_id": "T0",
+        "extrusion_length_mm": -1.0,
+        "material_id": "PLA",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 1,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0001-retract",
+      "event_type": "retract",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-01-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T0",
+        "material_id": "PLA",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 1,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0001-cut",
+      "event_type": "cut",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-01-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T0",
+        "material_id": "PLA",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 1,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0001-park",
+      "event_type": "park",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-01-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T0",
+        "material_id": "PLA",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 1,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0001-switch",
+      "event_type": "switch",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-01-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T0",
+        "extrusion_length_mm": 0.0,
+        "material_id": "PLA",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 1,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0001-load",
+      "event_type": "load",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-01-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T0",
+        "material_id": "PLA",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 1,
+        "target_temperature_c": 195.0,
+        "timeout_s": 180.0,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0001-temperature_wait",
+      "event_type": "temperature_wait",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-01-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T0",
+        "extrusion_length_mm": 5.0,
+        "material_id": "PLA",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 1,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0001-purge",
+      "event_type": "purge",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-01-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T0",
+        "extrusion_length_mm": 1.0,
+        "material_id": "PLA",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 1,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0001-prime",
+      "event_type": "prime",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-01-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T0",
+        "material_id": "PLA",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 1,
+        "tool_command": "T0"
+      },
+      "duration_s": null,
+      "event_id": "material-0001-resume",
+      "event_type": "resume",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-01-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 1
+      },
+      "duration_s": null,
+      "event_id": "event-0000001",
+      "event_type": "prime",
+      "layer_id": "layer-001",
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 41
+      },
+      "duration_s": null,
+      "event_id": "event-0000002",
+      "event_type": "retract",
+      "layer_id": "layer-001",
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "extrusion_length_mm": -1.0,
+        "material_id": "PETG",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 42,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0002-retract",
+      "event_type": "retract",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-02-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "material_id": "PETG",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 42,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0002-cut",
+      "event_type": "cut",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-02-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "material_id": "PETG",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 42,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0002-park",
+      "event_type": "park",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-02-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "material_id": "PETG",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 42,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0002-switch",
+      "event_type": "switch",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-02-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "extrusion_length_mm": 0.0,
+        "material_id": "PETG",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 42,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0002-load",
+      "event_type": "load",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-02-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "material_id": "PETG",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 42,
+        "target_temperature_c": 235.0,
+        "timeout_s": 180.0,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0002-temperature_wait",
+      "event_type": "temperature_wait",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-02-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "extrusion_length_mm": 6.0,
+        "material_id": "PETG",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 42,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0002-purge",
+      "event_type": "purge",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-02-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "extrusion_length_mm": 1.0,
+        "material_id": "PETG",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 42,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0002-prime",
+      "event_type": "prime",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-02-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T1",
+        "material_id": "PETG",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 42,
+        "tool_command": "T1"
+      },
+      "duration_s": null,
+      "event_id": "material-0002-resume",
+      "event_type": "resume",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-02-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 42
+      },
+      "duration_s": null,
+      "event_id": "event-0000003",
+      "event_type": "prime",
+      "layer_id": "layer-001",
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": -1.0,
+        "sequence_index": 82
+      },
+      "duration_s": null,
+      "event_id": "event-0000004",
+      "event_type": "retract",
+      "layer_id": "layer-001",
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "material_id": "PA",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 83,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0003-prepare_pause",
+      "event_type": "prepare_pause",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-03-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "extrusion_length_mm": -1.0,
+        "material_id": "PA",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 83,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0003-retract",
+      "event_type": "retract",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-03-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "material_id": "PA",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 83,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0003-cut",
+      "event_type": "cut",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-03-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "material_id": "PA",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 83,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0003-park",
+      "event_type": "park",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-03-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "material_id": "PA",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 83,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0003-switch",
+      "event_type": "switch",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-03-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "extrusion_length_mm": 0.0,
+        "material_id": "PA",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 83,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0003-load",
+      "event_type": "load",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-03-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "material_id": "PA",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 83,
+        "target_temperature_c": 275.0,
+        "timeout_s": 180.0,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0003-temperature_wait",
+      "event_type": "temperature_wait",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-03-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "extrusion_length_mm": 7.0,
+        "material_id": "PA",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 83,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0003-purge",
+      "event_type": "purge",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-03-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "extrusion_length_mm": 1.0,
+        "material_id": "PA",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 83,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0003-prime",
+      "event_type": "prime",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-03-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "channel_id": "T2",
+        "material_id": "PA",
+        "material_plan_id": "fan_blade-materials",
+        "sensor_required": true,
+        "sequence_index": 83,
+        "tool_command": "T2"
+      },
+      "duration_s": null,
+      "event_id": "material-0003-resume",
+      "event_type": "resume",
+      "layer_id": null,
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-03-pass-01",
+      "stage_id": "material_switch"
+    },
+    {
+      "context": {
+        "extrusion_length_mm": 1.0,
+        "sequence_index": 83
+      },
+      "duration_s": null,
+      "event_id": "event-0000005",
+      "event_type": "prime",
+      "layer_id": "layer-001",
+      "operation_id": "pc06-fan_blade",
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall"
+    }
+  ],
+  "operation_id": "pc06-fan_blade",
+  "points": [
+    {
+      "bead_width_mm": null,
+      "channel_id": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 3000.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-001",
+      "material_id": null,
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.047924473832121735,
+        0.04330075205635792,
+        -0.9979119648943329
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000001",
+      "point_type": "approach",
+      "position": [
+        49.503603281289905,
+        54.685013280265764,
+        57.872444228601836
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.047924473832121735,
+        -0.04330075205635792,
+        0.9979119648943329
+      ],
+      "tangent": [
+        0.9282396372933566,
+        -0.3671710344064106,
+        -0.05963729747753727
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.2398981326201445,
+      "nozzle_axis": [
+        -0.04559577063699092,
+        0.04440839470605329,
+        -0.9979724045181061
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000002",
+      "point_type": "deposition",
+      "position": [
+        52.28714022642336,
+        53.583967711436955,
+        57.69360827485967
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.04559577063699092,
+        -0.04440839470605329,
+        0.9979724045181061
+      ],
+      "tangent": [
+        0.9282396372933566,
+        -0.3671710344064106,
+        -0.05963729747753727
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989825178755664,
+      "nozzle_axis": [
+        -0.04331259734624269,
+        0.045449835881385243,
+        -0.9980272197337493
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000003",
+      "point_type": "deposition",
+      "position": [
+        54.99988200759573,
+        52.3183545288404,
+        57.51577182641473
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.04331259734624269,
+        -0.045449835881385243,
+        0.9980272197337493
+      ],
+      "tangent": [
+        0.9046307794104825,
+        -0.4220499893320856,
+        -0.0593039581138513
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989806360550717,
+      "nozzle_axis": [
+        -0.041071832553745184,
+        0.04643097341457349,
+        -0.9980767852617615
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000004",
+      "point_type": "deposition",
+      "position": [
+        57.6320145797442,
+        50.89254577000634,
+        57.33884274492048
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.041071832553745184,
+        -0.04643097341457349,
+        0.9980767852617615
+      ],
+      "tangent": [
+        0.8777503353180204,
+        -0.4754715356698119,
+        -0.05900142046505095
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.2398981867421003,
+      "nozzle_axis": [
+        -0.038870098435065746,
+        0.047356709516151375,
+        -0.9981214643075518
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000005",
+      "point_type": "deposition",
+      "position": [
+        60.17407397101588,
+        49.3116326961394,
+        57.16273615941159
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.038870098435065746,
+        -0.047356709516151375,
+        0.9981214643075518
+      ],
+      "tangent": [
+        0.847712748743529,
+        -0.5271946721519782,
+        -0.05872710849564242
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989815797036249,
+      "nozzle_axis": [
+        -0.03670387531438085,
+        0.04823101879140487,
+        -0.9981616073378347
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000006",
+      "point_type": "deposition",
+      "position": [
+        62.61699069525972,
+        47.58138134341066,
+        56.98737480916335
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.03670387531438085,
+        -0.04823101879140487,
+        0.9981616073378347
+      ],
+      "tangent": [
+        0.8146512653242288,
+        -0.5769952941255997,
+        -0.0584785983291802
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989815446259588,
+      "nozzle_axis": [
+        -0.03456987611636411,
+        0.04905754525266113,
+        -0.9981975159852294
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000007",
+      "point_type": "deposition",
+      "position": [
+        64.9519256126351,
+        45.70790204397038,
+        56.812682360586045
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.03456987611636411,
+        -0.04905754525266113,
+        0.9981975159852294
+      ],
+      "tangent": [
+        0.7786420608715193,
+        -0.6247582199661785,
+        -0.058255537302865285
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989819248747232,
+      "nozzle_axis": [
+        -0.03246542738626685,
+        0.04984031863746553,
+        -0.9982294018224183
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000008",
+      "point_type": "deposition",
+      "position": [
+        67.17057194397856,
+        43.698010014139804,
+        56.63858887737833
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.03246542738626685,
+        -0.04984031863746553,
+        0.9982294018224183
+      ],
+      "tangent": [
+        0.7398626253373958,
+        -0.6702483279228652,
+        -0.05805578821668007
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.2398981315286194,
+      "nozzle_axis": [
+        -0.030387140743865903,
+        0.050582787228836246,
+        -0.9982574834748672
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000009",
+      "point_type": "deposition",
+      "position": [
+        69.26493373111037,
+        41.55887805423318,
+        56.46502433955518
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.030387140743865903,
+        -0.050582787228836246,
+        0.9982574834748672
+      ],
+      "tangent": [
+        0.6984170401950675,
+        -0.7133467680723229,
+        -0.0578794129715672
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989817552665024,
+      "nozzle_axis": [
+        -0.028331592147377235,
+        0.05128805118872067,
+        -0.9982819525022267
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000010",
+      "point_type": "deposition",
+      "position": [
+        71.22749162287751,
+        39.298177504725686,
+        56.29192225564885
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.028331592147377235,
+        -0.05128805118872067,
+        0.9982819525022267
+      ],
+      "tangent": [
+        0.6544636323169081,
+        -0.7538867003201054,
+        -0.05772518562138018
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989817258138824,
+      "nozzle_axis": [
+        -0.02629521982493239,
+        0.051958540432483345,
+        -0.998302995833672
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000011",
+      "point_type": "deposition",
+      "position": [
+        73.05121704242917,
+        36.924032602028205,
+        56.11921979819843
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.02629521982493239,
+        -0.051958540432483345,
+        0.998302995833672
+      ],
+      "tangent": [
+        0.6081665066232865,
+        -0.7917175448735942,
+        -0.05759192096949505
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989809636513237,
+      "nozzle_axis": [
+        -0.02427442036731974,
+        0.0525961600002285,
+        -0.9983207883586623
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000012",
+      "point_type": "deposition",
+      "position": [
+        74.72944259131818,
+        34.4448777559067,
+        55.94685650179166
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.02427442036731974,
+        -0.0525961600002285,
+        0.9983207883586623
+      ],
+      "tangent": [
+        0.5596461411964493,
+        -0.8267359795462995,
+        -0.05747883756257226
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989823236354396,
+      "nozzle_axis": [
+        -0.02226585464184,
+        0.05320281491135718,
+        -0.9983354607558405
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000013",
+      "point_type": "deposition",
+      "position": [
+        76.25627064837248,
+        31.869697321173845,
+        55.77477844318592
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.02226585464184,
+        -0.05320281491135718,
+        0.9983354607558405
+      ],
+      "tangent": [
+        0.5091585851255573,
+        -0.8587576187990934,
+        -0.05738368537704465
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.2398981822370602,
+      "nozzle_axis": [
+        -0.020266283328230005,
+        0.0537801914436018,
+        -0.9983471183753422
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000014",
+      "point_type": "deposition",
+      "position": [
+        77.62636355417446,
+        29.207803339433244,
+        55.60293215417989
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.020266283328230005,
+        -0.0537801914436018,
+        0.9983471183753422
+      ],
+      "tangent": [
+        0.45689146721356905,
+        -0.8876745815806799,
+        -0.05730640804479973
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.2398982472588562,
+      "nozzle_axis": [
+        -0.0182724480727485,
+        0.054329677673912787,
+        -0.9983558502684688
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000015",
+      "point_type": "deposition",
+      "position": [
+        78.83474338709603,
+        26.46869417467968,
+        55.4312658350638
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.0182724480727485,
+        -0.054329677673912787,
+        0.9983558502684688
+      ],
+      "tangent": [
+        0.4029641222406076,
+        -0.9134236522530315,
+        -0.05724637710449286
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989810236253192,
+      "nozzle_axis": [
+        -0.016281286034796304,
+        0.05485295412783516,
+        -0.9983616945518807
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000016",
+      "point_type": "deposition",
+      "position": [
+        79.8770653418842,
+        23.662184017759486,
+        55.259728721808195
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.016281286034796304,
+        -0.05485295412783516,
+        0.9983616945518807
+      ],
+      "tangent": [
+        0.347588228343059,
+        -0.9359007442848447,
+        -0.05720332476707217
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989816077767095,
+      "nozzle_axis": [
+        -0.014289632691952624,
+        0.05535135563265395,
+        -0.9983646797774632
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000017",
+      "point_type": "deposition",
+      "position": [
+        80.7493112817611,
+        20.79824399879597,
+        55.08826949348521
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.014289632691952624,
+        -0.05535135563265395,
+        0.9983646797774632
+      ],
+      "tangent": [
+        0.2908720723991734,
+        -0.9550519302622623,
+        -0.05717733817288911
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989822789254892,
+      "nozzle_axis": [
+        -0.012294136669231015,
+        0.05582529675268091,
+        -0.9983648583789563
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000018",
+      "point_type": "deposition",
+      "position": [
+        81.44861270055382,
+        17.887237654352226,
+        54.91683933688215
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.012294136669231015,
+        -0.05582529675268091,
+        0.9983648583789563
+      ],
+      "tangent": [
+        0.23319936122444312,
+        -0.9707470938876941,
+        -0.05716762749238566
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989814502349596,
+      "nozzle_axis": [
+        -0.010291580444956776,
+        0.05627548950460263,
+        -0.9983622351896942
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000019",
+      "point_type": "deposition",
+      "position": [
+        81.97251073118551,
+        14.939611729921491,
+        54.74539033311731
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.010291580444956776,
+        -0.05627548950460263,
+        0.9983622351896942
+      ],
+      "tangent": [
+        0.17470682170731197,
+        -0.9829591384767199,
+        -0.057173932294657726
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989824988865635,
+      "nozzle_axis": [
+        -0.00827869768043869,
+        0.05670250019385751,
+        -0.9983567947565046
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000020",
+      "point_type": "deposition",
+      "position": [
+        82.31906784115033,
+        11.965918649930094,
+        54.57387358506369
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.00827869768043869,
+        -0.05670250019385751,
+        0.9983567947565046
+      ],
+      "tangent": [
+        0.11556803273910243,
+        -0.9916514460181595,
+        -0.05719649830983772
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989814801746887,
+      "nozzle_axis": [
+        -0.006252179993873395,
+        0.05710693606808518,
+        -0.9983484903069869
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000021",
+      "point_type": "deposition",
+      "position": [
+        82.48713123993885,
+        8.976828587222519,
+        54.40224021642284
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.006252179993873395,
+        -0.05710693606808518,
+        0.9983484903069869
+      ],
+      "tangent": [
+        0.056044917454312566,
+        -0.9967863736871921,
+        -0.05723541263131372
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989816078561566,
+      "nozzle_axis": [
+        -0.004208651503525527,
+        0.05748960614757085,
+        -0.99833723382308
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000022",
+      "point_type": "deposition",
+      "position": [
+        82.47584518759473,
+        5.983048188928571,
+        54.23044024192172
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.004208651503525527,
+        -0.05748960614757085,
+        0.99833723382308
+      ],
+      "tangent": [
+        -0.003763614462790068,
+        -0.9983504295289141,
+        -0.057290968447114836
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989821014756063,
+      "nozzle_axis": [
+        -0.0021445063260907564,
+        0.05785048864080334,
+        -0.9983229547879973
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000023",
+      "point_type": "deposition",
+      "position": [
+        82.28543296821334,
+        2.9953200252140766,
+        54.05841993364981
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.0021445063260907564,
+        -0.05785048864080334,
+        0.9983229547879973
+      ],
+      "tangent": [
+        -0.06349767070434224,
+        -0.9963319565833367,
+        -0.057364432411930656
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989816509522632,
+      "nozzle_axis": [
+        -5.60425736159635e-05,
+        0.05818911837897195,
+        -0.9983055761446532
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000024",
+      "point_type": "deposition",
+      "position": [
+        81.9165889311563,
+        0.024355084278066208,
+        53.88612542252025
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        5.60425736159635e-05,
+        -0.05818911837897195,
+        0.9983055761446532
+      ],
+      "tangent": [
+        -0.12300020282710673,
+        -0.9907420308135166,
+        -0.05745588293638374
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.2398982953220227,
+      "nozzle_axis": [
+        0.002060688458889036,
+        0.05850559801804838,
+        -0.9982849535897182
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000025",
+      "point_type": "deposition",
+      "position": [
+        81.37072491355755,
+        -2.9192153385983053,
+        53.713500380202184
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.002060688458889036,
+        -0.05850559801804838,
+        0.9982849535897182
+      ],
+      "tangent": [
+        -0.18203181206136235,
+        -0.9816061156833578,
+        -0.05756607551924369
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989814589648445,
+      "nozzle_axis": [
+        0.004209815640777301,
+        0.058798937438072144,
+        -0.9982609690899592
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000026",
+      "point_type": "deposition",
+      "position": [
+        80.64982443348029,
+        -5.824853114917879,
+        53.54048542748646
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.004209815640777301,
+        -0.058798937438072144,
+        0.9982609690899592
+      ],
+      "tangent": [
+        -0.2404021848133262,
+        -0.9689571431947125,
+        -0.05769613668973692
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.2398981488204798,
+      "nozzle_axis": [
+        0.006395068834972468,
+        0.0590686930932504,
+        -0.9982334359211033
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000027",
+      "point_type": "deposition",
+      "position": [
+        79.75614436957412,
+        -8.682056270458483,
+        53.367024037643475
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.006395068834972468,
+        -0.0590686930932504,
+        0.9982334359211033
+      ],
+      "tangent": [
+        -0.2980198282646797,
+        -0.9528054033226251,
+        -0.0578450115420569
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989820780915025,
+      "nozzle_axis": [
+        0.008620448754696438,
+        0.05931397526054576,
+        -0.9982021539758663
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000028",
+      "point_type": "deposition",
+      "position": [
+        78.69306524904663,
+        -11.480620730728887,
+        53.19305004561013
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.008620448754696438,
+        -0.05931397526054576,
+        0.9982021539758663
+      ],
+      "tangent": [
+        -0.35451006666067886,
+        -0.9332506435385419,
+        -0.058015937216755
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989825548809074,
+      "nozzle_axis": [
+        0.010890145857972594,
+        0.059533257561959305,
+        -0.9981669178886132
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000029",
+      "point_type": "deposition",
+      "position": [
+        77.4645630972259,
+        -14.210581050741492,
+        53.01849377036672
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.010890145857972594,
+        -0.059533257561959305,
+        0.9981669178886132
+      ],
+      "tangent": [
+        -0.4096743927783025,
+        -0.9103727126179554,
+        -0.05821010240804411
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989833637612756,
+      "nozzle_axis": [
+        0.013208490764567898,
+        0.05972436903264193,
+        -0.9981275146570078
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000030",
+      "point_type": "deposition",
+      "position": [
+        76.07514893636007,
+        -16.86222327732994,
+        52.84328351128126
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.013208490764567898,
+        -0.05972436903264193,
+        0.9981275146570078
+      ],
+      "tangent": [
+        -0.4633343213143188,
+        -0.8842553113602378,
+        -0.058428169776302226
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.2398981244995079,
+      "nozzle_axis": [
+        0.015579587357624134,
+        0.059884624244642706,
+        -0.9980837180501664
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000031",
+      "point_type": "deposition",
+      "position": [
+        74.52969479453434,
+        -19.4260056395285,
+        52.6673504162839
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.015579587357624134,
+        -0.059884624244642706,
+        0.9980837180501664
+      ],
+      "tangent": [
+        -0.5153701455732388,
+        -0.854957033965081,
+        -0.05866926900388184
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989821469560657,
+      "nozzle_axis": [
+        0.01800823805824525,
+        0.060013028880657494,
+        -0.9980351395249604
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000032",
+      "point_type": "deposition",
+      "position": [
+        72.83347214366914,
+        -21.892575137169032,
+        52.49062647064987
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.01800823805824525,
+        -0.060013028880657494,
+        0.9980351395249604
+      ],
+      "tangent": [
+        -0.5656474444438654,
+        -0.8225386756696704,
+        -0.05893297567329236
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989827952530846,
+      "nozzle_axis": [
+        0.020500531291498463,
+        0.060108069816930974,
+        -0.9979813365788206
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000033",
+      "point_type": "deposition",
+      "position": [
+        70.99282563808516,
+        -24.253263608435624,
+        52.31302308037825
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.020500531291498463,
+        -0.060108069816930974,
+        0.9979813365788206
+      ],
+      "tangent": [
+        -0.6138089891185882,
+        -0.7872298128816041,
+        -0.05922623225912187
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989815278930868,
+      "nozzle_axis": [
+        0.023062921578207676,
+        0.06016748711036563,
+        -0.9979218281724784
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000034",
+      "point_type": "deposition",
+      "position": [
+        69.0143023230131,
+        -26.499576233491048,
+        52.13445051196561
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.023062921578207676,
+        -0.06016748711036563,
+        0.9979218281724784
+      ],
+      "tangent": [
+        -0.6597877614538239,
+        -0.7490887608553636,
+        -0.059549460080911054
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989831768974673,
+      "nozzle_axis": [
+        0.025702185441094795,
+        0.060187828311515486,
+        -0.9978561133684031
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000035",
+      "point_type": "deposition",
+      "position": [
+        66.90500143399682,
+        -28.62347691755419,
+        51.95480896310607
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.025702185441094795,
+        -0.060187828311515486,
+        0.9978561133684031
+      ],
+      "tangent": [
+        -0.703398309526848,
+        -0.7082669706120801,
+        -0.05990589699486526
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.2398982460900009,
+      "nozzle_axis": [
+        0.02842544614705158,
+        0.06016453439915086,
+        -0.9977836553140538
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000036",
+      "point_type": "deposition",
+      "position": [
+        64.67260236039193,
+        -30.617484943962992,
+        51.77398738993033
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.02842544614705158,
+        -0.06016453439915086,
+        0.9977836553140538
+      ],
+      "tangent": [
+        -0.7444486518729674,
+        -0.6649512645993172,
+        -0.06029942315056254
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989824470882454,
+      "nozzle_axis": [
+        0.031241033475560457,
+        0.06009378483201514,
+        -0.9977037310003117
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000037",
+      "point_type": "deposition",
+      "position": [
+        62.32490340571836,
+        -32.47423348112069,
+        51.591876272797286
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.031241033475560457,
+        -0.06009378483201514,
+        0.9977037310003117
+      ],
+      "tangent": [
+        -0.782898251722712,
+        -0.6191786986724543,
+        -0.060729453807912205
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989836344100313,
+      "nozzle_axis": [
+        0.03415624944193836,
+        0.05996714298412557,
+        -0.9976158039979026
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000038",
+      "point_type": "deposition",
+      "position": [
+        59.87055546070965,
+        -34.18737936750902,
+        51.408338241538125
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.03415624944193836,
+        -0.05996714298412557,
+        0.9976158039979026
+      ],
+      "tangent": [
+        -0.8184625888412251,
+        -0.5712905621582968,
+        -0.06120526330453189
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.2398980830030474,
+      "nozzle_axis": [
+        0.037178492243094385,
+        0.05977576979932471,
+        -0.9975192314233488
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000039",
+      "point_type": "deposition",
+      "position": [
+        57.31820709513281,
+        -35.750586914181724,
+        51.22324951964606
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.037178492243094385,
+        -0.05977576979932471,
+        0.9975192314233488
+      ],
+      "tangent": [
+        -0.8511442304587046,
+        -0.5212905504218973,
+        -0.061722451326036994
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989844555432727,
+      "nozzle_axis": [
+        0.040314726593368225,
+        0.059508504650574244,
+        -0.9974133850585496
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000040",
+      "point_type": "deposition",
+      "position": [
+        54.67703397255938,
+        -37.15831671243786,
+        51.03647056010845
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.040314726593368225,
+        -0.059508504650574244,
+        0.9974133850585496
+      ],
+      "tangent": [
+        -0.880763730326153,
+        -0.4694419073882132,
+        -0.062286009100568196
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T0",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PLA",
+      "material_volume_mm3": 0.23989824878027644,
+      "nozzle_axis": [
+        0.04357107479887956,
+        0.059151615179985226,
+        -0.9972976726446671
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000041",
+      "point_type": "deposition",
+      "position": [
+        51.95664467501798,
+        -38.40582391810947,
+        50.847848933975236
+      ],
+      "region_id": "guide-01-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.04357107479887956,
+        -0.059151615179985226,
+        0.9972976726446671
+      ],
+      "tangent": [
+        -0.9071810440877426,
+        -0.416012109138556,
+        -0.06290054290674593
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "channel_id": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 3000.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-001",
+      "material_id": null,
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        0.02944126402130833,
+        -0.06730946523601439,
+        -0.9972976726446671
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000042",
+      "point_type": "travel",
+      "position": [
+        -59.23874150386393,
+        -25.79286222491205,
+        50.847848933975236
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.02944126402130833,
+        0.06730946523601439,
+        0.9972976726446671
+      ],
+      "tangent": [
+        -0.09331346724794615,
+        -0.9936478845809532,
+        0.0629005429067457
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989824878027732,
+      "nozzle_axis": [
+        0.03137851347193728,
+        -0.0646678297017682,
+        -0.9974133850585496
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000043",
+      "point_type": "deposition",
+      "position": [
+        -59.5185632211189,
+        -28.77254206760202,
+        51.03647056010845
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.03137851347193728,
+        0.0646678297017682,
+        0.9974133850585496
+      ],
+      "tangent": [
+        -0.09331346724794615,
+        -0.9936478845809532,
+        0.0629005429067457
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.2398984455543278,
+      "nozzle_axis": [
+        0.03317808905543837,
+        -0.06208540365658493,
+        -0.9975192314233488
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000044",
+      "point_type": "deposition",
+      "position": [
+        -59.620020015451445,
+        -31.76372998667136,
+        51.22324951964607
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.03317808905543837,
+        0.06208540365658493,
+        0.9975192314233488
+      ],
+      "tangent": [
+        -0.03383324776385537,
+        -0.9974847188885018,
+        0.06228600910057042
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.239898083003046,
+      "nozzle_axis": [
+        0.03485494449565702,
+        -0.05956375120677964,
+        -0.9976158039979026
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000045",
+      "point_type": "deposition",
+      "position": [
+        -59.54241675143379,
+        -34.75573228390493,
+        51.408338241538125
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.03485494449565702,
+        0.05956375120677964,
+        0.9976158039979026
+      ],
+      "tangent": [
+        0.0258787441887707,
+        -0.997757801072744,
+        0.061722451326035
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989836344100512,
+      "nozzle_axis": [
+        0.03642222753630064,
+        -0.057102421046323126,
+        -0.9977037310003117
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000046",
+      "point_type": "deposition",
+      "position": [
+        -59.285962865937044,
+        -37.73783289720279,
+        51.59187627279729
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.03642222753630064,
+        0.057102421046323126,
+        0.9977037310003117
+      ],
+      "tangent": [
+        0.08552084535076465,
+        -0.9944546750628273,
+        0.06120526330453375
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989824470882232,
+      "nozzle_axis": [
+        0.037891292123001324,
+        -0.05469942567682878,
+        -0.9977836553140538
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000047",
+      "point_type": "deposition",
+      "position": [
+        -58.85182094165569,
+        -40.699374100967106,
+        51.77398738993033
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.037891292123001324,
+        0.05469942567682878,
+        0.9977836553140538
+      ],
+      "tangent": [
+        0.14477535667117455,
+        -0.9875991239065206,
+        0.06072945380791039
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989824608999943,
+      "nozzle_axis": [
+        0.039273095595841016,
+        -0.052352659680524584,
+        -0.9978561133684031
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000048",
+      "point_type": "deposition",
+      "position": [
+        -58.24115887223805,
+        -43.62969242329817,
+        51.95480896310607
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.039273095595841016,
+        0.052352659680524584,
+        0.9978561133684031
+      ],
+      "tangent": [
+        0.20364036148510792,
+        -0.9771870766347271,
+        0.0602994231505629
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989831768974867,
+      "nozzle_axis": [
+        0.040575111530345306,
+        -0.05005681952739914,
+        -0.9979218281724784
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000049",
+      "point_type": "deposition",
+      "position": [
+        -57.456457369232375,
+        -46.518350919442966,
+        52.13445051196561
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.040575111530345306,
+        0.05005681952739914,
+        0.9979218281724784
+      ],
+      "tangent": [
+        0.26167803444807897,
+        -0.9632942903353215,
+        0.059905896994864774
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989815278930926,
+      "nozzle_axis": [
+        0.04180484978816138,
+        -0.0478080157979811,
+        -0.9979813365788206
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000050",
+      "point_type": "deposition",
+      "position": [
+        -56.500355228628734,
+        -49.35495868480291,
+        52.31302308037825
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.04180484978816138,
+        0.0478080157979811,
+        0.9979813365788206
+      ],
+      "tangent": [
+        0.31883601586322774,
+        -0.9459373429527643,
+        0.059549460080910915
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989827952530773,
+      "nozzle_axis": [
+        0.042968688539575896,
+        -0.04560210607616687,
+        -0.9980351395249604
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000051",
+      "point_type": "deposition",
+      "position": [
+        -55.37626229488281,
+        -52.129349553658976,
+        52.49062647064987
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.042968688539575896,
+        0.04560210607616687,
+        0.9980351395249604
+      ],
+      "tangent": [
+        0.37485652201264513,
+        -0.9251890840887456,
+        0.05922623225912205
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.2398982146956061,
+      "nozzle_axis": [
+        0.04407181221313381,
+        -0.043434630554502925,
+        -0.9980837180501665
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000052",
+      "point_type": "deposition",
+      "position": [
+        -54.08826177515887,
+        -54.83160620860307,
+        52.6673504162839
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.04407181221313381,
+        0.043434630554502925,
+        0.9980837180501665
+      ],
+      "tangent": [
+        0.4295156665032165,
+        -0.901134394308967,
+        0.058932975673292476
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989812449950787,
+      "nozzle_axis": [
+        0.045118575424980316,
+        -0.04130107306408908,
+        -0.9981275146570078
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000053",
+      "point_type": "deposition",
+      "position": [
+        -52.64068819063333,
+        -57.451899936907324,
+        52.84328351128126
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.045118575424980316,
+        0.04130107306408908,
+        0.9981275146570078
+      ],
+      "tangent": [
+        0.4827294377713279,
+        -0.8738021554010541,
+        0.05866926900388185
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.2398983363761282,
+      "nozzle_axis": [
+        0.04611224048971232,
+        -0.03919777174490201,
+        -0.9981669178886132
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000054",
+      "point_type": "deposition",
+      "position": [
+        -51.03900574109312,
+        -59.980989009889214,
+        53.01849377036672
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.04611224048971232,
+        0.03919777174490201,
+        0.9981669178886132
+      ],
+      "tangent": [
+        0.5341204024121233,
+        -0.8433869483835419,
+        0.05842816977630207
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989825548809063,
+      "nozzle_axis": [
+        0.04705718499772597,
+        -0.03712251524386214,
+        -0.9982021539758663
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000055",
+      "point_type": "deposition",
+      "position": [
+        -49.289041828549095,
+        -62.409883241976125,
+        53.19305004561013
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.04705718499772597,
+        0.03712251524386214,
+        0.9982021539758663
+      ],
+      "tangent": [
+        0.5835686996501397,
+        -0.8099747877349579,
+        0.058210102408044126
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989820780914833,
+      "nozzle_axis": [
+        0.047957454369614835,
+        -0.0350726386166618,
+        -0.9982334359211033
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000056",
+      "point_type": "deposition",
+      "position": [
+        -47.3969534720904,
+        -64.72981899672094,
+        53.367024037643475
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.047957454369614835,
+        0.0350726386166618,
+        0.9982334359211033
+      ],
+      "tangent": [
+        0.6309637320722126,
+        -0.7736400453947343,
+        0.05801593721675546
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989814882048047,
+      "nozzle_axis": [
+        0.04881646571651386,
+        -0.03304527600919805,
+        -0.9982609690899592
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000057",
+      "point_type": "deposition",
+      "position": [
+        -45.36938298757227,
+        -66.9323702126897,
+        53.54048542748646
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.04881646571651386,
+        0.03304527600919805,
+        0.9982609690899592
+      ],
+      "tangent": [
+        0.6761437700081271,
+        -0.7344954437700049,
+        0.05784501154205675
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989814589648342,
+      "nozzle_axis": [
+        0.04963698991778563,
+        -0.03103740756370766,
+        -0.9982849535897182
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000058",
+      "point_type": "deposition",
+      "position": [
+        -43.213477099122436,
+        -69.00950723019679,
+        53.713500380202184
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.04963698991778563,
+        0.03103740756370766,
+        0.9982849535897182
+      ],
+      "tangent": [
+        0.7189404087783539,
+        -0.6926729707709783,
+        0.05769613668973717
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989829532202306,
+      "nozzle_axis": [
+        0.05042127602681744,
+        -0.029046024897041205,
+        -0.9983055761446532
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000059",
+      "point_type": "deposition",
+      "position": [
+        -40.93720234388239,
+        -70.95402454788736,
+        53.88612542252025
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.05042127602681744,
+        0.029046024897041205,
+        0.9983055761446532
+      ],
+      "tangent": [
+        0.7590799266612646,
+        -0.6484472313837434,
+        0.05756607551924361
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.2398981650952257,
+      "nozzle_axis": [
+        0.05117224594732377,
+        -0.02706804736343141,
+        -0.9983229547879973
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000060",
+      "point_type": "deposition",
+      "position": [
+        -38.548693249807414,
+        -72.75893532448119,
+        54.05841993364981
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.05117224594732377,
+        0.02706804736343141,
+        0.9983229547879973
+      ],
+      "tangent": [
+        0.7965076658679324,
+        -0.6018923157256777,
+        0.0574558829363839
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989821014756157,
+      "nozzle_axis": [
+        0.05189178512912112,
+        -0.02510000395605706,
+        -0.99833723382308
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000061",
+      "point_type": "deposition",
+      "position": [
+        -36.05645087011912,
+        -74.41770122551371,
+        54.23044024192171
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.05189178512912112,
+        0.02510000395605706,
+        0.99833723382308
+      ],
+      "tangent": [
+        0.8310999496512499,
+        -0.5531565742027724,
+        0.057364432411928054
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989816078561652,
+      "nozzle_axis": [
+        0.05258214736419227,
+        -0.023138921330315688,
+        -0.9983484903069869
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000062",
+      "point_type": "deposition",
+      "position": [
+        -33.46940401801673,
+        -75.92436543269916,
+        54.40224021642283
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.05258214736419227,
+        0.023138921330315688,
+        0.9983484903069869
+      ],
+      "tangent": [
+        0.8627150266197458,
+        -0.5024346004992921,
+        0.057290968447114635
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989814801746723,
+      "nozzle_axis": [
+        0.053245154466191914,
+        -0.021181687595417876,
+        -0.9983567947565046
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000063",
+      "point_type": "deposition",
+      "position": [
+        -30.79674439011812,
+        -77.27336329125575,
+        54.57387358506369
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.053245154466191914,
+        0.021181687595417876,
+        0.9983567947565046
+      ],
+      "tangent": [
+        0.8912647804864295,
+        -0.44985686457516627,
+        0.057235412631316485
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989824988865532,
+      "nozzle_axis": [
+        0.05388179374386869,
+        -0.019224974641877873,
+        -0.9983622351896942
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000064",
+      "point_type": "deposition",
+      "position": [
+        -28.048172084805174,
+        -78.46008257015977,
+        54.74539033311731
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.05388179374386869,
+        0.019224974641877873,
+        0.9983622351896942
+      ],
+      "tangent": [
+        0.9165793603208532,
+        -0.39574087079161857,
+        0.05719649830983798
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989814502349663,
+      "nozzle_axis": [
+        0.05449319349624195,
+        -0.017265613703188906,
+        -0.9983648583789563
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000065",
+      "point_type": "deposition",
+      "position": [
+        -25.233504138078715,
+        -79.48018652885546,
+        54.91683933688215
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.05449319349624195,
+        0.017265613703188906,
+        0.9983648583789563
+      ],
+      "tangent": [
+        0.9386209956565623,
+        -0.3401790234253866,
+        0.05717393229465758
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.2398982278925501,
+      "nozzle_axis": [
+        0.055080496457761224,
+        -0.015300492894348225,
+        -0.9983646797774632
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000066",
+      "point_type": "deposition",
+      "position": [
+        -22.362847983816387,
+        -80.33007690750036,
+        55.08826949348521
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.055080496457761224,
+        0.015300492894348225,
+        0.9983646797774632
+      ],
+      "tangent": [
+        0.9572913245688796,
+        -0.28341697597718474,
+        0.05716762749238538
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989816077767134,
+      "nozzle_axis": [
+        0.055644694764725756,
+        -0.013326469751503358,
+        -0.9983616945518807
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000067",
+      "point_type": "deposition",
+      "position": [
+        -19.446480202540652,
+        -81.00665977470092,
+        55.25972872180819
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.055644694764725756,
+        0.013326469751503358,
+        0.9983616945518807
+      ],
+      "tangent": [
+        0.972535269740068,
+        -0.22562336118202994,
+        0.05717733817288664
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989810236253117,
+      "nozzle_axis": [
+        0.05618710508140283,
+        -0.011340434616624408,
+        -0.9983558502684688
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000068",
+      "point_type": "deposition",
+      "position": [
+        -16.494810133274644,
+        -81.50723756139226,
+        55.4312658350638
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.05618710508140283,
+        0.011340434616624408,
+        0.9983558502684688
+      ],
+      "tangent": [
+        0.9843079341429654,
+        -0.16693013634092713,
+        0.05720332476707472
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.239898247258856,
+      "nozzle_axis": [
+        0.05670815367466455,
+        -0.009338979519261019,
+        -0.9983471183753423
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000069",
+      "point_type": "deposition",
+      "position": [
+        -13.5184820963985,
+        -81.83030451103816,
+        55.60293215417989
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.05670815367466455,
+        0.009338979519261019,
+        0.9983471183753423
+      ],
+      "tangent": [
+        0.9925301483889923,
+        -0.10773465945244985,
+        0.0572463771044929
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989818223706033,
+      "nozzle_axis": [
+        0.057207916586996845,
+        -0.007318611698873785,
+        -0.9983354607558405
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000070",
+      "point_type": "deposition",
+      "position": [
+        -10.528167833129235,
+        -81.97471623993907,
+        55.77477844318592
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.057207916586996845,
+        0.007318611698873785,
+        0.9983354607558405
+      ],
+      "tangent": [
+        0.9971944715493761,
+        -0.04815767341103146,
+        0.05730640804479971
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989823236354477,
+      "nozzle_axis": [
+        0.057686820885368716,
+        -0.005275815299873242,
+        -0.9983207883586623
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000071",
+      "point_type": "deposition",
+      "position": [
+        -7.534582128794764,
+        -81.9400345726857,
+        55.94685650179166
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.057686820885368716,
+        0.005275815299873242,
+        0.9983207883586623
+      ],
+      "tangent": [
+        0.9982852061362268,
+        0.011565459874105042,
+        0.05738368537704446
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.2398980963651321,
+      "nozzle_axis": [
+        0.058145025870557636,
+        -0.0032069418497544123,
+        -0.998302995833672
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000072",
+      "point_type": "deposition",
+      "position": [
+        -4.548458277693743,
+        -81.7262260371285,
+        56.11921979819843
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.058145025870557636,
+        0.0032069418497544123,
+        0.998302995833672
+      ],
+      "tangent": [
+        0.9957974311079322,
+        0.07129978563290738,
+        0.05747883756257233
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989817258138754,
+      "nozzle_axis": [
+        0.05858255131371737,
+        -0.0011081470650722224,
+        -0.9982819525022267
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000073",
+      "point_type": "deposition",
+      "position": [
+        -1.5805257699165676,
+        -81.33390594561806,
+        56.29192225564885
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.05858255131371737,
+        0.0011081470650722224,
+        0.9982819525022267
+      ],
+      "tangent": [
+        0.9897307597940217,
+        0.13082887202980878,
+        0.057591920969495204
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989817552665083,
+      "nozzle_axis": [
+        0.0589995491063282,
+        0.0010246422181426611,
+        -0.9982574834748672
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000074",
+      "point_type": "deposition",
+      "position": [
+        1.358577282189945,
+        -80.76463122970387,
+        56.46502433955518
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.0589995491063282,
+        -0.0010246422181426611,
+        0.9982574834748672
+      ],
+      "tangent": [
+        0.9801168502108933,
+        0.18983878127941772,
+        0.05772518562138004
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.2398981315286195,
+      "nozzle_axis": [
+        0.05939569576588966,
+        0.0031957255424926705,
+        -0.9982294018224184
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000075",
+      "point_type": "deposition",
+      "position": [
+        4.25830079508219,
+        -80.02042669728567,
+        56.63858887737833
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.05939569576588966,
+        -0.0031957255424926705,
+        0.9982294018224184
+      ],
+      "tangent": [
+        0.9669849429556936,
+        0.2481735152086959,
+        0.05787941297156718
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.2398981924874719,
+      "nozzle_axis": [
+        0.05977001849429141,
+        0.005409618296121254,
+        -0.9981975159852294
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000076",
+      "point_type": "deposition",
+      "position": [
+        7.108241517451078,
+        -79.10396862724441,
+        56.812682360586045
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.05977001849429141,
+        -0.005409618296121254,
+        0.9981975159852294
+      ],
+      "tangent": [
+        0.9503833914939462,
+        0.3056156648913871,
+        0.058055788216680164
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989815446259768,
+      "nozzle_axis": [
+        0.06012122518095184,
+        0.007670979043887481,
+        -0.9981616073378347
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000077",
+      "point_type": "deposition",
+      "position": [
+        9.898189642918336,
+        -78.01859532233414,
+        56.98737480916335
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.06012122518095184,
+        -0.007670979043887481,
+        0.9981616073378347
+      ],
+      "tangent": [
+        0.9303775201496138,
+        0.36194469518672245,
+        0.058255537302864834
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.2398981579703619,
+      "nozzle_axis": [
+        0.060447162698160306,
+        0.00998413793429265,
+        -0.9981214643075517
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000078",
+      "point_type": "deposition",
+      "position": [
+        12.618089631435737,
+        -76.7680930561735,
+        57.16273615941159
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.060447162698160306,
+        -0.00998413793429265,
+        0.9981214643075517
+      ],
+      "tangent": [
+        0.9070182152389616,
+        0.4170110439331111,
+        0.05847859832918034
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989818674210103,
+      "nozzle_axis": [
+        0.06074631877633319,
+        0.012353763664236957,
+        -0.9980767852617615
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000079",
+      "point_type": "deposition",
+      "position": [
+        15.258230210215308,
+        -75.3570615823369,
+        57.33884274492048
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.06074631877633319,
+        -0.012353763664236957,
+        0.9980767852617615
+      ],
+      "tangent": [
+        0.8804203531951879,
+        0.47054343944783883,
+        0.05872710849564226
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989806360550797,
+      "nozzle_axis": [
+        0.061017011144234405,
+        0.014784891665040026,
+        -0.9980272197337493
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000080",
+      "point_type": "deposition",
+      "position": [
+        17.809083102378207,
+        -73.79047228814487,
+        57.51577182641473
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.061017011144234405,
+        -0.014784891665040026,
+        0.9980272197337493
+      ],
+      "tangent": [
+        0.8506455963254663,
+        0.5224183207308088,
+        0.05900142046505076
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.23989825178755764,
+      "nozzle_axis": [
+        0.061256683275224016,
+        0.01728289832373574,
+        -0.9979724045181061
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000081",
+      "point_type": "deposition",
+      "position": [
+        20.26150716045749,
+        -72.07397558304042,
+        57.69360827485967
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.061256683275224016,
+        -0.01728289832373574,
+        0.9979724045181061
+      ],
+      "tangent": [
+        0.8178214021337791,
+        0.5724082413487512,
+        0.05930395811385105
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T1",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PETG",
+      "material_volume_mm3": 0.2398981326201442,
+      "nozzle_axis": [
+        0.06146178819983807,
+        0.019853435773440706,
+        -0.9979119648943328
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000082",
+      "point_type": "deposition",
+      "position": [
+        22.60680906635427,
+        -70.21388466059675,
+        57.872444228601836
+      ],
+      "region_id": "guide-02-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        -0.06146178819983807,
+        -0.019853435773440706,
+        0.9979119648943328
+      ],
+      "tangent": [
+        0.782099261976446,
+        0.6202935894924873,
+        0.05963729747753734
+      ]
+    },
+    {
+      "bead_width_mm": null,
+      "channel_id": null,
+      "extrusion_role": "none",
+      "feedrate_mm_min": 3000.0,
+      "issue_ids": [],
+      "layer_height_mm": null,
+      "layer_id": "layer-001",
+      "material_id": null,
+      "material_volume_mm3": 0.0,
+      "nozzle_axis": [
+        -0.013537314367716938,
+        -0.06315418782979877,
+        -0.9979119648943328
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000083",
+      "point_type": "travel",
+      "position": [
+        -72.11041234764436,
+        15.528871380331541,
+        57.872444228601836
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.013537314367716938,
+        0.06315418782979877,
+        0.9979119648943328
+      ],
+      "tangent": [
+        -0.14614037531412702,
+        0.987464623899319,
+        -0.059637297477524005
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.2398981326427304,
+      "nozzle_axis": [
+        -0.015660912638429617,
+        -0.06169129302965161,
+        -0.9979724045181115
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000084",
+      "point_type": "deposition",
+      "position": [
+        -72.54864738691394,
+        18.490007871884075,
+        57.69360827484287
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.015660912638429617,
+        0.06169129302965161,
+        0.9979724045181115
+      ],
+      "tangent": [
+        -0.14614037531412702,
+        0.987464623899319,
+        -0.059637297477524005
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989825181014068,
+      "nozzle_axis": [
+        -0.017704413798369636,
+        -0.060234727546151286,
+        -0.9980272197337591
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000085",
+      "point_type": "deposition",
+      "position": [
+        -72.80896511000631,
+        21.472117759868016,
+        57.515771826381325
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.017704413798369636,
+        0.060234727546151286,
+        0.9980272197337591
+      ],
+      "tangent": [
+        -0.0868093772682896,
+        0.9944582306815746,
+        -0.059303958113805885
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989806362808974,
+      "nozzle_axis": [
+        -0.019674486223135144,
+        -0.05878473707840178,
+        -0.9980767852617748
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000086",
+      "point_type": "deposition",
+      "position": [
+        -72.89024478995725,
+        24.464515813176945,
+        57.33884274487062
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.019674486223135144,
+        0.05878473707840178,
+        0.9980767852617748
+      ],
+      "tangent": [
+        -0.02710473897845051,
+        0.9978898564010079,
+        -0.05900142046498463
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989818676468377,
+      "nozzle_axis": [
+        -0.02157706426379985,
+        -0.05734084744990126,
+        -0.9981214643075677
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000087",
+      "point_type": "deposition",
+      "position": [
+        -72.79216360238104,
+        27.45646036116023,
+        57.1627361593454
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.02157706426379985,
+        0.05734084744990126,
+        0.9981214643075677
+      ],
+      "tangent": [
+        0.032707604471365434,
+        0.9977381115991789,
+        -0.05872710849555906
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989815799294495,
+      "nozzle_axis": [
+        -0.023417349867424688,
+        -0.055901997834616086,
+        -0.9981616073378525
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000088",
+      "point_type": "deposition",
+      "position": [
+        -72.51518033800573,
+        30.437213980323204,
+        56.98737480908095
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.023417349867424688,
+        0.055901997834616086,
+        0.9981616073378525
+      ],
+      "tangent": [
+        0.09236694993996547,
+        0.9940063380563797,
+        -0.05847859832908255
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989815448518056,
+      "nozzle_axis": [
+        -0.02520014237891944,
+        -0.05446716354797367,
+        -0.9981975159852485
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000089",
+      "point_type": "deposition",
+      "position": [
+        -72.0601671297792,
+        33.39606658493819,
+        56.81268236048752
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.02520014237891944,
+        0.05446716354797367,
+        0.9981975159852485
+      ],
+      "tangent": [
+        0.15173545930871765,
+        0.9867029151481918,
+        -0.058255537302757295
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989819251005612,
+      "nozzle_axis": [
+        -0.026930268380747857,
+        -0.053036044179016084,
+        -0.998229401822438
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000090",
+      "point_type": "deposition",
+      "position": [
+        -71.42887273858706,
+        36.32241668506242,
+        56.638588877263764
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.026930268380747857,
+        0.053036044179016084,
+        0.998229401822438
+      ],
+      "tangent": [
+        0.21052076619232707,
+        0.9758639928065534,
+        -0.05805578821656504
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989813172847302,
+      "nozzle_axis": [
+        -0.028612408321652173,
+        -0.051607429397343266,
+        -0.998257483478603
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000091",
+      "point_type": "deposition",
+      "position": [
+        -70.62351109695778,
+        39.20575320354843,
+        56.46502434050148
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.028612408321652173,
+        0.051607429397343266,
+        0.998257483478603
+      ],
+      "tangent": [
+        0.268567874481263,
+        0.9615202912041001,
+        -0.05787941256957613
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989817562939947,
+      "nozzle_axis": [
+        -0.030250959166602313,
+        -0.05017990412341763,
+        -0.9982819525022304
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000092",
+      "point_type": "deposition",
+      "position": [
+        -69.64696585278983,
+        42.03572844134462,
+        56.29192225562097
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.030250959166602313,
+        0.05017990412341763,
+        0.9982819525022304
+      ],
+      "tangent": [
+        0.32565324570922705,
+        0.9437254719829128,
+        -0.057725185921521614
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989817260396853,
+      "nozzle_axis": [
+        -0.03184980604602896,
+        -0.04875159858236408,
+        -0.998302995833677
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000093",
+      "point_type": "deposition",
+      "position": [
+        -68.50275876442204,
+        44.80219343579863,
+        56.11921979815436
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.03184980604602896,
+        0.04875159858236408,
+        0.998302995833677
+      ],
+      "tangent": [
+        0.38156425318226533,
+        0.9225464168986329,
+        -0.05759192096947191
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989809615359522,
+      "nozzle_axis": [
+        -0.03341240051361901,
+        -0.04732034469772686,
+        -0.9983207883589352
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000094",
+      "point_type": "deposition",
+      "position": [
+        -67.19486046973049,
+        47.495156818199334,
+        55.94685650196558
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.03341240051361901,
+        0.04732034469772686,
+        0.9983207883589352
+      ],
+      "tangent": [
+        0.43615128778818496,
+        0.8980357662118439,
+        -0.057478837540562565
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989823240095945,
+      "nozzle_axis": [
+        -0.03494206194423204,
+        -0.04588420321336277,
+        -0.9983354607558326
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000095",
+      "point_type": "deposition",
+      "position": [
+        -65.72810281618692,
+        50.10501891719839,
+        55.774778443291005
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.03494206194423204,
+        0.04588420321336277,
+        0.9983354607558326
+      ],
+      "tangent": [
+        0.4891266230230719,
+        0.8703230775413155,
+        -0.05738368539105039
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989818225964266,
+      "nozzle_axis": [
+        -0.03644187034566706,
+        -0.04444121192508888,
+        -0.998347118375337
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000096",
+      "point_type": "deposition",
+      "position": [
+        -64.10788145865214,
+        52.62250117032974,
+        55.60293215426867
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.03644187034566706,
+        0.04444121192508888,
+        0.998347118375337
+      ],
+      "tangent": [
+        0.5403030043074534,
+        0.8395169081878806,
+        -0.05730640804484086
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989824728143963,
+      "nozzle_axis": [
+        -0.03791465700803705,
+        -0.04298924305790458,
+        -0.9983558502684658
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000097",
+      "point_type": "deposition",
+      "position": [
+        -62.33993325459904,
+        55.03854338571452,
+        55.43126583513634
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.03791465700803705,
+        0.04298924305790458,
+        0.9983558502684658
+      ],
+      "tangent": [
+        0.5895660261257399,
+        0.805688992817148,
+        -0.05724637710452045
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989810238511527,
+      "nozzle_axis": [
+        -0.039363408729457115,
+        -0.04152648437681453,
+        -0.9983616945518794
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000098",
+      "point_type": "deposition",
+      "position": [
+        -60.43058513999333,
+        57.344475756203465,
+        55.25972872186454
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.039363408729457115,
+        0.04152648437681453,
+        0.9983616945518794
+      ],
+      "tangent": [
+        0.6367197057826077,
+        0.7689706079582631,
+        -0.057203324767087255
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989816080025395,
+      "nozzle_axis": [
+        -0.040790863765477116,
+        -0.04005086273865357,
+        -0.9983646797774628
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000099",
+      "point_type": "deposition",
+      "position": [
+        -58.38646329843891,
+        59.53183290820679,
+        55.088269493525395
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.040790863765477116,
+        0.04005086273865357,
+        0.9983646797774628
+      ],
+      "tangent": [
+        0.6816631973286083,
+        0.7294285690917249,
+        -0.057177338172894866
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989822791513216,
+      "nozzle_axis": [
+        -0.04219905682681545,
+        -0.03855968304970198,
+        -0.9983648583789564
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000100",
+      "point_type": "deposition",
+      "position": [
+        -56.21510856278802,
+        61.59294887422403,
+        54.91683933690619
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.04219905682681545,
+        0.03855968304970198,
+        0.9983648583789564
+      ],
+      "tangent": [
+        0.724091963336735,
+        0.6873301179186346,
+        -0.05716762749238756
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989814504608084,
+      "nozzle_axis": [
+        -0.04359021329884818,
+        -0.03705051486279509,
+        -0.9983622351896945
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000101",
+      "point_type": "deposition",
+      "position": [
+        -53.92433864648835,
+        63.52047084015332,
+        54.74539033312521
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.04359021329884818,
+        0.03705051486279509,
+        0.9983622351896945
+      ],
+      "tangent": [
+        0.7639141739456615,
+        0.6427801150555946,
+        -0.057173932294658635
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989824991123979,
+      "nozzle_axis": [
+        -0.04496645678581954,
+        -0.03552081259836537,
+        -0.9983567947565043
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000102",
+      "point_type": "deposition",
+      "position": [
+        -51.52232345091397,
+        65.30744464140872,
+        54.57387358505544
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.04496645678581954,
+        0.03552081259836537,
+        0.9983567947565043
+      ],
+      "tangent": [
+        0.8010113275817903,
+        0.5959105752264767,
+        -0.05719649830983921
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989814804005116,
+      "nozzle_axis": [
+        -0.04632996737051174,
+        -0.033968014737547576,
+        -0.9983484903069855
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000103",
+      "point_type": "deposition",
+      "position": [
+        -49.0177272215587,
+        66.94753684569977,
+        54.40224021639841
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.04632996737051174,
+        0.033968014737547576,
+        0.9983484903069855
+      ],
+      "tangent": [
+        0.8352198630352505,
+        0.5469295091072522,
+        -0.0572354126313213
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989816057942495,
+      "nozzle_axis": [
+        -0.047683133620998915,
+        -0.03238960218975329,
+        -0.9983372338233567
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000104",
+      "point_type": "deposition",
+      "position": [
+        -46.419394322695084,
+        68.43465304137933,
+        54.230440242015504
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.047683133620998915,
+        0.03238960218975329,
+        0.9983372338233567
+      ],
+      "tangent": [
+        0.8664786399655173,
+        0.49591583098019154,
+        -0.057290968456934946
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989821018425214,
+      "nozzle_axis": [
+        -0.049027739620298445,
+        -0.03078244127850388,
+        -0.9983229547880084
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000105",
+      "point_type": "deposition",
+      "position": [
+        -43.73673972030479,
+        69.76361529839662,
+        54.05841993376994
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.049027739620298445,
+        0.03078244127850388,
+        0.9983229547880084
+      ],
+      "tangent": [
+        0.8945976213261115,
+        0.4431753804237492,
+        -0.057364432394370946
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989816511780826,
+      "nozzle_axis": [
+        -0.05036523345239673,
+        -0.029143093482929903,
+        -0.9983055761446646
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000106",
+      "point_type": "deposition",
+      "position": [
+        -40.97938658895862,
+        70.92966946295601,
+        53.88612542262435
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.05036523345239673,
+        0.029143093482929903,
+        0.9983055761446646
+      ],
+      "tangent": [
+        0.9195078686798963,
+        0.38884971512367394,
+        -0.05745588293632089
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.2398982953446075,
+      "nozzle_axis": [
+        -0.0516976783759971,
+        -0.027468190455203906,
+        -0.9982849535897297
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000107",
+      "point_type": "deposition",
+      "position": [
+        -38.15724781588736,
+        71.92872256832983,
+        53.71350038029023
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.0516976783759971,
+        0.027468190455203906,
+        0.9982849535897297
+      ],
+      "tangent": [
+        0.9411117387115512,
+        0.33315888433094704,
+        -0.05756607551917927
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989814591906625,
+      "nozzle_axis": [
+        -0.05302628135673995,
+        -0.02575366142959448,
+        -0.9982609690899699
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000108",
+      "point_type": "deposition",
+      "position": [
+        -35.28044144711239,
+        72.75722332729997,
+        53.54048542755841
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.05302628135673995,
+        0.02575366142959448,
+        0.9982609690899699
+      ],
+      "tangent": [
+        0.9593425935840327,
+        0.2762841724503017,
+        -0.057696136689672814
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.2398981486207771,
+      "nozzle_axis": [
+        -0.05435252319910789,
+        -0.023996054476125073,
+        -0.9982334359214128
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000109",
+      "point_type": "deposition",
+      "position": [
+        -32.35919090253897,
+        73.41187527264016,
+        53.367024037787495
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.05435252319910789,
+        0.023996054476125073,
+        0.9982334359214128
+      ],
+      "tangent": [
+        0.9741635977995754,
+        0.21830996165795113,
+        -0.057845011566176205
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.2398982078450922,
+      "nozzle_axis": [
+        -0.05567763375080093,
+        -0.022191460018923154,
+        -0.998202153975907
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000110",
+      "point_type": "deposition",
+      "position": [
+        -29.404023424131093,
+        73.89050397222798,
+        53.19305004582343
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.05567763375080093,
+        0.022191460018923154,
+        0.998202153975907
+      ],
+      "tangent": [
+        0.9854737990593399,
+        0.15961059613980189,
+        -0.05801593718495815
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989825551067412,
+      "nozzle_axis": [
+        -0.057002386346188406,
+        -0.02033548581918495,
+        -0.9981669178886554
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000111",
+      "point_type": "deposition",
+      "position": [
+        -26.42555735950709,
+        74.19157006039171,
+        53.01849377056432
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.057002386346188406,
+        0.02033548581918495,
+        0.9981669178886554
+      ],
+      "tangent": [
+        0.993243092421397,
+        0.1003979249529276,
+        -0.058210102407800904
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.2398983363987108,
+      "nozzle_axis": [
+        -0.058327066188176534,
+        -0.018423295970564243,
+        -0.9981275146570507
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000112",
+      "point_type": "deposition",
+      "position": [
+        -23.434460748827355,
+        74.31412321420335,
+        52.843283511463106
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.058327066188176534,
+        0.018423295970564243,
+        0.9981275146570507
+      ],
+      "tangent": [
+        0.9974547237238142,
+        0.04086836304123558,
+        -0.05842816977605514
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.239898124522091,
+      "nozzle_axis": [
+        -0.05965139956951102,
+        -0.016449993692027598,
+        -0.9980837180502099
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000113",
+      "point_type": "deposition",
+      "position": [
+        -20.441433022190914,
+        74.25761184826972,
+        52.66735041644993
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.05965139956951102,
+        0.016449993692027598,
+        0.9980837180502099
+      ],
+      "tangent": [
+        0.998099583345706,
+        -0.01884512137682065,
+        -0.05866926900363577
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989821471818915,
+      "nozzle_axis": [
+        -0.06097692659669701,
+        -0.01441092280624752,
+        -0.9980351395250037
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000114",
+      "point_type": "deposition",
+      "position": [
+        -17.457209851308214,
+        74.02192469110376,
+        52.490626470799995
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.06097692659669701,
+        0.01441092280624752,
+        0.9980351395250037
+      ],
+      "tangent": [
+        0.9951631109512998,
+        -0.07859571858600763,
+        -0.05893297567304766
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.239898279547891,
+      "nozzle_axis": [
+        -0.0623053810786581,
+        -0.01230005402056811,
+        -0.9979813365788632
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000115",
+      "point_type": "deposition",
+      "position": [
+        -14.49247041167938,
+        73.60822229361723,
+        52.3130230805124
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.0623053810786581,
+        0.01230005402056811,
+        0.9979813365788632
+      ],
+      "tangent": [
+        0.9886655111378512,
+        -0.13795927115982304,
+        -0.059226232258873274
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.2398981528118921,
+      "nozzle_axis": [
+        -0.06363803310767333,
+        -0.010110667584436957,
+        -0.9979218281725196
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000116",
+      "point_type": "deposition",
+      "position": [
+        -11.557844955702375,
+        73.01792715338127,
+        52.13445051208366
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.06363803310767333,
+        0.010110667584436957,
+        0.9979218281725196
+      ],
+      "tangent": [
+        0.978623777325402,
+        -0.19684858205601138,
+        -0.05954946008067446
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.2398983177123305,
+      "nozzle_axis": [
+        -0.06497528103617942,
+        -0.007835168632302127,
+        -0.997856113368442
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000117",
+      "point_type": "deposition",
+      "position": [
+        -8.663842563379948,
+        72.25316934133352,
+        51.95480896320789
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.06497528103617942,
+        0.007835168632302127,
+        0.997856113368442
+      ],
+      "tangent": [
+        0.9650763439842761,
+        -0.25502731968793296,
+        -0.05990589699463768
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989824611258342,
+      "nozzle_axis": [
+        -0.06631673826942013,
+        -0.005465108723461423,
+        -0.9977836553140896
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000118",
+      "point_type": "deposition",
+      "position": [
+        -5.820781420060738,
+        71.31685904541118,
+        51.77398739001577
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.06631673826942013,
+        0.005465108723461423,
+        0.9977836553140896
+      ],
+      "tangent": [
+        0.9480890133677662,
+        -0.31223581200603945,
+        -0.060299423150350334
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989824473140742,
+      "nozzle_axis": [
+        -0.06766326101135371,
+        -0.0029913637866439973,
+        -0.9977037310003434
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000119",
+      "point_type": "deposition",
+      "position": [
+        -3.038940540815883,
+        70.21206637877104,
+        51.591876272866145
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.06766326101135371,
+        0.0029913637866439973,
+        0.9977037310003434
+      ],
+      "tangent": [
+        0.9276736084032409,
+        -0.3684204252105552,
+        -0.06072945380772341
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989836346358642,
+      "nozzle_axis": [
+        -0.06901119393721508,
+        -0.00040339177809388724,
+        -0.9976158039979286
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000120",
+      "point_type": "deposition",
+      "position": [
+        -0.32813871003022776,
+        68.94311165179545,
+        51.40833824159019
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.06901119393721508,
+        0.00040339177809388724,
+        0.9976158039979286
+      ],
+      "tangent": [
+        0.9039834342003327,
+        -0.4231641128867326,
+        -0.06120526330437167
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989808302562876,
+      "nozzle_axis": [
+        -0.0703565812982802,
+        0.0023096338567372763,
+        -0.9975192314233678
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000121",
+      "point_type": "deposition",
+      "position": [
+        2.3018129198320283,
+        67.51431690113715,
+        51.223249519681076
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.0703565812982802,
+        -0.0023096338567372763,
+        0.9975192314233678
+      ],
+      "tangent": [
+        0.8770229746542137,
+        -0.47646725063848294,
+        -0.06172245132591152
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.2398984455769111,
+      "nozzle_axis": [
+        -0.07169324006518062,
+        0.005159325050918688,
+        -0.99741338505856
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000122",
+      "point_type": "deposition",
+      "position": [
+        4.84152924832534,
+        65.93085878019627,
+        51.03647056012612
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.07169324006518062,
+        -0.005159325050918688,
+        0.99741338505856
+      ],
+      "tangent": [
+        0.8469304825667435,
+        -0.5280428114931561,
+        -0.06228600910048854
+      ]
+    },
+    {
+      "bead_width_mm": 0.4,
+      "channel_id": "T2",
+      "extrusion_role": "buildup",
+      "feedrate_mm_min": 900.0,
+      "issue_ids": [],
+      "layer_height_mm": 0.2,
+      "layer_id": "layer-001",
+      "material_id": "PA",
+      "material_volume_mm3": 0.23989824880285973,
+      "nozzle_axis": [
+        -0.07301233882018819,
+        0.00815785005602974,
+        -0.997297672644667
+      ],
+      "operation_id": "pc06-fan_blade",
+      "point_id": "point-0000123",
+      "point_type": "deposition",
+      "position": [
+        7.282096828846406,
+        64.1986861430217,
+        50.847848933975236
+      ],
+      "region_id": "guide-03-pass-01",
+      "stage_id": "freeform_thin_wall",
+      "surface_normal": [
+        0.07301233882018819,
+        -0.00815785005602974,
+        0.997297672644667
+      ],
+      "tangent": [
+        0.8138675768414272,
+        -0.5776357754401157,
+        -0.06290054290671755
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "toolpath_id": "pc06-fan_blade-freeform_thin_wall-v1",
+  "units": {
+    "angle": "rad",
+    "feedrate": "mm_min",
+    "length": "mm",
+    "material_volume": "mm3"
+  }
+}

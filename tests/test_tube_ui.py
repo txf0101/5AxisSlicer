@@ -340,7 +340,11 @@ class TubeUiTests(unittest.TestCase):
         ]
         for index, first in enumerate(action_rects):
             for second in action_rects[index + 1 :]:
-                self.assertFalse(first.intersects(second))
+                self.assertFalse(
+                    first.intersects(second),
+                    f"overlapping actions: {actions[index].text()} {first} / "
+                    f"{actions[action_rects.index(second)].text()} {second}",
+                )
 
     def test_http_operation_set_uses_shared_revision_and_round_trips(self) -> None:
         window = self._loaded_tube_window()
@@ -466,7 +470,7 @@ class TubeUiTests(unittest.TestCase):
         page = window.tube_page
 
         self.assertIn("平面工作台", window.workbench_buttons["planar"].text())
-        self.assertIn("[预览]", window.workbench_buttons["planar"].text())
+        self.assertIn("[离线可用]", window.workbench_buttons["planar"].text())
         self.assertIn("回转工作台", window.workbench_buttons["rotary"].text())
         self.assertIn("[可用]", window.workbench_buttons["rotary"].text())
         self.assertIn("研究工作台", window.workbench_buttons["research"].text())

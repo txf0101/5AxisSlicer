@@ -1,0 +1,103 @@
+{
+  "controller_qualification": {
+    "axis_mode": "absolute",
+    "controller_family": "custom-klipper-derived",
+    "controller_version": null,
+    "coordinated_xyzac_verified": false,
+    "cumulative_c_span_rad": 2.3807752543714087,
+    "cumulative_c_travel_rad": 4.653632685798325,
+    "cutter_relative_z_mm": 20.0,
+    "extrusion_mode": "relative",
+    "feed_mode": "units_per_minute",
+    "machine_executable": false,
+    "machine_profile_id": "builtin.machine.own_ac_fdm.v1",
+    "macro_version": null,
+    "maximum_cumulative_c_rad": null,
+    "profile_id": "builtin.controller.own_ac.offline.v1",
+    "qualification_issues": [
+      "controller.version_unknown",
+      "controller.macros_unverified",
+      "controller.xyzac_coordination_unverified",
+      "controller.cumulative_c_limit_unknown"
+    ],
+    "reorientation_absolute_z_mm": 20.0,
+    "schema_version": 1
+  },
+  "issues": [
+    {
+      "code": "controller.version_unknown",
+      "context": {
+        "offline_only": true
+      },
+      "object_id": "",
+      "severity": "warning"
+    },
+    {
+      "code": "controller.macros_unverified",
+      "context": {
+        "offline_only": true
+      },
+      "object_id": "",
+      "severity": "warning"
+    },
+    {
+      "code": "controller.xyzac_coordination_unverified",
+      "context": {
+        "offline_only": true
+      },
+      "object_id": "",
+      "severity": "warning"
+    },
+    {
+      "code": "controller.cumulative_c_limit_unknown",
+      "context": {
+        "offline_only": true
+      },
+      "object_id": "",
+      "severity": "warning"
+    }
+  ],
+  "material_statistics": {
+    "deposition_volume_mm3_by_material": {
+      "PETG": 5.461030329289642,
+      "PLA": 5.461030329292521
+    },
+    "effective_channel_transition_count": 1,
+    "purge_length_mm": 11.0,
+    "selection_command_count": 2
+  },
+  "metrics": [
+    {
+      "limit": 2.0,
+      "name": "freeform_path_count",
+      "passed": true,
+      "unit": "count",
+      "value": 2.0
+    },
+    {
+      "limit": 0.17453292519943295,
+      "name": "freeform_max_normal_change",
+      "passed": true,
+      "unit": "rad",
+      "value": 0.1581326780391337
+    },
+    {
+      "limit": 0.01,
+      "name": "freeform_fk_position_error",
+      "passed": true,
+      "unit": "mm",
+      "value": 1.4210854715202004e-14
+    },
+    {
+      "limit": 0.00017453292519943296,
+      "name": "freeform_fk_orientation_error",
+      "passed": true,
+      "unit": "rad",
+      "value": 0.0
+    }
+  ],
+  "ready_for_offline_export": true,
+  "report_id": "pc06-dual_channel_preloaded-freeform_surface-v1-validation-v1",
+  "schema_version": 1,
+  "status": "warning"
+}

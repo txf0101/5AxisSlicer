@@ -129,7 +129,7 @@ class UiStateTests(unittest.TestCase):
 
         window.toggle_language()
         self.assertEqual(window.current_state()["language"], "en")
-        self.assertIn("Imported NC", window.operation_combo.itemText(0))
+        self.assertIn("Freeform Surface", window.operation_combo.itemText(0))
 
     def test_home_gcode_viewer_entry_opens_empty_result_preview(self) -> None:
         window = MainWindow(http_port=0)

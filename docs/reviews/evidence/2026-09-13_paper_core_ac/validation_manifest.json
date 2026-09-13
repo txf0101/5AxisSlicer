@@ -1,0 +1,662 @@
+{
+  "entrypoints": {
+    "gui": "FreeformPage",
+    "http": "FreeformAutomationRoutes",
+    "restricted_script": "FreeformCommandService",
+    "verification": "tests/test_freeform_integration.py"
+  },
+  "failure_cases": [
+    {
+      "actual": "curve.offset_outside_face: offset crosses the trimmed face boundary",
+      "case": "hemisphere_trim_boundary",
+      "expected": "curve.offset_outside_face",
+      "export_blocked": true
+    },
+    {
+      "case": "material_sensor_and_temperature",
+      "evidence": "tests/test_paper_core_ac.py",
+      "expected": [
+        "material.sensor_not_ready:T1",
+        "material.temperature_out_of_tolerance:T1"
+      ],
+      "recovery_tested": true
+    },
+    {
+      "case": "tampered_relative_extrusion_or_command_stream",
+      "evidence": "tests/test_paper_core_ac.py",
+      "expected": "strict readback rejection",
+      "export_blocked": true
+    }
+  ],
+  "files": [
+    {
+      "bytes": 4803,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/dual_channel_preloaded/machine_axes.csv",
+      "sha256": "2ef2bbdfa2a3d27b1b6c82e93a4bc6036ca7195c35c36eac661075752799afb8"
+    },
+    {
+      "bytes": 12534,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/dual_channel_preloaded/main.gcode",
+      "sha256": "d463774dc005ff290456e1968f78690379f8566603cda8f30cf8f05d83028a57"
+    },
+    {
+      "bytes": 126637,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/dual_channel_preloaded/manifest.json",
+      "sha256": "66ea9c9ec617a0cba7405134d709df4bd5c0654f37627630478290bb4e67e913"
+    },
+    {
+      "bytes": 32403,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/dual_channel_preloaded/preview.json",
+      "sha256": "fce426352b701b768a495bd659e28f743b0bcbf593d4721d381793c2ad750130"
+    },
+    {
+      "bytes": 56625,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/dual_channel_preloaded/toolpath.json",
+      "sha256": "0dd6c3bf3e95ded724e5c929d8ab35e07c585bc61532fdc861e8e33d70ae0a4d"
+    },
+    {
+      "bytes": 2646,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/dual_channel_preloaded/warnings.json",
+      "sha256": "5542f8275e1d51b252a492a22be4c85fcd5d81bee2a0fc30f44cbebe3f230a40"
+    },
+    {
+      "bytes": 12162,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/fan_blade/machine_axes.csv",
+      "sha256": "5d86e3d599fde340ff363c153af1e346fe5acd135fd5110e0bf3833df88969be"
+    },
+    {
+      "bytes": 25018,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/fan_blade/main.gcode",
+      "sha256": "b31d10b50b3b371d892966d145947881fcf6aa4c5afdd4e0e9c5d5a4d836f4f5"
+    },
+    {
+      "bytes": 303325,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/fan_blade/manifest.json",
+      "sha256": "d64b312278c22c1d1b45b42e209ae28e247f4853ebf73dd4520d476450c1bdd6"
+    },
+    {
+      "bytes": 84669,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/fan_blade/preview.json",
+      "sha256": "26b22cad77a4469fdbea091890a2dd981987ffab3f1443f760278d45ec618c44"
+    },
+    {
+      "bytes": 132736,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/fan_blade/toolpath.json",
+      "sha256": "b0a2a971032f3d680b10ceed321e3bcedefa144e54eda88fb5dc17d09e4d23a1"
+    },
+    {
+      "bytes": 2665,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/fan_blade/warnings.json",
+      "sha256": "6f6a56db0d0b20207329ed23b94da3cb5e8322e3b906c6af95733afb009a5403"
+    },
+    {
+      "bytes": 2976,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/hemisphere_pattern/machine_axes.csv",
+      "sha256": "81c7284f1d5f03c6c92f7cb5c9e5bd079406ab36426fc2776a81cb0d28a30859"
+    },
+    {
+      "bytes": 23722,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/hemisphere_pattern/main.gcode",
+      "sha256": "e723d4cdaf7e1894e5dad8adf75741c1eb28735e7a85ab97f7df5653fbe51b50"
+    },
+    {
+      "bytes": 119095,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/hemisphere_pattern/manifest.json",
+      "sha256": "63c4bfc9a8250a026093f42fc955db08423276469f4fd1e26266bc4a7b4ee69a"
+    },
+    {
+      "bytes": 20057,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/hemisphere_pattern/preview.json",
+      "sha256": "a3420c25587e7c77e2a3897eeca8fb3b8cd83249574983095788f578d7997871"
+    },
+    {
+      "bytes": 67749,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/hemisphere_pattern/toolpath.json",
+      "sha256": "f20491b4c324daa352e84dc1b197235214f3e58641aad7c9085725a3b02010a8"
+    },
+    {
+      "bytes": 2711,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/hemisphere_pattern/warnings.json",
+      "sha256": "4df84becf6a1afbaa5a16ac602c1ad40e74aa19651219238b6c4829cd155b9b7"
+    },
+    {
+      "bytes": 38197,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/impeller/machine_axes.csv",
+      "sha256": "7595fc238a8a90110e46eef360a49cf0e9cfa0ab387c2d7cc2f77c8f7dbba33e"
+    },
+    {
+      "bytes": 78313,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/impeller/main.gcode",
+      "sha256": "a392e67672e28e0e1a94ad8bc1357e8eaed4e25d3944dfd219936ef9b29c6de2"
+    },
+    {
+      "bytes": 937283,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/impeller/manifest.json",
+      "sha256": "b346866c43d09418f3a964af33305c37fff5a634daa998416a927193a5dbf591"
+    },
+    {
+      "bytes": 265036,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/impeller/preview.json",
+      "sha256": "e63400d1be0f68e3c021a9803cf2ef10e3947e9552564f11e3aa076c6cd85e07"
+    },
+    {
+      "bytes": 414167,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/impeller/toolpath.json",
+      "sha256": "3b0d575177ed1997a41fdf55a9c8ae1b9bcd4361171a13117a2b5125fed91530"
+    },
+    {
+      "bytes": 2719,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/impeller/warnings.json",
+      "sha256": "0e4e70d317541f60612a6f7e71e52bdc6cf2624b1511fd0ffcd7ed7160a76d99"
+    },
+    {
+      "bytes": 173736,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/pipe2/machine_axes.csv",
+      "sha256": "ed6e5e6bb2681363fcc81aa105d6e22c6701420ef62b896fbe3ec69883bf8fae"
+    },
+    {
+      "bytes": 219174,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/pipe2/main.gcode",
+      "sha256": "67298477e75644b7521c72ef8847039c1a86754836dddb264ac18b70bc2a86d5"
+    },
+    {
+      "bytes": 2721979,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/pipe2/manifest.json",
+      "sha256": "139153ddaa437079b54387275ba42fb5ecf96d4b9128d35f27b30f78e1c95bf9"
+    },
+    {
+      "bytes": 634250,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/pipe2/preview.json",
+      "sha256": "3de3b291df5b58c3113078bc374b4b663ac33f0ce6719ca56e2dba3ecce36c18"
+    },
+    {
+      "bytes": 1530255,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/pipe2/toolpath.json",
+      "sha256": "32dd6319ec4354f71a96f940889d7db745a495d1695ad9baf31f15dab1c9d927"
+    },
+    {
+      "bytes": 34322,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/pipe2/warnings.json",
+      "sha256": "e3824b0d329617bc3cd6fc550a3e62f53c57ee2f83f061bf4159ce9553946245"
+    },
+    {
+      "bytes": 220396,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/pipe2_own_ac.gcode",
+      "sha256": "b5b21be8b6523807fdea174ef61ff162825ade6f67e596a61a242b3066c43375"
+    },
+    {
+      "bytes": 356150,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/projects/fan_blade/project.json",
+      "sha256": "dea37150325bfb745cde5e9e660b69ad556d5e15eddd5ef0620565dd91eda861"
+    },
+    {
+      "bytes": 707751,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/projects/fan_blade/source/294b882a7231d6b0fcfaf4aa8c6355422b212590f443158ea0a624fec2b901ef.STEP",
+      "sha256": "294b882a7231d6b0fcfaf4aa8c6355422b212590f443158ea0a624fec2b901ef"
+    },
+    {
+      "bytes": 5464241,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/projects/hemisphere_pattern/project.json",
+      "sha256": "fcf4ac80182ac5618fb105c311abcd53f12e24cb6c867cf2f5149dc1d2660582"
+    },
+    {
+      "bytes": 4780139,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/projects/hemisphere_pattern/source/0812eebe0c43c57b0e280a981d4c1521889a26e85d1ec567cbf97d22aeac64c0.STEP",
+      "sha256": "0812eebe0c43c57b0e280a981d4c1521889a26e85d1ec567cbf97d22aeac64c0"
+    },
+    {
+      "bytes": 316958,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/projects/impeller/project.json",
+      "sha256": "3fb45c2e6b8cc0173222e603e79ec199d1946d7077eb235ffc3da44ae001576b"
+    },
+    {
+      "bytes": 454267,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/projects/impeller/source/3776fe6e1c384e03a7dab20e7ab8d8028210b86ec7c2ced3d3518a8011fdf21f.stp",
+      "sha256": "3776fe6e1c384e03a7dab20e7ab8d8028210b86ec7c2ced3d3518a8011fdf21f"
+    },
+    {
+      "bytes": 67914,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/projects/pipe2/project.json",
+      "sha256": "8d85e514f61d083396f20a2f39e7a336e0cbf29b5c991d5285e9c0279bb12396"
+    },
+    {
+      "bytes": 15504,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/projects/pipe2/source/116e99fd43492bd1f4f519c80c93cd1f7cd0bf2cb6861b3e123148e4031a0d4b.stp",
+      "sha256": "116e99fd43492bd1f4f519c80c93cd1f7cd0bf2cb6861b3e123148e4031a0d4b"
+    },
+    {
+      "bytes": 13608,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/tube_ui/01-zh-1366x768-indexed.png",
+      "sha256": "07283874a86b3fd48c852486975593291772da6c3586fa5264cd501b883e17cb"
+    },
+    {
+      "bytes": 15808,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/tube_ui/02-zh-1600x900-buildup.png",
+      "sha256": "8c56052b83b59ee55e2d1622a01bc8013c42320849e43f9a80de588e96f12f23"
+    },
+    {
+      "bytes": 17329,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/tube_ui/03-en-1920x1080-continuous.png",
+      "sha256": "5f84053cf7d8be215eaa0170c73f69172bf4152504c14144f64ac7ce0f5239fe"
+    },
+    {
+      "bytes": 9828,
+      "path": "docs/reviews/evidence/2026-09-13_paper_core_ac/tube_ui/summary.json",
+      "sha256": "ba8d55e3ef2ed8c541774a19a17f2b0c6f108e32401a6d8285942f153efafe5a"
+    },
+    {
+      "bytes": 81090,
+      "path": "docs/guides/assets/paper_core_ac/01_freeform_zh_1366x768.png",
+      "sha256": "4b16389a18c0fa2f598426858f559117373355c7c5f0d2a2bcfd7e1cbadadd5a"
+    },
+    {
+      "bytes": 117487,
+      "path": "docs/guides/assets/paper_core_ac/02_freeform_en_1600x900.png",
+      "sha256": "11bd70dedb520a22ab6547a4663e1b5a7e2e8a2e4dfa5d0dfff1b8008b759d59"
+    },
+    {
+      "bytes": 166717,
+      "path": "docs/guides/assets/paper_core_ac/03_freeform_en_1920x1080.png",
+      "sha256": "83b46fcb2c56598caeeef8ea05a940e5a51eef58eef93f94735619623f9d795d"
+    }
+  ],
+  "historical_nc_comparison": {
+    "fan_blade": {
+      "mode_counts": {
+        "G90": 7,
+        "G91": 0,
+        "G93": 0,
+        "G94": 0,
+        "M82": 0,
+        "M83": 4
+      },
+      "motion_lines": 2924765,
+      "motion_lines_with_A_or_C": 2604039,
+      "path": "example/扇叶/风扇扇叶完整新.gcode",
+      "sha256": "1de2cef4dbdb995e6d34bf0e143db166b3dcff3364339763f70a8536c9d6651e",
+      "tool_selection_lines": 0,
+      "use": "frame_strategy_and_command_count_comparison_only"
+    },
+    "hemisphere_pattern": {
+      "mode_counts": {
+        "G90": 13,
+        "G91": 0,
+        "G93": 0,
+        "G94": 0,
+        "M82": 0,
+        "M83": 7
+      },
+      "motion_lines": 147911,
+      "motion_lines_with_A_or_C": 39030,
+      "path": "example/球形NEU校徽/NEU校徽划线.gcode",
+      "sha256": "7fc667f26ebe31d0b93b3bda3dd7faabd08c4d73de6d502f189190ebcfb92218",
+      "tool_selection_lines": 0,
+      "use": "frame_strategy_and_command_count_comparison_only"
+    },
+    "impeller": {
+      "mode_counts": {
+        "G90": 17,
+        "G91": 0,
+        "G93": 0,
+        "G94": 0,
+        "M82": 0,
+        "M83": 9
+      },
+      "motion_lines": 1016034,
+      "motion_lines_with_A_or_C": 873916,
+      "path": "example/叶轮/叶轮完整.gcode",
+      "sha256": "5b33b1fa3569f2027e7628c0b7211e125267fc73b25e88e6b774cb1de338fe33",
+      "tool_selection_lines": 0,
+      "use": "frame_strategy_and_command_count_comparison_only"
+    },
+    "pipe2": {
+      "mode_counts": {
+        "G90": 2,
+        "G91": 0,
+        "G93": 0,
+        "G94": 0,
+        "M82": 2,
+        "M83": 0
+      },
+      "motion_lines": 679265,
+      "motion_lines_with_A_or_C": 15,
+      "path": "example/pipe2/弯管.gcode",
+      "sha256": "4d6630c01f63d6f802ae6955752fa41b35abfea23509c661fcd855f7064ff70a",
+      "tool_selection_lines": 0,
+      "use": "frame_strategy_and_command_count_comparison_only"
+    }
+  },
+  "known_limits": [
+    "controller and macro versions are unknown",
+    "coordinated XYZAC, cumulative C limit, calibration and site collision are unverified",
+    "all generated NC is offline review output and is not qualified for machine execution",
+    "historical NC is comparison evidence, not current geometry or material truth",
+    "local user CAD/NC redistribution licences remain unknown",
+    "production VTK/OpenGL screenshot capture was unavailable in this headless session"
+  ],
+  "products": {
+    "dual_channel_preloaded": {
+      "event_types": [
+        "retract",
+        "cut",
+        "park",
+        "switch",
+        "load",
+        "temperature_wait",
+        "purge",
+        "prime",
+        "resume",
+        "prime",
+        "retract",
+        "retract",
+        "cut",
+        "park",
+        "switch",
+        "load",
+        "temperature_wait",
+        "purge",
+        "prime",
+        "resume",
+        "prime"
+      ],
+      "files": {
+        "machine_axes.csv": "2ef2bbdfa2a3d27b1b6c82e93a4bc6036ca7195c35c36eac661075752799afb8",
+        "main.gcode": "d463774dc005ff290456e1968f78690379f8566603cda8f30cf8f05d83028a57",
+        "manifest.json": "66ea9c9ec617a0cba7405134d709df4bd5c0654f37627630478290bb4e67e913",
+        "preview.json": "fce426352b701b768a495bd659e28f743b0bcbf593d4721d381793c2ad750130",
+        "toolpath.json": "0dd6c3bf3e95ded724e5c929d8ab35e07c585bc61532fdc861e8e33d70ae0a4d",
+        "warnings.json": "5542f8275e1d51b252a492a22be4c85fcd5d81bee2a0fc30f44cbebe3f230a40"
+      },
+      "material_statistics": {
+        "deposition_volume_mm3_by_material": {
+          "PETG": 5.461030329289642,
+          "PLA": 5.461030329292521
+        },
+        "effective_channel_transition_count": 1,
+        "purge_length_mm": 11.0,
+        "selection_command_count": 2
+      },
+      "points": 48,
+      "status": "warning"
+    },
+    "fan_blade": {
+      "cad_path": "example/扇叶/风扇扇叶(1).STEP",
+      "cad_sha256": "294b882a7231d6b0fcfaf4aa8c6355422b212590f443158ea0a624fec2b901ef",
+      "controller_qualification": {
+        "axis_mode": "absolute",
+        "controller_family": "custom-klipper-derived",
+        "controller_version": null,
+        "coordinated_xyzac_verified": false,
+        "cumulative_c_span_rad": 3.565304366007418,
+        "cumulative_c_travel_rad": 6.5071228932358816,
+        "cutter_relative_z_mm": 20.0,
+        "extrusion_mode": "relative",
+        "feed_mode": "units_per_minute",
+        "machine_executable": false,
+        "machine_profile_id": "builtin.machine.own_ac_fdm.v1",
+        "macro_version": null,
+        "maximum_cumulative_c_rad": null,
+        "profile_id": "builtin.controller.own_ac.offline.v1",
+        "qualification_issues": [
+          "controller.version_unknown",
+          "controller.macros_unverified",
+          "controller.xyzac_coordination_unverified",
+          "controller.cumulative_c_limit_unknown"
+        ],
+        "reorientation_absolute_z_mm": 20.0,
+        "schema_version": 1
+      },
+      "files": {
+        "machine_axes.csv": "5d86e3d599fde340ff363c153af1e346fe5acd135fd5110e0bf3833df88969be",
+        "main.gcode": "b31d10b50b3b371d892966d145947881fcf6aa4c5afdd4e0e9c5d5a4d836f4f5",
+        "manifest.json": "d64b312278c22c1d1b45b42e209ae28e247f4853ebf73dd4520d476450c1bdd6",
+        "preview.json": "26b22cad77a4469fdbea091890a2dd981987ffab3f1443f760278d45ec618c44",
+        "toolpath.json": "b0a2a971032f3d680b10ceed321e3bcedefa144e54eda88fb5dc17d09e4d23a1",
+        "warnings.json": "6f6a56db0d0b20207329ed23b94da3cb5e8322e3b906c6af95733afb009a5403"
+      },
+      "machine_executable": false,
+      "material_statistics": {
+        "deposition_volume_mm3_by_material": {
+          "PA": 9.59592805853496,
+          "PETG": 9.595928058017082,
+          "PLA": 9.59592805801708
+        },
+        "effective_channel_transition_count": 2,
+        "purge_length_mm": 18.0,
+        "selection_command_count": 3
+      },
+      "offline_exportable": true,
+      "operation_semantic_sha256": "afb3e34aca26ef3db9bbb44a0fcb933d48929fbc72171108bb249f09988f82ce",
+      "paths": 3,
+      "points": 123,
+      "project": "docs/reviews/evidence/2026-09-13_paper_core_ac/projects/fan_blade/project.json",
+      "readback": {
+        "expected_events": 33,
+        "expected_points": 123,
+        "issues": [],
+        "machine_executable": false,
+        "passed": true,
+        "read_events": 33,
+        "read_points": 123,
+        "schema_version": 1
+      },
+      "status": "warning"
+    },
+    "hemisphere_pattern": {
+      "cad_path": "example/球形NEU校徽/球形测试件.STEP",
+      "cad_sha256": "0812eebe0c43c57b0e280a981d4c1521889a26e85d1ec567cbf97d22aeac64c0",
+      "controller_qualification": {
+        "axis_mode": "absolute",
+        "controller_family": "custom-klipper-derived",
+        "controller_version": null,
+        "coordinated_xyzac_verified": false,
+        "cumulative_c_span_rad": 1.0877732365677646,
+        "cumulative_c_travel_rad": 4.072505622930099,
+        "cutter_relative_z_mm": 20.0,
+        "extrusion_mode": "relative",
+        "feed_mode": "units_per_minute",
+        "machine_executable": false,
+        "machine_profile_id": "builtin.machine.own_ac_fdm.v1",
+        "macro_version": null,
+        "maximum_cumulative_c_rad": null,
+        "profile_id": "builtin.controller.own_ac.offline.v1",
+        "qualification_issues": [
+          "controller.version_unknown",
+          "controller.macros_unverified",
+          "controller.xyzac_coordination_unverified",
+          "controller.cumulative_c_limit_unknown"
+        ],
+        "reorientation_absolute_z_mm": 20.0,
+        "schema_version": 1
+      },
+      "files": {
+        "machine_axes.csv": "81c7284f1d5f03c6c92f7cb5c9e5bd079406ab36426fc2776a81cb0d28a30859",
+        "main.gcode": "e723d4cdaf7e1894e5dad8adf75741c1eb28735e7a85ab97f7df5653fbe51b50",
+        "manifest.json": "63c4bfc9a8250a026093f42fc955db08423276469f4fd1e26266bc4a7b4ee69a",
+        "preview.json": "a3420c25587e7c77e2a3897eeca8fb3b8cd83249574983095788f578d7997871",
+        "toolpath.json": "f20491b4c324daa352e84dc1b197235214f3e58641aad7c9085725a3b02010a8",
+        "warnings.json": "4df84becf6a1afbaa5a16ac602c1ad40e74aa19651219238b6c4829cd155b9b7"
+      },
+      "machine_executable": false,
+      "material_statistics": {
+        "deposition_volume_mm3_by_material": {
+          "ABS": 0.16804025741510176,
+          "PA": 1.2426820250452033,
+          "PETG": 0.8592142363221081,
+          "PLA": 2.2348337795262503
+        },
+        "effective_channel_transition_count": 6,
+        "purge_length_mm": 44.0,
+        "selection_command_count": 7
+      },
+      "offline_exportable": true,
+      "operation_semantic_sha256": "b8926a6e4bb7eb899dd3e7c18d1b2d31d9f34ff7e25543388ece96b12a30fa1e",
+      "paths": 7,
+      "points": 30,
+      "project": "docs/reviews/evidence/2026-09-13_paper_core_ac/projects/hemisphere_pattern/project.json",
+      "readback": {
+        "expected_events": 79,
+        "expected_points": 30,
+        "issues": [],
+        "machine_executable": false,
+        "passed": true,
+        "read_events": 79,
+        "read_points": 30,
+        "schema_version": 1
+      },
+      "status": "warning"
+    },
+    "impeller": {
+      "cad_path": "example/叶轮/叶轮.stp",
+      "cad_sha256": "3776fe6e1c384e03a7dab20e7ab8d8028210b86ec7c2ced3d3518a8011fdf21f",
+      "controller_qualification": {
+        "axis_mode": "absolute",
+        "controller_family": "custom-klipper-derived",
+        "controller_version": null,
+        "coordinated_xyzac_verified": false,
+        "cumulative_c_span_rad": 6.623796730785997,
+        "cumulative_c_travel_rad": 41.8412315919716,
+        "cutter_relative_z_mm": 20.0,
+        "extrusion_mode": "relative",
+        "feed_mode": "units_per_minute",
+        "machine_executable": false,
+        "machine_profile_id": "builtin.machine.own_ac_fdm.v1",
+        "macro_version": null,
+        "maximum_cumulative_c_rad": null,
+        "profile_id": "builtin.controller.own_ac.offline.v1",
+        "qualification_issues": [
+          "controller.version_unknown",
+          "controller.macros_unverified",
+          "controller.xyzac_coordination_unverified",
+          "controller.cumulative_c_limit_unknown"
+        ],
+        "reorientation_absolute_z_mm": 20.0,
+        "schema_version": 1
+      },
+      "files": {
+        "machine_axes.csv": "7595fc238a8a90110e46eef360a49cf0e9cfa0ab387c2d7cc2f77c8f7dbba33e",
+        "main.gcode": "a392e67672e28e0e1a94ad8bc1357e8eaed4e25d3944dfd219936ef9b29c6de2",
+        "manifest.json": "b346866c43d09418f3a964af33305c37fff5a634daa998416a927193a5dbf591",
+        "preview.json": "e63400d1be0f68e3c021a9803cf2ef10e3947e9552564f11e3aa076c6cd85e07",
+        "toolpath.json": "3b0d575177ed1997a41fdf55a9c8ae1b9bcd4361171a13117a2b5125fed91530",
+        "warnings.json": "0e4e70d317541f60612a6f7e71e52bdc6cf2624b1511fd0ffcd7ed7160a76d99"
+      },
+      "machine_executable": false,
+      "material_statistics": {
+        "deposition_volume_mm3_by_material": {
+          "ABS": 21.733570094558807,
+          "PA": 21.733570094549698,
+          "PETG": 21.733570094504184,
+          "PLA": 21.733570094505623
+        },
+        "effective_channel_transition_count": 8,
+        "purge_length_mm": 57.0,
+        "selection_command_count": 9
+      },
+      "offline_exportable": true,
+      "operation_semantic_sha256": "093cf4bb831f517af86d26bd6aef1616f52a5b36314d2c8471d4a35bd87a1e88",
+      "paths": 16,
+      "points": 384,
+      "project": "docs/reviews/evidence/2026-09-13_paper_core_ac/projects/impeller/project.json",
+      "readback": {
+        "expected_events": 116,
+        "expected_points": 384,
+        "issues": [],
+        "machine_executable": false,
+        "passed": true,
+        "read_events": 116,
+        "read_points": 384,
+        "schema_version": 1
+      },
+      "status": "warning"
+    },
+    "pipe2": {
+      "absolute_index_z20": true,
+      "cad_path": "example/pipe2/弯管新.stp",
+      "cad_sha256": "116e99fd43492bd1f4f519c80c93cd1f7cd0bf2cb6861b3e123148e4031a0d4b",
+      "existing_readback": {
+        "coordinate_mismatches": [],
+        "expected_points": 1591,
+        "extrusion_mismatches": [],
+        "feedrate_mismatches": [],
+        "order_mismatches": [],
+        "passed": true,
+        "read_points": 1591,
+        "schema_version": 1
+      },
+      "files": {
+        "machine_axes.csv": "ed6e5e6bb2681363fcc81aa105d6e22c6701420ef62b896fbe3ec69883bf8fae",
+        "main.gcode": "67298477e75644b7521c72ef8847039c1a86754836dddb264ac18b70bc2a86d5",
+        "manifest.json": "139153ddaa437079b54387275ba42fb5ecf96d4b9128d35f27b30f78e1c95bf9",
+        "preview.json": "3de3b291df5b58c3113078bc374b4b663ac33f0ce6719ca56e2dba3ecce36c18",
+        "toolpath.json": "32dd6319ec4354f71a96f940889d7db745a495d1695ad9baf31f15dab1c9d927",
+        "warnings.json": "e3824b0d329617bc3cd6fc550a3e62f53c57ee2f83f061bf4159ce9553946245"
+      },
+      "own_ac_gcode": "docs/reviews/evidence/2026-09-13_paper_core_ac/products/pipe2_own_ac.gcode",
+      "own_ac_gcode_sha256": "b5b21be8b6523807fdea174ef61ff162825ade6f67e596a61a242b3066c43375",
+      "own_ac_readback": {
+        "expected_events": 25,
+        "expected_points": 1591,
+        "issues": [],
+        "machine_executable": false,
+        "passed": true,
+        "read_events": 25,
+        "read_points": 1591,
+        "schema_version": 1
+      },
+      "points": 1591,
+      "project": "docs/reviews/evidence/2026-09-13_paper_core_ac/projects/pipe2/project.json",
+      "relative_material_park_z20": false,
+      "status": "warning"
+    }
+  },
+  "schema_version": 1,
+  "scope": "paper_core_ac_offline_only",
+  "screenshots": [
+    {
+      "clipped_buttons": [],
+      "export_enabled": true,
+      "horizontal_scroll_max": 0,
+      "language": "zh",
+      "path": "docs/guides/assets/paper_core_ac/01_freeform_zh_1366x768.png",
+      "sha256": "4b16389a18c0fa2f598426858f559117373355c7c5f0d2a2bcfd7e1cbadadd5a",
+      "size": [
+        1366,
+        768
+      ],
+      "status": "Status: warning",
+      "viewer": "Qt evidence renderer driven by production generated preview payload",
+      "visible_segments": 383
+    },
+    {
+      "clipped_buttons": [],
+      "export_enabled": true,
+      "horizontal_scroll_max": 0,
+      "language": "en",
+      "path": "docs/guides/assets/paper_core_ac/02_freeform_en_1600x900.png",
+      "sha256": "11bd70dedb520a22ab6547a4663e1b5a7e2e8a2e4dfa5d0dfff1b8008b759d59",
+      "size": [
+        1600,
+        900
+      ],
+      "status": "Status: warning",
+      "viewer": "Qt evidence renderer driven by production generated preview payload",
+      "visible_segments": 383
+    },
+    {
+      "clipped_buttons": [],
+      "export_enabled": true,
+      "horizontal_scroll_max": 0,
+      "language": "en",
+      "path": "docs/guides/assets/paper_core_ac/03_freeform_en_1920x1080.png",
+      "sha256": "83b46fcb2c56598caeeef8ea05a940e5a51eef58eef93f94735619623f9d795d",
+      "size": [
+        1920,
+        1080
+      ],
+      "status": "Status: warning",
+      "viewer": "Qt evidence renderer driven by production generated preview payload",
+      "visible_segments": 383
+    }
+  ]
+}
