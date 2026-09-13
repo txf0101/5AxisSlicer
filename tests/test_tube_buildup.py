@@ -85,6 +85,7 @@ class TubeBuildupPlanningTests(unittest.TestCase):
         self.assertEqual(plan.pass_offsets_mm, (-1.0, 0.0, 1.0))
         deposition = [point for point in toolpath.points if point.point_type == "deposition"]
         self.assertTrue(deposition)
+        self.assertEqual({point.nozzle_axis for point in deposition}, {(0.0, 0.0, -1.0)})
         self.assertEqual({point.extrusion_role for point in deposition}, {"buildup"})
         self.assertTrue(all(point.material_volume_mm3 > 0.0 for point in deposition))
         ideal = 2.0 * math.pi * sum((7.5, 8.5, 9.5)) * 2.0

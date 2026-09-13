@@ -42,7 +42,12 @@ class TubeSliceLayer:
     centerline_distance_mm: float
     plane_origin: Vector3
     plane_normal: Vector3
+    deposited_height_mm: float
     ownership: str = "half_open"
+
+    def __post_init__(self) -> None:
+        if not math.isfinite(self.deposited_height_mm) or self.deposited_height_mm <= 0:
+            raise ValueError("Tube layer deposited height must be finite and positive")
 
 
 @dataclass(frozen=True, slots=True)
@@ -86,6 +91,10 @@ def plan_indexed_slices(
                 distance,
                 origin,
                 region.fixed_build_direction,
+                min(
+                    parameters.layer_height_mm,
+                    feature.centerline_length_mm - index * parameters.layer_height_mm,
+                ),
                 "closed_exit" if index == len(distances) - 1 else "half_open",
             )
         )
@@ -116,13 +125,13 @@ def generate_indexed_toolpath(
     builder = _PathBuilder(operation_id, parameters)
     previous_region: str | None = None
     for layer in plan.layers:
-        center, tangent = feature.point_tangent_at(layer.centerline_distance_mm)
+        center, _tangent = feature.point_tangent_at(layer.centerline_distance_mm)
         loop = (
             _exact_section_loop(model, feature, layer, parameters.contour_chord_error_mm)
             if model is not None
             else _circular_loop(
                 center,
-                tangent,
+                layer.plane_normal,
                 feature.path_radius_mm,
                 parameters.contour_chord_error_mm,
             )
@@ -161,7 +170,7 @@ class _PathBuilder:
         previous = first_position
         for position, tangent, normal in loop[1:]:
             volume = math.dist(previous, position) * (
-                self.parameters.bead_width_mm * self.parameters.layer_height_mm
+                self.parameters.bead_width_mm * layer.deposited_height_mm
             )
             self._append_point(layer, position, tangent, normal, "deposition", volume)
             previous = position
@@ -181,11 +190,16 @@ class _PathBuilder:
             previous.position, _scale(previous.nozzle_axis, self.parameters.safe_clearance_mm)
         )
         self._append_point(
-            layer, depart, previous.tangent, previous.surface_normal or normal, "depart"
+            layer,
+            depart,
+            previous.tangent,
+            previous.surface_normal or normal,
+            "depart",
+            nozzle_axis=previous.nozzle_axis,
         )
         if indexed:
             self._event("index_start", layer)
-        safe_target = _add(target, _scale(normal, self.parameters.safe_clearance_mm))
+        safe_target = _add(target, _scale(layer.plane_normal, self.parameters.safe_clearance_mm))
         self._append_point(layer, safe_target, tangent, normal, "travel")
         if indexed:
             self._event("index_end", layer)
@@ -200,6 +214,8 @@ class _PathBuilder:
         normal: Vector3,
         point_type: str,
         material_volume_mm3: float = 0.0,
+        *,
+        nozzle_axis: Vector3 | None = None,
     ) -> None:
         self._sequence += 1
         deposition = point_type == "deposition"
@@ -208,7 +224,7 @@ class _PathBuilder:
                 point_id=f"point-{self._sequence:07d}",
                 position=position,
                 tangent=tangent,
-                nozzle_axis=_scale(normal, -1.0),
+                nozzle_axis=nozzle_axis or _scale(layer.plane_normal, -1.0),
                 surface_normal=normal,
                 operation_id=self.operation_id,
                 stage_id=layer.region_id,
@@ -222,7 +238,7 @@ class _PathBuilder:
                     else self.parameters.travel_feedrate_mm_min
                 ),
                 bead_width_mm=self.parameters.bead_width_mm if deposition else None,
-                layer_height_mm=self.parameters.layer_height_mm if deposition else None,
+                layer_height_mm=layer.deposited_height_mm if deposition else None,
                 material_volume_mm3=material_volume_mm3,
             )
         )

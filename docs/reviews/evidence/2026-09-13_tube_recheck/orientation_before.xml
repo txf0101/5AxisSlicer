@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="2.797" timestamp="2026-09-13T14:40:38.623544+08:00" hostname="BelongtoTXF"><testcase classname="tests.test_tube_indexed_pipeline.IndexedPlanningTests" name="test_indexed_nozzle_is_fixed_per_region_not_wall_radial" time="0.003"><failure message="AssertionError: Tuples differ: (0.4647231720437685, -0.8854560256532099, -0.0) != (-0.0, -0.0, -1.0)&#10;&#10;First differing element 0:&#10;0.4647231720437685&#10;-0.0&#10;&#10;- (0.4647231720437685, -0.8854560256532099, -0.0)&#10;+ (-0.0, -0.0, -1.0)">self = &lt;test_tube_indexed_pipeline.IndexedPlanningTests testMethod=test_indexed_nozzle_is_fixed_per_region_not_wall_radial&gt;
+
+    def test_indexed_nozzle_is_fixed_per_region_not_wall_radial(self) -&gt; None:
+        plan = plan_indexed_slices(self.feature, self.parameters)
+        path = generate_indexed_toolpath("fixed-axis", self.feature, plan, self.parameters)
+        layers = {layer.layer_id: layer for layer in plan.layers}
+        for point in path.points:
+            if point.point_type == "deposition":
+                expected = tuple(-v for v in layers[point.layer_id].plane_normal)
+&gt;               self.assertEqual(point.nozzle_axis, expected)
+E               AssertionError: Tuples differ: (0.4647231720437685, -0.8854560256532099, -0.0) != (-0.0, -0.0, -1.0)
+E               
+E               First differing element 0:
+E               0.4647231720437685
+E               -0.0
+E               
+E               - (0.4647231720437685, -0.8854560256532099, -0.0)
+E               + (-0.0, -0.0, -1.0)
+
+tests\test_tube_indexed_pipeline.py:360: AssertionError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,30 @@
+from pathlib import Path
+import json
+import math
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / 'src'))
+from five_axis_slicer.manufacturing.setup import ManufacturingSetup, TubeOperationDefinition
+from five_axis_slicer.step_loader import load_step
+from five_axis_slicer.tube_controller import TubeSetupController
+from five_axis_slicer.tube_generation_context import make_tube_generation_context
+from five_axis_slicer.postprocessing.indexed_tube import _generate_geometry
+from five_axis_slicer.validation.indexed_tube import _geometry_metrics
+
+out = ROOT / 'docs/reviews/evidence/2026-09-13_tube_recheck'
+inputs = json.loads((out / 'pipe2_own_ac_final/inputs.json').read_text(encoding='utf-8'))
+model = load_step(inputs['source'])
+operation = TubeOperationDefinition.from_json(inputs['operation'])
+controller = TubeSetupController(model, setup=ManufacturingSetup.from_json(inputs['setup']), operations=(operation,))
+context = make_tube_generation_context(controller, operation)
+feature, plan, path = _generate_geometry(context.model_in_build, operation, None)
+report = {
+    'geometry_metrics': [m.to_json() for m in _geometry_metrics(feature, plan, path, .01, .01)],
+    'layers': len(plan.layers), 'points': len(path.points),
+    'deposited_volume_mm3': sum(p.material_volume_mm3 or 0 for p in path.points),
+    'analytic_annulus_volume_mm3': math.pi * (16**2 - 15**2) * 66.4658970965758,
+    'volume_truth_basis': 'CAD measured constant annulus radii 16/15 mm and centerline length; not manual NC',
+}
+(out / 'pipe2_geometry_final.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
+print(json.dumps(report, indent=2))

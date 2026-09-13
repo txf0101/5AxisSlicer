@@ -124,6 +124,7 @@ def test_source_build_mount_and_independent_machine_fk(source_model, build):
     axis = build.T_target_from_source.transform_vector((0, 0, 1))
     for point, sample in zip(result.toolpath.points, result.trajectory.samples, strict=True):
         delta = tuple(point.position[k] - centre[k] for k in range(3))
+        assert math.dist(point.nozzle_axis, tuple(-v for v in axis)) < 1e-7
         assert abs(sum(delta[k] * axis[k] for k in range(3))) < 1e-7
         assert abs(math.sqrt(sum(v * v for v in delta)) - 5.5) < 0.001
         machine = ctrl.machine_profile()
@@ -313,3 +314,35 @@ def test_edit_during_generation_never_publishes_obsolete_result(source_model):
         ctrl.generate_operation("tube", cancelled=edit_once)
     assert ctrl.product_result("tube") is previous
     assert ctrl.product_state("tube").status == "error"
+
+
+def test_partial_tail_product_readback_and_old_context_stale(source_model, monkeypatch, tmp_path):
+    import five_axis_slicer.tube_generation_context as context_module
+
+    ctrl = controller(source_model)
+    current_version = context_module.CONTEXT_VERSION
+    with monkeypatch.context() as old:
+        old.setattr(context_module, "CONTEXT_VERSION", "tube-build-context-v2")
+        ctrl.generate_operation("tube")
+    assert context_module.CONTEXT_VERSION == current_version
+    with pytest.raises(ValueError, match="exportable"):
+        ctrl.export_operation_product("tube", tmp_path / "old-context")
+    assert ctrl.product_state("tube").status == "stale"
+    operation = ctrl.operations[0]
+    ctrl.configure_operation(
+        operation_id="tube",
+        tube_body_id=operation.geometry.tube_body.object_id,
+        entry_port_id=operation.geometry.entry_port.object_id,
+        exit_port_id=operation.geometry.exit_port.object_id,
+        substrate_body_id=operation.geometry.substrate_body.object_id,
+        parameters=replace(operation.parameters, layer_height_mm=1.0),
+    )
+    result = ctrl.generate_operation("tube")
+    assert result.exportable and result.readback.passed
+    assert result.manifest.algorithm_version == "tube-indexed-product-v3"
+    deposition = [p for p in result.toolpath.points if p.point_type == "deposition"]
+    assert {p.layer_height_mm for p in deposition} == {0.5}
+    assert sum(p.material_volume_mm3 for p in deposition) == pytest.approx(
+        math.pi * (6**2 - 5**2) * 0.5, rel=0.0001
+    )
+    ctrl.export_operation_product("tube", tmp_path / "current")

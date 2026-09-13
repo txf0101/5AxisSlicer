@@ -1,0 +1,30 @@
+...............................................F......                [100%]
+================================== FAILURES ===================================
+___ TubeIndexedProductFlowTests.test_pipe2_generates_exports_and_reads_back ___
+
+self = <test_tube_indexed_product_flow.TubeIndexedProductFlowTests testMethod=test_pipe2_generates_exports_and_reads_back>
+
+    def test_pipe2_generates_exports_and_reads_back(self) -> None:
+        operation = self._operation()
+        service = TubeIndexedProductService()
+        result = service.generate(
+            self.model,
+            operation,
+            self._machine(),
+            self._nozzle(),
+            source_path=self.source,
+            T_workpiece_from_build=self._placement(),
+            radial_error_limit_mm=0.025,
+        )
+    
+        self.assertTrue(result.exportable)
+        self.assertTrue(result.readback.passed)
+>       self.assertEqual(result.manifest.status.value, "ready")
+E       AssertionError: 'warning' != 'ready'
+E       - warning
+E       + ready
+
+tests\test_tube_indexed_product_flow.py:91: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_tube_indexed_product_flow.py::TubeIndexedProductFlowTests::test_pipe2_generates_exports_and_reads_back
+1 failed, 53 passed, 3 subtests passed in 36.32s

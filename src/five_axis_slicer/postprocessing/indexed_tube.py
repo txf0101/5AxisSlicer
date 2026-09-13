@@ -51,7 +51,7 @@ from .gcode_contract import (
 )
 from .gcode_readback import GCodeReadbackReport, readback_absolute_xyzac
 
-ALGORITHM_VERSION = "tube-indexed-product-v1"
+ALGORITHM_VERSION = "tube-indexed-product-v3"
 PRODUCT_STATE_SCHEMA_VERSION = 1
 CancelCheck = Callable[[], bool]
 
@@ -594,6 +594,7 @@ def _plan_json(plan: IndexedSlicePlan) -> dict[str, Any]:
                 "plane_origin": list(item.plane_origin),
                 "plane_normal": list(item.plane_normal),
                 "ownership": item.ownership,
+                "deposited_height_mm": item.deposited_height_mm,
             }
             for item in plan.layers
         ],

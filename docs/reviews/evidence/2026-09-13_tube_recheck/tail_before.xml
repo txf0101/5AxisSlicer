@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="4" time="2.854" timestamp="2026-09-13T14:23:19.691303+08:00" hostname="BelongtoTXF"><testcase classname="tests.test_tube_indexed_pipeline.IndexedPlanningTests" name="test_partial_tail_material_matches_analytic_annulus" time="0.508"><failure message="AssertionError: 9.424569947302283 != 1.8849555921538759 within 0.0001884955592153876 delta (7.539614355148407 difference)">self = &lt;test_tube_indexed_pipeline.IndexedPlanningTests testMethod=test_partial_tail_material_matches_analytic_annulus&gt;
+
+    def test_partial_tail_material_matches_analytic_annulus(self) -&gt; None:
+        # Independent solid volume; a 0.2 mm remainder must not receive 1 mm of material.
+        for length in (0.2, 4.2, 4.0):
+            with self.subTest(length=length):
+                feature = manual_tube_feature(
+                    ((0.0, 0.0, 0.0), (0.0, 0.0, length)),
+                    outer_radius_mm=2.0,
+                    inner_radius_mm=1.0,
+                )
+                parameters = replace(
+                    self.parameters, bead_width_mm=1.0, contour_chord_error_mm=0.0001
+                )
+                plan = plan_indexed_slices(feature, parameters)
+                path = generate_indexed_toolpath("partial-tail", feature, plan, parameters)
+                expected = math.pi * (2.0**2 - 1.0**2) * length
+&gt;               self.assertAlmostEqual(
+                    sum(point.material_volume_mm3 for point in path.points),
+                    expected, delta=expected * 0.0001,
+                )
+E               AssertionError: 9.424569947302283 != 1.8849555921538759 within 0.0001884955592153876 delta (7.539614355148407 difference)
+
+tests\test_tube_indexed_pipeline.py:311: AssertionError</failure><failure message="AssertionError: 47.12284973651141 != 39.5840674352314 within 0.00395840674352314 delta (7.5387823012800155 difference)">self = &lt;test_tube_indexed_pipeline.IndexedPlanningTests testMethod=test_partial_tail_material_matches_analytic_annulus&gt;
+
+    def test_partial_tail_material_matches_analytic_annulus(self) -&gt; None:
+        # Independent solid volume; a 0.2 mm remainder must not receive 1 mm of material.
+        for length in (0.2, 4.2, 4.0):
+            with self.subTest(length=length):
+                feature = manual_tube_feature(
+                    ((0.0, 0.0, 0.0), (0.0, 0.0, length)),
+                    outer_radius_mm=2.0,
+                    inner_radius_mm=1.0,
+                )
+                parameters = replace(
+                    self.parameters, bead_width_mm=1.0, contour_chord_error_mm=0.0001
+                )
+                plan = plan_indexed_slices(feature, parameters)
+                path = generate_indexed_toolpath("partial-tail", feature, plan, parameters)
+                expected = math.pi * (2.0**2 - 1.0**2) * length
+&gt;               self.assertAlmostEqual(
+                    sum(point.material_volume_mm3 for point in path.points),
+                    expected, delta=expected * 0.0001,
+                )
+E               AssertionError: 47.12284973651141 != 39.5840674352314 within 0.00395840674352314 delta (7.5387823012800155 difference)
+
+tests\test_tube_indexed_pipeline.py:311: AssertionError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,24 @@
+from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+source = ROOT / 'docs/reviews/evidence/2026-09-12_audit_fixes/tube/pipe2_evidence.py.txt'
+script = source.read_text(encoding='utf-8')
+script = script.replace("ROOT=next(p for p in Path(__file__).resolve().parents if (p/'src/five_axis_slicer').is_dir())", f'ROOT=Path({str(ROOT)!r})')
+script = script.replace("2026-09-12_audit_fixes/tube/pipe2_wall_1mm", "2026-09-13_tube_recheck/pipe2_current")
+script = script.replace("ctrl=TubeSetupController(model,setup=setup)", "from five_axis_slicer.manufacturing.own_printer import own_ac_profile\nsetup=replace(setup,machine=ResourceSnapshot.capture('machine',own_ac_profile()))\nctrl=TubeSetupController(model,setup=setup)")
+script = script.replace("(OUT/'result.json').write_text(json.dumps(result.to_json(),ensure_ascii=False,indent=2),encoding='utf8')", "pass  # Compact evidence: summary and actual exported product only")
+sys.argv.append('--child')
+script = script.replace("summary['elapsed_seconds']", """if 'result' in globals():
+    import math
+    summary['rotary_ranges_deg'] = {key: [math.degrees(min(s.joint_positions[key] for s in result.trajectory.samples)), math.degrees(max(s.joint_positions[key] for s in result.trajectory.samples))] for key in ('A','C')}
+    summary['max_fk_position_error_mm'] = max(s.fk_position_error_mm for s in result.trajectory.samples)
+    summary['max_fk_orientation_error_rad'] = max(s.fk_orientation_error_rad for s in result.trajectory.samples)
+    summary['gcode_characters'] = len(result.gcode)
+    if not result.exportable:
+        try:
+            ctrl.export_operation_product(op.operation_id, OUT/'blocked-export')
+        except ValueError as exc:
+            summary['actual_export_rejection'] = str(exc)
+summary['elapsed_seconds']""")
+exec(compile(script, str(source), 'exec'))

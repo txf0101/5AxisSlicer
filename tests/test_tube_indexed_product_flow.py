@@ -88,8 +88,9 @@ class TubeIndexedProductFlowTests(unittest.TestCase):
 
         self.assertTrue(result.exportable)
         self.assertTrue(result.readback.passed)
-        self.assertEqual(result.manifest.status.value, "ready")
-        self.assertEqual(service.state.status, "ready")
+        self.assertEqual(result.manifest.status.value, "warning")
+        self.assertEqual(service.state.status, "warning")
+        self.assertIn("xyzac.rotary_singularity", {issue.code for issue in result.validation.issues})
         with TemporaryDirectory() as directory:
             destination = Path(directory) / "pipe2-output"
             export_indexed_product(result, destination)

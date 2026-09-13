@@ -9,6 +9,7 @@ inspectable approximation, not a thermal or material-deformation simulation.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from itertools import product
 import math
 from typing import Any
 
@@ -252,6 +253,7 @@ def _collision_issues(
     issues: list[ValidationIssue] = []
     checked = 0
     deposited: list[tuple[Vector3, Vector3, float, str]] = []
+    index = _DepositedSegmentIndex(max(radius for radius, _ in nozzle.outer_profile_rz_mm))
     for segment_index, (left, right) in enumerate(zip(toolpath.points, toolpath.points[1:])):
         samples = _motion_samples(left, right, nozzle, sample_error)
         for motion_index, (position, axis) in enumerate(samples):
@@ -274,16 +276,62 @@ def _collision_issues(
                             )
                         )
                 if check_ipw and profile_index > 0:
-                    for start, end, bead_radius, source_id in deposited[:-2]:
-                        if _point_segment_distance(center, start, end) <= radius + bead_radius:
-                            issues.append(
-                                _collision_issue("ipw", right.point_id, source_id, segment_index)
-                            )
-                            break
+                    source_id = _first_ipw_hit(center, radius, deposited, index)
+                    if source_id is not None:
+                        issues.append(
+                            _collision_issue("ipw", right.point_id, source_id, segment_index)
+                        )
         if right.point_type == "deposition":
             radius = max(right.bead_width_mm or 0.0, right.layer_height_mm or 0.0) * 0.5
+            if check_ipw:
+                index.add(len(deposited), left.position, right.position, radius)
             deposited.append((left.position, right.position, radius, right.point_id))
     return issues, checked
+
+
+def _first_ipw_hit(
+    center: Vector3,
+    radius: float,
+    deposited: list[tuple[Vector3, Vector3, float, str]],
+    index: _DepositedSegmentIndex,
+) -> str | None:
+    for candidate in index.candidates(center, before=len(deposited) - 2):
+        start, end, bead_radius, source_id = deposited[candidate]
+        if _point_segment_distance(center, start, end) <= radius + bead_radius:
+            return source_id
+    return None
+
+
+class _DepositedSegmentIndex:
+    """Conservative capsule AABBs; exact distances and first-hit order stay unchanged."""
+
+    def __init__(self, maximum_nozzle_radius: float) -> None:
+        self.maximum_nozzle_radius = maximum_nozzle_radius
+        self.cell_size = max(1.0, 2 * maximum_nozzle_radius)
+        self.cells: dict[tuple[int, int, int], list[int]] = {}
+        self.large: list[int] = []
+
+    def add(self, index: int, start: Vector3, end: Vector3, bead_radius: float) -> None:
+        # Expand by the largest query sphere, so a query needs only its own cell.
+        padding = bead_radius + self.maximum_nozzle_radius + 1e-9
+        ranges = [
+            range(
+                math.floor((min(a, b) - padding) / self.cell_size),
+                math.floor((max(a, b) + padding) / self.cell_size) + 1,
+            )
+            for a, b in zip(start, end)
+        ]
+        if math.prod(len(values) for values in ranges) > 4096:
+            # Very long/large segments remain candidates without unbounded grid allocation.
+            self.large.append(index)
+            return
+        for x, y, z in product(*ranges):
+            self.cells.setdefault((x, y, z), []).append(index)
+
+    def candidates(self, center: Vector3, *, before: int) -> list[int]:
+        key = tuple(math.floor(value / self.cell_size) for value in center)
+        cell = self.cells.get((key[0], key[1], key[2]), ())
+        return sorted(index for index in (*cell, *self.large) if index < before)
 
 
 def _motion_samples(

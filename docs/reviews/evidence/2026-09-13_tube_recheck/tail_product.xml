@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="4.164" timestamp="2026-09-13T14:25:03.060330+08:00" hostname="BelongtoTXF"><testcase classname="tests.test_tube_generation_context" name="test_partial_tail_product_readback_and_old_context_stale" time="1.338"><failure message="TypeError: TubeOperationControllerMixin.configure_operation() missing 4 required keyword-only arguments: 'tube_body_id', 'entry_port_id', 'exit_port_id', and 'substrate_body_id'">source_model = CadModel(source_path=WindowsPath('F:/【项目和任务】/5AxisSclicer_V2.0/tmp/tube_tail_product/tube-source0/straight.step'), sou....4999999), maximum=(57.0000001, 57.0000001, 20.5000001)), source_size_bytes=26487, source_mtime_ns=1789280705462538800)
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000015F6304A5A0&gt;
+tmp_path = WindowsPath('F:/【项目和任务】/5AxisSclicer_V2.0/tmp/tube_tail_product/test_partial_tail_product_read0')
+
+    def test_partial_tail_product_readback_and_old_context_stale(source_model, monkeypatch, tmp_path):
+        import five_axis_slicer.tube_generation_context as context_module
+    
+        ctrl = controller(source_model)
+        current_version = context_module.CONTEXT_VERSION
+        with monkeypatch.context() as old:
+            old.setattr(context_module, "CONTEXT_VERSION", "tube-build-context-v2")
+            ctrl.generate_operation("tube")
+        assert context_module.CONTEXT_VERSION == current_version
+        with pytest.raises(ValueError, match="exportable"):
+            ctrl.export_operation_product("tube", tmp_path / "old-context")
+        assert ctrl.product_state("tube").status == "stale"
+        operation = ctrl.operations[0]
+&gt;       ctrl.configure_operation(
+            operation_id="tube", parameters=replace(operation.parameters, layer_height_mm=1.0)
+        )
+E       TypeError: TubeOperationControllerMixin.configure_operation() missing 4 required keyword-only arguments: 'tube_body_id', 'entry_port_id', 'exit_port_id', and 'substrate_body_id'
+
+tests\test_tube_generation_context.py:331: TypeError</failure></testcase></testsuite></testsuites>

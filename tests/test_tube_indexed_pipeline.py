@@ -293,6 +293,35 @@ class IndexedPlanningTests(unittest.TestCase):
         self.assertAlmostEqual(plan.layers[-1].centerline_distance_mm, 4.1)
         self.assertLess(plan.layers[-1].centerline_distance_mm, feature.centerline_length_mm)
 
+    def test_partial_tail_material_matches_analytic_annulus(self) -> None:
+        # Independent solid volume; a 0.2 mm remainder must not receive 1 mm of material.
+        for length in (0.2, 4.2, 4.0):
+            with self.subTest(length=length):
+                feature = manual_tube_feature(
+                    ((0.0, 0.0, 0.0), (0.0, 0.0, length)),
+                    outer_radius_mm=2.0,
+                    inner_radius_mm=1.0,
+                )
+                parameters = replace(
+                    self.parameters, bead_width_mm=1.0, contour_chord_error_mm=0.0001
+                )
+                plan = plan_indexed_slices(feature, parameters)
+                path = generate_indexed_toolpath("partial-tail", feature, plan, parameters)
+                expected = math.pi * (2.0**2 - 1.0**2) * length
+                self.assertAlmostEqual(
+                    sum(point.material_volume_mm3 for point in path.points),
+                    expected,
+                    delta=expected * 0.0001,
+                )
+                heights = {
+                    point.layer_height_mm
+                    for point in path.points
+                    if point.point_type == "deposition"
+                    and point.layer_id == plan.layers[-1].layer_id
+                }
+                self.assertEqual(len(heights), 1)
+                self.assertAlmostEqual(heights.pop(), 0.2 if length != 4.0 else 1.0)
+
     def test_toolpath_has_closed_deposition_loops_and_explicit_safe_index_events(self) -> None:
         plan = plan_indexed_slices(self.feature, self.parameters)
         toolpath = generate_indexed_toolpath("tube-op", self.feature, plan, self.parameters)
@@ -320,6 +349,18 @@ class IndexedPlanningTests(unittest.TestCase):
                     self.parameters.retract_length_mm,
                 )
         self.assertGreater(len(toolpath.to_preview_segments()), 0)
+
+    def test_indexed_nozzle_is_fixed_per_region_not_wall_radial(self) -> None:
+        plan = plan_indexed_slices(self.feature, self.parameters)
+        path = generate_indexed_toolpath("fixed-axis", self.feature, plan, self.parameters)
+        layers = {layer.layer_id: layer for layer in plan.layers}
+        for point in path.points:
+            if point.point_type == "deposition":
+                expected = tuple(-v for v in layers[point.layer_id].plane_normal)
+                self.assertEqual(point.nozzle_axis, expected)
+                self.assertAlmostEqual(
+                    sum(a * b for a, b in zip(point.nozzle_axis, point.surface_normal)), 0.0
+                )
 
     def test_clearance_failure_is_localised(self) -> None:
         parameters = TubeProcessParameters(
@@ -571,10 +612,17 @@ class IndexedValidationTests(unittest.TestCase):
         self.assertIn("tube.nozzle_obstacle_collision", {x.code for x in blocked.issues})
 
     def test_printed_ipw_collision_blocks_export(self) -> None:
+        # Deliberately point the shank sideways into existing material.
+        path = replace(
+            self.toolpath,
+            points=tuple(
+                replace(point, nozzle_axis=(1.0, 0.0, 0.0)) for point in self.toolpath.points
+            ),
+        )
         report = validate_indexed_tube(
             self.feature,
             self.plan,
-            self.toolpath,
+            path,
             self.trajectory,
             self.nozzle,
             check_ipw=True,

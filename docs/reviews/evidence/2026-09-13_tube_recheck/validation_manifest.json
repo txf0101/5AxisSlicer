@@ -1,0 +1,1176 @@
+{
+  "baseline_commit": "ecedf6f4c294d023bae582ab1832b986e2275fd0",
+  "source_snapshot": [
+    {
+      "path": "src/five_axis_slicer/__init__.py",
+      "bytes": 286,
+      "sha256": "f891db9cbb1e49eb3985486b710ee9ae626f13bdb035cb3ce60cea37e01d7850"
+    },
+    {
+      "path": "src/five_axis_slicer/__main__.py",
+      "bytes": 80,
+      "sha256": "812b20184f6ce01e7e4b333ddbf5a496da52a0209a25213c9c44636d474663c2"
+    },
+    {
+      "path": "src/five_axis_slicer/algorithms/__init__.py",
+      "bytes": 72,
+      "sha256": "e8c783fdea2d601a6a39a3c18b2bb80731076d17d7301dd8fd2e523d55f47e24"
+    },
+    {
+      "path": "src/five_axis_slicer/algorithms/curve/__init__.py",
+      "bytes": 250,
+      "sha256": "eb13c5eb8f4682e50da4b799cef6eb1a302e8e6bf3e91ac3a2eeea536bd4aa1c"
+    },
+    {
+      "path": "src/five_axis_slicer/algorithms/curve/chain.py",
+      "bytes": 12643,
+      "sha256": "294448e010044ca4513bb6500236aac84ca45d31df30d13a06e6707f1d013ca8"
+    },
+    {
+      "path": "src/five_axis_slicer/algorithms/curve/toolpath.py",
+      "bytes": 13862,
+      "sha256": "016af4d847c1b918eebcf0b823e86c96adf0e072e9fd54aee081a8ef87f9748c"
+    },
+    {
+      "path": "src/five_axis_slicer/algorithms/planar/__init__.py",
+      "bytes": 1417,
+      "sha256": "d6c0575d079697a12130c10e6636e5296ec597bf64e214d36a9a0bf3ebfaf0f9"
+    },
+    {
+      "path": "src/five_axis_slicer/algorithms/planar/offset.py",
+      "bytes": 14396,
+      "sha256": "27c2bb89bf87ce5852d103e7f8daafe4746d0b87cb7302309c18982aa58ca1cc"
+    },
+    {
+      "path": "src/five_axis_slicer/algorithms/planar/region.py",
+      "bytes": 9480,
+      "sha256": "79bd27c34a9f1a006ddc8d490bce28520174978d95a81dae33e5703a0de31f5e"
+    },
+    {
+      "path": "src/five_axis_slicer/algorithms/planar/section_loops.py",
+      "bytes": 5492,
+      "sha256": "a3a5feb910bc89864d9ec322fe2072bf1f2f9beab1d571681180c43cc5d05276"
+    },
+    {
+      "path": "src/five_axis_slicer/algorithms/planar/spiral.py",
+      "bytes": 12390,
+      "sha256": "e7d72741da9ef4901dcbc107c15b84513925718f3f3bf435a348777d8812e9d5"
+    },
+    {
+      "path": "src/five_axis_slicer/algorithms/planar/support.py",
+      "bytes": 12953,
+      "sha256": "a13354e8f7d898c41fee0f41514c1f8bdf1ddbba05fb12ef8e33e33e54c487f9"
+    },
+    {
+      "path": "src/five_axis_slicer/algorithms/planar/support_geometry.py",
+      "bytes": 4366,
+      "sha256": "23f13e51c9e1fa79520bc6fc3c32ba9686bde5fda87a447b0b19dfcd391d676c"
+    },
+    {
+      "path": "src/five_axis_slicer/algorithms/planar/thin_wall.py",
+      "bytes": 8455,
+      "sha256": "411b3acdfba5824df59e5a39c49e7454310cce23c32c67ac5f9b57d646f56548"
+    },
+    {
+      "path": "src/five_axis_slicer/algorithms/planar/zigzag.py",
+      "bytes": 9874,
+      "sha256": "9e6e54045a47fc1d73ee7a988aeaf8b16c0097e7771df07e88ffe377d7be6acb"
+    },
+    {
+      "path": "src/five_axis_slicer/algorithms/rotary/__init__.py",
+      "bytes": 659,
+      "sha256": "59ffb67ac0a18c65e58ae31d282f5913cd7c6a18b017517f248d3ea9c6427a89"
+    },
+    {
+      "path": "src/five_axis_slicer/algorithms/rotary/geometry.py",
+      "bytes": 38399,
+      "sha256": "1fb5975745cd51894758d546d2f753d9f126dc6de9937623a77d7986716bbc5f"
+    },
+    {
+      "path": "src/five_axis_slicer/algorithms/rotary/toolpath.py",
+      "bytes": 2534,
+      "sha256": "ac37c655972ab492a332614bf877bb66579d2fc8b0768a7afec09347a0b2ea72"
+    },
+    {
+      "path": "src/five_axis_slicer/algorithms/tube/__init__.py",
+      "bytes": 644,
+      "sha256": "a191075b62a50ffbda80c8b4142cd965e186dedc95f5d7daf3803f9a79b229c9"
+    },
+    {
+      "path": "src/five_axis_slicer/algorithms/tube/buildup.py",
+      "bytes": 27148,
+      "sha256": "244422c8d03eda063f147af697450ad3013dec6b0a095343490e255781e5ca6c"
+    },
+    {
+      "path": "src/five_axis_slicer/algorithms/tube/continuous.py",
+      "bytes": 16695,
+      "sha256": "5f52116e1c967a8b3133cedd482e44389735f187d542e8a6ff369abe5495cca3"
+    },
+    {
+      "path": "src/five_axis_slicer/algorithms/tube/geometry.py",
+      "bytes": 16452,
+      "sha256": "395aacb43720583e5ec7e09e35524acdb989e31a9fd0d42806552510b940f5cd"
+    },
+    {
+      "path": "src/five_axis_slicer/algorithms/tube/indexed.py",
+      "bytes": 14938,
+      "sha256": "b477c373796f4a6b9cee2fd43757dc6a1a48e523bcaed227ec833e4e67969bda"
+    },
+    {
+      "path": "src/five_axis_slicer/algorithms/tube/section.py",
+      "bytes": 9175,
+      "sha256": "9f03a71e1d0dfe64cc1e438e3cff5ed61e76e507fc0f667f68e7a7e1ceeb5075"
+    },
+    {
+      "path": "src/five_axis_slicer/app.py",
+      "bytes": 2463,
+      "sha256": "8bedd7192bc6c6ad0abf24076f62638bc0f524ab07906787b75f4ad990d9001c"
+    },
+    {
+      "path": "src/five_axis_slicer/automation.py",
+      "bytes": 11821,
+      "sha256": "5393dc78dd8ba74bfc1067ba7bfa20ad3535149ec07dc697331904705cf8a98e"
+    },
+    {
+      "path": "src/five_axis_slicer/automation_routes.py",
+      "bytes": 22104,
+      "sha256": "1838ccf2ae477ebcaafd263cf8315b2da9a514b436a445ec7107842320d1eb8f"
+    },
+    {
+      "path": "src/five_axis_slicer/background_load.py",
+      "bytes": 16481,
+      "sha256": "a52c4f615330b8aa4e055d84366a7cf30eb4a50774a607f68bbe1e074e67d091"
+    },
+    {
+      "path": "src/five_axis_slicer/command_kernel.py",
+      "bytes": 19361,
+      "sha256": "9a36d9051c882e297f1278818c7cfc03b6da65e2edbb078c7bf3c868c778aa0d"
+    },
+    {
+      "path": "src/five_axis_slicer/curve_automation.py",
+      "bytes": 3530,
+      "sha256": "adc7a1b081f4283b84bbb6a29a6d666b4425dd72bd7713544f88b6ff5a4d3488"
+    },
+    {
+      "path": "src/five_axis_slicer/curve_commands.py",
+      "bytes": 10660,
+      "sha256": "f62d9ff8d78ddf930c721cdbaa52aa3b6b7de6314b8ec5c7943cd0371d1634a2"
+    },
+    {
+      "path": "src/five_axis_slicer/curve_controller.py",
+      "bytes": 20398,
+      "sha256": "cc1fcb555030dc65ecda3afb73ecf6ea78fe487df7953ba152fca184c752975b"
+    },
+    {
+      "path": "src/five_axis_slicer/curve_generation_context.py",
+      "bytes": 5246,
+      "sha256": "95980828e66f45a56a71f5596623a20df803cac0b498a2a87d59d04cfb1e0950"
+    },
+    {
+      "path": "src/five_axis_slicer/curve_operation_service.py",
+      "bytes": 6350,
+      "sha256": "d399f5421e5b1f96637e6932cbc3a6859b886b77ab9459c2863ab2d5fa6b2deb"
+    },
+    {
+      "path": "src/five_axis_slicer/curve_shell.py",
+      "bytes": 3201,
+      "sha256": "14c7cad6151e09795bd9c0de38e759529793d035db15940e0601dede8697879b"
+    },
+    {
+      "path": "src/five_axis_slicer/curve_ui.py",
+      "bytes": 23942,
+      "sha256": "28c2dc29c0fa5c7c869aeb16de2e55098a615a1c4efb84b61623a2bee23e67b1"
+    },
+    {
+      "path": "src/five_axis_slicer/gcode_arrays.py",
+      "bytes": 11822,
+      "sha256": "43e4c821ec0fafa01031e0deba8ddc8ba80aaea9bcd821ccfbcf8be26b6fea3c"
+    },
+    {
+      "path": "src/five_axis_slicer/gcode_cache.py",
+      "bytes": 12340,
+      "sha256": "30468f98baae93eeb4a0f1f5292560467f5627ee2a3198e05ac7d18b9a84594a"
+    },
+    {
+      "path": "src/five_axis_slicer/gcode_parser.py",
+      "bytes": 23484,
+      "sha256": "13ccae59e973707bef005a81c84fdecc84b058b6b2c23380a4c8d021e9a303a4"
+    },
+    {
+      "path": "src/five_axis_slicer/gcode_preview.py",
+      "bytes": 40817,
+      "sha256": "187b6bf94a03692e5cad585c6f220531005dae6326b2e6f694805adf058553f5"
+    },
+    {
+      "path": "src/five_axis_slicer/gcode_source.py",
+      "bytes": 15686,
+      "sha256": "718d9899693386270022c0169dd0e6a0b3c1acf0061f59d5a41f73f19b138b0c"
+    },
+    {
+      "path": "src/five_axis_slicer/geometry_vtk.py",
+      "bytes": 3047,
+      "sha256": "a4555772e1e1bccdd70d9f77e4dec4138dec9859fcc33ff3ba56f239bc800f47"
+    },
+    {
+      "path": "src/five_axis_slicer/kinematics/__init__.py",
+      "bytes": 445,
+      "sha256": "91df5cd0d0887076d614e6fc5cbe8515f977765e2d5edb8ac044db7d50d6b080"
+    },
+    {
+      "path": "src/five_axis_slicer/kinematics/rotary.py",
+      "bytes": 7362,
+      "sha256": "159c3f96f57414d6b747b207d3561b46d1aca117f281756623ce78686865a0ec"
+    },
+    {
+      "path": "src/five_axis_slicer/kinematics/xyzac.py",
+      "bytes": 15464,
+      "sha256": "4cd1b6986dab9174600cb631086c46c1612d4819c29d73c9a2343bc4acd46a9d"
+    },
+    {
+      "path": "src/five_axis_slicer/localization.py",
+      "bytes": 34208,
+      "sha256": "b827d28ac9fba19bbdb11f1bfaa0a64198838c4b9a925afd718d0db98d24eb63"
+    },
+    {
+      "path": "src/five_axis_slicer/machine_profile_ui.py",
+      "bytes": 14086,
+      "sha256": "5f77d9ab2ec85c7f734028310fa77a3bb592333537195c82cc67c3fd20b958d4"
+    },
+    {
+      "path": "src/five_axis_slicer/manufacturing/__init__.py",
+      "bytes": 5776,
+      "sha256": "817e68a1e8f692b8c31fbc6b88c115a43de54c2d47da581564f3ba6a4bd5417c"
+    },
+    {
+      "path": "src/five_axis_slicer/manufacturing/coordinates.py",
+      "bytes": 39971,
+      "sha256": "d30fa1c9f049f5bf132fd46d5c70d794e578a13683966cbb0459ab6ae04ae996"
+    },
+    {
+      "path": "src/five_axis_slicer/manufacturing/curve_parameters.py",
+      "bytes": 11925,
+      "sha256": "247790fbdf9c97149d44f95c5a6b0c9402861b4f9b226875446747d2f8675dd5"
+    },
+    {
+      "path": "src/five_axis_slicer/manufacturing/json_contract.py",
+      "bytes": 1433,
+      "sha256": "e4b9928d6722e7e6c7bd91d0145c41cad075123048eff7754afb443705f3a271"
+    },
+    {
+      "path": "src/five_axis_slicer/manufacturing/library.py",
+      "bytes": 18782,
+      "sha256": "1298e431565ff3d7ca488f0dd15d4a807acd4979b2173f6d2b2fef2232039d60"
+    },
+    {
+      "path": "src/five_axis_slicer/manufacturing/machine.py",
+      "bytes": 42457,
+      "sha256": "fa1bd2c0498236e151a66670cfc678d5ad8c74e7277c10c97544094af2f0590a"
+    },
+    {
+      "path": "src/five_axis_slicer/manufacturing/machine_helpers.py",
+      "bytes": 4700,
+      "sha256": "e6e35add4bfe43c225b3e03ae37095d64fcd20e31d34591dd0be765151cb22bd"
+    },
+    {
+      "path": "src/five_axis_slicer/manufacturing/nozzle_envelope.py",
+      "bytes": 2539,
+      "sha256": "2682b05d1283e37e19dc9538ea6e838e2d220e886b84df59e3f3ef4f80fe4a15"
+    },
+    {
+      "path": "src/five_axis_slicer/manufacturing/own_printer.py",
+      "bytes": 736,
+      "sha256": "2cf489a28b2dada93aa0621d89172003b4382274f966ee5132379dc40d585894"
+    },
+    {
+      "path": "src/five_axis_slicer/manufacturing/planar_parameters.py",
+      "bytes": 13041,
+      "sha256": "cd4e9c78f43d4c02f0edbc9b1b142edb811f4927f72a3f50371fb9907193f862"
+    },
+    {
+      "path": "src/five_axis_slicer/manufacturing/preview_kinematics.py",
+      "bytes": 14165,
+      "sha256": "7877fc0bc17ee00a20777d5a3d4cb98d6223716dee1f61a1176b8b220772c96d"
+    },
+    {
+      "path": "src/five_axis_slicer/manufacturing/reference_audit.py",
+      "bytes": 12532,
+      "sha256": "3b2079e51d9c0895b1c32294176349b61c244776fb8340ca3308c2d47207b940"
+    },
+    {
+      "path": "src/five_axis_slicer/manufacturing/reference_descriptors.py",
+      "bytes": 21863,
+      "sha256": "0ae94fdfd80e4eceed01a066245647aa64d3702b728602974db5f8804434783a"
+    },
+    {
+      "path": "src/five_axis_slicer/manufacturing/reference_rebind.py",
+      "bytes": 31097,
+      "sha256": "228e8b9ae96bbe790d16f7418ad64702e807795024ae14bffc8625bbc7f1824e"
+    },
+    {
+      "path": "src/five_axis_slicer/manufacturing/references.py",
+      "bytes": 1649,
+      "sha256": "9f8c98bd90948f354efd396dcd9bee4fc251ea92c2d76003fa82be2f144171aa"
+    },
+    {
+      "path": "src/five_axis_slicer/manufacturing/resources.py",
+      "bytes": 37674,
+      "sha256": "8f0efab01cddb96553d15f02cd1c94b526757b9e28d84089d9f15a8a50e789c5"
+    },
+    {
+      "path": "src/five_axis_slicer/manufacturing/rotary_parameters.py",
+      "bytes": 17726,
+      "sha256": "a9a087f053ae02610a2d720efb4b6d950d9b0d9ca857514319ac15c6d0126a79"
+    },
+    {
+      "path": "src/five_axis_slicer/manufacturing/setup.py",
+      "bytes": 38918,
+      "sha256": "24c8601d3991f47fbb79c56ce724bd7faf5f58848302d280f696dc9bf54f11af"
+    },
+    {
+      "path": "src/five_axis_slicer/manufacturing/toolpath.py",
+      "bytes": 25242,
+      "sha256": "2b09175b67d12d781281d33ae504c48baf5d4b8615b3321debab03ab26afde72"
+    },
+    {
+      "path": "src/five_axis_slicer/manufacturing/tube_parameters.py",
+      "bytes": 8172,
+      "sha256": "37c863b3c93310f0d7a700034383789e15e5c5920b13cf9cfddf3051e0731278"
+    },
+    {
+      "path": "src/five_axis_slicer/manufacturing_script_service.py",
+      "bytes": 1992,
+      "sha256": "5c6d040ad6f9b94a261a055877a185d993270b3f713e2f7e435ae6b2c65d8d26"
+    },
+    {
+      "path": "src/five_axis_slicer/model_commit.py",
+      "bytes": 14437,
+      "sha256": "026f362456d4db35ef9fd6237242187cfcedeb5047b3918d5a628f1434f17a6d"
+    },
+    {
+      "path": "src/five_axis_slicer/models.py",
+      "bytes": 11438,
+      "sha256": "36edc80ee80dfd0e7f77e7d2a82d177a633563fc76f96589940e41660ed9c666"
+    },
+    {
+      "path": "src/five_axis_slicer/native_preview_index.py",
+      "bytes": 3259,
+      "sha256": "5aada1157d7400c9b064b4025bb006295861138a470aeb3fd6b82923e185a8b5"
+    },
+    {
+      "path": "src/five_axis_slicer/opengl_picking.py",
+      "bytes": 3138,
+      "sha256": "cd73a1265603ef4eb74204ee41c4a57255486a28c86793dc303005b81d0c63cd"
+    },
+    {
+      "path": "src/five_axis_slicer/opengl_scene.py",
+      "bytes": 19066,
+      "sha256": "0fdabf64aeef6d0c05c08bc3b9b69108b67e66f81f6a65c01297f862b4b20b0b"
+    },
+    {
+      "path": "src/five_axis_slicer/opengl_viewer.py",
+      "bytes": 72118,
+      "sha256": "ce53327cac62adc765697618c5f63d6d12374a805e82ef1a6a10d653503e30ad"
+    },
+    {
+      "path": "src/five_axis_slicer/planar_commands.py",
+      "bytes": 8860,
+      "sha256": "0a1905d79c2f62d93c26e09e0333f2c8b4eeceb61e1761c55c00e70db33f31a2"
+    },
+    {
+      "path": "src/five_axis_slicer/planar_controller.py",
+      "bytes": 23663,
+      "sha256": "cc08fb7d9f2fac8d41fe3f07ee97f805920721925e9cc64944693aa0f435b0fb"
+    },
+    {
+      "path": "src/five_axis_slicer/planar_generation_context.py",
+      "bytes": 6639,
+      "sha256": "a3ffa7a873d131c0b3d2a0f513e2264421cc25a739a421e10600f9fb729c652e"
+    },
+    {
+      "path": "src/five_axis_slicer/planar_operation_service.py",
+      "bytes": 4999,
+      "sha256": "573945bffbaad2b3c12706d56aab71f8299fd217ba44c47a957e4f93b1c18141"
+    },
+    {
+      "path": "src/five_axis_slicer/planar_shell.py",
+      "bytes": 3645,
+      "sha256": "e9b31a0f66af113ed94154c05429d5aad353c788587cfc335b66164d299a0b2d"
+    },
+    {
+      "path": "src/five_axis_slicer/planar_ui.py",
+      "bytes": 38078,
+      "sha256": "99acd9b0ed30cca8db075f167ca356078cfa780721b1ba96558114ec167dcb04"
+    },
+    {
+      "path": "src/five_axis_slicer/planar_ui_diagnostics.py",
+      "bytes": 11751,
+      "sha256": "ecac63b3cbba04b6e35f337faa8d5a5994354eca9e432cf4694c5866dc203d25"
+    },
+    {
+      "path": "src/five_axis_slicer/postprocessing/__init__.py",
+      "bytes": 1082,
+      "sha256": "e64881d57f3ce7ae349a042ff612c2da409a8fc5b2cc64f086ed0cdac76cce41"
+    },
+    {
+      "path": "src/five_axis_slicer/postprocessing/curve_product.py",
+      "bytes": 20231,
+      "sha256": "6c86d7beb5741d2bbb9b5a4c6cbec4a630f4a479a98a4358468aeb518b92f07a"
+    },
+    {
+      "path": "src/five_axis_slicer/postprocessing/gcode_contract.py",
+      "bytes": 3036,
+      "sha256": "05ffd73daa717dc9ea7fd144013fdd81695ddf0b76cc44e9b6521f0c51e9d99f"
+    },
+    {
+      "path": "src/five_axis_slicer/postprocessing/gcode_readback.py",
+      "bytes": 11374,
+      "sha256": "6ae83e2e6be3ef2ea705ba45dac8a84308773ca8cc72ea7f72bb21ab86c5ef84"
+    },
+    {
+      "path": "src/five_axis_slicer/postprocessing/indexed_tube.py",
+      "bytes": 22493,
+      "sha256": "7fa20a1467fe093e4cb4aabd9450d9dc0551d71e3479ab95e5580713940d3ccd"
+    },
+    {
+      "path": "src/five_axis_slicer/postprocessing/planar_product.py",
+      "bytes": 35278,
+      "sha256": "c3a039a837e31c78351a24e60426a41324383a8e01682b4c58e2bb2095c80bf6"
+    },
+    {
+      "path": "src/five_axis_slicer/postprocessing/planar_support_product.py",
+      "bytes": 3391,
+      "sha256": "78f078d1916d45fba14015cf65ef7050d638466e51838ca73158877cc598b655"
+    },
+    {
+      "path": "src/five_axis_slicer/postprocessing/rotary_product.py",
+      "bytes": 23709,
+      "sha256": "c86a4ed5da87ecc6e0118606e00a68c3c5f8edeba474e1f155623d68401344a4"
+    },
+    {
+      "path": "src/five_axis_slicer/postprocessing/tube_product.py",
+      "bytes": 29147,
+      "sha256": "30c6fa0353c9a6fbc4de8e964ac07fb4827016e83c5c9f7d5d705ba70d6165ef"
+    },
+    {
+      "path": "src/five_axis_slicer/project_assets.py",
+      "bytes": 16021,
+      "sha256": "60fb2adfd422a0d4b9bc80f06839ccf4f4eaaec553bbf89665140e104467f49a"
+    },
+    {
+      "path": "src/five_axis_slicer/project_contract.py",
+      "bytes": 857,
+      "sha256": "cfc94365b8f44d9a003659bdfa1332753fb45445c740e8fce2086913c01f22f4"
+    },
+    {
+      "path": "src/five_axis_slicer/project_io.py",
+      "bytes": 32275,
+      "sha256": "436563f1027ee9b13cd343387206db1b2f182609e1e315f4b23f1322e49c5ddf"
+    },
+    {
+      "path": "src/five_axis_slicer/project_storage.py",
+      "bytes": 10128,
+      "sha256": "0543db04172c5f47b8ace4df0949bcffe23f6b1600d1897ccd0b6d13d7d5d14f"
+    },
+    {
+      "path": "src/five_axis_slicer/qt_load_wait.py",
+      "bytes": 2005,
+      "sha256": "6d8862a5942e44cd05baa0605f1a895af9a4c236db8fce9143870a56956b6416"
+    },
+    {
+      "path": "src/five_axis_slicer/restricted_script.py",
+      "bytes": 13459,
+      "sha256": "c965c1169dc1e52d825e3a5d02267f3a8f7c236943fbb548e04e5821bed8dcec"
+    },
+    {
+      "path": "src/five_axis_slicer/result_commit.py",
+      "bytes": 13399,
+      "sha256": "5fe90bb323bbe11a0454c308e683f8c2a27c1eac545699f0608dfe0dcc9faa9c"
+    },
+    {
+      "path": "src/five_axis_slicer/result_preview.py",
+      "bytes": 70792,
+      "sha256": "6e3ed125816230bea48c1b5f10c3f8c7933824046480c028760ea61e623bab9d"
+    },
+    {
+      "path": "src/five_axis_slicer/result_preview_layout.py",
+      "bytes": 21399,
+      "sha256": "8d9c2ab049731ce2db964fb5339278e6ad1bcb5355c417e5938ec7a8624565db"
+    },
+    {
+      "path": "src/five_axis_slicer/result_preview_text.py",
+      "bytes": 5821,
+      "sha256": "8f9b1a170ece3e816b7453bb3a55093a2e4fa32cf8913da2c0a50452cc76c4cf"
+    },
+    {
+      "path": "src/five_axis_slicer/result_state.py",
+      "bytes": 13462,
+      "sha256": "74167e7a73a69f077ead033dc80ab4cef4f405397aa4b19f69f83e18a9b8bb94"
+    },
+    {
+      "path": "src/five_axis_slicer/rotary_automation.py",
+      "bytes": 3198,
+      "sha256": "4f0d50ce96a90435191de96ef7755c4686418bcec01623d5c350d3ab98fb5ac4"
+    },
+    {
+      "path": "src/five_axis_slicer/rotary_commands.py",
+      "bytes": 9177,
+      "sha256": "4df16e2ee845fc5d56719f1fb34d38143996cf1733170b07814d95774a281809"
+    },
+    {
+      "path": "src/five_axis_slicer/rotary_controller.py",
+      "bytes": 22305,
+      "sha256": "b1820a5017951ea639660ac3965bf3f90d2df96d356b7b28f87829d93d5846c0"
+    },
+    {
+      "path": "src/five_axis_slicer/rotary_generation_context.py",
+      "bytes": 8096,
+      "sha256": "0e59e389af8dedb334aec3aa21e63d0e1bc27f6255373369b264a0c0309d10b6"
+    },
+    {
+      "path": "src/five_axis_slicer/rotary_operation_service.py",
+      "bytes": 17455,
+      "sha256": "640cf3c42daa576f4b053d89f74b7d3a5f9045bee27414515dab8bc79e01a856"
+    },
+    {
+      "path": "src/five_axis_slicer/rotary_shell.py",
+      "bytes": 3384,
+      "sha256": "73017f3e33a21f75e18375bf9fadb8aef182eba940d5d78c1a7b24ae3e583031"
+    },
+    {
+      "path": "src/five_axis_slicer/rotary_ui.py",
+      "bytes": 47333,
+      "sha256": "c6c167e89950e4a4aca93ee4b6cc4a1218a2047b0f94528614d1c0deb5d1355f"
+    },
+    {
+      "path": "src/five_axis_slicer/script_console.py",
+      "bytes": 25667,
+      "sha256": "32dd40f078cd99e36b6cdc79a01f8b12628a30f7041b56930fff68551b720ea7"
+    },
+    {
+      "path": "src/five_axis_slicer/selection_list.py",
+      "bytes": 2591,
+      "sha256": "0364c421b3608f5678ca7dd62307335db307899802774641999d9f9000147fe0"
+    },
+    {
+      "path": "src/five_axis_slicer/setup_config.py",
+      "bytes": 37151,
+      "sha256": "89f8e56e2f9e51f01770c599142a28d966b00628e0e8e6d94d10552f11d51b51"
+    },
+    {
+      "path": "src/five_axis_slicer/setup_config_io.py",
+      "bytes": 7858,
+      "sha256": "65a707bd373bbe00a544753c3f6db4db38c2941dc858f6a17994a7157f79e2d2"
+    },
+    {
+      "path": "src/five_axis_slicer/setup_config_session.py",
+      "bytes": 13535,
+      "sha256": "f0187769f9bd06cb5dc955659dcf84bd204104752d6a20a4ee3c31a5ab5c6365"
+    },
+    {
+      "path": "src/five_axis_slicer/step_loader.py",
+      "bytes": 11496,
+      "sha256": "da1564d9b1d839cc27b0d438947901779e966efabe950c90081dc1770d201bf7"
+    },
+    {
+      "path": "src/five_axis_slicer/step_reader.py",
+      "bytes": 13283,
+      "sha256": "89e988deb396dddef2c2f49db79f126f2c853067de3b4d0fbcad3d48c2bc938c"
+    },
+    {
+      "path": "src/five_axis_slicer/step_topology.py",
+      "bytes": 23186,
+      "sha256": "b6a9e9865e1c830c08369d97e54598f198dc6306a37c5e3ad94fde7e42ff1013"
+    },
+    {
+      "path": "src/five_axis_slicer/styles.py",
+      "bytes": 11402,
+      "sha256": "bc6875bbc184760ff6b089c66cfafbac7f82e826e88f7af05cc6f7be81e6f785"
+    },
+    {
+      "path": "src/five_axis_slicer/theme.py",
+      "bytes": 3208,
+      "sha256": "fd40ec74631c261cf25ab6b0874d4032da27a6399f7c13aa348d39a8d2a8ed54"
+    },
+    {
+      "path": "src/five_axis_slicer/tube_commands.py",
+      "bytes": 34671,
+      "sha256": "d06eb887a0e57babd5cd0c3ce10b43bf1cfc5ab82308a9319c8ecf105c1b21d5"
+    },
+    {
+      "path": "src/five_axis_slicer/tube_controller.py",
+      "bytes": 44609,
+      "sha256": "70c1ca8c016cdee1abbab86127beb72bd2fabcdd171e144075dc24a1150208fc"
+    },
+    {
+      "path": "src/five_axis_slicer/tube_controller_state.py",
+      "bytes": 6063,
+      "sha256": "3d28c2e21fdfa78797ca98acb95872d71b663a3cd8259303a032dabb01ce9fef"
+    },
+    {
+      "path": "src/five_axis_slicer/tube_drafts.py",
+      "bytes": 12345,
+      "sha256": "9b1d0f80e73264b8f710862d679c56f982933e5fbfc67105be3a014820b6def7"
+    },
+    {
+      "path": "src/five_axis_slicer/tube_generation_context.py",
+      "bytes": 8919,
+      "sha256": "3deb51f1f0046ef89040df3c2f51cd4c02cb40db0e136361450dc739b405435f"
+    },
+    {
+      "path": "src/five_axis_slicer/tube_generation_service.py",
+      "bytes": 6595,
+      "sha256": "72c7a924f3ddf74fca87f4b269175fbc4d8b66da82ca6309048ec8e5509753ea"
+    },
+    {
+      "path": "src/five_axis_slicer/tube_operation_service.py",
+      "bytes": 8189,
+      "sha256": "80edd2aa6044eebb9072f2426631bbc19e54c5b64c72b0fde2e7a9803d9c98e1"
+    },
+    {
+      "path": "src/five_axis_slicer/tube_operation_ui.py",
+      "bytes": 15794,
+      "sha256": "35aa070827c44cae7e0d832cf43ec235a1dbb0a4db12227a1e8947d18e741bb0"
+    },
+    {
+      "path": "src/five_axis_slicer/tube_resource_context.py",
+      "bytes": 4919,
+      "sha256": "36fae1f01477cf7ecab227b57186c18c95873d192650185cfe2f230e78082d89"
+    },
+    {
+      "path": "src/five_axis_slicer/tube_resource_selection.py",
+      "bytes": 5275,
+      "sha256": "8ba098321ea9ba948a0c7fba60578d15a07272cce7b583f7d40df95e0c2a2477"
+    },
+    {
+      "path": "src/five_axis_slicer/tube_script_service.py",
+      "bytes": 31533,
+      "sha256": "35978b40b109b11c5120a4c848114fc466226c8e5f6b76234a398a4dd7fc9e01"
+    },
+    {
+      "path": "src/five_axis_slicer/tube_serialization.py",
+      "bytes": 6282,
+      "sha256": "18630270d62bc2fccba52f6121056ae6bf2f3e6e7a4d750ec932648c8eb8cb1d"
+    },
+    {
+      "path": "src/five_axis_slicer/tube_ui.py",
+      "bytes": 66977,
+      "sha256": "c33513cc3db2076ed2ad6ca411aa3bb47a6dfff9dece3cd8f80ccd3c8193eb6f"
+    },
+    {
+      "path": "src/five_axis_slicer/tube_ui_presenter.py",
+      "bytes": 10850,
+      "sha256": "3d27f4962f97165ed271add3a8b56a52503a2c503b81974c41b4994c8dccad6d"
+    },
+    {
+      "path": "src/five_axis_slicer/tube_ui_text.py",
+      "bytes": 36863,
+      "sha256": "fe0e068d3ee07526a14009e5e05d6f5f25a8c25d655c732901a569332dabef43"
+    },
+    {
+      "path": "src/five_axis_slicer/tube_validation.py",
+      "bytes": 12461,
+      "sha256": "948eafa86fa30321c76f11559f97a28cca17968bcbe03a8d235ab89724d3c939"
+    },
+    {
+      "path": "src/five_axis_slicer/ui.py",
+      "bytes": 120071,
+      "sha256": "150d155d874fa58c233c2b10d347f746591db7f11c75ccc602cf05d204a74df0"
+    },
+    {
+      "path": "src/five_axis_slicer/ui_controls.py",
+      "bytes": 1417,
+      "sha256": "c09fecefb958ed73a0549843445b8e1e765f33cecafd46cbc7c6c84c92128cc5"
+    },
+    {
+      "path": "src/five_axis_slicer/validation/__init__.py",
+      "bytes": 455,
+      "sha256": "f9db1e2e8288d31d1c21b335894405f8726addb09f879b428f4e55b11fe23466"
+    },
+    {
+      "path": "src/five_axis_slicer/validation/indexed_tube.py",
+      "bytes": 16425,
+      "sha256": "9fea5fb9420f3d45120f4e99521eb033fb4396f7d634f7ca5a8acef55aaec978"
+    },
+    {
+      "path": "src/five_axis_slicer/validation/planar.py",
+      "bytes": 5112,
+      "sha256": "cda2248a15da86a2cb90792cfe7e1de3a4abbce6227b15b8f57d44666dc97d1c"
+    },
+    {
+      "path": "src/five_axis_slicer/validation/planar_geometry.py",
+      "bytes": 4566,
+      "sha256": "1a8d9e01ffe222f0d4b248a7cb193876b595503b231457df7ed5c05a5093a156"
+    },
+    {
+      "path": "src/five_axis_slicer/validation/planar_qualification.py",
+      "bytes": 6703,
+      "sha256": "e0e728874fc219070a80931ad07c5fad29dde5a644d2350c56e95566c134c9a7"
+    },
+    {
+      "path": "src/five_axis_slicer/validation/planar_travel.py",
+      "bytes": 7182,
+      "sha256": "9862b7db4d0971f44fbad78233268daebdf17bc709292cc535b21ebeaa3341f2"
+    },
+    {
+      "path": "src/five_axis_slicer/viewer.py",
+      "bytes": 45000,
+      "sha256": "b428f379cb8e9e5505146bb370ccc67b88f3bcb760e97f526e5e82d64e31fa9c"
+    },
+    {
+      "path": "src/five_axis_slicer/viewer_common.py",
+      "bytes": 14293,
+      "sha256": "f547c27baabe3b60a944a87a779d09b7284ce42759f3a34b457c3546acffc0ba"
+    },
+    {
+      "path": "src/five_axis_slicer/viewer_interaction.py",
+      "bytes": 13271,
+      "sha256": "44bee27804623bc3ba7cec9725dbcaaf35854f319f30281dbd12b81a62ae3163"
+    },
+    {
+      "path": "src/five_axis_slicer/viewer_overlays.py",
+      "bytes": 6570,
+      "sha256": "91cfcd787a7ae4643e252cc03d8536e2896c10be92c3a2f061514e6dc8a96b36"
+    },
+    {
+      "path": "src/five_axis_slicer/workbench_navigation.py",
+      "bytes": 3940,
+      "sha256": "cf27a3b7f523ab541fc76b7f28bd83212812a3c1740f290961d41957565f15e0"
+    },
+    {
+      "path": "src/five_axis_slicer/workbenches.py",
+      "bytes": 2110,
+      "sha256": "effa0b08b0c4df239ed78b5228b7772c3b4919e7005e3e6db056b0b229b69d2a"
+    },
+    {
+      "path": "src/five_axis_slicer/manufacturing/profiles/own_ac_fdm.json",
+      "bytes": 9802,
+      "sha256": "21abb106660a582d9bc6ab1b4699f18be5585ff9b60c21406d711551a5dd3af9"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "example/pipe2/弯管新.stp",
+      "bytes": 15504,
+      "sha256": "116e99fd43492bd1f4f519c80c93cd1f7cd0bf2cb6861b3e123148e4031a0d4b"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_project_audit/tube_probe/ready_setup/analytic_straight_tube.step",
+      "bytes": 26487,
+      "sha256": "88c2daed770abc130cb922f76aab7e076dc68f280cbd13804c09c086c1b27ca1"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-12_audit_fixes/tube/pipe2_evidence.py.txt",
+      "bytes": 4330,
+      "sha256": "572c5d29b4f55376bf8aaca925ede227307549ab65101d1e7f9668be9a67963d"
+    }
+  ],
+  "python": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\tmp\\pytest9\\Scripts\\python.exe",
+  "python_version": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]",
+  "packages": {
+    "pytest": "9.1.1",
+    "PyQt5": "5.15.10",
+    "vtk": "9.3.1",
+    "cadquery": "2.7.0",
+    "cadquery-ocp": "7.8.1.1.post1",
+    "numpy": "2.2.6",
+    "ruff": "0.12.12",
+    "mypy": "1.11.2"
+  },
+  "preflight": {
+    "dependency_probe_ok": true,
+    "gui_settings_writable": true,
+    "run_once_before_tests": true
+  },
+  "runs": [
+    {
+      "log": "tube_recheck_20260913_pytest.log",
+      "process_exit_code": 0
+    },
+    {
+      "log": "tube_recheck_20260913_interfaces.log",
+      "process_exit_code": 0
+    },
+    {
+      "log": "tube_tail_before.log",
+      "process_exit_code": 1
+    },
+    {
+      "log": "tube_tail_after.log",
+      "process_exit_code": 0
+    },
+    {
+      "log": "tube_tail_product.log",
+      "process_exit_code": 1
+    },
+    {
+      "log": "tube_tail_product_v2.log",
+      "process_exit_code": 0
+    },
+    {
+      "log": "tube_recheck_full.log",
+      "process_exit_code": 0
+    },
+    {
+      "log": "tube_spatial.log",
+      "process_exit_code": 0
+    },
+    {
+      "log": "tube_recheck_quality.log",
+      "process_exit_code": 0
+    },
+    {
+      "log": "tube_recheck_quality_spatial.log",
+      "process_exit_code": 1
+    },
+    {
+      "log": "tube_recheck_quality_final.log",
+      "process_exit_code": 0
+    },
+    {
+      "log": "tube_recheck_full_final.log",
+      "process_exit_code": 0
+    },
+    {
+      "log": "tube_orientation_before.log",
+      "process_exit_code": 1
+    },
+    {
+      "log": "tube_orientation_after.log",
+      "process_exit_code": 1
+    },
+    {
+      "log": "tube_orientation_after_v2.log",
+      "process_exit_code": 0
+    },
+    {
+      "log": "tube_recheck_quality_close.log",
+      "process_exit_code": 0
+    },
+    {
+      "log": "tube_recheck_full_close.log",
+      "process_exit_code": 0
+    },
+    {
+      "log": "tube_pipe_final.log",
+      "process_exit_code": -1
+    },
+    {
+      "log": "tube_pipe_spatial.log",
+      "process_exit_code": 0
+    },
+    {
+      "log": "tube_pipe_current.log",
+      "process_exit_code": 0
+    }
+  ],
+  "text_evidence_newlines": "LF, normalized before SHA256 to match repository attributes; ZIP member bytes unchanged",
+  "superseded_runs": [
+    "full.xml",
+    "full_final.xml",
+    "pipe2_own_ac",
+    "pipe2_own_ac_final",
+    "pipe2_own_ac_spatial"
+  ],
+  "current_full_suite": "full_close.xml",
+  "current_tests": {
+    "passed": 839,
+    "skipped": 3,
+    "subtests_passed": 141,
+    "seconds": 347.65,
+    "exit_code": 0
+  },
+  "quality_exit_code": 0,
+  "current_product": "pipe2_current/summary.json",
+  "archive": {
+    "path": "docs/reviews/evidence/2026-09-13_tube_recheck/pipe2_six_files.zip",
+    "bytes": 5614731,
+    "sha256": "87cbaa8409a4920e9e8c3b4d1385c09f93436ac8b3750a88216480e75cbe0c3e"
+  },
+  "product_files": [
+    {
+      "path": "main.gcode",
+      "bytes": 2140279,
+      "sha256": "776f55c9ef323526638a333f6db513b0072b99cafa42994757f256e1e0381773"
+    },
+    {
+      "path": "toolpath.json",
+      "bytes": 13837297,
+      "sha256": "b3542a44e6d3113b54db70708f684df6223f485a5f42da3c0f2047ea59b93428"
+    },
+    {
+      "path": "machine_axes.csv",
+      "bytes": 1664504,
+      "sha256": "0678ec45c7b6a7d0bd4744d67a8457d2a94132f31d0699aa2606f6a41444e49c"
+    },
+    {
+      "path": "warnings.json",
+      "bytes": 503303,
+      "sha256": "2de5b6e8a8d8e88cc9c150bc764bf6b896c2716d7eb761355cf4664d56e1e12b"
+    },
+    {
+      "path": "preview.json",
+      "bytes": 6158753,
+      "sha256": "dd3697ebaaced3e8ba6ca957c424e659736f1d93d6aec54bda38aa208ed4e26c"
+    },
+    {
+      "path": "manifest.json",
+      "bytes": 25608653,
+      "sha256": "0ee8e79419ddd373533eb932089681ecdecf0daa151354c5d20829d1c4ca4c0e"
+    }
+  ],
+  "archive_independent_verify_passed": true,
+  "not_validated": [
+    "real controller and calibration",
+    "on-machine collision and cutting",
+    "current bilingual three-size desktop visual acceptance",
+    "complete three-operation T12 acceptance",
+    "clean environment installation"
+  ],
+  "reproduction": "Copy archived .py.txt scripts to repo tmp as .py before running with tmp/pytest9/Scripts/python.exe; wrapper reuses pinned historical pipe2_evidence.py.txt and current production controller. CAD original is not bundled.",
+  "document_links": {
+    "documents": [
+      "docs/README.md",
+      "docs/planning/progress_tracker.md",
+      "docs/guides/tube_workbench_zh.md",
+      "docs/reviews/2026-09-12_algorithm_audit_fixes.md"
+    ],
+    "missing": []
+  },
+  "evidence_files": [
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/focused.xml",
+      "bytes": 11156,
+      "sha256": "8799b8a1b74fb4453095360c69fd859b058cce95d5adbc50fbfcc5baeee06dfd"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/full.xml",
+      "bytes": 124011,
+      "sha256": "3d486f0ab397679bcd1a128fb624f036e964809c75b8b96da784c8c90ea54de0"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/full_close.xml",
+      "bytes": 124428,
+      "sha256": "9d075ed970aa35d6fb66c849f2d4bf2e9188fddae85eca1ba3d45722614c2c86"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/full_final.xml",
+      "bytes": 124274,
+      "sha256": "1b628a8f8a956c0847b2369b6a1bc0ba26fd80357f518ac81d252cf3702c4f02"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/interfaces.xml",
+      "bytes": 16568,
+      "sha256": "42430174b520e492a7f4db9b2bd0fe09acdcc1d24e170d19c939c5b441194b1b"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/orientation_after.xml",
+      "bytes": 9241,
+      "sha256": "9bfbe7d646cd35d57a7fd734f89e2e45f384833d564dfc6894d7286ae9614682"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/orientation_after_v2.xml",
+      "bytes": 3878,
+      "sha256": "a7c587731bd952b6752a19ce7f0fbf2a7b49c364583b885975560e4fa08c506a"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/orientation_before.xml",
+      "bytes": 1768,
+      "sha256": "a31e502f1c07f521d883e2f5351514cb359541f8654671adad3d491b898a670b"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/pipe2_contact_truth.json",
+      "bytes": 1400,
+      "sha256": "151696e44a889bd8810415288b8ff37e98c90ba4384fac4f4a25ce9b60608fe6"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/pipe2_current/inputs.json",
+      "bytes": 30469,
+      "sha256": "5624f162294d55f0dc7660df9ac2eb6a826dad085e30861d1974d3865f6f0a8a"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/pipe2_current/summary.json",
+      "bytes": 2678,
+      "sha256": "cffb0ff300742ce6734505ec18e5a8fb1405038c96f98f40572ea9d4ff7fbff0"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/pipe2_geometry.json",
+      "bytes": 892,
+      "sha256": "dfec74cc91b6e1c698be3336385c1ade141b73b91a12a454c41e736580043b24"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/pipe2_geometry_final.json",
+      "bytes": 892,
+      "sha256": "94cd516a6238fb0938f5e6e1ce69d2fdb007e35bde104fe4c0dfb1e9cab34259"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/pipe2_own_ac/inputs.json",
+      "bytes": 30469,
+      "sha256": "2e504e44d87dcaf5914d69bd4cc68622fb7585cebcf5f426304871665b0d8655"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/pipe2_own_ac_final/inputs.json",
+      "bytes": 30469,
+      "sha256": "dd4d4da5778feafbcef97fb1cf570e2ee8ee075590cf56c474f420c0e451aca0"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/pipe2_own_ac_spatial/inputs.json",
+      "bytes": 30469,
+      "sha256": "dd4d4da5778feafbcef97fb1cf570e2ee8ee075590cf56c474f420c0e451aca0"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/pipe2_own_ac_spatial/summary.json",
+      "bytes": 43158,
+      "sha256": "03f415edb47b5f391f2e861f1bf71e5b57f577dde5d1a7f28d1e418b71547806"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/pipe2_six_files.zip",
+      "bytes": 5614731,
+      "sha256": "87cbaa8409a4920e9e8c3b4d1385c09f93436ac8b3750a88216480e75cbe0c3e"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/product_package.json",
+      "bytes": 502,
+      "sha256": "fb8d0d746bb8ab102bef22aff9df06f6d27a898d45acedb56a68e1e68207ca53"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/spatial.xml",
+      "bytes": 5713,
+      "sha256": "4fe86df55a02c40c78215a40e79a4a8083a1554d1c5aebe8d2b809fb2aa72862"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tail_after.xml",
+      "bytes": 5938,
+      "sha256": "5684788322da3619cfcd1832ee247dbb2880b5a06c6c5406b8ffa751e341aeac"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tail_before.xml",
+      "bytes": 3372,
+      "sha256": "4f7905149fbb8a86ace6f69c03b4bf8c659f75425aa49e928677ced7bc03d9c6"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tail_product.xml",
+      "bytes": 2207,
+      "sha256": "a18abdd6315f31c0dea83d869a17f3d2d8f41d49d049b1f013aeaa2186ff8400"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tail_product_v2.xml",
+      "bytes": 383,
+      "sha256": "4f9fed100b6c62afc1760bae411b5d56a2774317bbc10862d35aec17ae27b832"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tube_contact_truth_20260913.py.txt",
+      "bytes": 2224,
+      "sha256": "58859f251e5f890594a5d09e7c2279ba19273fb40b9dffe5060d8d5078869c5a"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tube_geometry_recheck_20260913.py.txt",
+      "bytes": 1672,
+      "sha256": "412dce0e263d42e0bd91d24fde235ff995115a46bdba11751d3102830ec18c4a"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tube_orientation_after.log",
+      "bytes": 1343,
+      "sha256": "5ebe63cc17e13c509e37df902eea5f6c7ca5c54403938b004abdb8db147482a6"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tube_orientation_after_v2.log",
+      "bytes": 100,
+      "sha256": "c45a9b879f2bfcf958c575c9dc70c9fb3d72ce583a279c74acebf6402bdffa11"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tube_orientation_before.log",
+      "bytes": 1542,
+      "sha256": "65e1720b902247771270e06ac600f501fd24bc251032e9acf1d10089f9fc8ecc"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tube_pipe_current.log",
+      "bytes": 562,
+      "sha256": "6ffd473cbbc1a01cd613fbf1c342bf2c8cc1bfce25e002269ab859aa5031e352"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tube_pipe_final.log",
+      "bytes": 50,
+      "sha256": "e4a1de06a4bd17781dee46e9387731aae20ae0ce09470f7940dc00253adf6be4"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tube_pipe_spatial.log",
+      "bytes": 400,
+      "sha256": "73e88ab859fbcaa324aa0a5c46f3459ef31ceee305634bb4147ac9181a1d00bf"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tube_recheck_20260913.py.txt",
+      "bytes": 1855,
+      "sha256": "6007efc19a8aee13b14f14b67c291c10a5105148eb1adec0db85c1069dbdf1d0"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tube_recheck_20260913_interfaces.log",
+      "bytes": 203,
+      "sha256": "3bfdcd66700696ec32c2e0470f9598717b61761b217f9fb1678207f407e99aef"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tube_recheck_20260913_pytest.log",
+      "bytes": 190,
+      "sha256": "44882bacfc64fcefab96ccd952fc5f3c0a1815e17c42ff78b3bcbefece8850bf"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tube_recheck_full.log",
+      "bytes": 2050,
+      "sha256": "e6234e75f48d2b2e5e3906e2bc253c7c0feb6970505e3203d1b7cbd6de08e317"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tube_recheck_full_close.log",
+      "bytes": 1996,
+      "sha256": "2aa60436bb80602b77dd703b2d93407fc6a43e63d71498dca26d795026d522b1"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tube_recheck_full_final.log",
+      "bytes": 1996,
+      "sha256": "913e44a213c3ac9ffa6fe53e67cdbb90f0447815aa15507fd4a0de702b0fce53"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tube_recheck_quality.log",
+      "bytes": 222,
+      "sha256": "064a6b294dc79c5abf19b955d4394c23c67d2311b5eff95bd736830ede3132cf"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tube_recheck_quality_close.log",
+      "bytes": 222,
+      "sha256": "064a6b294dc79c5abf19b955d4394c23c67d2311b5eff95bd736830ede3132cf"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tube_recheck_quality_final.log",
+      "bytes": 222,
+      "sha256": "064a6b294dc79c5abf19b955d4394c23c67d2311b5eff95bd736830ede3132cf"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tube_recheck_quality_spatial.log",
+      "bytes": 245,
+      "sha256": "a9bf8077f274d00dae1e3df1edd31543e91737fd184047a5b415f3f48f2214d6"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tube_spatial.log",
+      "bytes": 116,
+      "sha256": "3ddf1e62261421cbd7189868cd027fea5e5c3db5e8d8b9a49ec3adae5c807c3c"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tube_tail_after.log",
+      "bytes": 116,
+      "sha256": "690b1a7982a05ddc4e95d4c38531988f0f7a7fe8f83df3bade24e2628677ab86"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tube_tail_before.log",
+      "bytes": 3392,
+      "sha256": "97ece26f4c00bb436c58e944c929452c9519ec7db70d8f12f42f720369a836ce"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tube_tail_product.log",
+      "bytes": 2079,
+      "sha256": "3257ec9d867c849b199327191f98e1f03c884af2a4b1882b0f3004664d8cf132"
+    },
+    {
+      "path": "docs/reviews/evidence/2026-09-13_tube_recheck/tube_tail_product_v2.log",
+      "bytes": 113,
+      "sha256": "dfe928290e9b618b40af797fb66b60b0e006c240622b5fc276ff129fecc2650a"
+    }
+  ]
+}

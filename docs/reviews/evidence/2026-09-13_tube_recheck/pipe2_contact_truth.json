@@ -1,0 +1,46 @@
+{
+  "method": "Independent OCCT solid point containment, not collision AABB",
+  "first_deposition_point": {
+    "point_id": "point-0000002",
+    "position": [
+      -0.5546642577381944,
+      15.49007053286579,
+      5.5
+    ],
+    "surface_normal": [
+      -0.019995832265748244,
+      0.9998000633586698,
+      0.0
+    ],
+    "tangent": [
+      -0.9993636443850362,
+      -0.03566940259464573,
+      0.0
+    ],
+    "nozzle_axis": [
+      0.019995832265748244,
+      -0.9998000633586698,
+      -0.0
+    ],
+    "feedrate_mm_min": 100.0,
+    "bead_width_mm": 1.0,
+    "layer_height_mm": 1.0,
+    "material_volume_mm3": 0.5547531280937779,
+    "operation_id": "pipe2-wall-1mm",
+    "stage_id": "region-0001",
+    "layer_id": "layer-00001",
+    "region_id": "region-0001",
+    "point_type": "deposition",
+    "extrusion_role": "thin_wall",
+    "issue_ids": []
+  },
+  "nozzle_shank_center_mm": [
+    -0.5946559222696909,
+    17.48967065958313,
+    5.5
+  ],
+  "tip_inside_actual_substrate": false,
+  "shank_center_inside_actual_substrate": false,
+  "input_sha256": "116e99fd43492bd1f4f519c80c93cd1f7cd0bf2cb6861b3e123148e4031a0d4b",
+  "interpretation": "Both tested centers are outside the substrate. This center-only test cannot rule out sphere-envelope intersection. The recorded nozzle axis is radial rather than the required fixed Indexed build direction; this run predates the orientation repair."
+}

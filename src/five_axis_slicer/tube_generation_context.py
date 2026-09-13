@@ -22,7 +22,7 @@ from .manufacturing.setup import TubeOperationDefinition
 from .models import BoundingBox, CadModel, EdgeInfo, FaceInfo, Vector3
 from .validation.indexed_tube import CollisionBox
 
-CONTEXT_VERSION = "tube-build-context-v2"
+CONTEXT_VERSION = "tube-build-context-v4"
 
 
 def tube_input_fingerprint(controller: Any, operation: TubeOperationDefinition) -> str:

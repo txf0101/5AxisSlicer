@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "root": "../../../../tmp/tube_recheck_pipe2_product",
+  "status": "offline-warning-readback-passed-not-machine-qualified",
+  "files": [
+    {"path": "main.gcode", "role": "generated-nc"},
+    {"path": "toolpath.json", "role": "toolpath"},
+    {"path": "machine_axes.csv", "role": "axis-trajectory"},
+    {"path": "warnings.json", "role": "validation"},
+    {"path": "preview.json", "role": "readback-preview"},
+    {"path": "manifest.json", "role": "product-manifest"}
+  ]
+}

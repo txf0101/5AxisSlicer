@@ -336,9 +336,15 @@ class _BuildupPathBuilder:
             previous.position, _scale(previous.nozzle_axis, self.parameters.safe_clearance_mm)
         )
         self._point(
-            layer, path_id, depart, previous.tangent, previous.surface_normal or normal, "depart"
+            layer,
+            path_id,
+            depart,
+            previous.tangent,
+            previous.surface_normal or normal,
+            "depart",
+            nozzle_axis=previous.nozzle_axis,
         )
-        safe_target = _add(target, _scale(normal, self.parameters.safe_clearance_mm))
+        safe_target = _add(target, _scale(layer.plane_normal, self.parameters.safe_clearance_mm))
         self._point(layer, path_id, safe_target, tangent, normal, "travel")
         self._point(layer, path_id, target, tangent, normal, "approach")
         self._event("prime", layer, path_id)
@@ -352,6 +358,8 @@ class _BuildupPathBuilder:
         normal: Vector3,
         point_type: str,
         volume: float = 0.0,
+        *,
+        nozzle_axis: Vector3 | None = None,
     ) -> None:
         deposition = point_type == "deposition"
         self.points.append(
@@ -359,7 +367,7 @@ class _BuildupPathBuilder:
                 point_id=f"point-{len(self.points) + 1:07d}",
                 position=position,
                 tangent=tangent,
-                nozzle_axis=_scale(normal, -1.0),
+                nozzle_axis=nozzle_axis or _scale(layer.plane_normal, -1.0),
                 surface_normal=normal,
                 operation_id=self.operation_id,
                 stage_id=layer.region_id,
@@ -471,10 +479,10 @@ def _midwall_loop(
     model: CadModel | None,
 ) -> tuple[tuple[Vector3, Vector3, Vector3], ...]:
     if model is None:
-        center, tangent = feature.point_tangent_at(layer.centerline_distance_mm)
+        center, _tangent = feature.point_tangent_at(layer.centerline_distance_mm)
         return _circular_loop(
             center,
-            tangent,
+            layer.plane_normal,
             feature.path_radius_mm,
             parameters.contour_chord_error_mm,
         )

@@ -1,0 +1,110 @@
+{
+  "completed": true,
+  "exportable": true,
+  "status": "warning",
+  "points": 15479,
+  "readback": {
+    "schema_version": 1,
+    "passed": true,
+    "expected_points": 15479,
+    "read_points": 15479,
+    "coordinate_mismatches": [],
+    "feedrate_mismatches": [],
+    "extrusion_mismatches": [],
+    "order_mismatches": []
+  },
+  "validation": {
+    "schema_version": 1,
+    "report_id": "pipe2-wall-1mm-indexed-v1-validation-v1",
+    "toolpath_id": "pipe2-wall-1mm-indexed-v1",
+    "trajectory_id": "pipe2-wall-1mm-indexed-v1-xyzac-v1",
+    "status": "warning",
+    "ready_for_export": true,
+    "issues": [
+      {
+        "code": "xyzac.rotary_singularity",
+        "severity": "warning",
+        "object_id": "point-0000001",
+        "context": {
+          "retained_c_rad": 0.0
+        }
+      },
+      {
+        "code": "xyzac.rotary_singularity",
+        "severity": "warning",
+        "object_id": "point-0000002",
+        "context": {
+          "retained_c_rad": 0.0
+        }
+      },
+      {
+        "code": "xyzac.rotary_singularity",
+        "severity": "warning",
+        "object_id": "point-0000003",
+        "context": {
+          "retained_c_rad": 0.0
+        }
+      },
+      {
+        "code": "MACHINE_REFERENCE_ONLY",
+        "severity": "warning",
+        "object_id": "builtin.machine.own_ac_fdm.v1",
+        "context": {
+          "resource_type": "machine"
+        }
+      }
+    ],
+    "metrics": [
+      {
+        "name": "maximum_radial_error",
+        "value": 0.0036448098755563763,
+        "limit": 0.01,
+        "unit": "mm",
+        "passed": true
+      },
+      {
+        "name": "maximum_sampled_chord_error",
+        "value": 0.002482062139289809,
+        "limit": 0.01,
+        "unit": "mm",
+        "passed": true
+      },
+      {
+        "name": "maximum_layer_spacing_error",
+        "value": 0.0,
+        "limit": 0.01,
+        "unit": "mm",
+        "passed": true
+      },
+      {
+        "name": "maximum_wedge_height_error",
+        "value": 0.046006331115617805,
+        "limit": 0.046006331115617805,
+        "unit": "mm",
+        "passed": true
+      }
+    ],
+    "collision_samples_checked": 52380,
+    "motion_sample_error_mm": 0.25,
+    "issue_counts": {
+      "xyzac.rotary_singularity": 2714,
+      "MACHINE_REFERENCE_ONLY": 1
+    },
+    "issues_are_examples": true,
+    "all_issues_source": "../pipe2_six_files.zip / warnings.json"
+  },
+  "rotary_ranges_deg": {
+    "A": [
+      0.0,
+      70.51333146296729
+    ],
+    "C": [
+      0.0,
+      0.0
+    ]
+  },
+  "max_fk_position_error_mm": 1.2710574864626038e-13,
+  "max_fk_orientation_error_rad": 0.0,
+  "gcode_characters": 2140279,
+  "elapsed_seconds": 38.57904310000595
+}

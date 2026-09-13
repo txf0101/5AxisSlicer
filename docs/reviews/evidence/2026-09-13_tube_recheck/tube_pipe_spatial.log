@@ -1,0 +1,2 @@
+Ready Setup validated; complete generation starts
+{"completed": true, "exportable": false, "status": "error", "points": 15479, "readback": {"schema_version": 1, "passed": false, "expected_points": 15479, "read_points": 0, "coordinate_mismatches": [], "feedrate_mismatches": [], "extrusion_mismatches": [], "order_mismatches": ["export_blocked_by_validation"]}, "elapsed_seconds": 34.873358500015456}

@@ -70,8 +70,8 @@ from .indexed_tube import (
 )
 
 ALGORITHM_VERSIONS = {
-    "tube_thin_wall_indexed": "tube-indexed-product-v1",
-    "tube_buildup": "tube-buildup-product-v1",
+    "tube_thin_wall_indexed": "tube-indexed-product-v3",
+    "tube_buildup": "tube-buildup-product-v2",
     "tube_continuous": "tube-continuous-product-v1",
 }
 PRODUCT_STATE_SCHEMA_VERSION = 2
@@ -845,6 +845,7 @@ def _plan_json(plan: IndexedSlicePlan | TubeBuildupPlan | None) -> dict[str, Any
         "kind": "tube_thin_wall_indexed",
         "regions": [item.region_id for item in plan.regions],
         "layers": [item.layer_id for item in plan.layers],
+        "deposited_heights_mm": [item.deposited_height_mm for item in plan.layers],
     }
 
 

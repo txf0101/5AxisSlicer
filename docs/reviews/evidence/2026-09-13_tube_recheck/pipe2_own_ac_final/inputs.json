@@ -1,0 +1,1158 @@
+{
+  "source": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\pipe2\\弯管新.stp",
+  "source_sha256": "116e99fd43492bd1f4f519c80c93cd1f7cd0bf2cb6861b3e123148e4031a0d4b",
+  "wall_thickness_mm": 1.0,
+  "centerline_length_mm": 66.4658970965758,
+  "setup": {
+    "setup_id": "setup-1",
+    "name": "Manufacturing Setup 1",
+    "assignments": {
+      "part_body_ids": [
+        "body_002"
+      ],
+      "ignored_body_ids": [
+        "body_001"
+      ],
+      "fixture_body_ids": [],
+      "unassigned_body_ids": []
+    },
+    "resources": {
+      "machine": {
+        "schema_version": 1,
+        "resource_type": "machine",
+        "resource_id": "builtin.machine.own_ac_fdm.v1",
+        "profile_version": 1,
+        "payload": {
+          "build_surfaces": [
+            {
+              "depth_mm": null,
+              "diameter_mm": 180.0,
+              "id": "xyzac_plate",
+              "name": "Own AC heated table",
+              "shape": "circle",
+              "thickness_mm": 0.0,
+              "width_mm": null
+            }
+          ],
+          "id": "builtin.machine.own_ac_fdm.v1",
+          "joints": [
+            {
+              "T_parent_from_child_zero": {
+                "T_target_from_source": [
+                  [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    1.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                ],
+                "source_frame": "x_carriage",
+                "target_frame": "machine"
+              },
+              "axis_direction": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "child_link_id": "x_carriage",
+              "id": "X",
+              "joint_type": "linear",
+              "max_acceleration": null,
+              "max_velocity": null,
+              "motion_side": "tool",
+              "name": "X linear axis",
+              "parent_link_id": "machine",
+              "post_axis_map": {
+                "offset": 0.0,
+                "output_unit": "mm",
+                "scale": 1.0,
+                "word": "X"
+              },
+              "rotation_center_mm": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "soft_limit_max": null,
+              "soft_limit_min": null,
+              "zero_offset": 0.0
+            },
+            {
+              "T_parent_from_child_zero": {
+                "T_target_from_source": [
+                  [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    1.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                ],
+                "source_frame": "y_carriage",
+                "target_frame": "x_carriage"
+              },
+              "axis_direction": [
+                0.0,
+                1.0,
+                0.0
+              ],
+              "child_link_id": "y_carriage",
+              "id": "Y",
+              "joint_type": "linear",
+              "max_acceleration": null,
+              "max_velocity": null,
+              "motion_side": "tool",
+              "name": "Y linear axis",
+              "parent_link_id": "x_carriage",
+              "post_axis_map": {
+                "offset": 0.0,
+                "output_unit": "mm",
+                "scale": 1.0,
+                "word": "Y"
+              },
+              "rotation_center_mm": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "soft_limit_max": null,
+              "soft_limit_min": null,
+              "zero_offset": 0.0
+            },
+            {
+              "T_parent_from_child_zero": {
+                "T_target_from_source": [
+                  [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    1.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                ],
+                "source_frame": "tool",
+                "target_frame": "y_carriage"
+              },
+              "axis_direction": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "child_link_id": "tool",
+              "id": "Z",
+              "joint_type": "linear",
+              "max_acceleration": null,
+              "max_velocity": null,
+              "motion_side": "tool",
+              "name": "Z linear axis",
+              "parent_link_id": "y_carriage",
+              "post_axis_map": {
+                "offset": 0.0,
+                "output_unit": "mm",
+                "scale": 1.0,
+                "word": "Z"
+              },
+              "rotation_center_mm": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "soft_limit_max": null,
+              "soft_limit_min": null,
+              "zero_offset": 0.0
+            },
+            {
+              "T_parent_from_child_zero": {
+                "T_target_from_source": [
+                  [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    1.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                ],
+                "source_frame": "a_cradle",
+                "target_frame": "machine"
+              },
+              "axis_direction": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "child_link_id": "a_cradle",
+              "id": "A",
+              "joint_type": "rotary",
+              "max_acceleration": null,
+              "max_velocity": null,
+              "motion_side": "workpiece",
+              "name": "A rotary axis",
+              "parent_link_id": "machine",
+              "post_axis_map": {
+                "offset": 0.0,
+                "output_unit": "deg",
+                "scale": 1.0,
+                "word": "A"
+              },
+              "rotation_center_mm": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "soft_limit_max": 3.141592653589793,
+              "soft_limit_min": -3.141592653589793,
+              "zero_offset": 0.0
+            },
+            {
+              "T_parent_from_child_zero": {
+                "T_target_from_source": [
+                  [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    1.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                ],
+                "source_frame": "c_table",
+                "target_frame": "a_cradle"
+              },
+              "axis_direction": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "child_link_id": "c_table",
+              "id": "C",
+              "joint_type": "rotary",
+              "max_acceleration": null,
+              "max_velocity": null,
+              "motion_side": "workpiece",
+              "name": "C rotary axis",
+              "parent_link_id": "a_cradle",
+              "post_axis_map": {
+                "offset": 0.0,
+                "output_unit": "deg",
+                "scale": 1.0,
+                "word": "C"
+              },
+              "rotation_center_mm": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "soft_limit_max": 6.283185307179586,
+              "soft_limit_min": -6.283185307179586,
+              "zero_offset": 0.0
+            }
+          ],
+          "manufacturer": "自研 / In-house",
+          "model": "AC rotary-table FDM",
+          "mount_datums": [
+            {
+              "T_parent_from_mount": {
+                "T_target_from_source": [
+                  [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    1.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                ],
+                "source_frame": "build_plate_mount",
+                "target_frame": "c_table"
+              },
+              "build_surface_id": "xyzac_plate",
+              "id": "build_plate_mount",
+              "name": "Rotary table center",
+              "parent_link_id": "c_table"
+            }
+          ],
+          "name": "自有 AC 五轴打印机 / Own AC FDM",
+          "reference_only": true,
+          "root_link_id": "machine",
+          "source_uri": "manuscript.docx#section-2.1-table-1",
+          "tool_link_id": "tool",
+          "version": 1,
+          "workpiece_link_id": "c_table"
+        },
+        "content_hash": "a98ffc8688ac1378780c3ed7f345b5d7f4408edf6bc5807470f66faa2ba44eed"
+      },
+      "nozzle": {
+        "schema_version": 1,
+        "resource_type": "nozzle",
+        "resource_id": "pipe2-1mm-audit",
+        "profile_version": 1,
+        "payload": {
+          "construction_material": null,
+          "display_name": "1 mm audit nozzle",
+          "filament_diameter_mm": 1.75,
+          "flow_category": null,
+          "interface": "M6",
+          "is_builtin": false,
+          "length_mm": 2,
+          "orifice_diameter_mm": 1.0,
+          "outer_profile_rz_mm": [
+            [
+              0.5,
+              0.0
+            ],
+            [
+              0.6,
+              2.0
+            ]
+          ],
+          "profile_version": 1,
+          "resource_id": "pipe2-1mm-audit",
+          "schema_version": 1,
+          "source": null,
+          "temperature_limit_c": null,
+          "wear_resistance_rating": null
+        },
+        "content_hash": "3d78658c07a0e1c9e4946a19638ff3ad81afc8462a5ea7f27f110d97256957fe"
+      },
+      "material": {
+        "schema_version": 1,
+        "resource_type": "material",
+        "resource_id": "audit-pla",
+        "profile_version": 1,
+        "payload": {
+          "brand": "Generic",
+          "density_g_cm3": 1.24,
+          "display_name": "Cura Generic PLA 1.75 mm",
+          "filament_diameter_mm": 1.75,
+          "form": "filament",
+          "guid": "0ff92885-617b-4144-a03c-9989872454bc",
+          "is_builtin": false,
+          "material": "PLA",
+          "process": "FFF/FDM",
+          "profile_version": 1,
+          "recommendations": {
+            "build_plate_temperature_c": 60.0,
+            "nozzle_temperature_c": 200.0
+          },
+          "resource_id": "audit-pla",
+          "review_confirmed": true,
+          "review_required": true,
+          "schema_version": 1,
+          "source": {
+            "file_path": "generic_pla_175.xml.fdm_material",
+            "revision": "886e7ad927463493cc9c64f427b1ae2cf4ce12c1",
+            "sha256": "5bc7c562e14cb10c15323bca26f1afddedcf6e18166c92adf4d638611907a4be",
+            "title": "Ultimaker fdm_materials: Generic PLA 1.75 mm",
+            "url": "https://github.com/Ultimaker/fdm_materials/blob/886e7ad927463493cc9c64f427b1ae2cf4ce12c1/generic_pla_175.xml.fdm_material"
+          },
+          "upstream_version": 13
+        },
+        "content_hash": "312a9527251e717e8f1c0fea0b69d674fa8bae6c15ab161f3b75665778f19497"
+      }
+    },
+    "coordinate_systems": {
+      "model": {
+        "frame_id": "model",
+        "name": "model",
+        "origin_reference": {
+          "reference_type": "numeric",
+          "point_in_source_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "geometry": null,
+          "parameter": null,
+          "confirmed": true
+        },
+        "z_direction_reference": {
+          "reference_type": "numeric",
+          "direction_in_source": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "geometry": null,
+          "secondary_geometry": null,
+          "first_point_in_source_mm": null,
+          "second_point_in_source_mm": null,
+          "flipped": false,
+          "confirmed": true
+        },
+        "x_direction_reference": {
+          "reference_type": "numeric",
+          "direction_in_source": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "geometry": null,
+          "secondary_geometry": null,
+          "first_point_in_source_mm": null,
+          "second_point_in_source_mm": null,
+          "flipped": false,
+          "confirmed": true
+        },
+        "T_target_from_source": {
+          "source_frame": "source",
+          "target_frame": "model",
+          "T_target_from_source": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              -0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              -0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        "revision": 1
+      },
+      "build": {
+        "frame_id": "build",
+        "name": "build",
+        "origin_reference": {
+          "reference_type": "numeric",
+          "point_in_source_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "geometry": null,
+          "parameter": null,
+          "confirmed": true
+        },
+        "z_direction_reference": {
+          "reference_type": "numeric",
+          "direction_in_source": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "geometry": null,
+          "secondary_geometry": null,
+          "first_point_in_source_mm": null,
+          "second_point_in_source_mm": null,
+          "flipped": false,
+          "confirmed": true
+        },
+        "x_direction_reference": {
+          "reference_type": "numeric",
+          "direction_in_source": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "geometry": null,
+          "secondary_geometry": null,
+          "first_point_in_source_mm": null,
+          "second_point_in_source_mm": null,
+          "flipped": false,
+          "confirmed": true
+        },
+        "T_target_from_source": {
+          "source_frame": "source",
+          "target_frame": "build",
+          "T_target_from_source": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              -0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              -0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        "revision": 1
+      }
+    },
+    "placement": {
+      "mount_datum_id": "build_plate_mount",
+      "adjustment": {
+        "translation_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "quaternion_xyzw": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      "T_mount_from_build": {
+        "source_frame": "build",
+        "target_frame": "build_plate_mount",
+        "T_target_from_source": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            250.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0,
+            250.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            -300.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      }
+    },
+    "draft_nodes": [],
+    "dirty_nodes": [],
+    "invalid_nodes": [],
+    "issues": [],
+    "revision": 1
+  },
+  "setup_validation": {
+    "issues": [
+      {
+        "code": "MACHINE_REFERENCE_ONLY",
+        "severity": "warning",
+        "object_id": "builtin.machine.own_ac_fdm.v1",
+        "context": {
+          "resource_type": "machine"
+        }
+      }
+    ],
+    "node_states": {
+      "build_cs": "valid",
+      "machine": "valid",
+      "material": "valid",
+      "model_cs": "valid",
+      "nozzle": "valid",
+      "operation": "dirty",
+      "part": "valid",
+      "placement": "valid"
+    },
+    "coordinates_valid": true,
+    "setup_ready": true
+  },
+  "operation": {
+    "operation_id": "pipe2-wall-1mm",
+    "setup_id": "setup-1",
+    "name": "Tube Thin-Wall Indexed",
+    "operation_type": "tube_thin_wall_indexed",
+    "state": "dirty",
+    "dirty_reasons": [
+      "operation_created",
+      "operation_geometry_changed",
+      "operation_parameters_changed"
+    ],
+    "enabled": true,
+    "geometry": {
+      "tube_body": {
+        "object_id": "body_002",
+        "geometry_type": "body",
+        "signature": {
+          "schema_version": 1,
+          "geometry_type": "body",
+          "descriptor": {
+            "kind": "solid",
+            "assembly_path": "弯管新",
+            "bounds_mm": {
+              "minimum": [
+                -16.0000001,
+                -20.202002314912093,
+                4.999999899999994
+              ],
+              "maximum": [
+                16.0000001,
+                36.90979707706259,
+                71.68262115462142
+              ]
+            },
+            "dimensions_mm": [
+              32.0000002,
+              57.111799391974685,
+              66.68262125462142
+            ],
+            "volume_mm3": 6473.071995018587,
+            "surface_area_mm2": 13140.922734559752,
+            "centroid_mm": [
+              -6.3451069811293996e-15,
+              7.215000693790886,
+              36.05307012202093
+            ],
+            "topology": {
+              "face_count": 8,
+              "edge_count": 14,
+              "vertex_count": 8,
+              "surface_types": {
+                "cylinder": 4,
+                "plane": 2,
+                "torus": 2
+              },
+              "curve_types": {
+                "bsplinecurve": 6,
+                "circle": 8
+              },
+              "vertex_edge_degrees": [
+                2,
+                2,
+                2,
+                2,
+                3,
+                3,
+                3,
+                3
+              ]
+            }
+          },
+          "parent_body": null,
+          "kernel_signature": "3543ea00cbca0d0bd7d38f72e0a213daa064f8eb6da3521eec518783e9891d84"
+        },
+        "parent_body_id": null,
+        "assembly_name": "弯管新"
+      },
+      "entry_port": {
+        "object_id": "body_002_edge_0003",
+        "geometry_type": "edge",
+        "signature": {
+          "schema_version": 1,
+          "geometry_type": "edge",
+          "descriptor": {
+            "curve_type": "circle",
+            "length_mm": 100.53096491487338,
+            "bounds_mm": {
+              "minimum": [
+                -1.934543418978814e-14,
+                -16.0,
+                4.999999999999995
+              ],
+              "maximum": [
+                0.0,
+                16.0,
+                5.000000000000005
+              ]
+            },
+            "endpoints_mm": [
+              [
+                -3.91886975727153e-15,
+                16.0,
+                4.999999999999995
+              ],
+              [
+                0.0,
+                16.0,
+                4.999999999999995
+              ]
+            ],
+            "arc_length_midpoint_mm": [
+              -1.934543418978814e-14,
+              -16.0,
+              5.000000000000005
+            ],
+            "center_mm": [
+              0.0,
+              1.01603706510246e-16,
+              5.0
+            ],
+            "axis_direction": [
+              -0.0,
+              3.33066907387547e-16,
+              1.0
+            ],
+            "radius_mm": 16.0,
+            "adjacency": {
+              "vertex_count": 1,
+              "face_count": 2,
+              "face_surface_types": [
+                "cylinder",
+                "plane"
+              ],
+              "vertex_edge_degrees": [
+                2
+              ]
+            }
+          },
+          "parent_body": {
+            "kind": "solid",
+            "assembly_path": "弯管新",
+            "bounds_mm": {
+              "minimum": [
+                -16.0000001,
+                -20.202002314912093,
+                4.999999899999994
+              ],
+              "maximum": [
+                16.0000001,
+                36.90979707706259,
+                71.68262115462142
+              ]
+            },
+            "dimensions_mm": [
+              32.0000002,
+              57.111799391974685,
+              66.68262125462142
+            ],
+            "volume_mm3": 6473.071995018587,
+            "surface_area_mm2": 13140.922734559752,
+            "centroid_mm": [
+              -6.3451069811293996e-15,
+              7.215000693790886,
+              36.05307012202093
+            ],
+            "topology": {
+              "face_count": 8,
+              "edge_count": 14,
+              "vertex_count": 8,
+              "surface_types": {
+                "cylinder": 4,
+                "plane": 2,
+                "torus": 2
+              },
+              "curve_types": {
+                "bsplinecurve": 6,
+                "circle": 8
+              },
+              "vertex_edge_degrees": [
+                2,
+                2,
+                2,
+                2,
+                3,
+                3,
+                3,
+                3
+              ]
+            }
+          },
+          "kernel_signature": "a278d960b655ac03a038d484040cb5d4ce55367538dbf1af6250b5d33a3d8a4c"
+        },
+        "parent_body_id": "body_002",
+        "assembly_name": "弯管新"
+      },
+      "exit_port": {
+        "object_id": "body_002_edge_0014",
+        "geometry_type": "edge",
+        "signature": {
+          "schema_version": 1,
+          "geometry_type": "edge",
+          "descriptor": {
+            "curve_type": "circle",
+            "length_mm": 100.53096491487338,
+            "bounds_mm": {
+              "minimum": [
+                -5.142188144172203e-15,
+                26.234996390323808,
+                40.47289700116248
+              ],
+              "maximum": [
+                0.0,
+                36.90979697706259,
+                70.63990932312372
+              ]
+            },
+            "endpoints_mm": [
+              [
+                -3.91886975727153e-15,
+                36.90979697706259,
+                40.47289700116248
+              ],
+              [
+                0.0,
+                36.90979697706259,
+                40.47289700116248
+              ]
+            ],
+            "arc_length_midpoint_mm": [
+              -5.142188144172203e-15,
+              26.234996390323808,
+              70.63990932312372
+            ],
+            "center_mm": [
+              0.0,
+              31.5723966836932,
+              55.5564031621431
+            ],
+            "axis_direction": [
+              -0.0,
+              0.9427191350612888,
+              0.3335875183355869
+            ],
+            "radius_mm": 16.0,
+            "adjacency": {
+              "vertex_count": 1,
+              "face_count": 2,
+              "face_surface_types": [
+                "cylinder",
+                "plane"
+              ],
+              "vertex_edge_degrees": [
+                2
+              ]
+            }
+          },
+          "parent_body": {
+            "kind": "solid",
+            "assembly_path": "弯管新",
+            "bounds_mm": {
+              "minimum": [
+                -16.0000001,
+                -20.202002314912093,
+                4.999999899999994
+              ],
+              "maximum": [
+                16.0000001,
+                36.90979707706259,
+                71.68262115462142
+              ]
+            },
+            "dimensions_mm": [
+              32.0000002,
+              57.111799391974685,
+              66.68262125462142
+            ],
+            "volume_mm3": 6473.071995018587,
+            "surface_area_mm2": 13140.922734559752,
+            "centroid_mm": [
+              -6.3451069811293996e-15,
+              7.215000693790886,
+              36.05307012202093
+            ],
+            "topology": {
+              "face_count": 8,
+              "edge_count": 14,
+              "vertex_count": 8,
+              "surface_types": {
+                "cylinder": 4,
+                "plane": 2,
+                "torus": 2
+              },
+              "curve_types": {
+                "bsplinecurve": 6,
+                "circle": 8
+              },
+              "vertex_edge_degrees": [
+                2,
+                2,
+                2,
+                2,
+                3,
+                3,
+                3,
+                3
+              ]
+            }
+          },
+          "kernel_signature": "10cab3f8c6ba4a05312c6a103eeeb11fdfe8ede32951936cd0d5bb437d5b3456"
+        },
+        "parent_body_id": "body_002",
+        "assembly_name": "弯管新"
+      },
+      "substrate_body": {
+        "object_id": "body_001",
+        "geometry_type": "body",
+        "signature": {
+          "schema_version": 1,
+          "geometry_type": "body",
+          "descriptor": {
+            "kind": "solid",
+            "assembly_path": "弯管新",
+            "bounds_mm": {
+              "minimum": [
+                -25.0000001,
+                -25.0000001,
+                -1e-07
+              ],
+              "maximum": [
+                25.0000001,
+                25.0000001,
+                5.0000001
+              ]
+            },
+            "dimensions_mm": [
+              50.0000002,
+              50.0000002,
+              5.000000200000001
+            ],
+            "volume_mm3": 9817.477042468103,
+            "surface_area_mm2": 4712.38898038469,
+            "centroid_mm": [
+              4.076176262485909e-15,
+              -8.833467290969567e-16,
+              2.5
+            ],
+            "topology": {
+              "face_count": 3,
+              "edge_count": 3,
+              "vertex_count": 2,
+              "surface_types": {
+                "cylinder": 1,
+                "plane": 2
+              },
+              "curve_types": {
+                "bsplinecurve": 1,
+                "circle": 2
+              },
+              "vertex_edge_degrees": [
+                2,
+                2
+              ]
+            }
+          },
+          "parent_body": null,
+          "kernel_signature": "1fbbc584ef346458e81366b4bb4beed1917f090a5d59942cfe31500ea130d3cc"
+        },
+        "parent_body_id": null,
+        "assembly_name": "弯管新"
+      },
+      "manual_centerline_edges": []
+    },
+    "parameters": {
+      "bead_width_mm": 1.0,
+      "layer_height_mm": 1.0,
+      "max_wedge_angle_deg": 15.0,
+      "max_bead_height_error_mm": 0.05,
+      "safe_clearance_mm": 3.0,
+      "retract_length_mm": 1.0,
+      "deposition_feedrate_mm_min": 100.0,
+      "travel_feedrate_mm_min": 100.0,
+      "contour_chord_error_mm": 0.01
+    },
+    "type_config": null
+  },
+  "generation_context": {
+    "version": "tube-build-context-v3",
+    "T_build_from_source": {
+      "source_frame": "source",
+      "target_frame": "build",
+      "T_target_from_source": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "T_workpiece_from_build": {
+      "source_frame": "build",
+      "target_frame": "c_table",
+      "T_target_from_source": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          250.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          250.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -300.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "collision": {
+      "check_ipw": true,
+      "coordinate_frame": "build",
+      "obstacles": [
+        {
+          "id": "body_001",
+          "role": "substrate",
+          "minimum_mm": [
+            -25.0000001,
+            -25.0000001,
+            -1e-07
+          ],
+          "maximum_mm": [
+            25.0000001,
+            25.0000001,
+            5.0000001
+          ]
+        }
+      ]
+    },
+    "setup_issues": [
+      {
+        "code": "MACHINE_REFERENCE_ONLY",
+        "severity": "warning",
+        "object_id": "builtin.machine.own_ac_fdm.v1",
+        "context": {
+          "resource_type": "machine"
+        }
+      }
+    ]
+  }
+}

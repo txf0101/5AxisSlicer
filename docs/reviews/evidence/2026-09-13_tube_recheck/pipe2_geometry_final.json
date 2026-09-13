@@ -1,0 +1,37 @@
+{
+  "geometry_metrics": [
+    {
+      "name": "maximum_radial_error",
+      "value": 0.0036448098755563763,
+      "limit": 0.01,
+      "unit": "mm",
+      "passed": true
+    },
+    {
+      "name": "maximum_sampled_chord_error",
+      "value": 0.002482062139289809,
+      "limit": 0.01,
+      "unit": "mm",
+      "passed": true
+    },
+    {
+      "name": "maximum_layer_spacing_error",
+      "value": 0.0,
+      "limit": 0.01,
+      "unit": "mm",
+      "passed": true
+    },
+    {
+      "name": "maximum_wedge_height_error",
+      "value": 0.046006331115617805,
+      "limit": 0.046006331115617805,
+      "unit": "mm",
+      "passed": true
+    }
+  ],
+  "layers": 67,
+  "points": 15479,
+  "deposited_volume_mm3": 6473.797342833636,
+  "analytic_annulus_volume_mm3": 6473.0719950185885,
+  "volume_truth_basis": "CAD measured constant annulus radii 16/15 mm and centerline length; not manual NC"
+}

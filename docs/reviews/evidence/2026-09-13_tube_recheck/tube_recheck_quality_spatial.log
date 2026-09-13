@@ -1,0 +1,10 @@
+==> Ruff
+All checks passed!
+==> Migrated Ruff
+All checks passed!
+==> Security Ruff
+All checks passed!
+==> Migrated format
+61 files already formatted
+==> Context budget
+complexity: validation/indexed_tube.py:_collision_issues is 16; budget is 15

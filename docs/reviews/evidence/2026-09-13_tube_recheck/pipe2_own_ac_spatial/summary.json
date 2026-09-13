@@ -1,0 +1,1689 @@
+{
+  "completed": true,
+  "exportable": false,
+  "status": "error",
+  "points": 15479,
+  "readback": {
+    "schema_version": 1,
+    "passed": false,
+    "expected_points": 15479,
+    "read_points": 0,
+    "coordinate_mismatches": [],
+    "feedrate_mismatches": [],
+    "extrusion_mismatches": [],
+    "order_mismatches": [
+      "export_blocked_by_validation"
+    ]
+  },
+  "validation": {
+    "schema_version": 1,
+    "report_id": "pipe2-wall-1mm-indexed-v1-validation-v1",
+    "toolpath_id": "pipe2-wall-1mm-indexed-v1",
+    "trajectory_id": "pipe2-wall-1mm-indexed-v1-xyzac-v1",
+    "status": "error",
+    "ready_for_export": false,
+    "issues": [
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000002",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 0
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000003",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 1
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000004",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 2
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000005",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 3
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000006",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 4
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000007",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 5
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000008",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 6
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000009",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 7
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000010",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 8
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000011",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 9
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000012",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 10
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000013",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 11
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000014",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 12
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000015",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 13
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000016",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 14
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000017",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 15
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000018",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 16
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000019",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 17
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000020",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 18
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000021",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 19
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000022",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 20
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000023",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 21
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000024",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 22
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000025",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 23
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000026",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 24
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000027",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 25
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000028",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 26
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000029",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 27
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000030",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 28
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000031",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 29
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000032",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 30
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000033",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 31
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000034",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 32
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000035",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 33
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000036",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 34
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000037",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 35
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000038",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 36
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000039",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 37
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000040",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 38
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000041",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 39
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000042",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 40
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000043",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 41
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000044",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 42
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000045",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 43
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000046",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 44
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000047",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 45
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000048",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 46
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000049",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 47
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000050",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 48
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000051",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 49
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000052",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 50
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000053",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 51
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000054",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 52
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000055",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 53
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000056",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 54
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000057",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 55
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000058",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 56
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000059",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 57
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000060",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 58
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000061",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 59
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000062",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 60
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000063",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 61
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000064",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 62
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000065",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 63
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000066",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 64
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000067",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 65
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000068",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 66
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000069",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 67
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000070",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 68
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000071",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 69
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000072",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 70
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000073",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 71
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000074",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 72
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000075",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 73
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000076",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 74
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000077",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 75
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000078",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 76
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000079",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 77
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000080",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 78
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000081",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 79
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000082",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 80
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000083",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 81
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000084",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 82
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000085",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 83
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000086",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 84
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000087",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 85
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000088",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 86
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000089",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 87
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000090",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 88
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000091",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 89
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000092",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 90
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000093",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 91
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000094",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 92
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000095",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 93
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000096",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 94
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000097",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 95
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000098",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 96
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000099",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 97
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000100",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 98
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000101",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 99
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000102",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 100
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000103",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 101
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000104",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 102
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000105",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 103
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000106",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 104
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000107",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 105
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000108",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 106
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000109",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 107
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000110",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 108
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000111",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 109
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000112",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 110
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000113",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 111
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000114",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 112
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000115",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 113
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000116",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 114
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000117",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 115
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000118",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 116
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000119",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 117
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000120",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 118
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000121",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 119
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000122",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 120
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000123",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 121
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000124",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 122
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000125",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 123
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000126",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 124
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000127",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 125
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000128",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 126
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000129",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 127
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000130",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 128
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000131",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 129
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000132",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 130
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000133",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 131
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000134",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 132
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000135",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 133
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000136",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 134
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000137",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 135
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000138",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 136
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000139",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 137
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000140",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 138
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000141",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 139
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000142",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 140
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000143",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 141
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000144",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 142
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000145",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 143
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000146",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 144
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000147",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 145
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000148",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 146
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000149",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 147
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000150",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 148
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000151",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 149
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000152",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 150
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000153",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 151
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000154",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 152
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000155",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 153
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000156",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 154
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000157",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 155
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000158",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 156
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000159",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 157
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000160",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 158
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000161",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 159
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000162",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 160
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000163",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 161
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000164",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 162
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000165",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 163
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000166",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 164
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000167",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 165
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000168",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 166
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000169",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 167
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000170",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 168
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000171",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 169
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000172",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 170
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000173",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 171
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000174",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 172
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000175",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 173
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000176",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 174
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000177",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 175
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000178",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 176
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000179",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 177
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000180",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 178
+        }
+      },
+      {
+        "code": "tube.nozzle_obstacle_collision",
+        "severity": "error",
+        "object_id": "point-0000181",
+        "context": {
+          "target_id": "body_001",
+          "segment_index": 179
+        }
+      },
+      {
+        "code": "MACHINE_REFERENCE_ONLY",
+        "severity": "warning",
+        "object_id": "builtin.machine.own_ac_fdm.v1",
+        "context": {
+          "resource_type": "machine"
+        }
+      }
+    ],
+    "metrics": [
+      {
+        "name": "maximum_radial_error",
+        "value": 0.0036448098755563763,
+        "limit": 0.01,
+        "unit": "mm",
+        "passed": true
+      },
+      {
+        "name": "maximum_sampled_chord_error",
+        "value": 0.002482062139289809,
+        "limit": 0.01,
+        "unit": "mm",
+        "passed": true
+      },
+      {
+        "name": "maximum_layer_spacing_error",
+        "value": 0.0,
+        "limit": 0.01,
+        "unit": "mm",
+        "passed": true
+      },
+      {
+        "name": "maximum_wedge_height_error",
+        "value": 0.046006331115617805,
+        "limit": 0.046006331115617805,
+        "unit": "mm",
+        "passed": true
+      }
+    ],
+    "collision_samples_checked": 52552,
+    "motion_sample_error_mm": 0.25
+  },
+  "elapsed_seconds": 34.873358500015456
+}

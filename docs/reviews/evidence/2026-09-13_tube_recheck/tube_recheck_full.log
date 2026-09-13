@@ -1,0 +1,17 @@
+........................................................................ [  8%]
+.............................................................. [ 15%]
+......................................... [ 20%]
+............................................. [ 26%]
+........................................................................ [ 34%]
+........................................................................ [ 43%]
+........................................................................ [ 51%]
+..................................s.............s.............................................. [ 63%]
+................................................................. [ 71%]
+......s................................................................................................................................ [ 87%]
+...................................................................... [ 95%]
+......................................                             [100%]
+=========================== short test summary info ===========================
+SKIPPED [1] tests\test_project_io.py:779: file symlink unavailable: [WinError 1314] �ͻ���û���������Ȩ��: 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmpjcm4hbkf\\outside.step' -> 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmpjcm4hbkf\\project\\source\\871ceb5230283158dc842891d5c5800dcaa768acf987c0d1778deaf52af975dc.step'
+SKIPPED [1] tests\test_project_io.py:807: directory symlink unavailable: [WinError 1314] �ͻ���û���������Ȩ��: 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmp10kvt6my\\outside-source' -> 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmp10kvt6my\\project\\source'
+SKIPPED [1] tests\test_setup_config.py:335: file symlink unavailable: [WinError 1314] �ͻ���û���������Ȩ��: 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmpcd9prxfs\\target.yaml' -> 'C:\\Users\\TANGXU~1\\AppData\\Local\\Temp\\tmpcd9prxfs\\manufacturing-setup.yaml'
+836 passed, 3 skipped, 141 subtests passed in 383.83s (0:06:23)
