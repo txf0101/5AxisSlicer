@@ -63,8 +63,8 @@
     {"path": "docs/guides/assets/paper_core_ac/01_freeform_zh_1366x768.png", "role": "ui"},
     {"path": "docs/guides/assets/paper_core_ac/02_freeform_en_1600x900.png", "role": "ui"},
     {"path": "docs/guides/assets/paper_core_ac/03_freeform_en_1920x1080.png", "role": "ui"},
-    {"path": "dist/pc07_paper_core_ac/five_axis_slicer-2.0.2.dev35+g590cebc.d20260913-py3-none-any.whl", "role": "package"},
-    {"path": "dist/pc07_paper_core_ac/five_axis_slicer-2.0.2.dev35+g590cebc.d20260913.tar.gz", "role": "package"},
-    {"path": "dist/pc07_paper_core_ac_native/five_axis_slicer-2.0.2.dev35+g590cebc.d20260913-cp312-cp312-win_amd64.whl", "role": "package"}
+    {"path": "dist/pc07_final_b586a55/five_axis_slicer-2.0.2.dev36+gb586a55-py3-none-any.whl", "role": "package"},
+    {"path": "dist/pc07_final_b586a55/five_axis_slicer-2.0.2.dev36+gb586a55.tar.gz", "role": "package"},
+    {"path": "dist/pc07_final_b586a55_native/five_axis_slicer-2.0.2.dev36+gb586a55-cp312-cp312-win_amd64.whl", "role": "package"}
   ]
 }
