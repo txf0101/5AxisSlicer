@@ -38,7 +38,7 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 
 | 日期 | 任务 | Skill | 本轮用途 | 证据 |
 | --- | --- | --- | --- | --- |
-| 2026-09-14 | CI-QUALITY | `five-axis-slicer-validation`、`gh-fix-ci` | 读取 Actions `34758493547` 三个失败任务的原始日志；确认 Node.js 提示不致命，修复 Freeform 的 PyQt 类型枚举访问并保留静态门禁；安装官方 GitHub CLI 以跟踪后续运行 | [CI 与分支复盘](../reviews/2026-09-13_ci_branch_consolidation_review.md)；质量检查 162 个源码文件通过，13 文件领域集 161 passed、2 skipped、89 subtests，论文核心 9 passed |
+| 2026-09-14 | CI-QUALITY | `five-axis-slicer-validation`、`gh-fix-ci` | 读取 Actions `34758493547` 三个失败任务的原始日志；确认 Node.js 提示不致命，修复 Freeform 的 PyQt 类型枚举访问并保留静态门禁；安装官方 GitHub CLI 以跟踪后续运行 | [CI 与分支复盘](../reviews/2026-09-13_ci_branch_consolidation_review.md)；质量检查 162 个源码文件通过，13 文件领域集 161 passed、2 skipped、89 subtests，论文核心 9 passed；Actions `34770465207` 四项全部通过 |
 | 2026-09-13 | DOC-01 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`computer-use` | 把案例平铺手册重组为 L01—L09 公共课程、W01—W05 工作台支线和参考手册；核对 IDE/PWSH 启动、链接、图片、错误恢复与迁移学习；Computer Use 三次均因 `nodeRepl.fetch request failed` 无法枚举 Windows 窗口 | [学习总册](../guides/user_learning_manual_zh.md)、[本轮复盘](../reviews/2026-09-13_user_learning_manual_reorganization.md) |
 | 2026-09-13 | PC01—PC07 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`artifact-package-verify`、`computer-use` | 完成受限 Freeform、显式多材料、自有 AC 离线后处理、Tube 收口、五产品证据、严格回读、串行 Qt/全仓、质量/构建/原生 wheel/隔离安装和显式清单 ZIP；Computer Use 在应用启动后仍无法枚举 Windows 窗口，不将其冒充为真人桌面操作通过 | [实施复盘](../reviews/2026-09-13_paper_core_ac_implementation_review.md)、[验证清单](../reviews/evidence/2026-09-13_paper_core_ac/validation_manifest.json) |
 | 2026-09-13 | CI-BRANCH | `five-axis-slicer-validation`、`gh-fix-ci` | 核对默认分支和全部分支祖先关系；读取 Actions 原始日志；用隔离 Python 3.12 环境修复 runner 预装包、CasADi/PyQt/mypy 漂移、Linux 平台存根和托管 VTK 崩溃边界 | [CI 与分支复盘](../reviews/2026-09-13_ci_branch_consolidation_review.md)；干净环境质量通过，13文件领域集161 passed、2 skipped、89 subtests；Actions `34747228928` 四项全部通过 |
@@ -201,7 +201,7 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 
 | 日期 | 变更依据 | 变更内容 | 影响 |
 | --- | --- | --- | --- |
-| 2026-09-14 | 用户要求修复截图中的多个 Actions 红叉，并允许安装 `gh` | 读取运行 `34758493547` 的三个失败任务日志；将 Freeform 的两处旧式 `QFormLayout` 枚举访问改为类型存根与运行时均支持的带类型写法；安装 GitHub CLI 2.100.0 | 三个失败任务共用的 Mypy 根因已修复；本地质量、同 CI 领域集和论文核心测试通过；无头 Freeform Qt 专项仍受当前 Windows 原生退出限制，不计为通过 |
+| 2026-09-14 | 用户要求修复截图中的多个 Actions 红叉，并允许安装 `gh` | 读取运行 `34758493547` 的三个失败任务日志；将 Freeform 的两处旧式 `QFormLayout` 枚举访问改为类型存根与运行时均支持的带类型写法；安装 GitHub CLI 2.100.0 | 三个失败任务共用的 Mypy 根因已修复，运行 `34770465207` 四项全绿；本地质量、同 CI 领域集和论文核心测试通过；无头 Freeform Qt 专项仍受当前 Windows 原生退出限制，不计为通过 |
 | 2026-09-13 | 用户要求按工业软件学习思路整理图文教程矩阵，案例只作练习，并在开篇写明 IDE/PWSH 启动入口 | 新增学习总册；重组手册中心为公共课程、五工作台支线和参考层；加入自检、错误恢复、迁移检查单和编写矩阵；核对 `run_app.py` 与 `scripts/run_app.ps1` | DOC-01 已完成；现有模块手册保留为参考，不再以具体案例组织总学习路线；Computer Use 无法连接窗口，复用当前可追溯 Qt/VTK 图片并单列限制 |
 | 2026-09-13 | 用户要求检查并完成 PC00—PC07，发现问题必须修复 | 冻结输入契约，完成受限 Freeform、T0—T3 多材料事件、自有 AC 离线后处理、Tube 收口、五产品/四项目证据及本地封装；修复质量门发现的可空CAD/输入类型问题和1366×768 Tube顶部按钮重叠 | PC00—PC07、T08、T12改为已完成（受限离线）；57 passed/6 subtests、全仓856 passed/3 skipped/141 subtests、质量/构建/Twine/原生包隔离安装通过；真实控制器、标定、生产VTK/OpenGL、现场碰撞和试切未验证 |
 | 2026-09-13 | 用户要求按 GitHub 默认主线统一本地与远端分支，并解决当前 CI 依赖冲突 | 确认默认分支为 `master`，所有功能分支均已进入主线后删除其引用；Actions 改用隔离虚拟环境，固定 mypy、CasADi 与 PyQt5，修复 Linux 平台存根，并把托管 Windows 回归限定为无头领域集 | 本地和远端均只保留 `master`；干净 Python 3.12 的依赖、质量和161项领域测试通过；完整 Qt/VTK 桌面回归仍须在真实显示环境执行 |

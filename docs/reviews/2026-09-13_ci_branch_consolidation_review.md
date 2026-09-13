@@ -37,6 +37,8 @@ Freeform 是新增且需要继续接受静态检查的模块，所以没有把�
 - `tests/test_paper_core_ac.py`：9 passed；
 - Freeform Qt 专项在当前无头 Windows 会话中以 `0xC0000409` 原生退出，没有产生 Python 断言失败；该限制与前述 Qt/VTK 桌面资格边界一致，不记录为测试通过。枚举本身已由运行时探测和 Mypy 双向核对。
 
+修复提交 `479313c` 的 Actions 运行 `34770465207` 已完成远端验证：Linux static/domain、Windows Python 3.10 regression、Windows Python 3.12 regression 和 Windows native smoke 四项全部为 success。三个原红叉均已消除。
+
 ## 可复用判断
 
 共享 GitHub runner 上的 `pip check` 应在项目隔离环境内执行。静态检查依赖应固定已验证版本；第三方类型存根异常与项目自身类型错误需分开记录。新增受 mypy 检查的领域模块不应加入 legacy Qt 豁免清单。
