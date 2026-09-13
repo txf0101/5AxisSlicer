@@ -2,13 +2,16 @@
 
 ## 六个工作台算法开发
 
+- [论文核心 AC 范围与开源复用研究](planning/paper_core_ac_scope.md)：当前优先路线、四例覆盖缺口、论文批判性核对、固定版本及许可边界；状态统一见台账PC00—PC07。
+- [论文核心范围调整复盘](reviews/2026-09-13_paper_core_ac_planning_review.md)：资源取舍、证据限制和本轮实际Skill使用。
+
 - [AUD-02 缺陷修复、真实模型与 Skill 更新](reviews/2026-09-12_algorithm_audit_fixes.md)：最终合格输出、拒绝案例、回归及后续开发方法。
 
 - [当前完成情况与算法独立审查（AUD-01）](reviews/2026-09-12_project_algorithm_audit.md)：真实模型、坐标/道宽/截层/回读/空移反例及本轮验证边界。
 - [算法审查后的修改方案](planning/2026-09-12_algorithm_audit_fix_plan.md)：六步修复顺序、具体改动范围和验收矩阵；已实施，结果见下方 AUD-02。
 
 - [开发进度台账](planning/progress_tracker.md)：任务主表；每轮更新依赖、状态、验收证据、下一步和日期。
-- [开发计划](planning/development_plan.md)：管状优先，六个工作台、20 种操作、当前 UI 接入、算法接口和完成条件。
+- [开发计划](planning/development_plan.md)：论文核心AC优先，保留长期六工作台20操作目录及原阶段完成条件。
 - [参考资料检索](planning/reference_research.md)：NX 官方资料、公开参考项目、研究论文与当前源码依据。
 - [A01-A03 管状算法基线、样例与 Toolpath 契约](planning/tube_algorithm_contract.md)：环境、支持范围、样例真值、生成路径和结果清单契约。
 - [A02 样例来源登记](planning/example_source_inventory.md)：当前示例文件的来源状态、哈希和后续真值计划。
