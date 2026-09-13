@@ -1,5 +1,7 @@
 # Curve 工作台图文手册
 
+> 初次使用请先完成[学习总册](user_learning_manual_zh.md)的 L01—L06；本页是 Curve 专项参考。叶轮边链用于练习有向链和法向，换零件后必须重新选择 edge、邻面和工艺参数。
+
 适用版本：C01—C05，2026-09-12 当前本地版本。Curve 工作台沿 STEP 有向 edge 链生成 Buildup、Multi-pass Buildup 和 Offset Buildup。内部长度为 mm、角度为 rad；界面长度显示 mm。路径从 Source/Model frame 转换到 Build frame，再进入 Workpiece/Machine frame 的离线轨迹检查。
 
 ## 1. 前置条件与入口

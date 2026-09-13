@@ -2,7 +2,7 @@
 
 最近更新：2026-09-13。关联[开发计划](development_plan.md)、[参考资料](reference_research.md)与[文档索引](../README.md)。**下方主表是任务进度的唯一维护位置**，计划和复盘引用任务编号，不另行维护一份状态表。
 
-当前优先版本：**论文核心 AC（Paper Core AC）**。PC00—PC07 已于 2026-09-13 按 **契约/来源 → 受限 Freeform → 多材料 → 自有 AC 后处理 → Tube 收口 → 四例与双通道回归 → 本地封装** 完成受限离线验收。范围和许可证依据见[论文核心说明](paper_core_ac_scope.md)，实施、失败和验收见[本轮复盘](../reviews/2026-09-13_paper_core_ac_implementation_review.md)。六工作台完整目标保留为后续路线，不作为核心版前置依赖。
+当前优先版本：**论文核心 AC（Paper Core AC）**。PC00—PC07 已于 2026-09-13 按 **契约/来源 → 受限 Freeform → 多材料 → 自有 AC 后处理 → Tube 收口 → 四例与双通道回归 → 本地封装** 完成受限离线验收。DOC-01 随后把使用文档整理为学习总册、五条工作台支线和参考手册，当前入口为[学习总册](../guides/user_learning_manual_zh.md)。范围和许可证依据见[论文核心说明](paper_core_ac_scope.md)，实施、失败和验收见[本轮复盘](../reviews/2026-09-13_paper_core_ac_implementation_review.md)。六工作台完整目标保留为后续路线，不作为核心版前置依赖。
 
 Planar P01—P07、Curve C01—C05、Rotary R01—R05 保留既有离线阶段验收。PC05 已使 T04、T07、T08、T12 在受限离线范围内统一为已完成：当前 pipe2 六件套与自有 AC 回读通过，Tube 三操作的双语多尺寸证据、长 Warning、Ready/Stale/Error 展示和首页标签已收口。F01—F06 中论文需要的子集由 PC02 交付，原完整阶段仍暂缓；X01—X06、完整 I01—I04 暂缓。原编号和完成判据不删除，子集通过不自动关闭完整父阶段。当前 PC00—PC07 八项全部完成；完整路线 F/X/I 的 16 项仍暂缓，不将离线结果升级为真实控制器资格。
 
@@ -38,6 +38,7 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 
 | 日期 | 任务 | Skill | 本轮用途 | 证据 |
 | --- | --- | --- | --- | --- |
+| 2026-09-13 | DOC-01 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`computer-use` | 把案例平铺手册重组为 L01—L09 公共课程、W01—W05 工作台支线和参考手册；核对 IDE/PWSH 启动、链接、图片、错误恢复与迁移学习；Computer Use 三次均因 `nodeRepl.fetch request failed` 无法枚举 Windows 窗口 | [学习总册](../guides/user_learning_manual_zh.md)、[本轮复盘](../reviews/2026-09-13_user_learning_manual_reorganization.md) |
 | 2026-09-13 | PC01—PC07 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`artifact-package-verify`、`computer-use` | 完成受限 Freeform、显式多材料、自有 AC 离线后处理、Tube 收口、五产品证据、严格回读、串行 Qt/全仓、质量/构建/原生 wheel/隔离安装和显式清单 ZIP；Computer Use 在应用启动后仍无法枚举 Windows 窗口，不将其冒充为真人桌面操作通过 | [实施复盘](../reviews/2026-09-13_paper_core_ac_implementation_review.md)、[验证清单](../reviews/evidence/2026-09-13_paper_core_ac/validation_manifest.json) |
 | 2026-09-13 | CI-BRANCH | `five-axis-slicer-validation`、`gh-fix-ci` | 核对默认分支和全部分支祖先关系；读取 Actions 原始日志；用隔离 Python 3.12 环境修复 runner 预装包、CasADi/PyQt/mypy 漂移、Linux 平台存根和托管 VTK 崩溃边界 | [CI 与分支复盘](../reviews/2026-09-13_ci_branch_consolidation_review.md)；干净环境质量通过，13文件领域集161 passed、2 skipped、89 subtests；Actions `34747228928` 四项全部通过 |
 | 2026-09-13 | AUD-02-TUBE、T04/T07、PC05子项 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`artifact-package-verify` | 原反例复核；修复末层材料、固定方向姿态和IPW性能；独立体积/候选对照、串行Qt/全仓、六件套压缩逐文件核验；区分缺陷关闭与整阶段验收 | [同一AUD-02复盘](../reviews/2026-09-12_algorithm_audit_fixes.md)、[当前证据](../reviews/evidence/2026-09-13_tube_recheck/validation_manifest.json) |
@@ -97,6 +98,7 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 | PC05 | Tube 论文案例收口与状态统一 | PC04,AUD-02 | 已完成 | 自有AC真实pipe2几何/体积/覆盖/运动/回读；逐项决定T04/T07/T08/T12资格；README与中英首页标签一致 | pipe2 1,591点，原六件套与自有AC 25/25事件严格回读；三操作双语多尺寸证据无截断/碰撞；笔记本尺寸顶部动作重叠已修复 | T04/T07/T08/T12均关闭到受限离线资格；实机限制不变 | 2026-09-13 |
 | PC06 | 四论文案例及多材料完整回归 | PC02,PC03,PC04,PC05 | 已完成 | 当前CAD生成四例六件套并严格回读；增加预装双通道案例；独立法向/道距/体积/AC连续/材料切换/NC差异；三入口、project I/O、真实Viewer、双语三尺寸 | [验证清单](../reviews/evidence/2026-09-13_paper_core_ac/validation_manifest.json)：半球7路径30点、扇叶3路径123点、叶轮16路径384点、pipe2 1,591点、双通道48点；五套六件套和四项目重开通过 | 生产VTK/OpenGL截图受无显示会话限制；Qt证据绘制器不冒充生产Viewer资格 | 2026-09-13 |
 | PC07 | 论文核心 AC 本地封装与交付 | PC06 | 已完成 | 范围内最终pytest/质量/包检查/干净环境启动；4例项目、指南/截图、许可通知、证据索引；论文声明与验证边界一致 | 57 passed/6 subtests 联合回归；全仓 856 passed、3 skipped、141 subtests；质量门 162 源码无问题；wheel/sdist、Twine、原生wheel及包隔离安装/命令入口通过；[实施复盘](../reviews/2026-09-13_paper_core_ac_implementation_review.md) | 已本地封装；隔离环境继承已验证依赖，不声称完全无缓存干净安装；实机资格单列 | 2026-09-13 |
+| DOC-01 | 学习手册总册与教程矩阵 | PC07 | 已完成 | 开篇明确 IDE/PWSH 启动；课程按通用能力、工作台支线、自检、错误恢复和迁移到自有零件组织；案例只作为练习 | [学习总册](../guides/user_learning_manual_zh.md)、[手册中心](../guides/README.md)、[复盘](../reviews/2026-09-13_user_learning_manual_reorganization.md)；11个相关Markdown链接通过，10图可读取，入口帮助和PS1语法通过 | 作为当前用户手册入口；后续 UI/参数变化时同步更新，印刷版按需单向生成 | 2026-09-13 |
 | Q00 | 资料检索、计划与台账 | 无 | 已完成 | 六入口、20 操作、依赖与验收完整；来源、链接和台账一致 | [本轮复盘](../reviews/2026-09-10_six_workbench_plan_review.md)；51 行、20 操作、59 链接及依赖检查通过 | A01—A03 已完成；按台账进入 T01 | 2026-09-11 |
 | B01 | 既有 STEP、选择与 NC 预览 | 无 | 已完成 | 已有导入、拓扑选择和路径预览可复用 | [本轮验收](../reviews/2026-09-11_b01_b03_acceptance_review.md)；真实 STEP、四级选择、NC 解析与坐标回退、VTK 离屏通过；全仓 402 passed、3 skipped | T01 复用已核验环境、输入指纹与预览入口 | 2026-09-11 |
 | B02 | Tube Setup 与坐标闭环 | B01 | 已完成 | Part、资源、Model/Build CS、Placement、项目重开 | [本轮验收](../reviews/2026-09-11_b01_b03_acceptance_review.md)；pipe2 GUI 达到 Ready，坐标/装夹、资源与保存重开通过；符号链接权限边界单列 | T01 接入几何节点时回归 | 2026-09-11 |
@@ -198,6 +200,7 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 
 | 日期 | 变更依据 | 变更内容 | 影响 |
 | --- | --- | --- | --- |
+| 2026-09-13 | 用户要求按工业软件学习思路整理图文教程矩阵，案例只作练习，并在开篇写明 IDE/PWSH 启动入口 | 新增学习总册；重组手册中心为公共课程、五工作台支线和参考层；加入自检、错误恢复、迁移检查单和编写矩阵；核对 `run_app.py` 与 `scripts/run_app.ps1` | DOC-01 已完成；现有模块手册保留为参考，不再以具体案例组织总学习路线；Computer Use 无法连接窗口，复用当前可追溯 Qt/VTK 图片并单列限制 |
 | 2026-09-13 | 用户要求检查并完成 PC00—PC07，发现问题必须修复 | 冻结输入契约，完成受限 Freeform、T0—T3 多材料事件、自有 AC 离线后处理、Tube 收口、五产品/四项目证据及本地封装；修复质量门发现的可空CAD/输入类型问题和1366×768 Tube顶部按钮重叠 | PC00—PC07、T08、T12改为已完成（受限离线）；57 passed/6 subtests、全仓856 passed/3 skipped/141 subtests、质量/构建/Twine/原生包隔离安装通过；真实控制器、标定、生产VTK/OpenGL、现场碰撞和试切未验证 |
 | 2026-09-13 | 用户要求按 GitHub 默认主线统一本地与远端分支，并解决当前 CI 依赖冲突 | 确认默认分支为 `master`，所有功能分支均已进入主线后删除其引用；Actions 改用隔离虚拟环境，固定 mypy、CasADi 与 PyQt5，修复 Linux 平台存根，并把托管 Windows 回归限定为无头领域集 | 本地和远端均只保留 `master`；干净 Python 3.12 的依赖、质量和161项领域测试通过；完整 Qt/VTK 桌面回归仍须在真实显示环境执行 |
 | 2026-09-13 | 用户要求再检查旧错误，存在则修复、消失则标记完成 | AUD-02-TUBE原反例通过；新增末层材料、固定打印方向与IPW性能修复；当前pipe2全链通过，撤回旧A≈±122.3°固有需求解释；839 passed、3 skipped、141 subtests，质量通过，六件套压缩校验 | T04/T07受限离线资格恢复；T08/T12仍待当前实际界面与整阶段门；PC05仅复核子项先行，整体仍依赖PC04 |

@@ -1,53 +1,72 @@
-# 使用手册索引与编写要求
+# 5AxisSclicer V2.0 学习与参考手册中心
 
-本目录集中保存面向软件使用者的操作手册。开发计划、算法依据和验收复盘仍放在 `docs/planning/` 与 `docs/reviews/`；使用手册只说明用户在界面中怎样完成任务、怎样判断结果和怎样处理错误。
+这里是软件使用者的统一入口。教程按工业软件常见的三层结构组织：**学习总册**负责从零开始建立完整工作流，**工作台课程**负责不同几何和工艺的专项训练，**参考手册**用于查询参数、文件和高级入口。
 
-## 当前可用手册
+初次使用请从[《5AxisSclicer V2.0 学习手册》](user_learning_manual_zh.md)开始，不要直接挑一个案例照抄。pipe2、平面件、叶轮、扇叶和半球是练手材料，目的是帮助理解可迁移的方法；模型 ID、参数、点数和轴范围都不应复制到自己的零件。
 
-| 模块 | 手册 | 当前状态 |
+## 学习路线
+
+| 阶段 | 建议课程 | 学习成果 | 进入下一阶段前的检查 |
+| --- | --- | --- | --- |
+| 入门 | L01 界面、L02 几何、L03 Setup | 能打开项目、理解对象角色并建立坐标和资源 | 能解释 Source/Model/Build/Machine，设置问题可定位 |
+| 决策 | L04 工作台选择 | 能根据几何和制造意图选 Planar/Curve/Rotary/Tube/Freeform | 写出选择理由和拒绝条件 |
+| 操作 | L05 参数、L06 状态与恢复 | 能创建操作、应用参数、生成并处理 Warning/Error/Stale | Error 阻止导出，参数变化触发 Stale |
+| 专项 | W01—W05 任选一条工作台支线 | 掌握该类几何的选择、路径与失败边界 | 完成随附材料练习和一个迁移练习 |
+| 收口 | L07 检查回读、L08 六件套、L09 独立迁移 | 能交叉检查路径、运动和代码，保存重开并迁移到新零件 | 六件套可解释，未知设备资格继续保留 |
+
+完整课程目标、练习、自检和迁移检查单见[总册中的教程矩阵](user_learning_manual_zh.md#3-教程矩阵)。
+
+## 工作台课程
+
+| 几何/制造问题 | 课程 | 当前离线范围 |
 | --- | --- | --- |
-| 机型配置 | [机型选择、旋转轴输出字与自定义](machine_profiles_zh.md) | A/B/C 内部轴到固件轴字的映射、用户配置另存、JSON 导入导出及快照重开 |
-| Tube 坐标与装夹 | [管状坐标设置](tube_coordinate_setup_zh.md) | 已有图文步骤 |
-| Tube 设置脚本与 YAML | [设置脚本与 YAML](tube_setup_script_console_zh.md) | 已有命令说明，界面截图仍需随控制台改版补拍 |
-| Tube 三种操作 | [Tube 工作台完整手册](tube_workbench_zh.md) | 覆盖 Indexed、Buildup、Continuous 及生成和导出 |
-| Planar 路径与支撑操作 | [Planar 工作台手册](planar_workbench_zh.md) | 覆盖 Region、Zigzag、Offset、Thin Wall、Spiral、Planar Support（P07）、真实 STEP、离线检查、导出和错误恢复；真人桌面点击仍未验证 |
-| Curve 曲线沉积 | [Curve 工作台手册](curve_workbench_zh.md) | 覆盖有向边链、法向、Buildup、Multi-pass、Offset、真实 STEP、六件套、脚本/HTTP 和错误恢复 |
-| Rotary 回转沉积 | [Rotary 工作台手册](rotary_workbench_zh.md) | 覆盖回转坐标、Spiral、Thin Wall、Around Part、跨周期、G93 回读、六件套和错误恢复 |
-| 受限 Freeform | [Freeform 工作台手册](freeform_workbench_zh.md) | 论文核心有限面组、多导引线、曲面贴合/薄壁、离线导出和失败恢复 |
-| 多材料通道 | [预定义材料区域与 T0—T3](material_channels_zh.md) | 显式区域分配、切换/剪切/回抽/park/上料/温控/清洗/恢复事件链 |
-| 自有 AC 控制器 | [论文核心 AC 离线封装](paper_core_ac_controller_zh.md) | G90/M83/G94、两种 Z20 动作、宏展开、严格回读与 `machine_executable=false` 边界 |
-| Rotary/Tube/Freeform 选择辅助 | [pipe2 与扇叶模型、手工 G-code 可视化对比](../reviews/2026-09-13_pipe2_model_manual_gcode_comparison.md) | 对比连续弯管、三叶自由曲面、选面结果和手工 XYZAC，说明各工作台的支持边界 |
-| G-code 与成果预览 | [G-code 可视化手册](gcode_preview_zh.md) | 覆盖普通 Preview、成果页和五轴坐标回读边界 |
+| 平行层面、截面、孔岛、平面支撑 | [Planar 工作台](planar_workbench_zh.md) | Region、Zigzag、Offset、Thin Wall、Spiral、buildplate-only Planar Support |
+| 有向 edge 链上的沉积 | [Curve 工作台](curve_workbench_zh.md) | Buildup、Multi-pass Buildup、Offset Buildup |
+| 固定轴圆柱/圆锥上的回转沉积 | [Rotary 工作台](rotary_workbench_zh.md) | Spiral、Thin Wall、Around Part、跨周期区间 |
+| 单支恒定圆截面管体 | [Tube 工作台](tube_workbench_zh.md) | Indexed、Buildup、Continuous |
+| 有限修剪面组和明确导引线 | [受限 Freeform 工作台](freeform_workbench_zh.md) | 曲面贴合、薄壁、有限多道/多层，最多 16 面、32 条导引线 |
+| 已有 NC 的查看和诊断 | [G-code 预览](gcode_preview_zh.md) | 模型叠加、层/角色筛选、代码定位和安全回退 |
 
-Planar P01—P07、Curve C01—C05、Rotary R01—R05、Tube T01—T12 与 PC00—PC07 论文核心 AC 离线版已完成。PC02 只关闭论文所需的受限 Freeform 子集，不自动关闭通用 F01—F06 父阶段；Research 仍未完成。
+Research 工作台仍未完成，不提供操作教程。计划中的入口、名称或效果图不能写成当前可用能力。
 
-## 每个模块的交付门槛
+## 公共参考手册
 
-每个工作台及跨工作台公共模块完成时，手册至少包含以下内容：
+| 主题 | 手册 | 使用时机 |
+| --- | --- | --- |
+| 对象、坐标和装夹 | [Tube 坐标设置](tube_coordinate_setup_zh.md) | L02—L03；其中 Setup 方法供各制造工作台复用 |
+| 机型和旋转轴字 | [机型选择、旋转轴输出字与自定义](machine_profiles_zh.md) | 选择参考/自有机型、保存用户配置或核对 A/B/C 映射 |
+| 多材料 | [预定义材料区域与 T0—T3](material_channels_zh.md) | Freeform 或多通道产品需要显式区域和材料事件时 |
+| 自有 AC 后处理 | [论文核心 AC 离线封装](paper_core_ac_controller_zh.md) | 核对 G90/M83/G94、两种 Z20、宏展开和累计 C 时 |
+| 脚本与 YAML | [Tube 设置脚本与 YAML](tube_setup_script_console_zh.md) | GUI 基础掌握后，再学习事务和自动化入口 |
+| 工作台辨别 | [pipe2 与扇叶模型、手工 G-code 可视化对比](../reviews/2026-09-13_pipe2_model_manual_gcode_comparison.md) | 难以区分 Rotary、Tube、Curve 和 Freeform 时 |
 
-1. 适用范围、前置条件、可复现示例和当前限制。
-2. 从入口到结果的完整操作顺序，按钮和页签名称与当前中英文 UI 一致。
-3. 参数表，写明单位、默认值、作用、有效范围和修改后是否使结果过期。
-4. 输入角色、生成、检查、预览、导出、保存与重开的实际行为。
-5. 至少一条正常流程和一条典型失败或恢复流程。
-6. 输出文件的用途和判断成功的方法，避免只写“已生成”。
-7. 真实界面图片。关键流程至少应有界面总览、主要参数、生成结果和错误定位四类图；复杂选择或坐标操作应增加局部图。
+## 教程编写矩阵
+
+新增或修订一节课程时，应同时覆盖下表。只有“案例步骤”一列有内容的文档不能进入学习主线。
+
+| 教学层 | 必须回答的问题 | 最低证据 |
+| --- | --- | --- |
+| 学习目标 | 学完后使用者能够独立完成什么？ | 可观察的自检结果 |
+| 通用概念 | 哪些规则可以迁移到其他零件？ | 当前 UI 名称、单位和领域契约 |
+| 引导练习 | 随附案例用于练习哪个概念？ | 当前版本界面或三维结果图 |
+| 判断方法 | 如何判断结果正确、警告可接受或必须停止？ | Ready/Warning/Error/Stale、问题列表和检查结果 |
+| 错误恢复 | 怎样制造一个有意义的失败并恢复？ | 错误态和恢复态，不能只展示成功 |
+| 迁移任务 | 换成自己的同类零件后，哪些内容必须重新选择或核定？ | 不复制 ID、坐标、参数、点数和轴范围的检查单 |
+| 能力边界 | 哪些内容尚未得到软件、控制器或现场资格？ | `machine_executable`、机型和实机边界 |
 
 ## 图片与内容规则
 
-- 图片优先使用当前版本真实运行截图，保存到 `docs/guides/assets/<module>/`，或引用具有固定日期和清单的 `docs/reviews/evidence/` 证据。
-- 截图要显示足够上下文，正文紧邻图片说明用户应查看的位置和状态。含测试故障的画面必须标成错误示例。
-- 涉及路径、模型或加工结果时，至少提供一个三维视图；仅有表单截图不算图文完整。
-- 密钥、用户名、外部绝对路径和设备敏感参数应遮蔽。图片不能替代数值、单位和安全边界说明。
-- UI、参数语义或输出结构变更时，同一任务内更新手册文字并重拍受影响图片。旧图仍有审计价值时留在 `docs/reviews/evidence/`，不继续作为当前操作图。
-- 参考机型的离线通过不能写成真实机床验证。需要实测、标定或现场资格的步骤单独标明。
+- 图片优先使用当前版本真实运行截图，保存到 `docs/guides/assets/<module>/`，或引用具有日期和清单的 `docs/reviews/evidence/`。
+- 正文紧邻图片说明观察目标。错误态、Stale 或参考机型 Warning 必须明确标注，不能当成成功画面。
+- 涉及路径、模型或加工结果时至少提供一个三维视图；只有表单截图不能构成完整课程。
+- 参数必须写单位、作用和变更影响。示例值标为练习值，不能暗示适用于所有零件。
+- 案例用于练习后必须给迁移任务或替换规则。禁止把 body/face/edge ID、绝对坐标、点数或轴范围写成通用操作答案。
+- 密钥、用户名、外部绝对路径和设备敏感参数应遮蔽。图片不能替代安全边界说明。
+- UI、参数语义或输出结构变化时，同一任务更新正文和受影响图片。旧图有审计价值时留在 evidence，不继续作为当前操作图。
+- QWidget grab、证据绘制器、生产 VTK/OpenGL、Computer Use 和真人现场操作是不同证据，图注要说明来源。
 
-## 后续模块手册清单
+## 当前资格说明
 
-| 阶段 | 计划手册 | 最少配图 |
-| --- | --- | --- |
-| Planar | Region、Zigzag、Offset、Thin Wall、Spiral、Planar Support | 区域/孔岛、五种制造操作、主体/interface、路径检查、失败与恢复 |
-| Curve | 边链与法向、Buildup、Multi-pass、Offset | 边链顺序、法向、三类结果、自交或断链错误 |
-| Freeform | 曲面区域、Coating、Thin Wall、Buildup | UV/边界、投影结果、姿态、接缝与多解错误 |
-| Research | 四种研究操作及可复现实例 | 数据来源、基线、结果图、失败或负结果 |
-| 整体交付 | 安装、项目管理、资源库、自动化和故障排查 | 首次启动、保存重开、资源冲突、API 状态 |
+Planar P01—P07、Curve C01—C05、Rotary R01—R05、Tube T01—T12 和 PC00—PC07 已完成受限离线验收。PC02 只关闭论文所需的 Freeform 子集；通用 F01—F06、Research 和完整第二机型仍未完成。
+
+当前手册可以指导离线生成、检查、回读、导出和保存重开。真实控制器、宏版本、机床标定、生产环境完整碰撞和试切需要另行取得证据；自有 AC 输出保持 `machine_executable=false`。

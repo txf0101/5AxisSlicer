@@ -52,7 +52,9 @@
 
 ## 当前软件与使用说明
 
-- [图文使用手册索引与交付要求](guides/README.md)：当前手册入口、图片要求和后续各工作台的手册门槛。
+- [5AxisSclicer V2.0 学习手册](guides/user_learning_manual_zh.md)：从 IDE/PowerShell 启动、界面、Setup、工作台选择到生成、错误恢复、回读、六件套和独立迁移的主课程；随附案例只作为练习。
+- [学习与参考手册中心](guides/README.md)：学习路线、工作台课程、参考手册、教程编写矩阵和图片要求。
+- [DOC-01 学习手册重组复盘](reviews/2026-09-13_user_learning_manual_reorganization.md)：课程结构、图片依据、启动入口检查、Computer Use 限制和文档验收结果。
 - [Tube 工作台完整图文手册](guides/tube_workbench_zh.md)：三种操作、生成、检查、预览、导出及错误处理。
 - [Planar 工作台图文手册](guides/planar_workbench_zh.md)：Region、Zigzag、Offset、Thin Wall、Spiral 与 buildplate-only Planar Support 的离线生成链与恢复说明。
 - [Curve 工作台图文手册](guides/curve_workbench_zh.md)：Buildup、Multi-pass Buildup 与 Offset Buildup 的完整离线工作流。

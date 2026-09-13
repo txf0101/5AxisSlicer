@@ -1,5 +1,7 @@
 # Planar 平面工作台使用手册
 
+> 初次使用请先完成[学习总册](user_learning_manual_zh.md)的 L01—L06；本页是 Planar 专项参考。随附平面件用于练习区域、层、道距和孔岛判断，示例参数不是其他零件的默认答案。
+
 日期：2026-09-12。Planar 已具备 P01—P07 所述离线功能，阶段状态以进度台账为准。本手册覆盖 Region 截面预览、Zigzag Fill、Offset Fill、Thin Wall、Spiral，以及 buildplate-only 垂直支撑。所有结果都应先查看检查报告和回读状态；本手册不把离线参考结果描述为真实设备资格。
 
 ## AUD-02 修复后的使用要求

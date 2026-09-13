@@ -2,7 +2,7 @@
 
 5AxisSclicer V2.0 以 Workbench 为入口。`Imported NC Review` 用于已有 NC/G-code 的空间路径、层范围和路径类型预览。Tube 支持 Indexed、Buildup、Continuous；Planar 支持 Region、Zigzag、Offset、Thin Wall、Spiral 和 buildplate-only Planar Support；Curve 支持 Buildup、Multi-pass Buildup 和 Offset Buildup；Rotary 支持圆柱/圆锥 Spiral、圆周多道 Thin Wall 和跨周期 Around Part；论文核心 Freeform 子集支持有限修剪面组、曲面贴合、薄壁及有限多道/多层。这五类制造入口共用路径、状态、命令、检查、回读、保存重开和六件套离线导出链。
 
-使用者可从[图文使用手册索引](docs/guides/README.md)进入。Tube、Planar、Curve、Rotary 手册分别见[Tube](docs/guides/tube_workbench_zh.md)、[Planar](docs/guides/planar_workbench_zh.md)、[Curve](docs/guides/curve_workbench_zh.md)和[Rotary](docs/guides/rotary_workbench_zh.md)。论文核心子集请结合[Freeform 工作台](docs/guides/freeform_workbench_zh.md)、[多材料通道](docs/guides/material_channels_zh.md)和[自有 AC 离线控制器](docs/guides/paper_core_ac_controller_zh.md)阅读。机床内部 A/B/C 与固件输出字的映射见[机型选择与自定义](docs/guides/machine_profiles_zh.md)。遇到弯管或扇叶等带回转外观的模型，可先看[pipe2 与扇叶模型、手工 G-code 可视化对比](docs/reviews/2026-09-13_pipe2_model_manual_gcode_comparison.md)，判断固定轴 Rotary、中心线随动 Tube 和自由曲面路径的适用范围。坐标、G-code 和设置脚本说明仍可从手册索引进入。
+初次使用请从[《5AxisSclicer V2.0 学习手册》](docs/guides/user_learning_manual_zh.md)开始。手册首页写明 IDE 的 `run_app.py` 和 PowerShell 的 `scripts/run_app.ps1` 启动方式，并按界面、Setup、工作台选择、操作、生成恢复、回读、六件套和独立迁移组织课程。pipe2、平面件、叶轮、扇叶和半球只作为练手材料，不要求复制案例 ID 或参数。熟悉公共流程后，可从[学习与参考手册中心](docs/guides/README.md)进入 Tube、Planar、Curve、Rotary、Freeform、多材料、机型和 G-code 专项参考。
 
 算法开发按[开发计划](docs/planning/development_plan.md)推进。PC00—PC07 论文核心 AC 离线版已验收；完整 Research、通用 Freeform F01—F06 父阶段及第二机型仍暂缓。每轮任务状态、验收证据和下一步更新到[进度台账主表](docs/planning/progress_tracker.md#主表)；NX 与公开项目资料见[参考资料](docs/planning/reference_research.md)，全部开发文档从[文档索引](docs/README.md)进入。
 

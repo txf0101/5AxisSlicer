@@ -1,5 +1,7 @@
 # Rotary 工作台图文使用手册
 
+> 初次使用请先完成[学习总册](user_learning_manual_zh.md)的 L01—L06；本页是 Rotary 专项参考。圆柱或轮毂案例用于练习固定轴、零角和周期，不能把示例 face ID、角区间或轴范围复制到其他零件。
+
 适用版本：R01—R05，2026-09-13 当前本地分支。Rotary 工作台在有明确回转轴和圆柱/圆锥表面的 STEP 零件上生成 Rotary Spiral、Rotary Thin Wall 和 Around Part。内部长度使用 mm，内部角度使用 rad；界面的起止角和区域角使用 deg，角速度使用 rad/s。
 
 > 图片证据：本手册优先使用 `assets/rotary/live_qt/` 中 7 张当前生产 `RotaryPage` + `ModelViewer` 截图；它们由真实生成结果渲染，并由 Qt `QWidget.grab()` 捕获，尺寸与 SHA-256 见该目录 `summary.json`。Computer Use 在本轮未枚举到 Qt 原生窗口，不能声称由 Computer Use 捕获。`assets/rotary/current_r01_r05/` 中另有 10 张三尺寸中英状态图，使用 `qt_evidence_paint_harness` 核对控件、状态和真实 preview payload，不单独作为 VTK/OpenGL 资格证据。
