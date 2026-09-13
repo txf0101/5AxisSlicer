@@ -2,6 +2,7 @@
 
 ## 六个工作台算法开发
 
+- [CI 依赖修复与分支统一复盘](reviews/2026-09-13_ci_branch_consolidation_review.md)：默认 `master` 主线、Actions 隔离环境、依赖漂移原因和本轮验证边界。
 - [论文核心 AC 范围与开源复用研究](planning/paper_core_ac_scope.md)：当前优先路线、四例覆盖缺口、论文批判性核对、固定版本及许可边界；状态统一见台账PC00—PC07。
 - [论文核心范围调整复盘](reviews/2026-09-13_paper_core_ac_planning_review.md)：资源取舍、证据限制和本轮实际Skill使用。
 

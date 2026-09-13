@@ -27,6 +27,10 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
+      - name: Create isolated virtual environment
+        run: |
+          python -m venv .venv
+          (Resolve-Path ".venv\Scripts").Path | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
       - run: python -m pip install --upgrade pip setuptools
       - run: python -m pip install -e ".[dev,cad-tests]"
       - run: python -m pip check
@@ -53,6 +57,10 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
+      - name: Create isolated virtual environment
+        run: |
+          python -m venv .venv
+          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
       - run: python -m pip install --upgrade pip setuptools
       - run: python -m pip install -e ".[dev,cad-tests]"
       - run: python -m pip check
@@ -94,6 +102,10 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
+      - name: Create isolated virtual environment
+        run: |
+          python -m venv .venv
+          (Resolve-Path ".venv\Scripts").Path | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
       - run: python -m pip install --upgrade pip setuptools
       - run: python -m pip install -e ".[dev,cad-tests]"
       - name: Verify native extension
