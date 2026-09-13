@@ -24,7 +24,7 @@ GitHub 仓库的默认分支经远端配置和 API 核对为 `master`。处理�
 - `python -X faulthandler -m pytest -q tests/test_project_io.py`：33 passed、2 skipped、14 subtests passed；
 - 与 Windows CI 相同的 13 文件无头领域集：161 passed、2 skipped、89 subtests passed。
 
-提交 `fdc0ff4` 的首次远端运行确认 Windows 3.10/3.12 均已通过隔离安装、`pip check` 和质量门禁；Linux 暴露 `msvcrt` 的平台存根误判，Windows 完整回归暴露托管 runner 的 VTK 原生访问冲突。本机干净环境复现完整回归时同样在 GUI/VTK 阶段异常退出，未生成完整 JUnit，因此不把该次尝试记录为测试通过。后续修复提交的 GitHub Actions 是最终远端判据。
+提交 `fdc0ff4` 的首次远端运行确认 Windows 3.10/3.12 均已通过隔离安装、`pip check` 和质量门禁；Linux 暴露 `msvcrt` 的平台存根误判，Windows 完整回归暴露托管 runner 的 VTK 原生访问冲突。本机干净环境复现完整回归时同样在 GUI/VTK 阶段异常退出，未生成完整 JUnit，因此不把该次尝试记录为测试通过。修复提交 `7e0ff13` 的 GitHub Actions 运行 `34747228928` 最终四项全部通过：Linux static/domain、Windows Python 3.10/3.12 regression 和 Windows native smoke 均为 success。
 
 ## 可复用判断
 

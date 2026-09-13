@@ -38,7 +38,7 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 
 | 日期 | 任务 | Skill | 本轮用途 | 证据 |
 | --- | --- | --- | --- | --- |
-| 2026-09-13 | CI-BRANCH | `five-axis-slicer-validation`、`gh-fix-ci` | 核对默认分支和全部分支祖先关系；读取 Actions 原始日志；用隔离 Python 3.12 环境修复 runner 预装包、CasADi/PyQt/mypy 漂移、Linux 平台存根和托管 VTK 崩溃边界 | [CI 与分支复盘](../reviews/2026-09-13_ci_branch_consolidation_review.md)；干净环境质量通过，13文件领域集161 passed、2 skipped、89 subtests；最终远端结果以本轮 Actions 为准 |
+| 2026-09-13 | CI-BRANCH | `five-axis-slicer-validation`、`gh-fix-ci` | 核对默认分支和全部分支祖先关系；读取 Actions 原始日志；用隔离 Python 3.12 环境修复 runner 预装包、CasADi/PyQt/mypy 漂移、Linux 平台存根和托管 VTK 崩溃边界 | [CI 与分支复盘](../reviews/2026-09-13_ci_branch_consolidation_review.md)；干净环境质量通过，13文件领域集161 passed、2 skipped、89 subtests；Actions `34747228928` 四项全部通过 |
 | 2026-09-13 | AUD-02-TUBE、T04/T07、PC05子项 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`artifact-package-verify` | 原反例复核；修复末层材料、固定方向姿态和IPW性能；独立体积/候选对照、串行Qt/全仓、六件套压缩逐文件核验；区分缺陷关闭与整阶段验收 | [同一AUD-02复盘](../reviews/2026-09-12_algorithm_audit_fixes.md)、[当前证据](../reviews/evidence/2026-09-13_tube_recheck/validation_manifest.json) |
 | 2026-09-13 | PC00 | `five-axis-workbench-development` | 按阶段门重排论文核心范围；批判性核对论文/当前代码、固定开源版本与许可；保留原阶段资格和延期范围 | [核心范围/研究](paper_core_ac_scope.md)、[复盘](../reviews/2026-09-13_paper_core_ac_planning_review.md)；本轮仅文档检查，未运行产品测试 |
 | 2026-09-13 | I01-AXIS | `five-axis-workbench-development`、`five-axis-slicer-validation` | 按共享机型/后处理契约分离内部关节与控制器地址；复用已验证解释器、Qt 串行、WinError 5 诊断、JUnit、质量和构建规则 | [实施复盘](../reviews/2026-09-13_custom_rotary_axis_words_review.md)；[验证清单](../reviews/evidence/2026-09-13_custom_rotary_axis_words/validation_manifest.json) |
