@@ -1,0 +1,355 @@
+{
+  "inventory": {
+    "source": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\pipe2\\弯管新.stp",
+    "sha256": "116e99fd43492bd1f4f519c80c93cd1f7cd0bf2cb6861b3e123148e4031a0d4b",
+    "bodies": [
+      {
+        "id": "body_001",
+        "volume_mm3": 9817.477042468103,
+        "bounds": {
+          "minimum": [
+            -25.0000001,
+            -25.0000001,
+            -1e-07
+          ],
+          "maximum": [
+            25.0000001,
+            25.0000001,
+            5.0000001
+          ]
+        }
+      },
+      {
+        "id": "body_002",
+        "volume_mm3": 6473.071995018587,
+        "bounds": {
+          "minimum": [
+            -16.0000001,
+            -20.202002314912093,
+            4.999999899999994
+          ],
+          "maximum": [
+            16.0000001,
+            36.90979707706259,
+            71.68262115462142
+          ]
+        }
+      }
+    ]
+  },
+  "legacy": {
+    "source": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\pipe2\\弯管.gcode",
+    "sha256": "4d6630c01f63d6f802ae6955752fa41b35abfea23509c661fcd855f7064ff70a",
+    "lines": 679277,
+    "positive_e_segments": 669892,
+    "commands": {
+      "PRINT_START": 1,
+      "G90": 2,
+      "M82": 2,
+      "G92": 2,
+      "G0": 3210,
+      "G1": 676055,
+      "E0.0": 2,
+      "PRINT_END": 1
+    },
+    "types": {
+      "unspecified": 669892
+    },
+    "bounds": [
+      [
+        -24.8,
+        -24.793,
+        0.2
+      ],
+      [
+        24.78,
+        36.99537127515776,
+        70.50474425873536
+      ]
+    ],
+    "positive_e_mm": 6578.070504999998,
+    "length_mm": 197776.60818926804,
+    "ac_bounds": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        70.513,
+        0.0
+      ]
+    ],
+    "frame": "zero-centre Rz(-C)Rx(-A), registration to CAD not assumed",
+    "boundary": "G0/G1 positive-E only; positive E is not automatically valid deposition"
+  },
+  "current_modes": {
+    "indexed": {
+      "segments": 42778,
+      "volume_mm3": 2589.3061526591714,
+      "cad_tube_volume_mm3": 6473.071995018587,
+      "wall_thickness_mm": 1.0,
+      "bead_width_mm": 0.4,
+      "scope": "single mid-wall path, substrate excluded; no full wall fill"
+    },
+    "continuous": {
+      "segments": 29066,
+      "volume_mm3": 2588.677794048916,
+      "cad_tube_volume_mm3": 6473.071995018587,
+      "wall_thickness_mm": 1.0,
+      "bead_width_mm": 0.4,
+      "scope": "single mid-wall path, substrate excluded; no full wall fill"
+    }
+  },
+  "planar": {
+    "requested_layers": 358,
+    "successful_layers": 303,
+    "failures": [
+      {
+        "z_mm": 29.0,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 30.4,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 30.6,
+        "error": "planar.offset_kernel_failed: offset 0.8 mm failed"
+      },
+      {
+        "z_mm": 31.0,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 31.2,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 33.4,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 35.6,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 35.8,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 36.4,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 36.6,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 36.8,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 37.0,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 37.2,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 37.4,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 37.8,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 38.0,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 38.2,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 38.4,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 38.6,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 38.8,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 39.0,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 40.6,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 40.8,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 41.0,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 41.2,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 41.4,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 41.8,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 42.0,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 42.2,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 42.4,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 42.6,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 42.8,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 43.0,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 43.2,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 43.4,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 43.6,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 43.8,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 44.0,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 44.2,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 44.4,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 44.6,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 44.8,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 45.0,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 45.2,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 45.4,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 45.6,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 46.8,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 47.0,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 47.6,
+        "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+      },
+      {
+        "z_mm": 49.6,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 52.0,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 52.8,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 70.2,
+        "error": "planar.offset_kernel_failed: offset 0.8 mm failed"
+      },
+      {
+        "z_mm": 70.4,
+        "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+      },
+      {
+        "z_mm": 70.6,
+        "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+      }
+    ],
+    "deposition_segments": 364129,
+    "section_segments": 99456,
+    "scope": "full-height diagnostic alternative: no supports, no skin, no machine qualification",
+    "accepted": false
+  },
+  "comparison": {
+    "case": "pipe2",
+    "accepted": false,
+    "legacy_frame": "zero-centre Rz(-C)Rx(-A), registration to CAD not assumed",
+    "legacy_to_source_rz_deg": 0,
+    "new_candidate_file": "new_indexed.npz",
+    "planar_requested_layers": 358,
+    "planar_failed_layers": 55,
+    "metric_scope": "sampled endpoint proximity, not bead coverage or exact curve Hausdorff",
+    "new_to_old": {
+      "median_mm": 0.32712017775247537,
+      "p95_mm": 0.39048353461064583,
+      "max_mm": 0.5651108291186374
+    },
+    "old_to_new": {
+      "median_mm": 3.9888741557358105,
+      "p95_mm": 9.91551545873825,
+      "max_mm": 16.095831658095992
+    }
+  },
+  "manufacturing_accepted": false,
+  "new_complete_nc_generated": false
+}

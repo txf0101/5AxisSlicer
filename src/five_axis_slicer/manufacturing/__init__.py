@@ -138,6 +138,18 @@ from .toolpath import (
     ToolpathEvent,
     ToolpathPoint,
 )
+from .fan_job import (
+    FAN_JOB_SCHEMA_VERSION,
+    FanGeometrySelection,
+    FanJobOperation,
+    FanJobPublication,
+    FanManufacturingContract,
+    FanManufacturingJob,
+    FanOperationState,
+    FanProcessParameters,
+    ParameterSource,
+    SourcedValue,
+)
 
 __all__ = [
     "BUILD_CS_NODE",
@@ -236,6 +248,16 @@ __all__ = [
     "ValidationIssue",
     "Vector3",
     "apply_local_adjustment",
+    "FAN_JOB_SCHEMA_VERSION",
+    "FanGeometrySelection",
+    "FanJobOperation",
+    "FanJobPublication",
+    "FanManufacturingContract",
+    "FanManufacturingJob",
+    "FanOperationState",
+    "FanProcessParameters",
+    "ParameterSource",
+    "SourcedValue",
     "apply_material_plan",
     "audit_coordinate_frame_references",
     "builtin_machine_profiles",

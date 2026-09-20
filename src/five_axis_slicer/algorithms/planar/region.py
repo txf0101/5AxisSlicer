@@ -12,7 +12,7 @@ from dataclasses import dataclass
 import math
 from collections.abc import Callable
 
-from OCP.BRepAlgoAPI import BRepAlgoAPI_Section
+from OCP.BRepAlgoAPI import BRepAlgoAPI_Common, BRepAlgoAPI_Section
 from OCP.BRepBuilderAPI import BRepBuilderAPI_MakeFace
 from OCP.gp import gp_Dir, gp_Pln, gp_Pnt
 
@@ -62,6 +62,8 @@ def slice_planar_layers(
     layer_height_mm: float,
     last_layer_z_mm: float | None = None,
     sample_segments: int = 64,
+    max_endpoint_correction_mm: float = 0.001,
+    allow_bounded_topology_repair: bool = False,
     T_model_from_build: RigidTransform | None = None,
     cancelled: Callable[[], bool] | None = None,
 ) -> tuple[PlanarSliceLayer, ...]:
@@ -84,6 +86,8 @@ def slice_planar_layers(
         layer_height_mm,
         count,
         sample_segments,
+        max_endpoint_correction_mm,
+        allow_bounded_topology_repair,
         transform,
         cancelled,
     )
@@ -95,6 +99,8 @@ def _slice_layers(
     layer_height_mm: float,
     count: int,
     sample_segments: int,
+    max_endpoint_correction_mm: float,
+    allow_bounded_topology_repair: bool,
     transform: RigidTransform,
     cancelled: Callable[[], bool] | None,
 ) -> tuple[PlanarSliceLayer, ...]:
@@ -109,7 +115,14 @@ def _slice_layers(
             PlanarSliceLayer(
                 f"layer-{index + 1:05d}",
                 z_mm,
-                _section_regions(bodies, z_mm, sample_segments, transform),
+                _section_regions(
+                    bodies,
+                    z_mm,
+                    sample_segments,
+                    transform,
+                    max_endpoint_correction_mm,
+                    allow_bounded_topology_repair,
+                ),
             )
         )
     return tuple(layers)
@@ -142,6 +155,24 @@ def _selected_bodies(
     return bodies, body_bounds
 
 
+def _union_material_regions(regions: list[PlanarRegion], z_mm: float) -> tuple[PlanarRegion, ...]:
+    """Union per-solid material faces, retaining each solid's genuine holes."""
+    if len(regions) < 2:
+        return tuple(regions)
+    from dataclasses import replace
+    from .support_geometry import layer_shape, shape_regions
+
+    unique = tuple(replace(region, region_id=f"source-{i}") for i, region in enumerate(regions))
+    try:
+        material = layer_shape(PlanarSliceLayer("material-union", z_mm, unique))
+        material = material.clean()
+        if not material.isValid():
+            raise ValueError("invalid union of material section faces")
+        return shape_regions(material, z_mm, "region")
+    except Exception as error:
+        raise PlanarSectionError("planar.material_union_failed", str(error)) from error
+
+
 def _last_layer_z(
     model: CadModel,
     body_bounds: list[BoundingBox],
@@ -166,8 +197,10 @@ def _section_regions(
     z_mm: float,
     sample_segments: int,
     T_model_from_build: RigidTransform,
+    max_endpoint_correction_mm: float,
+    allow_bounded_topology_repair: bool,
 ) -> tuple[PlanarRegion, ...]:
-    loops: list[tuple[Vector3, ...]] = []
+    regions: list[PlanarRegion] = []
     origin_model = T_model_from_build.transform_point((0.0, 0.0, z_mm))
     normal_model = T_model_from_build.transform_vector((0.0, 0.0, 1.0))
     T_build_from_model = T_model_from_build.inverse()
@@ -181,14 +214,60 @@ def _section_regions(
         if not section.IsDone():
             raise PlanarSectionError("planar.section_kernel_failed", f"z={z_mm}")
         try:
-            body_loops = _recover_loops(section.Shape(), sample_segments)
+            body_loops = _recover_loops(
+                section.Shape(),
+                sample_segments,
+                max_endpoint_correction_mm=max_endpoint_correction_mm,
+                allow_bounded_topology_repair=allow_bounded_topology_repair,
+            )
         except PlanarSectionError as error:
-            raise PlanarSectionError(error.code, f"z_mm={z_mm:.9g}, {error.detail}") from error
-        loops.extend(
+            if not allow_bounded_topology_repair or error.code != "planar.section_open_contour":
+                raise PlanarSectionError(error.code, f"z_mm={z_mm:.9g}, {error.detail}") from error
+            body_loops = _common_face_loops(
+                body,
+                face,
+                sample_segments,
+                max_endpoint_correction_mm,
+                z_mm,
+                error,
+            )
+        loops = [
             tuple(T_build_from_model.transform_point(point) for point in loop)
             for loop in body_loops
+        ]
+        regions.extend(_classify_loops(loops))
+    return _union_material_regions(regions, z_mm)
+
+
+def _common_face_loops(
+    body: object,
+    face: object,
+    sample_segments: int,
+    max_endpoint_correction_mm: float,
+    z_mm: float,
+    original_error: PlanarSectionError,
+) -> list[tuple[Vector3, ...]]:
+    """Recover a closed material face when the section edge graph is open."""
+
+    common = BRepAlgoAPI_Common(body, face)
+    common.Build()
+    if not common.IsDone():
+        raise PlanarSectionError(
+            original_error.code,
+            f"z_mm={z_mm:.9g}, {original_error.detail}; common-face fallback failed",
+        ) from original_error
+    try:
+        return _recover_loops(
+            common.Shape(),
+            sample_segments,
+            max_endpoint_correction_mm=max_endpoint_correction_mm,
+            allow_bounded_topology_repair=False,
         )
-    return _classify_loops(loops)
+    except PlanarSectionError as fallback_error:
+        raise PlanarSectionError(
+            fallback_error.code,
+            f"z_mm={z_mm:.9g}, section={original_error.detail}, common={fallback_error.detail}",
+        ) from fallback_error
 
 
 def _bounds_corners(minimum: Vector3, maximum: Vector3) -> tuple[Vector3, ...]:
@@ -200,17 +279,26 @@ def _bounds_corners(minimum: Vector3, maximum: Vector3) -> tuple[Vector3, ...]:
     )
 
 
-def _recover_loops(shape: object, sample_segments: int) -> list[tuple[Vector3, ...]]:
+def _recover_loops(
+    shape: object,
+    sample_segments: int,
+    *,
+    max_endpoint_correction_mm: float = 0.001,
+    allow_bounded_topology_repair: bool = False,
+) -> list[tuple[Vector3, ...]]:
     try:
-        return recover_section_loops(shape, sample_segments)
+        return recover_section_loops(
+            shape,
+            sample_segments,
+            max_endpoint_correction_mm=max_endpoint_correction_mm,
+            allow_bounded_topology_repair=allow_bounded_topology_repair,
+        )
     except SectionLoopError as error:
         raise PlanarSectionError(error.code, error.detail) from error
 
 
 def _classify_loops(loops: list[tuple[Vector3, ...]]) -> tuple[PlanarRegion, ...]:
-    records = [
-        (loop, abs(_area(loop)), _centroid2(loop)) for loop in loops if abs(_area(loop)) > 1.0e-9
-    ]
+    records = [(loop, abs(_area(loop)), loop[0][:2]) for loop in loops if abs(_area(loop)) > 1.0e-9]
     regions: list[PlanarRegion] = []
     for outer, area, center in sorted(records, key=lambda item: item[1], reverse=True):
         if _nesting_depth(center, area, records) % 2:
@@ -240,7 +328,9 @@ def _direct_holes(
     area: float,
     records: list[tuple[tuple[Vector3, ...], float, Point2]],
 ) -> tuple[tuple[Vector3, ...], ...]:
-    depth = _nesting_depth(_centroid2(outer), area, records)
+    # A concave loop's vertex mean can lie outside its material. For disjoint
+    # section boundaries, a boundary vertex is a valid witness in other loops.
+    depth = _nesting_depth(outer[0][:2], area, records)
     return tuple(
         loop
         for loop, smaller_area, center in records

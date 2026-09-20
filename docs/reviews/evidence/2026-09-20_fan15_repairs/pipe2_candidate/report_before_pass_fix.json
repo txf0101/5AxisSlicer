@@ -1,0 +1,391 @@
+{
+  "source_hash": "116e99fd43492bd1f4f519c80c93cd1f7cd0bf2cb6861b3e123148e4031a0d4b",
+  "wall_parameters": {
+    "bead_width_mm": 0.3333333333333333,
+    "layer_height_mm": 0.2,
+    "maximum_pass_spacing_mm": 0.3333333333333333,
+    "max_wedge_angle_deg": 15.0,
+    "max_bead_height_error_mm": 0.05,
+    "safe_clearance_mm": 5.0,
+    "retract_length_mm": 1.0,
+    "deposition_feedrate_mm_min": 1200.0,
+    "travel_feedrate_mm_min": 3000.0,
+    "contour_chord_error_mm": 0.02
+  },
+  "geometry": {
+    "tube_body": {
+      "object_id": "body_002",
+      "geometry_type": "body",
+      "signature": {
+        "schema_version": 1,
+        "geometry_type": "body",
+        "descriptor": {
+          "kind": "solid",
+          "assembly_path": "弯管新",
+          "bounds_mm": {
+            "minimum": [
+              -16.0000001,
+              -20.202002314912093,
+              4.999999899999994
+            ],
+            "maximum": [
+              16.0000001,
+              36.90979707706259,
+              71.68262115462142
+            ]
+          },
+          "dimensions_mm": [
+            32.0000002,
+            57.111799391974685,
+            66.68262125462142
+          ],
+          "volume_mm3": 6473.071995018587,
+          "surface_area_mm2": 13140.922734559752,
+          "centroid_mm": [
+            -6.3451069811293996e-15,
+            7.215000693790886,
+            36.05307012202093
+          ],
+          "topology": {
+            "face_count": 8,
+            "edge_count": 14,
+            "vertex_count": 8,
+            "surface_types": {
+              "cylinder": 4,
+              "plane": 2,
+              "torus": 2
+            },
+            "curve_types": {
+              "bsplinecurve": 6,
+              "circle": 8
+            },
+            "vertex_edge_degrees": [
+              2,
+              2,
+              2,
+              2,
+              3,
+              3,
+              3,
+              3
+            ]
+          }
+        },
+        "parent_body": null,
+        "kernel_signature": "3543ea00cbca0d0bd7d38f72e0a213daa064f8eb6da3521eec518783e9891d84"
+      },
+      "parent_body_id": null,
+      "assembly_name": "弯管新"
+    },
+    "entry_port": {
+      "object_id": "body_002_edge_0003",
+      "geometry_type": "edge",
+      "signature": {
+        "schema_version": 1,
+        "geometry_type": "edge",
+        "descriptor": {
+          "curve_type": "circle",
+          "length_mm": 100.53096491487338,
+          "bounds_mm": {
+            "minimum": [
+              -1.934543418978814e-14,
+              -16.0,
+              4.999999999999995
+            ],
+            "maximum": [
+              0.0,
+              16.0,
+              5.000000000000005
+            ]
+          },
+          "endpoints_mm": [
+            [
+              -3.91886975727153e-15,
+              16.0,
+              4.999999999999995
+            ],
+            [
+              0.0,
+              16.0,
+              4.999999999999995
+            ]
+          ],
+          "arc_length_midpoint_mm": [
+            -1.934543418978814e-14,
+            -16.0,
+            5.000000000000005
+          ],
+          "center_mm": [
+            0.0,
+            1.01603706510246e-16,
+            5.0
+          ],
+          "axis_direction": [
+            -0.0,
+            3.33066907387547e-16,
+            1.0
+          ],
+          "radius_mm": 16.0,
+          "adjacency": {
+            "vertex_count": 1,
+            "face_count": 2,
+            "face_surface_types": [
+              "cylinder",
+              "plane"
+            ],
+            "vertex_edge_degrees": [
+              2
+            ]
+          }
+        },
+        "parent_body": {
+          "kind": "solid",
+          "assembly_path": "弯管新",
+          "bounds_mm": {
+            "minimum": [
+              -16.0000001,
+              -20.202002314912093,
+              4.999999899999994
+            ],
+            "maximum": [
+              16.0000001,
+              36.90979707706259,
+              71.68262115462142
+            ]
+          },
+          "dimensions_mm": [
+            32.0000002,
+            57.111799391974685,
+            66.68262125462142
+          ],
+          "volume_mm3": 6473.071995018587,
+          "surface_area_mm2": 13140.922734559752,
+          "centroid_mm": [
+            -6.3451069811293996e-15,
+            7.215000693790886,
+            36.05307012202093
+          ],
+          "topology": {
+            "face_count": 8,
+            "edge_count": 14,
+            "vertex_count": 8,
+            "surface_types": {
+              "cylinder": 4,
+              "plane": 2,
+              "torus": 2
+            },
+            "curve_types": {
+              "bsplinecurve": 6,
+              "circle": 8
+            },
+            "vertex_edge_degrees": [
+              2,
+              2,
+              2,
+              2,
+              3,
+              3,
+              3,
+              3
+            ]
+          }
+        },
+        "kernel_signature": "a278d960b655ac03a038d484040cb5d4ce55367538dbf1af6250b5d33a3d8a4c"
+      },
+      "parent_body_id": "body_002",
+      "assembly_name": "弯管新"
+    },
+    "exit_port": {
+      "object_id": "body_002_edge_0014",
+      "geometry_type": "edge",
+      "signature": {
+        "schema_version": 1,
+        "geometry_type": "edge",
+        "descriptor": {
+          "curve_type": "circle",
+          "length_mm": 100.53096491487338,
+          "bounds_mm": {
+            "minimum": [
+              -5.142188144172203e-15,
+              26.234996390323808,
+              40.47289700116248
+            ],
+            "maximum": [
+              0.0,
+              36.90979697706259,
+              70.63990932312372
+            ]
+          },
+          "endpoints_mm": [
+            [
+              -3.91886975727153e-15,
+              36.90979697706259,
+              40.47289700116248
+            ],
+            [
+              0.0,
+              36.90979697706259,
+              40.47289700116248
+            ]
+          ],
+          "arc_length_midpoint_mm": [
+            -5.142188144172203e-15,
+            26.234996390323808,
+            70.63990932312372
+          ],
+          "center_mm": [
+            0.0,
+            31.5723966836932,
+            55.5564031621431
+          ],
+          "axis_direction": [
+            -0.0,
+            0.9427191350612888,
+            0.3335875183355869
+          ],
+          "radius_mm": 16.0,
+          "adjacency": {
+            "vertex_count": 1,
+            "face_count": 2,
+            "face_surface_types": [
+              "cylinder",
+              "plane"
+            ],
+            "vertex_edge_degrees": [
+              2
+            ]
+          }
+        },
+        "parent_body": {
+          "kind": "solid",
+          "assembly_path": "弯管新",
+          "bounds_mm": {
+            "minimum": [
+              -16.0000001,
+              -20.202002314912093,
+              4.999999899999994
+            ],
+            "maximum": [
+              16.0000001,
+              36.90979707706259,
+              71.68262115462142
+            ]
+          },
+          "dimensions_mm": [
+            32.0000002,
+            57.111799391974685,
+            66.68262125462142
+          ],
+          "volume_mm3": 6473.071995018587,
+          "surface_area_mm2": 13140.922734559752,
+          "centroid_mm": [
+            -6.3451069811293996e-15,
+            7.215000693790886,
+            36.05307012202093
+          ],
+          "topology": {
+            "face_count": 8,
+            "edge_count": 14,
+            "vertex_count": 8,
+            "surface_types": {
+              "cylinder": 4,
+              "plane": 2,
+              "torus": 2
+            },
+            "curve_types": {
+              "bsplinecurve": 6,
+              "circle": 8
+            },
+            "vertex_edge_degrees": [
+              2,
+              2,
+              2,
+              2,
+              3,
+              3,
+              3,
+              3
+            ]
+          }
+        },
+        "kernel_signature": "10cab3f8c6ba4a05312c6a103eeeb11fdfe8ede32951936cd0d5bb437d5b3456"
+      },
+      "parent_body_id": "body_002",
+      "assembly_name": "弯管新"
+    },
+    "substrate_body": {
+      "object_id": "body_001",
+      "geometry_type": "body",
+      "signature": {
+        "schema_version": 1,
+        "geometry_type": "body",
+        "descriptor": {
+          "kind": "solid",
+          "assembly_path": "弯管新",
+          "bounds_mm": {
+            "minimum": [
+              -25.0000001,
+              -25.0000001,
+              -1e-07
+            ],
+            "maximum": [
+              25.0000001,
+              25.0000001,
+              5.0000001
+            ]
+          },
+          "dimensions_mm": [
+            50.0000002,
+            50.0000002,
+            5.000000200000001
+          ],
+          "volume_mm3": 9817.477042468103,
+          "surface_area_mm2": 4712.38898038469,
+          "centroid_mm": [
+            4.076176262485909e-15,
+            -8.833467290969567e-16,
+            2.5
+          ],
+          "topology": {
+            "face_count": 3,
+            "edge_count": 3,
+            "vertex_count": 2,
+            "surface_types": {
+              "cylinder": 1,
+              "plane": 2
+            },
+            "curve_types": {
+              "bsplinecurve": 1,
+              "circle": 2
+            },
+            "vertex_edge_degrees": [
+              2,
+              2
+            ]
+          }
+        },
+        "parent_body": null,
+        "kernel_signature": "1fbbc584ef346458e81366b4bb4beed1917f090a5d59942cfe31500ea130d3cc"
+      },
+      "parent_body_id": null,
+      "assembly_name": "弯管新"
+    },
+    "manual_centerline_edges": []
+  },
+  "pass_count": 4,
+  "wall_layers": 333,
+  "base_layers": 25,
+  "wall_volume_mm3": 8631.020597673214,
+  "cad_wall_volume_mm3": 6473.071995018587,
+  "base_volume_mm3": 4813.11793910746,
+  "complete_nc": false,
+  "accepted": false,
+  "limits": [
+    "candidate domain generation only",
+    "no joint base-wall transition qualification",
+    "no full swept-nozzle or local prior-material qualification",
+    "equal lane width requires process calibration",
+    "no machine program exported"
+  ],
+  "array_sha256": "7dcf48dd3ed41b994ad50d137d017153a2c42d5ddf34dbe537cdf4479976376f"
+}

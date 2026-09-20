@@ -1,6 +1,6 @@
 # 六个工作台开发进度台账
 
-最近更新：2026-09-14。关联[开发计划](development_plan.md)、[参考资料](reference_research.md)与[文档索引](../README.md)。**下方主表是任务进度的唯一维护位置**，计划和复盘引用任务编号，不另行维护一份状态表。
+最近更新：2026-09-20。关联[开发计划](development_plan.md)、[参考资料](reference_research.md)与[文档索引](../README.md)。**下方主表是任务进度的唯一维护位置**，计划和复盘引用任务编号，不另行维护一份状态表。
 
 当前优先版本：**论文核心 AC（Paper Core AC）**。PC00—PC07 已于 2026-09-13 按 **契约/来源 → 受限 Freeform → 多材料 → 自有 AC 后处理 → Tube 收口 → 四例与双通道回归 → 本地封装** 完成受限离线验收。DOC-01 随后把使用文档整理为学习总册、五条工作台支线和参考手册，当前入口为[学习总册](../guides/user_learning_manual_zh.md)。范围和许可证依据见[论文核心说明](paper_core_ac_scope.md)，实施、失败和验收见[本轮复盘](../reviews/2026-09-13_paper_core_ac_implementation_review.md)。六工作台完整目标保留为后续路线，不作为核心版前置依赖。
 
@@ -38,6 +38,18 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 
 | 日期 | 任务 | Skill | 本轮用途 | 证据 |
 | --- | --- | --- | --- | --- |
+| 2026-09-21 | FAN15-R06 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`computer-use` | 原生文件加载、四角色鼠标拾取、内圆失败与外圆重试；修复拾取入口/失败详情，长生成响应继续排查 | [修复过程](../reviews/2026-09-20_fan15_repairs.md) |
+| 2026-09-21 | FAN15-R03 | `five-axis-workbench-development`、`five-axis-slicer-validation` | 完整球面实体截交、孔与度量，37 实体/111 截层恢复；仅层域，待有限道宽及 NC | [修复过程](../reviews/2026-09-20_fan15_repairs.md) |
+| 2026-09-21 | FAN15-R02 | `five-axis-workbench-development`、`five-axis-slicer-validation` | 自动底座从包围盒圆盘替换为共享 CAD 截层/填充；带孔矩形反例和产品入口验证；四例仍未完成整件验收 | [修复过程](../reviews/2026-09-20_fan15_repairs.md) |
+| 2026-09-20 | FAN15-R01/R02 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`computer-use` | 公共材料并集、偏置失败传播、薄环偏置、轴向喷嘴修复与真实工作台点击；逐项继续 | [执行计划](fan15_repair_execution.md)、[修复过程](../reviews/2026-09-20_fan15_repairs.md) |
+| 2026-09-20 | FAN15四例核查 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`skill-creator` | 重跑Tube两模式、Freeform粗细采样、四例全高Planar诊断及旧NC对照；保留覆盖缺失、未知轴语义与多实体面积失败，并写入Skill | [四例审查](../reviews/2026-09-20_fan15_example_acceptance.md) |
+| 2026-09-20 | FAN旧NC完整图 | `five-axis-slicer-validation` | 复用MATLAB既有脚本读取全部旧NC并还原中心柱/三叶；不以参考图替代新算法验收 | [参考图记录](../reviews/2026-09-20_fan_radial_correction.md#旧代码完整参考图重新输出) |
+| 2026-09-20 | FAN工艺教训固化 | `skill-creator`、`five-axis-workbench-development`、`five-axis-slicer-validation` | 将基底、生长方向、逐层承接及轴联动设为开发/验收前置条件；两项Skill结构校验通过；复核并展示现有局部路径图，未恢复FAN04/FAN07资格 | [纠正复盘：Skill固化](../reviews/2026-09-20_fan_radial_correction.md#skill固化与本次图片复核) |
+| 2026-09-20 | FAN02/FAN04/FAN07纠正 | `five-axis-workbench-development`、`five-axis-slicer-validation` | 旧NC模态解析、撤回错误验收、柱面起印解析与拒绝测试、研发资格隔离 | [纠正复盘](../reviews/2026-09-20_fan_radial_correction.md) |
+| 2026-09-20 | FAN01—FAN05 | `five-axis-workbench-development`、`five-axis-slicer-validation` | 落地制造契约、旧NC/CAD基线、作业DAG、A=90°全体积层域审计和公共壳层/填充；真实STEP与248项领域回归验证 | [实施复盘](../reviews/2026-09-20_fan_complete_program_fan01_fan05_review.md)、[证据](../reviews/evidence/2026-09-20_fan_complete_program/validation_manifest.json) |
+| 2026-09-20 | FAN00 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`computer-use` | 规划完整扇叶填充、90°换姿、总程序和真实点击；六仓库核对；未启动实施 | [计划](fan_complete_program_plan.md)、[研究](fan_complete_program_research.md)、[复盘](../reviews/2026-09-20_fan_complete_program_planning_review.md) |
+| 2026-09-20 | SIM00 | `five-axis-workbench-development` | 核对现有timeline、MachineAxisTrajectory和VTK基础；调研Vismach、FreeCAD、CAMotics、PyBullet、VTK/FFmpeg；制定SIM01—SIM10计划和独立台账 | [调研](motion_simulation_research.md)、[计划](motion_simulation_plan.md)、[独立台账](motion_simulation_tracker.md)、[复盘](../reviews/2026-09-20_motion_simulation_planning_review.md) |
+| 2026-09-20 | EXAMPLE-PLA-01 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`documents` | 读取论文参数；按 0.4 mm 喷嘴和单材料 PLA 重新生成半球、扇叶、叶轮、pipe2 的自有 AC 离线代码并严格回读；拒绝为缺少受限五轴流程的三叶扇和仅有 STL 的 pipe 伪造输出 | [生成复盘](../reviews/2026-09-20_example_pla_gcode_generation_review.md)；[参数与指纹清单](../../example/本软件五轴PLA切片_20260920.json) |
 | 2026-09-14 | CI-QUALITY | `five-axis-slicer-validation`、`gh-fix-ci` | 读取 Actions `34758493547` 三个失败任务的原始日志；确认 Node.js 提示不致命，修复 Freeform 的 PyQt 类型枚举访问并保留静态门禁；安装官方 GitHub CLI 以跟踪后续运行 | [CI 与分支复盘](../reviews/2026-09-13_ci_branch_consolidation_review.md)；质量检查 162 个源码文件通过，13 文件领域集 161 passed、2 skipped、89 subtests，论文核心 9 passed；Actions `34770465207` 四项全部通过 |
 | 2026-09-13 | DOC-01 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`computer-use` | 把案例平铺手册重组为 L01—L09 公共课程、W01—W05 工作台支线和参考手册；核对 IDE/PWSH 启动、链接、图片、错误恢复与迁移学习；Computer Use 三次均因 `nodeRepl.fetch request failed` 无法枚举 Windows 窗口 | [学习总册](../guides/user_learning_manual_zh.md)、[本轮复盘](../reviews/2026-09-13_user_learning_manual_reorganization.md) |
 | 2026-09-13 | PC01—PC07 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`artifact-package-verify`、`computer-use` | 完成受限 Freeform、显式多材料、自有 AC 离线后处理、Tube 收口、五产品证据、严格回读、串行 Qt/全仓、质量/构建/原生 wheel/隔离安装和显式清单 ZIP；Computer Use 在应用启动后仍无法枚举 Windows 窗口，不将其冒充为真人桌面操作通过 | [实施复盘](../reviews/2026-09-13_paper_core_ac_implementation_review.md)、[验证清单](../reviews/evidence/2026-09-13_paper_core_ac/validation_manifest.json) |
@@ -83,11 +95,29 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 | 2026-09-12 | AUD-01 | `five-axis-slicer-validation` | 只读预检、串行回归、固定源码复测、P07 并行修改分类、Qt/OpenGL 图像和证据指纹 | [审查证据](../reviews/evidence/2026-09-12_project_audit/manifest.json) |
 
 | 2026-09-12 | AUD-02 | `five-axis-workbench-development`、`five-axis-slicer-validation` | 按已批准方案修复坐标/状态/NC/截层/道宽/运动缺陷，GPT-6 子 Agent 并行领域验证，Qt 与全仓串行 | [修复方案](2026-09-12_algorithm_audit_fix_plan.md)；[证据目录](../reviews/evidence/2026-09-12_audit_fixes/) |
+| 2026-09-20 | FAN06—FAN07 | `five-axis-workbench-development` | 接入全高轮毂、20%填充、支撑逐层调度、A=90° 单叶片完整填充，并将 Indexed Build 叶片路径映射回公共装配 Build 预览 | [阶段复盘](../reviews/2026-09-20_fan_complete_program_fan06_fan07_review.md) |
+| 2026-09-20 | FAN06—FAN07 | `five-axis-slicer-validation` | 复用项目解释器和仓库内 basetemp，执行真实模型证据、坐标相关专项、合并路径图人工检查、质量门与文件指纹 | [证据目录](../reviews/evidence/2026-09-20_fan_complete_program/fan06_fan07/) |
 
 ## 主表
 
 | 编号 | 阶段与交付 | 依赖 | 状态 | 完成判据 | 证据或阻塞 | 下一步 | 更新日期 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| FAN00 | 规划与项目调研 | 用户计划授权 | 已完成 | 详细计划、六仓库研究、电脑验收方案齐全 | [任务设计与边界](fan_complete_program_plan.md)；[研究](fan_complete_program_research.md)，仅规划完成 | FAN01 | 2026-09-20 |
+| FAN01 | 输入与制造契约 | FAN00 | 已完成 | 参数来源、实体角色、坐标、姿态及误差阈值冻结 | [契约JSON](../reviews/evidence/2026-09-20_fan_complete_program/fan_contract_v1.json)；机床包络、零点、宏版本保持实机资格待测 | FAN02 | 2026-09-20 |
+| FAN02 | 旧NC和CAD独立基线 | FAN01 | 重新核查中 | 分工序模态解析、径向层序、坐标注册与填充覆盖 | [模态运动统计](../reviews/evidence/2026-09-20_fan_complete_program/radial_correction/legacy_motion.json)：叶片A90、C连续联动；原全文件TYPE统计不能证明叶片内部填充 | FAN04纠正 | 2026-09-20 |
+| FAN03 | 作业依赖和状态模型 | FAN01 | 已完成 | 序列化、依赖图、Stale、取消、程序索引 | [作业JSON](../reviews/evidence/2026-09-20_fan_complete_program/fan_job_v1.json)；循环/缺依赖、下游失效、JSON和取消事务已测；G-code行号索引属FAN10 | FAN06 | 2026-09-20 |
+| FAN04 | 全体积层域和90°可行性 | FAN01,FAN02 | 撤回原验收，修正中 | 柱面起印、径向曲层、层间承接、AC联动与独立FK | 原固定A平面截层只证明几何积分，不符合绕轴生长；[纠正复盘](../reviews/2026-09-20_fan_radial_correction.md) | 曲层域与承接验证 | 2026-09-20 |
+| FAN05 | 公共壳层和内部填充 | FAN01,FAN02 | 待验证 | 带孔/多岛/窄缝、顶底层、0/20/100%矩阵 | [历史248项回归](../reviews/evidence/2026-09-20_fan_complete_program/pytest_fan01_fan05_final_retry.xml)保留；FAN15发现偏置异常吞并、原边界回退及多实体嵌套误判孔，[原完整资格撤回](../reviews/2026-09-20_fan15_example_acceptance.md) | 修复反例后重新验收 | 2026-09-20 |
+| FAN06 | 全高底座和支撑联合调度 | FAN03,FAN05 | 已完成 | 全部层、孔和接口保留，支撑逐层排序 | [真实模型统计与路径图](../reviews/evidence/2026-09-20_fan_complete_program/fan06_fan07/fan06_fan07_summary.json)：325/325层有实体路径，309层支撑，零支撑诊断；图示按层抽样，完整统计未抽样 | FAN09 | 2026-09-20 |
+| FAN07 | 单叶片完整Freeform填充 | FAN04,FAN05 | 撤回原验收，修正中 | 真实曲层填充、叶根和逐层承接、材料覆盖、非穿透路径 | 旧平面生成入口已拒绝继续生成；径向替代仅研发预览，G2撤回；[纠正复盘](../reviews/2026-09-20_fan_radial_correction.md) | 修复并验证后才进入FAN08 | 2026-09-20 |
+| FAN08 | 三叶片推广与接口归属 | FAN07 | 实施中，未验收 | 三份稳定引用、无漏片、无重复体积 | [三实体独立生成](../reviews/evidence/2026-09-20_fan_complete_program/radial_repair_full/summary.json)：各329径向层，六对体积交集为零，叶根间隙近零；沉积覆盖与承接未关闭 | 完成FAN07物理覆盖后验收 | 2026-09-20 |
+| FAN09 | 换姿与已打印体碰撞 | FAN06,FAN08 | 部分实现，未验收 | 90°转位和跨叶片全段验证、Z20方向与扫掠 | `fan/transitions.py`：外绕候选和线段/球形尖端距离；穿柱及先打印叶片障碍反例已测；完整喷头与机器插补扫掠未接通 | 整件轨迹及换姿扫掠 | 2026-09-20 |
+| FAN10 | 统一后处理和总程序回读 | FAN03,FAN09 | 部分实现，未验收 | 全局C、E/F/模式、起止温控、事件及行号映射 | `postprocessing/fan_merge.py`：结构化合并、事件偏移、来源和NC行号索引；夹具全局IK/回读及模态篡改拒绝通过，真实整件总NC未生成 | FAN09后联调整件及温控 | 2026-09-20 |
+| FAN11 | 作业GUI和三入口持久化 | FAN10 | 未开始 | GUI/脚本/HTTP共核、后台取消、重开和依赖失效 | [任务设计与边界](fan_complete_program_plan.md)；尚无实施证据 | FAN12 | 2026-09-20 |
+| FAN12 | 电脑真实用户点击验收 | FAN11 | 未开始 | UI01—UI12、双语三尺寸、GUI生成文件hash | [任务设计与边界](fan_complete_program_plan.md)；尚无实施证据 | FAN13 | 2026-09-20 |
+| FAN13 | 独立全件与长程序回归 | FAN10,FAN12 | 未开始 | 覆盖/材料/姿态/收敛、新旧对照和百万级负载 | [任务设计与边界](fan_complete_program_plan.md)；尚无实施证据 | FAN14 | 2026-09-20 |
+| FAN14 | 完整扇叶交付与封装 | FAN13 | 未开始 | 总NC、项目、产品和索引、报告手册及相关回归 | [任务设计与边界](fan_complete_program_plan.md)；尚无实施证据 | FAN15 | 2026-09-20 |
+| FAN15 | 其他示例逐件迁移 | FAN14 | 进行中 | 叶轮/管件/半球/三叶扇逐例子项和判据 | [四例审查](../reviews/2026-09-20_fan15_example_acceptance.md)；按[修复计划](fan15_repair_execution.md)连续实施，[修复过程](../reviews/2026-09-20_fan15_repairs.md)保留测试与电脑操作失败 | 公共失败高度复测→弯管完整壁/底座→校徽→叶轮→三叶扇；保留FAN14依赖 | 2026-09-20 |
 | AUD-01 | 跨工作台独立审查与修改方案 | 当前工作区与项目示例 | 已完成 | 文档/实现核对、真实模型、独立反例、证据和待实施方案齐全 | [审查报告](../reviews/2026-09-12_project_algorithm_audit.md)；[修改方案](2026-09-12_algorithm_audit_fix_plan.md)；本轮未修改产品代码 | 用户确认方案后实施；P07 并行工作保留 | 2026-09-12 |
 | AUD-02 | 跨工作台缺陷修复与重新验证 | AUD-01 | 已完成 | 原始反例拒绝、正确解析/真实模型通过、旧资格失效、全仓与图文证据齐全 | [修改方案](2026-09-12_algorithm_audit_fix_plan.md)；[本轮证据](../reviews/evidence/2026-09-12_audit_fixes/) | [修复复盘](../reviews/2026-09-12_algorithm_audit_fixes.md)；窄壁实心、自适应道宽、联合调度和实机资格保留 | 2026-09-12 |
 | AUD-02-TUBE | Tube 原缺陷复核与本轮发现修复 | AUD-02、用户本轮授权 | 已完成 | 原坐标/Stale/碰撞漏接/弦高/NC反例；末层体积与固定姿态；真实pipe2当前生成/碰撞/回读；失败与回归归档 | [同一复盘](../reviews/2026-09-12_algorithm_audit_fixes.md)；839 passed、3 skipped、141 subtests，质量通过；pipe2 15479/15479回读，六件套ZIP逐文件核验 | T04/T07恢复受限离线资格；T08/T12保留实际界面与整阶段门，实机未验证 | 2026-09-13 |
@@ -154,6 +184,7 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 | I02 | 全软件工作流与质量回归 | I01 | 未开始 | 六工作台、20 操作、多工序、错误恢复、双语/双后端及数值矩阵通过 | 待前述阶段完成 | 暂缓完整六工作台/第二机型范围；核心版由PC04/PC06/PC07单独验收 | 2026-09-13 |
 | I03 | 本地安装包、帮助与复现实例 | I02 | 未开始 | 本地构建/包检查、干净环境启动、20 操作帮助与案例可找到 | 不包含对外发布或上传 | 暂缓完整六工作台/第二机型范围；核心版由PC04/PC06/PC07单独验收 | 2026-09-13 |
 | I04 | 本版软件总验收 | I03 | 未开始 | 20 操作验收证据、范围/限制、未验证设备状态及文档齐全 | 软件验收与实机验证分别列明 | 暂缓完整六工作台/第二机型范围；核心版由PC04/PC06/PC07单独验收 | 2026-09-13 |
+| SIM | 五轴运动仿真与视频导出 | PC06、I01-OWN | 进行中 | 参数化/自定义机床场景、真实轴时间回放、分段倍速、确定性帧和视频清单形成闭环 | [专项计划](motion_simulation_plan.md)、[独立台账](motion_simulation_tracker.md)、[调研](motion_simulation_research.md)；SIM00已完成，产品实现未开始 | 从SIM01冻结来源、时间和帧计划契约 | 2026-09-20 |
 
 ## 模型分工与悲观 token 预算
 

@@ -33,16 +33,26 @@ class _SectionEdge:
     points: list[Vector3]
 
 
-def recover_section_loops(shape: object, sample_segments: int) -> list[tuple[Vector3, ...]]:
+def recover_section_loops(
+    shape: object,
+    sample_segments: int,
+    *,
+    max_endpoint_correction_mm: float = MAX_ENDPOINT_CORRECTION_MM,
+    allow_bounded_topology_repair: bool = False,
+) -> list[tuple[Vector3, ...]]:
     """Use topology for adjacency and curve parameters for traversal direction.
 
-    Different vertices are never joined by proximity. At each shared vertex,
-    two curve endpoints may differ within OCCT's tolerance; their midpoint is
-    used only when neither endpoint moves more than one micrometre. The vertex
-    position itself can be much less accurate and is not a snapping target.
+    Shared vertices are preferred. OCCT section output can duplicate a vertex
+    at the same bounded location, so unmatched degree-one endpoints are paired
+    only when their sampled endpoints require no more than the caller's repair
+    limit. The midpoint is the sole coordinate correction.
     """
+    if not math.isfinite(max_endpoint_correction_mm) or max_endpoint_correction_mm <= 0.0:
+        raise ValueError("max_endpoint_correction_mm must be finite and positive")
     edges, incidence = _section_graph(shape, sample_segments)
-    _join_shared_endpoints(edges, incidence)
+    if allow_bounded_topology_repair:
+        _join_bounded_open_endpoints(edges, incidence, max_endpoint_correction_mm)
+    _join_shared_endpoints(edges, incidence, max_endpoint_correction_mm)
     unused = set(range(len(edges)))
     loops = []
     while unused:
@@ -80,7 +90,7 @@ def _section_graph(shape, sample_segments):
     return edges, incidence
 
 
-def _join_shared_endpoints(edges, incidence):
+def _join_shared_endpoints(edges, incidence, max_endpoint_correction_mm):
     for vertex_id, ends in incidence.items():
         if len(ends) != 2:
             code = (
@@ -89,15 +99,41 @@ def _join_shared_endpoints(edges, incidence):
             raise SectionLoopError(code, f"vertex={vertex_id}, degree={len(ends)}")
         samples = [edges[index].points[0 if start else -1] for index, start in ends]
         correction = math.dist(*samples) / 2.0
-        if correction > MAX_ENDPOINT_CORRECTION_MM:
+        if correction > max_endpoint_correction_mm:
             raise SectionLoopError(
                 "planar.section_endpoint_gap_exceeds_limit",
                 f"vertex={vertex_id}, correction_mm={correction:.9g}, "
-                f"limit_mm={MAX_ENDPOINT_CORRECTION_MM:.9g}",
+                f"limit_mm={max_endpoint_correction_mm:.9g}",
             )
         joined: Vector3 = tuple((a + b) / 2 for a, b in zip(*samples))  # type: ignore[assignment]
         for index, start in ends:
             edges[index].points[0 if start else -1] = joined
+
+
+def _join_bounded_open_endpoints(edges, incidence, max_endpoint_correction_mm):
+    open_vertices = [vertex_id for vertex_id, ends in incidence.items() if len(ends) == 1]
+    while open_vertices:
+        left = open_vertices.pop(0)
+        left_end = incidence[left][0]
+        left_point = edges[left_end[0]].points[0 if left_end[1] else -1]
+        candidates = []
+        for right in open_vertices:
+            right_end = incidence[right][0]
+            right_point = edges[right_end[0]].points[0 if right_end[1] else -1]
+            candidates.append((math.dist(left_point, right_point), right))
+        if not candidates:
+            return
+        distance, right = min(candidates)
+        if distance / 2.0 > max_endpoint_correction_mm:
+            continue
+        open_vertices.remove(right)
+        right_end = incidence.pop(right)[0]
+        incidence[left].append(right_end)
+        edge = edges[right_end[0]]
+        if right_end[1]:
+            edge.start = left
+        else:
+            edge.end = left
 
 
 def _walk_cycle(edges, incidence, unused):

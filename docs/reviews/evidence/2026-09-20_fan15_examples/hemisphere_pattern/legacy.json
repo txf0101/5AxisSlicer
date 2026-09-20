@@ -1,0 +1,61 @@
+{
+  "source": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\球形NEU校徽\\NEU校徽划线.gcode",
+  "sha256": "7fc667f26ebe31d0b93b3bda3dd7faabd08c4d73de6d502f189190ebcfb92218",
+  "lines": 151621,
+  "positive_e_segments": 143535,
+  "commands": {
+    "M73": 147,
+    "PRINT_START": 1,
+    "G90": 13,
+    "G21": 7,
+    "M83": 7,
+    "M106": 6,
+    "G92": 168,
+    "G1": 147905,
+    "SET_VELOCITY_LIMIT": 10,
+    "M140": 1,
+    "G0": 6,
+    "M98": 1,
+    "PRINT_END": 1
+  },
+  "types": {
+    "INNER WALL": 47416,
+    "OUTER WALL": 24236,
+    "BOTTOM SURFACE": 439,
+    "INTERNAL SOLID INFILL": 22837,
+    "SPARSE INFILL": 9161,
+    "INTERNAL BRIDGE": 499,
+    "TOP SURFACE": 30,
+    "CUSTOM": 38917
+  },
+  "bounds": [
+    [
+      -39.798,
+      -39.797,
+      0.2
+    ],
+    [
+      39.798,
+      39.797,
+      40.06894191910973
+    ]
+  ],
+  "positive_e_mm": 8535.340823,
+  "length_mm": 233201.86908809617,
+  "ac_bounds": [
+    [
+      0.0,
+      -1529.95,
+      0.0
+    ],
+    [
+      57.4,
+      73.71,
+      0.0
+    ]
+  ],
+  "frame": "zero-centre Rz(-C)Rx(-A), registration to CAD not assumed",
+  "unsupported_rotary_words": [],
+  "offset_macro_unresolved": false,
+  "boundary": "G0/G1 positive-E only; positive E is not automatically valid deposition"
+}

@@ -1,0 +1,30 @@
+{
+  "date": "2026-09-20",
+  "status": "partial_radial_root_preview_only",
+  "fan04_fan07_qualified": false,
+  "gcode_exported": false,
+  "verified_range_mm": [17.7, 25.5],
+  "full_range_failure": "At R75.7, cylindrical section is open with a missing approximately 1.6 mm boundary. No gap bridge or tolerance increase accepted.",
+  "validation": {
+    "related_pytest": "19 passed in 3.35s",
+    "new_files_ruff": "passed",
+    "fan_source_mypy": "2 files passed",
+    "repository_quality": "Ruff, format, context budget, mypy 169 files passed",
+    "visual": "generated PNG inspected",
+    "video": "official YouTube fetch failed; browser timed out; not watched",
+    "machine": "not verified"
+  },
+  "hash_scope": "Source paths relative to repository; evidence filenames relative to this directory. Preview preceded only formatting and explicit tuple typing changes to the mapper; no geometry change.",
+  "sha256": {
+    "src/five_axis_slicer/algorithms/fan/radial.py": "ff25f037cc6ec88a4fa1630c208eada607547624f69eee6da8342521a21a402c",
+    "src/five_axis_slicer/algorithms/fan/program.py": "396bdaf15ecff0e3bfbacb4ec48b1786c6629dbc7ef3a348ee5c3effc6155876",
+    "scripts/audit_fan_rotary_motion.py": "830431e4589e24479c3bfc5c502ac95d1b78641e63f5afeb7c0a1a5396bb2853",
+    "scripts/probe_fan_radial_layers.py": "9e17bd473f1df6fd2c557d7803328c613f0c12488b7c96c1a719148c2abb7171",
+    "tests/test_fan_radial.py": "18ef2e4e17a8b162187b3af71acf20bc47abd01a94614fa152920b7f63dfff27",
+    "legacy_motion.json": "768b2d5b6008c71f8d8fac464eafd32507733af2b4eec4ca0716ede88aba4b83",
+    "radial_summary.json": "a8cef9e8d3cad857fd005c5839cf245ebe7d8a5e94675ef92b94e4df379d253e",
+    "radial_preview_paths.json.gz": "8e4fe92222f0b889a0102c44a3db59d1a843521343feb0aa4f43b6295a3f0a5f",
+    "fan_radial_root_preview.png": "1334c235c796899241329c97812fa4524dbe046624f154f06cf1e5ba8fb14af7",
+    "pytest_radial_final.xml": "dfb0e234e60f4f7873499b3459ebfa0e53cb812d81fe210f0afcb4469341a2af"
+  }
+}

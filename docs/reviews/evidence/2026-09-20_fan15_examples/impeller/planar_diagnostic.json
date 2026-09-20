@@ -1,0 +1,126 @@
+{
+  "requested_layers": 352,
+  "successful_layers": 323,
+  "failures": [
+    {
+      "z_mm": 2.0,
+      "error": "planar.section_open_contour: z_mm=2, vertex=1, degree=1"
+    },
+    {
+      "z_mm": 2.2,
+      "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=2.2, vertex=3, correction_mm=0.00641489027, limit_mm=0.001"
+    },
+    {
+      "z_mm": 2.4,
+      "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=2.4, vertex=3, correction_mm=0.00353731156, limit_mm=0.001"
+    },
+    {
+      "z_mm": 2.6,
+      "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=2.6, vertex=3, correction_mm=0.00121022966, limit_mm=0.001"
+    },
+    {
+      "z_mm": 22.4,
+      "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=22.4, vertex=2, correction_mm=0.0152383363, limit_mm=0.001"
+    },
+    {
+      "z_mm": 22.6,
+      "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=22.6, vertex=2, correction_mm=0.0177306139, limit_mm=0.001"
+    },
+    {
+      "z_mm": 22.8,
+      "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=22.8, vertex=2, correction_mm=0.0194190532, limit_mm=0.001"
+    },
+    {
+      "z_mm": 23.4,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 23.6,
+      "error": "planar.offset_kernel_failed: offset wire has a 0.133225 mm gap"
+    },
+    {
+      "z_mm": 24.2,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 32.6,
+      "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=32.6, vertex=4, correction_mm=0.00483266541, limit_mm=0.001"
+    },
+    {
+      "z_mm": 32.8,
+      "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=32.8, vertex=4, correction_mm=0.00973398534, limit_mm=0.001"
+    },
+    {
+      "z_mm": 33.0,
+      "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=33, vertex=4, correction_mm=0.00988356362, limit_mm=0.001"
+    },
+    {
+      "z_mm": 33.2,
+      "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=33.2, vertex=4, correction_mm=0.0100049624, limit_mm=0.001"
+    },
+    {
+      "z_mm": 33.4,
+      "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=33.4, vertex=4, correction_mm=0.0100966986, limit_mm=0.001"
+    },
+    {
+      "z_mm": 33.6,
+      "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=33.6, vertex=4, correction_mm=0.0101572663, limit_mm=0.001"
+    },
+    {
+      "z_mm": 33.8,
+      "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=33.8, vertex=4, correction_mm=0.0101851401, limit_mm=0.001"
+    },
+    {
+      "z_mm": 34.0,
+      "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=34, vertex=4, correction_mm=0.0101792557, limit_mm=0.001"
+    },
+    {
+      "z_mm": 34.2,
+      "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=34.2, vertex=4, correction_mm=0.0101426323, limit_mm=0.001"
+    },
+    {
+      "z_mm": 34.4,
+      "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=34.4, vertex=4, correction_mm=0.0100769865, limit_mm=0.001"
+    },
+    {
+      "z_mm": 34.6,
+      "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=34.6, vertex=4, correction_mm=0.00998342187, limit_mm=0.001"
+    },
+    {
+      "z_mm": 34.8,
+      "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=34.8, vertex=4, correction_mm=0.00986304638, limit_mm=0.001"
+    },
+    {
+      "z_mm": 35.0,
+      "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=35, vertex=4, correction_mm=0.00541260516, limit_mm=0.001"
+    },
+    {
+      "z_mm": 37.8,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 41.2,
+      "error": "planar.offset_kernel_failed: offset 0.8 mm failed"
+    },
+    {
+      "z_mm": 41.4,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 41.6,
+      "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=41.6, vertex=2, correction_mm=0.24255566, limit_mm=0.001"
+    },
+    {
+      "z_mm": 41.8,
+      "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=41.8, vertex=2, correction_mm=0.442555081, limit_mm=0.001"
+    },
+    {
+      "z_mm": 42.0,
+      "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=42, vertex=2, correction_mm=0.267176017, limit_mm=0.001"
+    }
+  ],
+  "deposition_segments": 872133,
+  "section_segments": 369472,
+  "scope": "full-height diagnostic alternative: no supports, no skin, no machine qualification",
+  "accepted": false
+}

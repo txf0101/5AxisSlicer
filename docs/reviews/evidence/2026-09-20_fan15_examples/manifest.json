@@ -1,0 +1,2182 @@
+{
+  "schema_version": 1,
+  "stage": "FAN15",
+  "accepted": false,
+  "scope": "four-example geometry and legacy diagnostic; NOT complete manufacturing programs",
+  "results": {
+    "pipe2": {
+      "inventory": {
+        "source": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\pipe2\\弯管新.stp",
+        "sha256": "116e99fd43492bd1f4f519c80c93cd1f7cd0bf2cb6861b3e123148e4031a0d4b",
+        "bodies": [
+          {
+            "id": "body_001",
+            "volume_mm3": 9817.477042468103,
+            "bounds": {
+              "minimum": [
+                -25.0000001,
+                -25.0000001,
+                -1e-07
+              ],
+              "maximum": [
+                25.0000001,
+                25.0000001,
+                5.0000001
+              ]
+            }
+          },
+          {
+            "id": "body_002",
+            "volume_mm3": 6473.071995018587,
+            "bounds": {
+              "minimum": [
+                -16.0000001,
+                -20.202002314912093,
+                4.999999899999994
+              ],
+              "maximum": [
+                16.0000001,
+                36.90979707706259,
+                71.68262115462142
+              ]
+            }
+          }
+        ]
+      },
+      "legacy": {
+        "source": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\pipe2\\弯管.gcode",
+        "sha256": "4d6630c01f63d6f802ae6955752fa41b35abfea23509c661fcd855f7064ff70a",
+        "lines": 679277,
+        "positive_e_segments": 669892,
+        "commands": {
+          "PRINT_START": 1,
+          "G90": 2,
+          "M82": 2,
+          "G92": 2,
+          "G0": 3210,
+          "G1": 676055,
+          "E0.0": 2,
+          "PRINT_END": 1
+        },
+        "types": {
+          "unspecified": 669892
+        },
+        "bounds": [
+          [
+            -24.8,
+            -24.793,
+            0.2
+          ],
+          [
+            24.78,
+            36.99537127515776,
+            70.50474425873536
+          ]
+        ],
+        "positive_e_mm": 6578.070504999998,
+        "length_mm": 197776.60818926804,
+        "ac_bounds": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            70.513,
+            0.0
+          ]
+        ],
+        "frame": "zero-centre Rz(-C)Rx(-A), registration to CAD not assumed",
+        "boundary": "G0/G1 positive-E only; positive E is not automatically valid deposition"
+      },
+      "current_modes": {
+        "indexed": {
+          "segments": 42778,
+          "volume_mm3": 2589.3061526591714,
+          "cad_tube_volume_mm3": 6473.071995018587,
+          "wall_thickness_mm": 1.0,
+          "bead_width_mm": 0.4,
+          "scope": "single mid-wall path, substrate excluded; no full wall fill"
+        },
+        "continuous": {
+          "segments": 29066,
+          "volume_mm3": 2588.677794048916,
+          "cad_tube_volume_mm3": 6473.071995018587,
+          "wall_thickness_mm": 1.0,
+          "bead_width_mm": 0.4,
+          "scope": "single mid-wall path, substrate excluded; no full wall fill"
+        }
+      },
+      "planar": {
+        "requested_layers": 358,
+        "successful_layers": 303,
+        "failures": [
+          {
+            "z_mm": 29.0,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 30.4,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 30.6,
+            "error": "planar.offset_kernel_failed: offset 0.8 mm failed"
+          },
+          {
+            "z_mm": 31.0,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 31.2,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 33.4,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 35.6,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 35.8,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 36.4,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 36.6,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 36.8,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 37.0,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 37.2,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 37.4,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 37.8,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 38.0,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 38.2,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 38.4,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 38.6,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 38.8,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 39.0,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 40.6,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 40.8,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 41.0,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 41.2,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 41.4,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 41.8,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 42.0,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 42.2,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 42.4,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 42.6,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 42.8,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 43.0,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 43.2,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 43.4,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 43.6,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 43.8,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 44.0,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 44.2,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 44.4,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 44.6,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 44.8,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 45.0,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 45.2,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 45.4,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 45.6,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 46.8,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 47.0,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 47.6,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 49.6,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 52.0,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 52.8,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 70.2,
+            "error": "planar.offset_kernel_failed: offset 0.8 mm failed"
+          },
+          {
+            "z_mm": 70.4,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 70.6,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          }
+        ],
+        "deposition_segments": 364129,
+        "section_segments": 99456,
+        "scope": "full-height diagnostic alternative: no supports, no skin, no machine qualification",
+        "accepted": false
+      },
+      "comparison": {
+        "case": "pipe2",
+        "accepted": false,
+        "legacy_frame": "zero-centre Rz(-C)Rx(-A), registration to CAD not assumed",
+        "legacy_to_source_rz_deg": 0,
+        "new_candidate_file": "new_indexed.npz",
+        "planar_requested_layers": 358,
+        "planar_failed_layers": 55,
+        "metric_scope": "sampled endpoint proximity, not bead coverage or exact curve Hausdorff",
+        "new_to_old": {
+          "median_mm": 0.32712017775247537,
+          "p95_mm": 0.39048353461064583,
+          "max_mm": 0.5651108291186374
+        },
+        "old_to_new": {
+          "median_mm": 3.9888741557358105,
+          "p95_mm": 9.91551545873825,
+          "max_mm": 16.095831658095992
+        }
+      },
+      "manufacturing_accepted": false,
+      "new_complete_nc_generated": false
+    },
+    "hemisphere_pattern": {
+      "inventory": {
+        "source": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\球形NEU校徽\\球形测试件.STEP",
+        "sha256": "0812eebe0c43c57b0e280a981d4c1521889a26e85d1ec567cbf97d22aeac64c0",
+        "bodies": [
+          {
+            "id": "body_001",
+            "volume_mm3": 134041.2865531645,
+            "bounds": {
+              "minimum": [
+                -40.0000001,
+                -40.0000001,
+                -1.000002793185071e-07
+              ],
+              "maximum": [
+                40.0000001,
+                40.0000001,
+                40.0000001
+              ]
+            }
+          },
+          {
+            "id": "body_002",
+            "volume_mm3": 149.18091208225184,
+            "bounds": {
+              "minimum": [
+                -19.416744192309483,
+                -22.135498764623566,
+                29.67797682716467
+              ],
+              "maximum": [
+                19.60308419857808,
+                -4.019700844074643,
+                39.80898493168391
+              ]
+            }
+          },
+          {
+            "id": "body_003",
+            "volume_mm3": 3.9652624105593235,
+            "bounds": {
+              "minimum": [
+                -22.045908569489004,
+                -24.072903797561818,
+                25.66314593900243
+              ],
+              "maximum": [
+                -17.327604138075134,
+                -17.898950535500695,
+                31.12098548851772
+              ]
+            }
+          },
+          {
+            "id": "body_004",
+            "volume_mm3": 244.15297878757235,
+            "bounds": {
+              "minimum": [
+                -22.135603612351247,
+                -5.408792232996214,
+                28.40166355441671
+              ],
+              "maximum": [
+                22.135603612351243,
+                22.13549876462345,
+                40.5000001
+              ]
+            }
+          },
+          {
+            "id": "body_005",
+            "volume_mm3": 54.33192764056574,
+            "bounds": {
+              "minimum": [
+                -21.247104708289204,
+                -22.135498764623605,
+                33.06825057575907
+              ],
+              "maximum": [
+                21.405749053484566,
+                -1.3128687597550488,
+                40.34460806494771
+              ]
+            }
+          },
+          {
+            "id": "body_006",
+            "volume_mm3": 161.96362263205629,
+            "bounds": {
+              "minimum": [
+                -33.86893059259398,
+                -33.8684343107261,
+                12.176848181835622
+              ],
+              "maximum": [
+                33.86893059259398,
+                33.86843431072596,
+                40.5000001
+              ]
+            }
+          },
+          {
+            "id": "body_007",
+            "volume_mm3": 63.153446721982164,
+            "bounds": {
+              "minimum": [
+                -23.912164134732787,
+                -23.91203559649087,
+                26.381764956564954
+              ],
+              "maximum": [
+                23.912164134732766,
+                23.91203559649065,
+                40.5000001
+              ]
+            }
+          },
+          {
+            "id": "body_008",
+            "volume_mm3": 8.633551852728566,
+            "bounds": {
+              "minimum": [
+                -22.265887135948624,
+                18.102827677901203,
+                22.95168818684609
+              ],
+              "maximum": [
+                -12.808001245028395,
+                28.002792463292106,
+                32.59191858857566
+              ]
+            }
+          },
+          {
+            "id": "body_009",
+            "volume_mm3": 2.021772125010734,
+            "bounds": {
+              "minimum": [
+                -8.619632525844915,
+                25.31626213833378,
+                26.962668189680784
+              ],
+              "maximum": [
+                -5.866551070328144,
+                28.80592575594049,
+                30.78118933193896
+              ]
+            }
+          },
+          {
+            "id": "body_010",
+            "volume_mm3": 3.010808530564729,
+            "bounds": {
+              "minimum": [
+                -5.703957293170423,
+                25.868720186788916,
+                26.08280084029019
+              ],
+              "maximum": [
+                -2.028955623994701,
+                30.22257402374143,
+                30.775668316446634
+              ]
+            }
+          },
+          {
+            "id": "body_011",
+            "volume_mm3": 3.2706062613474223,
+            "bounds": {
+              "minimum": [
+                5.227314307945713,
+                24.92202353449991,
+                26.255456106706298
+              ],
+              "maximum": [
+                10.138154298885096,
+                29.57439109996369,
+                31.11370681106953
+              ]
+            }
+          },
+          {
+            "id": "body_012",
+            "volume_mm3": 9.73384176848269,
+            "bounds": {
+              "minimum": [
+                14.446060242009898,
+                17.354575015801384,
+                23.898048164364653
+              ],
+              "maximum": [
+                22.509042612465752,
+                26.413249068349693,
+                32.20213480803735
+              ]
+            }
+          },
+          {
+            "id": "body_013",
+            "volume_mm3": 0.45888935701410316,
+            "bounds": {
+              "minimum": [
+                15.446753173348213,
+                22.550189999652517,
+                27.352201015831447
+              ],
+              "maximum": [
+                16.87800753759217,
+                24.288004771937867,
+                29.606621917476165
+              ]
+            }
+          },
+          {
+            "id": "body_014",
+            "volume_mm3": 1.9097194410359444,
+            "bounds": {
+              "minimum": [
+                -7.025568147088019,
+                -30.059623616010047,
+                25.873721206496498
+              ],
+              "maximum": [
+                -4.791787901054459,
+                -26.187716756352632,
+                30.280377527004735
+              ]
+            }
+          },
+          {
+            "id": "body_015",
+            "volume_mm3": 3.820553189474633,
+            "bounds": {
+              "minimum": [
+                -3.42579815923338,
+                -30.80107103263618,
+                25.715777249975577
+              ],
+              "maximum": [
+                -0.4820922366746063,
+                -26.63648677615225,
+                30.283254567023153
+              ]
+            }
+          },
+          {
+            "id": "body_016",
+            "volume_mm3": 3.4816105726603204,
+            "bounds": {
+              "minimum": [
+                0.4168189992573064,
+                -30.5309168606289,
+                25.831020509380068
+              ],
+              "maximum": [
+                3.3191242620017216,
+                -26.743881064515573,
+                30.30283473555864
+              ]
+            }
+          },
+          {
+            "id": "body_017",
+            "volume_mm3": 3.5093662355832596,
+            "bounds": {
+              "minimum": [
+                3.928712701174535,
+                -30.29412651344729,
+                25.719790457939087
+              ],
+              "maximum": [
+                7.081202300571265,
+                -26.19460178796245,
+                30.34703036940569
+              ]
+            }
+          },
+          {
+            "id": "body_018",
+            "volume_mm3": 4.538118234308798,
+            "bounds": {
+              "minimum": [
+                -29.404766976561078,
+                7.115796876034171,
+                25.502787765623864
+              ],
+              "maximum": [
+                -24.809721822915105,
+                13.077834647804965,
+                30.887611128379284
+              ]
+            }
+          },
+          {
+            "id": "body_019",
+            "volume_mm3": 4.47942887173596,
+            "bounds": {
+              "minimum": [
+                -30.47308682412873,
+                3.845247307053919,
+                25.498079447646425
+              ],
+              "maximum": [
+                -25.87827214120219,
+                8.488229496670279,
+                30.578455890265623
+              ]
+            }
+          },
+          {
+            "id": "body_020",
+            "volume_mm3": 4.516138928847222,
+            "bounds": {
+              "minimum": [
+                -30.688313407267174,
+                0.27654317303456266,
+                25.642685956415573
+              ],
+              "maximum": [
+                -26.749085428661534,
+                3.9742072920966796,
+                30.341298867617287
+              ]
+            }
+          },
+          {
+            "id": "body_021",
+            "volume_mm3": 2.6235478416024516,
+            "bounds": {
+              "minimum": [
+                -30.599892955491317,
+                -3.388581028430234,
+                25.741964115553323
+              ],
+              "maximum": [
+                -26.778146249434588,
+                -0.0050845249694954665,
+                30.343656582354523
+              ]
+            }
+          },
+          {
+            "id": "body_022",
+            "volume_mm3": 4.054979422973693,
+            "bounds": {
+              "minimum": [
+                -30.372924331331323,
+                -7.867106332354224,
+                25.72061654941039
+              ],
+              "maximum": [
+                -26.164854027243955,
+                -3.0282383546662053,
+                30.65022838216101
+              ]
+            }
+          },
+          {
+            "id": "body_023",
+            "volume_mm3": 4.181414150856883,
+            "bounds": {
+              "minimum": [
+                -29.56947076799715,
+                -11.976016641865305,
+                25.715230363544432
+              ],
+              "maximum": [
+                -25.071353947341613,
+                -6.370611406700479,
+                30.89124804753783
+              ]
+            }
+          },
+          {
+            "id": "body_024",
+            "volume_mm3": 3.5586340140773483,
+            "bounds": {
+              "minimum": [
+                -28.38633155189323,
+                -15.635442284597342,
+                25.416255812291517
+              ],
+              "maximum": [
+                -23.637567778233272,
+                -10.099162806596246,
+                30.440996539610413
+              ]
+            }
+          },
+          {
+            "id": "body_025",
+            "volume_mm3": 4.1475108956474145,
+            "bounds": {
+              "minimum": [
+                -26.604590148880163,
+                -18.361069967462257,
+                25.701599080238736
+              ],
+              "maximum": [
+                -21.803656551531954,
+                -12.883635404153788,
+                30.752312770271608
+              ]
+            }
+          },
+          {
+            "id": "body_026",
+            "volume_mm3": 4.360085698036811,
+            "bounds": {
+              "minimum": [
+                -19.171123222347408,
+                -26.209544990869535,
+                25.732673650110705
+              ],
+              "maximum": [
+                -14.394835726774783,
+                -20.371949591314532,
+                30.999891909328863
+              ]
+            }
+          },
+          {
+            "id": "body_027",
+            "volume_mm3": 4.587445557768529,
+            "bounds": {
+              "minimum": [
+                -15.697650298609505,
+                -28.03431185664583,
+                25.798075240486614
+              ],
+              "maximum": [
+                -11.172272572320077,
+                -22.671661438837546,
+                30.95264163980649
+              ]
+            }
+          },
+          {
+            "id": "body_028",
+            "volume_mm3": 2.6763145372617276,
+            "bounds": {
+              "minimum": [
+                24.680369717628107,
+                7.501883419149433,
+                25.468811436491528
+              ],
+              "maximum": [
+                29.40465178018878,
+                12.757964518497957,
+                30.924609572752047
+              ]
+            }
+          },
+          {
+            "id": "body_029",
+            "volume_mm3": 2.5809218708439454,
+            "bounds": {
+              "minimum": [
+                26.250924655680087,
+                3.396204382043037,
+                25.510087369262983
+              ],
+              "maximum": [
+                30.497135253979433,
+                7.6551215766904726,
+                30.511202645356715
+              ]
+            }
+          },
+          {
+            "id": "body_030",
+            "volume_mm3": 1.649177140352326,
+            "bounds": {
+              "minimum": [
+                26.989247000560194,
+                1.2366286556015877,
+                25.571619968242505
+              ],
+              "maximum": [
+                30.717655754568305,
+                2.596638285805752,
+                30.130684657866293
+              ]
+            }
+          },
+          {
+            "id": "body_031",
+            "volume_mm3": 4.224247459351947,
+            "bounds": {
+              "minimum": [
+                26.695027333133545,
+                -4.07649610393786,
+                25.459930557097383
+              ],
+              "maximum": [
+                30.835551520918106,
+                -0.526024860052992,
+                30.269474039624736
+              ]
+            }
+          },
+          {
+            "id": "body_032",
+            "volume_mm3": 4.507640917170335,
+            "bounds": {
+              "minimum": [
+                25.743085927045374,
+                -10.15963600827529,
+                25.568435519657157
+              ],
+              "maximum": [
+                30.13901686566126,
+                -5.032218039618923,
+                30.652132033682765
+              ]
+            }
+          },
+          {
+            "id": "body_033",
+            "volume_mm3": 1.5597402518230954,
+            "bounds": {
+              "minimum": [
+                19.53221239185393,
+                -22.002518990546807,
+                25.691292887406945
+              ],
+              "maximum": [
+                22.760905713453457,
+                -17.291683766013794,
+                30.37875829003543
+              ]
+            }
+          },
+          {
+            "id": "body_034",
+            "volume_mm3": 3.1499582362964498,
+            "bounds": {
+              "minimum": [
+                21.142548506364765,
+                -19.198515746171033,
+                25.674202915624345
+              ],
+              "maximum": [
+                26.147258587260065,
+                -13.486591113546265,
+                31.182383210871773
+              ]
+            }
+          },
+          {
+            "id": "body_035",
+            "volume_mm3": 4.539819768443839,
+            "bounds": {
+              "minimum": [
+                15.687184569903332,
+                -25.376921221840842,
+                25.68243580325882
+              ],
+              "maximum": [
+                20.538531367383086,
+                -19.34342017809214,
+                31.102309748350553
+              ]
+            }
+          },
+          {
+            "id": "body_036",
+            "volume_mm3": 3.6844379287466023,
+            "bounds": {
+              "minimum": [
+                11.414676333724021,
+                -27.791903355546847,
+                25.681928602681612
+              ],
+              "maximum": [
+                15.923662105245562,
+                -22.710415645331317,
+                30.915940030848628
+              ]
+            }
+          },
+          {
+            "id": "body_037",
+            "volume_mm3": 4.1379355818510835,
+            "bounds": {
+              "minimum": [
+                23.878510316553704,
+                -15.334235490357973,
+                25.521256326193566
+              ],
+              "maximum": [
+                28.489721669245842,
+                -9.214317154243089,
+                30.970900093388103
+              ]
+            }
+          },
+          {
+            "id": "body_038",
+            "volume_mm3": 2.4462656355489414,
+            "bounds": {
+              "minimum": [
+                -24.54426586548464,
+                -21.03101098007757,
+                25.854659946556197
+              ],
+              "maximum": [
+                -19.66068785445368,
+                -15.361567616202036,
+                31.259677123342463
+              ]
+            }
+          }
+        ]
+      },
+      "legacy": {
+        "source": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\球形NEU校徽\\NEU校徽划线.gcode",
+        "sha256": "7fc667f26ebe31d0b93b3bda3dd7faabd08c4d73de6d502f189190ebcfb92218",
+        "lines": 151621,
+        "positive_e_segments": 143535,
+        "commands": {
+          "M73": 147,
+          "PRINT_START": 1,
+          "G90": 13,
+          "G21": 7,
+          "M83": 7,
+          "M106": 6,
+          "G92": 168,
+          "G1": 147905,
+          "SET_VELOCITY_LIMIT": 10,
+          "M140": 1,
+          "G0": 6,
+          "M98": 1,
+          "PRINT_END": 1
+        },
+        "types": {
+          "INNER WALL": 47416,
+          "OUTER WALL": 24236,
+          "BOTTOM SURFACE": 439,
+          "INTERNAL SOLID INFILL": 22837,
+          "SPARSE INFILL": 9161,
+          "INTERNAL BRIDGE": 499,
+          "TOP SURFACE": 30,
+          "CUSTOM": 38917
+        },
+        "bounds": [
+          [
+            -39.798,
+            -39.797,
+            0.2
+          ],
+          [
+            39.798,
+            39.797,
+            40.06894191910973
+          ]
+        ],
+        "positive_e_mm": 8535.340823,
+        "length_mm": 233201.86908809617,
+        "ac_bounds": [
+          [
+            0.0,
+            -1529.95,
+            0.0
+          ],
+          [
+            57.4,
+            73.71,
+            0.0
+          ]
+        ],
+        "frame": "zero-centre Rz(-C)Rx(-A), registration to CAD not assumed",
+        "unsupported_rotary_words": [],
+        "offset_macro_unresolved": false,
+        "boundary": "G0/G1 positive-E only; positive E is not automatically valid deposition"
+      },
+      "current_modes": {
+        "0.2": {
+          "error": "curve.offset_outside_face: offset crosses the trimmed face boundary"
+        },
+        "3.0": {
+          "paths": 7,
+          "segments": 23,
+          "scope": "existing selected guides only, not complete solid or logo"
+        }
+      },
+      "planar": {
+        "requested_layers": 202,
+        "successful_layers": 116,
+        "failures": [
+          {
+            "z_mm": 21.4,
+            "error": "unsafe original-boundary wall fallback"
+          },
+          {
+            "z_mm": 21.6,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 21.8,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 22.0,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 22.2,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 23.0,
+            "error": "unsafe original-boundary wall fallback"
+          },
+          {
+            "z_mm": 23.2,
+            "error": "unsafe original-boundary wall fallback"
+          },
+          {
+            "z_mm": 23.4,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 23.8,
+            "error": "planar.offset_kernel_failed: offset wire has a 0.035089 mm gap"
+          },
+          {
+            "z_mm": 24.0,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 24.4,
+            "error": "planar.offset_kernel_failed: offset wire has a 0.00569482 mm gap"
+          },
+          {
+            "z_mm": 24.6,
+            "error": "planar.offset_kernel_failed: offset wire has a 0.0339407 mm gap"
+          },
+          {
+            "z_mm": 24.8,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 25.0,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 25.2,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 25.4,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 25.6,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 25.8,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 26.0,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 26.2,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 26.4,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 26.6,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 26.8,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 27.0,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 27.2,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 27.4,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 27.6,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 27.8,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 28.0,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 28.2,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 28.4,
+            "error": "planar.section_branch_contour: z_mm=28.4, vertex=6, degree=4"
+          },
+          {
+            "z_mm": 28.6,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 28.8,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 29.0,
+            "error": "planar.section_branch_contour: z_mm=29, vertex=4, degree=4"
+          },
+          {
+            "z_mm": 29.2,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 29.4,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 29.6,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 29.8,
+            "error": "planar.section_branch_contour: z_mm=29.8, vertex=5, degree=4"
+          },
+          {
+            "z_mm": 30.0,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 30.2,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 30.4,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 30.6,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 30.8,
+            "error": "planar.offset_kernel_failed: offset wire has a 0.0146399 mm gap"
+          },
+          {
+            "z_mm": 31.0,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 31.2,
+            "error": "planar.offset_kernel_failed: offset wire has a 0.00657686 mm gap"
+          },
+          {
+            "z_mm": 31.4,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 31.6,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 31.8,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 32.0,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 32.2,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 32.4,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 33.0,
+            "error": "unsafe original-boundary wall fallback"
+          },
+          {
+            "z_mm": 33.4,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 33.6,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 33.8,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 34.0,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 34.2,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 34.4,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 34.6,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 34.8,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 35.0,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 35.2,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 35.4,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 35.6,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 35.8,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 36.0,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 36.2,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 36.4,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 36.6,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 36.8,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 37.0,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 37.2,
+            "error": "planar.offset_kernel_failed: offset 0.8 mm failed"
+          },
+          {
+            "z_mm": 37.4,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 37.6,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 37.8,
+            "error": "planar.offset_kernel_failed: offset wire has a 0.0075406 mm gap"
+          },
+          {
+            "z_mm": 38.0,
+            "error": "planar.offset_kernel_failed: offset wire has a 0.000325238 mm gap"
+          },
+          {
+            "z_mm": 38.2,
+            "error": "planar.offset_kernel_failed: offset wire has a 0.0193154 mm gap"
+          },
+          {
+            "z_mm": 38.4,
+            "error": "planar.offset_kernel_failed: offset wire has a 0.17535 mm gap"
+          },
+          {
+            "z_mm": 38.6,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 38.8,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 39.0,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 39.2,
+            "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+          },
+          {
+            "z_mm": 39.4,
+            "error": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer"
+          },
+          {
+            "z_mm": 39.6,
+            "error": "planar.offset_kernel_failed: offset 0.8 mm failed"
+          },
+          {
+            "z_mm": 39.8,
+            "error": "planar.offset_kernel_failed: offset 0.8 mm failed"
+          },
+          {
+            "z_mm": 40.0,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          }
+        ],
+        "deposition_segments": 27926,
+        "section_segments": 72960,
+        "scope": "full-height diagnostic alternative: no supports, no skin, no machine qualification",
+        "accepted": false
+      },
+      "comparison": {
+        "case": "hemisphere_pattern",
+        "accepted": false,
+        "legacy_frame": "zero-centre Rz(-C)Rx(-A), registration to CAD not assumed",
+        "legacy_to_source_rz_deg": 180,
+        "new_candidate_file": "new_freeform_3.0.npz",
+        "planar_requested_layers": 202,
+        "planar_failed_layers": 86,
+        "metric_scope": "sampled endpoint proximity, not bead coverage or exact curve Hausdorff",
+        "new_to_old": {
+          "median_mm": 0.11188841032904862,
+          "p95_mm": 0.11894325827341325,
+          "max_mm": 0.1194202407516422
+        },
+        "old_to_new": {
+          "median_mm": 27.559176668286785,
+          "p95_mm": 54.8081626939126,
+          "max_mm": 63.54646018850092
+        }
+      },
+      "manufacturing_accepted": false,
+      "new_complete_nc_generated": false
+    },
+    "three_leaf": {
+      "inventory": {
+        "source": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\三叶扇\\Supportless_sample.stp",
+        "sha256": "291155b64dace255937bbcddb496da4f11f8319a2fe6b9d32aa29a340686befc",
+        "bodies": [
+          {
+            "id": "body_001",
+            "volume_mm3": 46894.28754125003,
+            "bounds": {
+              "minimum": [
+                -16.454482771904303,
+                -18.999708244704802,
+                -1e-07
+              ],
+              "maximum": [
+                19.105020329796602,
+                19.0111141052666,
+                100.0000001
+              ]
+            }
+          },
+          {
+            "id": "body_002",
+            "volume_mm3": 8000.001755379692,
+            "bounds": {
+              "minimum": [
+                3.80980349912531,
+                -51.275592388034404,
+                55.9999998999999
+              ],
+              "maximum": [
+                52.401546397120605,
+                -3.4552711951320503,
+                96.0000001000001
+              ]
+            }
+          },
+          {
+            "id": "body_003",
+            "volume_mm3": 8000.001755379697,
+            "bounds": {
+              "minimum": [
+                -1.80507117649298,
+                8.029222658109731,
+                55.9999998999999
+              ],
+              "maximum": [
+                28.7949628009195,
+                60.0450250474591,
+                96.0000001000001
+              ]
+            }
+          },
+          {
+            "id": "body_004",
+            "volume_mm3": 8000.0017553797115,
+            "bounds": {
+              "minimum": [
+                -60.016968430143,
+                -30.7345866347935,
+                55.9999998999999
+              ],
+              "maximum": [
+                -7.78977641359601,
+                1.43044945756594,
+                96.0000001000001
+              ]
+            }
+          }
+        ]
+      },
+      "legacy": {
+        "source": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\三叶扇\\EXAMPLE.gcode",
+        "sha256": "5c0fe0d52bb512d3f6c31447751a1724724933d26641ed165d27cb564afeb820",
+        "lines": 785382,
+        "positive_e_segments": 728260,
+        "commands": {
+          "M140": 2,
+          "M105": 2,
+          "M190": 1,
+          "M104": 5,
+          "M109": 4,
+          "PRINT_START": 1,
+          "M82": 2,
+          "G92": 6,
+          "G1": 731867,
+          "M107": 2,
+          "G0": 14154,
+          "M106": 1,
+          "SET_GCODE_OFFSET": 1,
+          "G90": 6,
+          "M221": 3,
+          "G21": 3,
+          "M83": 3,
+          "PRINT_END": 1
+        },
+        "types": {
+          "SKIRT": 300,
+          "WA-LL-INNER": 4992,
+          "WA-LL-OUTER": 5006,
+          "SKIN": 714292,
+          "FILL": 3670
+        },
+        "bounds": [
+          [
+            -96.53,
+            -18.599,
+            0.3
+          ],
+          [
+            20.226,
+            23.991,
+            99.9
+          ]
+        ],
+        "positive_e_mm": 6378.405486,
+        "length_mm": 219654.95342454503,
+        "ac_bounds": [
+          [
+            -94.87,
+            0.0,
+            -89.01
+          ],
+          [
+            0.0,
+            0.0,
+            180.79
+          ]
+        ],
+        "frame": "machine XYZ: unsupported rotary mapping",
+        "unsupported_rotary_words": [
+          "B"
+        ],
+        "offset_macro_unresolved": true,
+        "boundary": "G0/G1 positive-E only; positive E is not automatically valid deposition"
+      },
+      "current_modes": {
+        "five_axis": {
+          "error": "No whole-solid five-axis partition generator registered"
+        }
+      },
+      "planar": {
+        "requested_layers": 500,
+        "successful_layers": 500,
+        "failures": [],
+        "deposition_segments": 25786,
+        "section_segments": 250368,
+        "scope": "full-height diagnostic alternative: no supports, no skin, no machine qualification",
+        "accepted": false
+      },
+      "comparison": {
+        "case": "three_leaf",
+        "accepted": false,
+        "legacy_frame": "machine XYZ: unsupported rotary mapping",
+        "legacy_to_source_rz_deg": 0,
+        "new_candidate_file": null,
+        "planar_requested_layers": 500,
+        "planar_failed_layers": 0,
+        "metric_scope": "sampled endpoint proximity, not bead coverage or exact curve Hausdorff"
+      },
+      "manufacturing_accepted": false,
+      "new_complete_nc_generated": false
+    },
+    "impeller": {
+      "inventory": {
+        "source": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\叶轮\\叶轮.stp",
+        "sha256": "3776fe6e1c384e03a7dab20e7ab8d8028210b86ec7c2ced3d3518a8011fdf21f",
+        "bodies": [
+          {
+            "id": "body_001",
+            "volume_mm3": 81154.91663496663,
+            "bounds": {
+              "minimum": [
+                -99.58008252690024,
+                -99.58008252690024,
+                -1e-07
+              ],
+              "maximum": [
+                99.58008252690024,
+                99.58008252690024,
+                70.4000001
+              ]
+            }
+          },
+          {
+            "id": "body_002",
+            "volume_mm3": 1119.763042775145,
+            "bounds": {
+              "minimum": [
+                3.26324676207757,
+                -0.5000001,
+                1.9999999
+              ],
+              "maximum": [
+                52.0000001,
+                25.6785248661409,
+                42.5000001
+              ]
+            }
+          },
+          {
+            "id": "body_003",
+            "volume_mm3": 1119.763042775143,
+            "bounds": {
+              "minimum": [
+                -12.2577402084016,
+                10.4796762638143,
+                1.9999999
+              ],
+              "maximum": [
+                37.123106112293804,
+                37.1231061122937,
+                42.5000001
+              ]
+            }
+          },
+          {
+            "id": "body_004",
+            "volume_mm3": 1119.7630427751446,
+            "bounds": {
+              "minimum": [
+                -25.6785248661409,
+                3.2632467620775802,
+                1.9999999
+              ],
+              "maximum": [
+                0.5000001000000609,
+                52.0000001,
+                42.5000001
+              ]
+            }
+          },
+          {
+            "id": "body_005",
+            "volume_mm3": 1119.7630427751333,
+            "bounds": {
+              "minimum": [
+                -37.1231061122937,
+                -12.2577402084016,
+                1.9999999
+              ],
+              "maximum": [
+                -10.4796762638143,
+                37.123106112293804,
+                42.5000001
+              ]
+            }
+          },
+          {
+            "id": "body_006",
+            "volume_mm3": 1119.7630427751421,
+            "bounds": {
+              "minimum": [
+                -52.0000001,
+                -25.6785248661409,
+                1.9999999
+              ],
+              "maximum": [
+                -3.26324676207759,
+                0.500000100000122,
+                42.5000001
+              ]
+            }
+          },
+          {
+            "id": "body_007",
+            "volume_mm3": 1119.7630427751421,
+            "bounds": {
+              "minimum": [
+                -37.123106112293904,
+                -37.1231061122936,
+                1.9999999
+              ],
+              "maximum": [
+                12.257740208401499,
+                -10.4796762638143,
+                42.5000001
+              ]
+            }
+          },
+          {
+            "id": "body_008",
+            "volume_mm3": 1119.763042775153,
+            "bounds": {
+              "minimum": [
+                -0.5000001000001939,
+                -52.0000001,
+                1.9999999
+              ],
+              "maximum": [
+                25.6785248661408,
+                -3.26324676207761,
+                42.5000001
+              ]
+            }
+          },
+          {
+            "id": "body_009",
+            "volume_mm3": 1119.763042775141,
+            "bounds": {
+              "minimum": [
+                10.4796762638143,
+                -37.123106112293904,
+                1.9999999
+              ],
+              "maximum": [
+                37.1231061122936,
+                12.257740208401499,
+                42.5000001
+              ]
+            }
+          }
+        ]
+      },
+      "legacy": {
+        "source": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\叶轮\\叶轮完整.gcode",
+        "sha256": "5b33b1fa3569f2027e7628c0b7211e125267fc73b25e88e6b774cb1de338fe33",
+        "lines": 1021062,
+        "positive_e_segments": 1005400,
+        "commands": {
+          "M73": 168,
+          "PRINT_START": 1,
+          "G90": 17,
+          "G21": 9,
+          "M83": 9,
+          "M106": 10,
+          "G92": 220,
+          "G1": 1016026,
+          "SET_VELOCITY_LIMIT": 42,
+          "M140": 1,
+          "G0": 8,
+          "PRINT_END": 1
+        },
+        "types": {
+          "BRIM": 3384,
+          "INNER WALL": 56694,
+          "OUTER WALL": 28680,
+          "BOTTOM SURFACE": 576,
+          "INTERNAL SOLID INFILL": 24207,
+          "SPARSE INFILL": 13327,
+          "INTERNAL BRIDGE": 3051,
+          "TOP SURFACE": 875481
+        },
+        "bounds": [
+          [
+            -57.635,
+            -57.633,
+            0.2
+          ],
+          [
+            57.635,
+            57.633,
+            49.90920167720499
+          ]
+        ],
+        "positive_e_mm": 11922.774498,
+        "length_mm": 380878.21563263395,
+        "ac_bounds": [
+          [
+            0.0,
+            -344.1
+          ],
+          [
+            90.0,
+            135.56
+          ]
+        ],
+        "frame": "zero-centre Rz(-C)Rx(-A), registration to CAD not assumed",
+        "boundary": "G0/G1 positive-E only; positive E is not automatically valid deposition"
+      },
+      "current_modes": {
+        "0.2": {
+          "paths": 16,
+          "segments": 5472,
+          "scope": "existing selected guides only, not complete solid or logo"
+        },
+        "3.0": {
+          "paths": 16,
+          "segments": 368,
+          "scope": "existing selected guides only, not complete solid or logo"
+        }
+      },
+      "planar": {
+        "requested_layers": 352,
+        "successful_layers": 323,
+        "failures": [
+          {
+            "z_mm": 2.0,
+            "error": "planar.section_open_contour: z_mm=2, vertex=1, degree=1"
+          },
+          {
+            "z_mm": 2.2,
+            "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=2.2, vertex=3, correction_mm=0.00641489027, limit_mm=0.001"
+          },
+          {
+            "z_mm": 2.4,
+            "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=2.4, vertex=3, correction_mm=0.00353731156, limit_mm=0.001"
+          },
+          {
+            "z_mm": 2.6,
+            "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=2.6, vertex=3, correction_mm=0.00121022966, limit_mm=0.001"
+          },
+          {
+            "z_mm": 22.4,
+            "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=22.4, vertex=2, correction_mm=0.0152383363, limit_mm=0.001"
+          },
+          {
+            "z_mm": 22.6,
+            "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=22.6, vertex=2, correction_mm=0.0177306139, limit_mm=0.001"
+          },
+          {
+            "z_mm": 22.8,
+            "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=22.8, vertex=2, correction_mm=0.0194190532, limit_mm=0.001"
+          },
+          {
+            "z_mm": 23.4,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 23.6,
+            "error": "planar.offset_kernel_failed: offset wire has a 0.133225 mm gap"
+          },
+          {
+            "z_mm": 24.2,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 32.6,
+            "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=32.6, vertex=4, correction_mm=0.00483266541, limit_mm=0.001"
+          },
+          {
+            "z_mm": 32.8,
+            "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=32.8, vertex=4, correction_mm=0.00973398534, limit_mm=0.001"
+          },
+          {
+            "z_mm": 33.0,
+            "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=33, vertex=4, correction_mm=0.00988356362, limit_mm=0.001"
+          },
+          {
+            "z_mm": 33.2,
+            "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=33.2, vertex=4, correction_mm=0.0100049624, limit_mm=0.001"
+          },
+          {
+            "z_mm": 33.4,
+            "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=33.4, vertex=4, correction_mm=0.0100966986, limit_mm=0.001"
+          },
+          {
+            "z_mm": 33.6,
+            "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=33.6, vertex=4, correction_mm=0.0101572663, limit_mm=0.001"
+          },
+          {
+            "z_mm": 33.8,
+            "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=33.8, vertex=4, correction_mm=0.0101851401, limit_mm=0.001"
+          },
+          {
+            "z_mm": 34.0,
+            "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=34, vertex=4, correction_mm=0.0101792557, limit_mm=0.001"
+          },
+          {
+            "z_mm": 34.2,
+            "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=34.2, vertex=4, correction_mm=0.0101426323, limit_mm=0.001"
+          },
+          {
+            "z_mm": 34.4,
+            "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=34.4, vertex=4, correction_mm=0.0100769865, limit_mm=0.001"
+          },
+          {
+            "z_mm": 34.6,
+            "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=34.6, vertex=4, correction_mm=0.00998342187, limit_mm=0.001"
+          },
+          {
+            "z_mm": 34.8,
+            "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=34.8, vertex=4, correction_mm=0.00986304638, limit_mm=0.001"
+          },
+          {
+            "z_mm": 35.0,
+            "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=35, vertex=4, correction_mm=0.00541260516, limit_mm=0.001"
+          },
+          {
+            "z_mm": 37.8,
+            "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+          },
+          {
+            "z_mm": 41.2,
+            "error": "planar.offset_kernel_failed: offset 0.8 mm failed"
+          },
+          {
+            "z_mm": 41.4,
+            "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+          },
+          {
+            "z_mm": 41.6,
+            "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=41.6, vertex=2, correction_mm=0.24255566, limit_mm=0.001"
+          },
+          {
+            "z_mm": 41.8,
+            "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=41.8, vertex=2, correction_mm=0.442555081, limit_mm=0.001"
+          },
+          {
+            "z_mm": 42.0,
+            "error": "planar.section_endpoint_gap_exceeds_limit: z_mm=42, vertex=2, correction_mm=0.267176017, limit_mm=0.001"
+          }
+        ],
+        "deposition_segments": 872133,
+        "section_segments": 369472,
+        "scope": "full-height diagnostic alternative: no supports, no skin, no machine qualification",
+        "accepted": false
+      },
+      "comparison": {
+        "case": "impeller",
+        "accepted": false,
+        "legacy_frame": "zero-centre Rz(-C)Rx(-A), registration to CAD not assumed",
+        "legacy_to_source_rz_deg": 0,
+        "new_candidate_file": "new_freeform_0.2.npz",
+        "planar_requested_layers": 352,
+        "planar_failed_layers": 29,
+        "metric_scope": "sampled endpoint proximity, not bead coverage or exact curve Hausdorff",
+        "new_to_old": {
+          "median_mm": 0.2190185660644451,
+          "p95_mm": 0.3590316518199497,
+          "max_mm": 0.5035257397597298
+        },
+        "old_to_new": {
+          "median_mm": 7.522787742428465,
+          "p95_mm": 17.29628459034729,
+          "max_mm": 21.75429896883532
+        }
+      },
+      "manufacturing_accepted": false,
+      "new_complete_nc_generated": false
+    }
+  },
+  "source_hashes": {
+    "scripts\\fan15_example_audit.py": "7682c76a59a8293745db3f0a62896728a9ef6303a26811cc9021d711a43c12b2",
+    "scripts\\render_fan15_examples.py": "9a18c98826ca4f78c0fe6e4edecbc3313f6f133254484db3c89fd3e3cfac9e02",
+    "scripts\\finalize_fan15_evidence.py": "efc1717538cb5f412bfc2e7e500af83eef84d81057e30cf3e648f15ecb9dfce7",
+    "src\\five_axis_slicer\\__init__.py": "f891db9cbb1e49eb3985486b710ee9ae626f13bdb035cb3ce60cea37e01d7850",
+    "src\\five_axis_slicer\\__main__.py": "812b20184f6ce01e7e4b333ddbf5a496da52a0209a25213c9c44636d474663c2",
+    "src\\five_axis_slicer\\algorithms\\__init__.py": "e8c783fdea2d601a6a39a3c18b2bb80731076d17d7301dd8fd2e523d55f47e24",
+    "src\\five_axis_slicer\\algorithms\\curve\\__init__.py": "eb13c5eb8f4682e50da4b799cef6eb1a302e8e6bf3e91ac3a2eeea536bd4aa1c",
+    "src\\five_axis_slicer\\algorithms\\curve\\chain.py": "7349d4d9642fe6c505799d652374e733d36ad54cfa3d29e8332e5638393b881e",
+    "src\\five_axis_slicer\\algorithms\\curve\\toolpath.py": "9a375e44e0bb6f6d7fcc436bfceafec374dc799147f0afe2c42ce3ce73c95d11",
+    "src\\five_axis_slicer\\algorithms\\fan\\__init__.py": "4ac47df2fc67ae5032afa2cf69354872b4a780b7633e7d50fcbfe88acc73efc0",
+    "src\\five_axis_slicer\\algorithms\\fan\\assembly.py": "84720bed9f725279b8abb6544449fd8bfd1679610f580959da02dca15572ad80",
+    "src\\five_axis_slicer\\algorithms\\fan\\chart_fill.py": "f853b49106050f2c488d735982ab8eb6900b40fef6526198aecdcb5ceda02578",
+    "src\\five_axis_slicer\\algorithms\\fan\\program.py": "396bdaf15ecff0e3bfbacb4ec48b1786c6629dbc7ef3a348ee5c3effc6155876",
+    "src\\five_axis_slicer\\algorithms\\fan\\radial.py": "6931acae1b1f4f38d6b6100425696e125903afaced291b9ba48b088852c78c76",
+    "src\\five_axis_slicer\\algorithms\\fan\\transitions.py": "e56c72455f983fcea4a18d175723c7395479a3735e6dc81080e96d92b49a0bff",
+    "src\\five_axis_slicer\\algorithms\\freeform\\__init__.py": "aafbad23a6684e9252be945625a6dfcd2844da9925f423f2fb47aeca54e95dac",
+    "src\\five_axis_slicer\\algorithms\\freeform\\core.py": "891e9be9516dcd07ada73ade476228507292a2027421ba31b558bd344effa846",
+    "src\\five_axis_slicer\\algorithms\\freeform\\layer_domain.py": "df71856cd94d12637fc92343f09c92fd45127a92ef25f4e0054c20e68a374f0e",
+    "src\\five_axis_slicer\\algorithms\\freeform\\toolpath.py": "627c005e7f4425bf8b9114865454f45092886c71f654469de9b60f4ec3414597",
+    "src\\five_axis_slicer\\algorithms\\planar\\__init__.py": "6c69a3cd5ce58fb3dee4ddafe468c89463eb1b1935d78d87e736dc53a12c8590",
+    "src\\five_axis_slicer\\algorithms\\planar\\feature_fill.py": "527e64d8805703e552a84d336b82f2e082679e91e94e6bbaf8d2de16521d3691",
+    "src\\five_axis_slicer\\algorithms\\planar\\feature_toolpath.py": "fccf9d4871c390ae5a74ccbf0892d16515d1c49b7318d12f914cec71321201bf",
+    "src\\five_axis_slicer\\algorithms\\planar\\offset.py": "27c2bb89bf87ce5852d103e7f8daafe4746d0b87cb7302309c18982aa58ca1cc",
+    "src\\five_axis_slicer\\algorithms\\planar\\region.py": "3f698d83b268b4176fa05af0266c8b0c69862971cdaf62fc3b77716477374f5b",
+    "src\\five_axis_slicer\\algorithms\\planar\\section_loops.py": "b6a8b71b121148f020c96d5bb5cd50b2d34cbc1bc8f8efdef63b82992331fdc5",
+    "src\\five_axis_slicer\\algorithms\\planar\\spiral.py": "e7d72741da9ef4901dcbc107c15b84513925718f3f3bf435a348777d8812e9d5",
+    "src\\five_axis_slicer\\algorithms\\planar\\support.py": "a2fc0fccffa1627b201fe1f640b4f27333b67a17b55d25d6f370f69f38944cde",
+    "src\\five_axis_slicer\\algorithms\\planar\\support_geometry.py": "23f13e51c9e1fa79520bc6fc3c32ba9686bde5fda87a447b0b19dfcd391d676c",
+    "src\\five_axis_slicer\\algorithms\\planar\\thin_wall.py": "411b3acdfba5824df59e5a39c49e7454310cce23c32c67ac5f9b57d646f56548",
+    "src\\five_axis_slicer\\algorithms\\planar\\zigzag.py": "eb050fb88c3c9c541952afa0a4c15bbe273a93906c291f811813135f580c596f",
+    "src\\five_axis_slicer\\algorithms\\rotary\\__init__.py": "59ffb67ac0a18c65e58ae31d282f5913cd7c6a18b017517f248d3ea9c6427a89",
+    "src\\five_axis_slicer\\algorithms\\rotary\\geometry.py": "1fb5975745cd51894758d546d2f753d9f126dc6de9937623a77d7986716bbc5f",
+    "src\\five_axis_slicer\\algorithms\\rotary\\toolpath.py": "ac37c655972ab492a332614bf877bb66579d2fc8b0768a7afec09347a0b2ea72",
+    "src\\five_axis_slicer\\algorithms\\tube\\__init__.py": "a191075b62a50ffbda80c8b4142cd965e186dedc95f5d7daf3803f9a79b229c9",
+    "src\\five_axis_slicer\\algorithms\\tube\\buildup.py": "244422c8d03eda063f147af697450ad3013dec6b0a095343490e255781e5ca6c",
+    "src\\five_axis_slicer\\algorithms\\tube\\continuous.py": "5f52116e1c967a8b3133cedd482e44389735f187d542e8a6ff369abe5495cca3",
+    "src\\five_axis_slicer\\algorithms\\tube\\geometry.py": "395aacb43720583e5ec7e09e35524acdb989e31a9fd0d42806552510b940f5cd",
+    "src\\five_axis_slicer\\algorithms\\tube\\indexed.py": "b477c373796f4a6b9cee2fd43757dc6a1a48e523bcaed227ec833e4e67969bda",
+    "src\\five_axis_slicer\\algorithms\\tube\\section.py": "9f03a71e1d0dfe64cc1e438e3cff5ed61e76e507fc0f667f68e7a7e1ceeb5075",
+    "src\\five_axis_slicer\\app.py": "8bedd7192bc6c6ad0abf24076f62638bc0f524ab07906787b75f4ad990d9001c",
+    "src\\five_axis_slicer\\automation.py": "5393dc78dd8ba74bfc1067ba7bfa20ad3535149ec07dc697331904705cf8a98e",
+    "src\\five_axis_slicer\\automation_routes.py": "0c02297a93867fd09ff6197efea713b82ac521a63675d07d72371f528db90b8a",
+    "src\\five_axis_slicer\\background_load.py": "a52c4f615330b8aa4e055d84366a7cf30eb4a50774a607f68bbe1e074e67d091",
+    "src\\five_axis_slicer\\command_kernel.py": "9a36d9051c882e297f1278818c7cfc03b6da65e2edbb078c7bf3c868c778aa0d",
+    "src\\five_axis_slicer\\curve_automation.py": "adc7a1b081f4283b84bbb6a29a6d666b4425dd72bd7713544f88b6ff5a4d3488",
+    "src\\five_axis_slicer\\curve_commands.py": "f62d9ff8d78ddf930c721cdbaa52aa3b6b7de6314b8ec5c7943cd0371d1634a2",
+    "src\\five_axis_slicer\\curve_controller.py": "cc1fcb555030dc65ecda3afb73ecf6ea78fe487df7953ba152fca184c752975b",
+    "src\\five_axis_slicer\\curve_generation_context.py": "95980828e66f45a56a71f5596623a20df803cac0b498a2a87d59d04cfb1e0950",
+    "src\\five_axis_slicer\\curve_operation_service.py": "d399f5421e5b1f96637e6932cbc3a6859b886b77ab9459c2863ab2d5fa6b2deb",
+    "src\\five_axis_slicer\\curve_shell.py": "14c7cad6151e09795bd9c0de38e759529793d035db15940e0601dede8697879b",
+    "src\\five_axis_slicer\\curve_ui.py": "28c2dc29c0fa5c7c869aeb16de2e55098a615a1c4efb84b61623a2bee23e67b1",
+    "src\\five_axis_slicer\\freeform_automation.py": "d353d97006f60c51bc7f994a66110c5775228d627a1c50cb0e39dd5241534a29",
+    "src\\five_axis_slicer\\freeform_commands.py": "28c74596334fd177e78efa38a507a064b8ab538b05a72a4322198e3608df2f15",
+    "src\\five_axis_slicer\\freeform_controller.py": "26d918fddc0d5ebac966ac587bc5c78515822612ed0d38fbdef358e2547a7f20",
+    "src\\five_axis_slicer\\freeform_operation_service.py": "55d5b6c93f19fde08ab997a78165398d0f20944aa71e61278a88b4170ddc55c1",
+    "src\\five_axis_slicer\\freeform_shell.py": "5ce38ba899d432e9628c5106628e692b654ec97740ff5ab320cbf0f3991cfc92",
+    "src\\five_axis_slicer\\freeform_ui.py": "5f016ebd83819eab650df7865a621436785d6b147c2596cb59f328a034aac412",
+    "src\\five_axis_slicer\\gcode_arrays.py": "43e4c821ec0fafa01031e0deba8ddc8ba80aaea9bcd821ccfbcf8be26b6fea3c",
+    "src\\five_axis_slicer\\gcode_cache.py": "30468f98baae93eeb4a0f1f5292560467f5627ee2a3198e05ac7d18b9a84594a",
+    "src\\five_axis_slicer\\gcode_parser.py": "13ccae59e973707bef005a81c84fdecc84b058b6b2c23380a4c8d021e9a303a4",
+    "src\\five_axis_slicer\\gcode_preview.py": "187b6bf94a03692e5cad585c6f220531005dae6326b2e6f694805adf058553f5",
+    "src\\five_axis_slicer\\gcode_source.py": "718d9899693386270022c0169dd0e6a0b3c1acf0061f59d5a41f73f19b138b0c",
+    "src\\five_axis_slicer\\geometry_vtk.py": "a4555772e1e1bccdd70d9f77e4dec4138dec9859fcc33ff3ba56f239bc800f47",
+    "src\\five_axis_slicer\\kinematics\\__init__.py": "91df5cd0d0887076d614e6fc5cbe8515f977765e2d5edb8ac044db7d50d6b080",
+    "src\\five_axis_slicer\\kinematics\\rotary.py": "159c3f96f57414d6b747b207d3561b46d1aca117f281756623ce78686865a0ec",
+    "src\\five_axis_slicer\\kinematics\\xyzac.py": "4cd1b6986dab9174600cb631086c46c1612d4819c29d73c9a2343bc4acd46a9d",
+    "src\\five_axis_slicer\\localization.py": "b827d28ac9fba19bbdb11f1bfaa0a64198838c4b9a925afd718d0db98d24eb63",
+    "src\\five_axis_slicer\\machine_profile_ui.py": "5f77d9ab2ec85c7f734028310fa77a3bb592333537195c82cc67c3fd20b958d4",
+    "src\\five_axis_slicer\\manufacturing\\__init__.py": "91c1c1c5d8afbb19d74211c739e423fbdd020b614d6a122ae1452c6f8fa82c6b",
+    "src\\five_axis_slicer\\manufacturing\\controller_profile.py": "05f04f2e0ae0e07ac1fe30e11835ea8fe586bb569694794b4ad07f33cd6fd39d",
+    "src\\five_axis_slicer\\manufacturing\\coordinates.py": "d30fa1c9f049f5bf132fd46d5c70d794e578a13683966cbb0459ab6ae04ae996",
+    "src\\five_axis_slicer\\manufacturing\\curve_parameters.py": "247790fbdf9c97149d44f95c5a6b0c9402861b4f9b226875446747d2f8675dd5",
+    "src\\five_axis_slicer\\manufacturing\\fan_job.py": "38b5909d57b4806b18d9069198ccaf189a46e969ba1395c003647c4c9eea1d87",
+    "src\\five_axis_slicer\\manufacturing\\freeform_parameters.py": "7044c8dc34dd4fbd89ed981c318d5b3e99e81939c5342048ec4d220f41cf3b70",
+    "src\\five_axis_slicer\\manufacturing\\json_contract.py": "e4b9928d6722e7e6c7bd91d0145c41cad075123048eff7754afb443705f3a271",
+    "src\\five_axis_slicer\\manufacturing\\library.py": "1298e431565ff3d7ca488f0dd15d4a807acd4979b2173f6d2b2fef2232039d60",
+    "src\\five_axis_slicer\\manufacturing\\machine.py": "fa1bd2c0498236e151a66670cfc678d5ad8c74e7277c10c97544094af2f0590a",
+    "src\\five_axis_slicer\\manufacturing\\machine_helpers.py": "e6e35add4bfe43c225b3e03ae37095d64fcd20e31d34591dd0be765151cb22bd",
+    "src\\five_axis_slicer\\manufacturing\\material_plan.py": "05f5377fbf873b7f7fa0b43cc113a6f5da165ce5a187d6719e0d68cdc94f699e",
+    "src\\five_axis_slicer\\manufacturing\\nozzle_envelope.py": "2682b05d1283e37e19dc9538ea6e838e2d220e886b84df59e3f3ef4f80fe4a15",
+    "src\\five_axis_slicer\\manufacturing\\own_printer.py": "2cf489a28b2dada93aa0621d89172003b4382274f966ee5132379dc40d585894",
+    "src\\five_axis_slicer\\manufacturing\\planar_parameters.py": "cd4e9c78f43d4c02f0edbc9b1b142edb811f4927f72a3f50371fb9907193f862",
+    "src\\five_axis_slicer\\manufacturing\\preview_kinematics.py": "7877fc0bc17ee00a20777d5a3d4cb98d6223716dee1f61a1176b8b220772c96d",
+    "src\\five_axis_slicer\\manufacturing\\reference_audit.py": "3b2079e51d9c0895b1c32294176349b61c244776fb8340ca3308c2d47207b940",
+    "src\\five_axis_slicer\\manufacturing\\reference_descriptors.py": "0ae94fdfd80e4eceed01a066245647aa64d3702b728602974db5f8804434783a",
+    "src\\five_axis_slicer\\manufacturing\\reference_rebind.py": "228e8b9ae96bbe790d16f7418ad64702e807795024ae14bffc8625bbc7f1824e",
+    "src\\five_axis_slicer\\manufacturing\\references.py": "9f8c98bd90948f354efd396dcd9bee4fc251ea92c2d76003fa82be2f144171aa",
+    "src\\five_axis_slicer\\manufacturing\\resources.py": "8f0efab01cddb96553d15f02cd1c94b526757b9e28d84089d9f15a8a50e789c5",
+    "src\\five_axis_slicer\\manufacturing\\rotary_parameters.py": "a9a087f053ae02610a2d720efb4b6d950d9b0d9ca857514319ac15c6d0126a79",
+    "src\\five_axis_slicer\\manufacturing\\setup.py": "24c8601d3991f47fbb79c56ce724bd7faf5f58848302d280f696dc9bf54f11af",
+    "src\\five_axis_slicer\\manufacturing\\toolpath.py": "9a0553bd92a8e202bf11778e2482baf40761ab6fed4ee6d63e7048b6e92e81ef",
+    "src\\five_axis_slicer\\manufacturing\\tube_parameters.py": "37c863b3c93310f0d7a700034383789e15e5c5920b13cf9cfddf3051e0731278",
+    "src\\five_axis_slicer\\manufacturing_script_service.py": "0138c61c3b1720417d36a1b5b35bcf078ca4b6e1797210575d8a6dd099c1262e",
+    "src\\five_axis_slicer\\model_commit.py": "b6f6c34acb56525db2c7a2b25df388ace13ca21204dbe2653963612853e97e9a",
+    "src\\five_axis_slicer\\models.py": "36edc80ee80dfd0e7f77e7d2a82d177a633563fc76f96589940e41660ed9c666",
+    "src\\five_axis_slicer\\native_preview_index.py": "5aada1157d7400c9b064b4025bb006295861138a470aeb3fd6b82923e185a8b5",
+    "src\\five_axis_slicer\\opengl_picking.py": "cd73a1265603ef4eb74204ee41c4a57255486a28c86793dc303005b81d0c63cd",
+    "src\\five_axis_slicer\\opengl_scene.py": "0fdabf64aeef6d0c05c08bc3b9b69108b67e66f81f6a65c01297f862b4b20b0b",
+    "src\\five_axis_slicer\\opengl_viewer.py": "ce53327cac62adc765697618c5f63d6d12374a805e82ef1a6a10d653503e30ad",
+    "src\\five_axis_slicer\\planar_commands.py": "0a1905d79c2f62d93c26e09e0333f2c8b4eeceb61e1761c55c00e70db33f31a2",
+    "src\\five_axis_slicer\\planar_controller.py": "cc08fb7d9f2fac8d41fe3f07ee97f805920721925e9cc64944693aa0f435b0fb",
+    "src\\five_axis_slicer\\planar_generation_context.py": "a3ffa7a873d131c0b3d2a0f513e2264421cc25a739a421e10600f9fb729c652e",
+    "src\\five_axis_slicer\\planar_operation_service.py": "573945bffbaad2b3c12706d56aab71f8299fd217ba44c47a957e4f93b1c18141",
+    "src\\five_axis_slicer\\planar_shell.py": "e9b31a0f66af113ed94154c05429d5aad353c788587cfc335b66164d299a0b2d",
+    "src\\five_axis_slicer\\planar_ui.py": "99acd9b0ed30cca8db075f167ca356078cfa780721b1ba96558114ec167dcb04",
+    "src\\five_axis_slicer\\planar_ui_diagnostics.py": "ecac63b3cbba04b6e35f337faa8d5a5994354eca9e432cf4694c5866dc203d25",
+    "src\\five_axis_slicer\\postprocessing\\__init__.py": "644d23fa4e5dec6d545c626c8382b7799c8b1096f862ca9534bfbd66ff07efdd",
+    "src\\five_axis_slicer\\postprocessing\\curve_product.py": "6c86d7beb5741d2bbb9b5a4c6cbec4a630f4a479a98a4358468aeb518b92f07a",
+    "src\\five_axis_slicer\\postprocessing\\fan_merge.py": "0306ffaf34bfb80f00ade0ee7bb71866d8c105bdacd5298425cbc2a732bd3c55",
+    "src\\five_axis_slicer\\postprocessing\\freeform_product.py": "e8ea38c4546ce87a298e991774fbfeaa1c96bc37d398593cc0c059cf3f31762c",
+    "src\\five_axis_slicer\\postprocessing\\gcode_contract.py": "05ffd73daa717dc9ea7fd144013fdd81695ddf0b76cc44e9b6521f0c51e9d99f",
+    "src\\five_axis_slicer\\postprocessing\\gcode_readback.py": "6ae83e2e6be3ef2ea705ba45dac8a84308773ca8cc72ea7f72bb21ab86c5ef84",
+    "src\\five_axis_slicer\\postprocessing\\indexed_tube.py": "7fa20a1467fe093e4cb4aabd9450d9dc0551d71e3479ab95e5580713940d3ccd",
+    "src\\five_axis_slicer\\postprocessing\\own_ac.py": "e3d287a47f5009d1f0dccb26e6b0b56b3c94a46ecfac21f833d50f936f9bc140",
+    "src\\five_axis_slicer\\postprocessing\\planar_product.py": "c3a039a837e31c78351a24e60426a41324383a8e01682b4c58e2bb2095c80bf6",
+    "src\\five_axis_slicer\\postprocessing\\planar_support_product.py": "78f078d1916d45fba14015cf65ef7050d638466e51838ca73158877cc598b655",
+    "src\\five_axis_slicer\\postprocessing\\rotary_product.py": "c86a4ed5da87ecc6e0118606e00a68c3c5f8edeba474e1f155623d68401344a4",
+    "src\\five_axis_slicer\\postprocessing\\tube_product.py": "30c6fa0353c9a6fbc4de8e964ac07fb4827016e83c5c9f7d5d705ba70d6165ef",
+    "src\\five_axis_slicer\\project_assets.py": "60fb2adfd422a0d4b9bc80f06839ccf4f4eaaec553bbf89665140e104467f49a",
+    "src\\five_axis_slicer\\project_contract.py": "cfc94365b8f44d9a003659bdfa1332753fb45445c740e8fce2086913c01f22f4",
+    "src\\five_axis_slicer\\project_io.py": "d9b45986b202b9d75885d171921d9ae3bb3125ba3655c9935dd3118155c00a54",
+    "src\\five_axis_slicer\\project_storage.py": "f9d739d322eb7b09bfb528ae75d0ebd06649663ada6e049528926fc20209340b",
+    "src\\five_axis_slicer\\qt_load_wait.py": "6d8862a5942e44cd05baa0605f1a895af9a4c236db8fce9143870a56956b6416",
+    "src\\five_axis_slicer\\restricted_script.py": "2a4d7d2b9b798ccc348f382f49501c62d46a9427f9a2b924529f173104291255",
+    "src\\five_axis_slicer\\result_commit.py": "5fe90bb323bbe11a0454c308e683f8c2a27c1eac545699f0608dfe0dcc9faa9c",
+    "src\\five_axis_slicer\\result_preview.py": "6e3ed125816230bea48c1b5f10c3f8c7933824046480c028760ea61e623bab9d",
+    "src\\five_axis_slicer\\result_preview_layout.py": "8d9c2ab049731ce2db964fb5339278e6ad1bcb5355c417e5938ec7a8624565db",
+    "src\\five_axis_slicer\\result_preview_text.py": "8f9b1a170ece3e816b7453bb3a55093a2e4fa32cf8913da2c0a50452cc76c4cf",
+    "src\\five_axis_slicer\\result_state.py": "74167e7a73a69f077ead033dc80ab4cef4f405397aa4b19f69f83e18a9b8bb94",
+    "src\\five_axis_slicer\\rotary_automation.py": "4f0d50ce96a90435191de96ef7755c4686418bcec01623d5c350d3ab98fb5ac4",
+    "src\\five_axis_slicer\\rotary_commands.py": "4df16e2ee845fc5d56719f1fb34d38143996cf1733170b07814d95774a281809",
+    "src\\five_axis_slicer\\rotary_controller.py": "b1820a5017951ea639660ac3965bf3f90d2df96d356b7b28f87829d93d5846c0",
+    "src\\five_axis_slicer\\rotary_generation_context.py": "0e59e389af8dedb334aec3aa21e63d0e1bc27f6255373369b264a0c0309d10b6",
+    "src\\five_axis_slicer\\rotary_operation_service.py": "640cf3c42daa576f4b053d89f74b7d3a5f9045bee27414515dab8bc79e01a856",
+    "src\\five_axis_slicer\\rotary_shell.py": "73017f3e33a21f75e18375bf9fadb8aef182eba940d5d78c1a7b24ae3e583031",
+    "src\\five_axis_slicer\\rotary_ui.py": "c6c167e89950e4a4aca93ee4b6cc4a1218a2047b0f94528614d1c0deb5d1355f",
+    "src\\five_axis_slicer\\script_console.py": "32dd40f078cd99e36b6cdc79a01f8b12628a30f7041b56930fff68551b720ea7",
+    "src\\five_axis_slicer\\selection_list.py": "0364c421b3608f5678ca7dd62307335db307899802774641999d9f9000147fe0",
+    "src\\five_axis_slicer\\setup_config.py": "89f8e56e2f9e51f01770c599142a28d966b00628e0e8e6d94d10552f11d51b51",
+    "src\\five_axis_slicer\\setup_config_io.py": "65a707bd373bbe00a544753c3f6db4db38c2941dc858f6a17994a7157f79e2d2",
+    "src\\five_axis_slicer\\setup_config_session.py": "f0187769f9bd06cb5dc955659dcf84bd204104752d6a20a4ee3c31a5ab5c6365",
+    "src\\five_axis_slicer\\step_loader.py": "da1564d9b1d839cc27b0d438947901779e966efabe950c90081dc1770d201bf7",
+    "src\\five_axis_slicer\\step_reader.py": "89e988deb396dddef2c2f49db79f126f2c853067de3b4d0fbcad3d48c2bc938c",
+    "src\\five_axis_slicer\\step_topology.py": "b6a9e9865e1c830c08369d97e54598f198dc6306a37c5e3ad94fde7e42ff1013",
+    "src\\five_axis_slicer\\styles.py": "bc6875bbc184760ff6b089c66cfafbac7f82e826e88f7af05cc6f7be81e6f785",
+    "src\\five_axis_slicer\\theme.py": "fd40ec74631c261cf25ab6b0874d4032da27a6399f7c13aa348d39a8d2a8ed54",
+    "src\\five_axis_slicer\\tube_commands.py": "d06eb887a0e57babd5cd0c3ce10b43bf1cfc5ab82308a9319c8ecf105c1b21d5",
+    "src\\five_axis_slicer\\tube_controller.py": "70c1ca8c016cdee1abbab86127beb72bd2fabcdd171e144075dc24a1150208fc",
+    "src\\five_axis_slicer\\tube_controller_state.py": "3d28c2e21fdfa78797ca98acb95872d71b663a3cd8259303a032dabb01ce9fef",
+    "src\\five_axis_slicer\\tube_drafts.py": "9b1d0f80e73264b8f710862d679c56f982933e5fbfc67105be3a014820b6def7",
+    "src\\five_axis_slicer\\tube_generation_context.py": "3deb51f1f0046ef89040df3c2f51cd4c02cb40db0e136361450dc739b405435f",
+    "src\\five_axis_slicer\\tube_generation_service.py": "72c7a924f3ddf74fca87f4b269175fbc4d8b66da82ca6309048ec8e5509753ea",
+    "src\\five_axis_slicer\\tube_operation_service.py": "80edd2aa6044eebb9072f2426631bbc19e54c5b64c72b0fde2e7a9803d9c98e1",
+    "src\\five_axis_slicer\\tube_operation_ui.py": "35aa070827c44cae7e0d832cf43ec235a1dbb0a4db12227a1e8947d18e741bb0",
+    "src\\five_axis_slicer\\tube_resource_context.py": "36fae1f01477cf7ecab227b57186c18c95873d192650185cfe2f230e78082d89",
+    "src\\five_axis_slicer\\tube_resource_selection.py": "8ba098321ea9ba948a0c7fba60578d15a07272cce7b583f7d40df95e0c2a2477",
+    "src\\five_axis_slicer\\tube_script_service.py": "35978b40b109b11c5120a4c848114fc466226c8e5f6b76234a398a4dd7fc9e01",
+    "src\\five_axis_slicer\\tube_serialization.py": "18630270d62bc2fccba52f6121056ae6bf2f3e6e7a4d750ec932648c8eb8cb1d",
+    "src\\five_axis_slicer\\tube_ui.py": "df63b19e5a403410891b32a786a69127af09089143622068f2554d7a58dfa284",
+    "src\\five_axis_slicer\\tube_ui_presenter.py": "3d27f4962f97165ed271add3a8b56a52503a2c503b81974c41b4994c8dccad6d",
+    "src\\five_axis_slicer\\tube_ui_text.py": "fe0e068d3ee07526a14009e5e05d6f5f25a8c25d655c732901a569332dabef43",
+    "src\\five_axis_slicer\\tube_validation.py": "948eafa86fa30321c76f11559f97a28cca17968bcbe03a8d235ab89724d3c939",
+    "src\\five_axis_slicer\\ui.py": "df9e30f0cd3176fb8ff8b26b1ff49457601baa2cc54ca7baf7a538276ae65847",
+    "src\\five_axis_slicer\\ui_controls.py": "c09fecefb958ed73a0549843445b8e1e765f33cecafd46cbc7c6c84c92128cc5",
+    "src\\five_axis_slicer\\validation\\__init__.py": "f9db1e2e8288d31d1c21b335894405f8726addb09f879b428f4e55b11fe23466",
+    "src\\five_axis_slicer\\validation\\indexed_tube.py": "9fea5fb9420f3d45120f4e99521eb033fb4396f7d634f7ca5a8acef55aaec978",
+    "src\\five_axis_slicer\\validation\\planar.py": "cda2248a15da86a2cb90792cfe7e1de3a4abbce6227b15b8f57d44666dc97d1c",
+    "src\\five_axis_slicer\\validation\\planar_geometry.py": "1a8d9e01ffe222f0d4b248a7cb193876b595503b231457df7ed5c05a5093a156",
+    "src\\five_axis_slicer\\validation\\planar_qualification.py": "e0e728874fc219070a80931ad07c5fad29dde5a644d2350c56e95566c134c9a7",
+    "src\\five_axis_slicer\\validation\\planar_travel.py": "9862b7db4d0971f44fbad78233268daebdf17bc709292cc535b21ebeaa3341f2",
+    "src\\five_axis_slicer\\viewer.py": "b428f379cb8e9e5505146bb370ccc67b88f3bcb760e97f526e5e82d64e31fa9c",
+    "src\\five_axis_slicer\\viewer_common.py": "f547c27baabe3b60a944a87a779d09b7284ce42759f3a34b457c3546acffc0ba",
+    "src\\five_axis_slicer\\viewer_interaction.py": "44bee27804623bc3ba7cec9725dbcaaf35854f319f30281dbd12b81a62ae3163",
+    "src\\five_axis_slicer\\viewer_overlays.py": "91cfcd787a7ae4643e252cc03d8536e2896c10be92c3a2f061514e6dc8a96b36",
+    "src\\five_axis_slicer\\workbench_navigation.py": "85b63e55af54f4a82e830b644ce5afb92f845d695c2c905c2c4d23b20dacae80",
+    "src\\five_axis_slicer\\workbenches.py": "99c9bf25c16b3e09961805239665ac29aa8571d5cc3fa736592b04d925d39ac3",
+    "tests\\test_fan15_audit.py": "58aaff94d15b222e40e23ed96d566235ae29da6484d0979fa9d8a3c92a037588",
+    "docs\\reviews\\2026-09-20_fan15_example_acceptance.md": "83c8ebc7fc0a25f1e5144d0e01de076c62f1381ddad652154755e6b14eb4df66"
+  },
+  "files": {
+    "hemisphere_pattern\\comparison.json": "9562226ed39e6b9f6c3ce59a4bcfe3397d73021c271d79951296a78bda425226",
+    "hemisphere_pattern\\comparison.png": "93e6897098e2d09e1eaa181b67c68eec1a53b4332b17f65f01da47b778ffbf31",
+    "hemisphere_pattern\\current_mode.json": "32d16293b519b5b60200c0d9beb756d97b58b8dd9a89829a012cbe45468923e4",
+    "hemisphere_pattern\\inventory.json": "3b48d6759e8f844106c7f208b82172a98a1a8442a5acd3b74cf5d791ec7ed1ac",
+    "hemisphere_pattern\\legacy.json": "158929213b17e649a493853176a845f5ba3c5595a20442b3b828ff5efd4f07f1",
+    "hemisphere_pattern\\legacy.npz": "9f828227e6d543751526d7adbc1ed28775ed32c11a479a9b0438dd2575c97f4d",
+    "hemisphere_pattern\\new_freeform_3.0.npz": "74242f6f466f94f50040b69396a7ef982fd43940291cb58902ccab64ebd0468d",
+    "hemisphere_pattern\\planar_diagnostic.json": "ee246d1891ea9072d3378eaa50ba7cc151c9c14048400c73b7082358001f5a3f",
+    "hemisphere_pattern\\planar_diagnostic.npz": "71e8367155ad2405fa08a4f2abec1e7fab707fe291e108337d9425ab5a04661f",
+    "impeller\\comparison.json": "d094bc737946e045e4a041f48d3203b5f41d0a54c7643e5aa853afd4458c0f1f",
+    "impeller\\comparison.png": "f922dc4519b060188187fc47720e816d09396176a5b65a1313dac29559610bb9",
+    "impeller\\current_mode.json": "6cb957fcbe73bae232fa02e5d14df2d7fe1c9ea8b1308b2eb4a6602988aa2e1e",
+    "impeller\\inventory.json": "a2ae8d4bf516fc7271c4d3e5fcb85dd08704d00f93132e61c3977f7ab7460ed9",
+    "impeller\\legacy.json": "d6b5371b68968ed75ad1fc417ac181fce6d54e4230d223d5da2f7b7d7426b556",
+    "impeller\\legacy.npz": "8356bd0cc859b3a062639daf3c204db7bc87a38a246a01090b9ec0da6cd1ff42",
+    "impeller\\new_freeform_0.2.npz": "b6b91f4bff385b28e82634e60da6675beb451dfa23f14fc56a2dc108a4109226",
+    "impeller\\new_freeform_3.0.npz": "6e75ce313d7f8c7bda0842d260014e673c3797f89148159e41b316afdc712828",
+    "impeller\\planar_diagnostic.json": "e1aea2fefec77afa379bc3b5c61c4805ba787e463dafda724105ea12120654e1",
+    "impeller\\planar_diagnostic.npz": "da99f00993972a74236232f54a5e44f1273f21377d873d5c9bf7b728b9ea9c33",
+    "pipe2\\comparison.json": "5720fd9181dd8bdab8c832483ff793a03e5c77113f913a1c263e5406d0cf4132",
+    "pipe2\\comparison.png": "4e787adb57bc9fc31f116ba98730620bd35ff866eb081e5c152c39795e93e90b",
+    "pipe2\\current_mode.json": "48ea4f64e4655c4f4b6598f30428917b36cfc4834f571aea759c3406ef40828b",
+    "pipe2\\inventory.json": "22e6877f1d401391dae69e6149c5818b86e264e9048d999c2b91e86aecf8823c",
+    "pipe2\\legacy.json": "d1c98b8beb61470ca68172d3c5ea71489e7d28378ca17177859af0812e027b75",
+    "pipe2\\legacy.npz": "d95b0e9f0492a71f86030a79ba5e832b6a9d5d76a6b4e429f53b103cec445009",
+    "pipe2\\new_continuous.npz": "e5ba7a9d01f01877265c3c07783172f508d60f16e89809fec942aef0ebd1ce2e",
+    "pipe2\\new_indexed.npz": "c53cce6dd6965d62d7d032ef68a2016335623ce8ad19d4bea96061ef63c0b73a",
+    "pipe2\\planar_diagnostic.json": "0ff06bcb97a6c58a5fe1d7df04ae246ddb9f62cf0fc6673dfedce328348585d3",
+    "pipe2\\planar_diagnostic.npz": "74c37a40662f11295017d9ad1ad9880b42ba671e2d10350232091e11e598d2a8",
+    "pytest_audit.xml": "f2b3afbe5dfa92ce35ce9c52dd5f35cefbc421f24a912069989e7777f4eaf113",
+    "pytest_audit_axial.xml": "312cbdb4d08095b403be197dd5187ec6df45adf3100d1f8bac1b9021d17eaa3c",
+    "pytest_audit_final.xml": "c6bd7d740da6ff843f7d89794b92b00281fe066fa1966a60b8c08c5726428b7a",
+    "pytest_audit_fixed.xml": "c8bd20ff6738d63da86b9e608bec5be31c8e6576fd8b518901581bd1941c604f",
+    "pytest_audit_retry.xml": "1f2398eea530613ede92435137ca0486e35b40fdd04b87947ca3d542c6602fbe",
+    "pytest_audit_union.xml": "4ff7abe23be09939115b92d2e418fcaacc40e01ebc750f8696dba1bc8d0d3bd7",
+    "three_leaf\\comparison.json": "db30711df80eec76aa90bafa5d12383aa344e6f295f4bf435815016ff835c562",
+    "three_leaf\\comparison.png": "78e2a7d0d57b1294ebbc75159f8f2ae9d243f096f6ec079f893500e2900191fc",
+    "three_leaf\\current_mode.json": "a231472906d1a35957e2a3485d62b432dd6b2cb7ce44c4e91562d660e965fd13",
+    "three_leaf\\inventory.json": "cd64e6f9ac0c5c68b129ba63ad6f60710a1584fed5a9f259eb106bc2907f36d0",
+    "three_leaf\\legacy.json": "cb8529fb0196444cf5b52f51149e11245d978c4a8a61ca3b476ba3de9a999ed3",
+    "three_leaf\\legacy.npz": "bc56b7d2a31956a42ca4d2c04422a7e2c9db6ba5099d9d3b0d990e5f919c8946",
+    "three_leaf\\planar_diagnostic.json": "927d1008512c3630f11729fce5cd9220c827ab51085715b9a27ccf484bd37937",
+    "three_leaf\\planar_diagnostic.npz": "23e3cabb4bc2870cfba7c658f26be58720f7b58d34f998125078033da397117c"
+  }
+}

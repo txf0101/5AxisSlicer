@@ -1,0 +1,5 @@
+{
+  "five_axis": {
+    "error": "No whole-solid five-axis partition generator registered"
+  }
+}

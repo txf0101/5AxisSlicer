@@ -1,14 +1,33 @@
 """Broad-phase candidates must preserve the brute-force collision result."""
 
 import random
+import pytest
 from dataclasses import replace
 
 import test_tube_indexed_pipeline as pipeline
 from five_axis_slicer.validation.indexed_tube import (
     _DepositedSegmentIndex,
+    _collision_issues,
     _point_segment_distance,
     validate_indexed_tube,
 )
+
+
+def test_collision_checkpoint_preserves_report_and_propagates_cancellation():
+    fixture = pipeline.IndexedValidationTests()
+    fixture.setUp()
+    args = (fixture.toolpath, fixture.nozzle, (), 0.25)
+    expected = _collision_issues(*args, check_ipw=True)
+    calls = []
+    actual = _collision_issues(*args, check_ipw=True, checkpoint=lambda: calls.append(1))
+    assert actual == expected
+    assert calls
+
+    def stop():
+        raise RuntimeError("cancel requested")
+
+    with pytest.raises(RuntimeError, match="cancel requested"):
+        _collision_issues(*args, check_ipw=True, checkpoint=stop)
 
 
 def test_capsule_candidates_include_every_exact_hit():

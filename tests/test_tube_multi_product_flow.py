@@ -179,7 +179,7 @@ def test_continuous_reads_back_exports_six_artifacts_and_reopens_state(
 
     assert result.operation_type == "tube_continuous"
     assert result.exportable and result.readback.passed
-    assert result.manifest.algorithm_version == "tube-continuous-product-v1"
+    assert result.manifest.algorithm_version == "tube-continuous-product-v2"
     destination = export_tube_product(result, tmp_path / "continuous-result")
     assert {item.name for item in destination.iterdir()} == {
         "machine_axes.csv",
@@ -193,7 +193,9 @@ def test_continuous_reads_back_exports_six_artifacts_and_reopens_state(
     with patch("five_axis_slicer.postprocessing.tube_product.recognise_tube", return_value=feature):
         service.generate(model, operation, machine, nozzle, T_workpiece_from_build=placement)
     assert service.state is not None
-    assert service.state.status == "ready"
+    # Axial growth holds A=0: C is underdetermined and retained, with a warning.
+    assert service.state.status == "warning"
+    assert {issue.code for issue in result.validation.issues} == {"xyzac.rotary_singularity"}
 
 
 def test_continuous_collision_error_blocks_nc_and_export(

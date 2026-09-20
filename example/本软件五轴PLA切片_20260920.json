@@ -1,0 +1,137 @@
+{
+  "generated_on": "2026-09-20",
+  "generic_pla_defaults": {
+    "bead_width_mm": 0.4,
+    "controller": "own_ac_offline",
+    "deposition_feedrate_mm_min": 1200.0,
+    "filament_diameter_mm": 1.75,
+    "layer_height_mm": 0.2,
+    "material": "PLA",
+    "nozzle_diameter_mm": 0.4,
+    "nozzle_temperature_c": 205.0,
+    "qualification": "offline_review_only",
+    "retract_length_mm": 1.0,
+    "rotary_clearance_absolute_z_mm": 20.0,
+    "travel_feedrate_mm_min": 3000.0
+  },
+  "not_generated": [
+    {
+      "reason": "current bounded workbenches do not provide an independently qualified automatic five-axis decomposition for this complete solid",
+      "source": "example/三叶扇/Supportless_sample.stp"
+    },
+    {
+      "reason": "current Tube manufacturing workflow requires STEP topology; STL is preview-only for this workflow",
+      "source": "example/pipe/pipe_fitting_40pct.stl"
+    }
+  ],
+  "outputs": [
+    {
+      "case": "hemisphere_pattern",
+      "mode": "freeform_surface",
+      "output": "example/球形NEU校徽/球形测试件_本软件五轴_PLA_20260920.gcode",
+      "parameters": {
+        "bead_width_mm": 0.4,
+        "controller": "own_ac_offline",
+        "deposition_feedrate_mm_min": 1200.0,
+        "filament_diameter_mm": 1.75,
+        "layer_height_mm": 0.2,
+        "material": "PLA",
+        "nozzle_diameter_mm": 0.4,
+        "nozzle_temperature_c": 205.0,
+        "qualification": "offline_review_only",
+        "retract_length_mm": 1.0,
+        "rotary_clearance_absolute_z_mm": 20.0,
+        "travel_feedrate_mm_min": 3000.0
+      },
+      "paths": 7,
+      "points": 30,
+      "readback_passed": true,
+      "sha256": "63c8a4d4d62b1a1a7495b3434190628c190252041df00d5c7578aa3d915362cd",
+      "source": "example/球形NEU校徽/球形测试件.STEP",
+      "status": "warning"
+    },
+    {
+      "case": "fan_blade",
+      "mode": "freeform_thin_wall",
+      "output": "example/扇叶/风扇扇叶_本软件五轴_PLA_20260920.gcode",
+      "parameters": {
+        "bead_width_mm": 0.4,
+        "controller": "own_ac_offline",
+        "deposition_feedrate_mm_min": 1200.0,
+        "filament_diameter_mm": 1.75,
+        "layer_height_mm": 0.2,
+        "material": "PLA",
+        "nozzle_diameter_mm": 0.4,
+        "nozzle_temperature_c": 205.0,
+        "qualification": "offline_review_only",
+        "retract_length_mm": 1.0,
+        "rotary_clearance_absolute_z_mm": 20.0,
+        "travel_feedrate_mm_min": 3000.0
+      },
+      "paths": 3,
+      "points": 123,
+      "readback_passed": true,
+      "sha256": "dfd6a68ec843cfce2888cb598e27ffd7e5efd6ada108739cb8194d8ea9edad3c",
+      "source": "example/扇叶/风扇扇叶(1).STEP",
+      "status": "warning"
+    },
+    {
+      "case": "impeller",
+      "mode": "freeform_surface",
+      "output": "example/叶轮/叶轮_本软件五轴_PLA_20260920.gcode",
+      "parameters": {
+        "bead_width_mm": 0.4,
+        "controller": "own_ac_offline",
+        "deposition_feedrate_mm_min": 1200.0,
+        "filament_diameter_mm": 1.75,
+        "layer_height_mm": 0.2,
+        "material": "PLA",
+        "nozzle_diameter_mm": 0.4,
+        "nozzle_temperature_c": 205.0,
+        "qualification": "offline_review_only",
+        "retract_length_mm": 1.0,
+        "rotary_clearance_absolute_z_mm": 20.0,
+        "travel_feedrate_mm_min": 3000.0
+      },
+      "paths": 16,
+      "points": 384,
+      "readback_passed": true,
+      "sha256": "acc1b81e829e612766e3ad2adac6164acacbf61eb8b9cb9d1357b6693e5a84cc",
+      "source": "example/叶轮/叶轮.stp",
+      "status": "warning"
+    },
+    {
+      "case": "pipe2",
+      "mode": "tube_indexed",
+      "output": "example/pipe2/弯管新_本软件五轴_PLA_20260920.gcode",
+      "parameters": {
+        "bead_width_mm": 0.4,
+        "controller": "own_ac_offline",
+        "deposition_feedrate_mm_min": 1200.0,
+        "filament_diameter_mm": 1.75,
+        "layer_height_mm": 0.2,
+        "material": "PLA",
+        "nozzle_diameter_mm": 0.4,
+        "nozzle_temperature_c": 205.0,
+        "qualification": "offline_review_only",
+        "retract_length_mm": 1.0,
+        "rotary_clearance_absolute_z_mm": 20.0,
+        "travel_feedrate_mm_min": 3000.0
+      },
+      "points": 43775,
+      "readback_passed": true,
+      "sha256": "149f081eee016f5bc8b006c21e96a6123c8283ce006623700af622d0b8495ac5",
+      "source": "example/pipe2/弯管新.stp",
+      "status": "warning"
+    }
+  ],
+  "paper_parameters": [
+    "0.4 mm nozzle",
+    "1.75 mm filament",
+    "AC rotary table",
+    "A +/-180 deg, C +/-360 deg",
+    "absolute Z=20 mm before scheduled non-deposition reorientation"
+  ],
+  "schema_version": 1,
+  "scope": "offline_review_only"
+}

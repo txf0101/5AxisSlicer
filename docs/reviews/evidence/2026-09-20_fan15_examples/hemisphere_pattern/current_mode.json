@@ -1,0 +1,10 @@
+{
+  "0.2": {
+    "error": "curve.offset_outside_face: offset crosses the trimmed face boundary"
+  },
+  "3.0": {
+    "paths": 7,
+    "segments": 23,
+    "scope": "existing selected guides only, not complete solid or logo"
+  }
+}

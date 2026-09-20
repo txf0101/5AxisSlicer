@@ -49,13 +49,13 @@ from .indexed_tube import GCodeReadbackReport, postprocess_indexed_gcode, readba
 from .planar_support_product import build_planar_support_geometry
 
 PLANAR_PRODUCT_STATE_SCHEMA_VERSION = 1
-PLANAR_REGION_ALGORITHM_VERSION = "planar-region-product-v3"
-PLANAR_ZIGZAG_ALGORITHM_VERSION = "planar-zigzag-product-v3"
+PLANAR_REGION_ALGORITHM_VERSION = "planar-region-product-v4"
+PLANAR_ZIGZAG_ALGORITHM_VERSION = "planar-zigzag-product-v4"
 PLANAR_PATH_ALGORITHM_VERSIONS = {
-    "planar_offset": "planar-offset-product-v3",
-    "planar_thin_wall": "planar-thin-wall-product-v3",
-    "planar_spiral": "planar-spiral-product-v3",
-    "planar_support": "planar-support-product-v3",
+    "planar_offset": "planar-offset-product-v4",
+    "planar_thin_wall": "planar-thin-wall-product-v4",
+    "planar_spiral": "planar-spiral-product-v4",
+    "planar_support": "planar-support-product-v4",
 }
 PLANAR_MARKERS = {
     "planar_zigzag": "P02",

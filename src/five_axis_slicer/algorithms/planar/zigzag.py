@@ -100,17 +100,18 @@ class _ZigzagBuilder:
         region: PlanarRegion,
         points: tuple[tuple[float, float], ...],
         role: str,
+        stage_id: str = "planar",
     ) -> None:
         if len(points) < 2:
             return
         start = _at_z(points[0], layer.z_mm)
         tangent = _unit(_subtract(_at_z(points[1], layer.z_mm), start))
         if self.points:
-            self._event("retract", layer, region)
-            self._point(layer, region, start, tangent, "travel")
+            self._event("retract", layer, region, stage_id)
+            self._point(layer, region, start, tangent, "travel", stage_id=stage_id)
         else:
-            self._point(layer, region, start, tangent, "approach")
-        self._event("prime", layer, region)
+            self._point(layer, region, start, tangent, "approach", stage_id=stage_id)
+        self._event("prime", layer, region, stage_id)
         previous = start
         for point in points[1:]:
             current = _at_z(point, layer.z_mm)
@@ -126,6 +127,7 @@ class _ZigzagBuilder:
                 "deposition",
                 length * self.parameters.bead_width_mm * self.parameters.layer_height_mm,
                 role,
+                stage_id,
             )
             previous = current
 
@@ -138,6 +140,7 @@ class _ZigzagBuilder:
         point_type: str,
         volume: float = 0.0,
         role: str = "none",
+        stage_id: str = "planar",
     ) -> None:
         self.sequence += 1
         deposition = point_type == "deposition"
@@ -148,7 +151,7 @@ class _ZigzagBuilder:
                 tangent,
                 (0.0, 0.0, -1.0),
                 self.operation_id,
-                "planar",
+                stage_id,
                 layer.layer_id,
                 region.region_id,
                 point_type,
@@ -165,14 +168,20 @@ class _ZigzagBuilder:
             )
         )
 
-    def _event(self, event_type: str, layer: PlanarSliceLayer, region: PlanarRegion) -> None:
+    def _event(
+        self,
+        event_type: str,
+        layer: PlanarSliceLayer,
+        region: PlanarRegion,
+        stage_id: str = "planar",
+    ) -> None:
         amount = self.parameters.retract_length_mm * (-1.0 if event_type == "retract" else 1.0)
         self.events.append(
             ToolpathEvent(
                 f"event-{len(self.events) + 1:07d}",
                 event_type,
                 self.operation_id,
-                "planar",
+                stage_id,
                 layer.layer_id,
                 region.region_id,
                 context={"sequence_index": self.sequence, "extrusion_length_mm": amount},

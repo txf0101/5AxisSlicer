@@ -1,0 +1,65 @@
+{
+  "source": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\三叶扇\\EXAMPLE.gcode",
+  "sha256": "5c0fe0d52bb512d3f6c31447751a1724724933d26641ed165d27cb564afeb820",
+  "lines": 785382,
+  "positive_e_segments": 728260,
+  "commands": {
+    "M140": 2,
+    "M105": 2,
+    "M190": 1,
+    "M104": 5,
+    "M109": 4,
+    "PRINT_START": 1,
+    "M82": 2,
+    "G92": 6,
+    "G1": 731867,
+    "M107": 2,
+    "G0": 14154,
+    "M106": 1,
+    "SET_GCODE_OFFSET": 1,
+    "G90": 6,
+    "M221": 3,
+    "G21": 3,
+    "M83": 3,
+    "PRINT_END": 1
+  },
+  "types": {
+    "SKIRT": 300,
+    "WA-LL-INNER": 4992,
+    "WA-LL-OUTER": 5006,
+    "SKIN": 714292,
+    "FILL": 3670
+  },
+  "bounds": [
+    [
+      -96.53,
+      -18.599,
+      0.3
+    ],
+    [
+      20.226,
+      23.991,
+      99.9
+    ]
+  ],
+  "positive_e_mm": 6378.405486,
+  "length_mm": 219654.95342454503,
+  "ac_bounds": [
+    [
+      -94.87,
+      0.0,
+      -89.01
+    ],
+    [
+      0.0,
+      0.0,
+      180.79
+    ]
+  ],
+  "frame": "machine XYZ: unsupported rotary mapping",
+  "unsupported_rotary_words": [
+    "B"
+  ],
+  "offset_macro_unresolved": true,
+  "boundary": "G0/G1 positive-E only; positive E is not automatically valid deposition"
+}

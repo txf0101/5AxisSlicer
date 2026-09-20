@@ -1,0 +1,24 @@
+{
+  "body_id": "body_001",
+  "a_angle_deg": 90.0,
+  "build_z_range_mm": [
+    -72.73904529370034,
+    50.467729562419045
+  ],
+  "layer_height_mm": 0.2,
+  "layer_count": 616,
+  "nonempty_layer_count": 466,
+  "internal_empty_layer_ids": [],
+  "section_volume_mm3": 6755.4873447253185,
+  "cad_volume_mm3": 6773.125601048962,
+  "relative_volume_error": 0.0026041531432566692,
+  "max_sampling_area_change_fraction": 2.6512214752932854e-05,
+  "endpoint_correction_limit_mm": 0.01,
+  "jacobian_min": 1.0,
+  "self_intersection_count": 0,
+  "fk_position_error_mm": 0.0,
+  "fk_angle_error_deg": 0.0,
+  "fixed_a_within_limit": true,
+  "geometry_feasible": true,
+  "machine_qualification_pending": true
+}

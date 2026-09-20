@@ -1,0 +1,20 @@
+{
+  "case": "hemisphere_pattern",
+  "accepted": false,
+  "legacy_frame": "zero-centre Rz(-C)Rx(-A), registration to CAD not assumed",
+  "legacy_to_source_rz_deg": 180,
+  "new_candidate_file": "new_freeform_3.0.npz",
+  "planar_requested_layers": 202,
+  "planar_failed_layers": 86,
+  "metric_scope": "sampled endpoint proximity, not bead coverage or exact curve Hausdorff",
+  "new_to_old": {
+    "median_mm": 0.11188841032904862,
+    "p95_mm": 0.11894325827341325,
+    "max_mm": 0.1194202407516422
+  },
+  "old_to_new": {
+    "median_mm": 27.559176668286785,
+    "p95_mm": 54.8081626939126,
+    "max_mm": 63.54646018850092
+  }
+}

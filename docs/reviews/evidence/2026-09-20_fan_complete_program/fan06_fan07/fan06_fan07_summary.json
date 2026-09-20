@@ -1,0 +1,113 @@
+{
+  "source_step": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\扇叶\\风扇扇叶(1).STEP",
+  "source_sha256": "294b882a7231d6b0fcfaf4aa8c6355422b212590f443158ea0a624fec2b901ef",
+  "contract_sha256": "42f6ac7d309335646da6acff6b3cff6883fac2be3c29fade1faac872d61f8397",
+  "base": {
+    "layer_count": 325,
+    "nonempty_layer_count": 325,
+    "all_layers_scheduled": true,
+    "support_layer_count": 309,
+    "support_diagnostic_count": 0,
+    "unsupported_contact_area_mm2": 687.8525357544204,
+    "feature_counts": {
+      "solid_skin": 8,
+      "sparse_infill": 317
+    },
+    "part_toolpath": {
+      "point_count": 1149929,
+      "event_count": 25863,
+      "deposition_point_count": 1136997,
+      "deposition_volume_mm3": 12637.0355159492,
+      "stage_counts": {
+        "fan_base_shell": 1125353,
+        "fan_base_bottom_skin": 648,
+        "fan_base_sparse_infill": 10285,
+        "fan_base_top_skin": 711
+      },
+      "extrusion_role_counts": {
+        "skin": 1126712,
+        "infill": 10285
+      },
+      "deposition_layer_count": 325
+    },
+    "support_toolpath": {
+      "point_count": 8884,
+      "event_count": 8883,
+      "deposition_point_count": 4442,
+      "deposition_volume_mm3": 8228.415127516002,
+      "stage_counts": {
+        "planar_support": 4298,
+        "planar_support_interface": 144
+      },
+      "extrusion_role_counts": {
+        "support_material": 4298,
+        "support_interface": 144
+      },
+      "deposition_layer_count": 309
+    },
+    "generation_seconds": 96.92468460000237
+  },
+  "blade_1": {
+    "body_id": "body_001",
+    "a_angle_deg": 90.0,
+    "layer_count": 616,
+    "nonempty_layer_count": 466,
+    "internal_empty_layer_ids": [],
+    "geometry_feasible": true,
+    "machine_qualification_pending": true,
+    "cad_volume_mm3": 6773.125601048962,
+    "section_volume_mm3": 6755.4873447253185,
+    "section_relative_volume_error": 0.0026041531432566692,
+    "feature_counts": {
+      "thin_wall": 8,
+      "solid_skin": 2,
+      "solid_infill": 456
+    },
+    "toolpath": {
+      "point_count": 123391,
+      "event_count": 54151,
+      "deposition_point_count": 96315,
+      "deposition_volume_mm3": 7710.2987118076535,
+      "stage_counts": {
+        "fan_blade_shell": 70165,
+        "fan_blade_bottom_skin": 5,
+        "fan_blade_solid_infill": 26145
+      },
+      "extrusion_role_counts": {
+        "skin": 70170,
+        "infill": 26145
+      },
+      "deposition_layer_count": 466
+    },
+    "toolpath_to_cad_volume_error": 0.13836641544245842,
+    "generation_seconds": 117.93446299999778
+  },
+  "preview": {
+    "coordinate_frame": "common build frame before A indexing",
+    "blade_mapping": "indexed build -> source -> common build",
+    "base_layer_stride": 10,
+    "support_layer_stride": 3,
+    "blade_layer_stride": 4,
+    "rendered_segment_counts": {
+      "base": {
+        "hub_shell": 111616,
+        "hub_skin": 162,
+        "hub_infill": 1024,
+        "support": 1442,
+        "blade_shell": 0,
+        "blade_skin": 0,
+        "blade_infill": 0
+      },
+      "blade": {
+        "hub_shell": 0,
+        "hub_skin": 0,
+        "hub_infill": 0,
+        "support": 0,
+        "blade_shell": 17458,
+        "blade_skin": 0,
+        "blade_infill": 459
+      }
+    },
+    "note": "The image combines the hub and blade in one assembly frame and samples complete generated toolpaths by layer for legible rendering."
+  }
+}

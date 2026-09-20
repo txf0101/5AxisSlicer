@@ -107,9 +107,13 @@ def generate_support_plan(
     _validate_layers(layers, parameters.layer_height_mm)
     try:
         objects = []
+        object_cache = {}
         for layer in layers:
             _checkpoint(cancelled)
-            objects.append(layer_shape(layer))
+            key = _layer_xy_key(layer)
+            if key not in object_cache:
+                object_cache[key] = layer_shape(layer)
+            objects.append(object_cache[key])
         return _generate_plan(layers, objects, parameters, cancelled)
     except PlanarSupportError:
         raise
@@ -140,14 +144,29 @@ def _validate_layers(layers: tuple[PlanarSliceLayer, ...], height: float) -> Non
 def _generate_plan(layers, objects, parameters, cancelled):
     allowance = parameters.layer_height_mm * math.tan(parameters.overhang_angle_rad)
     contacts = [empty_shape()]
+    allowance_cache = {}
+    contact_cache = {}
     for index in range(1, len(layers)):
         _checkpoint(cancelled)
-        contacts.append(subtract_shape(objects[index], offset_shape(objects[index - 1], allowance)))
+        previous_key = id(objects[index - 1])
+        if previous_key not in allowance_cache:
+            allowance_cache[previous_key] = offset_shape(objects[index - 1], allowance)
+        key = (id(objects[index]), previous_key)
+        if key not in contact_cache:
+            contact_cache[key] = subtract_shape(objects[index], allowance_cache[previous_key])
+        contacts.append(contact_cache[key])
+    if not any(shape_area(shape) > AREA_EPSILON for shape in contacts):
+        empty_layers = tuple(SupportLayer(layer.layer_id, layer.z_mm, (), ()) for layer in layers)
+        return SupportPlan(empty_layers, (), 0.0)
     gap_layers = int(math.ceil(parameters.z_gap_mm / parameters.layer_height_mm - 1.0e-9))
     blockers = []
+    blocker_cache = {}
     for shape in objects:
         _checkpoint(cancelled)
-        blockers.append(offset_shape(shape, parameters.xy_gap_mm))
+        blocker_key = id(shape)
+        if blocker_key not in blocker_cache:
+            blocker_cache[blocker_key] = offset_shape(shape, parameters.xy_gap_mm)
+        blockers.append(blocker_cache[blocker_key])
     candidates, interfaces = _project_contacts(
         contacts, blockers, gap_layers, parameters.interface_layers, cancelled
     )
@@ -156,7 +175,10 @@ def _generate_plan(layers, objects, parameters, cancelled):
     connected: list[cq.Shape] = []
     for index, candidate in enumerate(candidates):
         _checkpoint(cancelled)
-        connected.append(candidate if index == 0 else intersect_shape(candidate, connected[-1]))
+        if index == 0 or candidate is connected[-1]:
+            connected.append(candidate)
+        else:
+            connected.append(intersect_shape(candidate, connected[-1]))
     diagnostics = _contact_diagnostics(layers, contacts, connected, blockers, gap_layers)
     output = []
     for index, layer in enumerate(layers):
@@ -186,15 +208,32 @@ def _project_contacts(contacts, blockers, gap_layers, interface_layers, cancelle
         top = contact_index - 1 - gap_layers
         column = contact
         # Solids inside the omitted top gap still obstruct a vertical column.
+        applied_blockers = set()
         for index in range(contact_index - 1, -1, -1):
             _checkpoint(cancelled)
-            column = subtract_shape(column, blockers[index])
+            blocker_key = id(blockers[index])
+            if blocker_key not in applied_blockers:
+                column = subtract_shape(column, blockers[index])
+                applied_blockers.add(blocker_key)
             if index > top:
                 continue
             candidates[index] = union_shapes([candidates[index], column])
             if index > top - interface_layers:
                 interfaces[index] = union_shapes([interfaces[index], column])
     return candidates, interfaces
+
+
+def _layer_xy_key(layer):
+    return tuple(
+        (
+            tuple((round(point[0], 7), round(point[1], 7)) for point in region.outer),
+            tuple(
+                tuple((round(point[0], 7), round(point[1], 7)) for point in hole)
+                for hole in region.holes
+            ),
+        )
+        for region in layer.regions
+    )
 
 
 def _contact_diagnostics(layers, contacts, connected, blockers, gap_layers):

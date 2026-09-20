@@ -1,0 +1,20 @@
+{
+  "case": "pipe2",
+  "accepted": false,
+  "legacy_frame": "zero-centre Rz(-C)Rx(-A), registration to CAD not assumed",
+  "legacy_to_source_rz_deg": 0,
+  "new_candidate_file": "new_indexed.npz",
+  "planar_requested_layers": 358,
+  "planar_failed_layers": 55,
+  "metric_scope": "sampled endpoint proximity, not bead coverage or exact curve Hausdorff",
+  "new_to_old": {
+    "median_mm": 0.32712017775247537,
+    "p95_mm": 0.39048353461064583,
+    "max_mm": 0.5651108291186374
+  },
+  "old_to_new": {
+    "median_mm": 3.9888741557358105,
+    "p95_mm": 9.91551545873825,
+    "max_mm": 16.095831658095992
+  }
+}

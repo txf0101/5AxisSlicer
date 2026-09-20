@@ -9,6 +9,7 @@ inspectable approximation, not a thermal or material-deformation simulation.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from collections.abc import Callable
 from itertools import product
 import math
 from typing import Any
@@ -249,12 +250,14 @@ def _collision_issues(
     sample_error: float,
     *,
     check_ipw: bool,
+    checkpoint: Callable[[], None] | None = None,
 ) -> tuple[list[ValidationIssue], int]:
     issues: list[ValidationIssue] = []
     checked = 0
     deposited: list[tuple[Vector3, Vector3, float, str]] = []
     index = _DepositedSegmentIndex(max(radius for radius, _ in nozzle.outer_profile_rz_mm))
     for segment_index, (left, right) in enumerate(zip(toolpath.points, toolpath.points[1:])):
+        _collision_checkpoint(checkpoint, segment_index)
         samples = _motion_samples(left, right, nozzle, sample_error)
         for motion_index, (position, axis) in enumerate(samples):
             checked += 1
@@ -287,6 +290,11 @@ def _collision_issues(
                 index.add(len(deposited), left.position, right.position, radius)
             deposited.append((left.position, right.position, radius, right.point_id))
     return issues, checked
+
+
+def _collision_checkpoint(checkpoint: Callable[[], None] | None, segment_index: int) -> None:
+    if checkpoint is not None and segment_index % 64 == 0:
+        checkpoint()
 
 
 def _first_ipw_hit(

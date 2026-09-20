@@ -1,0 +1,230 @@
+{
+  "requested_layers": 358,
+  "successful_layers": 303,
+  "failures": [
+    {
+      "z_mm": 29.0,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 30.4,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 30.6,
+      "error": "planar.offset_kernel_failed: offset 0.8 mm failed"
+    },
+    {
+      "z_mm": 31.0,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 31.2,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 33.4,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 35.6,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 35.8,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 36.4,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 36.6,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 36.8,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 37.0,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 37.2,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 37.4,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 37.8,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 38.0,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 38.2,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 38.4,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 38.6,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 38.8,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 39.0,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 40.6,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 40.8,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 41.0,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 41.2,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 41.4,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 41.8,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 42.0,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 42.2,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 42.4,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 42.6,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 42.8,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 43.0,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 43.2,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 43.4,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 43.6,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 43.8,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 44.0,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 44.2,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 44.4,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 44.6,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 44.8,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 45.0,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 45.2,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 45.4,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 45.6,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 46.8,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 47.0,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 47.6,
+      "error": "planar.offset_output_self_intersection: OCCT returned a crossing loop"
+    },
+    {
+      "z_mm": 49.6,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 52.0,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 52.8,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 70.2,
+      "error": "planar.offset_kernel_failed: offset 0.8 mm failed"
+    },
+    {
+      "z_mm": 70.4,
+      "error": "planar.offset_kernel_failed: offset 0.6 mm failed"
+    },
+    {
+      "z_mm": 70.6,
+      "error": "planar.offset_kernel_failed: offset 0.2 mm failed"
+    }
+  ],
+  "deposition_segments": 364129,
+  "section_segments": 99456,
+  "scope": "full-height diagnostic alternative: no supports, no skin, no machine qualification",
+  "accepted": false
+}

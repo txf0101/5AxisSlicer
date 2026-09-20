@@ -17,7 +17,6 @@ from ...manufacturing.setup import TubeProcessParameters
 from ...manufacturing.toolpath import GeneratedToolpath, ToolpathEvent, ToolpathPoint
 from ...models import CadModel, Vector3
 from .geometry import TubeFeature
-from .indexed import TubeSliceLayer, plan_indexed_slices
 from .section import section_tube_layer
 
 
@@ -98,6 +97,7 @@ class TubeBuildupLayer:
     plane_normal: Vector3
     deposited_height_mm: float
     passes: tuple[TubeBuildupPass, ...]
+    curvature_per_mm: Vector3 = (0.0, 0.0, 0.0)
 
     def __post_init__(self) -> None:
         passes = tuple(self.passes)
@@ -201,15 +201,11 @@ def plan_tube_buildup(
     if not isinstance(parameters, TubeBuildupParameters):
         raise TypeError("parameters must be TubeBuildupParameters")
     offsets = _pass_offsets(feature.wall_thickness_mm, parameters)
-    indexed = plan_indexed_slices(feature, parameters.indexed_parameters())
     passes = tuple(
         TubeBuildupPass(f"pass-{index + 1:04d}", index, offset)
         for index, offset in enumerate(offsets)
     )
-    layers = tuple(
-        _buildup_layer(layer, passes, index, feature.centerline_length_mm, parameters)
-        for index, layer in enumerate(indexed.layers)
-    )
+    layers = _axial_buildup_layers(feature, passes, parameters)
     return TubeBuildupPlan(
         layers,
         feature.wall_thickness_mm,
@@ -317,9 +313,24 @@ class _BuildupPathBuilder:
             self._event("prime", layer, path_id)
         previous = position
         for position, tangent, normal in path[1:]:
+            midpoint = _scale(_add(previous, position), 0.5)
+            radial = _subtract(midpoint, layer.plane_origin)
+            scale = 1.0 - sum(a * b for a, b in zip(layer.curvature_per_mm, radial))
+            local_height = deposited_height_mm * scale
+            if local_height <= 0:
+                raise TubeBuildupError("tube.buildup_folded_layer", layer.layer_id)
             volume = math.dist(previous, position) * self.parameters.bead_width_mm
-            volume *= deposited_height_mm
-            self._point(layer, path_id, position, tangent, normal, "deposition", volume)
+            volume *= local_height
+            self._point(
+                layer,
+                path_id,
+                position,
+                tangent,
+                normal,
+                "deposition",
+                volume,
+                local_height_mm=local_height,
+            )
             previous = position
 
     def _connect(
@@ -360,6 +371,7 @@ class _BuildupPathBuilder:
         volume: float = 0.0,
         *,
         nozzle_axis: Vector3 | None = None,
+        local_height_mm: float | None = None,
     ) -> None:
         deposition = point_type == "deposition"
         self.points.append(
@@ -381,7 +393,9 @@ class _BuildupPathBuilder:
                     else self.parameters.travel_feedrate_mm_min
                 ),
                 bead_width_mm=self.parameters.bead_width_mm if deposition else None,
-                layer_height_mm=layer.deposited_height_mm if deposition else None,
+                layer_height_mm=(local_height_mm or layer.deposited_height_mm)
+                if deposition
+                else None,
                 material_volume_mm3=volume,
             )
         )
@@ -422,30 +436,59 @@ def _pass_offsets(
             "tube.buildup_wall_too_thin",
             "wall must fit at least two bead-centre passes",
         )
-    intervals = max(1, math.ceil(usable / parameters.maximum_pass_spacing_mm))
+    ratio = usable / parameters.maximum_pass_spacing_mm
+    # Exact wall partitions can land one ULP above an integer (e.g. 1/3 mm).
+    # Do not add an entire extrusion pass for floating-point roundoff.
+    nearest = round(ratio)
+    if math.isclose(ratio, nearest, rel_tol=0.0, abs_tol=1.0e-12):
+        ratio = float(nearest)
+    intervals = max(1, math.ceil(ratio))
     if intervals < 1 or usable / intervals > parameters.bead_width_mm + 1.0e-9:
         raise TubeBuildupError("tube.buildup_pass_gap", "computed radial passes leave a gap")
     return tuple(-0.5 * usable + usable * index / intervals for index in range(intervals + 1))
 
 
-def _buildup_layer(
-    layer: TubeSliceLayer,
-    passes: tuple[TubeBuildupPass, ...],
-    index: int,
-    total_length_mm: float,
-    parameters: TubeBuildupParameters,
-) -> TubeBuildupLayer:
-    remaining = total_length_mm - index * parameters.layer_height_mm
-    height = min(parameters.layer_height_mm, remaining)
-    return TubeBuildupLayer(
-        layer.layer_id,
-        layer.region_id,
-        layer.centerline_distance_mm,
-        layer.plane_origin,
-        layer.plane_normal,
-        height,
-        passes,
-    )
+def _axial_buildup_layers(feature, passes, parameters):
+    """Follow the tube axis without discontinuous fixed-plane wedge boundaries.
+
+    Curved sections use the sweep Jacobian 1-kappa dot radial for local bead
+    height. Axial increments bound both maximum height and its radial variation.
+    """
+    from .continuous import _check_centerline
+
+    _check_centerline(feature)
+    layers: list[TubeBuildupLayer] = []
+    walked = 0.0
+    for primitive in feature.centerline:
+        ratio = 0.0
+        if primitive.kind == "arc":
+            radius = primitive.length_mm / abs(primitive.sweep_rad)
+            ratio = feature.outer_radius_mm / radius
+        step = parameters.layer_height_mm / (1.0 + ratio)
+        if ratio:
+            step = min(step, parameters.max_bead_height_error_mm / ratio)
+        count = math.ceil(primitive.length_mm / step)
+        for index in range(count):
+            lower, upper = index * step, min((index + 1) * step, primitive.length_mm)
+            midpoint = (lower + upper) / 2
+            origin, normal = primitive.point_tangent(midpoint / primitive.length_mm)
+            curvature = (0.0, 0.0, 0.0)
+            if primitive.kind == "arc":
+                curvature = _scale(_subtract(primitive.center, origin), 1 / radius**2)
+            layers.append(
+                TubeBuildupLayer(
+                    f"layer-{len(layers) + 1:05d}",
+                    "axial-buildup",
+                    walked + midpoint,
+                    origin,
+                    normal,
+                    upper - lower,
+                    passes,
+                    curvature,
+                )
+            )
+        walked += primitive.length_mm
+    return tuple(layers)
 
 
 def _validate_generation_inputs(

@@ -20,6 +20,13 @@ from .support import (
     generate_support_plan,
     generate_support_toolpath,
 )
+from .feature_fill import (
+    FeatureFillParameters,
+    FeatureLayerPlan,
+    FeatureRegionPlan,
+    plan_feature_fill,
+)
+from .feature_toolpath import FeatureToolpathParameters, generate_feature_toolpath
 
 __all__ = [
     "PlanarRegion",
@@ -47,4 +54,10 @@ __all__ = [
     "SupportPlan",
     "generate_support_plan",
     "generate_support_toolpath",
+    "FeatureFillParameters",
+    "FeatureLayerPlan",
+    "FeatureRegionPlan",
+    "plan_feature_fill",
+    "FeatureToolpathParameters",
+    "generate_feature_toolpath",
 ]

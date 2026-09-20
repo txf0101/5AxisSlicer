@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "contract_id": "fan-complete-reference-v1",
+  "source_sha256": "294b882a7231d6b0fcfaf4aa8c6355422b212590f443158ea0a624fec2b901ef",
+  "geometry": {
+    "hub": {
+      "object_id": "body_004",
+      "geometry_type": "body",
+      "signature": {
+        "geometry_sha256": "b20d664c00d11b4377af34cee9da2d7ffca21152746d40737d6ae09cf008c557",
+        "volume_mm3": 18610.7783537473,
+        "centroid_mm": [
+          0.004135975588837334,
+          0.002339935961035888,
+          35.85665033285137
+        ]
+      },
+      "parent_body_id": null,
+      "assembly_name": "风扇扇叶"
+    },
+    "blades": [
+      {
+        "object_id": "body_001",
+        "geometry_type": "body",
+        "signature": {
+          "geometry_sha256": "11bf0a393d3a5ba5b0149d88a580e4ba7bf8f24b47c1d3b1db99893a3c6c7bfe",
+          "volume_mm3": 6773.125601048962,
+          "centroid_mm": [
+            49.74432325723537,
+            11.6738594162885,
+            54.26133635177177
+          ]
+        },
+        "parent_body_id": null,
+        "assembly_name": "风扇扇叶"
+      },
+      {
+        "object_id": "body_002",
+        "geometry_type": "body",
+        "signature": {
+          "geometry_sha256": "e2894c8682c17caa06a350315c9ff9c291198d85613437648e9241d240867898",
+          "volume_mm3": 6773.1255979302,
+          "centroid_mm": [
+            -14.76230282134925,
+            -48.91677735720639,
+            54.26133635088192
+          ]
+        },
+        "parent_body_id": null,
+        "assembly_name": "风扇扇叶"
+      },
+      {
+        "object_id": "body_003",
+        "geometry_type": "body",
+        "signature": {
+          "geometry_sha256": "9d752d33feb4d12e7f510e25fd929d10872bbbc023d78a9d7ea30f566c491362",
+          "volume_mm3": 6773.125568518159,
+          "centroid_mm": [
+            -34.98202055963266,
+            37.24291804321727,
+            54.26133635672802
+          ]
+        },
+        "parent_body_id": null,
+        "assembly_name": "风扇扇叶"
+      }
+    ]
+  },
+  "source_to_build": {
+    "source_frame": "source",
+    "target_frame": "build",
+    "T_target_from_source": [
+      [
+        -1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        -1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  "parameters": {
+    "nozzle_diameter_mm": 0.4,
+    "filament_diameter_mm": 1.75,
+    "layer_height_mm": 0.2,
+    "bead_width_mm": 0.4,
+    "deposition_feedrate_mm_min": 1200.0,
+    "travel_feedrate_mm_min": 3000.0,
+    "nozzle_temperature_c": 205.0,
+    "bed_temperature_c": 60.0,
+    "retract_length_mm": 1.0,
+    "wall_count": 2,
+    "top_solid_thickness_mm": 0.8,
+    "bottom_solid_thickness_mm": 0.8,
+    "base_infill_fraction": 0.2,
+    "blade_infill_fraction": 1.0,
+    "indexing_a_deg": 90.0,
+    "indexing_machine_z_mm": 20.0,
+    "a_limit_deg": [
+      -180.0,
+      180.0
+    ],
+    "c_limit_deg": [
+      -360.0,
+      360.0
+    ],
+    "chord_error_mm": 0.02,
+    "fk_position_tolerance_mm": 0.001,
+    "fk_angle_tolerance_deg": 0.001
+  },
+  "controller_profile_id": "own-ac-offline-reference",
+  "material_profile_id": "generic-pla-175",
+  "material_channel_id": "T0",
+  "parameter_sources": {
+    "a_limit_deg": {
+      "value": [
+        -180.0,
+        180.0
+      ],
+      "source": "paper",
+      "note": "论文给定"
+    },
+    "base_infill_fraction": {
+      "value": 0.2,
+      "source": "engineering_default",
+      "note": ""
+    },
+    "bead_width_mm": {
+      "value": 0.4,
+      "source": "engineering_default",
+      "note": ""
+    },
+    "blade_infill_fraction": {
+      "value": 1.0,
+      "source": "engineering_default",
+      "note": ""
+    },
+    "c_limit_deg": {
+      "value": [
+        -360.0,
+        360.0
+      ],
+      "source": "paper",
+      "note": "论文给定"
+    },
+    "controller_macro_version": {
+      "value": null,
+      "source": "pending_measurement",
+      "note": "实机资格门"
+    },
+    "filament_diameter_mm": {
+      "value": 1.75,
+      "source": "paper",
+      "note": "论文给定"
+    },
+    "indexing_machine_z_mm": {
+      "value": 20.0,
+      "source": "paper",
+      "note": "论文给定"
+    },
+    "layer_height_mm": {
+      "value": 0.2,
+      "source": "engineering_default",
+      "note": ""
+    },
+    "machine_zero": {
+      "value": null,
+      "source": "pending_measurement",
+      "note": "实机资格门"
+    },
+    "material": {
+      "value": "PLA",
+      "source": "user",
+      "note": "用户指定"
+    },
+    "nozzle_diameter_mm": {
+      "value": 0.4,
+      "source": "paper",
+      "note": "论文给定"
+    },
+    "nozzle_envelope": {
+      "value": null,
+      "source": "pending_measurement",
+      "note": "实机资格门"
+    }
+  },
+  "machine_measurements_complete": false
+}

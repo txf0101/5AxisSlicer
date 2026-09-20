@@ -1,0 +1,18 @@
+{
+  "indexed": {
+    "segments": 42778,
+    "volume_mm3": 2589.3061526591714,
+    "cad_tube_volume_mm3": 6473.071995018587,
+    "wall_thickness_mm": 1.0,
+    "bead_width_mm": 0.4,
+    "scope": "single mid-wall path, substrate excluded; no full wall fill"
+  },
+  "continuous": {
+    "segments": 29066,
+    "volume_mm3": 2588.677794048916,
+    "cad_tube_volume_mm3": 6473.071995018587,
+    "wall_thickness_mm": 1.0,
+    "bead_width_mm": 0.4,
+    "scope": "single mid-wall path, substrate excluded; no full wall fill"
+  }
+}

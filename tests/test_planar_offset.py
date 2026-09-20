@@ -24,6 +24,23 @@ def _area(loop):
     return cq.Face.makeFromWires(wire).Area()
 
 
+@pytest.mark.parametrize("distance", [0.2, 0.6, 0.8])
+def test_thin_annulus_erosion_matches_analytic_material(distance):
+    from five_axis_slicer.algorithms.planar.offset import inset_region
+
+    def circle(radius):
+        points = tuple(
+            (radius * math.cos(i * math.tau / 256), radius * math.sin(i * math.tau / 256), 0.0)
+            for i in range(256)
+        )
+        return (*points, points[0])
+
+    regions = inset_region(PlanarRegion("annulus", circle(16), (circle(15),)), distance)
+    actual = sum(_area(r.outer) - sum(_area(h) for h in r.holes) for r in regions)
+    expected = max(0, math.pi * ((16 - distance) ** 2 - (15 + distance) ** 2))
+    assert actual == pytest.approx(expected, rel=0.002, abs=1e-7)
+
+
 def test_square_multi_pass_has_independent_area_truth_and_residual():
     region = PlanarRegion("square", _loop((0, 0, 0), (10, 0, 0), (10, 10, 0), (0, 10, 0)))
     result = inward_offsets(region, 1, 3)

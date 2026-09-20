@@ -1,0 +1,45 @@
+{
+  "source": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\pipe2\\弯管.gcode",
+  "sha256": "4d6630c01f63d6f802ae6955752fa41b35abfea23509c661fcd855f7064ff70a",
+  "lines": 679277,
+  "positive_e_segments": 669892,
+  "commands": {
+    "PRINT_START": 1,
+    "G90": 2,
+    "M82": 2,
+    "G92": 2,
+    "G0": 3210,
+    "G1": 676055,
+    "E0.0": 2,
+    "PRINT_END": 1
+  },
+  "types": {
+    "unspecified": 669892
+  },
+  "bounds": [
+    [
+      -24.8,
+      -24.793,
+      0.2
+    ],
+    [
+      24.78,
+      36.99537127515776,
+      70.50474425873536
+    ]
+  ],
+  "positive_e_mm": 6578.070504999998,
+  "length_mm": 197776.60818926804,
+  "ac_bounds": [
+    [
+      0.0,
+      0.0
+    ],
+    [
+      70.513,
+      0.0
+    ]
+  ],
+  "frame": "zero-centre Rz(-C)Rx(-A), registration to CAD not assumed",
+  "boundary": "G0/G1 positive-E only; positive E is not automatically valid deposition"
+}

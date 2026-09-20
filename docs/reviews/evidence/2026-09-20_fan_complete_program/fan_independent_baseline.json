@@ -1,0 +1,218 @@
+{
+  "step": {
+    "path": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\扇叶\\风扇扇叶(1).STEP",
+    "sha256": "294b882a7231d6b0fcfaf4aa8c6355422b212590f443158ea0a624fec2b901ef",
+    "bounds_mm": {
+      "minimum": [
+        -83.8660024394316,
+        -84.01249778747217,
+        -1e-07
+      ],
+      "maximum": [
+        83.90420222623231,
+        84.03954158270787,
+        65.00000010000002
+      ]
+    },
+    "bodies": [
+      {
+        "body_id": "body_001",
+        "signature": "11bf0a393d3a5ba5b0149d88a580e4ba7bf8f24b47c1d3b1db99893a3c6c7bfe",
+        "volume_mm3": 6773.125601048962,
+        "surface_area_mm2": 8875.235469084615,
+        "centroid_mm": [
+          49.74432325723537,
+          11.6738594162885,
+          54.26133635177177
+        ],
+        "bounds_mm": {
+          "minimum": [
+            8.332718716866937,
+            -50.46772956241904,
+            49.20207353733448
+          ],
+          "maximum": [
+            83.90420222623231,
+            72.73904529370034,
+            58.89432898591723
+          ]
+        },
+        "role": "blade"
+      },
+      {
+        "body_id": "body_002",
+        "signature": "e2894c8682c17caa06a350315c9ff9c291198d85613437648e9241d240867898",
+        "volume_mm3": 6773.1255979302,
+        "surface_area_mm2": 8875.235469796487,
+        "centroid_mm": [
+          -14.76230282134925,
+          -48.91677735720639,
+          54.26133635088192
+        ],
+        "bounds_mm": {
+          "minimum": [
+            -77.16002333393767,
+            -84.01249778747217,
+            49.20207353733448
+          ],
+          "maximum": [
+            42.147202064785795,
+            -6.4986761204790415,
+            58.89432898591723
+          ]
+        },
+        "role": "blade"
+      },
+      {
+        "body_id": "body_003",
+        "signature": "9d752d33feb4d12e7f510e25fd929d10872bbbc023d78a9d7ea30f566c491362",
+        "volume_mm3": 6773.125568518159,
+        "surface_area_mm2": 8875.235608024794,
+        "centroid_mm": [
+          -34.98202055963266,
+          37.24291804321727,
+          54.26133635672802
+        ],
+        "bounds_mm": {
+          "minimum": [
+            -83.8660024394316,
+            -0.2620501061752589,
+            49.20207353733448
+          ],
+          "maximum": [
+            10.252648437613768,
+            84.03954158270787,
+            58.89432898591723
+          ]
+        },
+        "role": "blade"
+      },
+      {
+        "body_id": "body_004",
+        "signature": "b20d664c00d11b4377af34cee9da2d7ffca21152746d40737d6ae09cf008c557",
+        "volume_mm3": 18610.7783537473,
+        "surface_area_mm2": 15008.46819608424,
+        "centroid_mm": [
+          0.004135975588837334,
+          0.002339935961035888,
+          35.85665033285137
+        ],
+        "bounds_mm": {
+          "minimum": [
+            -17.500000099999998,
+            -17.500000099999998,
+            -1e-07
+          ],
+          "maximum": [
+            17.500000099999998,
+            17.500000099999998,
+            65.00000010000002
+          ]
+        },
+        "role": "hub"
+      }
+    ]
+  },
+  "old_manual_program": {
+    "path": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\扇叶\\风扇扇叶完整新.gcode",
+    "sha256": "1de2cef4dbdb995e6d34bf0e143db166b3dcff3364339763f70a8536c9d6651e",
+    "size_bytes": 186891627,
+    "line_count": 2936410,
+    "motion_count": 2924765,
+    "deposition_move_count": 2893775,
+    "retract_move_count": 12626,
+    "layer_change_count": 325,
+    "motion_by_type": {
+      "Bottom surface": 426,
+      "Bridge": 191,
+      "Custom": 2604053,
+      "Gap infill": 122,
+      "Inner wall": 70451,
+      "Internal Bridge": 490,
+      "Internal solid infill": 3302,
+      "Outer wall": 74802,
+      "Sparse infill": 48520,
+      "Support": 120653,
+      "Support interface": 336,
+      "Top surface": 1419
+    },
+    "deposition_by_type": {
+      "Bottom surface": 400,
+      "Bridge": 184,
+      "Custom": 2603710,
+      "Gap infill": 82,
+      "Inner wall": 69162,
+      "Internal Bridge": 453,
+      "Internal solid infill": 2799,
+      "Outer wall": 69653,
+      "Sparse infill": 44690,
+      "Support": 101898,
+      "Support interface": 288,
+      "Top surface": 456
+    },
+    "axis_word_bounds": {
+      "X": [
+        -17.3,
+        17.3
+      ],
+      "Y": [
+        -58.84,
+        17.3
+      ],
+      "Z": [
+        0.2,
+        93.2
+      ],
+      "A": [
+        0.0,
+        90.0
+      ],
+      "C": [
+        -269.78,
+        66.47
+      ]
+    }
+  },
+  "previous_software_program": {
+    "path": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\扇叶\\风扇扇叶_本软件五轴_PLA_20260920.gcode",
+    "sha256": "dfd6a68ec843cfce2888cb598e27ffd7e5efd6ada108739cb8194d8ea9edad3c",
+    "size_bytes": 20381,
+    "line_count": 303,
+    "motion_count": 133,
+    "deposition_move_count": 125,
+    "retract_move_count": 3,
+    "layer_change_count": 0,
+    "motion_by_type": {
+      "unclassified": 133
+    },
+    "deposition_by_type": {
+      "unclassified": 125
+    },
+    "axis_word_bounds": {
+      "X": [
+        -83.389612,
+        83.389612
+      ],
+      "Y": [
+        -3.667891,
+        3.667891
+      ],
+      "Z": [
+        20.0,
+        59.756136
+      ],
+      "A": [
+        -4.213126,
+        4.213126
+      ],
+      "C": [
+        -167.901536,
+        36.375357
+      ]
+    }
+  },
+  "coordinate_registration": {
+    "source_to_build_rotation_deg_about_z": 180.0,
+    "status": "frozen_offline_reference"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "case": "three_leaf",
+  "accepted": false,
+  "legacy_frame": "machine XYZ: unsupported rotary mapping",
+  "legacy_to_source_rz_deg": 0,
+  "new_candidate_file": null,
+  "planar_requested_layers": 500,
+  "planar_failed_layers": 0,
+  "metric_scope": "sampled endpoint proximity, not bead coverage or exact curve Hausdorff"
+}

@@ -299,6 +299,88 @@ class TubeUiTests(unittest.TestCase):
             "Operation geometry roles and process parameters applied.",
         )
 
+    def test_selected_pipe_edges_bind_explicit_roles_before_generation(self) -> None:
+        window = self._loaded_tube_window()
+        page = window.tube_page
+        QTest.mouseClick(page.create_operation_button, Qt.LeftButton)
+        self.app.processEvents()
+        operation = page.controller.operations[0]
+        page.tree.setCurrentItem(page._tree_items[f"operation:{operation.operation_id}"])
+        self.app.processEvents()
+        edges = ["body_002_edge_0003", "body_002_edge_0014"]
+        window.handle_automation("/selection/set", {"edge_ids": edges})
+        self.assertEqual(page.viewer.selection.edge_ids, set(edges))
+        # Selection highlighting alone must not guess which edge is the inlet.
+        roles = dict(
+            tube_body_id="body_002",
+            entry_port_id=edges[0],
+            exit_port_id=edges[1],
+            substrate_body_id="body_001",
+        )
+        for key, identifier in roles.items():
+            combo = page._operation_geometry_combos[key]
+            self.assertGreaterEqual(combo.findData(identifier), 0)
+            combo.setCurrentIndex(combo.findData(identifier))
+        QTest.mouseClick(page.operation_apply_button, Qt.LeftButton)
+        self.app.processEvents()
+        operation = page.controller.operations[0]
+        self.assertEqual(operation.geometry.entry_port.object_id, edges[0])
+        self.assertEqual(operation.geometry.exit_port.object_id, edges[1])
+        restored = TubeSetupController.from_json(page.controller.to_json(), cad_model=window.model)
+        self.assertEqual(restored.operations[0].geometry, operation.geometry)
+        # Incomplete machine/nozzle setup must still prevent export from this UI flow.
+        QTest.mouseClick(page.operation_generate_button, Qt.LeftButton)
+        self.app.processEvents()
+        self.assertFalse(page.operation_export_button.isEnabled())
+        self.assertTrue(page.operation_generation_status.text())
+
+    def test_operation_failure_displays_actionable_product_error(self) -> None:
+        from five_axis_slicer import tube_operation_ui
+        from five_axis_slicer.postprocessing.tube_product import TubeProductState
+
+        page = self._loaded_tube_window().tube_page
+        page._create_operation()
+        operation = page.controller.operations[0]
+        error = "tube.port_not_outer_boundary: ports must use outer circular edges"
+        state = TubeProductState(operation.operation_id, "0" * 64, "error", {"error": error})
+        with mock.patch.object(page.controller, "product_state", return_value=state):
+            tube_operation_ui._refresh_product_status(page)
+        self.assertIn(error, page.operation_generation_status.text())
+        self.assertFalse(page.operation_export_button.isEnabled())
+
+    def test_operation_viewer_picks_bind_draft_and_reject_invalid_hits(self) -> None:
+        window = self._loaded_tube_window()
+        page = window.tube_page
+        page._create_operation()
+        operation = page.controller.operations[0]
+        page.tree.setCurrentItem(page._tree_items[f"operation:{operation.operation_id}"])
+        self.app.processEvents()
+        roles = {
+            "tube_body_id": "body_002",
+            "entry_port_id": "body_002_edge_0003",
+            "exit_port_id": "body_002_edge_0014",
+            "substrate_body_id": "body_001",
+        }
+        for field, entity in roles.items():
+            QTest.mouseClick(page._operation_pick_buttons[field], Qt.LeftButton)
+            kind = "body" if field.endswith("body_id") else "edge"
+            self.assertEqual(page.viewer.pick_request.kind, kind)
+            self.assertIn(entity, page.viewer.pick_request.allowed_ids)
+            combo = page._operation_geometry_combos[field]
+            before = combo.currentData()
+            page.viewer.pick_callback(PickHit("vertex", entity))
+            page.viewer.pick_callback(PickHit(kind, "missing-object"))
+            self.assertEqual(combo.currentData(), before)
+            page.viewer.pick_callback(PickHit(kind, entity))
+            self.assertEqual(combo.currentData(), entity)
+            self.assertIsNone(page._operation_pick_field)
+        self.assertFalse(page.controller.operations[0].geometry.is_complete)
+        QTest.mouseClick(page.operation_apply_button, Qt.LeftButton)
+        self.assertTrue(page.controller.operations[0].geometry.is_complete)
+        QTest.mouseClick(page._operation_pick_buttons["entry_port_id"], Qt.LeftButton)
+        page.tree.setCurrentItem(page._tree_items[PART_NODE])
+        self.assertIsNone(page._operation_pick_field)
+
     def test_operation_editor_keeps_apply_visible_at_laptop_size(self) -> None:
         window = self._loaded_tube_window()
         page = window.tube_page

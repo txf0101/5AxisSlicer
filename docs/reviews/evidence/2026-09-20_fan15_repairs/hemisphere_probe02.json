@@ -1,0 +1,37 @@
+{
+  "source_hash": "0812eebe0c43c57b0e280a981d4c1521889a26e85d1ec567cbf97d22aeac64c0",
+  "seconds": 8.334015099999306,
+  "scope": "historical failed-height geometry probes only; no manufacturing qualification",
+  "records": [
+    {
+      "z_mm": 21.4,
+      "previous": "unsafe original-boundary wall fallback",
+      "passed": true,
+      "regions": 1
+    },
+    {
+      "z_mm": 21.6,
+      "previous": "planar.offset_hole_topology_invalid: holes must be disjoint and inside outer",
+      "passed": true,
+      "regions": 1
+    },
+    {
+      "z_mm": 23.4,
+      "previous": "planar.offset_kernel_failed: offset 0.2 mm failed",
+      "passed": false,
+      "error": "planar.feature_below_bead_width: region-0001: no inset centreline fits the requested bead width"
+    },
+    {
+      "z_mm": 25.6,
+      "previous": "planar.offset_output_self_intersection: OCCT returned a crossing loop",
+      "passed": false,
+      "error": "planar.material_union_failed: planar.support_geometry_invalid: material-union/source-2: ('planar.offset_self_intersection', 'input loop crosses itself')"
+    },
+    {
+      "z_mm": 28.4,
+      "previous": "planar.section_branch_contour: z_mm=28.4, vertex=6, degree=4",
+      "passed": false,
+      "error": "planar.section_branch_contour: z_mm=28.4, vertex=6, degree=4"
+    }
+  ]
+}

@@ -1,0 +1,299 @@
+{
+  "source_sha256": "294b882a7231d6b0fcfaf4aa8c6355422b212590f443158ea0a624fec2b901ef",
+  "interfaces": {
+    "body_ids": [
+      "body_004",
+      "body_001",
+      "body_002",
+      "body_003"
+    ],
+    "pair_overlap_mm3": [
+      [
+        "body_004",
+        "body_001",
+        0.0
+      ],
+      [
+        "body_004",
+        "body_002",
+        0.0
+      ],
+      [
+        "body_004",
+        "body_003",
+        0.0
+      ],
+      [
+        "body_001",
+        "body_002",
+        0.0
+      ],
+      [
+        "body_001",
+        "body_003",
+        0.0
+      ],
+      [
+        "body_002",
+        "body_003",
+        0.0
+      ]
+    ],
+    "root_gap_mm": [
+      [
+        "body_001",
+        0.0
+      ],
+      [
+        "body_002",
+        3.552713678800501e-15
+      ],
+      [
+        "body_003",
+        0.0
+      ]
+    ],
+    "ownership_policy": "each solid owns its interior; zero-volume interface is shared"
+  },
+  "blades": [
+    {
+      "body_id": "body_001",
+      "reference": {
+        "object_id": "body_001",
+        "geometry_type": "body",
+        "signature": {
+          "schema_version": 1,
+          "geometry_type": "body",
+          "descriptor": {
+            "kind": "solid",
+            "assembly_path": "风扇扇叶",
+            "bounds_mm": {
+              "minimum": [
+                8.332718716866937,
+                -50.46772956241904,
+                49.20207353733448
+              ],
+              "maximum": [
+                83.90420222623231,
+                72.73904529370034,
+                58.89432898591723
+              ]
+            },
+            "dimensions_mm": [
+              75.57148350936538,
+              123.20677485611938,
+              9.692255448582749
+            ],
+            "volume_mm3": 6773.125601048962,
+            "surface_area_mm2": 8875.235469084615,
+            "centroid_mm": [
+              49.74432325723537,
+              11.6738594162885,
+              54.26133635177177
+            ],
+            "topology": {
+              "face_count": 6,
+              "edge_count": 16,
+              "vertex_count": 12,
+              "surface_types": {
+                "bsplinesurface": 5,
+                "cylinder": 1
+              },
+              "curve_types": {
+                "bsplinecurve": 16
+              },
+              "vertex_edge_degrees": [
+                2,
+                2,
+                2,
+                2,
+                3,
+                3,
+                3,
+                3,
+                3,
+                3,
+                3,
+                3
+              ]
+            }
+          },
+          "parent_body": null,
+          "kernel_signature": "11bf0a393d3a5ba5b0149d88a580e4ba7bf8f24b47c1d3b1db99893a3c6c7bfe"
+        },
+        "parent_body_id": null,
+        "assembly_name": "风扇扇叶"
+      },
+      "occupied_layers": 329,
+      "first_radius": 17.7,
+      "last_radius": 83.3,
+      "paths": 28419,
+      "unresolved": [],
+      "root_samples": 768,
+      "volume_integral_mm3": 6770.874830494183,
+      "cad_volume_mm3": 6773.125601048962
+    },
+    {
+      "body_id": "body_002",
+      "reference": {
+        "object_id": "body_002",
+        "geometry_type": "body",
+        "signature": {
+          "schema_version": 1,
+          "geometry_type": "body",
+          "descriptor": {
+            "kind": "solid",
+            "assembly_path": "风扇扇叶",
+            "bounds_mm": {
+              "minimum": [
+                -77.16002333393767,
+                -84.01249778747217,
+                49.20207353733448
+              ],
+              "maximum": [
+                42.147202064785795,
+                -6.4986761204790415,
+                58.89432898591723
+              ]
+            },
+            "dimensions_mm": [
+              119.30722539872346,
+              77.51382166699312,
+              9.692255448582749
+            ],
+            "volume_mm3": 6773.1255979302,
+            "surface_area_mm2": 8875.235469796487,
+            "centroid_mm": [
+              -14.76230282134925,
+              -48.91677735720639,
+              54.26133635088192
+            ],
+            "topology": {
+              "face_count": 6,
+              "edge_count": 16,
+              "vertex_count": 12,
+              "surface_types": {
+                "bsplinesurface": 5,
+                "cylinder": 1
+              },
+              "curve_types": {
+                "bsplinecurve": 16
+              },
+              "vertex_edge_degrees": [
+                2,
+                2,
+                2,
+                2,
+                3,
+                3,
+                3,
+                3,
+                3,
+                3,
+                3,
+                3
+              ]
+            }
+          },
+          "parent_body": null,
+          "kernel_signature": "e2894c8682c17caa06a350315c9ff9c291198d85613437648e9241d240867898"
+        },
+        "parent_body_id": null,
+        "assembly_name": "风扇扇叶"
+      },
+      "occupied_layers": 329,
+      "first_radius": 17.7,
+      "last_radius": 83.3,
+      "paths": 28551,
+      "unresolved": [],
+      "root_samples": 512,
+      "volume_integral_mm3": 6770.874552025965,
+      "cad_volume_mm3": 6773.1255979302
+    },
+    {
+      "body_id": "body_003",
+      "reference": {
+        "object_id": "body_003",
+        "geometry_type": "body",
+        "signature": {
+          "schema_version": 1,
+          "geometry_type": "body",
+          "descriptor": {
+            "kind": "solid",
+            "assembly_path": "风扇扇叶",
+            "bounds_mm": {
+              "minimum": [
+                -83.8660024394316,
+                -0.2620501061752589,
+                49.20207353733448
+              ],
+              "maximum": [
+                10.252648437613768,
+                84.03954158270787,
+                58.89432898591723
+              ]
+            },
+            "dimensions_mm": [
+              94.11865087704537,
+              84.30159168888312,
+              9.692255448582749
+            ],
+            "volume_mm3": 6773.125568518159,
+            "surface_area_mm2": 8875.235608024794,
+            "centroid_mm": [
+              -34.98202055963266,
+              37.24291804321727,
+              54.26133635672802
+            ],
+            "topology": {
+              "face_count": 6,
+              "edge_count": 16,
+              "vertex_count": 12,
+              "surface_types": {
+                "bsplinesurface": 5,
+                "cylinder": 1
+              },
+              "curve_types": {
+                "bsplinecurve": 16
+              },
+              "vertex_edge_degrees": [
+                2,
+                2,
+                2,
+                2,
+                3,
+                3,
+                3,
+                3,
+                3,
+                3,
+                3,
+                3
+              ]
+            }
+          },
+          "parent_body": null,
+          "kernel_signature": "9d752d33feb4d12e7f510e25fd929d10872bbbc023d78a9d7ea30f566c491362"
+        },
+        "parent_body_id": null,
+        "assembly_name": "风扇扇叶"
+      },
+      "occupied_layers": 329,
+      "first_radius": 17.7,
+      "last_radius": 83.3,
+      "paths": 28198,
+      "unresolved": [],
+      "root_samples": 512,
+      "volume_integral_mm3": 6770.8745517170455,
+      "cad_volume_mm3": 6773.125568518159
+    }
+  ],
+  "qualification": "deposition candidates only; no NC / collision or bead coverage qualification",
+  "base": {
+    "layers": 325,
+    "part_points": 1149929,
+    "support_points": 8884,
+    "display_layer_stride": 8
+  },
+  "blade_display_layer_stride": 10
+}

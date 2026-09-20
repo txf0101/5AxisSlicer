@@ -2,6 +2,20 @@
 
 ## 六个工作台算法开发
 
+- [FAN15 修复执行计划](planning/fan15_repair_execution.md)：公共层域、四例逐项修复、选边操作测试与完整程序验收；继续工作时回读。
+
+- [FAN15 四示例切片与旧程序对照](reviews/2026-09-20_fan15_example_acceptance.md)：弯管、球形校徽、三叶扇、叶轮逐例生成和失败记录，完整诊断图及未通过验收的原因。
+
+- [扇叶完整五轴程序详细计划](planning/fan_complete_program_plan.md)：全高填充底座、90°换姿、三片叶片完整填充、总后处理，含独立验证和12项电脑点击验收。
+- [扇叶完整程序借鉴项目调研](planning/fan_complete_program_research.md)：六个仓库固定版本、许可、已读内容、适用任务和未验证项。
+- [FAN00—FAN15开发台账](planning/progress_tracker.md#主表)：FAN04/FAN07 原验收撤回，正在纠正径向曲层及叶根承接。
+- [扇叶径向曲层纠正复盘](reviews/2026-09-20_fan_radial_correction.md)：旧 NC 模态证据、柱面起印、原工艺误判和修正边界。
+- [扇叶完整程序规划复盘](reviews/2026-09-20_fan_complete_program_planning_review.md)：证据纠正、路线取舍和SIM接口关系。
+- [五轴运动仿真专项调研](planning/motion_simulation_research.md)：Vismach、FreeCAD、CAMotics、PyBullet、VTK和FFmpeg的可复用设计、许可证与取舍。
+- [五轴运动仿真与视频导出开发计划](planning/motion_simulation_plan.md)：机床场景、真实轴时间、分段倍速、确定性逐帧和视频导出架构。
+- [五轴运动仿真开发台账](planning/motion_simulation_tracker.md)：SIM00—SIM10的依赖、状态、完成判据和下一步。
+- [五轴运动仿真规划复盘](reviews/2026-09-20_motion_simulation_planning_review.md)：现有基础、技术选择、未验证项和本轮边界。
+- [示例模型 PLA 五轴代码生成复盘](reviews/2026-09-20_example_pla_gcode_generation_review.md)：六类示例的工作台选择、论文参数、四份新代码的严格回读结果，以及三叶扇和 STL pipe 的当前阻塞边界。
 - [CI 依赖修复与分支统一复盘](reviews/2026-09-13_ci_branch_consolidation_review.md)：默认 `master` 主线、Actions 隔离环境、依赖漂移原因和本轮验证边界。
 - [论文核心 AC 范围与开源复用研究](planning/paper_core_ac_scope.md)：当前优先路线、四例覆盖缺口、论文批判性核对、固定版本及许可边界；状态统一见台账PC00—PC07。
 - [论文核心范围调整复盘](reviews/2026-09-13_paper_core_ac_planning_review.md)：资源取舍、证据限制和本轮实际Skill使用。
@@ -44,6 +58,9 @@
 - [Rotary R01—R05 当前验收证据](reviews/evidence/2026-09-13_rotary_workbench_final/validation_manifest.json)：真实 STEP、四组六件套、G93 回读、Qt 多尺寸截图、JUnit、质量与包检查及逐文件 SHA-256。
 - [跨工作台旋转轴 G-code 输出字实施复盘](reviews/2026-09-13_custom_rotary_axis_words_review.md)：内部物理轴与控制器地址分离、危险字拒绝、共享发布、回读和实机边界。
 - [pipe2 与扇叶模型、手工 G-code 可视化对比](reviews/2026-09-13_pipe2_model_manual_gcode_comparison.md)：连续弯管、三叶自由曲面、选面契约、XYZAC 策略、180° 坐标注册及 Rotary/Tube/Freeform 适用性判断。
+- [扇叶完整程序计划](planning/fan_complete_program_plan.md)：FAN00—FAN15 的依赖、参数、验证和电脑点击验收路线。
+- [扇叶 FAN01—FAN05 实施复盘](reviews/2026-09-20_fan_complete_program_fan01_fan05_review.md)：制造契约、独立旧NC基线、作业DAG、A=90°真实层域和公共内部填充的实现与限制。
+- [扇叶 FAN01—FAN05 证据清单](reviews/evidence/2026-09-20_fan_complete_program/validation_manifest.json)：真实输入、机器可读契约、层域数据、JUnit、质量门禁和SHA-256。
 - [Planar P01—P06 历史阶段交接](planning/planar_handoff.md)：P07 加入前的四操作真实 STEP、六件套、回读和 UI 证据；当前状态以 P01—P07 最终证据和进度台账为准。
 - [多对话工作台开发启动提示词](planning/workbench_multi_chat_prompts.md)：P07、Curve、Rotary、Freeform、Research 与最终集成的可复制任务提示词及统一完成条件。
 - [多对话工作台提示词编制复盘](reviews/2026-09-12_multi_chat_workbench_prompt_review.md)：依赖、工作树、多 Agent、完整验收和 Planar Support 计数边界。
@@ -62,6 +79,7 @@
 - [Freeform 工作台图文手册](guides/freeform_workbench_zh.md)：受限面组、多导引线、曲面贴合/薄壁、三入口、六件套和错误恢复。
 - [多材料通道指南](guides/material_channels_zh.md)：显式材料区域、T0—T3 事件链、温控/传感器门禁和统计口径。
 - [自有 AC 离线控制器指南](guides/paper_core_ac_controller_zh.md)：模式、Z20、宏展开、累计 C、严格回读和实机资格缺口。
+- [扇叶完整程序 FAN06—FAN07 复盘](reviews/2026-09-20_fan_complete_program_fan06_fan07_review.md)：全高底座与支撑、A=90° 单叶片完整填充、真实路径图和当前材料量偏差。
 - [机型选择与旋转轴输出字指南](guides/machine_profiles_zh.md)：把内部 A/B/C 映射到固件轴字，并说明保存、重开、Stale 与安全限制。
 - [pipe2 与扇叶回转特征对比报告](reviews/2026-09-13_pipe2_model_manual_gcode_comparison.md)：用当前 STEP 与手工 G-code 说明固定轴 Rotary、中心线随动 Tube 和自由曲面多轴路径的差异。
 - [G-code 可视化图文手册](guides/gcode_preview_zh.md)：普通 Preview、成果页、分色、层范围与五轴回读边界。

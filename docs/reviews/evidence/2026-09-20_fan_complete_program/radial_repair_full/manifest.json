@@ -1,0 +1,40 @@
+{
+  "python": "F:\\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\\5AxisSclicer_V2.0\\tmp\\pytest9\\Scripts\\python.exe",
+  "machine_executable": false,
+  "full_new_nc_generated": false,
+  "FAN08_FAN09_FAN10_accepted": false,
+  "scope": "Complete CAD-derived deposition candidates; partial transition/merge implementation",
+  "tests": "33 related tests passed; latest affected 6 tests passed after merge changes",
+  "quality": "check_quality.py passed: Ruff, formatting, context budget, mypy 173 source files",
+  "pending": [
+    "actual bead coverage and layer support",
+    "radial Toolpath and safe links",
+    "full machine/nozzle/fixture swept collision",
+    "full fan NC readback and thermal start/end"
+  ],
+  "sha256": {
+    "src/five_axis_slicer/algorithms/fan/assembly.py": "84720bed9f725279b8abb6544449fd8bfd1679610f580959da02dca15572ad80",
+    "src/five_axis_slicer/algorithms/fan/chart_fill.py": "f853b49106050f2c488d735982ab8eb6900b40fef6526198aecdcb5ceda02578",
+    "src/five_axis_slicer/algorithms/fan/program.py": "396bdaf15ecff0e3bfbacb4ec48b1786c6629dbc7ef3a348ee5c3effc6155876",
+    "src/five_axis_slicer/algorithms/fan/radial.py": "6931acae1b1f4f38d6b6100425696e125903afaced291b9ba48b088852c78c76",
+    "src/five_axis_slicer/algorithms/fan/transitions.py": "e56c72455f983fcea4a18d175723c7395479a3735e6dc81080e96d92b49a0bff",
+    "src/five_axis_slicer/algorithms/fan/__init__.py": "4ac47df2fc67ae5032afa2cf69354872b4a780b7633e7d50fcbfe88acc73efc0",
+    "src/five_axis_slicer/postprocessing/fan_merge.py": "0306ffaf34bfb80f00ade0ee7bb71866d8c105bdacd5298425cbc2a732bd3c55",
+    "scripts/probe_fan_radial_layers.py": "ff70fddc330ae699cd41b8e8f1b5e17643dd8e2a8a5fe9148a93a8437f41ee27",
+    "scripts/generate_fan_radial_assembly.py": "fa80463231c88c32ac7656c78971d80fc885ebde0c0b5ae387c26301b92ef18a",
+    "scripts/render_fan_radial_cached.py": "cb9166e39c01969468afc2d3f0cb9a73143909752a69c5fd9e7620e4b11b3145",
+    "tests/test_fan_radial.py": "0a31bd5cfc7e15f07bf13f6590a4121166ba399c9b5fbabb324acd480fdce7d2",
+    "tests/test_fan_stages.py": "b00e68de699c1e9c428c83272c92d12c0d362dec0fd8963d1cd94cb9d101f870",
+    "docs/reviews/evidence/2026-09-20_fan_complete_program/radial_repair_full/base_display_paths.json.gz": "7b1aa5db1a4b2c6c109530c34066a14a6a4f2a0d53faa258b9e5e1d1ffb2e486",
+    "docs/reviews/evidence/2026-09-20_fan_complete_program/radial_repair_full/body_001_paths.json.gz": "577ca0c1306fb5dbbcbdff1d6a91e62ef2af401cf672b4d424e54f4f17856f5d",
+    "docs/reviews/evidence/2026-09-20_fan_complete_program/radial_repair_full/body_002_paths.json.gz": "83c9d7fef6874cf7211e4d7508e938c5a0dd25e6fb90db05ba8e50be531c7e73",
+    "docs/reviews/evidence/2026-09-20_fan_complete_program/radial_repair_full/body_003_paths.json.gz": "6da3ad45a703ee6438ab0f947d3568fbd5a5b93524dfd1a2cb6ac98313c091fd",
+    "docs/reviews/evidence/2026-09-20_fan_complete_program/radial_repair_full/fan_new_radial_full.png": "86d551ab70f88b89b32f974b3d7814a4aca3eaa4d041528d384e9a5a6b16997c",
+    "docs/reviews/evidence/2026-09-20_fan_complete_program/radial_repair_full/fan_new_radial_root_detail.png": "cca0619d7e6278c49326f7759b15a3cf4e01ff0294f4427479553e967e484028",
+    "docs/reviews/evidence/2026-09-20_fan_complete_program/radial_repair_full/legacy_layer_runs.json": "a359a928e2f781d536b4faf20dfcdc049d314798af06870c7d780a620d975d6a",
+    "docs/reviews/evidence/2026-09-20_fan_complete_program/radial_repair_full/pytest.xml": "f3572760e03a83e5ae549a620abc5b7ce493e805f3bb11b861207302ad2298ae",
+    "docs/reviews/evidence/2026-09-20_fan_complete_program/radial_repair_full/pytest_merge_final.xml": "eab8cd060e770d2f2b59afa3eee673c06adb872419c695186b36de0cf4901381",
+    "docs/reviews/evidence/2026-09-20_fan_complete_program/radial_repair_full/pytest_merge_index.xml": "b58b4df3c3a8bc17a8fa039b9ccadd59ac0230a5be6f908a3706577f15488832",
+    "docs/reviews/evidence/2026-09-20_fan_complete_program/radial_repair_full/summary.json": "a3cec75d04a2c2031659177c8c300a74e129f8ded20f99905796ad6aaf69eaad"
+  }
+}

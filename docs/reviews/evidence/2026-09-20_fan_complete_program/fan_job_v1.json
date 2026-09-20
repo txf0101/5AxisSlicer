@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "job_id": "fan-complete-reference-job",
+  "contract_sha256": "42f6ac7d309335646da6acff6b3cff6883fac2be3c29fade1faac872d61f8397",
+  "operations": [
+    {
+      "operation_id": "base",
+      "operation_type": "planar_complete",
+      "dependencies": [],
+      "state": "dirty",
+      "result_sha256": null
+    },
+    {
+      "operation_id": "support",
+      "operation_type": "support",
+      "dependencies": [
+        "base"
+      ],
+      "state": "dirty",
+      "result_sha256": null
+    },
+    {
+      "operation_id": "index-a90",
+      "operation_type": "indexed_reorientation",
+      "dependencies": [
+        "support"
+      ],
+      "state": "dirty",
+      "result_sha256": null
+    },
+    {
+      "operation_id": "blade-1",
+      "operation_type": "freeform_volume",
+      "dependencies": [
+        "index-a90"
+      ],
+      "state": "dirty",
+      "result_sha256": null
+    },
+    {
+      "operation_id": "blade-2",
+      "operation_type": "freeform_volume",
+      "dependencies": [
+        "blade-1"
+      ],
+      "state": "dirty",
+      "result_sha256": null
+    },
+    {
+      "operation_id": "blade-3",
+      "operation_type": "freeform_volume",
+      "dependencies": [
+        "blade-2"
+      ],
+      "state": "dirty",
+      "result_sha256": null
+    },
+    {
+      "operation_id": "validation",
+      "operation_type": "whole_job_validation",
+      "dependencies": [
+        "blade-3"
+      ],
+      "state": "dirty",
+      "result_sha256": null
+    },
+    {
+      "operation_id": "program",
+      "operation_type": "combined_postprocess",
+      "dependencies": [
+        "validation"
+      ],
+      "state": "dirty",
+      "result_sha256": null
+    }
+  ]
+}

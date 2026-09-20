@@ -1,0 +1,163 @@
+{
+  "inventory": {
+    "source": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\三叶扇\\Supportless_sample.stp",
+    "sha256": "291155b64dace255937bbcddb496da4f11f8319a2fe6b9d32aa29a340686befc",
+    "bodies": [
+      {
+        "id": "body_001",
+        "volume_mm3": 46894.28754125003,
+        "bounds": {
+          "minimum": [
+            -16.454482771904303,
+            -18.999708244704802,
+            -1e-07
+          ],
+          "maximum": [
+            19.105020329796602,
+            19.0111141052666,
+            100.0000001
+          ]
+        }
+      },
+      {
+        "id": "body_002",
+        "volume_mm3": 8000.001755379692,
+        "bounds": {
+          "minimum": [
+            3.80980349912531,
+            -51.275592388034404,
+            55.9999998999999
+          ],
+          "maximum": [
+            52.401546397120605,
+            -3.4552711951320503,
+            96.0000001000001
+          ]
+        }
+      },
+      {
+        "id": "body_003",
+        "volume_mm3": 8000.001755379697,
+        "bounds": {
+          "minimum": [
+            -1.80507117649298,
+            8.029222658109731,
+            55.9999998999999
+          ],
+          "maximum": [
+            28.7949628009195,
+            60.0450250474591,
+            96.0000001000001
+          ]
+        }
+      },
+      {
+        "id": "body_004",
+        "volume_mm3": 8000.0017553797115,
+        "bounds": {
+          "minimum": [
+            -60.016968430143,
+            -30.7345866347935,
+            55.9999998999999
+          ],
+          "maximum": [
+            -7.78977641359601,
+            1.43044945756594,
+            96.0000001000001
+          ]
+        }
+      }
+    ]
+  },
+  "legacy": {
+    "source": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\三叶扇\\EXAMPLE.gcode",
+    "sha256": "5c0fe0d52bb512d3f6c31447751a1724724933d26641ed165d27cb564afeb820",
+    "lines": 785382,
+    "positive_e_segments": 728260,
+    "commands": {
+      "M140": 2,
+      "M105": 2,
+      "M190": 1,
+      "M104": 5,
+      "M109": 4,
+      "PRINT_START": 1,
+      "M82": 2,
+      "G92": 6,
+      "G1": 731867,
+      "M107": 2,
+      "G0": 14154,
+      "M106": 1,
+      "SET_GCODE_OFFSET": 1,
+      "G90": 6,
+      "M221": 3,
+      "G21": 3,
+      "M83": 3,
+      "PRINT_END": 1
+    },
+    "types": {
+      "SKIRT": 300,
+      "WA-LL-INNER": 4992,
+      "WA-LL-OUTER": 5006,
+      "SKIN": 714292,
+      "FILL": 3670
+    },
+    "bounds": [
+      [
+        -96.53,
+        -18.599,
+        0.3
+      ],
+      [
+        20.226,
+        23.991,
+        99.9
+      ]
+    ],
+    "positive_e_mm": 6378.405486,
+    "length_mm": 219654.95342454503,
+    "ac_bounds": [
+      [
+        -94.87,
+        0.0,
+        -89.01
+      ],
+      [
+        0.0,
+        0.0,
+        180.79
+      ]
+    ],
+    "frame": "machine XYZ: unsupported rotary mapping",
+    "unsupported_rotary_words": [
+      "B"
+    ],
+    "offset_macro_unresolved": true,
+    "boundary": "G0/G1 positive-E only; positive E is not automatically valid deposition"
+  },
+  "current_modes": {
+    "five_axis": {
+      "error": "No whole-solid five-axis partition generator registered"
+    }
+  },
+  "planar": {
+    "requested_layers": 500,
+    "successful_layers": 500,
+    "failures": [],
+    "deposition_segments": 25786,
+    "section_segments": 250368,
+    "scope": "full-height diagnostic alternative: no supports, no skin, no machine qualification",
+    "accepted": false
+  },
+  "comparison": {
+    "case": "three_leaf",
+    "accepted": false,
+    "legacy_frame": "machine XYZ: unsupported rotary mapping",
+    "legacy_to_source_rz_deg": 0,
+    "new_candidate_file": null,
+    "planar_requested_layers": 500,
+    "planar_failed_layers": 0,
+    "metric_scope": "sampled endpoint proximity, not bead coverage or exact curve Hausdorff"
+  },
+  "manufacturing_accepted": false,
+  "new_complete_nc_generated": false
+}

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="5" time="2.920" timestamp="2026-09-20T23:56:56.128981+08:00" hostname="BelongtoTXF"><testcase classname="tests.test_tube_multi_product_flow" name="test_indexed_dispatch_reuses_t08_product" time="0.004" /><testcase classname="tests.test_tube_multi_product_flow" name="test_buildup_keeps_base_independent_and_orders_safe_transition[before_tube-expected0]" time="0.058" /><testcase classname="tests.test_tube_multi_product_flow" name="test_buildup_keeps_base_independent_and_orders_safe_transition[after_tube-expected1]" time="0.050" /><testcase classname="tests.test_tube_multi_product_flow" name="test_continuous_reads_back_exports_six_artifacts_and_reopens_state" time="0.075"><failure message="AssertionError: assert 'warning' == 'ready'&#10;  &#10;  - ready&#10;  + warning">tmp_path = WindowsPath('F:/【项目和任务】/5AxisSclicer_V2.0/tmp/fan15_product_fix/test_continuous_reads_back_exp0')
+model = CadModel(source_path=WindowsPath('F:/【项目和任务】/5AxisSclicer_V2.0/tmp/fan15_product_fix/test_continuous_reads_back_exp0/a...red_length_unit=None, conversion_source='step_declaration'), bounds=None, source_size_bytes=None, source_mtime_ns=None)
+feature = TubeFeature(tube_body_id='tube-body', entry_port_id='manual-entry', exit_port_id='manual-exit', outer_radius_mm=3.0, i...0, 50.75), length_mm=0.75, source_face_id='manual', center=None, axis=None, sweep_rad=0.0),), source='manual_polyline')
+machine = MachineProfile(profile_id='builtin.machine.generic_xyzac_reference.v1', name='Generic XYZAC Reference', version=1, joi...er='5AxisSclicer', model='Generic XYZAC reference template', source_uri='builtin://machine/generic-xyzac-reference/v1')
+nozzle = NozzleProfile(resource_id='multi-product-test', display_name='slender', orifice_diameter_mm=0.02, filament_diameter_mm...mit_c=None, wear_resistance_rating=None, outer_profile_rz_mm=((0.01, 0.0), (0.01, 2.0)), source=None, is_builtin=False)
+placement = RigidTransform(T_target_from_source=((1.0, 0.0, 0.0, 250.0), (0.0, 1.0, 0.0, 250.0), (0.0, 0.0, 1.0, -300.0), (0.0, 0.0, 0.0, 1.0)), source_frame='build', target_frame='workpiece')
+
+    def test_continuous_reads_back_exports_six_artifacts_and_reopens_state(
+        tmp_path, model, feature, machine, nozzle, placement
+    ) -&gt; None:
+        result, operation = _generate_continuous(model, feature, machine, nozzle, placement)
+    
+        assert result.operation_type == "tube_continuous"
+        assert result.exportable and result.readback.passed
+        assert result.manifest.algorithm_version == "tube-continuous-product-v2"
+        destination = export_tube_product(result, tmp_path / "continuous-result")
+        assert {item.name for item in destination.iterdir()} == {
+            "machine_axes.csv",
+            "main.gcode",
+            "manifest.json",
+            "preview.json",
+            "toolpath.json",
+            "warnings.json",
+        }
+        service = TubeProductService()
+        with patch("five_axis_slicer.postprocessing.tube_product.recognise_tube", return_value=feature):
+            service.generate(model, operation, machine, nozzle, T_workpiece_from_build=placement)
+        assert service.state is not None
+&gt;       assert service.state.status == "ready"
+E       AssertionError: assert 'warning' == 'ready'
+E         
+E         - ready
+E         + warning
+
+tests\test_tube_multi_product_flow.py:196: AssertionError</failure></testcase><testcase classname="tests.test_tube_multi_product_flow" name="test_continuous_collision_error_blocks_nc_and_export" time="0.052" /></testsuite></testsuites>

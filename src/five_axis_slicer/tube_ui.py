@@ -676,6 +676,7 @@ class TubeSetupPage(QWidget):
         self.controller.set_resource_library(self.resource_library)
         self.model = model
         self._pick_context = None
+        self._operation_pick_field = None
         self._two_point_hits.clear()
         self._coordinate_control_dirty.clear()
         if model is not None:
@@ -795,6 +796,7 @@ class TubeSetupPage(QWidget):
         self.state_changed.emit(self.controller.state_json())
 
     def activate_selected_editor(self) -> None:
+        self._operation_pick_field = None
         item = self.tree.currentItem()
         if item is None:
             return
@@ -1198,6 +1200,8 @@ class TubeSetupPage(QWidget):
         self.coordinate_feedback.setText(f"Pick {pick_kind}: {component.upper()}")
 
     def _on_pick_hit(self, hit: PickHit) -> None:
+        if tube_operation_ui.accept_pick(self, hit):
+            return
         if self._pick_context is None or self.model is None:
             return
         node, component, requested_kind = self._pick_context

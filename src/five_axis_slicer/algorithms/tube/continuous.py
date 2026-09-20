@@ -108,7 +108,7 @@ def generate_continuous_toolpath(
     points = _helix_points(operation_id, parameters, distances, positions, normals)
     events = _add_clearance_and_events(operation_id, parameters, points, normals)
     return GeneratedToolpath(
-        f"{operation_id}-continuous-v1", operation_id, points=tuple(points), events=events
+        f"{operation_id}-continuous-v2", operation_id, points=tuple(points), events=events
     )
 
 
@@ -153,7 +153,9 @@ def _helix_geometry(
             _scale(frame.normal, math.cos(angle)), _scale(frame.binormal, math.sin(angle))
         )
         positions.append(_add(frame.origin, _scale(normal, feature.path_radius_mm)))
-        normals.append(normal)
+        # Radial direction locates the wall; axial growth defines the deposition
+        # surface and nozzle approach. These are different physical directions.
+        normals.append(frame.tangent)
     return positions, normals
 
 

@@ -121,7 +121,7 @@ def test_support_product_matches_analytic_domain_and_exports_p07_bundle(tmp_path
     assert all(not layer.regions for layer in result.layers[:4])
     assert all(layer.regions for layer in result.layers[4:])
     assert result.exportable and result.readback.passed
-    assert result.manifest.algorithm_version == "planar-support-product-v3"
+    assert result.manifest.algorithm_version == "planar-support-product-v4"
     assert result.validation.measurement.deposition_outside_max_mm == pytest.approx(0.0)
     assert result.validation.measurement.volume_difference_mm3 == pytest.approx(0.0)
     assert "; P07" in result.gcode

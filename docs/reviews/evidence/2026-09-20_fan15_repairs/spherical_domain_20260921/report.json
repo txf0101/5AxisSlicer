@@ -1,0 +1,1118 @@
+{
+  "source_hash": "0812eebe0c43c57b0e280a981d4c1521889a26e85d1ec567cbf97d22aeac64c0",
+  "scope": "section boundaries only; no bead, support or NC qualification",
+  "records": [
+    {
+      "body_id": "body_002",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 299.4156060701042
+    },
+    {
+      "body_id": "body_002",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 299.0996323466049
+    },
+    {
+      "body_id": "body_002",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 298.78797313428106
+    },
+    {
+      "body_id": "body_003",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 7.963040403742965
+    },
+    {
+      "body_id": "body_003",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 7.927785415729396
+    },
+    {
+      "body_id": "body_003",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 7.893434491263711
+    },
+    {
+      "body_id": "body_004",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 488.82613937840057
+    },
+    {
+      "body_id": "body_004",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 488.2370479667675
+    },
+    {
+      "body_id": "body_004",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 487.657502428047
+    },
+    {
+      "body_id": "body_005",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 108.560037613533
+    },
+    {
+      "body_id": "body_005",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 108.48714932405582
+    },
+    {
+      "body_id": "body_005",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 108.41568007740722
+    },
+    {
+      "body_id": "body_006",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 2,
+      "passed": true,
+      "surface_area_mm2": 326.9366642543173
+    },
+    {
+      "body_id": "body_006",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 2,
+      "passed": true,
+      "surface_area_mm2": 323.87784921372076
+    },
+    {
+      "body_id": "body_006",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 2,
+      "passed": true,
+      "surface_area_mm2": 320.939711425347
+    },
+    {
+      "body_id": "body_007",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 2,
+      "passed": true,
+      "surface_area_mm2": 126.5742328630829
+    },
+    {
+      "body_id": "body_007",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 2,
+      "passed": true,
+      "surface_area_mm2": 126.29859302707018
+    },
+    {
+      "body_id": "body_007",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 2,
+      "passed": true,
+      "surface_area_mm2": 126.02811681385583
+    },
+    {
+      "body_id": "body_008",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 5,
+      "passed": true,
+      "surface_area_mm2": 17.315970966031927
+    },
+    {
+      "body_id": "body_008",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 5,
+      "passed": true,
+      "surface_area_mm2": 17.241086209251975
+    },
+    {
+      "body_id": "body_008",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 5,
+      "passed": true,
+      "surface_area_mm2": 17.16814197401845
+    },
+    {
+      "body_id": "body_009",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 4.056572307949257
+    },
+    {
+      "body_id": "body_009",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 4.040761969501026
+    },
+    {
+      "body_id": "body_009",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 4.025328807098772
+    },
+    {
+      "body_id": "body_010",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 6.046039056874523
+    },
+    {
+      "body_id": "body_010",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 6.021321091304936
+    },
+    {
+      "body_id": "body_010",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 5.997209634911443
+    },
+    {
+      "body_id": "body_011",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 6.567836469432069
+    },
+    {
+      "body_id": "body_011",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 6.540761813053002
+    },
+    {
+      "body_id": "body_011",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 6.514352288913135
+    },
+    {
+      "body_id": "body_012",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 3,
+      "passed": true,
+      "surface_area_mm2": 19.55910715554506
+    },
+    {
+      "body_id": "body_012",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 3,
+      "passed": true,
+      "surface_area_mm2": 19.466102640872194
+    },
+    {
+      "body_id": "body_012",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 3,
+      "passed": true,
+      "surface_area_mm2": 19.37561094845855
+    },
+    {
+      "body_id": "body_013",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 0.9215142176213762
+    },
+    {
+      "body_id": "body_013",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 0.9177162083055109
+    },
+    {
+      "body_id": "body_013",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 0.9140109608854711
+    },
+    {
+      "body_id": "body_014",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 3.8354086391224693
+    },
+    {
+      "body_id": "body_014",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 3.81883371379099
+    },
+    {
+      "body_id": "body_014",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 3.8026768977162115
+    },
+    {
+      "body_id": "body_015",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 2,
+      "passed": true,
+      "surface_area_mm2": 7.674761656478553
+    },
+    {
+      "body_id": "body_015",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 2,
+      "passed": true,
+      "surface_area_mm2": 7.640725274904166
+    },
+    {
+      "body_id": "body_015",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 2,
+      "passed": true,
+      "surface_area_mm2": 7.607558947970744
+    },
+    {
+      "body_id": "body_016",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 6.995301906995684
+    },
+    {
+      "body_id": "body_016",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 6.963822762261767
+    },
+    {
+      "body_id": "body_016",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 6.933156877169924
+    },
+    {
+      "body_id": "body_017",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 7.049842027961773
+    },
+    {
+      "body_id": "body_017",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 7.018228494833003
+    },
+    {
+      "body_id": "body_017",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 6.987429168245063
+    },
+    {
+      "body_id": "body_018",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 9.117158123153947
+    },
+    {
+      "body_id": "body_018",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 9.07618113096964
+    },
+    {
+      "body_id": "body_018",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 9.036258429957373
+    },
+    {
+      "body_id": "body_019",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 2,
+      "passed": true,
+      "surface_area_mm2": 8.99898341309635
+    },
+    {
+      "body_id": "body_019",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 2,
+      "passed": true,
+      "surface_area_mm2": 8.958426191212238
+    },
+    {
+      "body_id": "body_019",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 2,
+      "passed": true,
+      "surface_area_mm2": 8.91891794083158
+    },
+    {
+      "body_id": "body_020",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 2,
+      "passed": true,
+      "surface_area_mm2": 9.071265355652931
+    },
+    {
+      "body_id": "body_020",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 2,
+      "passed": true,
+      "surface_area_mm2": 9.031518222208938
+    },
+    {
+      "body_id": "body_020",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 2,
+      "passed": true,
+      "surface_area_mm2": 8.99278150903952
+    },
+    {
+      "body_id": "body_021",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 5.268760417775279
+    },
+    {
+      "body_id": "body_021",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 5.246975773591405
+    },
+    {
+      "body_id": "body_021",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 5.225730307505498
+    },
+    {
+      "body_id": "body_022",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 8.145588765967759
+    },
+    {
+      "body_id": "body_022",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 8.109434922388006
+    },
+    {
+      "body_id": "body_022",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 8.074204602336057
+    },
+    {
+      "body_id": "body_023",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 8.39506417422351
+    },
+    {
+      "body_id": "body_023",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 8.35756749379199
+    },
+    {
+      "body_id": "body_023",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 8.321036791549327
+    },
+    {
+      "body_id": "body_024",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 2,
+      "passed": true,
+      "surface_area_mm2": 7.148994771622819
+    },
+    {
+      "body_id": "body_024",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 2,
+      "passed": true,
+      "surface_area_mm2": 7.116687737322904
+    },
+    {
+      "body_id": "body_024",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 2,
+      "passed": true,
+      "surface_area_mm2": 7.085213446032753
+    },
+    {
+      "body_id": "body_025",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 8.331493815591424
+    },
+    {
+      "body_id": "body_025",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 8.294360297466028
+    },
+    {
+      "body_id": "body_025",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 8.25818169872804
+    },
+    {
+      "body_id": "body_026",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 2,
+      "passed": true,
+      "surface_area_mm2": 8.757414158832205
+    },
+    {
+      "body_id": "body_026",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 2,
+      "passed": true,
+      "surface_area_mm2": 8.719678997928325
+    },
+    {
+      "body_id": "body_026",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 2,
+      "passed": true,
+      "surface_area_mm2": 8.682894804797893
+    },
+    {
+      "body_id": "body_027",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 9.208831273697575
+    },
+    {
+      "body_id": "body_027",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 9.168329955660528
+    },
+    {
+      "body_id": "body_027",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 9.128859766390624
+    },
+    {
+      "body_id": "body_028",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 5.3756273483919745
+    },
+    {
+      "body_id": "body_028",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 5.352266884415902
+    },
+    {
+      "body_id": "body_028",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 5.329497565083968
+    },
+    {
+      "body_id": "body_029",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 5.183552441424028
+    },
+    {
+      "body_id": "body_029",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 5.161647199219161
+    },
+    {
+      "body_id": "body_029",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 5.140290349059916
+    },
+    {
+      "body_id": "body_030",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 3.3133346769336196
+    },
+    {
+      "body_id": "body_030",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 3.2983200086093
+    },
+    {
+      "body_id": "body_030",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 3.283693812520682
+    },
+    {
+      "body_id": "body_031",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 8.486915201008985
+    },
+    {
+      "body_id": "body_031",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 8.448177257196484
+    },
+    {
+      "body_id": "body_031",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 8.410447029411026
+    },
+    {
+      "body_id": "body_032",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 2,
+      "passed": true,
+      "surface_area_mm2": 9.054429356427478
+    },
+    {
+      "body_id": "body_032",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 2,
+      "passed": true,
+      "surface_area_mm2": 9.01455066155411
+    },
+    {
+      "body_id": "body_032",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 2,
+      "passed": true,
+      "surface_area_mm2": 8.975688828778653
+    },
+    {
+      "body_id": "body_033",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 3.1334578044395283
+    },
+    {
+      "body_id": "body_033",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 3.1194715937747803
+    },
+    {
+      "body_id": "body_033",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 3.1058443334371275
+    },
+    {
+      "body_id": "body_034",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 6.327380946751754
+    },
+    {
+      "body_id": "body_034",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 6.299645719750819
+    },
+    {
+      "body_id": "body_034",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 6.272615152258768
+    },
+    {
+      "body_id": "body_035",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 9.1062193210939
+    },
+    {
+      "body_id": "body_035",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 9.06582414865057
+    },
+    {
+      "body_id": "body_035",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 9.026461180152426
+    },
+    {
+      "body_id": "body_036",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 7.4020134049277715
+    },
+    {
+      "body_id": "body_036",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 7.368577994091706
+    },
+    {
+      "body_id": "body_036",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 7.336006218392016
+    },
+    {
+      "body_id": "body_037",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 8.313606526354004
+    },
+    {
+      "body_id": "body_037",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 8.276078107877543
+    },
+    {
+      "body_id": "body_037",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 8.239521638665304
+    },
+    {
+      "body_id": "body_038",
+      "radius_mm": 40.083333333333336,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 4.912546151222448
+    },
+    {
+      "body_id": "body_038",
+      "radius_mm": 40.25,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 4.8926083865663195
+    },
+    {
+      "body_id": "body_038",
+      "radius_mm": 40.416666666666664,
+      "regions": 1,
+      "contours": 1,
+      "passed": true,
+      "surface_area_mm2": 4.873159609961251
+    }
+  ],
+  "volumes": [
+    {
+      "body_id": "body_002",
+      "spherical_integral_mm3": 149.55053525849837,
+      "cad_volume_mm3": 149.18091208225184,
+      "relative_error": 0.0024776841157985443
+    },
+    {
+      "body_id": "body_003",
+      "spherical_integral_mm3": 3.964043385122679,
+      "cad_volume_mm3": 3.9652624105593235,
+      "relative_error": -0.0003074261701819373
+    },
+    {
+      "body_id": "body_004",
+      "spherical_integral_mm3": 244.1201149622025,
+      "cad_volume_mm3": 244.15297878757235,
+      "relative_error": -0.00013460341763201595
+    },
+    {
+      "body_id": "body_005",
+      "spherical_integral_mm3": 54.24381116916601,
+      "cad_volume_mm3": 54.33192764056574,
+      "relative_error": -0.00162181750632273
+    },
+    {
+      "body_id": "body_006",
+      "spherical_integral_mm3": 161.95903748223085,
+      "cad_volume_mm3": 161.96362263205629,
+      "relative_error": -2.8309750985548063e-05
+    },
+    {
+      "body_id": "body_007",
+      "spherical_integral_mm3": 63.15015711733482,
+      "cad_volume_mm3": 63.153446721982164,
+      "relative_error": -5.208907538846148e-05
+    },
+    {
+      "body_id": "body_008",
+      "spherical_integral_mm3": 8.620866524883725,
+      "cad_volume_mm3": 8.633551852728566,
+      "relative_error": -0.0014693058038252641
+    },
+    {
+      "body_id": "body_009",
+      "spherical_integral_mm3": 2.0204438474248425,
+      "cad_volume_mm3": 2.021772125010734,
+      "relative_error": -0.0006569867936449809
+    },
+    {
+      "body_id": "body_010",
+      "spherical_integral_mm3": 3.0107616305151503,
+      "cad_volume_mm3": 3.010808530564729,
+      "relative_error": -1.5577227546196187e-05
+    },
+    {
+      "body_id": "body_011",
+      "spherical_integral_mm3": 3.270491761899701,
+      "cad_volume_mm3": 3.2706062613474223,
+      "relative_error": -3.50086309913009e-05
+    },
+    {
+      "body_id": "body_012",
+      "spherical_integral_mm3": 9.733470124145967,
+      "cad_volume_mm3": 9.73384176848269,
+      "relative_error": -3.8180642911951416e-05
+    },
+    {
+      "body_id": "body_013",
+      "spherical_integral_mm3": 0.45887356446872635,
+      "cad_volume_mm3": 0.45888935701410316,
+      "relative_error": -3.4414712687111596e-05
+    },
+    {
+      "body_id": "body_014",
+      "spherical_integral_mm3": 1.9094865417716118,
+      "cad_volume_mm3": 1.9097194410359444,
+      "relative_error": -0.00012195470147501152
+    },
+    {
+      "body_id": "body_015",
+      "spherical_integral_mm3": 3.8205076465589105,
+      "cad_volume_mm3": 3.820553189474633,
+      "relative_error": -1.1920502991069866e-05
+    },
+    {
+      "body_id": "body_016",
+      "spherical_integral_mm3": 3.4820469244045626,
+      "cad_volume_mm3": 3.4816105726603204,
+      "relative_error": 0.00012533042829912516
+    },
+    {
+      "body_id": "body_017",
+      "spherical_integral_mm3": 3.5092499485066395,
+      "cad_volume_mm3": 3.5093662355832596,
+      "relative_error": -3.313620432115126e-05
+    },
+    {
+      "body_id": "body_018",
+      "spherical_integral_mm3": 4.53826628068016,
+      "cad_volume_mm3": 4.538118234308798,
+      "relative_error": 3.2622854610280886e-05
+    },
+    {
+      "body_id": "body_019",
+      "spherical_integral_mm3": 4.4793879241900285,
+      "cad_volume_mm3": 4.47942887173596,
+      "relative_error": -9.14124257896494e-06
+    },
+    {
+      "body_id": "body_020",
+      "spherical_integral_mm3": 4.515927514483565,
+      "cad_volume_mm3": 4.516138928847222,
+      "relative_error": -4.6813077938528434e-05
+    },
+    {
+      "body_id": "body_021",
+      "spherical_integral_mm3": 2.6235777498120303,
+      "cad_volume_mm3": 2.6235478416024516,
+      "relative_error": 1.1399910115777743e-05
+    },
+    {
+      "body_id": "body_022",
+      "spherical_integral_mm3": 4.054871381781971,
+      "cad_volume_mm3": 4.054979422973693,
+      "relative_error": -2.6644078909480385e-05
+    },
+    {
+      "body_id": "body_023",
+      "spherical_integral_mm3": 4.1789447432608045,
+      "cad_volume_mm3": 4.181414150856883,
+      "relative_error": -0.0005905675704407873
+    },
+    {
+      "body_id": "body_024",
+      "spherical_integral_mm3": 3.5584826591630794,
+      "cad_volume_mm3": 3.5586340140773483,
+      "relative_error": -4.25317449532998e-05
+    },
+    {
+      "body_id": "body_025",
+      "spherical_integral_mm3": 4.147339301964249,
+      "cad_volume_mm3": 4.1475108956474145,
+      "relative_error": -4.137269014669467e-05
+    },
+    {
+      "body_id": "body_026",
+      "spherical_integral_mm3": 4.35999799359307,
+      "cad_volume_mm3": 4.360085698036811,
+      "relative_error": -2.0115302729205036e-05
+    },
+    {
+      "body_id": "body_027",
+      "spherical_integral_mm3": 4.584336832624788,
+      "cad_volume_mm3": 4.587445557768529,
+      "relative_error": -0.0006776592996240151
+    },
+    {
+      "body_id": "body_028",
+      "spherical_integral_mm3": 2.676231966315308,
+      "cad_volume_mm3": 2.6763145372617276,
+      "relative_error": -3.085248212428645e-05
+    },
+    {
+      "body_id": "body_029",
+      "spherical_integral_mm3": 2.5809149982838506,
+      "cad_volume_mm3": 2.5809218708439454,
+      "relative_error": -2.6628315147516235e-06
+    },
+    {
+      "body_id": "body_030",
+      "spherical_integral_mm3": 1.649224749677267,
+      "cad_volume_mm3": 1.649177140352326,
+      "relative_error": 2.8868533146587803e-05
+    },
+    {
+      "body_id": "body_031",
+      "spherical_integral_mm3": 4.224256581269416,
+      "cad_volume_mm3": 4.224247459351947,
+      "relative_error": 2.159418347801643e-06
+    },
+    {
+      "body_id": "body_032",
+      "spherical_integral_mm3": 4.507444807793373,
+      "cad_volume_mm3": 4.507640917170335,
+      "relative_error": -4.350598917818865e-05
+    },
+    {
+      "body_id": "body_033",
+      "spherical_integral_mm3": 1.559795621941906,
+      "cad_volume_mm3": 1.5597402518230954,
+      "relative_error": 3.5499576769855055e-05
+    },
+    {
+      "body_id": "body_034",
+      "spherical_integral_mm3": 3.14994030312689,
+      "cad_volume_mm3": 3.1499582362964498,
+      "relative_error": -5.693145182979773e-06
+    },
+    {
+      "body_id": "body_035",
+      "spherical_integral_mm3": 4.5330841083161495,
+      "cad_volume_mm3": 4.539819768443839,
+      "relative_error": -0.0014836844789541475
+    },
+    {
+      "body_id": "body_036",
+      "spherical_integral_mm3": 3.684432936235249,
+      "cad_volume_mm3": 3.6844379287466023,
+      "relative_error": -1.3550265874386366e-06
+    },
+    {
+      "body_id": "body_037",
+      "spherical_integral_mm3": 4.138201045482808,
+      "cad_volume_mm3": 4.1379355818510835,
+      "relative_error": 6.415364049867487e-05
+    },
+    {
+      "body_id": "body_038",
+      "spherical_integral_mm3": 2.44638569129167,
+      "cad_volume_mm3": 2.4462656355489414,
+      "relative_error": 4.9077148852484556e-05
+    }
+  ]
+}

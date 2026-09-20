@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="3" failures="0" skipped="0" tests="3" time="3.865" timestamp="2026-09-20T19:03:33.045981+08:00" hostname="BelongtoTXF"><testcase classname="tests.test_fan15_audit" name="test_modal_e_and_inverse_known_quarter_turn" time="0.008"><error message="failed on setup with &quot;PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\Tang Xufeng\\AppData\\Local\\Temp\\pytest-of-Tang Xufeng'&quot;">cls = &lt;class '_pytest.runner.CallInfo'&gt;
+func = &lt;function call_and_report.&lt;locals&gt;.&lt;lambda&gt; at 0x00000291EE39F1A0&gt;
+when = 'setup'
+reraise = (&lt;class '_pytest.outcomes.Exit'&gt;, &lt;class 'KeyboardInterrupt'&gt;)
+
+    @classmethod
+    def from_call(
+        cls,
+        func: Callable[[], TResult],
+        when: Literal["collect", "setup", "call", "teardown"],
+        reraise: type[BaseException] | tuple[type[BaseException], ...] | None = None,
+    ) -&gt; CallInfo[TResult]:
+        """Call func, wrapping the result in a CallInfo.
+    
+        :param func:
+            The function to call. Called without arguments.
+        :type func: Callable[[], _pytest.runner.TResult]
+        :param when:
+            The phase in which the function is called.
+        :param reraise:
+            Exception or exceptions that shall propagate if raised by the
+            function, instead of being wrapped in the CallInfo.
+        """
+        excinfo = None
+        instant = timing.Instant()
+        try:
+&gt;           result: TResult | None = func()
+                                     ^^^^^^
+
+tmp\pytest9\Lib\site-packages\_pytest\runner.py:361: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tmp\pytest9\Lib\site-packages\_pytest\runner.py:250: in &lt;lambda&gt;
+    lambda: runtest_hook(item=item, **kwds),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\pluggy\_hooks.py:512: in __call__
+    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\pluggy\_manager.py:120: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\logging.py:858: in pytest_runtest_setup
+    yield
+tmp\pytest9\Lib\site-packages\_pytest\capture.py:895: in pytest_runtest_setup
+    return (yield)
+            ^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\runner.py:170: in pytest_runtest_setup
+    item.session._setupstate.setup(item)
+tmp\pytest9\Lib\site-packages\_pytest\runner.py:536: in setup
+    col.setup()
+tmp\pytest9\Lib\site-packages\_pytest\python.py:1710: in setup
+    self._request._fillfixtures()
+tmp\pytest9\Lib\site-packages\_pytest\fixtures.py:806: in _fillfixtures
+    item.funcargs[argname] = self.getfixturevalue(argname)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\fixtures.py:630: in getfixturevalue
+    fixturedef = self._get_active_fixturedef(argname)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\fixtures.py:726: in _get_active_fixturedef
+    fixturedef.execute(request=subrequest)
+tmp\pytest9\Lib\site-packages\_pytest\fixtures.py:1232: in execute
+    result: FixtureValue = ihook.pytest_fixture_setup(
+tmp\pytest9\Lib\site-packages\pluggy\_hooks.py:512: in __call__
+    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\pluggy\_manager.py:120: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\pluggy\_callers.py:53: in run_old_style_hookwrapper
+    return result.get_result()
+           ^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\pluggy\_callers.py:38: in run_old_style_hookwrapper
+    res = yield
+          ^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\setuponly.py:36: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\fixtures.py:1328: in pytest_fixture_setup
+    result = call_fixture_func(fixturefunc, request, kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\fixtures.py:998: in call_fixture_func
+    fixture_result = next(generator)
+                     ^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\tmpdir.py:300: in tmp_path
+    path = _mk_tmp(request, tmp_path_factory)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\tmpdir.py:287: in _mk_tmp
+    return factory.mktemp(name, numbered=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\tmpdir.py:213: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+tmp\pytest9\Lib\site-packages\_pytest\pathlib.py:420: in make_numbered_dir_with_cleanup
+    raise e
+tmp\pytest9\Lib\site-packages\_pytest\pathlib.py:401: in make_numbered_dir_with_cleanup
+    p = make_numbered_dir(root, prefix, mode)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\pathlib.py:228: in make_numbered_dir
+    max_existing = max(map(parse_num, find_suffixes(root, prefix)), default=-1)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\pathlib.py:187: in extract_suffixes
+    for entry in iter:
+                 ^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('C:/Users/Tang Xufeng/AppData/Local/Temp/pytest-of-Tang Xufeng')
+prefix = 'pytest-'
+
+    def find_prefixed(root: Path, prefix: str) -&gt; Iterator[os.DirEntry[str]]:
+        """Find all elements in root that begin with the prefix, case-insensitive."""
+        l_prefix = prefix.lower()
+&gt;       for x in os.scandir(root):
+                 ^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\Tang Xufeng\\AppData\\Local\\Temp\\pytest-of-Tang Xufeng'
+
+tmp\pytest9\Lib\site-packages\_pytest\pathlib.py:175: PermissionError</error></testcase><testcase classname="tests.test_fan15_audit" name="test_unknown_b_preserves_machine_frame" time="0.004"><error message="failed on setup with &quot;PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\Tang Xufeng\\AppData\\Local\\Temp\\pytest-of-Tang Xufeng'&quot;">cls = &lt;class '_pytest.runner.CallInfo'&gt;
+func = &lt;function call_and_report.&lt;locals&gt;.&lt;lambda&gt; at 0x00000291EE3EEC00&gt;
+when = 'setup'
+reraise = (&lt;class '_pytest.outcomes.Exit'&gt;, &lt;class 'KeyboardInterrupt'&gt;)
+
+    @classmethod
+    def from_call(
+        cls,
+        func: Callable[[], TResult],
+        when: Literal["collect", "setup", "call", "teardown"],
+        reraise: type[BaseException] | tuple[type[BaseException], ...] | None = None,
+    ) -&gt; CallInfo[TResult]:
+        """Call func, wrapping the result in a CallInfo.
+    
+        :param func:
+            The function to call. Called without arguments.
+        :type func: Callable[[], _pytest.runner.TResult]
+        :param when:
+            The phase in which the function is called.
+        :param reraise:
+            Exception or exceptions that shall propagate if raised by the
+            function, instead of being wrapped in the CallInfo.
+        """
+        excinfo = None
+        instant = timing.Instant()
+        try:
+&gt;           result: TResult | None = func()
+                                     ^^^^^^
+
+tmp\pytest9\Lib\site-packages\_pytest\runner.py:361: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tmp\pytest9\Lib\site-packages\_pytest\runner.py:250: in &lt;lambda&gt;
+    lambda: runtest_hook(item=item, **kwds),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\pluggy\_hooks.py:512: in __call__
+    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\pluggy\_manager.py:120: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\logging.py:858: in pytest_runtest_setup
+    yield
+tmp\pytest9\Lib\site-packages\_pytest\capture.py:895: in pytest_runtest_setup
+    return (yield)
+            ^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\runner.py:170: in pytest_runtest_setup
+    item.session._setupstate.setup(item)
+tmp\pytest9\Lib\site-packages\_pytest\runner.py:536: in setup
+    col.setup()
+tmp\pytest9\Lib\site-packages\_pytest\python.py:1710: in setup
+    self._request._fillfixtures()
+tmp\pytest9\Lib\site-packages\_pytest\fixtures.py:806: in _fillfixtures
+    item.funcargs[argname] = self.getfixturevalue(argname)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\fixtures.py:630: in getfixturevalue
+    fixturedef = self._get_active_fixturedef(argname)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\fixtures.py:726: in _get_active_fixturedef
+    fixturedef.execute(request=subrequest)
+tmp\pytest9\Lib\site-packages\_pytest\fixtures.py:1232: in execute
+    result: FixtureValue = ihook.pytest_fixture_setup(
+tmp\pytest9\Lib\site-packages\pluggy\_hooks.py:512: in __call__
+    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\pluggy\_manager.py:120: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\pluggy\_callers.py:53: in run_old_style_hookwrapper
+    return result.get_result()
+           ^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\pluggy\_callers.py:38: in run_old_style_hookwrapper
+    res = yield
+          ^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\setuponly.py:36: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\fixtures.py:1328: in pytest_fixture_setup
+    result = call_fixture_func(fixturefunc, request, kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\fixtures.py:998: in call_fixture_func
+    fixture_result = next(generator)
+                     ^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\tmpdir.py:300: in tmp_path
+    path = _mk_tmp(request, tmp_path_factory)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\tmpdir.py:287: in _mk_tmp
+    return factory.mktemp(name, numbered=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\tmpdir.py:213: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+tmp\pytest9\Lib\site-packages\_pytest\pathlib.py:420: in make_numbered_dir_with_cleanup
+    raise e
+tmp\pytest9\Lib\site-packages\_pytest\pathlib.py:401: in make_numbered_dir_with_cleanup
+    p = make_numbered_dir(root, prefix, mode)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\pathlib.py:228: in make_numbered_dir
+    max_existing = max(map(parse_num, find_suffixes(root, prefix)), default=-1)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\pathlib.py:187: in extract_suffixes
+    for entry in iter:
+                 ^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('C:/Users/Tang Xufeng/AppData/Local/Temp/pytest-of-Tang Xufeng')
+prefix = 'pytest-'
+
+    def find_prefixed(root: Path, prefix: str) -&gt; Iterator[os.DirEntry[str]]:
+        """Find all elements in root that begin with the prefix, case-insensitive."""
+        l_prefix = prefix.lower()
+&gt;       for x in os.scandir(root):
+                 ^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\Tang Xufeng\\AppData\\Local\\Temp\\pytest-of-Tang Xufeng'
+
+tmp\pytest9\Lib\site-packages\_pytest\pathlib.py:175: PermissionError</error></testcase><testcase classname="tests.test_fan15_audit" name="test_arc_not_silently_discarded" time="0.004"><error message="failed on setup with &quot;PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\Tang Xufeng\\AppData\\Local\\Temp\\pytest-of-Tang Xufeng'&quot;">cls = &lt;class '_pytest.runner.CallInfo'&gt;
+func = &lt;function call_and_report.&lt;locals&gt;.&lt;lambda&gt; at 0x00000291EE3EE160&gt;
+when = 'setup'
+reraise = (&lt;class '_pytest.outcomes.Exit'&gt;, &lt;class 'KeyboardInterrupt'&gt;)
+
+    @classmethod
+    def from_call(
+        cls,
+        func: Callable[[], TResult],
+        when: Literal["collect", "setup", "call", "teardown"],
+        reraise: type[BaseException] | tuple[type[BaseException], ...] | None = None,
+    ) -&gt; CallInfo[TResult]:
+        """Call func, wrapping the result in a CallInfo.
+    
+        :param func:
+            The function to call. Called without arguments.
+        :type func: Callable[[], _pytest.runner.TResult]
+        :param when:
+            The phase in which the function is called.
+        :param reraise:
+            Exception or exceptions that shall propagate if raised by the
+            function, instead of being wrapped in the CallInfo.
+        """
+        excinfo = None
+        instant = timing.Instant()
+        try:
+&gt;           result: TResult | None = func()
+                                     ^^^^^^
+
+tmp\pytest9\Lib\site-packages\_pytest\runner.py:361: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tmp\pytest9\Lib\site-packages\_pytest\runner.py:250: in &lt;lambda&gt;
+    lambda: runtest_hook(item=item, **kwds),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\pluggy\_hooks.py:512: in __call__
+    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\pluggy\_manager.py:120: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\logging.py:858: in pytest_runtest_setup
+    yield
+tmp\pytest9\Lib\site-packages\_pytest\capture.py:895: in pytest_runtest_setup
+    return (yield)
+            ^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\runner.py:170: in pytest_runtest_setup
+    item.session._setupstate.setup(item)
+tmp\pytest9\Lib\site-packages\_pytest\runner.py:536: in setup
+    col.setup()
+tmp\pytest9\Lib\site-packages\_pytest\python.py:1710: in setup
+    self._request._fillfixtures()
+tmp\pytest9\Lib\site-packages\_pytest\fixtures.py:806: in _fillfixtures
+    item.funcargs[argname] = self.getfixturevalue(argname)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\fixtures.py:630: in getfixturevalue
+    fixturedef = self._get_active_fixturedef(argname)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\fixtures.py:726: in _get_active_fixturedef
+    fixturedef.execute(request=subrequest)
+tmp\pytest9\Lib\site-packages\_pytest\fixtures.py:1232: in execute
+    result: FixtureValue = ihook.pytest_fixture_setup(
+tmp\pytest9\Lib\site-packages\pluggy\_hooks.py:512: in __call__
+    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\pluggy\_manager.py:120: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\pluggy\_callers.py:53: in run_old_style_hookwrapper
+    return result.get_result()
+           ^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\pluggy\_callers.py:38: in run_old_style_hookwrapper
+    res = yield
+          ^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\setuponly.py:36: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\fixtures.py:1328: in pytest_fixture_setup
+    result = call_fixture_func(fixturefunc, request, kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\fixtures.py:998: in call_fixture_func
+    fixture_result = next(generator)
+                     ^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\tmpdir.py:300: in tmp_path
+    path = _mk_tmp(request, tmp_path_factory)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\tmpdir.py:287: in _mk_tmp
+    return factory.mktemp(name, numbered=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\tmpdir.py:213: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+tmp\pytest9\Lib\site-packages\_pytest\pathlib.py:420: in make_numbered_dir_with_cleanup
+    raise e
+tmp\pytest9\Lib\site-packages\_pytest\pathlib.py:401: in make_numbered_dir_with_cleanup
+    p = make_numbered_dir(root, prefix, mode)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\pathlib.py:228: in make_numbered_dir
+    max_existing = max(map(parse_num, find_suffixes(root, prefix)), default=-1)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tmp\pytest9\Lib\site-packages\_pytest\pathlib.py:187: in extract_suffixes
+    for entry in iter:
+                 ^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('C:/Users/Tang Xufeng/AppData/Local/Temp/pytest-of-Tang Xufeng')
+prefix = 'pytest-'
+
+    def find_prefixed(root: Path, prefix: str) -&gt; Iterator[os.DirEntry[str]]:
+        """Find all elements in root that begin with the prefix, case-insensitive."""
+        l_prefix = prefix.lower()
+&gt;       for x in os.scandir(root):
+                 ^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\Tang Xufeng\\AppData\\Local\\Temp\\pytest-of-Tang Xufeng'
+
+tmp\pytest9\Lib\site-packages\_pytest\pathlib.py:175: PermissionError</error></testcase></testsuite></testsuites>

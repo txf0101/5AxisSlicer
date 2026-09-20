@@ -1,0 +1,31 @@
+{
+  "source_hash": "3776fe6e1c384e03a7dab20e7ab8d8028210b86ec7c2ced3d3518a8011fdf21f",
+  "seconds": 6.8741932000002635,
+  "scope": "historical failed-height geometry probes only; no manufacturing qualification",
+  "records": [
+    {
+      "z_mm": 2.0,
+      "previous": "planar.section_open_contour: z_mm=2, vertex=1, degree=1",
+      "passed": false,
+      "error": "planar.section_branch_contour: z_mm=2, section=vertex=2, degree=3, common=vertex=2, degree=3"
+    },
+    {
+      "z_mm": 2.2,
+      "previous": "planar.section_endpoint_gap_exceeds_limit: z_mm=2.2, vertex=3, correction_mm=0.00641489027, limit_mm=0.001",
+      "passed": false,
+      "error": "planar.section_branch_contour: z_mm=2.2, section=vertex=2, degree=4, common=vertex=2, degree=4"
+    },
+    {
+      "z_mm": 23.4,
+      "previous": "planar.offset_kernel_failed: offset 0.6 mm failed",
+      "passed": false,
+      "error": "planar.section_branch_contour: z_mm=23.4, section=vertex=2, degree=4, common=vertex=2, degree=4"
+    },
+    {
+      "z_mm": 41.4,
+      "previous": "planar.offset_output_self_intersection: OCCT returned a crossing loop",
+      "passed": false,
+      "error": "planar.section_branch_contour: z_mm=41.4, section=vertex=1, degree=3, common=vertex=1, degree=3"
+    }
+  ]
+}

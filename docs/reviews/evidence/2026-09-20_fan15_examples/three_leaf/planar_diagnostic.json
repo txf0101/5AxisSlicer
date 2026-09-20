@@ -1,0 +1,9 @@
+{
+  "requested_layers": 500,
+  "successful_layers": 500,
+  "failures": [],
+  "deposition_segments": 25786,
+  "section_segments": 250368,
+  "scope": "full-height diagnostic alternative: no supports, no skin, no machine qualification",
+  "accepted": false
+}

@@ -215,7 +215,8 @@ def test_continuous_fk_c_unwrap_and_full_motion_collision():
 
 
 def test_continuous_rotary_exhaustion_and_motion_limits_block_export():
-    # Artificially narrow C travel forces the IK to change branches during deposition.
+    # A synthetic radial-axis path exercises the discontinuity guard independently
+    # of the axial-growth generator, which no longer turns C around a straight tube.
     profile = replace(
         _profile(),
         joints=tuple(
@@ -224,7 +225,17 @@ def test_continuous_rotary_exhaustion_and_motion_limits_block_export():
         ),
     )
     path = generate_continuous_toolpath("op", _straight(2), _parameters())
-    trajectory = solve_continuous_xyzac_trajectory(path, profile)
+    radial_path = replace(
+        path,
+        points=tuple(
+            replace(p, nozzle_axis=(-p.position[0] / 1.5, -p.position[1] / 1.5, 0.0))
+            for p in path.points
+        ),
+    )
+    axial_trajectory = solve_continuous_xyzac_trajectory(path, profile)
+    assert not axial_trajectory.has_errors
+    assert all(abs(s.joint_positions["C"]) < 1e-8 for s in axial_trajectory.samples)
+    trajectory = solve_continuous_xyzac_trajectory(radial_path, profile)
     assert any(i.code == "tube.continuous_rotary_discontinuity" for i in trajectory.issues)
     fast = replace(path, points=tuple(replace(p, feedrate_mm_min=1e8) for p in path.points))
     codes = {i.code for i in solve_continuous_xyzac_trajectory(fast, profile).issues}
@@ -235,6 +246,22 @@ def test_continuous_rotary_exhaustion_and_motion_limits_block_export():
     )
     with pytest.raises(XYZACInverseKinematicsError, match="axis_limit"):
         solve_continuous_xyzac_trajectory(shifted, profile)
+
+
+def test_bent_axial_growth_nozzle_reaches_negative_y():
+    arc = CenterlinePrimitive(
+        "arc",
+        (0, 0, 50),
+        (0, 30, 80),
+        15 * math.pi,
+        center=(0, 30, 50),
+        axis=(-1, 0, 0),
+        sweep_rad=math.pi / 2,
+    )
+    feature = TubeFeature("body", "in", "out", 2, 1, (arc,))
+    path = generate_continuous_toolpath("op", feature, _parameters())
+    assert path.points[1].nozzle_axis == pytest.approx((0, 0, -1))
+    assert path.points[-2].nozzle_axis == pytest.approx((0, -1, 0))
 
 
 def test_radial_corruption_and_wrong_trajectory_are_rejected():

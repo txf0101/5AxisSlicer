@@ -1,0 +1,12 @@
+{
+  "0.2": {
+    "paths": 16,
+    "segments": 5472,
+    "scope": "existing selected guides only, not complete solid or logo"
+  },
+  "3.0": {
+    "paths": 16,
+    "segments": 368,
+    "scope": "existing selected guides only, not complete solid or logo"
+  }
+}

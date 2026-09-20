@@ -203,6 +203,57 @@ def _prepare_region(
 def _offset_loops(
     face: cq.Face, distance_mm: float
 ) -> tuple[tuple[tuple[Vector3, ...], ...], tuple[str, str] | None]:
+    if distance_mm > 0 and face.innerWires():
+        return _offset_holed_face(face, distance_mm)
+    return _offset_simple_face(face, distance_mm)
+
+
+def _offset_holed_face(face, distance_mm):
+    """Erode the exterior and subtract expanded voids explicitly.
+
+    Offsetting all wires together can fail when opposing wavefronts meet in
+    a thin annulus. Boolean subtraction represents this genuine exhaustion.
+    Kernel failures from either individual boundary still propagate.
+    """
+    try:
+        exterior = cq.Face.makeFromWires(face.outerWire())
+        outer_loops, error = _offset_simple_face(exterior, distance_mm)
+        if error or not outer_loops:
+            return outer_loops, error
+        material = _faces_from_offset_loops(outer_loops)
+        for wire in face.innerWires():
+            hole = cq.Face.makeFromWires(_wire(_orient(_wire_loop(wire), True)))
+            expanded, error = _offset_simple_face(hole, -distance_mm)
+            if error:
+                return (), error
+            if not expanded:
+                return (), ("planar.offset_kernel_failed", "expanded void disappeared")
+            material = material.cut(_faces_from_offset_loops(expanded))
+            if not material.isValid():
+                return (), ("planar.offset_kernel_failed", "invalid eroded material face")
+        loops = tuple(_wire_loop(wire) for part in material.Faces() for wire in part.Wires())
+        if any(_self_intersects(loop) for loop in loops):
+            return (), ("planar.offset_output_self_intersection", "eroded boundary crosses itself")
+        return _normalise_output(loops), None
+    except Exception as error:
+        return (), ("planar.offset_kernel_failed", str(error))
+
+
+def _faces_from_offset_loops(loops):
+    outers = [loop for loop in loops if _area(loop) > 0]
+    holes = [loop for loop in loops if _area(loop) < 0]
+    faces = [
+        cq.Face.makeFromWires(
+            _wire(outer), [_wire(hole) for hole in holes if _contains(hole[0], outer)]
+        )
+        for outer in outers
+    ]
+    return cq.Compound.makeCompound(faces)
+
+
+def _offset_simple_face(
+    face: cq.Face, distance_mm: float
+) -> tuple[tuple[tuple[Vector3, ...], ...], tuple[str, str] | None]:
     try:
         operation = BRepOffsetAPI_MakeOffset()
         operation.Init(face.wrapped, GeomAbs_Arc, False)

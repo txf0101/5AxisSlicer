@@ -1,0 +1,32 @@
+{
+  "status": "experimental_preview_not_manufacturing_qualified",
+  "requested_last_radius_mm": 85.0,
+  "scope": "Only the requested radial range; not proof of whole-blade coverage",
+  "source_sha256": "294b882a7231d6b0fcfaf4aa8c6355422b212590f443158ea0a624fec2b901ef",
+  "coordinate_frame": "Source XYZ; cylinder axis Source Z; no display registration",
+  "root_samples": 768,
+  "unsupported_root_samples": 0,
+  "root_probe": "CAD section R17.51 projected to hub R17.49; boundary samples only",
+  "first_last_occupied_radius_mm": [
+    17.7,
+    83.3
+  ],
+  "occupied_layer_count": 329,
+  "layer_height_mm": 0.2,
+  "section_integrated_volume_mm3": 6770.874830156138,
+  "cad_blade_volume_mm3": 6773.125601048962,
+  "path_count": 26994,
+  "unresolved_narrow_layer_ids": [
+    "radius-46.700000",
+    "radius-81.500000",
+    "radius-82.100000"
+  ],
+  "not_verified": [
+    "bead-envelope coverage and overlaps",
+    "layer-to-layer support of actual deposited beads",
+    "nozzle/fixture/printed-part swept collision",
+    "safe non-extruding travel",
+    "controller trajectory and independent NC readback",
+    "physical printing"
+  ]
+}

@@ -71,8 +71,8 @@ from .indexed_tube import (
 
 ALGORITHM_VERSIONS = {
     "tube_thin_wall_indexed": "tube-indexed-product-v3",
-    "tube_buildup": "tube-buildup-product-v2",
-    "tube_continuous": "tube-continuous-product-v1",
+    "tube_buildup": "tube-buildup-product-v4",
+    "tube_continuous": "tube-continuous-product-v2",
 }
 PRODUCT_STATE_SCHEMA_VERSION = 2
 CancelCheck = Callable[[], bool]
@@ -378,7 +378,13 @@ def _generate_buildup_product(
         T_workpiece_from_build=transform,
     )
     validation = _validate_buildup(
-        plan, toolpath, trajectory, nozzle, obstacles=obstacles, check_ipw=check_ipw
+        plan,
+        toolpath,
+        trajectory,
+        nozzle,
+        obstacles=obstacles,
+        check_ipw=check_ipw,
+        cancelled=cancelled,
     )
     return _finish_product(
         model,
@@ -418,10 +424,12 @@ def _plan_buildup_sequence(
     )
     base_path = None
     if config.include_planar_base:
-        base = planar_base or _base_from_substrate(model, operation, feature)
-        base_path = generate_planar_base_toolpath(
-            f"{operation.operation_id}-planar-base", base, parameters
-        )
+        if planar_base is not None:
+            base_path = generate_planar_base_toolpath(
+                f"{operation.operation_id}-planar-base", planar_base, parameters
+            )
+        else:
+            base_path = _cad_substrate_toolpath(model, operation, feature, parameters)
     sequence = sequence_buildup_operations(
         f"{operation.operation_id}-sequence",
         tube_path,
@@ -615,36 +623,35 @@ def _indexed_result(result: IndexedProductResult) -> TubeProductResult:
     )
 
 
-def _base_from_substrate(
+def _cad_substrate_toolpath(
     model: CadModel,
     operation: TubeOperationDefinition,
     feature: TubeFeature,
-) -> PlanarBaseDefinition:
+    parameters: TubeBuildupParameters,
+) -> GeneratedToolpath:
+    from ..algorithms.planar.feature_toolpath import FeatureToolpathParameters
+    from ..algorithms.planar.substrate import generate_substrate_toolpath
+
     reference = operation.geometry.substrate_body
     if reference is None:
         raise ValueError("planar base generation requires a substrate body")
     body = model.body_map.get(reference.object_id)
     if body is None or body.bounds is None:
         raise ValueError("selected substrate body has no usable bounds")
-    minimum, maximum = body.bounds.minimum, body.bounds.maximum
-    spans = tuple(right - left for left, right in zip(minimum, maximum, strict=True))
-    axis = min(range(3), key=spans.__getitem__)
-    if spans[axis] <= 0.0:
-        raise ValueError("selected substrate body has degenerate bounds")
-    tube_start = feature.centerline[0].start[axis]
-    positive = abs(tube_start - maximum[axis]) <= abs(tube_start - minimum[axis])
-    normal = [0.0, 0.0, 0.0]
-    normal[axis] = 1.0 if positive else -1.0
-    center = [(minimum[index] + maximum[index]) * 0.5 for index in range(3)]
-    center[axis] = minimum[axis] if positive else maximum[axis]
-    cross_spans = [span for index, span in enumerate(spans) if index != axis]
-    radius = min(cross_spans) * 0.5
-    return PlanarBaseDefinition(
+    _, tangent = feature.centerline[0].point_tangent(0.0)
+    if math.dist(tangent, (0.0, 0.0, 1.0)) > 1.0e-6:
+        raise ValueError("automatic CAD substrate requires an explicit +Z build pose")
+    return generate_substrate_toolpath(
+        model,
         reference.object_id,
-        tuple(center),  # type: ignore[arg-type]
-        tuple(normal),  # type: ignore[arg-type]
-        radius,
-        spans[axis],
+        f"{operation.operation_id}-planar-base",
+        FeatureToolpathParameters(
+            bead_width_mm=parameters.bead_width_mm,
+            layer_height_mm=parameters.layer_height_mm,
+            deposition_feedrate_mm_min=parameters.deposition_feedrate_mm_min,
+            travel_feedrate_mm_min=parameters.travel_feedrate_mm_min,
+            retract_length_mm=parameters.retract_length_mm,
+        ),
     )
 
 
@@ -746,6 +753,7 @@ def _validate_buildup(
     *,
     obstacles: tuple[CollisionBox, ...],
     check_ipw: bool,
+    cancelled: CancelCheck | None = None,
 ) -> IndexedValidationReport:
     offsets = plan.pass_offsets_mm
     maximum_gap = max(
@@ -769,7 +777,14 @@ def _validate_buildup(
                 {"measured_mm": maximum_gap, "limit_mm": plan.maximum_pass_spacing_mm},
             )
         )
-    collision, checked = _collision_issues(toolpath, nozzle, obstacles, 0.25, check_ipw=check_ipw)
+    collision, checked = _collision_issues(
+        toolpath,
+        nozzle,
+        obstacles,
+        0.25,
+        check_ipw=check_ipw,
+        checkpoint=lambda: _checkpoint(cancelled),
+    )
     issues.extend(collision)
     return IndexedValidationReport(
         f"{toolpath.toolpath_id}-validation-v1",

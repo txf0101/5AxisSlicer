@@ -1,0 +1,40 @@
+{
+  "task": "FAN06-FAN07",
+  "date": "2026-09-20",
+  "status": "fan07_qualification_withdrawn",
+  "withdrawal_reason": "Fixed-A planar blade slicing does not implement cylindrical growth from the hub or continuous C motion. Historical tests and hashes below do not qualify the corrected algorithm. G2 withdrawn.",
+  "validation": {
+    "direct_tests": "45 passed in 4.24s",
+    "broad_fan_planar_freeform_tests": "244 passed in 32.05s",
+    "quality": "Ruff, migrated Ruff, security Ruff, format, context budget and mypy passed",
+    "visual_review": "combined-frame fan_fan07_toolpath_preview.png inspected at original detail; hub and blade share one assembly frame",
+    "preview_correction_tests": "4 coordinate/feature tests passed; quality gate passed",
+    "machine_qualification": "pending"
+  },
+  "known_limitations": [
+    "Blade nominal line-volume is 13.8366% above CAD volume and remains a FAN13 calibration gate.",
+    "The PNG samples generated layers for legibility; the JSON summary records complete counts.",
+    "Three-blade propagation, indexed collision, combined postprocessing and GUI acceptance start at FAN08."
+  ],
+  "sha256": {
+    "src/five_axis_slicer/algorithms/fan/program.py": "418ab831365716918bf283f3ffa6d72c8c9594aab11e5f7cbc5521b10e475491",
+    "src/five_axis_slicer/algorithms/fan/__init__.py": "4ac47df2fc67ae5032afa2cf69354872b4a780b7633e7d50fcbfe88acc73efc0",
+    "src/five_axis_slicer/algorithms/planar/feature_fill.py": "527e64d8805703e552a84d336b82f2e082679e91e94e6bbaf8d2de16521d3691",
+    "src/five_axis_slicer/algorithms/planar/feature_toolpath.py": "fccf9d4871c390ae5a74ccbf0892d16515d1c49b7318d12f914cec71321201bf",
+    "src/five_axis_slicer/algorithms/planar/support.py": "a2fc0fccffa1627b201fe1f640b4f27333b67a17b55d25d6f370f69f38944cde",
+    "src/five_axis_slicer/algorithms/planar/zigzag.py": "eb050fb88c3c9c541952afa0a4c15bbe273a93906c291f811813135f580c596f",
+    "scripts/generate_fan_fan06_fan07_evidence.py": "37f34224b30840b5e56bba9eb62caf965ce59b4d748c32f449c924578101db5a",
+    "scripts/render_fan_fan07_zoom.py": "166304830e52c330fdb7d3c16079024e0b257a93627a88a7e50eda31e2d4202d",
+    "tests/test_planar_feature_toolpath.py": "4b6aa1fc48285e7fa08c144df0b19fcd36cf84765deeb49b9bc38f3670353e03",
+    "docs/planning/progress_tracker.md": "e5cef75325913606cfd0e824087e13170c4e21011fd532a777779cedb07871a3",
+    "docs/planning/fan_complete_program_plan.md": "1eec749f94b9e559ac2fd4f3e396a34affecadffca8faf2802a88b67433e8c71",
+    "docs/reviews/2026-09-20_fan_complete_program_fan06_fan07_review.md": "31fb8ae7a4bc144f5e1ae4572ff27f961a5f77b3006990bd97280772a091dd94",
+    "docs/README.md": "6550329be961f7ff7e51695ea1253267286673aa2377b2914e99895140bd9f22",
+    "fan06_fan07_summary.json": "2dae85b1b2db0988a4487ed996ea5a3380691f069ef59b15d9856152ec11b287",
+    "fan_fan07_toolpath_preview.png": "051cc073f5ec4ea7a69061459cecf1d1f198bdc18b06a57e2715264a0f227fbb",
+    "fan_fan07_blade_zoom.png": "a0fdd7014905462d67b34e37da991b278ad7446eeb25bb0ac20ce8ef0b113c04",
+    "fan_fan07_blade_root_zoom.png": "5875466dbbad4c30748096b790e5fdec3bbcab93bec5ed7ba5e676453bf40501",
+    "pytest_fan06_fan07.xml": "b109c62ccabc7084036643c1749bfc0637cf3bec4a643de6bb492c97b5d4b670",
+    "pytest_fan06_fan07_broad.xml": "a72b19db2b4fd3aadebe99b5d2bb9e991e5aa96a24e272ca1c211b4be33939b5"
+  }
+}

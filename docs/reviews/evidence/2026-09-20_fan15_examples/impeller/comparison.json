@@ -1,0 +1,20 @@
+{
+  "case": "impeller",
+  "accepted": false,
+  "legacy_frame": "zero-centre Rz(-C)Rx(-A), registration to CAD not assumed",
+  "legacy_to_source_rz_deg": 0,
+  "new_candidate_file": "new_freeform_0.2.npz",
+  "planar_requested_layers": 352,
+  "planar_failed_layers": 29,
+  "metric_scope": "sampled endpoint proximity, not bead coverage or exact curve Hausdorff",
+  "new_to_old": {
+    "median_mm": 0.2190185660644451,
+    "p95_mm": 0.3590316518199497,
+    "max_mm": 0.5035257397597298
+  },
+  "old_to_new": {
+    "median_mm": 7.522787742428465,
+    "p95_mm": 17.29628459034729,
+    "max_mm": 21.75429896883532
+  }
+}

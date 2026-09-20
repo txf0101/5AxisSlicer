@@ -12,6 +12,7 @@ from PyQt5.QtWidgets import (
     QFileDialog,
     QFormLayout,
     QGridLayout,
+    QHBoxLayout,
     QLabel,
     QPushButton,
     QVBoxLayout,
@@ -19,6 +20,7 @@ from PyQt5.QtWidgets import (
 )
 
 from .ui_controls import OptionalDoubleSpinBox
+from .models import PickHit, PickRequest
 
 GEOMETRY_FIELDS = (
     ("tube_body_id", "tube_body"),
@@ -50,6 +52,29 @@ def _spin(low: float, high: float, value: float, decimals: int) -> OptionalDoubl
     return spin
 
 
+def _add_geometry_controls(page: Any, form: QFormLayout) -> None:
+    page._operation_geometry_combos = {}
+    page._operation_pick_buttons = {}
+    page._operation_pick_field = None
+    for key, _label_key in GEOMETRY_FIELDS:
+        combo = QComboBox()
+        combo.setObjectName(f"operation_{key}")
+        combo.currentIndexChanged.connect(lambda _index, owner=page: role_changed(owner))
+        label = QLabel()
+        setattr(page, f"operation_{key}_label", label)
+        row = QWidget()
+        row_layout = QHBoxLayout(row)
+        row_layout.setContentsMargins(0, 0, 0, 0)
+        row_layout.addWidget(combo, 1)
+        button = QPushButton()
+        button.setObjectName(f"pick_{key}")
+        button.clicked.connect(lambda _checked=False, field=key: start_pick(page, field))
+        row_layout.addWidget(button)
+        page._operation_pick_buttons[key] = button
+        form.addRow(label, row)
+        page._operation_geometry_combos[key] = combo
+
+
 def build_editor(page: Any) -> QWidget:
     editor = QWidget()
     layout = QVBoxLayout(editor)
@@ -61,15 +86,7 @@ def build_editor(page: Any) -> QWidget:
     page.operation_type_value.setObjectName("valueText")
     page.operation_type_label = QLabel()
     form.addRow(page.operation_type_label, page.operation_type_value)
-    page._operation_geometry_combos = {}
-    for key, _label_key in GEOMETRY_FIELDS:
-        combo = QComboBox()
-        combo.setObjectName(f"operation_{key}")
-        combo.currentIndexChanged.connect(lambda _index, owner=page: role_changed(owner))
-        label = QLabel()
-        setattr(page, f"operation_{key}_label", label)
-        form.addRow(label, combo)
-        page._operation_geometry_combos[key] = combo
+    _add_geometry_controls(page, form)
     page._operation_parameter_spins = {}
     for key, _label_key, low, high in PARAMETER_FIELDS:
         spin = _spin(low, high, low, 4)
@@ -152,6 +169,38 @@ def role_changed(page: Any) -> None:
     edge_ids = _selected_ids(page, ("entry_port_id", "exit_port_id"))
     if hasattr(page.viewer, "set_selection"):
         page.viewer.set_selection(body_ids=body_ids, edge_ids=edge_ids)
+
+
+def start_pick(page: Any, field: str) -> None:
+    """Select an explicit role before accepting one hit from the model viewer."""
+    combo = page._operation_geometry_combos[field]
+    allowed = frozenset(str(combo.itemData(i)) for i in range(1, combo.count()))
+    page._pick_context = None
+    page._operation_pick_field = field
+    page.set_view_mode("model")
+    page.viewer.set_pick_request(
+        PickRequest("body" if field.endswith("body_id") else "edge", allowed_ids=allowed)
+    )
+    page._operation_feedback_key = "operation_pick_pending"
+    page.operation_feedback.setText(page._t("operation_pick_pending"))
+
+
+def accept_pick(page: Any, hit: PickHit) -> bool:
+    field = page._operation_pick_field
+    if field is None:
+        return False
+    combo = page._operation_geometry_combos[field]
+    expected = "body" if field.endswith("body_id") else "edge"
+    index = combo.findData(hit.entity_id)
+    if hit.kind != expected or index < 1:
+        return True  # Ignore stale or wrong-kind hits without changing the draft.
+    combo.setCurrentIndex(index)
+    page._operation_pick_field = None
+    page.viewer.set_pick_request(PickRequest("edge", multiple=True))
+    role_changed(page)
+    page._operation_feedback_key = "operation_pick_bound"
+    page.operation_feedback.setText(page._t("operation_pick_bound"))
+    return True
 
 
 def apply(page: Any) -> None:
@@ -238,11 +287,13 @@ def export(page: Any) -> None:
 
 
 def populate_editor(page: Any, operation_id: str | None = None) -> None:
+    page._operation_pick_field = None
     if not page.controller.operations:
         return
     operation = _selected_operation(page, operation_id)
     page._selected_operation_id = operation.operation_id
     page._selected_operation_type = operation.operation_type
+    page.editor_title.setText(_operation_type_label(page, operation.operation_type))
     page.operation_type_value.setText(_operation_type_label(page, operation.operation_type))
     bodies = () if page.model is None else page.model.solid_bodies
     circular_edges = (
@@ -274,6 +325,7 @@ def retranslate(page: Any, translate: Callable[[str], str]) -> None:
     page.operation_type_label.setText(translate("operation_type"))
     for field, label_key in GEOMETRY_FIELDS:
         getattr(page, f"operation_{field}_label").setText(translate(label_key))
+        page._operation_pick_buttons[field].setText(translate("operation_pick"))
     for field, label_key, _low, _high in PARAMETER_FIELDS:
         getattr(page, f"operation_{field}_label").setText(translate(label_key))
     page.operation_maximum_pass_spacing_mm_label.setText(translate("maximum_pass_spacing"))
@@ -340,7 +392,12 @@ def _refresh_product_status(page: Any, *, preserve_message: bool = False) -> Non
     state = page.controller.product_state(page._selected_operation_id)
     status = "draft" if state is None else state.status
     if not preserve_message:
-        page.operation_generation_status.setText(page._t(f"generation_{status}"))
+        message = page._t(f"generation_{status}")
+        if state is not None and status == "error" and state.result_payload:
+            detail = state.result_payload.get("error")
+            if detail:
+                message += "\n" + str(detail)
+        page.operation_generation_status.setText(message)
     page.operation_preview_button.setEnabled(status in {"ready", "warning"})
     page.operation_export_button.setEnabled(status in {"ready", "warning"})
     page.operation_generate_button.setEnabled(

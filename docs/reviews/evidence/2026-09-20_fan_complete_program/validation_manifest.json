@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-20",
+  "scope": ["FAN01", "FAN02", "FAN03", "FAN04", "FAN05"],
+  "source_head_before_work": "ec41f80e551f9c56ed7da2c78f1624b13b3188f7",
+  "qualification": "historical_numeric_evidence_fan04_process_qualification_withdrawn",
+  "withdrawal_reason": "FAN04 indexed planar domains are not the intended hub-based radial growth strategy; historical numerical tests remain traceable but do not qualify FAN07.",
+  "machine_ready": false,
+  "real_input_sha256": {
+    "example/扇叶/风扇扇叶(1).STEP": "294b882a7231d6b0fcfaf4aa8c6355422b212590f443158ea0a624fec2b901ef",
+    "example/扇叶/风扇扇叶完整新.gcode": "1de2cef4dbdb995e6d34bf0e143db166b3dcff3364339763f70a8536c9d6651e",
+    "example/扇叶/风扇扇叶_本软件五轴_PLA_20260920.gcode": "dfd6a68ec843cfce2888cb598e27ffd7e5efd6ada108739cb8194d8ea9edad3c"
+  },
+  "implementation_sha256": {
+    "src/five_axis_slicer/manufacturing/fan_job.py": "38b5909d57b4806b18d9069198ccaf189a46e969ba1395c003647c4c9eea1d87",
+    "src/five_axis_slicer/algorithms/freeform/layer_domain.py": "df71856cd94d12637fc92343f09c92fd45127a92ef25f4e0054c20e68a374f0e",
+    "src/five_axis_slicer/algorithms/planar/feature_fill.py": "bb9a3d29bc5d66ae6a70e8f96b149fb3c0674d0eca122270c0cdd877fa7bfa26",
+    "scripts/audit_fan_fan01_fan05.py": "4e92f456c931e7d852bb32f2a21411c297fb8d228cf6ff4ab9bff3ab9321ecf4"
+  },
+  "evidence_sha256": {
+    "fan_contract_v1.json": "ed574352cab7098f09c07515048970b6d7230af5ead147471d1ba1c81d6d8021",
+    "fan_job_v1.json": "370f054f4331803e0a4b25b3aba3d7f04bf194c0de382ef541333fe469edc54a",
+    "fan_independent_baseline.json": "9695cea7adf5dde0369393842c580d12eef0cd29a7848f717e71aa70504fd8ab",
+    "fan_blade_a90_layer_domain.json": "1d2d94ec808409e59318f9743e42376b2445dd786f809997e52272cd38e85ada",
+    "pytest_fan01_fan05_final_retry.xml": "e610de43dbeab575b68a015770014d36dbadddb8a1ee5f1efcd30a1bf887f153",
+    "pytest_fan01_fan05_postquality.xml": "e5759ceb33064c01a534218705ece6c86b8b94cd31289adb224e81c29cfa45f3"
+  },
+  "validation": {
+    "domain_regression": "248 passed in 31.43s",
+    "final_direct_regression": "20 passed in 3.51s",
+    "quality": "passed: Ruff, migrated Ruff, security Ruff, format, context budget, mypy 165 source files",
+    "first_domain_attempt": "222 passed, 26 setup errors caused by WinError 5 at the system pytest temp root",
+    "retry_change": "used repository-local --basetemp; no product-code change for this retry"
+  },
+  "known_limits": [
+    "no complete base or blade deposition toolpath yet",
+    "no combined XYZAC G-code yet",
+    "no GUI or computer-use acceptance yet",
+    "no measured nozzle envelope, machine zero, controller macro version, collision qualification, or physical print"
+  ]
+}

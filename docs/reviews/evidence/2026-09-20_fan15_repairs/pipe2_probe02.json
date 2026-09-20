@@ -1,0 +1,19 @@
+{
+  "source_hash": "116e99fd43492bd1f4f519c80c93cd1f7cd0bf2cb6861b3e123148e4031a0d4b",
+  "seconds": 5.159717699999419,
+  "scope": "historical failed-height geometry probes only; no manufacturing qualification",
+  "records": [
+    {
+      "z_mm": 29.0,
+      "previous": "planar.offset_kernel_failed: offset 0.6 mm failed",
+      "passed": true,
+      "regions": 1
+    },
+    {
+      "z_mm": 31.0,
+      "previous": "planar.offset_output_self_intersection: OCCT returned a crossing loop",
+      "passed": true,
+      "regions": 1
+    }
+  ]
+}

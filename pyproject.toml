@@ -166,6 +166,8 @@ complexity = 15
 "rotary_operation_service.py" = { function_lines = 148, complexity = 55 }
 "rotary_ui.py" = { module_lines = 1048, class_lines = 806, function_lines = 118 }
 "tube_controller.py" = { module_lines = 1184, class_lines = 962 }
-"tube_ui.py" = { module_lines = 1651, class_lines = 1372 }
+# Four integration lines route operation picks and clear stale pick state;
+# implementation remains in tube_operation_ui rather than growing this shell.
+"tube_ui.py" = { module_lines = 1655, class_lines = 1376 }
 "ui.py" = { module_lines = 2806, class_lines = 2695, function_lines = 148 }
 "viewer.py" = { module_lines = 1150, class_lines = 1006, function_lines = 88, complexity = 16 }

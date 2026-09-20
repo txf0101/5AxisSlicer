@@ -1,0 +1,56 @@
+{
+  "source": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\叶轮\\叶轮完整.gcode",
+  "sha256": "5b33b1fa3569f2027e7628c0b7211e125267fc73b25e88e6b774cb1de338fe33",
+  "lines": 1021062,
+  "positive_e_segments": 1005400,
+  "commands": {
+    "M73": 168,
+    "PRINT_START": 1,
+    "G90": 17,
+    "G21": 9,
+    "M83": 9,
+    "M106": 10,
+    "G92": 220,
+    "G1": 1016026,
+    "SET_VELOCITY_LIMIT": 42,
+    "M140": 1,
+    "G0": 8,
+    "PRINT_END": 1
+  },
+  "types": {
+    "BRIM": 3384,
+    "INNER WALL": 56694,
+    "OUTER WALL": 28680,
+    "BOTTOM SURFACE": 576,
+    "INTERNAL SOLID INFILL": 24207,
+    "SPARSE INFILL": 13327,
+    "INTERNAL BRIDGE": 3051,
+    "TOP SURFACE": 875481
+  },
+  "bounds": [
+    [
+      -57.635,
+      -57.633,
+      0.2
+    ],
+    [
+      57.635,
+      57.633,
+      49.90920167720499
+    ]
+  ],
+  "positive_e_mm": 11922.774498,
+  "length_mm": 380878.21563263395,
+  "ac_bounds": [
+    [
+      0.0,
+      -344.1
+    ],
+    [
+      90.0,
+      135.56
+    ]
+  ],
+  "frame": "zero-centre Rz(-C)Rx(-A), registration to CAD not assumed",
+  "boundary": "G0/G1 positive-E only; positive E is not automatically valid deposition"
+}
