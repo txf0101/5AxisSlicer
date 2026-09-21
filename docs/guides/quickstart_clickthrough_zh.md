@@ -69,7 +69,7 @@
 
 ![Freeform 有限导引面/边模式与路径](assets/paper_core_ac/01_freeform_zh_1366x768.png)
 
-此图由 Qt 证据绘制器呈现导引线模式，不是新增实体模式的 GUI 截图。实体模式中校徽与叶轮已完成真实 GUI 生成及导出；三叶扇和 Tube 的整套界面验收仍在进行。导引模式见[Freeform 手册](freeform_workbench_zh.md)，实体生长选择与验证边界见[完整实体方法](fan15_solid_fill_method_notes.md)。
+此图由 Qt 证据绘制器呈现导引线模式，不是新增实体模式的 GUI 截图。三种实体模式各有真实 GUI 生成与六件套导出记录，百万点操作仍有界面响应问题；Tube 的整套界面验收仍在进行。导引模式见[Freeform 手册](freeform_workbench_zh.md)，实体生长选择与验证边界见[完整实体方法](fan15_solid_fill_method_notes.md)。
 
 ## 6. 查看已有 G-code
 

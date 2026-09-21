@@ -48,4 +48,4 @@
 - 真实叶轮项目经原生 Open Project 对话框加载，Freeform `Surface Solid Fill` 保存的 8 片叶片 body/面/根边角色和 `body_001` 基体在界面中恢复。点击 Generate 后产生 Warning 状态，再从 Export bundle 对话框导出六件套到 `tmp/fan15-ui-impeller-export/`。清单为 681718 点、16343 个事件，严格回读同数通过；`machine_executable=false`。预览包含 673526 段挤出、8191 段空移，不能仅凭红色密线断定局部路径正确。该目录为本机临时验证，不纳入 Git。
 - 现行 GUI 在长时叶轮生成期间曾被 Windows 标记未响应。公共 AC 求解、后处理和回读增加协作检查点，使下一次运行可泵送 Qt 事件并响应取消；单元反例证明输出与无检查点版本相同、取消异常可传播。此时运行中的旧窗口尚未重启，新检查点的真实 GUI 响应性待重新验证。
 - 公共 Tube 产品接入材料配置给出的温控参数，包装后恢复原运动文本再严格回读。入口测试和 Tube 控制器测试均通过；泛用 PLA 资源为 200/60 ℃，论文案例配置的 195/45 ℃不能混为一谈。弯管真实界面流程、IPW 诊断和 FP03 跨工作台持久化作业仍未关闭。
-- 三叶扇真实项目已用 Open Project 加载，界面恢复 hub/body/root face/轴角色；后续 Generate 和 Export 结果继续在本复盘登记。FP05 仍不关闭。
+- 三叶扇真实项目经 Open Project 加载，界面恢复 hub/body/root face/轴角色；点击 Generate 后为 Warning，原生 Export bundle 对话框输出 `tmp/fan15-ui-three-leaf-export/` 六件套。清单为 1034535 点、124988 事件，严格回读同数通过，`machine_executable=false`。旧进程生成时长约 29 分钟且 Windows 判无响应；应在加载新代码的进程复测取消/事件泵。FP05 还缺弯管真实全流程、完整交互拾取和各窗口/语言矩阵，仍不关闭。
