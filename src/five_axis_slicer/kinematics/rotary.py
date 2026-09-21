@@ -16,7 +16,7 @@ from collections.abc import Mapping
 
 from ..manufacturing.coordinates import RigidTransform
 from ..manufacturing.machine import MachineProfile
-from ..manufacturing.setup import IssueSeverity, ValidationIssue
+from ..manufacturing.setup import ValidationIssue
 from ..manufacturing.toolpath import GeneratedToolpath
 from ..models import Vector3
 from .xyzac import (
@@ -25,6 +25,7 @@ from .xyzac import (
     XYZACInverseKinematicsError,
     _fk_reconstruct,
     _motion_limit_issues,
+    _singularity_issues,
     _solve_linear,
     _solve_rotary,
     _transform_toolpath_point,
@@ -63,8 +64,7 @@ def solve_prescribed_rotary_trajectory(
     extra = set(prescribed_angles_rad) - point_ids
     if missing or extra:
         raise ValueError(
-            "rotary.prescribed_phase_mismatch: "
-            f"missing={sorted(missing)}, extra={sorted(extra)}"
+            f"rotary.prescribed_phase_mismatch: missing={sorted(missing)}, extra={sorted(extra)}"
         )
     angles = {key: float(value) for key, value in prescribed_angles_rad.items()}
     if any(not math.isfinite(value) for value in angles.values()):
@@ -86,11 +86,7 @@ def solve_prescribed_rotary_trajectory(
         target = _transform_toolpath_point(point, T_workpiece_from_build)
         phase = angles[point.point_id]
         preferred_c = None
-        if (
-            phase_to_c_sign is not None
-            and phase_reference is not None
-            and c_reference is not None
-        ):
+        if phase_to_c_sign is not None and phase_reference is not None and c_reference is not None:
             preferred_c = c_reference + phase_to_c_sign * (phase - phase_reference)
         rotary, singular = _solve_rotary(
             target,
@@ -149,15 +145,6 @@ def solve_prescribed_rotary_trajectory(
                 point.point_id,
                 f"{position_error}, {angular_error}",
             )
-        if singular:
-            issues.append(
-                ValidationIssue(
-                    "xyzac.rotary_singularity",
-                    IssueSeverity.WARNING,
-                    point.point_id,
-                    {"retained_c_rad": positions["C"], "workpiece_phase_rad": phase},
-                )
-            )
         samples.append(
             MachineAxisSample(
                 point.point_id,
@@ -173,6 +160,7 @@ def solve_prescribed_rotary_trajectory(
         previous_point = point
         previous_angle = phase
 
+    issues.extend(_singularity_issues(samples))
     issues.extend(_motion_limit_issues(samples, profile))
     return MachineAxisTrajectory(
         f"{toolpath.toolpath_id}-rotary-xyzac-v1",

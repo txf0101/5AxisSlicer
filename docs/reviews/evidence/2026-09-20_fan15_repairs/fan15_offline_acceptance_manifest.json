@@ -1,0 +1,61 @@
+{
+  "acceptance": "passed_offline",
+  "date": "2026-09-21",
+  "scope": "FAN15 four-example complete offline NC generation, strict full-stream readback, independent inverse verification, and actual NC path visualization",
+  "excluded_qualifications": [
+    "IPW collision qualification is deferred by user and is not passed",
+    "real machine calibration, controller macros, dynamics, trial printing, and production release are not qualified",
+    "Computer Use selection-to-slice replay was blocked by nodeRepl.fetch request failed and is not passed"
+  ],
+  "examples": {
+    "pipe": {
+      "nc_path": "example/pipe2/弯管_新算法_离线检查_20260921_v5.gcode",
+      "nc_bytes": 30856982,
+      "nc_sha256": "C851ED34C0B3E49232D9E81E61B450E1A3A6ADDF274B286A1599B185BC6E4525",
+      "point_count": 208232,
+      "readback_count": 208232,
+      "report_path": "docs/reviews/evidence/2026-09-20_fan15_repairs/pipe_offline_nc_v5_20260921/delivery.json",
+      "report_sha256": "BDDFDB6761FFBC2F5A41DC4713D4CA51A425B98C0BAC086C3CDAFFCDBD6651A9",
+      "preview_path": "docs/reviews/evidence/2026-09-20_fan15_repairs/pipe_offline_nc_v5_20260921/nc_comparison.png",
+      "preview_sha256": "C8F11F1151F356EA8A9189A841C92DF8F7FC522C423BE3B73902C05A8DA8BB8A"
+    },
+    "spherical_neu_logo": {
+      "nc_path": "example/球形NEU校徽/球形NEU校徽_新算法_离线检查_20260921.gcode",
+      "nc_bytes": 12755315,
+      "nc_sha256": "ACC037C46A8D8CE7B84F71CF4FDB35D8E9CF935C052AFDC93E8C469D4A400EF8",
+      "point_count": 76098,
+      "readback_count": 76098,
+      "report_path": "docs/reviews/evidence/2026-09-20_fan15_repairs/logo_offline_nc_20260921/report.json",
+      "report_sha256": "E236C90EEE0AF84F7D1AF7DD1CFFAC5B7A36A20A7F842C9C909097E41BC4F325",
+      "preview_path": "docs/reviews/evidence/2026-09-20_fan15_repairs/logo_offline_nc_20260921/nc_comparison.png",
+      "preview_sha256": "CE848F636757867A6DF5C9137F404A1A7AB2BDF94022817C1E91F6E269DC6EFD"
+    },
+    "impeller": {
+      "nc_path": "example/叶轮/叶轮_新算法_离线检查_20260921.gcode",
+      "nc_bytes": 104983005,
+      "nc_sha256": "3F2D49DCD90319B184A9C07D9B349D2CC48DDA623F34DCB4D1BF12EC369AE95C",
+      "point_count": 681718,
+      "readback_count": 681718,
+      "report_path": "docs/reviews/evidence/2026-09-20_fan15_repairs/impeller_offline_nc_20260921/report.json",
+      "report_sha256": "788865D50F084064A21BF511746EDB3B7D364CC7B4347E6A4A9E69FCCDD44F6E",
+      "preview_path": "docs/reviews/evidence/2026-09-20_fan15_repairs/impeller_offline_nc_20260921/nc_comparison.png",
+      "preview_sha256": "5D298EE01C485B48F0463BF23F8FDB3B4FADFAD25429C00A7A924C985FA44A69"
+    },
+    "three_leaf_fan": {
+      "nc_path": "example/三叶扇/三叶扇_新算法_离线检查_20260921.gcode",
+      "nc_bytes": 170021543,
+      "nc_sha256": "3F095AC4F7CD549ABC72CE4205B5073670C06E0614E3CB5C469E5D3128491B58",
+      "point_count": 1034535,
+      "readback_count": 1034535,
+      "report_path": "docs/reviews/evidence/2026-09-20_fan15_repairs/three_leaf_offline_nc_20260921/report.json",
+      "report_sha256": "627245B398D7AF8C276E186403CD55513764F55FBA9BF26A39F16E73BC813075",
+      "preview_path": "docs/reviews/evidence/2026-09-20_fan15_repairs/three_leaf_offline_nc_20260921/nc_comparison.png",
+      "preview_sha256": "1969AC5428C0672DB4A07F6083FF7DE14E792F0E2BD958B50D29325C086B2DD1"
+    }
+  },
+  "regression": {
+    "result": "222 passed, 28 subtests passed",
+    "junit_path": "docs/reviews/evidence/2026-09-20_fan15_repairs/fan15_final_regression.xml",
+    "junit_sha256": "C36B292C227E969A4D4D499E51F1262F2B97FEA9C99A55337AB99148C9E8F8A1"
+  }
+}

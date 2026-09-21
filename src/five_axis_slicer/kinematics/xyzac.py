@@ -9,6 +9,7 @@ accepted sample and includes both the configured rotary centres and tool length.
 from __future__ import annotations
 
 from dataclasses import dataclass, field, replace
+from collections.abc import Callable
 import math
 from types import MappingProxyType
 from typing import Any, Mapping
@@ -106,6 +107,7 @@ def solve_xyzac_trajectory(
     tool_length_mm: float = 0.0,
     fixed_machine_nozzle_axis: Vector3 = (0.0, 0.0, -1.0),
     T_workpiece_from_build: RigidTransform | None = None,
+    checkpoint: Callable[[], None] | None = None,
 ) -> MachineAxisTrajectory:
     """Solve XYZAC samples and report motion-limit violations."""
 
@@ -114,30 +116,22 @@ def solve_xyzac_trajectory(
     samples: list[MachineAxisSample] = []
     issues: list[ValidationIssue] = []
     previous: Mapping[str, float] | None = None
+    workpiece_cache: dict[tuple[float, float], RigidTransform] = {}
     elapsed = 0.0
-    for point in toolpath.points:
+    for point_index, point in enumerate(toolpath.points):
+        _trajectory_checkpoint(checkpoint, point_index)
         target = _transform_toolpath_point(point, T_workpiece_from_build)
         rotary, singular = _solve_rotary(target, axes["A"], axes["C"], fixed_axis, previous)
-        positions, contact = _solve_linear(target, profile, rotary, fixed_axis, tool_length_mm)
+        positions, contact = _solve_linear(
+            target, profile, rotary, fixed_axis, tool_length_mm, workpiece_cache
+        )
         if previous is not None:
             elapsed += _requested_duration(point, positions, previous)
         reconstructed, angular_error = _fk_reconstruct(
             target, profile, positions, fixed_axis, tool_length_mm
         )
         position_error = math.dist(reconstructed, target.position)
-        if position_error > _POSITION_TOLERANCE_MM or angular_error > _ORIENTATION_TOLERANCE_RAD:
-            raise XYZACInverseKinematicsError(
-                "xyzac.fk_round_trip_failed", point.point_id, f"{position_error}, {angular_error}"
-            )
-        if singular:
-            issues.append(
-                ValidationIssue(
-                    "xyzac.rotary_singularity",
-                    IssueSeverity.WARNING,
-                    point.point_id,
-                    {"retained_c_rad": positions["C"]},
-                )
-            )
+        _require_fk_round_trip(point.point_id, position_error, angular_error)
         samples.append(
             MachineAxisSample(
                 point.point_id,
@@ -150,6 +144,7 @@ def solve_xyzac_trajectory(
             )
         )
         previous = positions
+    issues.extend(_singularity_issues(samples))
     issues.extend(_motion_limit_issues(samples, profile))
     return MachineAxisTrajectory(
         f"{toolpath.toolpath_id}-xyzac-v1",
@@ -159,6 +154,48 @@ def solve_xyzac_trajectory(
         tuple(issues),
         float(tool_length_mm),
     )
+
+
+def _trajectory_checkpoint(checkpoint: Callable[[], None] | None, point_index: int) -> None:
+    if checkpoint is not None and point_index % 64 == 0:
+        checkpoint()
+
+
+def _singularity_issues(samples) -> tuple[ValidationIssue, ...]:
+    """Summarise contiguous singular spans instead of emitting one issue per point."""
+
+    result = []
+    start = None
+    for index in range(len(samples) + 1):
+        singular = index < len(samples) and samples[index].singular
+        if singular and start is None:
+            start = index
+        if not singular and start is not None:
+            group = samples[start:index]
+            retained = [sample.joint_positions["C"] for sample in group]
+            result.append(
+                ValidationIssue(
+                    "xyzac.rotary_singularity",
+                    IssueSeverity.WARNING,
+                    group[0].source_point_id,
+                    {
+                        "point_count": len(group),
+                        "first_point_id": group[0].source_point_id,
+                        "last_point_id": group[-1].source_point_id,
+                        "retained_c_min_rad": min(retained),
+                        "retained_c_max_rad": max(retained),
+                    },
+                )
+            )
+            start = None
+    return tuple(result)
+
+
+def _require_fk_round_trip(point_id: str, position_error: float, angular_error: float) -> None:
+    if position_error > _POSITION_TOLERANCE_MM or angular_error > _ORIENTATION_TOLERANCE_RAD:
+        raise XYZACInverseKinematicsError(
+            "xyzac.fk_round_trip_failed", point_id, f"{position_error}, {angular_error}"
+        )
 
 
 def _transform_toolpath_point(
@@ -229,9 +266,7 @@ def _solve_rotary(
         raise XYZACInverseKinematicsError("xyzac.orientation_unreachable", point.point_id)
     seed_a = 0.0 if previous is None else previous["A"]
     seed_c = (
-        (0.0 if previous is None else previous["C"])
-        if preferred_c is None
-        else float(preferred_c)
+        (0.0 if previous is None else previous["C"]) if preferred_c is None else float(preferred_c)
     )
     a_value, c_value = min(
         feasible,
@@ -246,9 +281,12 @@ def _solve_linear(
     rotary: Mapping[str, float],
     fixed_axis: Vector3,
     tool_length_mm: float,
+    workpiece_cache: dict[tuple[float, float], RigidTransform] | None = None,
 ) -> tuple[dict[str, float], Vector3]:
     assert profile.workpiece_link_id is not None
-    transform = profile.link_transform(profile.workpiece_link_id, rotary)
+    transform = _cached_workpiece_transform(
+        profile, rotary, {} if workpiece_cache is None else workpiece_cache
+    )
     contact = transform.transform_point(point.position)
     mount = _subtract(contact, _scale(fixed_axis, float(tool_length_mm)))
     positions = {"X": mount[0], "Y": mount[1], "Z": mount[2], **rotary}
@@ -259,6 +297,15 @@ def _solve_linear(
         except ValueError as exc:
             raise XYZACInverseKinematicsError("xyzac.axis_limit", point.point_id, name) from exc
     return positions, contact
+
+
+def _cached_workpiece_transform(profile, rotary, cache):
+    key = (rotary["A"], rotary["C"])
+    if key not in cache:
+        if len(cache) >= 64:
+            cache.clear()
+        cache[key] = profile.link_transform(profile.workpiece_link_id, rotary)
+    return cache[key]
 
 
 def _fk_reconstruct(
@@ -328,9 +375,7 @@ def _motion_limit_issues(
                 value = speed / duration if boundary == "start" else -speed / duration
                 limit = profile.joint_map[name].max_acceleration
                 if limit is not None and abs(value) > limit + 1.0e-9:
-                    issue = _limit_issue(
-                        "acceleration", name, sample_index, value, limit
-                    )
+                    issue = _limit_issue("acceleration", name, sample_index, value, limit)
                     issues.append(
                         replace(
                             issue,

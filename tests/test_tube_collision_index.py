@@ -53,11 +53,13 @@ def test_capsule_candidates_include_every_exact_hit():
     for point in queries:
         for before in (0, 2, len(segments) - 2, len(segments)):
             candidates = index.candidates(point, before=before)
+            near = index.near_candidates(point, 0.6, before=before)
             assert candidates == sorted(set(candidates))
             assert all(value < before for value in candidates)
             for ordinal, (start, end, radius) in enumerate(segments[:before]):
                 if _point_segment_distance(point, start, end) <= radius + 0.6:
                     assert ordinal in candidates
+                    assert ordinal in near
     assert len(index.candidates((100.0, 100.0, 100.0), before=len(segments))) < 5
     assert index.large == [0]
 
@@ -87,3 +89,58 @@ def test_full_report_matches_brute_force_including_first_hit_order(monkeypatch):
     brute = validate_indexed_tube(*arguments)
     assert indexed.to_json() == brute.to_json()
     assert indexed.has_errors  # The known IPW collision must not disappear.
+    fast, checked = _collision_issues(
+        fixture.toolpath, fixture.nozzle, (), 0.25, check_ipw=True, stop_on_collision=True
+    )
+    assert fast
+    assert checked < indexed.collision_samples_checked
+    assert fast[0] in indexed.issues
+    incomplete = replace(indexed, issues=(), collision_check_complete=False)
+    assert incomplete.has_errors
+    assert not incomplete.ready_for_export
+
+
+def test_trajectory_checkpoint_preserves_fk_and_cancels():
+    from five_axis_slicer.kinematics.xyzac import solve_xyzac_trajectory
+    from five_axis_slicer.manufacturing.own_printer import own_ac_profile
+
+    fixture = pipeline.IndexedValidationTests()
+    fixture.setUp()
+    machine = own_ac_profile()
+    expected = solve_xyzac_trajectory(fixture.toolpath, machine)
+    calls = []
+    actual = solve_xyzac_trajectory(fixture.toolpath, machine, checkpoint=lambda: calls.append(1))
+    assert actual == expected
+    assert calls
+
+    def stop():
+        raise RuntimeError("cancel requested")
+
+    with pytest.raises(RuntimeError, match="cancel requested"):
+        solve_xyzac_trajectory(fixture.toolpath, machine, checkpoint=stop)
+
+
+def test_buildup_geometry_checkpoint_preserves_path_and_cancels():
+    from five_axis_slicer.algorithms.tube.buildup import (
+        TubeBuildupParameters,
+        plan_tube_buildup,
+        generate_tube_buildup_toolpath,
+    )
+
+    fixture = pipeline.IndexedValidationTests()
+    fixture.setUp()
+    parameters = TubeBuildupParameters(
+        bead_width_mm=0.5, layer_height_mm=0.5, maximum_pass_spacing_mm=0.5
+    )
+    plan = plan_tube_buildup(fixture.feature, parameters)
+    args = ("checkpoint", fixture.feature, plan, parameters)
+    expected = generate_tube_buildup_toolpath(*args)
+    calls = []
+    assert generate_tube_buildup_toolpath(*args, checkpoint=lambda: calls.append(1)) == expected
+    assert len(calls) == len(plan.layers)
+
+    def stop():
+        raise RuntimeError("cancel requested")
+
+    with pytest.raises(RuntimeError, match="cancel requested"):
+        generate_tube_buildup_toolpath(*args, checkpoint=stop)

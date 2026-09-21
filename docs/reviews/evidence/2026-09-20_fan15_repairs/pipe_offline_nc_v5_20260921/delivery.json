@@ -1,0 +1,35 @@
+{
+  "qualification": "offline_diagnostic_only",
+  "ipw_collision": "deferred_by_user",
+  "physical_machine_qualified": false,
+  "readback": {
+    "schema_version": 1,
+    "passed": true,
+    "expected_points": 208232,
+    "read_points": 208232,
+    "coordinate_mismatches": [],
+    "feedrate_mismatches": [],
+    "extrusion_mismatches": [],
+    "order_mismatches": []
+  },
+  "nc_generated": true,
+  "output": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\pipe2\\弯管_新算法_离线检查_20260921_v5.gcode",
+  "sha256": "c851ed34c0b3e49232d9e81e61b450e1a3a6addf274b286a1599b185bc6e4525",
+  "motion_sha256": "12eb4caede08a90805a82f116bc03ece946a43efbf190cc7d1a8fbf158ac46ba",
+  "thermal_wrapper_checked": true,
+  "thermal_motion_unchanged": true,
+  "pla_nozzle_c": 195,
+  "pla_bed_c": 45,
+  "thermal_source": "bundled own_ac_fdm.json process_reference (paper extraction)",
+  "independent_inverse_max_error_mm": 1.3119881838093983e-06,
+  "points": 208232,
+  "deposition_segments": 201882,
+  "travel_segments": 6349,
+  "still_pending": [
+    "IPW collision",
+    "physical machine calibration",
+    "axis dynamic limits",
+    "local bead support/coverage",
+    "native GUI full product export"
+  ]
+}

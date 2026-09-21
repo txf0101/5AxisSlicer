@@ -71,7 +71,7 @@ from .indexed_tube import (
 
 ALGORITHM_VERSIONS = {
     "tube_thin_wall_indexed": "tube-indexed-product-v3",
-    "tube_buildup": "tube-buildup-product-v4",
+    "tube_buildup": "tube-buildup-product-v5",
     "tube_continuous": "tube-continuous-product-v2",
 }
 PRODUCT_STATE_SCHEMA_VERSION = 2
@@ -367,7 +367,7 @@ def _generate_buildup_product(
     if not isinstance(config, TubeBuildupOperationConfig):
         raise TypeError("tube_buildup requires TubeBuildupOperationConfig")
     parameters, plan, sequence = _plan_buildup_sequence(
-        model, operation, feature, config, planar_base
+        model, operation, feature, config, planar_base, checkpoint=lambda: _checkpoint(cancelled)
     )
     toolpath = _merge_buildup_sequence(operation.operation_id, sequence, parameters)
     _checkpoint(cancelled)
@@ -376,6 +376,7 @@ def _generate_buildup_product(
         machine,
         tool_length_mm=nozzle.length_mm or 0.0,
         T_workpiece_from_build=transform,
+        checkpoint=lambda: _checkpoint(cancelled),
     )
     validation = _validate_buildup(
         plan,
@@ -409,6 +410,7 @@ def _plan_buildup_sequence(
     feature: TubeFeature,
     config: TubeBuildupOperationConfig,
     planar_base: PlanarBaseDefinition | None,
+    checkpoint: Callable[[], None] | None = None,
 ) -> tuple[TubeBuildupParameters, TubeBuildupPlan, TubeBuildupSequence]:
     parameters = TubeBuildupParameters(
         **operation.parameters.to_json(),
@@ -421,6 +423,7 @@ def _plan_buildup_sequence(
         plan,
         parameters,
         model=model if feature.tube_body_id in model.shapes else None,
+        checkpoint=checkpoint,
     )
     base_path = None
     if config.include_planar_base:
@@ -784,6 +787,7 @@ def _validate_buildup(
         0.25,
         check_ipw=check_ipw,
         checkpoint=lambda: _checkpoint(cancelled),
+        stop_on_collision=True,
     )
     issues.extend(collision)
     return IndexedValidationReport(
@@ -794,6 +798,7 @@ def _validate_buildup(
         (metric,),
         checked,
         0.25,
+        collision_check_complete=not collision,
     )
 
 

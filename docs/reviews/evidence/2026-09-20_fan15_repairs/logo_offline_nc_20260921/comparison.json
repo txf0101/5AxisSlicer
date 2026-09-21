@@ -1,0 +1,22 @@
+{
+  "old_complete_positive_e_segments": 143535,
+  "old_custom_logo_segments": 38917,
+  "new_complete_deposition_segments": 65105,
+  "new_feature_segments": 7702,
+  "new_feature_skin_segments": 3978,
+  "new_feature_infill_segments": 3724,
+  "legacy_registration": "Rz(180 deg), documented by the existing MATLAB overlay",
+  "endpoint_proximity_scope": "sampled endpoints only; fill strategy and radial thickness differ",
+  "old_logo_to_new_logo_mm": {
+    "median": 0.30576626125146616,
+    "p95": 1.1419893974289188,
+    "maximum": 4.194155370266435
+  },
+  "new_logo_to_old_logo_mm": {
+    "median": 0.2560707371738651,
+    "p95": 4.555550632923456,
+    "maximum": 8.712464129015522
+  },
+  "accepted_scope": "offline NC geometry and complete-stream readback",
+  "physical_machine_qualified": false
+}

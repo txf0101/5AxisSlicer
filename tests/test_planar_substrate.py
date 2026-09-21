@@ -44,6 +44,32 @@ def test_missing_substrate_cad_is_rejected(tmp_path):
         generate_substrate_toolpath(model, "missing", "base", FeatureToolpathParameters())
 
 
+def test_hemisphere_apex_has_a_real_final_slab(tmp_path):
+    import math
+
+    solid = (
+        cq.Workplane("XY")
+        .sphere(4)
+        .intersect(cq.Workplane("XY").box(10, 10, 4, centered=(True, True, False)))
+    )
+    source = tmp_path / "hemisphere.step"
+    cq.exporters.export(solid, str(source))
+    model = load_step(source)
+    path = generate_substrate_toolpath(
+        model, model.bodies[0].body_id, "sphere-base", FeatureToolpathParameters()
+    )
+    deposits = [p for p in path.points if p.point_type == "deposition"]
+    top = max(p.position[2] for p in deposits)
+    assert top == pytest.approx(4, abs=1e-6)
+    cap = [p for p in deposits if abs(p.position[2] - top) < 1e-7]
+    assert cap and sum(p.material_volume_mm3 for p in cap) > 0
+    height = cap[0].layer_height_mm
+    # Independent spherical section at the middle of the last slab.
+    radius = math.sqrt(16 - (4 - height / 2) ** 2)
+    assert max(math.hypot(*p.position[:2]) for p in cap) <= radius - 0.2 + 0.005
+    assert min(p.position[2] for p in deposits) == pytest.approx(height, abs=1e-6)
+
+
 @pytest.mark.parametrize("direction", [(0, 0, 1), (1, 0, 0)])
 def test_product_substrate_uses_cad_and_rejects_unestablished_pose(tmp_path, direction):
     source = tmp_path / "product-base.step"

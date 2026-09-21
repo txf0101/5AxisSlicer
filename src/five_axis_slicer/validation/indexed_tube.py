@@ -12,6 +12,7 @@ from dataclasses import dataclass
 from collections.abc import Callable
 from itertools import product
 import math
+import numpy as np
 from typing import Any
 
 from ..algorithms.tube.geometry import TubeFeature
@@ -64,10 +65,13 @@ class IndexedValidationReport:
     metrics: tuple[ValidationMetric, ...]
     collision_samples_checked: int
     motion_sample_error_mm: float
+    collision_check_complete: bool = True
 
     @property
     def has_errors(self) -> bool:
-        return any(issue.severity is IssueSeverity.ERROR for issue in self.issues)
+        return not self.collision_check_complete or any(
+            issue.severity is IssueSeverity.ERROR for issue in self.issues
+        )
 
     @property
     def status(self) -> GeneratedResultStatus:
@@ -93,6 +97,7 @@ class IndexedValidationReport:
             "metrics": [metric.to_json() for metric in self.metrics],
             "collision_samples_checked": self.collision_samples_checked,
             "motion_sample_error_mm": self.motion_sample_error_mm,
+            "collision_check_complete": self.collision_check_complete,
         }
 
 
@@ -251,6 +256,7 @@ def _collision_issues(
     *,
     check_ipw: bool,
     checkpoint: Callable[[], None] | None = None,
+    stop_on_collision: bool = False,
 ) -> tuple[list[ValidationIssue], int]:
     issues: list[ValidationIssue] = []
     checked = 0
@@ -284,12 +290,22 @@ def _collision_issues(
                         issues.append(
                             _collision_issue("ipw", right.point_id, source_id, segment_index)
                         )
-        if right.point_type == "deposition":
-            radius = max(right.bead_width_mm or 0.0, right.layer_height_mm or 0.0) * 0.5
-            if check_ipw:
-                index.add(len(deposited), left.position, right.position, radius)
-            deposited.append((left.position, right.position, radius, right.point_id))
+        if _stop_after_collision(stop_on_collision, issues):
+            return issues, checked
+        _record_deposition(left, right, deposited, index, check_ipw)
     return issues, checked
+
+
+def _stop_after_collision(enabled: bool, issues: list[ValidationIssue]) -> bool:
+    return enabled and bool(issues)
+
+
+def _record_deposition(left, right, deposited, index, check_ipw):
+    if right.point_type == "deposition":
+        radius = max(right.bead_width_mm or 0.0, right.layer_height_mm or 0.0) * 0.5
+        if check_ipw:
+            index.add(len(deposited), left.position, right.position, radius)
+        deposited.append((left.position, right.position, radius, right.point_id))
 
 
 def _collision_checkpoint(checkpoint: Callable[[], None] | None, segment_index: int) -> None:
@@ -303,7 +319,7 @@ def _first_ipw_hit(
     deposited: list[tuple[Vector3, Vector3, float, str]],
     index: _DepositedSegmentIndex,
 ) -> str | None:
-    for candidate in index.candidates(center, before=len(deposited) - 2):
+    for candidate in index.near_candidates(center, radius, before=len(deposited) - 2):
         start, end, bead_radius, source_id = deposited[candidate]
         if _point_segment_distance(center, start, end) <= radius + bead_radius:
             return source_id
@@ -318,8 +334,10 @@ class _DepositedSegmentIndex:
         self.cell_size = max(1.0, 2 * maximum_nozzle_radius)
         self.cells: dict[tuple[int, int, int], list[int]] = {}
         self.large: list[int] = []
+        self.bounds = np.empty((256, 13), dtype=float)
 
     def add(self, index: int, start: Vector3, end: Vector3, bead_radius: float) -> None:
+        self._store_bounds(index, start, end, bead_radius)
         # Expand by the largest query sphere, so a query needs only its own cell.
         padding = bead_radius + self.maximum_nozzle_radius + 1e-9
         ranges = [
@@ -340,6 +358,43 @@ class _DepositedSegmentIndex:
         key = tuple(math.floor(value / self.cell_size) for value in center)
         cell = self.cells.get((key[0], key[1], key[2]), ())
         return sorted(index for index in (*cell, *self.large) if index < before)
+
+    def _store_bounds(self, index: int, start: Vector3, end: Vector3, radius: float) -> None:
+        if index >= len(self.bounds):
+            grown = np.empty((max(index + 1, len(self.bounds) * 2), 13), dtype=float)
+            grown[: len(self.bounds)] = self.bounds
+            self.bounds = grown
+        self.bounds[index] = (
+            *np.minimum(start, end),
+            *np.maximum(start, end),
+            radius,
+            *start,
+            *end,
+        )
+
+    def near_candidates(self, center: Vector3, radius: float, *, before: int) -> list[int]:
+        candidates = self.candidates(center, before=before)
+        if not candidates:
+            return []
+        bounds = self.bounds[candidates]
+        padding = (bounds[:, 6] + radius + 1.0e-9)[:, None]
+        inside = np.all(
+            (center >= bounds[:, :3] - padding) & (center <= bounds[:, 3:6] + padding), axis=1
+        )
+        selected = np.asarray(candidates)[inside]
+        bounds = bounds[inside]
+        span = bounds[:, 10:13] - bounds[:, 7:10]
+        length_sq = np.sum(span * span, axis=1)
+        fraction = np.divide(
+            np.sum((center - bounds[:, 7:10]) * span, axis=1),
+            length_sq,
+            out=np.zeros(len(bounds)),
+            where=length_sq > 1.0e-18,
+        )
+        closest = bounds[:, 7:10] + np.clip(fraction, 0, 1)[:, None] * span
+        distance = np.linalg.norm(center - closest, axis=1)
+        # Pad the vectorized rejection; final hits still use the original scalar predicate.
+        return selected[distance <= bounds[:, 6] + radius + 1.0e-9].tolist()
 
 
 def _motion_samples(

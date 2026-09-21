@@ -38,6 +38,9 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 
 | 日期 | 任务 | Skill | 本轮用途 | 证据 |
 | --- | --- | --- | --- | --- |
+| 2026-09-21 | FAN15-R02/R06 长任务 | `five-axis-workbench-development`、`five-axis-slicer-validation` | 分阶段定位、逆解缓存/取消、碰撞批量筛选与失败早退；实际 208232 点重切返回底座首圈碰撞，完整图已查，未放行 NC | [修复过程](../reviews/2026-09-20_fan15_repairs.md) |
+| 2026-09-21 | FAN15-R02/R06 离线 NC | `five-axis-workbench-development`、`five-axis-slicer-validation` | 按用户要求暂缓 IPW，弯管完整重切与 208232 点回读通过，温控包装/篡改回归 62 项通过，新旧 NC 图及 OFFLINE 文件已保存；其余三例和制造资格仍未完成 | [修复过程](../reviews/2026-09-20_fan15_repairs.md) |
+| 2026-09-21 | FAN15-R03—R06 四例离线闭环 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`skill-creator`、`computer-use` | 校徽 76098、叶轮 681718、三叶扇 1034535 点完整 AC NC 及严格回读通过；与弯管合计四例完成真实 NC 路径图；222 passed/28 subtests，Ruff/Mypy 通过；新经验写入 Skill。Computer Use 重置后仍无法读取应用清单，本轮真实点击复验受阻 | [修复过程](../reviews/2026-09-20_fan15_repairs.md) |
 | 2026-09-21 | FAN15-R06 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`computer-use` | 原生文件加载、四角色鼠标拾取、内圆失败与外圆重试；修复拾取入口/失败详情，长生成响应继续排查 | [修复过程](../reviews/2026-09-20_fan15_repairs.md) |
 | 2026-09-21 | FAN15-R03 | `five-axis-workbench-development`、`five-axis-slicer-validation` | 完整球面实体截交、孔与度量，37 实体/111 截层恢复；仅层域，待有限道宽及 NC | [修复过程](../reviews/2026-09-20_fan15_repairs.md) |
 | 2026-09-21 | FAN15-R02 | `five-axis-workbench-development`、`five-axis-slicer-validation` | 自动底座从包围盒圆盘替换为共享 CAD 截层/填充；带孔矩形反例和产品入口验证；四例仍未完成整件验收 | [修复过程](../reviews/2026-09-20_fan15_repairs.md) |
@@ -117,7 +120,7 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 | FAN12 | 电脑真实用户点击验收 | FAN11 | 未开始 | UI01—UI12、双语三尺寸、GUI生成文件hash | [任务设计与边界](fan_complete_program_plan.md)；尚无实施证据 | FAN13 | 2026-09-20 |
 | FAN13 | 独立全件与长程序回归 | FAN10,FAN12 | 未开始 | 覆盖/材料/姿态/收敛、新旧对照和百万级负载 | [任务设计与边界](fan_complete_program_plan.md)；尚无实施证据 | FAN14 | 2026-09-20 |
 | FAN14 | 完整扇叶交付与封装 | FAN13 | 未开始 | 总NC、项目、产品和索引、报告手册及相关回归 | [任务设计与边界](fan_complete_program_plan.md)；尚无实施证据 | FAN15 | 2026-09-20 |
-| FAN15 | 其他示例逐件迁移 | FAN14 | 进行中 | 叶轮/管件/半球/三叶扇逐例子项和判据 | [四例审查](../reviews/2026-09-20_fan15_example_acceptance.md)；按[修复计划](fan15_repair_execution.md)连续实施，[修复过程](../reviews/2026-09-20_fan15_repairs.md)保留测试与电脑操作失败 | 公共失败高度复测→弯管完整壁/底座→校徽→叶轮→三叶扇；保留FAN14依赖 | 2026-09-20 |
+| FAN15 | 其他示例逐件迁移 | FAN14 | 四例离线 NC 已验收；桌面复验受阻 | 叶轮/管件/半球/三叶扇逐例子项和判据 | [四例审查](../reviews/2026-09-20_fan15_example_acceptance.md)；[修复计划](fan15_repair_execution.md)；[修复过程](../reviews/2026-09-20_fan15_repairs.md)。四例模型旁 OFFLINE NC、严格回读、独立逆变换和对比图均通过；IPW 暂缓，实机未资格化；Computer Use `nodeRepl.fetch request failed` | Computer Use 恢复后补真实选边→切片复验；实机/碰撞与 FAN11—FAN14 仍单列 | 2026-09-21 |
 | AUD-01 | 跨工作台独立审查与修改方案 | 当前工作区与项目示例 | 已完成 | 文档/实现核对、真实模型、独立反例、证据和待实施方案齐全 | [审查报告](../reviews/2026-09-12_project_algorithm_audit.md)；[修改方案](2026-09-12_algorithm_audit_fix_plan.md)；本轮未修改产品代码 | 用户确认方案后实施；P07 并行工作保留 | 2026-09-12 |
 | AUD-02 | 跨工作台缺陷修复与重新验证 | AUD-01 | 已完成 | 原始反例拒绝、正确解析/真实模型通过、旧资格失效、全仓与图文证据齐全 | [修改方案](2026-09-12_algorithm_audit_fix_plan.md)；[本轮证据](../reviews/evidence/2026-09-12_audit_fixes/) | [修复复盘](../reviews/2026-09-12_algorithm_audit_fixes.md)；窄壁实心、自适应道宽、联合调度和实机资格保留 | 2026-09-12 |
 | AUD-02-TUBE | Tube 原缺陷复核与本轮发现修复 | AUD-02、用户本轮授权 | 已完成 | 原坐标/Stale/碰撞漏接/弦高/NC反例；末层体积与固定姿态；真实pipe2当前生成/碰撞/回读；失败与回归归档 | [同一复盘](../reviews/2026-09-12_algorithm_audit_fixes.md)；839 passed、3 skipped、141 subtests，质量通过；pipe2 15479/15479回读，六件套ZIP逐文件核验 | T04/T07恢复受限离线资格；T08/T12保留实际界面与整阶段门，实机未验证 | 2026-09-13 |

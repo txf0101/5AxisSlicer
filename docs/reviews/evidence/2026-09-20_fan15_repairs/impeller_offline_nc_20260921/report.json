@@ -1,0 +1,130 @@
+{
+  "status": "offline_nc_readback_passed",
+  "physical_machine_qualified": false,
+  "source": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\叶轮\\叶轮.stp",
+  "source_sha256": "3776fe6e1c384e03a7dab20e7ab8d8028210b86ec7c2ced3d3518a8011fdf21f",
+  "old_gcode": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\叶轮\\叶轮完整.gcode",
+  "old_gcode_sha256": "5b33b1fa3569f2027e7628c0b7211e125267fc73b25e88e6b774cb1de338fe33",
+  "output": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\叶轮\\叶轮_新算法_离线检查_20260921.gcode",
+  "output_sha256": "3f2d49dcd90319b184a9c07d9b349d2cc48dda623f34dcb4d1bf12ec369ae95c",
+  "machine_profile": "builtin.machine.own_ac_fdm.v1",
+  "machine_reference_only": true,
+  "controller_rotary_words": {
+    "A": "A",
+    "C": "C"
+  },
+  "blade_body_count": 8,
+  "base_points": 68198,
+  "feature_points": 613440,
+  "combined_points": 681718,
+  "deposition_segment_roles": {
+    "skin": 313000,
+    "infill": 360526
+  },
+  "fill_audit": {
+    "body_count": 8,
+    "depth_layer_count": 5,
+    "paths_per_body_layer": [
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52,
+      52
+    ],
+    "maximum_cross_path_spacing_mm": 0.39396305096039086,
+    "maximum_segment_length_mm": 0.1986895734716881,
+    "thickness_min_mm": 0.9966115106047468,
+    "thickness_max_mm": 1.0000109443617007,
+    "material_volume_mm3": 9511.551852107525,
+    "cad_volume_mm3": 8958.104342201144,
+    "relative_volume_error": 0.0617817664055462,
+    "root_edge_max_gap_mm": 0.00911697071440918
+  },
+  "readback": {
+    "schema_version": 1,
+    "passed": true,
+    "expected_points": 681718,
+    "read_points": 681718,
+    "coordinate_mismatches": [],
+    "feedrate_mismatches": [],
+    "extrusion_mismatches": [],
+    "order_mismatches": []
+  },
+  "independent_inverse_max_error_mm": 1.1555288778414311e-06,
+  "fk_position_max_error_mm": 3.552991223715482e-14,
+  "fk_orientation_max_error_rad": 2.1073424255447017e-08,
+  "trajectory_issues": [
+    {
+      "code": "xyzac.rotary_singularity",
+      "severity": "warning",
+      "object_id": "op01-point-0000001",
+      "context": {
+        "point_count": 68199,
+        "first_point_id": "op01-point-0000001",
+        "last_point_id": "transition-02-depart",
+        "retained_c_min_rad": 0.0,
+        "retained_c_max_rad": 0.0
+      }
+    }
+  ],
+  "thermal": {
+    "material": "PLA",
+    "nozzle_c": 195,
+    "bed_c": 45
+  },
+  "timings_s": {
+    "load_step": 0.4009768999967491,
+    "surface_solid_fill": 17.74634700000024,
+    "xyzac_inverse_kinematics": 697.6653952000052,
+    "postprocess_and_readback": 122.92248019999533
+  },
+  "acceptance": {
+    "all_8_blades_have_5_depth_layers": true,
+    "all_layers_start_at_supported_root": true,
+    "maximum_cross_path_spacing_le_0_4_mm": true,
+    "maximum_segment_length_le_0_2_mm": true,
+    "finite_width_volume_error_le_10_percent": true,
+    "strict_complete_stream_readback": true,
+    "independent_inverse_le_0_0001_mm": true
+  },
+  "deferred": [
+    "IPW collision qualification (user-deferred)",
+    "physical axis calibration and dynamic limits",
+    "controller-specific homing/probing/tool macros"
+  ]
+}

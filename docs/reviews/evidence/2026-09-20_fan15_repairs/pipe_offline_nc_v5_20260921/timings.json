@@ -1,0 +1,30 @@
+[
+  {
+    "stage": "generate_tube_buildup_toolpath",
+    "seconds": 37.17774750000535
+  },
+  {
+    "stage": "_cad_substrate_toolpath",
+    "seconds": 0.5309926999980235
+  },
+  {
+    "stage": "_plan_buildup_sequence",
+    "seconds": 37.75117179999506
+  },
+  {
+    "stage": "_merge_buildup_sequence",
+    "seconds": 3.7687103999996907
+  },
+  {
+    "stage": "solve_xyzac_trajectory",
+    "seconds": 120.2502822000024
+  },
+  {
+    "stage": "_validate_buildup",
+    "seconds": 13.642046200002369
+  },
+  {
+    "stage": "_finish_product",
+    "seconds": 20.580920000000333
+  }
+]

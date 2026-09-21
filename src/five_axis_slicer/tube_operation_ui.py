@@ -394,7 +394,7 @@ def _refresh_product_status(page: Any, *, preserve_message: bool = False) -> Non
     if not preserve_message:
         message = page._t(f"generation_{status}")
         if state is not None and status == "error" and state.result_payload:
-            detail = state.result_payload.get("error")
+            detail = _product_error_detail(state.result_payload)
             if detail:
                 message += "\n" + str(detail)
         page.operation_generation_status.setText(message)
@@ -404,6 +404,22 @@ def _refresh_product_status(page: Any, *, preserve_message: bool = False) -> Non
         page.model is not None and page.controller.setup_ready and not page.controller.has_drafts
     )
     page.operation_cancel_button.setEnabled(status == "running")
+
+
+def _product_error_detail(payload: Any) -> str:
+    if payload.get("error"):
+        return str(payload["error"])
+    validation = payload.get("validation", {})
+    details = list(
+        dict.fromkeys(
+            f"{item.get('code', '')}: {item.get('object_id', '')}"
+            for item in validation.get("issues", ())
+            if item.get("severity") == "error"
+        )
+    )[:3]
+    if validation.get("collision_check_complete") is False:
+        details.append("collision_check_complete=False")
+    return "\n".join(details)
 
 
 def _set_generation_busy(page: Any, busy: bool) -> None:

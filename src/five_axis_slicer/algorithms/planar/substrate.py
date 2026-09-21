@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+from dataclasses import replace
 
 from ...manufacturing.toolpath import GeneratedToolpath
 from ...models import CadModel
@@ -21,7 +22,10 @@ def generate_substrate_toolpath(
 
     This entry point assumes the caller has established the +Z build pose.
     Equal thickness layers fit the entire height without overextruding a short
-    final layer. Actual CAD sections retain holes and non-circular outlines.
+    final layer. Each slab is sectioned at its midpoint; the nozzle is placed
+    at the slab top. This avoids a degenerate zero-area section at a sphere
+    apex without skipping its final material slab. This remains a stepped
+    planar approximation, not an exact curved-surface finish.
     """
     from OCP.Bnd import Bnd_Box
     from OCP.BRepBndLib import BRepBndLib
@@ -40,8 +44,8 @@ def generate_substrate_toolpath(
     layers = slice_planar_layers(
         model,
         (body_id,),
-        first_layer_z_mm=lower + step,
-        last_layer_z_mm=upper,
+        first_layer_z_mm=lower + step / 2,
+        last_layer_z_mm=upper - step / 2,
         layer_height_mm=step,
         sample_segments=128,
     )
@@ -50,8 +54,15 @@ def generate_substrate_toolpath(
     filled = plan_feature_fill(
         layers, FeatureFillParameters(bead_width_mm=parameters.bead_width_mm)
     )
-    from dataclasses import replace
-
-    return generate_feature_toolpath(
+    path = generate_feature_toolpath(
         operation_id, filled, replace(parameters, layer_height_mm=step), stage_prefix="base"
+    )
+    return replace(
+        path,
+        points=tuple(
+            replace(
+                point, position=(point.position[0], point.position[1], point.position[2] + step / 2)
+            )
+            for point in path.points
+        ),
     )

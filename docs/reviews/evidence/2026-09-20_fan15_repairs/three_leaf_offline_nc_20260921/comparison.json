@@ -1,0 +1,22 @@
+{
+  "old_positive_e_segments": 728260,
+  "old_coordinate_interpretation": "Y tilt, positive A/B, Z offset -1.5 mm; hypothesis only",
+  "new_complete_deposition_segments": 972039,
+  "new_feature_segments": 961397,
+  "new_feature_skin_segments": 507677,
+  "new_feature_infill_segments": 453720,
+  "new_blade1_root_segments": 35390,
+  "endpoint_proximity_scope": "sampled endpoints; legacy axis mapping remains a hypothesis",
+  "old_to_new_mm": {
+    "median": 0.4685391660814374,
+    "p95": 0.7959229182691049,
+    "maximum": 12.649128242708507
+  },
+  "new_to_old_mm": {
+    "median": 0.8236045753105873,
+    "p95": 1.8337170076820501,
+    "maximum": 7.3184223736291
+  },
+  "accepted_scope": "new offline AC NC geometry and complete-stream readback",
+  "physical_machine_qualified": false
+}

@@ -1,0 +1,128 @@
+{
+  "status": "offline_nc_readback_passed",
+  "physical_machine_qualified": false,
+  "source": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\三叶扇\\Supportless_sample.stp",
+  "source_sha256": "291155b64dace255937bbcddb496da4f11f8319a2fe6b9d32aa29a340686befc",
+  "old_gcode": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\三叶扇\\EXAMPLE.gcode",
+  "old_gcode_sha256": "5c0fe0d52bb512d3f6c31447751a1724724933d26641ed165d27cb564afeb820",
+  "legacy_axis_interpretation_evidence": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\docs\\reviews\\evidence\\2026-09-20_fan15_repairs\\three_leaf_axis_hypotheses.json",
+  "legacy_axis_warning": "Old B was analyzed as a Y-tilt hypothesis; it was not renamed to C.",
+  "output": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\三叶扇\\三叶扇_新算法_离线检查_20260921.gcode",
+  "output_sha256": "3f095ac4f7cd549abc72ce4205b5073670c06e0614e3cb5c469e5d3128491b58",
+  "machine_profile": "builtin.machine.own_ac_fdm.v1",
+  "machine_reference_only": true,
+  "controller_rotary_words": {
+    "A": "A",
+    "C": "C"
+  },
+  "blade_body_count": 3,
+  "base_points": 19280,
+  "feature_points": 1015249,
+  "combined_points": 1034535,
+  "deposition_segment_roles": {
+    "skin": 511244,
+    "infill": 460795
+  },
+  "fill_audit": {
+    "body_count": 3,
+    "layer_counts": [
+      254,
+      254,
+      254
+    ],
+    "occupied_layer_counts": [
+      252,
+      252,
+      252
+    ],
+    "bridge_layer_counts": [
+      2,
+      2,
+      2
+    ],
+    "paths_per_body": [
+      17951,
+      17951,
+      17950
+    ],
+    "supported_first_radii_mm": [
+      9.699530100061782,
+      9.699530100061786,
+      9.699530100061784
+    ],
+    "cad_root_section_radii_mm": [
+      10.009827112390884,
+      10.009827112390887,
+      10.009827112390886
+    ],
+    "cad_outer_radii_mm": [
+      60.033662621732915,
+      60.033662621732915,
+      60.033662621732915
+    ],
+    "maximum_radial_spacing_mm": 0.2,
+    "maximum_segment_length_mm": 0.3999955952309904,
+    "first_layer_hub_gap_max_mm": 0.20000164792500488,
+    "material_volume_mm3": 25102.276538269194,
+    "section_integral_volume_mm3": 24040.095552725747,
+    "cad_volume_mm3": 24000.005266139102,
+    "relative_material_volume_error": 0.04592795959446118,
+    "relative_section_volume_error": 0.0016704282412473822
+  },
+  "readback": {
+    "schema_version": 1,
+    "passed": true,
+    "expected_points": 1034535,
+    "read_points": 1034535,
+    "coordinate_mismatches": [],
+    "feedrate_mismatches": [],
+    "extrusion_mismatches": [],
+    "order_mismatches": []
+  },
+  "independent_inverse_max_error_mm": 8.41935140467906e-07,
+  "fk_position_max_error_mm": 3.6230712748823524e-14,
+  "fk_orientation_max_error_rad": 1.4901161193847656e-08,
+  "trajectory_issues": [
+    {
+      "code": "xyzac.rotary_singularity",
+      "severity": "warning",
+      "object_id": "op01-point-0000001",
+      "context": {
+        "point_count": 19281,
+        "first_point_id": "op01-point-0000001",
+        "last_point_id": "transition-02-depart",
+        "retained_c_min_rad": 0.0,
+        "retained_c_max_rad": 0.0
+      }
+    }
+  ],
+  "thermal": {
+    "material": "PLA",
+    "nozzle_c": 195,
+    "bed_c": 45
+  },
+  "timings_s": {
+    "load_step": 0.11032580000028247,
+    "radial_solid_fill": 311.60914290000073,
+    "xyzac_inverse_kinematics": 939.2399287000007,
+    "postprocess_and_readback": 174.58834599999682
+  },
+  "acceptance": {
+    "all_3_blades_generated": true,
+    "each_blade_has_explicit_hub_bond_layers": true,
+    "first_layer_finite_width_touches_hub": true,
+    "maximum_radial_spacing_le_0_2_mm": true,
+    "maximum_segment_length_le_0_4_mm": true,
+    "finite_width_volume_error_le_10_percent": true,
+    "section_integral_volume_error_le_2_percent": true,
+    "strict_complete_stream_readback": true,
+    "independent_inverse_le_0_0001_mm": true,
+    "new_output_uses_target_AC_words": true
+  },
+  "deferred": [
+    "IPW collision qualification (user-deferred)",
+    "physical axis calibration and dynamic limits",
+    "controller-specific homing/probing/tool macros",
+    "legacy B-axis machine calibration; old B was not copied or renamed"
+  ]
+}

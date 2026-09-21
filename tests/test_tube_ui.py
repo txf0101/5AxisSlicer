@@ -347,6 +347,28 @@ class TubeUiTests(unittest.TestCase):
             tube_operation_ui._refresh_product_status(page)
         self.assertIn(error, page.operation_generation_status.text())
         self.assertFalse(page.operation_export_button.isEnabled())
+        state = TubeProductState(
+            operation.operation_id,
+            "0" * 64,
+            "error",
+            {
+                "validation": {
+                    "collision_check_complete": False,
+                    "issues": [
+                        {
+                            "code": "tube.nozzle_ipw_collision",
+                            "severity": "error",
+                            "object_id": "p3",
+                        }
+                    ],
+                }
+            },
+        )
+        with mock.patch.object(page.controller, "product_state", return_value=state):
+            tube_operation_ui._refresh_product_status(page)
+        self.assertIn("tube.nozzle_ipw_collision", page.operation_generation_status.text())
+        self.assertIn("collision_check_complete=False", page.operation_generation_status.text())
+        self.assertFalse(page.operation_export_button.isEnabled())
 
     def test_operation_viewer_picks_bind_draft_and_reject_invalid_hits(self) -> None:
         window = self._loaded_tube_window()

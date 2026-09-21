@@ -1,0 +1,16 @@
+{
+  "qualification": "offline_diagnostic_only",
+  "ipw_collision": "deferred_by_user",
+  "physical_machine_qualified": false,
+  "readback": {
+    "schema_version": 1,
+    "passed": true,
+    "expected_points": 208232,
+    "read_points": 208232,
+    "coordinate_mismatches": [],
+    "feedrate_mismatches": [],
+    "extrusion_mismatches": [],
+    "order_mismatches": []
+  },
+  "nc_generated": true
+}

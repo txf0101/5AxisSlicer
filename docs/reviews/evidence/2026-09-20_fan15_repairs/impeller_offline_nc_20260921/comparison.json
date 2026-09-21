@@ -1,0 +1,22 @@
+{
+  "old_complete_positive_e_segments": 1005400,
+  "new_complete_deposition_segments": 673526,
+  "blade_region_definition": "segment midpoint Z > 5 mm and XY radius > 17 mm",
+  "old_blade_region_segments": 840742,
+  "new_blade_region_segments": 573711,
+  "new_blade_skin_segments": 248264,
+  "new_blade_infill_segments": 325447,
+  "endpoint_proximity_scope": "sampled endpoints only; old and new bead/layer strategies differ",
+  "old_blade_to_new_blade_mm": {
+    "median": 0.2804927469005094,
+    "p95": 0.4908575188272596,
+    "maximum": 2.7629092368864767
+  },
+  "new_blade_to_old_blade_mm": {
+    "median": 0.3163974122350587,
+    "p95": 0.4983080614476685,
+    "maximum": 2.0211418370977814
+  },
+  "accepted_scope": "offline NC geometry and complete-stream readback",
+  "physical_machine_qualified": false
+}

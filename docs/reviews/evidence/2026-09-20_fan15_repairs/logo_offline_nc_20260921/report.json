@@ -1,0 +1,90 @@
+{
+  "status": "offline_nc_readback_passed",
+  "physical_machine_qualified": false,
+  "source": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\球形NEU校徽\\球形测试件.STEP",
+  "source_sha256": "0812eebe0c43c57b0e280a981d4c1521889a26e85d1ec567cbf97d22aeac64c0",
+  "old_gcode": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\球形NEU校徽\\NEU校徽划线.gcode",
+  "old_gcode_sha256": "7fc667f26ebe31d0b93b3bda3dd7faabd08c4d73de6d502f189190ebcfb92218",
+  "output": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\球形NEU校徽\\球形NEU校徽_新算法_离线检查_20260921.gcode",
+  "output_sha256": "acc037c46a8d8ce7b84f71cf4fdb35d8e9cf935c052afdc93e8c469d4a400ef8",
+  "machine_profile": "builtin.machine.own_ac_fdm.v1",
+  "machine_reference_only": true,
+  "controller_rotary_words": {
+    "A": "A",
+    "C": "C"
+  },
+  "feature_body_count": 37,
+  "base_points": 65564,
+  "feature_points": 10532,
+  "combined_points": 76098,
+  "deposition_segment_roles": {
+    "skin": 55402,
+    "infill": 9703
+  },
+  "fill_audit": {
+    "layer_count": 3,
+    "body_count": 37,
+    "bodies_per_layer": [
+      37,
+      37,
+      37
+    ],
+    "maximum_cross_path_spacing_mm": 0.39965483612607605,
+    "material_volume_mm3": 737.5221092826308,
+    "cad_volume_mm3": 792.8026325524355,
+    "relative_volume_error": 0.0697279764218599,
+    "first_layer_root_gap_mm": -7.105427357601002e-15,
+    "raster_only_region_count": 105
+  },
+  "readback": {
+    "schema_version": 1,
+    "passed": true,
+    "expected_points": 76098,
+    "read_points": 76098,
+    "coordinate_mismatches": [],
+    "feedrate_mismatches": [],
+    "extrusion_mismatches": [],
+    "order_mismatches": []
+  },
+  "independent_inverse_max_error_mm": 8.564147319672393e-07,
+  "fk_position_max_error_mm": 2.398081733190338e-14,
+  "fk_orientation_max_error_rad": 1.4901161193847656e-08,
+  "trajectory_issues": [
+    {
+      "code": "xyzac.rotary_singularity",
+      "severity": "warning",
+      "object_id": "op01-point-0000001",
+      "context": {
+        "point_count": 65565,
+        "first_point_id": "op01-point-0000001",
+        "last_point_id": "transition-02-depart",
+        "retained_c_min_rad": 0.0,
+        "retained_c_max_rad": 0.0
+      }
+    }
+  ],
+  "thermal": {
+    "material": "PLA",
+    "nozzle_c": 195,
+    "bed_c": 45
+  },
+  "timings_s": {
+    "load_step": 3.8883854000014253,
+    "spherical_solid_fill": 50.19036359999882,
+    "xyzac_inverse_kinematics": 46.72382909999578,
+    "postprocess_and_readback": 12.43447539999761
+  },
+  "acceptance": {
+    "all_37_feature_bodies_present_in_all_3_layers": true,
+    "maximum_cross_path_spacing_le_0_4_mm": true,
+    "first_feature_layer_touches_radius_40_substrate": true,
+    "finite_width_volume_error_le_10_percent": true,
+    "strict_complete_stream_readback": true,
+    "independent_inverse_le_0_0001_mm": true
+  },
+  "deferred": [
+    "IPW collision qualification (user-deferred)",
+    "physical axis calibration and dynamic limits",
+    "controller-specific homing/probing/tool macros"
+  ]
+}

@@ -10,6 +10,7 @@ with explicit safe transition events.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from collections.abc import Callable
 import math
 from typing import Literal
 
@@ -221,12 +222,15 @@ def generate_tube_buildup_toolpath(
     parameters: TubeBuildupParameters,
     *,
     model: CadModel | None = None,
+    checkpoint: Callable[[], None] | None = None,
 ) -> GeneratedToolpath:
     """Generate closed contours for every planned axial layer and radial pass."""
 
     _validate_generation_inputs(operation_id, feature, plan, parameters)
     builder = _BuildupPathBuilder(operation_id, parameters)
     for layer_index, layer in enumerate(plan.layers):
+        if checkpoint is not None:
+            checkpoint()
         midwall = _midwall_loop(feature, layer, parameters, model)
         ordered_passes = layer.passes if layer_index % 2 == 0 else tuple(reversed(layer.passes))
         for radial_pass in ordered_passes:
