@@ -16,6 +16,11 @@
 *.tif binary
 *.tiff binary
 
+# Large FAN15 example programs and reproducible toolpaths are stored in Git LFS.
+example/**/*.gcode filter=lfs diff=lfs merge=lfs -text
+docs/reviews/evidence/2026-09-20_fan15_repairs/**/toolpath.json.gz filter=lfs diff=lfs merge=lfs -text
+docs/reviews/evidence/2026-09-20_fan15_repairs/**/nc_readback_paths.npz filter=lfs diff=lfs merge=lfs -text
+
 # Generated/frozen evidence preserves tool output verbatim, including traceback spacing.
 docs/reviews/evidence/** -whitespace
 docs/references/own_ac_printer/manuscript_text.txt -whitespace

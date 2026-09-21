@@ -2,6 +2,9 @@
 
 ## 六个工作台算法开发
 
+- [FAN15 四例交付复盘](reviews/2026-09-21_fan15_github_delivery_review.md)：模型、新旧代码、可重绘中间文件的收口范围，以及离线与实机资格边界。
+- [FAN15 四例文件索引](../example/README.md)：下载模型、新旧 G-code、对比图和 Git LFS 路径数据。
+
 - [FAN15 修复执行计划](planning/fan15_repair_execution.md)：公共层域、四例逐项修复、选边操作测试与完整程序验收；继续工作时回读。
 
 - [FAN15 四示例切片与旧程序对照](reviews/2026-09-20_fan15_example_acceptance.md)：弯管、球形校徽、三叶扇、叶轮逐例生成和失败记录，完整诊断图及未通过验收的原因。
