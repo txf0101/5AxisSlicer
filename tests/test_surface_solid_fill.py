@@ -31,7 +31,11 @@ def _box_case(tmp_path: Path):
         key=lambda edge: sum(point[2] for point in edge.endpoints),
     )
     return model, SurfaceSolidBodySelection(
-        body.body_id, selected.face_id, opposite.face_id, root.edge_id
+        body.body_id,
+        selected.face_id,
+        opposite.face_id,
+        root.edge_id,
+        next(item.body_id for item in model.bodies if item.body_id != body.body_id),
     )
 
 

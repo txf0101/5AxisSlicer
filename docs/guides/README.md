@@ -1,8 +1,8 @@
 # 5AxisSclicer V2.0 学习与参考手册中心
 
-这里是软件使用者的统一入口。教程按工业软件常见的三层结构组织：**学习总册**负责从零开始建立完整工作流，**工作台课程**负责不同几何和工艺的专项训练，**参考手册**用于查询参数、文件和高级入口。
+这里是软件使用者的统一入口。按顺序使用：[五工作台图文点击教程](quickstart_clickthrough_zh.md)完成一次操作 → [学习总册](user_learning_manual_zh.md)理解判断与错误恢复 → 下方的工作台专项与参数参考。
 
-初次使用请从[《5AxisSclicer V2.0 学习手册》](user_learning_manual_zh.md)开始，不要直接挑一个案例照抄。pipe2、平面件、叶轮、扇叶和半球是练手材料，目的是帮助理解可迁移的方法；模型 ID、参数、点数和轴范围都不应复制到自己的零件。
+快速操作可从[点击教程](quickstart_clickthrough_zh.md)开始，系统学习再读[《5AxisSclicer V2.0 学习手册》](user_learning_manual_zh.md)。pipe2、平面件、叶轮、扇叶和半球是练手材料；模型 ID、参数、点数和轴范围都不应复制到自己的零件。
 
 ## 学习路线
 
@@ -24,7 +24,7 @@
 | 有向 edge 链上的沉积 | [Curve 工作台](curve_workbench_zh.md) | Buildup、Multi-pass Buildup、Offset Buildup |
 | 固定轴圆柱/圆锥上的回转沉积 | [Rotary 工作台](rotary_workbench_zh.md) | Spiral、Thin Wall、Around Part、跨周期区间 |
 | 单支恒定圆截面管体 | [Tube 工作台](tube_workbench_zh.md) | Indexed、Buildup、Continuous |
-| 有限修剪面组和明确导引线 | [受限 Freeform 工作台](freeform_workbench_zh.md) | 曲面贴合、薄壁、有限多道/多层，最多 16 面、32 条导引线 |
+| 有限修剪面组和明确导引线 | [受限 Freeform 工作台](freeform_workbench_zh.md) | 曲面贴合、薄壁、有限多道/多层，最多 16 面、32 条导引线；实体模式进展见下方方法说明 |
 | 已有 NC 的查看和诊断 | [G-code 预览](gcode_preview_zh.md) | 模型叠加、层/角色筛选、代码定位和安全回退 |
 
 Research 工作台仍未完成，不提供操作教程。计划中的入口、名称或效果图不能写成当前可用能力。

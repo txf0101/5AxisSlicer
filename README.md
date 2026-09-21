@@ -1,6 +1,10 @@
 # 5AxisSclicer V2.0
 
+**第一次使用：**先看[五个工作台图文点击教程](docs/guides/quickstart_clickthrough_zh.md)，依次完成 Setup、选几何、应用参数、生成检查和离线导出。按对象跳转：[Planar](docs/guides/quickstart_clickthrough_zh.md#1-planar平面切片) · [Curve](docs/guides/quickstart_clickthrough_zh.md#2-curve沿边沉积) · [Rotary](docs/guides/quickstart_clickthrough_zh.md#3-rotary固定轴回转) · [Tube](docs/guides/quickstart_clickthrough_zh.md#4-tube管体生长) · [Freeform](docs/guides/quickstart_clickthrough_zh.md#5-freeform曲面与实体) · [已有 G-code 预览](docs/guides/quickstart_clickthrough_zh.md#6-查看已有-g-code)。参数、排错和迁移练习再查[学习总册](docs/guides/user_learning_manual_zh.md)与[手册索引](docs/guides/README.md)。Research 尚未完成，以上流程是离线验证，不代表实机打印许可。
+
 5AxisSclicer V2.0 以 Workbench 为入口。`Imported NC Review` 用于已有 NC/G-code 的空间路径、层范围和路径类型预览。Tube 支持 Indexed、Buildup、Continuous；Planar 支持 Region、Zigzag、Offset、Thin Wall、Spiral 和 buildplate-only Planar Support；Curve 支持 Buildup、Multi-pass Buildup 和 Offset Buildup；Rotary 支持圆柱/圆锥 Spiral、圆周多道 Thin Wall 和跨周期 Around Part；论文核心 Freeform 子集支持有限修剪面组、曲面贴合、薄壁及有限多道/多层。这五类制造入口共用路径、状态、命令、检查、回读、保存重开和六件套离线导出链。
+
+开发中的 Freeform 实体模式包含球面、一般曲面与径向填充；校徽已从真实 GUI 生成并导出，其余示例仍需完成界面全流程验收。当前生成结果均属离线参考，进度与限制见[方法说明](docs/guides/fan15_solid_fill_method_notes.md)和[阶段计划](docs/planning/fan15_productization_plan.md)。
 
 初次使用请从[《5AxisSclicer V2.0 学习手册》](docs/guides/user_learning_manual_zh.md)开始。手册首页写明 IDE 的 `run_app.py` 和 PowerShell 的 `scripts/run_app.ps1` 启动方式，并按界面、Setup、工作台选择、操作、生成恢复、回读、六件套和独立迁移组织课程。pipe2、平面件、叶轮、扇叶和半球只作为练手材料，不要求复制案例 ID 或参数。熟悉公共流程后，可从[学习与参考手册中心](docs/guides/README.md)进入 Tube、Planar、Curve、Rotary、Freeform、多材料、机型和 G-code 专项参考。
 

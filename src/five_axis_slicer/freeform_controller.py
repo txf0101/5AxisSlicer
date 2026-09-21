@@ -13,6 +13,7 @@ from typing import Any
 from .curve_generation_context import curve_build_from_source, curve_workpiece_from_build
 from .freeform_operation_service import (
     configure_freeform_operation,
+    configure_freeform_solid_operation,
     create_freeform_operation,
     rebind_freeform_operation_geometry,
 )
@@ -21,6 +22,7 @@ from .manufacturing.freeform_parameters import (
     FREEFORM_OPERATION_TYPES,
     FreeformOperationDefinition,
 )
+from .manufacturing.freeform_solid_parameters import SOLID_FILL_OPERATION_TYPES
 from .manufacturing.machine import MachineProfile
 from .manufacturing.reference_rebind import DEFAULT_REBIND_TOLERANCE, RebindTolerance
 from .manufacturing.setup import ManufacturingSetup
@@ -34,6 +36,7 @@ from .postprocessing.freeform_product import (
     state_from_freeform_result,
 )
 from .postprocessing.indexed_tube import GenerationCancelled
+from .postprocessing.thermal_program import ThermalProgramParameters
 
 FREEFORM_CONTROLLER_SCHEMA_VERSION = 1
 MAX_FREEFORM_OPERATIONS = 16
@@ -149,6 +152,25 @@ class FreeformController:
             self._modified = True
         return updated
 
+    def configure_solid_operation(
+        self, *, solid_geometry, operation_id=None, parameters=None, material_plan=None
+    ):
+        if self._cad_model is None:
+            raise ValueError("no CAD model is attached")
+        current = self.operation(operation_id)
+        updated = configure_freeform_solid_operation(
+            current,
+            self._cad_model,
+            geometry=dict(solid_geometry),
+            parameters=parameters,
+            material_plan=material_plan,
+        )
+        if updated != current:
+            self._replace_operation(updated)
+            self._mark_product_stale(updated)
+            self._modified = True
+        return updated
+
     def set_operation_metadata(self, operation_id, *, name=None, enabled=None):
         current = self.operation(operation_id)
         updated = replace(
@@ -194,6 +216,7 @@ class FreeformController:
                 T_workpiece_from_build=curve_workpiece_from_build(self._setup, machine),
                 source_path=self._cad_model.source_path,
                 cancelled=check,
+                thermal_parameters=self.thermal_parameters(),
             )
         except GenerationCancelled:
             raise
@@ -285,6 +308,18 @@ class FreeformController:
         if self._setup.nozzle is None:
             raise ValueError("Nozzle has not been selected")
         return self._setup.nozzle.as_nozzle_profile()
+
+    def material_profile(self):
+        if self._setup.material is None:
+            raise ValueError("Material has not been selected")
+        return self._setup.material.as_material_profile()
+
+    def thermal_parameters(self):
+        recommendations = self.material_profile().recommendations
+        return ThermalProgramParameters(
+            recommendations.nozzle_temperature_c,
+            recommendations.build_plate_temperature_c,
+        )
 
     def state_json(self):
         self._refresh_product_states()
@@ -386,11 +421,12 @@ class FreeformController:
         model = self._cad_model
         if model is None:
             raise ValueError("Freeform Generate requires an attached CAD model")
-        if (
-            not operation.enabled
-            or operation.setup_id != self._setup.setup_id
-            or not operation.geometry.is_complete
-        ):
+        geometry_complete = (
+            operation.solid_geometry is not None
+            if operation.operation_type in SOLID_FILL_OPERATION_TYPES
+            else operation.geometry.is_complete
+        )
+        if not operation.enabled or operation.setup_id != self._setup.setup_id or not geometry_complete:
             raise ValueError("Freeform Generate requires a complete enabled operation")
         report = self._setup.validation_report()
         if not report.setup_ready or report.has_errors or self._setup.draft_nodes:

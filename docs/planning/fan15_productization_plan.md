@@ -32,3 +32,13 @@
 ## 恢复入口
 
 继续工作先读本计划、`progress_tracker.md` 的 FAN11—FAN15、`2026-09-20_fan15_repairs.md` 和当前 diff。FP01 从 `manufacturing/freeform_parameters.py`、`freeform_operation_service.py`、`freeform_controller.py` 和 `postprocessing/freeform_product.py` 接入，不直接从 UI 调算法。每完成一个子项，实际重切至少一个真实模型，并把首次失败与最终证据写入同一复盘。
+
+## 2026-09-21 执行复核
+
+- FP01：三类实体操作、稳定 body/face/edge 角色、附加参数、语义哈希、重绑和 JSON 往返已接公共 Freeform。真实叶轮实体项目重开首次失败于 `project_io` 仅识别 `freeform_` 前缀，公共分派修正后往返测试通过。缺少跨三种操作的完整拓扑漂移矩阵，暂不关闭。
+- FP02：公共 `generate_freeform_product` 现在调三种实体算法、CAD 基体、工序合并、AC 后处理、温控与全流回读；薄回归脚本 `scripts/run_fan15_solid_product.py` 对校徽、叶轮、三叶扇实际重切分别得到 76098、681718、1034535 点，全部严格回读。Freeform 结果状态和清单改为元数据摘要，避免重复序列化完整点列。完整工具路径和轴 CSV 仍单独导出，百万点性能/导出体积待优化。
+- FP03：单个实体操作能按基体→特征合并并保留非挤出转移；还缺跨 Planar/Tube/Freeform 的持久化作业依赖、换姿和错误顺序拒绝，不关闭。
+- FP04/FP05：真实桌面 UI 用文件对话框载入校徽 STEP，建立并应用实体角色与参数；随后重开配置 Setup 的项目，界面完整生成 76098 点，显示路径、导出六件套，清单回读通过、`machine_executable=false`。准备项目的首版 Setup ID 不匹配被生成前检查正确拦截，修正后重试。其余三例的完整 UI 选择/生成/导出和三尺寸/双语矩阵未完成。
+- FP06：新增五工作台图文点击路线，从根 README、手册索引和学习总册均可进入；复用已标明来源的当前 Qt 截图，明确实体模式仅校徽通过真实 GUI 导出。四例逐项实际点击记录、叶轮/三叶扇实体模式截图仍需补齐。
+
+当前目标保持 active。应用户新要求先提交一个中间 Git 版本；离线 NC 验收不等于完整界面/实机验收。下一轮按 FP03 组合契约、FP04 角色拾取与后台响应、FP05 其余真实模型逐例推进。

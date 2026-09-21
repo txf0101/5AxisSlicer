@@ -5,7 +5,44 @@ from __future__ import annotations
 from dataclasses import replace
 import math
 
+from ..manufacturing.coordinates import RigidTransform
 from ..manufacturing.toolpath import GeneratedToolpath, ToolpathEvent, ToolpathPoint
+
+
+def transform_toolpath(
+    toolpath: GeneratedToolpath,
+    transform: RigidTransform,
+    *,
+    coordinate_frame: str = "workpiece_build",
+) -> GeneratedToolpath:
+    """Map a complete toolpath between rigid coordinate frames.
+
+    Positions include translation. Tangents, nozzle axes and surface normals
+    use only the rotation. Event sequence indices remain unchanged.
+    """
+
+    if not isinstance(toolpath, GeneratedToolpath):
+        raise TypeError("toolpath must be a GeneratedToolpath")
+    if not isinstance(transform, RigidTransform):
+        raise TypeError("transform must be a RigidTransform")
+    return replace(
+        toolpath,
+        coordinate_frame=str(coordinate_frame).strip(),
+        points=tuple(
+            replace(
+                point,
+                position=transform.transform_point(point.position),
+                tangent=transform.transform_vector(point.tangent),
+                nozzle_axis=transform.transform_vector(point.nozzle_axis),
+                surface_normal=(
+                    None
+                    if point.surface_normal is None
+                    else transform.transform_vector(point.surface_normal)
+                ),
+            )
+            for point in toolpath.points
+        ),
+    )
 
 
 def merge_toolpath_sequence(
@@ -142,4 +179,4 @@ def _append_transition(
         )
 
 
-__all__ = ["merge_toolpath_sequence"]
+__all__ = ["merge_toolpath_sequence", "transform_toolpath"]

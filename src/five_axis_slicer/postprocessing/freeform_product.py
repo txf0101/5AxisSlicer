@@ -20,6 +20,7 @@ from ..kinematics.xyzac import MachineAxisTrajectory, solve_xyzac_trajectory
 from ..manufacturing.controller_profile import ControllerProfile
 from ..manufacturing.coordinates import RigidTransform
 from ..manufacturing.freeform_parameters import FreeformOperationDefinition
+from ..manufacturing.freeform_solid_parameters import SOLID_FILL_OPERATION_TYPES
 from ..manufacturing.machine import MachineProfile
 from ..manufacturing.material_plan import material_statistics
 from ..manufacturing.resources import NozzleProfile
@@ -33,6 +34,12 @@ from ..manufacturing.toolpath import (
 from ..models import CadModel
 from ..validation.indexed_tube import ValidationMetric
 from .own_ac import OwnACReadbackReport, postprocess_own_ac, readback_own_ac
+from .freeform_solid_product import SolidFillPlan, generate_solid_fill_product_path
+from .thermal_program import (
+    ThermalProgramParameters,
+    unwrap_checked_thermal_program,
+    wrap_thermal_program,
+)
 
 FREEFORM_ALGORITHM_VERSION = "paper-core-freeform-product-v1"
 CancelCheck = Callable[[], bool]
@@ -71,13 +78,14 @@ class FreeformValidationReport:
 
 @dataclass(frozen=True, slots=True)
 class FreeformProductResult:
-    plan: FreeformPlan
+    plan: FreeformPlan | SolidFillPlan
     toolpath: GeneratedToolpath
     trajectory: MachineAxisTrajectory
     validation: FreeformValidationReport
     manifest: GeneratedResultManifest
     gcode: str
     readback: OwnACReadbackReport
+    thermal_parameters: ThermalProgramParameters | None = None
 
     @property
     def offline_exportable(self) -> bool:
@@ -98,16 +106,55 @@ class FreeformProductResult:
         return bool(self.validation.controller_qualification.get("machine_executable", False))
 
     def to_json(self) -> dict[str, Any]:
+        # The full points and machine samples have their own export files. Keeping
+        # them in the project/HTTP result as well made a million-point operation
+        # consume gigabytes merely to refresh the workbench status.
+        manifest = {
+            "result_id": self.manifest.result_id,
+            "operation_id": self.manifest.operation_id,
+            "status": (
+                self.manifest.status.value
+                if isinstance(self.manifest.status, GeneratedResultStatus)
+                else str(self.manifest.status)
+            ),
+            "algorithm_version": self.manifest.algorithm_version,
+            "parameter_semantic_sha256": self.manifest.parameter_semantic_sha256,
+            "input_sources": [source.to_json() for source in self.manifest.input_sources],
+            "machine_profile_id": self.manifest.machine_profile_id,
+            "generated_at_utc": self.manifest.generated_at_utc,
+            "ready_for_export": self.manifest.ready_for_export,
+            "issues": list(self.manifest.issues),
+        }
         return {
-            "schema_version": 1,
+            "schema_version": 2,
             "operation_type": "freeform",
             "offline_exportable": self.offline_exportable,
             "machine_executable": self.machine_executable,
-            "manifest": self.manifest.to_json(),
+            "manifest": manifest,
             "freeform_plan": self.plan.to_json(),
-            "machine_trajectory": self.trajectory.to_json(),
+            "toolpath_summary": {
+                "toolpath_id": self.toolpath.toolpath_id,
+                "point_count": len(self.toolpath.points),
+                "event_count": len(self.toolpath.events),
+                "coordinate_frame": self.toolpath.coordinate_frame,
+            },
+            "machine_trajectory_summary": {
+                "trajectory_id": self.trajectory.trajectory_id,
+                "machine_profile_id": self.trajectory.machine_profile_id,
+                "source_toolpath_id": self.trajectory.source_toolpath_id,
+                "sample_count": len(self.trajectory.samples),
+                "tool_length_mm": self.trajectory.tool_length_mm,
+            },
             "validation": self.validation.to_json(),
             "readback": self.readback.to_json(),
+            "thermal_parameters": (
+                None
+                if self.thermal_parameters is None
+                else {
+                    "nozzle_c": self.thermal_parameters.nozzle_c,
+                    "bed_c": self.thermal_parameters.bed_c,
+                }
+            ),
         }
 
 
@@ -180,12 +227,25 @@ def generate_freeform_product(
     T_workpiece_from_build: RigidTransform | None = None,
     source_path: str | Path | None = None,
     cancelled: CancelCheck | None = None,
+    thermal_parameters: ThermalProgramParameters | None = None,
 ) -> FreeformProductResult:
     _checkpoint(cancelled)
-    plan = build_freeform_plan(
-        model, operation, T_build_from_source=T_build_from_source, cancelled=cancelled
-    )
-    toolpath = generate_freeform_toolpath(plan, operation, cancelled=cancelled)
+    plan: FreeformPlan | SolidFillPlan
+    toolpath: GeneratedToolpath
+    if operation.operation_type in SOLID_FILL_OPERATION_TYPES:
+        solid_plan, toolpath = generate_solid_fill_product_path(
+            model,
+            operation,
+            T_build_from_source=T_build_from_source,
+            cancelled=cancelled,
+        )
+        plan = solid_plan
+    else:
+        freeform_plan = build_freeform_plan(
+            model, operation, T_build_from_source=T_build_from_source, cancelled=cancelled
+        )
+        plan = freeform_plan
+        toolpath = generate_freeform_toolpath(freeform_plan, operation, cancelled=cancelled)
     trajectory = solve_xyzac_trajectory(
         toolpath,
         machine,
@@ -217,9 +277,21 @@ def generate_freeform_product(
             OwnACReadbackReport(
                 len(toolpath.points), 0, len(toolpath.events), 0, ("blocked",), False
             ),
+            thermal_parameters,
         )
-    gcode = postprocess_own_ac(toolpath, trajectory, machine, nozzle, controller)
-    readback = readback_own_ac(gcode, toolpath, trajectory, machine, nozzle, controller)
+    motion_gcode = postprocess_own_ac(toolpath, trajectory, machine, nozzle, controller)
+    readback = readback_own_ac(
+        motion_gcode, toolpath, trajectory, machine, nozzle, controller
+    )
+    gcode = motion_gcode
+    if thermal_parameters is not None:
+        gcode = wrap_thermal_program(motion_gcode, thermal_parameters)
+        recovered = unwrap_checked_thermal_program(gcode, thermal_parameters)
+        if recovered != motion_gcode:
+            raise ValueError("thermal wrapper changed the checked motion program")
+        readback = readback_own_ac(
+            recovered, toolpath, trajectory, machine, nozzle, controller
+        )
     if not readback.passed:
         manifest = replace(
             manifest,
@@ -227,7 +299,16 @@ def generate_freeform_product(
             ready_for_export=False,
             issues=(*manifest.issues, "freeform.gcode_readback_failed"),
         )
-    return FreeformProductResult(plan, toolpath, trajectory, validation, manifest, gcode, readback)
+    return FreeformProductResult(
+        plan,
+        toolpath,
+        trajectory,
+        validation,
+        manifest,
+        gcode,
+        readback,
+        thermal_parameters,
+    )
 
 
 def _validate(plan, toolpath, trajectory, operation, controller):
@@ -253,6 +334,8 @@ def _validate(plan, toolpath, trajectory, operation, controller):
 
 
 def _validation_metrics(plan, trajectory, operation):
+    if isinstance(plan, SolidFillPlan):
+        return _solid_validation_metrics(plan, trajectory, operation)
     expected_paths = (
         len(operation.geometry.guides)
         * operation.parameters.path_count
@@ -302,6 +385,56 @@ def _validation_metrics(plan, trajectory, operation):
             fk_orientation <= math.radians(0.01),
         ),
     )
+
+
+def _solid_validation_metrics(plan, trajectory, operation):
+    parameters = operation.solid_parameters
+    if parameters is None:
+        raise ValueError("solid-fill validation requires solid parameters")
+    audit = plan.audit
+    metrics = []
+
+    def add(name, field, limit, unit="mm"):
+        value = float(audit[field])
+        metrics.append(ValidationMetric(name, value, float(limit), unit, value <= limit + 1e-12))
+
+    if plan.operation_type == "spherical_solid_fill":
+        add("solid_maximum_cross_path_spacing", "maximum_cross_path_spacing_mm", parameters.bead_width_mm)
+        add("solid_relative_volume_error", "relative_volume_error", 0.10, "ratio")
+        add("solid_first_layer_root_gap", "first_layer_root_gap_mm", parameters.bead_width_mm / 2 + 0.001)
+    elif plan.operation_type == "surface_solid_fill":
+        add("solid_maximum_cross_path_spacing", "maximum_cross_path_spacing_mm", parameters.path_spacing_mm)
+        add("solid_maximum_segment_length", "maximum_segment_length_mm", parameters.sampling_step_mm)
+        add("solid_relative_volume_error", "relative_volume_error", 0.10, "ratio")
+        if operation.solid_geometry.substrate_body is not None:
+            add("solid_root_edge_gap", "root_edge_max_gap_mm", 0.01)
+    elif plan.operation_type == "radial_solid_fill":
+        add("solid_maximum_radial_spacing", "maximum_radial_spacing_mm", parameters.layer_height_mm)
+        add("solid_maximum_segment_length", "maximum_segment_length_mm", parameters.sampling_step_mm)
+        add("solid_first_layer_hub_gap", "first_layer_hub_gap_max_mm", parameters.bead_width_mm / 2 + 0.001)
+        add("solid_relative_material_volume_error", "relative_material_volume_error", 0.10, "ratio")
+        add("solid_relative_section_volume_error", "relative_section_volume_error", 0.02, "ratio")
+    else:  # pragma: no cover - guarded by SolidFillPlan
+        raise ValueError(f"unsupported solid-fill operation: {plan.operation_type}")
+    fk_position = max((item.fk_position_error_mm for item in trajectory.samples), default=0.0)
+    fk_orientation = max(
+        (item.fk_orientation_error_rad for item in trajectory.samples), default=0.0
+    )
+    metrics.extend(
+        (
+            ValidationMetric(
+                "freeform_fk_position_error", fk_position, 0.01, "mm", fk_position <= 0.01
+            ),
+            ValidationMetric(
+                "freeform_fk_orientation_error",
+                fk_orientation,
+                math.radians(0.01),
+                "rad",
+                fk_orientation <= math.radians(0.01),
+            ),
+        )
+    )
+    return tuple(metrics)
 
 
 def _metric_issues(metrics):

@@ -9,13 +9,21 @@ from typing import Any, Mapping
 
 from .coordinates import GeometryReference
 from .curve_parameters import CurveGeometrySelection
+from .freeform_solid_parameters import (
+    SOLID_FILL_OPERATION_TYPES,
+    SolidFillGeometrySelection,
+    SolidFillProcessParameters,
+    solid_geometry_from_json,
+)
 from .json_contract import parse_json_bool, require_bool
 from .material_plan import MaterialPlan
 from .resources import canonical_json_bytes
 from .setup import NodeState
 
 
-FREEFORM_OPERATION_TYPES = frozenset({"freeform_surface", "freeform_thin_wall"})
+FREEFORM_OPERATION_TYPES = frozenset(
+    {"freeform_surface", "freeform_thin_wall", *SOLID_FILL_OPERATION_TYPES}
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -140,6 +148,8 @@ class FreeformOperationDefinition:
     geometry: FreeformGeometrySelection = field(default_factory=FreeformGeometrySelection)
     parameters: FreeformProcessParameters = field(default_factory=FreeformProcessParameters)
     material_plan: MaterialPlan | None = None
+    solid_geometry: SolidFillGeometrySelection | None = None
+    solid_parameters: SolidFillProcessParameters | None = None
 
     def __post_init__(self) -> None:
         for name in ("operation_id", "setup_id", "name"):
@@ -157,6 +167,17 @@ class FreeformOperationDefinition:
             raise TypeError("parameters must be FreeformProcessParameters")
         if self.material_plan is not None and not isinstance(self.material_plan, MaterialPlan):
             raise TypeError("material_plan must be MaterialPlan or None")
+        is_solid = operation_type in SOLID_FILL_OPERATION_TYPES
+        if is_solid:
+            if (
+                self.solid_geometry is not None
+                and self.solid_geometry.to_json()["operation_type"] != operation_type
+            ):
+                raise ValueError("solid geometry type must match operation_type")
+            if self.solid_parameters is None:
+                object.__setattr__(self, "solid_parameters", SolidFillProcessParameters())
+        elif self.solid_geometry is not None or self.solid_parameters is not None:
+            raise ValueError("guide-driven Freeform operations cannot contain solid-fill inputs")
         reasons = tuple(str(item).strip() for item in self.dirty_reasons)
         if any(not item for item in reasons) or len(set(reasons)) != len(reasons):
             raise ValueError("dirty_reasons must contain unique nonempty values")
@@ -175,7 +196,7 @@ class FreeformOperationDefinition:
         return replace(self, state=NodeState.DIRTY, dirty_reasons=reasons)
 
     def semantic_hash_input(self) -> dict[str, Any]:
-        return {
+        payload = {
             "operation_id": self.operation_id,
             "name": self.name,
             "operation_type": self.operation_type,
@@ -184,6 +205,14 @@ class FreeformOperationDefinition:
             "parameters": self.parameters.to_json(),
             "material_plan": None if self.material_plan is None else self.material_plan.to_json(),
         }
+        if self.operation_type in SOLID_FILL_OPERATION_TYPES:
+            payload.update(
+                solid_geometry=(
+                    None if self.solid_geometry is None else self.solid_geometry.to_json()
+                ),
+                solid_parameters=self.solid_parameters.to_json(),  # type: ignore[union-attr]
+            )
+        return payload
 
     def semantic_sha256(self) -> str:
         return hashlib.sha256(canonical_json_bytes(self.semantic_hash_input())).hexdigest()
@@ -201,17 +230,30 @@ class FreeformOperationDefinition:
         if not isinstance(payload, Mapping):
             raise ValueError("Freeform operation payload must be an object")
         material = payload.get("material_plan")
+        operation_type = str(payload.get("operation_type", "freeform_surface"))
+        solid_geometry = payload.get("solid_geometry")
+        solid_parameters = payload.get("solid_parameters")
         return cls(
             str(payload.get("operation_id", "")),
             str(payload.get("setup_id", "")),
             str(payload.get("name", "Freeform Surface")),
-            str(payload.get("operation_type", "freeform_surface")),
+            operation_type,
             NodeState(str(payload.get("state", NodeState.DIRTY.value))),
             tuple(payload.get("dirty_reasons", ())),
             parse_json_bool(payload, "enabled", default=True),
             FreeformGeometrySelection.from_json(payload.get("geometry", {})),
             FreeformProcessParameters.from_json(payload.get("parameters", {})),
             None if material is None else MaterialPlan.from_json(material),
+            (
+                None
+                if solid_geometry is None
+                else solid_geometry_from_json(solid_geometry)
+            ),
+            (
+                None
+                if operation_type not in SOLID_FILL_OPERATION_TYPES
+                else SolidFillProcessParameters.from_json(solid_parameters or {})
+            ),
         )
 
 

@@ -9,6 +9,10 @@ from typing import Any, cast
 from .command_kernel import CommandError, CommandInvocation, CommandKernel, CommandOutcome
 from .freeform_controller import FreeformController
 from .manufacturing.freeform_parameters import FreeformProcessParameters
+from .manufacturing.freeform_solid_parameters import (
+    SOLID_FILL_OPERATION_TYPES,
+    SolidFillProcessParameters,
+)
 from .manufacturing.material_plan import MaterialPlan
 from .postprocessing.indexed_tube import GenerationCancelled
 from .restricted_script import ScriptCall, ScriptParseError, parse_script
@@ -26,6 +30,7 @@ _MUTATIONS = frozenset(
 _HISTORY = {"undo": "undo", "redo": "redo"}
 _COMMANDS = _QUERIES | _MUTATIONS | _HISTORY.keys()
 _PARAMETERS = frozenset(FreeformProcessParameters.__dataclass_fields__)
+_SOLID_PARAMETERS = frozenset(SolidFillProcessParameters.__dataclass_fields__)
 
 
 class FreeformCommandProvider:
@@ -93,17 +98,34 @@ class FreeformCommandProvider:
         enabled=None,
         face_ids=None,
         guides=None,
+        solid_geometry=None,
         material_plan=None,
         **parameter_changes,
     ):
-        unknown = sorted(set(parameter_changes) - _PARAMETERS)
+        current = controller.operation(operation_id)
+        allowed = _SOLID_PARAMETERS if current.operation_type in SOLID_FILL_OPERATION_TYPES else _PARAMETERS
+        unknown = sorted(set(parameter_changes) - allowed)
         if unknown:
             raise TypeError(f"unknown Freeform parameter: {', '.join(unknown)}")
-        current = controller.operation(operation_id)
         if name is not None or enabled is not None:
             current = controller.set_operation_metadata(
                 current.operation_id, name=name, enabled=enabled
             )
+        if current.operation_type in SOLID_FILL_OPERATION_TYPES:
+            parameters = _updated_solid_parameters(current, parameter_changes)
+            geometry = _selected_solid_geometry(current, solid_geometry)
+            plan = _material_plan(current, material_plan)
+            if geometry is None:
+                if parameter_changes or material_plan is not None:
+                    raise ValueError("solid_geometry is required before solid-fill parameters")
+                return CommandOutcome(current.to_json(), ("operation",), ("operations", "products"))
+            updated = controller.configure_solid_operation(
+                operation_id=current.operation_id,
+                solid_geometry=geometry,
+                parameters=parameters,
+                material_plan=plan,
+            )
+            return CommandOutcome(updated.to_json(), ("operation",), ("operations", "products"))
         parameters = _updated_parameters(current, parameter_changes)
         selected_faces = _selected_faces(current, face_ids)
         selected_guides = _selected_guides(current, guides)
@@ -196,6 +218,53 @@ def _script_invocation(call: ScriptCall):
 def _updated_parameters(current, changes):
     values = {key: value for key, value in changes.items() if value is not None}
     return current.parameters if not values else replace(current.parameters, **values)
+
+
+def _updated_solid_parameters(current, changes):
+    values = {key: value for key, value in changes.items() if value is not None}
+    return (
+        current.solid_parameters
+        if not values
+        else replace(current.solid_parameters, **values)
+    )
+
+
+def _selected_solid_geometry(current, payload):
+    if payload is not None:
+        if not isinstance(payload, dict):
+            raise ValueError("solid_geometry must be an object")
+        return dict(payload)
+    selection = current.solid_geometry
+    if selection is None:
+        return None
+    data = selection.to_json()
+    operation_type = data.pop("operation_type")
+    substrate = data.pop("substrate_body", None)
+    if substrate is not None:
+        data["substrate_body_id"] = substrate["object_id"]
+    if operation_type == "spherical_solid_fill":
+        data["body_ids"] = [item["object_id"] for item in data.pop("bodies")]
+    elif operation_type == "surface_solid_fill":
+        data["bodies"] = [
+            {
+                "body_id": item["body"]["object_id"],
+                "surface_face_id": item["surface_face"]["object_id"],
+                "opposite_face_id": item["opposite_face"]["object_id"],
+                "root_edge_id": item["root_edge"]["object_id"],
+            }
+            for item in data["bodies"]
+        ]
+    else:
+        data["hub_body_id"] = data.pop("hub_body")["object_id"]
+        data["blades"] = [
+            {
+                "body_id": item["body"]["object_id"],
+                "root_face_id": item["root_face"]["object_id"],
+                "outer_face_id": item["outer_face"]["object_id"],
+            }
+            for item in data["blades"]
+        ]
+    return data
 
 
 def _selected_faces(current, face_ids):

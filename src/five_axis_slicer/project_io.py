@@ -725,6 +725,7 @@ def _default_setup_loader(payload: Mapping[str, Any]) -> Any:
 def _default_operation_loader(payload: Mapping[str, Any]) -> Any:
     from .manufacturing.curve_parameters import CurveOperationDefinition
     from .manufacturing.freeform_parameters import FreeformOperationDefinition
+    from .manufacturing.freeform_solid_parameters import SOLID_FILL_OPERATION_TYPES
     from .manufacturing.planar_parameters import PlanarOperationDefinition
     from .manufacturing.rotary_parameters import RotaryOperationDefinition
     from .manufacturing.setup import TubeOperationDefinition
@@ -736,7 +737,7 @@ def _default_operation_loader(payload: Mapping[str, Any]) -> Any:
         return PlanarOperationDefinition.from_json(payload)
     if operation_type.startswith("curve_"):
         return CurveOperationDefinition.from_json(payload)
-    if operation_type.startswith("freeform_"):
+    if operation_type.startswith("freeform_") or operation_type in SOLID_FILL_OPERATION_TYPES:
         return FreeformOperationDefinition.from_json(payload)
     if operation_type.startswith("rotary_"):
         return RotaryOperationDefinition.from_json(payload)

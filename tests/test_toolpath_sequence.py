@@ -1,9 +1,15 @@
+import pytest
+
 from five_axis_slicer.manufacturing.toolpath import (
     GeneratedToolpath,
     ToolpathEvent,
     ToolpathPoint,
 )
-from five_axis_slicer.postprocessing.toolpath_sequence import merge_toolpath_sequence
+from five_axis_slicer.manufacturing.coordinates import RigidTransform
+from five_axis_slicer.postprocessing.toolpath_sequence import (
+    merge_toolpath_sequence,
+    transform_toolpath,
+)
 
 
 def _path(operation, point, axis):
@@ -132,3 +138,20 @@ def test_merge_toolpath_sequence_rejects_duplicate_operations_and_frames():
         assert "coordinate frame" in str(error)
     else:
         raise AssertionError("mixed coordinate frames accepted")
+
+
+def test_transform_toolpath_maps_positions_and_orientations() -> None:
+    source = _path("first", (1.0, 0.0, 0.0), (0.0, 0.0, -1.0))
+    transform = RigidTransform.from_rotation_translation(
+        ((0.0, -1.0, 0.0), (1.0, 0.0, 0.0), (0.0, 0.0, 1.0)),
+        (10.0, 20.0, 30.0),
+        source_frame="model",
+        target_frame="build",
+    )
+
+    result = transform_toolpath(source, transform)
+
+    assert result.coordinate_frame == "workpiece_build"
+    assert result.points[0].position == pytest.approx((10.0, 21.0, 30.0))
+    assert result.points[0].tangent == pytest.approx((0.0, 1.0, 0.0))
+    assert result.points[0].nozzle_axis == pytest.approx((0.0, 0.0, -1.0))

@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 import math
+from collections.abc import Callable
 
 from OCP.BRep import BRep_Tool
 from OCP.BRepBuilderAPI import BRepBuilderAPI_MakeVertex
@@ -88,6 +89,8 @@ def generate_radial_solid_fill(
     selections: tuple[RadialSolidBladeSelection, ...],
     operation_prefix: str,
     parameters: RadialSolidFillParameters,
+    *,
+    cancelled: Callable[[], bool] | None = None,
 ) -> tuple[tuple[GeneratedToolpath, ...], RadialSolidFillAudit]:
     if not selections or len({item.body_id for item in selections}) != len(selections):
         raise ValueError("unique non-empty blade selections required")
@@ -101,6 +104,7 @@ def generate_radial_solid_fill(
     outer_radii = []
     maximum_segment = first_gap = material_volume = section_volume = 0.0
     for selection in selections:
+        _checkpoint(cancelled)
         _validate_selection(model, selection)
         layers, bridge_count, supported_radius, root_radius, outer_radius = _manufacturing_layers(
             model, selection, parameters
@@ -159,6 +163,13 @@ def generate_radial_solid_fill(
         abs(material_volume - cad_volume) / cad_volume,
         abs(section_volume - cad_volume) / cad_volume,
     )
+
+
+def _checkpoint(cancelled: Callable[[], bool] | None) -> None:
+    if cancelled is not None and cancelled():
+        from ...postprocessing.indexed_tube import GenerationCancelled
+
+        raise GenerationCancelled("radial solid-fill generation cancelled")
 
 
 def _manufacturing_layers(model, selection, parameters):

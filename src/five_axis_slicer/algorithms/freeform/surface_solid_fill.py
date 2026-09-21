@@ -68,6 +68,7 @@ class SurfaceSolidBodySelection:
     face_id: str
     opposite_face_id: str
     root_edge_id: str
+    substrate_body_id: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -114,7 +115,8 @@ def generate_surface_solid_fill(
         thickness_values.extend(thickness)
         if min(thickness) < parameters.solid_thickness_mm - 0.02:
             raise ValueError(f"freeform.solid_thickness_exceeds_body: {selection.body_id}")
-        root_gap = max(root_gap, _root_edge_gap(model, selection))
+        if selection.substrate_body_id is not None:
+            root_gap = max(root_gap, _root_edge_gap(model, selection))
         for depth_index in range(1, depth_count + 1):
             _checkpoint(cancelled)
             operation_id = f"{operation_prefix}-{selection.body_id}-depth-{depth_index:03d}"
@@ -491,9 +493,9 @@ def _root_edge_gap(model, selection):
     from OCP.BRepBuilderAPI import BRepBuilderAPI_MakeVertex
     from OCP.BRepExtrema import BRepExtrema_DistShapeShape
 
-    substrate = model.shapes.get("body_001")
+    substrate = model.shapes.get(selection.substrate_body_id)
     if substrate is None:
-        return math.inf
+        raise ValueError(f"unknown substrate body: {selection.substrate_body_id}")
     result = 0.0
     for point in sample_edge_points(model.edge_shapes[selection.root_edge_id], 64):
         distance = BRepExtrema_DistShapeShape(
