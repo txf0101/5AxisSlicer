@@ -68,6 +68,11 @@ from .indexed_tube import (
     postprocess_indexed_gcode,
     readback_indexed_gcode,
 )
+from .thermal_program import (
+    ThermalProgramParameters,
+    unwrap_checked_thermal_program,
+    wrap_thermal_program,
+)
 
 ALGORITHM_VERSIONS = {
     "tube_thin_wall_indexed": "tube-indexed-product-v3",
@@ -95,6 +100,7 @@ class TubeProductResult:
     buildup_sequence: TubeBuildupSequence | None = None
     generation_context: Mapping[str, Any] | None = None
     input_semantic_sha256: str | None = None
+    thermal_parameters: ThermalProgramParameters | None = None
 
     @property
     def exportable(self) -> bool:
@@ -112,6 +118,12 @@ class TubeProductResult:
             "operation_sequence": [item.operation_id for item in self.operation_toolpaths],
             "generation_context": self.generation_context,
             "input_semantic_sha256": self.input_semantic_sha256,
+            "thermal_parameters": (
+                None if self.thermal_parameters is None else {
+                    "nozzle_c": self.thermal_parameters.nozzle_c,
+                    "bed_c": self.thermal_parameters.bed_c,
+                }
+            ),
         }
 
 
@@ -241,6 +253,7 @@ def generate_tube_product(
     radial_error_limit_mm: float = 0.01,
     planar_base: PlanarBaseDefinition | None = None,
     cancelled: CancelCheck | None = None,
+    thermal_parameters: ThermalProgramParameters | None = None,
 ) -> TubeProductResult:
     """Dispatch one persisted Tube operation through the complete product chain."""
 
@@ -248,7 +261,7 @@ def generate_tube_product(
     if not operation.enabled or not operation.geometry.is_complete:
         raise ValueError("Tube operation must be enabled and have complete geometry")
     if operation.operation_type == "tube_thin_wall_indexed":
-        return _generate_indexed_tube_product(
+        result = _generate_indexed_tube_product(
             model,
             operation,
             machine,
@@ -260,19 +273,33 @@ def generate_tube_product(
             radial_error_limit_mm,
             cancelled,
         )
-
-    return _generate_nonindexed_tube_product(
-        model,
-        operation,
-        machine,
-        nozzle,
-        source_path,
-        T_workpiece_from_build,
-        obstacles,
-        check_ipw,
-        radial_error_limit_mm,
-        planar_base,
-        cancelled,
+    else:
+        result = _generate_nonindexed_tube_product(
+            model,
+            operation,
+            machine,
+            nozzle,
+            source_path,
+            T_workpiece_from_build,
+            obstacles,
+            check_ipw,
+            radial_error_limit_mm,
+            planar_base,
+            cancelled,
+        )
+    if thermal_parameters is None or not result.exportable:
+        return result
+    _checkpoint(cancelled)
+    wrapped = wrap_thermal_program(result.gcode, thermal_parameters)
+    motion = unwrap_checked_thermal_program(wrapped, thermal_parameters)
+    if motion != result.gcode:
+        raise ValueError("thermal wrapper changed the checked Tube motion program")
+    readback = readback_tube_gcode(motion, result.toolpath, result.trajectory, machine, nozzle)
+    return replace(
+        result,
+        gcode=wrapped,
+        readback=readback,
+        thermal_parameters=thermal_parameters,
     )
 
 

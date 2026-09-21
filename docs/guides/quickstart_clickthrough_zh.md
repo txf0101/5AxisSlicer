@@ -59,7 +59,7 @@
 
 ![Tube 中从已导入模型进入设置的按钮](assets/tube_coordinate_setup/01_imported_step_entry.png)
 
-界面入口图只展示起步位置；模式选择、生成和已知底座限制见[Tube 手册](tube_workbench_zh.md)。当前 Buildup 的完整弯管底座连接尚待整件验收，不能把部分路径当作完整 NC。
+界面入口图只展示起步位置；模式选择、生成和已知限制见[Tube 手册](tube_workbench_zh.md)。弯管已经有整件离线 NC 与全流回读；IPW 碰撞检查暂缓、真实机床资格未取得。
 
 ## 5. Freeform：曲面与实体
 
@@ -69,7 +69,7 @@
 
 ![Freeform 有限导引面/边模式与路径](assets/paper_core_ac/01_freeform_zh_1366x768.png)
 
-此图由 Qt 证据绘制器呈现导引线模式，不是新增实体模式的 GUI 截图。实体模式目前只有校徽完成真实 GUI 生成及导出；叶轮和三叶扇仍须完成各自界面验收。导引模式见[Freeform 手册](freeform_workbench_zh.md)，实体生长选择与验证边界见[完整实体方法](fan15_solid_fill_method_notes.md)。
+此图由 Qt 证据绘制器呈现导引线模式，不是新增实体模式的 GUI 截图。实体模式中校徽与叶轮已完成真实 GUI 生成及导出；三叶扇和 Tube 的整套界面验收仍在进行。导引模式见[Freeform 手册](freeform_workbench_zh.md)，实体生长选择与验证边界见[完整实体方法](fan15_solid_fill_method_notes.md)。
 
 ## 6. 查看已有 G-code
 

@@ -2,7 +2,7 @@
 
 本手册对应论文核心 AC 离线版本的 Freeform 子集。它支持在一个明确修剪面或最多 16 个显式面组成的有限面组上，沿最多 32 条导引边链生成曲面贴合或薄壁路径。当前输出可检查、可回读、可保存重开，但没有真实控制器、机床标定和现场试切资格。
 
-实体填充正在公共 Freeform 界面开发：`Spherical Solid Fill`、`Surface Solid Fill`、`Radial Solid Fill` 要求分别选择球面实体角色、根边与成对曲面、hub 与叶片及旋转轴。本页以下步骤和图片专指已验收的有限导引模式；实体模式的简短点击入口见[五工作台教程](quickstart_clickthrough_zh.md#5-freeform曲面与实体)，生长方法与当前验收范围见[实体方法说明](fan15_solid_fill_method_notes.md)。截至 2026-09-21，仅球形校徽完成一次真实 GUI 生成和六件套导出，叶轮与三叶扇的完整界面流程尚未验收。
+公共 Freeform 界面已有 `Spherical Solid Fill`、`Surface Solid Fill`、`Radial Solid Fill`，分别要求球面实体角色、根边与成对曲面、hub 与叶片及旋转轴。本页以下步骤和图片专指有限导引模式；实体模式的简短点击入口见[五工作台教程](quickstart_clickthrough_zh.md#5-freeform曲面与实体)，生长方法与当前验收范围见[实体方法说明](fan15_solid_fill_method_notes.md)。截至 2026-09-21，球形校徽和叶轮完成真实 GUI 生成和六件套导出；三叶扇的完整界面流程仍在验证。
 
 > 初次使用请先完成[学习总册](user_learning_manual_zh.md)的 L01—L06；本页是受限 Freeform 专项参考。半球、扇叶和叶轮只用于练习面组、导引线和材料区域，换零件后必须重新建立全部几何引用。
 

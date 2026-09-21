@@ -297,6 +297,36 @@ def test_project_switch_clears_old_freeform_path_overlay(configured) -> None:
     page.close()
 
 
+def test_radial_solid_gui_captures_hub_and_three_blade_roles(configured) -> None:
+    base, _operation, _model, _guides = configured
+    model = load_step("example/三叶扇/Supportless_sample.stp")
+    controller = FreeformController(model, setup=base.setup)
+    operation = controller.create_operation(
+        "radial_solid_fill", operation_id="three-blade-gui-selection"
+    )
+    page = FreeformPage(controller=controller, viewer_factory=TubeViewerStub)
+    page.viewer.set_selection(
+        body_ids={"body_001", "body_002", "body_003", "body_004"},
+        face_ids={
+            f"body_{index:03d}_face_{face:04d}"
+            for index in range(2, 5) for face in (5, 6)
+        },
+    )
+
+    page.use_selection_button.click()
+    geometry = json.loads(page.solid_geometry_edit.text())
+    assert geometry["hub_body_id"] == "body_001"
+    assert geometry["substrate_body_id"] == "body_001"
+    assert len(geometry["blades"]) == 3
+    assert all(item["root_face_id"].endswith("face_0005") for item in geometry["blades"])
+    assert all(item["outer_face_id"].endswith("face_0006") for item in geometry["blades"])
+    page.apply_button.click()
+    updated = controller.operation(operation.operation_id)
+    assert updated.solid_geometry is not None
+    assert page._last_error is None
+    page.close()
+
+
 def test_surface_solid_controller_runs_shared_product_and_readback(configured) -> None:
     base, _operation, _model, _guides = configured
     controller = base.fork()

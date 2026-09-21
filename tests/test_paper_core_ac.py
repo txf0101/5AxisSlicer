@@ -322,6 +322,50 @@ def test_own_ac_readback_rejects_mode_and_relative_e_tampering(freeform_case) ->
     assert not report.passed and any(issue.endswith(":E") for issue in report.issues)
 
 
+def test_own_ac_long_passes_expose_cooperative_checkpoints(freeform_case) -> None:
+    _model, _operation, result = freeform_case
+    post_count = 0
+
+    def post_checkpoint() -> None:
+        nonlocal post_count
+        post_count += 1
+
+    gcode = postprocess_own_ac(
+        result.toolpath, result.trajectory, own_ac_profile(), GENERIC_NOZZLE_0_4,
+        OWN_AC_OFFLINE_CONTROLLER, checkpoint=post_checkpoint,
+    )
+    assert gcode == result.gcode
+    assert post_count >= 1
+
+    read_count = 0
+
+    def read_checkpoint() -> None:
+        nonlocal read_count
+        read_count += 1
+
+    report = readback_own_ac(
+        gcode, result.toolpath, result.trajectory, own_ac_profile(),
+        GENERIC_NOZZLE_0_4, OWN_AC_OFFLINE_CONTROLLER,
+        checkpoint=read_checkpoint,
+    )
+    assert report.passed
+    assert read_count >= 4  # entry, regenerated NC, markers and point verification
+
+    def cancelled() -> None:
+        raise RuntimeError("user cancelled")
+
+    with pytest.raises(RuntimeError, match="user cancelled"):
+        postprocess_own_ac(
+            result.toolpath, result.trajectory, own_ac_profile(), GENERIC_NOZZLE_0_4,
+            OWN_AC_OFFLINE_CONTROLLER, checkpoint=cancelled,
+        )
+    with pytest.raises(RuntimeError, match="user cancelled"):
+        readback_own_ac(
+            gcode, result.toolpath, result.trajectory, own_ac_profile(),
+            GENERIC_NOZZLE_0_4, OWN_AC_OFFLINE_CONTROLLER, checkpoint=cancelled,
+        )
+
+
 def test_own_ac_distinguishes_absolute_reorientation_from_relative_material_park(
     freeform_case,
 ) -> None:

@@ -251,7 +251,9 @@ def generate_freeform_product(
         machine,
         tool_length_mm=nozzle.length_mm or 0.0,
         T_workpiece_from_build=T_workpiece_from_build,
+        checkpoint=lambda: _checkpoint(cancelled),
     )
+    _checkpoint(cancelled)
     validation = _validate(plan, toolpath, trajectory, operation, controller)
     manifest = GeneratedResultManifest(
         f"{toolpath.toolpath_id}-result-v1",
@@ -279,9 +281,13 @@ def generate_freeform_product(
             ),
             thermal_parameters,
         )
-    motion_gcode = postprocess_own_ac(toolpath, trajectory, machine, nozzle, controller)
+    motion_gcode = postprocess_own_ac(
+        toolpath, trajectory, machine, nozzle, controller,
+        checkpoint=lambda: _checkpoint(cancelled),
+    )
     readback = readback_own_ac(
-        motion_gcode, toolpath, trajectory, machine, nozzle, controller
+        motion_gcode, toolpath, trajectory, machine, nozzle, controller,
+        checkpoint=lambda: _checkpoint(cancelled),
     )
     gcode = motion_gcode
     if thermal_parameters is not None:
@@ -290,7 +296,8 @@ def generate_freeform_product(
         if recovered != motion_gcode:
             raise ValueError("thermal wrapper changed the checked motion program")
         readback = readback_own_ac(
-            recovered, toolpath, trajectory, machine, nozzle, controller
+            recovered, toolpath, trajectory, machine, nozzle, controller,
+            checkpoint=lambda: _checkpoint(cancelled),
         )
     if not readback.passed:
         manifest = replace(

@@ -6,7 +6,7 @@ from dataclasses import dataclass
 import json
 import math
 import re
-from typing import Any
+from typing import Any, Callable
 
 from ..kinematics.xyzac import MachineAxisTrajectory
 from ..manufacturing.controller_profile import ControllerProfile
@@ -56,6 +56,7 @@ def postprocess_own_ac(
     controller: ControllerProfile,
     *,
     marker_tag: str = "PAC",
+    checkpoint: Callable[[], None] | None = None,
 ) -> str:
     if trajectory.source_toolpath_id != toolpath.toolpath_id:
         raise ValueError("trajectory source does not match toolpath")
@@ -82,6 +83,8 @@ def postprocess_own_ac(
         "G92 E0 ; explicit extrusion origin",
     ]
     for index, (point, sample) in enumerate(zip(toolpath.points, trajectory.samples, strict=True)):
+        if checkpoint is not None and index % 512 == 0:
+            checkpoint()
         _emit_events(
             lines, events.get(index, ()), controller, marker_tag, point.feedrate_mm_min or 1.0
         )
@@ -153,11 +156,14 @@ def readback_own_ac(
     *,
     tolerance: float = 1.0e-4,
     marker_tag: str = "PAC",
+    checkpoint: Callable[[], None] | None = None,
 ) -> OwnACReadbackReport:
     """Strictly verify modes, marker order, XYZAC/F, relative E and macro balance."""
 
     if not math.isfinite(tolerance) or tolerance < 0.0:
         raise ValueError("tolerance must be finite and non-negative")
+    if checkpoint is not None:
+        checkpoint()
     lines = gcode.splitlines()
     command_lines = [
         line.partition(";")[0].strip() for line in lines if line.partition(";")[0].strip()
@@ -170,8 +176,9 @@ def readback_own_ac(
         nozzle,
         controller,
         marker_tag,
+        checkpoint,
     )
-    point_markers, event_markers = _markers(lines, marker_tag)
+    point_markers, event_markers = _markers(lines, marker_tag, checkpoint)
     expected_events = _expected_events(toolpath)
     if [(parts[0], parts[1]) for parts in event_markers] != [
         (event.event_id, event.event_type) for event in expected_events
@@ -186,6 +193,7 @@ def readback_own_ac(
             machine,
             nozzle,
             tolerance,
+            checkpoint,
         )
     )
     return OwnACReadbackReport(
@@ -199,7 +207,7 @@ def readback_own_ac(
 
 
 def _command_stream_issues(
-    command_lines, toolpath, trajectory, machine, nozzle, controller, marker_tag
+    command_lines, toolpath, trajectory, machine, nozzle, controller, marker_tag, checkpoint
 ):
     issues = []
     required_prefix = ["G21", "G90", "M83", "G94", "G92 E0"]
@@ -212,7 +220,8 @@ def _command_stream_issues(
     expected_commands = [
         line.partition(";")[0].strip()
         for line in postprocess_own_ac(
-            toolpath, trajectory, machine, nozzle, controller, marker_tag=marker_tag
+            toolpath, trajectory, machine, nozzle, controller,
+            marker_tag=marker_tag, checkpoint=checkpoint,
         ).splitlines()
         if line.partition(";")[0].strip()
     ]
@@ -221,10 +230,12 @@ def _command_stream_issues(
     return issues
 
 
-def _markers(lines, marker_tag):
+def _markers(lines, marker_tag, checkpoint=None):
     point_markers = []
     event_markers = []
     for index, line in enumerate(lines):
+        if checkpoint is not None and index % 4096 == 0:
+            checkpoint()
         prefix = f"; {marker_tag} POINT "
         if line.startswith(prefix):
             point_markers.append((index, line[len(prefix) :].split()))
@@ -239,7 +250,9 @@ def _expected_events(toolpath):
     return [event for sequence in sorted(grouped_events) for event in grouped_events[sequence]]
 
 
-def _point_readback_issues(lines, point_markers, toolpath, trajectory, machine, nozzle, tolerance):
+def _point_readback_issues(
+    lines, point_markers, toolpath, trajectory, machine, nozzle, tolerance, checkpoint=None
+):
     issues = []
     area = filament_area_mm2(nozzle)
     if len(point_markers) != len(toolpath.points):
@@ -247,6 +260,8 @@ def _point_readback_issues(lines, point_markers, toolpath, trajectory, machine, 
     for ordinal, ((line_index, fields), point, sample) in enumerate(
         zip(point_markers, toolpath.points, trajectory.samples), start=1
     ):
+        if checkpoint is not None and ordinal % 512 == 1:
+            checkpoint()
         issues.extend(
             _point_issues(
                 lines,

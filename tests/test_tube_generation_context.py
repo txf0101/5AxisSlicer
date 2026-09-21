@@ -120,6 +120,11 @@ def test_source_build_mount_and_independent_machine_fk(source_model, build):
     result = ctrl.generate_operation("tube")
     assert ctrl.setup_ready
     assert result.exportable, result.validation.to_json()
+    assert result.thermal_parameters is not None
+    assert result.thermal_parameters.nozzle_c == 200.0
+    assert result.thermal_parameters.bed_c == 60.0
+    assert result.gcode.startswith("; OFFLINE PRINT JOB:")
+    assert "M109 S200.000000" in result.gcode
     centre = build.T_target_from_source.transform_point((50, 50, 20.25))
     axis = build.T_target_from_source.transform_vector((0, 0, 1))
     for point, sample in zip(result.toolpath.points, result.trajectory.samples, strict=True):

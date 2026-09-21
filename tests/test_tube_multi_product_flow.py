@@ -28,6 +28,10 @@ from five_axis_slicer.postprocessing.tube_product import (
     export_tube_product,
     generate_tube_product,
 )
+from five_axis_slicer.postprocessing.thermal_program import (
+    ThermalProgramParameters,
+    unwrap_checked_thermal_program,
+)
 from five_axis_slicer.validation.indexed_tube import CollisionBox
 
 
@@ -196,6 +200,26 @@ def test_continuous_reads_back_exports_six_artifacts_and_reopens_state(
     # Axial growth holds A=0: C is underdetermined and retained, with a warning.
     assert service.state.status == "warning"
     assert {issue.code for issue in result.validation.issues} == {"xyzac.rotary_singularity"}
+
+
+def test_tube_public_product_can_export_checked_pla_thermal_program(
+    tmp_path, model, feature, machine, nozzle, placement
+) -> None:
+    operation = _operation("tube_continuous", TubeContinuousOperationConfig(30.0))
+    thermal = ThermalProgramParameters(195.0, 45.0)
+    with patch("five_axis_slicer.postprocessing.tube_product.recognise_tube", return_value=feature):
+        result = generate_tube_product(
+            model, operation, machine, nozzle,
+            T_workpiece_from_build=placement,
+            thermal_parameters=thermal,
+        )
+    assert result.exportable and result.readback.passed
+    assert result.gcode.startswith("; OFFLINE PRINT JOB:")
+    motion = unwrap_checked_thermal_program(result.gcode, thermal)
+    assert motion.startswith("; 5AxisSclicer Tube Continuous")
+    output = export_tube_product(result, tmp_path / "thermal-tube")
+    assert (output / "main.gcode").read_text(encoding="utf-8") == result.gcode
+    assert result.to_json()["thermal_parameters"] == {"nozzle_c": 195.0, "bed_c": 45.0}
 
 
 def test_continuous_collision_error_blocks_nc_and_export(

@@ -19,6 +19,7 @@ from .postprocessing.tube_product import (
     export_tube_product,
     tube_operation_semantic_sha256,
 )
+from .postprocessing.thermal_program import ThermalProgramParameters
 
 
 class TubeGenerationControllerMixin:
@@ -67,6 +68,9 @@ class TubeGenerationControllerMixin:
             context = make_tube_generation_context(self, operation)
             nozzle = self._setup.nozzle
             assert nozzle is not None
+            material = self._setup.material
+            assert material is not None
+            recommendations = material.as_material_profile().recommendations
             result = service.generate(
                 context.model_in_build,
                 operation,
@@ -79,6 +83,10 @@ class TubeGenerationControllerMixin:
                 input_semantic_sha256=context.input_sha256,
                 generation_context=context.metadata,
                 cancelled=cancel_check,
+                thermal_parameters=ThermalProgramParameters(
+                    recommendations.nozzle_temperature_c,
+                    recommendations.build_plate_temperature_c,
+                ),
             )
             if context.input_sha256 != tube_input_fingerprint(
                 self, self._operation_for_id(operation.operation_id)
