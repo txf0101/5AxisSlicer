@@ -39,6 +39,7 @@ Research 工作台仍未完成，不提供操作教程。计划中的入口、�
 | 自有 AC 后处理 | [论文核心 AC 离线封装](paper_core_ac_controller_zh.md) | 核对 G90/M83/G94、两种 Z20、宏展开和累计 C 时 |
 | 脚本与 YAML | [Tube 设置脚本与 YAML](tube_setup_script_console_zh.md) | GUI 基础掌握后，再学习事务和自动化入口 |
 | 工作台辨别 | [pipe2 与扇叶模型、手工 G-code 可视化对比](../reviews/2026-09-13_pipe2_model_manual_gcode_comparison.md) | 难以区分 Rotary、Tube、Curve 和 Freeform 时 |
+| 完整实体切片方法（开发中） | [FAN15 四类方法与迁移检查单](fan15_solid_fill_method_notes.md) | 理解弯管、球面实体、一般曲面实体和径向叶片的生长方式；当前不是已走通的 GUI 教程 |
 
 ## 教程编写矩阵
 
