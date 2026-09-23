@@ -12,15 +12,50 @@ from five_axis_slicer.gcode_preview import (
     load_gcode,
     normalize_role,
     parse_gcode,
+    preview_from_generated_toolpath,
     preview_from_json,
     preview_to_json,
 )
 from five_axis_slicer.manufacturing.preview_kinematics import (
     GENERIC_XYZAC_AC_SEMANTICS,
 )
+from five_axis_slicer.manufacturing.coordinates import RigidTransform
+from five_axis_slicer.manufacturing.toolpath import GeneratedToolpath, ToolpathPoint
 
 
 class GCodePreviewTests(unittest.TestCase):
+    def test_generated_path_preview_uses_source_cad_coordinates(self) -> None:
+        common = dict(
+            tangent=(1.0, 0.0, 0.0),
+            nozzle_axis=(0.0, 0.0, -1.0),
+            operation_id="tube-1",
+            stage_id="tube-shell",
+            layer_id="layer-1",
+            region_id="region-1",
+        )
+        toolpath = GeneratedToolpath(
+            "tube-path",
+            "tube-1",
+            points=(
+                ToolpathPoint("p1", (11.0, 2.0, 3.0), point_type="approach", **common),
+                ToolpathPoint(
+                    "p2", (12.0, 2.0, 3.0), point_type="deposition", extrusion_role="buildup", **common
+                ),
+            ),
+        )
+        preview = preview_from_generated_toolpath(
+            toolpath,
+            source_from_build=RigidTransform.from_translation(
+                (-10.0, 0.0, 0.0), source_frame="build", target_frame="source"
+            ),
+        )
+
+        self.assertEqual(preview.coordinate_transform, "source")
+        self.assertEqual(preview.bounds, ((1.0, 2.0, 3.0), (2.0, 2.0, 3.0)))
+        self.assertEqual(preview.segments[0].start, (1.0, 2.0, 3.0))
+        self.assertEqual(preview.segments[0].end, (2.0, 2.0, 3.0))
+        self.assertEqual(preview.segments[0].move_type, "extrude")
+
     def test_maps_orca_type_tags_and_relative_extrusion(self) -> None:
         text = """
 G90

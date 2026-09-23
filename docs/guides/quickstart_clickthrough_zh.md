@@ -1,6 +1,6 @@
 # 五个工作台：照着界面完成第一次切片
 
-本页是最短的点击路线。先完成公共 Setup，再选与几何和生长方式相符的工作台，最后检查路径和 NC 回读。图中的 ID、尺寸和参数只用于演示，自己的 STEP 必须重新选几何、核定工艺。截图来自当前项目的 Qt 界面或注明的证据绘制器，均不代表实机打印。需要参数解释和故障处理时打开各节的详细手册。
+先完成公共制造设置，再选与几何和生长方式相符的工作台，最后检查路径和 NC 回读。图中的 ID、尺寸和参数只用于演示；自己的 STEP 必须重新选几何、核定工艺。界面图和路径图仅用于学习离线操作，不代表实机打印。参数解释和故障处理见各工作台手册。
 
 | 要做什么 | 进入哪节 | 适用对象 |
 | --- | --- | --- |
@@ -13,13 +13,17 @@
 
 ## 0. 所有工作台先做 Setup
 
+![首页的打开 STEP、公共制造设置和工作台入口](assets/product_delivery/01_home_zh.jpg)
+
 1. 在仓库根目录运行 `run_app.py`（或 `scripts/run_app.ps1`）。进入工作台后打开自己的 STEP/STP。若只是导入到模型预览页，仍须进入制造工作台创建操作。
-2. 从管状设置入口进入公共 Setup；在 **Part** 中把参与打印的封闭实体标为 Part，其他实体不要误选。依次应用 **Machine → Model CS → Build CS → Placement**，并检查 **Nozzle** 和 **Material** 已审核。每页有草稿时点“应用”或“确认”。
+2. 点顶部“公共制造设置 / Manufacturing Setup”；在 **Part** 中把参与打印的封闭实体标为 Part，其他实体不要误选。依次应用 **Machine → Model CS → Build CS → Placement**，并检查 **Nozzle** 和 **Material** 已审核。每页有草稿时点“应用”或“确认”。
 3. 回到工作台首页。检查状态“设置就绪”；如果为 Error，点问题列表查缺少的资源或坐标。参考机型的 Warning 需要保留并审阅，不代表可上机。
 
-![Part 页：把待打印实体分配为零件](assets/tube_coordinate_setup/02_tube_setup_part.png)
+![Part 页：弯管的两个实体已设为零件，喷嘴仍待设置](assets/product_delivery/02_part_pipe_zh.jpg)
 
-上图看 Part 归属；Model CS 的三参考编辑位置见[坐标设置图](assets/tube_coordinate_setup/03_model_cs_editor.png)，完整说明见[Setup 手册](tube_coordinate_setup_zh.md)。
+在右侧“角色”列选择“零件”，向下滚动并点“确认”。左侧显示“零件（Part）[有效]”后，再处理问题列表中的喷嘴和其他资源。Model CS 的三参考编辑位置见[坐标设置图](assets/tube_coordinate_setup/03_model_cs_editor.png)，完整说明见[Setup 手册](tube_coordinate_setup_zh.md)。
+
+如果底部“设置脚本”占用画面，可在顶部“工具”菜单取消勾选“设置脚本”；需要脚本操作时再打开。
 
 ## 1. Planar：平面切片
 
@@ -49,7 +53,7 @@
 
 ![Rotary 中 Viewer 选轴边和回转面的位置](assets/rotary/live_qt/02_selection_overview_zh.png)
 
-图为生产 Qt Viewer 抓图。叶片自由曲面不能选作圆柱面；示例和轴语义见[Rotary 手册](rotary_workbench_zh.md)。
+叶片自由曲面不能选作圆柱面；示例和轴语义见[Rotary 手册](rotary_workbench_zh.md)。
 
 ## 4. Tube：管体生长
 
@@ -59,7 +63,7 @@
 
 ![Tube 中从已导入模型进入设置的按钮](assets/tube_coordinate_setup/01_imported_step_entry.png)
 
-界面入口图只展示起步位置；模式选择、生成和已知限制见[Tube 手册](tube_workbench_zh.md)。弯管已经有整件离线 NC 与全流回读；IPW 碰撞检查暂缓、真实机床资格未取得。
+界面入口图展示模型导入位置；模式选择、生成和适用范围见[Tube 手册](tube_workbench_zh.md)。导出前应检查逐层承接、空移与问题列表。离线检查不能代替机床碰撞与试打验证。
 
 ## 5. Freeform：曲面与实体
 
@@ -69,7 +73,7 @@
 
 ![Freeform 有限导引面/边模式与路径](assets/paper_core_ac/01_freeform_zh_1366x768.png)
 
-此图由 Qt 证据绘制器呈现导引线模式，不是新增实体模式的 GUI 截图。三种实体模式各有真实 GUI 生成与六件套导出记录，百万点操作仍有界面响应问题；Tube 的整套界面验收仍在进行。导引模式见[Freeform 手册](freeform_workbench_zh.md)，实体生长选择与验证边界见[完整实体方法](fan15_solid_fill_method_notes.md)。
+图为导引线模式示意。导引模式见[Freeform 手册](freeform_workbench_zh.md)，实体生长的几何选择和适用条件见[完整实体方法](fan15_solid_fill_method_notes.md)。大型操作可能耗时较长；生成完成前不要将旧预览当作当前结果。
 
 ## 6. 查看已有 G-code
 
@@ -85,4 +89,4 @@
 2. 只有允许导出的 Ready/Warning 才点“导出结果”，检查六件套：`main.gcode`、`toolpath.json`、`machine_axes.csv`、`warnings.json`、`preview.json`、`manifest.json`。核对清单的回读状态与 `machine_executable`；当前参考机型/自有 AC 的离线验证不等于实机资格。
 3. 点“保存项目”，重新打开后旧运行时结果会是 Stale，再点 Generate 才能取得当前导出资格。新模型应重新选择 body/face/edge、坐标和参数，不能复制演示 ID。
 
-想系统学习判断标准、错误恢复和迁移练习，可按[学习总册](user_learning_manual_zh.md)继续；高级参数从[手册中心](README.md)查找。Research 仍未完成，本页不提供可操作步骤。
+判断标准、错误恢复和迁移练习见[学习总册](user_learning_manual_zh.md)；高级参数见[手册中心](README.md)。Research 入口不可用，请选择上述工作台。

@@ -224,6 +224,15 @@ class ResourceLibraryUiTests(unittest.TestCase):
                 library.audit_snapshot(selected).status,
                 "missing",
             )
+            self.assertNotIn(
+                "RESOURCE_LIBRARY_ENTRY_MISSING",
+                {issue.code for issue in page.controller.validation_report().issues},
+            )
+            self.assertIn("当前项目", page.nozzle_combo.currentText())
+            errors: list[str] = []
+            page.error_raised.connect(errors.append)
+            page._apply_nozzle()
+            self.assertEqual(errors, [])
             self.assertTrue(get_builtin_nozzle_profile(0.4).is_builtin)
 
             builtin_material_key = next(
@@ -242,6 +251,9 @@ class ResourceLibraryUiTests(unittest.TestCase):
                 library.audit_snapshot(selected_material).status,
                 "missing",
             )
+            self.assertIn("当前项目", page.material_combo.currentText())
+            page._apply_material()
+            self.assertEqual(errors, [])
 
     def test_applied_page_actions_use_injected_command_executor(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

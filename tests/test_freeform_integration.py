@@ -327,7 +327,33 @@ def test_radial_solid_gui_captures_hub_and_three_blade_roles(configured) -> None
     page.close()
 
 
-def test_surface_solid_controller_runs_shared_product_and_readback(configured) -> None:
+def test_tool_change_station_is_editable_and_persisted_via_freeform_ui(configured) -> None:
+    base, operation, model, _guides = configured
+    controller = base.fork()
+    page = FreeformPage(controller=controller, viewer_factory=TubeViewerStub)
+    station = {
+        "clearance_z_mm": 180.0,
+        "cutter_xyz_mm": [130.0, 100.0, 80.0],
+        "exchange_xyz_mm": [140.0, 100.0, 80.0],
+        "purge_xyz_mm": [150.0, 100.0, 80.0],
+        "wipe_start_xyz_mm": [160.0, 100.0, 80.0],
+        "wipe_end_xyz_mm": [170.0, 100.0, 80.0],
+    }
+    page.tool_change_station_edit.setText(json.dumps(station))
+    page.apply_button.click()
+    assert page._last_error is None
+    assert controller.controller_profile.tool_change_station is not None
+    restored = FreeformController.from_json(controller.to_json(), cad_model=model)
+    assert restored.controller_profile.tool_change_station == controller.controller_profile.tool_change_station
+    old_profile = controller.controller_profile
+    page.tool_change_station_edit.setText('{"clearance_z_mm":10}')
+    page.apply_button.click()
+    assert page._last_error
+    assert controller.controller_profile == old_profile
+    page.close()
+
+
+def test_surface_solid_controller_blocks_unsafe_operation_transition(configured) -> None:
     base, _operation, _model, _guides = configured
     controller = base.fork()
     solid = controller.create_operation(
@@ -352,9 +378,13 @@ def test_surface_solid_controller_runs_shared_product_and_readback(configured) -
     result = controller.generate_operation(solid.operation_id)
 
     assert result.plan.operation_type == "surface_solid_fill"
-    assert result.offline_exportable
-    assert result.readback.passed
-    assert "M109 S" in result.gcode and result.gcode.rstrip().endswith("M2")
+    assert not result.offline_exportable
+    assert not result.readback.passed
+    assert not result.gcode
+    assert any(
+        issue.code == "motion.printed_part_collision"
+        for issue in result.validation.issues
+    )
     assert any(point.extrusion_role == "infill" for point in result.toolpath.points)
     summary = result.to_json()
     assert summary["schema_version"] == 2

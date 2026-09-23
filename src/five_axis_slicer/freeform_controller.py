@@ -17,7 +17,11 @@ from .freeform_operation_service import (
     create_freeform_operation,
     rebind_freeform_operation_geometry,
 )
-from .manufacturing.controller_profile import ControllerProfile, OWN_AC_OFFLINE_CONTROLLER
+from .manufacturing.controller_profile import (
+    ControllerProfile,
+    OWN_AC_OFFLINE_CONTROLLER,
+    ToolChangeStation,
+)
 from .manufacturing.freeform_parameters import (
     FREEFORM_OPERATION_TYPES,
     FreeformOperationDefinition,
@@ -93,6 +97,19 @@ class FreeformController:
     @property
     def cad_model(self):
         return self._cad_model
+
+    @property
+    def controller_profile(self) -> ControllerProfile:
+        return self._controller_profile
+
+    def configure_tool_change_station(self, station: ToolChangeStation | None) -> None:
+        if station is not None and not isinstance(station, ToolChangeStation):
+            raise TypeError("station must be ToolChangeStation or None")
+        updated = replace(self._controller_profile, tool_change_station=station)
+        if updated != self._controller_profile:
+            self._controller_profile = updated
+            self._mark_all_products_stale()
+            self._modified = True
 
     @property
     def is_modified(self):

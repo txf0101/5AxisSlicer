@@ -73,6 +73,8 @@ class TubeViewerStub(QWidget):
         self.model_transform_history = []
         self.visible_path_segment_count = 0
         self.path_render_mode = "test"
+        self.model_visible = True
+        self.quality_mode = "interactive"
 
     def set_selection_callback(self, _callback) -> None:
         return
@@ -128,6 +130,12 @@ class TubeViewerStub(QWidget):
     def load_gcode_preview(self, preview) -> None:
         self.gcode_preview = preview
         self.visible_path_segment_count = len(preview.segments)
+
+    def set_model_visible(self, visible: bool) -> None:
+        self.model_visible = bool(visible)
+
+    def set_quality_mode(self, mode: str) -> None:
+        self.quality_mode = mode
 
     def clear_gcode_preview(self) -> None:
         self.gcode_preview = None
@@ -366,6 +374,7 @@ class TubeUiTests(unittest.TestCase):
         )
         with mock.patch.object(page.controller, "product_state", return_value=state):
             tube_operation_ui._refresh_product_status(page)
+            page.set_language("en")
         self.assertIn("tube.nozzle_ipw_collision", page.operation_generation_status.text())
         self.assertIn("collision_check_complete=False", page.operation_generation_status.text())
         self.assertFalse(page.operation_export_button.isEnabled())
@@ -409,6 +418,7 @@ class TubeUiTests(unittest.TestCase):
         page._create_operation()
         operation_item = page.tree.topLevelItem(0).child(2).child(0)
         page.tree.setCurrentItem(operation_item)
+        window.script_console_manager.action.setChecked(True)
         window.resize(1366, 768)
         self.app.processEvents()
 
@@ -569,6 +579,74 @@ class TubeUiTests(unittest.TestCase):
         self.assertEqual(window.tube_page.issue_title.text(), "Issues")
         self.assertEqual(window.tube_page.coordinate_apply_button.text(), "Apply")
 
+    def test_path_controls_can_show_full_lines_without_occluding_model(self) -> None:
+        window = self._window()
+        page = window.tube_page
+        window.enter_workbench("tube")
+        window.resize(1366, 768)
+        window.show()
+        self.app.processEvents()
+        self.assertLess(
+            page.model_view_button.geometry().bottom(),
+            page.show_model_checkbox.geometry().top(),
+        )
+        self.assertLess(
+            page.machine_view_button.geometry().bottom(),
+            page.path_display_combo.geometry().top(),
+        )
+        self.assertEqual(page.path_display_combo.currentData(), "paper")
+        self.assertTrue(page.show_model_checkbox.isChecked())
+
+        page.show_model_checkbox.setChecked(False)
+        self.assertFalse(page.viewer.model_visible)
+        page.viewer.gcode_preview = object()
+        page.path_display_combo.setCurrentIndex(1)
+        self.assertEqual(page.viewer.quality_mode, "interactive")
+        page.path_display_combo.setCurrentIndex(0)
+        self.assertEqual(page.viewer.quality_mode, "paper")
+
+        window.set_language("en")
+        self.assertEqual(page.show_model_checkbox.text(), "Show model")
+        self.assertEqual(page.path_display_combo.itemText(0), "Full lines (fast)")
+
+    def test_operation_title_and_preview_status_follow_language(self) -> None:
+        from five_axis_slicer import tube_operation_ui
+
+        window = self._loaded_tube_window()
+        page = window.tube_page
+        page._create_operation()
+        operation = page.controller.operations[0]
+        page.tree.setCurrentItem(page._tree_items[f"operation:{operation.operation_id}"])
+        self.app.processEvents()
+        tube_operation_ui._set_generation_status(page, "generation_preview_ready")
+
+        window.set_language("en")
+        self.assertEqual(
+            page.editor_title.text(), page._t(f"operation_type_{operation.operation_type}")
+        )
+        self.assertEqual(
+            page.operation_generation_status.text(),
+            "The layered path is visible in the viewer.",
+        )
+        window.set_language("zh")
+        self.assertEqual(
+            page.editor_title.text(), page._t(f"operation_type_{operation.operation_type}")
+        )
+        self.assertEqual(page.operation_generation_status.text(), "已在查看器中显示逐层路径。")
+
+    def test_common_setup_entry_uses_generic_heading_and_hides_tube_creation(self) -> None:
+        window = self._window()
+        window.open_manufacturing_setup()
+        page = window.tube_page
+        self.assertIs(window.stack.currentWidget(), page)
+        self.assertEqual(page.title_label.text(), "公共制造设置")
+        self.assertFalse(page.create_operation_button.isVisibleTo(page))
+        window.set_language("en")
+        self.assertEqual(page.title_label.text(), "Manufacturing Setup")
+        window.enter_workbench("tube")
+        self.assertEqual(page.title_label.text(), "Tube Workbench")
+        self.assertFalse(page.create_operation_button.isHidden())
+
     def test_workbench_cards_and_part_roles_follow_language(self) -> None:
         window = self._loaded_tube_window()
         page = window.tube_page
@@ -576,9 +654,12 @@ class TubeUiTests(unittest.TestCase):
         self.assertIn("平面工作台", window.workbench_buttons["planar"].text())
         self.assertIn("[离线可用]", window.workbench_buttons["planar"].text())
         self.assertIn("回转工作台", window.workbench_buttons["rotary"].text())
-        self.assertIn("[可用]", window.workbench_buttons["rotary"].text())
+        self.assertIn("[离线可用]", window.workbench_buttons["rotary"].text())
         self.assertIn("研究工作台", window.workbench_buttons["research"].text())
-        self.assertIn("[研发]", window.workbench_buttons["research"].text())
+        self.assertIn("[暂不可用]", window.workbench_buttons["research"].text())
+        self.assertFalse(window.workbench_buttons["research"].isEnabled())
+        self.assertEqual(window.setup_action.text(), "公共制造设置")
+        self.assertLessEqual(window.workbench_buttons["planar"].maximumHeight(), 150)
 
         combo = next(iter(page._role_combos.values()))
         self.assertEqual(
@@ -591,7 +672,9 @@ class TubeUiTests(unittest.TestCase):
         combo.setCurrentIndex(combo.findData("ignore"))
 
         window.set_language("en")
-        self.assertIn("[Ready]", window.workbench_buttons["rotary"].text())
+        self.assertEqual(window.setup_action.text(), "Manufacturing Setup")
+        self.assertIn("[Offline Ready]", window.workbench_buttons["rotary"].text())
+        self.assertIn("[Unavailable]", window.workbench_buttons["research"].text())
         combo = next(iter(page._role_combos.values()))
         self.assertEqual(
             [combo.itemText(i) for i in range(combo.count())], ["Part", "Ignore", "Unassigned"]

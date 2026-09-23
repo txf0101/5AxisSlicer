@@ -8,7 +8,7 @@
 - `G92 E0`：建立明确挤出原点；
 - 结束前恢复 `G90/M83/G94`，再发 `M400` 和 `M2`。
 
-每个点前都有可回读的 `PAC POINT` 标记，材料事件有 `PAC EVENT` 和 JSON 上下文。回读器逐项比较完整命令流、点顺序、控制器轴字、F、相对 E、材料/通道和事件顺序。插入额外命令、把 M83 改成 M82、篡改 E/F/轴值、互换两种 Z20 动作或破坏 footer 都会失败。
+每个点前都有可回读的 `PAC POINT` 标记，材料事件有 `PAC EVENT` 和 JSON 上下文。换料移动带 `PAC SERVICE` 标记。回读器逐项比较完整命令流、点顺序、控制器轴字、F、相对 E、材料/通道和事件顺序。插入额外命令、把 M83 改成 M82、篡改 E/F/轴值或破坏 footer 都会失败。
 
 ## 资格判断
 
@@ -21,8 +21,8 @@
 
 因此 `machine_executable=false`。已知 A±180°、C±360°仍会参与单点轴限检查；实际累计 C 运动量和跨度写入 qualification。没有累计上限时产生 `controller.cumulative_c_limit_unknown` Warning；配置已知上限后，超限产生 Error。
 
-## 本轮样例
+## 换料移动
 
-pipe2 的当前 Tube 产品有 1,591 个点，现有离线后处理和自有 AC 后处理均严格回读通过。Indexed 的 `index_start` 中可见绝对 `Z=20 mm`。材料切换的相对 `Z+20 mm` 在多材料 Freeform 案例中验证。四个 Freeform/Tube 项目和五类产品都保存在[论文核心 AC 证据目录](../reviews/evidence/2026-09-13_paper_core_ac/validation_manifest.json)。
+Freeform 多通道程序需要配置[换料站与材料区域](material_channels_zh.md)。退离、切刀位、换料位、排料位、擦嘴和返回位置均为明确的绝对 XYZAC 移动；`index_start` 不会暗中插入固定 Z 高度。换料站未配置或退离路径与已打印材料相交时，导出被阻止。仅有通道初选、不发生换色的程序无需访问换料站。
 
 这些结果不能直接下发机床。取得实机资格前还需冻结控制器与宏版本、回转中心/零偏/轴方向、工具与夹具扫掠、速度/加速度、传感器协议，并完成现场空运行、碰撞检查和试切。

@@ -25,12 +25,15 @@ from five_axis_slicer.manufacturing.resources import (
 from five_axis_slicer.manufacturing.setup import (
     ManufacturingObjectAssignments,
     ManufacturingSetup,
+    NodeState,
+    TubeBuildupOperationConfig,
     TubeProcessParameters,
 )
 from five_axis_slicer.postprocessing.indexed_tube import GenerationCancelled
 from five_axis_slicer.postprocessing.tube_product import TubeProductState
 from five_axis_slicer.step_loader import load_step
 from five_axis_slicer.tube_controller import TubeSetupController
+from five_axis_slicer.tube_generation_context import _collision_boxes
 
 
 def frame(name, origin=(0, 0, 0), x=(1, 0, 0), z=(0, 0, 1)):
@@ -111,6 +114,25 @@ def controller(model, *, shift=0, build=None, reviewed=True):
     return ctrl
 
 
+def test_printed_planar_base_is_not_treated_as_an_existing_obstacle(source_model):
+    ctrl = controller(source_model)
+    operation = ctrl.operations[0]
+    existing = replace(
+        operation,
+        operation_type="tube_buildup",
+        type_config=TubeBuildupOperationConfig(include_planar_base=False),
+    )
+    printed = replace(
+        operation,
+        operation_type="tube_buildup",
+        type_config=TubeBuildupOperationConfig(include_planar_base=True),
+    )
+    assert [(box.obstacle_id, box.role) for box in _collision_boxes(source_model, ctrl.setup, existing)] == [
+        ("body_002", "substrate")
+    ]
+    assert _collision_boxes(source_model, ctrl.setup, printed) == ()
+
+
 @pytest.mark.parametrize(
     "build", [frame("build", (10, 0, 0)), frame("build", (10, 0, 0), x=(0, 1, 0))]
 )
@@ -119,6 +141,8 @@ def test_source_build_mount_and_independent_machine_fk(source_model, build):
     ctrl = controller(source_model, build=build)
     result = ctrl.generate_operation("tube")
     assert ctrl.setup_ready
+    assert ctrl.operations[0].state is NodeState.VALID
+    assert ctrl.operations[0].dirty_reasons == ()
     assert result.exportable, result.validation.to_json()
     assert result.thermal_parameters is not None
     assert result.thermal_parameters.nozzle_c == 200.0

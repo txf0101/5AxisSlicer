@@ -74,8 +74,10 @@ from .tube_commands import TubeCommandProvider
 from .tube_controller import BodyRole, DraftNotFoundError, TubeSetupController
 from .tube_drafts import CoordinateFrameDraft
 from .tube_resource_selection import NozzleEditorError
+from .tube_resource_context import is_project_resource_id
 from .tube_ui_text import (
     TUBE_CONTROL_TEXT,
+    TUBE_ISSUE_LABELS,
     apply_tube_help,
     setup_tree_node,
     tube_language,
@@ -137,6 +139,7 @@ class TubeSetupPage(QWidget):
     ) -> None:
         super().__init__(parent)
         self.language = "zh"
+        self._common_setup_mode = False
         self.model: CadModel | None = None
         self.resource_library = resource_library or UserResourceLibrary(
             default_user_resource_library_root()
@@ -266,16 +269,33 @@ class TubeSetupPage(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         toolbar = QFrame()
         toolbar.setObjectName("progressPanel")
-        toolbar_layout = QHBoxLayout(toolbar)
+        toolbar_layout = QVBoxLayout(toolbar)
         toolbar_layout.setContentsMargins(8, 6, 8, 6)
+        toolbar_layout.setSpacing(4)
+        view_row = QHBoxLayout()
         self.model_view_button, self.machine_view_button = QPushButton(), QPushButton()
         self.model_view_button.setMinimumWidth(128)
         self.machine_view_button.setMinimumWidth(128)
         self.model_view_button.clicked.connect(lambda: self.set_view_mode("model"))
         self.machine_view_button.clicked.connect(lambda: self.set_view_mode("machine"))
-        toolbar_layout.addWidget(self.model_view_button)
-        toolbar_layout.addWidget(self.machine_view_button)
-        toolbar_layout.addStretch(1)
+        view_row.addWidget(self.model_view_button)
+        view_row.addWidget(self.machine_view_button)
+        view_row.addStretch(1)
+        toolbar_layout.addLayout(view_row)
+        self.show_model_checkbox = QCheckBox()
+        self.show_model_checkbox.setObjectName("tubeShowModel")
+        self.show_model_checkbox.setChecked(True)
+        self.show_model_checkbox.toggled.connect(self._set_model_visible)
+        self.path_display_combo = QComboBox()
+        self.path_display_combo.setObjectName("tubePathDisplay")
+        self.path_display_combo.addItem("", "paper")
+        self.path_display_combo.addItem("", "interactive")
+        self.path_display_combo.currentIndexChanged.connect(self._set_path_display)
+        display_row = QHBoxLayout()
+        display_row.addWidget(self.show_model_checkbox)
+        display_row.addWidget(self.path_display_combo)
+        display_row.addStretch(1)
+        toolbar_layout.addLayout(display_row)
         layout.addWidget(toolbar)
         layout.addWidget(self.viewer, 1)
         return panel
@@ -542,8 +562,11 @@ class TubeSetupPage(QWidget):
                 (item for item in self.controller.resource_audits if item.resource_type == kind),
                 None,
             )
-            status = "missing" if audit is None else audit.status
-            origins[kind][snapshot_key] = f"snapshot:{status}"
+            if is_project_resource_id(kind, snapshot.resource_id):
+                origins[kind][snapshot_key] = "project"
+            else:
+                status = "missing" if audit is None else audit.status
+                origins[kind][snapshot_key] = f"snapshot:{status}"
 
         self._machine_profiles = dict(catalogs["machine"])
         self._nozzle_profiles = dict(catalogs["nozzle"])
@@ -598,6 +621,8 @@ class TubeSetupPage(QWidget):
             qualifier = self._t("resource_origin_builtin")
         elif origin == "user":
             qualifier = self._t("resource_origin_user")
+        elif origin == "project":
+            qualifier = self._t("resource_origin_project")
         else:
             _prefix, _separator, status = origin.partition(":")
             status_key = (
@@ -630,6 +655,10 @@ class TubeSetupPage(QWidget):
         view_width = 220 if english else 128
         self.model_view_button.setMinimumWidth(view_width)
         self.machine_view_button.setMinimumWidth(view_width)
+        self.show_model_checkbox.setText(t("show_model"))
+        self.path_display_combo.setItemText(0, t("path_display_lines"))
+        self.path_display_combo.setItemText(1, t("path_display_beads"))
+        self.path_display_combo.setToolTip(t("path_display"))
         self.part_table.setHorizontalHeaderLabels((t("body"), t("kind"), t("role")))
         self.coordinate_help.setText(
             t(
@@ -650,6 +679,7 @@ class TubeSetupPage(QWidget):
             if component != "origin":
                 getattr(self, f"{component}_flip_button").setText(t("flip"))
         self._populate_resource_combos()
+        self._update_page_heading()
         self._retranslate_part_roles()
         self._rebuild_tree()
         self._populate_coordinate_candidates(preserve_selection=True)
@@ -657,6 +687,20 @@ class TubeSetupPage(QWidget):
 
     def _t(self, key: str) -> str:
         return _TEXT[self.language][key]
+
+    def set_common_setup_mode(self, enabled: bool) -> None:
+        self._common_setup_mode = bool(enabled)
+        self.operation_type_combo.setVisible(not enabled)
+        self.create_operation_button.setVisible(not enabled)
+        self._update_page_heading()
+
+    def _update_page_heading(self) -> None:
+        if self._common_setup_mode:
+            self.title_label.setText(self._t("common_setup_title"))
+            self.subtitle_label.setText(self._t("common_setup_subtitle"))
+        else:
+            self.title_label.setText(self._t("title"))
+            self.subtitle_label.setText(self._t("subtitle"))
 
     def set_model(self, model: CadModel) -> None:
         self.model = model
@@ -786,10 +830,11 @@ class TubeSetupPage(QWidget):
                 IssueSeverity.WARNING: "W",
                 IssueSeverity.INFO: "I",
             }[issue.severity]
-            self.issue_list.addItem(
-                f"[{marker}] {issue.code} · {issue.object_id or self.controller.setup.setup_id}"
-            )
-            self.issue_list.item(self.issue_list.count() - 1).setData(Qt.UserRole, issue.to_json())
+            label = TUBE_ISSUE_LABELS[self.language].get(issue.code, issue.code)
+            self.issue_list.addItem(f"[{marker}] {label}")
+            item = self.issue_list.item(self.issue_list.count() - 1)
+            item.setData(Qt.UserRole, issue.to_json())
+            item.setToolTip(f"{issue.code} · {issue.object_id or self.controller.setup.setup_id}")
         if not report.issues:
             self.issue_list.addItem(self._t("no_issues"))
         self._refresh_overlays()
@@ -951,8 +996,10 @@ class TubeSetupPage(QWidget):
         rec = profile.recommendations
         self.material_detail.setText(
             f"{profile.material} · {profile.filament_diameter_mm:.2f} mm\n"
-            f"Nozzle {rec.nozzle_temperature_c:.0f} °C · Plate {rec.build_plate_temperature_c:.0f} °C\n"
-            f"Revision {profile.source.revision[:12]}"
+            + self._t("material_temperatures").format(
+                nozzle=rec.nozzle_temperature_c,
+                plate=rec.build_plate_temperature_c,
+            )
         )
 
     def _begin_coordinate_editor(self, node: str) -> None:
@@ -965,8 +1012,11 @@ class TubeSetupPage(QWidget):
             self._t("coordinate_help_model" if node == MODEL_CS_NODE else "coordinate_help_build")
         )
         self.coordinate_feedback.setText(
-            f"Draft: origin={'✓' if draft.origin_reference else '—'}, "
-            f"Z={'✓' if draft.z_direction_reference else '—'}, X={'✓' if draft.x_direction_reference else '—'}"
+            self._t("coordinate_confirmed").format(
+                origin="✓" if draft.origin_reference else "—",
+                z="✓" if draft.z_direction_reference else "—",
+                x="✓" if draft.x_direction_reference else "—",
+            )
         )
         self._coordinate_control_dirty.clear()
         self._populate_coordinate_candidates()
@@ -1148,7 +1198,7 @@ class TubeSetupPage(QWidget):
             )
             if frame is None:  # pragma: no cover - provider contract guard
                 raise RuntimeError("coordinate command did not publish an applied frame")
-            self.coordinate_feedback.setText(f"Applied {frame.name} · revision {frame.revision}")
+            self.coordinate_feedback.setText(self._t("coordinate_applied"))
         except Exception as exc:
             self._report_error(exc, self.coordinate_feedback)
 
@@ -1343,10 +1393,7 @@ class TubeSetupPage(QWidget):
             transform = self.controller.setup.T_mount_from_build
             if transform is None:  # pragma: no cover - provider contract guard
                 raise RuntimeError("placement command did not publish a transform")
-            self.placement_feedback.setText(
-                f"Applied T_mount_from_build · ({transform.translation[0]:.3f}, "
-                f"{transform.translation[1]:.3f}, {transform.translation[2]:.3f}) mm"
-            )
+            self.placement_feedback.setText(self._t("placement_applied"))
         except Exception as exc:
             self._set_view_mode_state(previous_mode)
             self._report_error(exc, self.placement_feedback)
@@ -1362,6 +1409,14 @@ class TubeSetupPage(QWidget):
     def set_view_mode(self, mode: str) -> None:
         self._set_view_mode_state(mode)
         self._refresh_overlays()
+
+    def _set_model_visible(self, visible: bool) -> None:
+        if hasattr(self.viewer, "set_model_visible"):
+            self.viewer.set_model_visible(visible)
+
+    def _set_path_display(self, _index: int) -> None:
+        if hasattr(self.viewer, "set_quality_mode") and getattr(self.viewer, "gcode_preview", None) is not None:
+            self.viewer.set_quality_mode(str(self.path_display_combo.currentData()))
 
     def _set_view_mode_state(self, mode: str) -> None:
         if mode not in {"model", "machine"}:

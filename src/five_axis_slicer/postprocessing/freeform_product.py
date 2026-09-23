@@ -35,6 +35,12 @@ from ..models import CadModel
 from ..validation.indexed_tube import ValidationMetric
 from .own_ac import OwnACReadbackReport, postprocess_own_ac, readback_own_ac
 from .freeform_solid_product import SolidFillPlan, generate_solid_fill_product_path
+from .tool_change_service import (
+    ToolChangeCollisionError,
+    ToolChangeServicePlan,
+    check_operation_transition_safety,
+    plan_tool_change_service,
+)
 from .thermal_program import (
     ThermalProgramParameters,
     unwrap_checked_thermal_program,
@@ -254,7 +260,33 @@ def generate_freeform_product(
         checkpoint=lambda: _checkpoint(cancelled),
     )
     _checkpoint(cancelled)
-    validation = _validate(plan, toolpath, trajectory, operation, controller)
+    service_plan: ToolChangeServicePlan | None = None
+    service_error: ValueError | None = None
+    try:
+        service_plan = plan_tool_change_service(
+            toolpath, trajectory, machine, nozzle, controller,
+            T_workpiece_from_build=T_workpiece_from_build,
+            checkpoint=lambda: _checkpoint(cancelled),
+        )
+    except ValueError as exc:
+        service_error = exc
+    transition_error: ValueError | None = None
+    transition_tip_contacts = 0
+    if service_error is None:
+        try:
+            _, transition_tip_contacts = check_operation_transition_safety(
+                toolpath, trajectory, machine, nozzle,
+                T_workpiece_from_build=T_workpiece_from_build,
+                checkpoint=lambda: _checkpoint(cancelled),
+            )
+        except ValueError as exc:
+            transition_error = exc
+    validation = _validate(
+        plan, toolpath, trajectory, operation, controller,
+        service_plan=service_plan, service_error=service_error,
+        transition_error=transition_error,
+        transition_tip_contacts=transition_tip_contacts,
+    )
     manifest = GeneratedResultManifest(
         f"{toolpath.toolpath_id}-result-v1",
         operation.operation_id,
@@ -284,10 +316,12 @@ def generate_freeform_product(
     motion_gcode = postprocess_own_ac(
         toolpath, trajectory, machine, nozzle, controller,
         checkpoint=lambda: _checkpoint(cancelled),
+        service_plan=service_plan,
     )
     readback = readback_own_ac(
         motion_gcode, toolpath, trajectory, machine, nozzle, controller,
         checkpoint=lambda: _checkpoint(cancelled),
+        service_plan=service_plan,
     )
     gcode = motion_gcode
     if thermal_parameters is not None:
@@ -298,6 +332,7 @@ def generate_freeform_product(
         readback = readback_own_ac(
             recovered, toolpath, trajectory, machine, nozzle, controller,
             checkpoint=lambda: _checkpoint(cancelled),
+            service_plan=service_plan,
         )
     if not readback.passed:
         manifest = replace(
@@ -318,11 +353,57 @@ def generate_freeform_product(
     )
 
 
-def _validate(plan, toolpath, trajectory, operation, controller):
+def _validate(
+    plan, toolpath, trajectory, operation, controller, *,
+    service_plan=None, service_error=None, transition_error=None,
+    transition_tip_contacts=0,
+):
     metrics = _validation_metrics(plan, trajectory, operation)
     c_values = [item.joint_positions.get("C", 0.0) for item in trajectory.samples]
     cumulative_c = sum(abs(right - left) for left, right in zip(c_values, c_values[1:]))
     issues = [*trajectory.issues, *_metric_issues(metrics)]
+    if service_error is not None:
+        if isinstance(service_error, ToolChangeCollisionError):
+            issues.append(ValidationIssue(
+                "tool_change.printed_part_collision", IssueSeverity.ERROR,
+                object_id=service_error.point_id, context=service_error.context,
+            ))
+        elif str(service_error).startswith("tool_change."):
+            code, _, object_id = str(service_error).partition(":")
+            issues.append(ValidationIssue(code, IssueSeverity.ERROR, object_id=object_id))
+        else:
+            issues.append(ValidationIssue(
+                "tool_change.service_planning_failed", IssueSeverity.ERROR,
+                context={"reason": str(service_error)},
+            ))
+    if transition_error is not None:
+        if isinstance(transition_error, ToolChangeCollisionError):
+            issues.append(ValidationIssue(
+                transition_error.code, IssueSeverity.ERROR,
+                object_id=transition_error.point_id,
+                context=transition_error.context,
+            ))
+        else:
+            issues.append(ValidationIssue(
+                "motion.transition_check_failed", IssueSeverity.ERROR,
+                context={"reason": str(transition_error)},
+            ))
+    if transition_tip_contacts:
+        issues.append(ValidationIssue(
+            "motion.intentional_tip_contact", IssueSeverity.WARNING,
+            context={"allowed_contact_checks": transition_tip_contacts,
+                     "offline_only": True},
+        ))
+    elif service_plan is not None and service_plan.moves_before_event:
+        if not service_plan.nozzle_envelope_complete:
+            issues.append(ValidationIssue(
+                "tool_change.nozzle_envelope_incomplete", IssueSeverity.WARNING,
+                context={"offline_only": True},
+            ))
+        issues.append(ValidationIssue(
+            "tool_change.fixture_geometry_unverified", IssueSeverity.WARNING,
+            context={"offline_only": True},
+        ))
     issues.extend(
         ValidationIssue(code, IssueSeverity.WARNING, context={"offline_only": True})
         for code in controller.qualification_issues
@@ -331,6 +412,12 @@ def _validate(plan, toolpath, trajectory, operation, controller):
     if cumulative_issue is not None:
         issues.append(cumulative_issue)
     qualification = _controller_qualification(controller, c_values, cumulative_c)
+    if service_error is not None or transition_error is not None:
+        qualification["machine_executable"] = False
+    if service_plan is not None and service_plan.moves_before_event:
+        qualification["service_checked_samples"] = service_plan.checked_samples
+        qualification["service_nozzle_envelope_complete"] = service_plan.nozzle_envelope_complete
+        qualification["machine_executable"] = False
     return FreeformValidationReport(
         f"{toolpath.toolpath_id}-validation-v1",
         tuple(issues),

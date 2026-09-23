@@ -161,6 +161,42 @@ class OpenGLPaperPathTests(unittest.TestCase):
         self.assertEqual(arrays.draw_counts.tolist(), [2])
         self.assertEqual(arrays.last_point, (1.0, 0.0, 0.0))
 
+    def test_paper_path_renders_generated_segments_without_nc_timeline(self) -> None:
+        segments = [
+            GCodePathSegment(
+                step_index=index,
+                line_number=0,
+                layer=0,
+                start=(float(index), 0.0, 0.0),
+                end=(float(index + 1), 0.0, 0.0),
+                move_type="extrude",
+                extrusion_role="perimeter",
+                delta_e=0.1,
+            )
+            for index in range(3)
+        ]
+        preview = GCodePreview(
+            source_path=Path("<generated:test>"),
+            segments=segments,
+            total_segment_count=3,
+            layer_min=0,
+            layer_max=0,
+            bounds=((0.0, 0.0, 0.0), (3.0, 0.0, 0.0)),
+            move_counts={"extrude": 3},
+            role_counts={"perimeter": 3},
+            rotary_axes=[],
+        )
+
+        arrays = _build_paper_path_arrays(
+            preview,
+            PreviewSettings(layer_min=0, layer_max=0, quality_mode="paper"),
+            current_global_step=None,
+        )
+
+        self.assertEqual(arrays.segment_count, 3)
+        self.assertEqual(arrays.draw_counts.tolist(), [4])
+        self.assertEqual(arrays.last_point, (3.0, 0.0, 0.0))
+
     def test_clear_model_removes_cpu_geometry_and_pick_identity(self) -> None:
         viewer = OpenGLModelViewer()
         self.addCleanup(viewer.deleteLater)

@@ -23,6 +23,8 @@ TUBE_TEXT: dict[str, dict[str, str]] = {
     "zh": {
         "title": "管状工作台",
         "subtitle": "管状分度薄壁、加厚与连续螺旋：制造 Setup、生成、检查与输出",
+        "common_setup_title": "公共制造设置",
+        "common_setup_subtitle": "选择零件、机床、喷嘴和材料，并确定模型与构建坐标。",
         "back": "工作台",
         "open": "打开 STEP",
         "update_source": "从原文件更新",
@@ -70,6 +72,10 @@ TUBE_TEXT: dict[str, dict[str, str]] = {
         "generate": "生成",
         "cancel_generation": "取消生成",
         "preview_result": "查看路径",
+        "show_model": "显示模型",
+        "path_display": "路径显示",
+        "path_display_lines": "完整线条（快速）",
+        "path_display_beads": "沉积道宽（简化）",
         "export_result": "导出结果",
         "generation_draft": "尚未生成当前操作。",
         "generation_running": "正在生成操作路径…",
@@ -96,15 +102,17 @@ TUBE_TEXT: dict[str, dict[str, str]] = {
         "apply": "应用",
         "cancel": "取消",
         "flip": "翻转",
-        "resource_help": "内置资源是只读模板，项目保存冻结快照。",
+        "resource_help": "选择适合当前机床和材料的配置；需要时可调整参数。",
         "resource_origin_builtin": "内置",
         "resource_origin_user": "用户库",
+        "resource_origin_project": "当前项目",
         "resource_origin_snapshot": "项目快照",
         "resource_status_diverged": "已分叉",
         "resource_status_missing": "库中缺失",
         "select_machine": "选择 Machine Profile",
         "select_nozzle": "选择喷嘴身份模板",
         "select_material": "选择 Cura 材料模板",
+        "material_temperatures": "喷嘴建议 {nozzle:.0f} °C · 热床建议 {plate:.0f} °C",
         "interface": "安装接口（螺纹/型号）",
         "length": "总长 (mm)",
         "collision_profile": "使用 R–Z 碰撞外形（缺失时生成简化外形）",
@@ -115,7 +123,7 @@ TUBE_TEXT: dict[str, dict[str, str]] = {
             "已有 R–Z 外形与原总长绑定。要修改总长，请先取消勾选并应用，"
             "再重新勾选以生成匹配新总长的简化外形。"
         ),
-        "review": "已核对来源中的材料单点建议值",
+        "review": "已核对材料与建议温度",
         "coordinate_help_model": "数值输入基于 Source CS。原点、Z 和 X 需要逐项确认。",
         "coordinate_help_build": "数值输入默认基于 Model CS，保存时换算到 Source CS。",
         "origin": "原点",
@@ -141,6 +149,9 @@ TUBE_TEXT: dict[str, dict[str, str]] = {
         "status_valid": "有效",
         "status_dirty": "待更新",
         "status_invalid": "无效",
+        "coordinate_confirmed": "已确认：原点 {origin} · Z {z} · X {x}",
+        "coordinate_applied": "坐标系已应用。",
+        "placement_applied": "装夹定位已应用。",
         "help_open": "导入一个可含多个实体的 STEP，并生成零件与坐标参考候选。",
         "help_update_source": (
             "重新读取原始 STEP，并按几何签名唯一重绑定实体和坐标引用。"
@@ -194,17 +205,9 @@ TUBE_TEXT: dict[str, dict[str, str]] = {
             "保存已编辑的用户喷嘴 Profile，并把冻结快照应用到 Setup。"
             "接口、正数总长和 R–Z 外形齐全后喷嘴节点才有效。"
         ),
-        "help_material_profile": (
-            "选择固定来源版本的 Cura Generic 材料。下方温度是来源文件中的单点建议值；"
-            "实际工艺参数归入后续 Process Profile。"
-        ),
-        "help_material_detail": (
-            "显示材料、丝径、来源单点温度和固定 revision。审核时应对照来源记录。"
-        ),
-        "help_material_review": (
-            "勾选表示已核对当前材料的来源、revision 及温度单点值。"
-            "该确认只解除资源审核门禁，不表示工艺已经验证。"
-        ),
+        "help_material_profile": "选择与所用耗材相符的材料；温度为参考建议，请按耗材标识核对。",
+        "help_material_detail": "核对材料种类、丝径、喷嘴和热床建议温度。",
+        "help_material_review": "确认材料与建议温度已核对；此处不代表机床工艺验证。",
         "help_material_apply": (
             "勾选审核后创建用户副本并冻结到项目；未勾选时材料节点保持草稿状态。"
         ),
@@ -272,6 +275,8 @@ TUBE_TEXT: dict[str, dict[str, str]] = {
     "en": {
         "title": "Tube Workbench",
         "subtitle": "Indexed, buildup, and continuous Tube operations: Setup, generate, validate, and export",
+        "common_setup_title": "Manufacturing Setup",
+        "common_setup_subtitle": "Choose the part, machine, nozzle, and material, then define model and build coordinates.",
         "back": "Workbench",
         "open": "Open STEP",
         "update_source": "Update from Source",
@@ -319,6 +324,10 @@ TUBE_TEXT: dict[str, dict[str, str]] = {
         "generate": "Generate",
         "cancel_generation": "Cancel Generate",
         "preview_result": "Preview Path",
+        "show_model": "Show model",
+        "path_display": "Path display",
+        "path_display_lines": "Full lines (fast)",
+        "path_display_beads": "Bead width (simplified)",
         "export_result": "Export Result",
         "generation_draft": "This operation has not been generated.",
         "generation_running": "Generating operation path…",
@@ -345,15 +354,17 @@ TUBE_TEXT: dict[str, dict[str, str]] = {
         "apply": "Apply",
         "cancel": "Cancel",
         "flip": "Flip",
-        "resource_help": "Built-in resources are read-only templates; projects store frozen snapshots.",
+        "resource_help": "Choose a configuration for this machine and material; adjust values if needed.",
         "resource_origin_builtin": "Built-in",
         "resource_origin_user": "User library",
+        "resource_origin_project": "Current project",
         "resource_origin_snapshot": "Project snapshot",
         "resource_status_diverged": "Diverged",
         "resource_status_missing": "Missing from library",
         "select_machine": "Select Machine Profile",
         "select_nozzle": "Select nozzle identity template",
         "select_material": "Select Cura material template",
+        "material_temperatures": "Suggested nozzle {nozzle:.0f} °C · bed {plate:.0f} °C",
         "interface": "Mount interface (thread/model)",
         "length": "Overall length (mm)",
         "collision_profile": "Use R–Z collision shape (generate a coarse shape when missing)",
@@ -366,7 +377,7 @@ TUBE_TEXT: dict[str, dict[str, str]] = {
             "The existing R–Z shape is tied to its original length. Clear the checkbox and Apply first, "
             "then enable it again to generate a coarse shape for the new length."
         ),
-        "review": "Pinned material recommendations reviewed",
+        "review": "Material and suggested temperatures checked",
         "coordinate_help_model": "Numeric values use Source CS. Confirm origin, Z, and X separately.",
         "coordinate_help_build": "Numeric values use Model CS by default and are persisted in Source CS.",
         "origin": "Origin",
@@ -392,6 +403,9 @@ TUBE_TEXT: dict[str, dict[str, str]] = {
         "status_valid": "Valid",
         "status_dirty": "Dirty",
         "status_invalid": "Invalid",
+        "coordinate_confirmed": "Confirmed: origin {origin} · Z {z} · X {x}",
+        "coordinate_applied": "Coordinate system applied.",
+        "placement_applied": "Placement applied.",
         "help_open": "Import one STEP containing one or more bodies and create Part and coordinate candidates.",
         "help_update_source": (
             "Reload the original STEP and uniquely rebind bodies and coordinate references by geometry "
@@ -454,18 +468,9 @@ TUBE_TEXT: dict[str, dict[str, str]] = {
             "Save edited data as a user nozzle profile and apply its frozen snapshot. Interface, positive "
             "length, and a valid R–Z shape are required for a Valid nozzle node."
         ),
-        "help_material_profile": (
-            "Select a Cura Generic material pinned to a source revision. Values below are source-provided "
-            "nominal temperatures; process settings belong to a future Process Profile."
-        ),
-        "help_material_detail": (
-            "Shows material, filament diameter, source nominal temperatures, and pinned revision. "
-            "Compare them with the recorded source before review."
-        ),
-        "help_material_review": (
-            "Check after reviewing the source, revision, and nominal temperatures. This clears the resource "
-            "review gate only; it does not validate the manufacturing process."
-        ),
+        "help_material_profile": "Choose a material matching the filament in use. Check the suggested temperatures against its label.",
+        "help_material_detail": "Check material, filament diameter, and suggested nozzle and bed temperatures.",
+        "help_material_review": "Confirm these material values have been checked; this does not qualify the machine process.",
         "help_material_apply": (
             "After review, create a user copy and freeze it into the project. Without review, the Material "
             "node remains Draft."
@@ -540,6 +545,15 @@ TUBE_TEXT: dict[str, dict[str, str]] = {
             "Double-click or press Enter to open the related Setup node. Stable issue codes support persistence "
             "and automation."
         ),
+    },
+}
+
+TUBE_ISSUE_LABELS: dict[str, dict[str, str]] = {
+    "zh": {
+        "MACHINE_REFERENCE_ONLY": "参考机型仅供离线检查；投入设备前需完成标定",
+    },
+    "en": {
+        "MACHINE_REFERENCE_ONLY": "Reference machine for offline review; calibrate before device use",
     },
 }
 

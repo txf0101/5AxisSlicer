@@ -4,6 +4,7 @@ import json
 import math
 import os  # noqa: F401
 import re
+from collections import Counter
 from collections.abc import Callable, Iterator, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -715,6 +716,46 @@ class PreviewSettings:
             "role_colors": {role: rgb_to_hex(color) for role, color in ROLE_COLORS.items()},
             "move_colors": {move: rgb_to_hex(color) for move, color in MOVE_OPTION_COLORS.items()},
         }
+
+
+def preview_from_generated_toolpath(
+    toolpath: Any,
+    *,
+    source_from_build: Any | None = None,
+) -> GCodePreview:
+    """Show a generated path in the same frame as its source CAD model.
+
+    This adapter uses the qualified geometric path. Raw NC machine positions
+    include rotary-table and tool-length offsets and cannot be overlaid on CAD.
+    NC consistency is checked separately by the product readback validator.
+    """
+
+    segments = toolpath.to_preview_segments()
+    if source_from_build is not None:
+        for segment in segments:
+            segment.start = source_from_build.transform_point(segment.start)
+            segment.end = source_from_build.transform_point(segment.end)
+            segment.coordinate_transform = "source"
+    points = (point for segment in segments for point in (segment.start, segment.end))
+    low = [math.inf, math.inf, math.inf]
+    high = [-math.inf, -math.inf, -math.inf]
+    for point in points:
+        for axis in range(3):
+            low[axis] = min(low[axis], point[axis])
+            high[axis] = max(high[axis], point[axis])
+    layers = [segment.layer for segment in segments]
+    return GCodePreview(
+        source_path=Path(f"<generated:{toolpath.operation_id}>"),
+        segments=segments,
+        total_segment_count=len(segments),
+        layer_min=min(layers, default=0),
+        layer_max=max(layers, default=-1),
+        bounds=(None if not segments else (tuple(low), tuple(high))),
+        move_counts=dict(Counter(segment.move_type for segment in segments)),
+        role_counts=dict(Counter(segment.extrusion_role for segment in segments)),
+        rotary_axes=[],
+        coordinate_transform=("source" if source_from_build is not None else toolpath.coordinate_frame),
+    )
 
 
 def load_gcode(

@@ -2,6 +2,7 @@
 
 ## 六个工作台算法开发
 
+- [离线产品交付计划](planning/product_delivery_20260923.md)：首次使用、五工作台、四例真实点击、长任务、教程和停止线。
 - [FAN15 四例交付复盘](reviews/2026-09-21_fan15_github_delivery_review.md)：模型、新旧代码、可重绘中间文件的收口范围，以及离线与实机资格边界。
 - [FAN15 四例文件索引](../example/README.md)：下载模型、新旧 G-code、对比图和 Git LFS 路径数据。
 

@@ -2,9 +2,9 @@
 
 想先照界面完成一次操作，请从[五工作台图文点击教程](quickstart_clickthrough_zh.md)开始。本册随后解释为什么选择某种工作台、怎样判断结果和迁移到自己的零件。
 
-文档版本：2026-09-13。适用范围：PC00—PC07 论文核心 AC 受限离线版。
+本手册适用于离线模型切片、路径检查和 NC 导出。实机运行前还需核对机床配置并完成现场验证。
 
-## 0. 当前版本怎样打开窗口
+## 0. 启动软件
 
 ### 在 IDE 中运行
 
@@ -15,17 +15,11 @@
 - Python interpreter：已安装项目运行依赖的 Python 3.10—3.12 环境
 - Program arguments：普通启动留空；练习入口可填 `--demo`；只打开成果页可填 `--results`
 
-当前开发工作区已经验证的解释器是 `tmp/pytest9/Scripts/python.exe`。它继承系统依赖，只适合本机当前开发验证；重新搭建环境时按根 README 创建 `.venv`。
+如尚未安装运行依赖，请先按[根目录 README](../../README.md)创建 `.venv`。
 
 ### 在 PowerShell 中运行
 
 在仓库根目录打开 PowerShell，推荐显式指定解释器：
-
-```powershell
-.\scripts\run_app.ps1 -Python ".\tmp\pytest9\Scripts\python.exe"
-```
-
-使用自己创建的 `.venv` 时：
 
 ```powershell
 .\scripts\run_app.ps1 -Python ".\.venv\Scripts\python.exe"
@@ -301,4 +295,4 @@ Indexed 用于分段转位薄壁，Buildup 用于多道加厚和可选底座，C
 - [自有 AC 离线控制器](paper_core_ac_controller_zh.md)
 - [G-code 预览](gcode_preview_zh.md)
 
-Research 工作台仍未完成，因此没有编写可操作教程。设计计划和研究入口不能作为可用功能说明。
+Research 入口暂不可用，请选择 Planar、Curve、Rotary、Tube 或 Freeform 工作台。

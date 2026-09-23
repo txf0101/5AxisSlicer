@@ -30,8 +30,8 @@ WORKBENCHES: tuple[WorkbenchInfo, ...] = (
         "Curve Workbench",
         "沿 STEP 边线和空间曲线生成单道或多道沉积路径。",
         "Single-pass or multi-pass deposition along STEP edges and spatial curves.",
-        "可用",
-        "Ready",
+        "离线可用",
+        "Offline Ready",
     ),
     WorkbenchInfo(
         "freeform",
@@ -48,8 +48,8 @@ WORKBENCHES: tuple[WorkbenchInfo, ...] = (
         "Rotary Workbench",
         "圆柱/圆锥螺旋、回转薄壁和局部多区域沉积。",
         "Cylinder/cone spirals, rotary thin walls, and local multi-region deposition.",
-        "可用",
-        "Ready",
+        "离线可用",
+        "Offline Ready",
     ),
     WorkbenchInfo(
         "tube",
@@ -66,8 +66,8 @@ WORKBENCHES: tuple[WorkbenchInfo, ...] = (
         "Research Workbench",
         "锥面层、标量场曲面切片和强度导向路径研究。",
         "Conical layers, scalar-field surface slicing, and research paths.",
-        "研发",
-        "R&D",
+        "暂不可用",
+        "Unavailable",
     ),
 )
 

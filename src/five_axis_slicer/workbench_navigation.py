@@ -35,6 +35,7 @@ def enter_workbench(host: Any, key: str) -> None:
         page.refresh()
     host.current_workbench_key = key
     if key == "tube":
+        host.tube_page.set_common_setup_mode(False)
         host.current_operation = (
             host.tube_page.controller.operations[0].operation_type
             if host.tube_page.controller.operations

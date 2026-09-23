@@ -474,7 +474,7 @@ G1 X2 Y0 Z0.3 A90 C-60 E0.3 F1200
                     self.assertEqual(page.source_audits, old_audits)
                     self.assertIs(page.viewer.model, old_model)
                     self.assertIs(page.viewer.preview, old_preview)
-                    self.assertEqual(page.viewer.quality_mode, "interactive")
+                    self.assertEqual(page.viewer.quality_mode, page.state.quality_mode)
                     self.assertEqual(old_index.close_count, 0)
                     self.assertEqual(new_index.close_count, 1)
 

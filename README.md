@@ -1,18 +1,18 @@
 # 5AxisSclicer V2.0
 
-**第一次使用：**先看[五个工作台图文点击教程](docs/guides/quickstart_clickthrough_zh.md)，依次完成 Setup、选几何、应用参数、生成检查和离线导出。按对象跳转：[Planar](docs/guides/quickstart_clickthrough_zh.md#1-planar平面切片) · [Curve](docs/guides/quickstart_clickthrough_zh.md#2-curve沿边沉积) · [Rotary](docs/guides/quickstart_clickthrough_zh.md#3-rotary固定轴回转) · [Tube](docs/guides/quickstart_clickthrough_zh.md#4-tube管体生长) · [Freeform](docs/guides/quickstart_clickthrough_zh.md#5-freeform曲面与实体) · [已有 G-code 预览](docs/guides/quickstart_clickthrough_zh.md#6-查看已有-g-code)。参数、排错和迁移练习再查[学习总册](docs/guides/user_learning_manual_zh.md)与[手册索引](docs/guides/README.md)。Research 尚未完成，以上流程是离线验证，不代表实机打印许可。
+**第一次使用：**先看[五个工作台图文点击教程](docs/guides/quickstart_clickthrough_zh.md)，依次完成公共制造设置、选几何、应用参数、生成检查和离线导出。按对象跳转：[Planar](docs/guides/quickstart_clickthrough_zh.md#1-planar平面切片) · [Curve](docs/guides/quickstart_clickthrough_zh.md#2-curve沿边沉积) · [Rotary](docs/guides/quickstart_clickthrough_zh.md#3-rotary固定轴回转) · [Tube](docs/guides/quickstart_clickthrough_zh.md#4-tube管体生长) · [Freeform](docs/guides/quickstart_clickthrough_zh.md#5-freeform曲面与实体) · [已有 G-code 预览](docs/guides/quickstart_clickthrough_zh.md#6-查看已有-g-code)。参数和排错见[学习总册](docs/guides/user_learning_manual_zh.md)与[手册索引](docs/guides/README.md)。Research 入口不可用；离线检查不代表实机打印许可。
 
-四个 FAN15 示例的模型、旧代码、新离线代码及路径中间文件见[示例交付索引](example/README.md)。大文件使用 Git LFS；克隆后需安装 Git LFS 并执行 `git lfs pull`。这些代码只通过离线生成与回读，不能直接上机。
+四个示例的模型、原始代码、离线切片代码及路径文件见[示例文件索引](example/README.md)。大文件使用 Git LFS；克隆后需安装 Git LFS 并执行 `git lfs pull`。示例代码不能直接上机。
 
 5AxisSclicer V2.0 以 Workbench 为入口。`Imported NC Review` 用于已有 NC/G-code 的空间路径、层范围和路径类型预览。Tube 支持 Indexed、Buildup、Continuous；Planar 支持 Region、Zigzag、Offset、Thin Wall、Spiral 和 buildplate-only Planar Support；Curve 支持 Buildup、Multi-pass Buildup 和 Offset Buildup；Rotary 支持圆柱/圆锥 Spiral、圆周多道 Thin Wall 和跨周期 Around Part；论文核心 Freeform 子集支持有限修剪面组、曲面贴合、薄壁及有限多道/多层。这五类制造入口共用路径、状态、命令、检查、回读、保存重开和六件套离线导出链。
 
-开发中的 Freeform 实体模式包含球面、一般曲面与径向填充；校徽已从真实 GUI 生成并导出，其余示例仍需完成界面全流程验收。当前生成结果均属离线参考，进度与限制见[方法说明](docs/guides/fan15_solid_fill_method_notes.md)和[阶段计划](docs/planning/fan15_productization_plan.md)。
+Freeform 的球面、一般曲面与径向实体填充需要明确选择对应的实体角色和几何参考。操作条件与限制见[实体生长方法说明](docs/guides/fan15_solid_fill_method_notes.md)。输出仅供离线检查；实际机床运行需另行验证。
 
 初次使用请从[《5AxisSclicer V2.0 学习手册》](docs/guides/user_learning_manual_zh.md)开始。手册首页写明 IDE 的 `run_app.py` 和 PowerShell 的 `scripts/run_app.ps1` 启动方式，并按界面、Setup、工作台选择、操作、生成恢复、回读、六件套和独立迁移组织课程。pipe2、平面件、叶轮、扇叶和半球只作为练手材料，不要求复制案例 ID 或参数。熟悉公共流程后，可从[学习与参考手册中心](docs/guides/README.md)进入 Tube、Planar、Curve、Rotary、Freeform、多材料、机型和 G-code 专项参考。
 
-算法开发按[开发计划](docs/planning/development_plan.md)推进。PC00—PC07 论文核心 AC 离线版已验收；完整 Research、通用 Freeform F01—F06 父阶段及第二机型仍暂缓。每轮任务状态、验收证据和下一步更新到[进度台账主表](docs/planning/progress_tracker.md#主表)；NX 与公开项目资料见[参考资料](docs/planning/reference_research.md)，全部开发文档从[文档索引](docs/README.md)进入。
+开发计划、验证记录与公开资料统一从[开发文档索引](docs/README.md)进入。Research 入口不可用；第二机型需要独立配置与验证。
 
-Tube 的 T01—T12 实现已经聚拢到本仓库：Indexed 支持受限圆管的分块切层和安全转位，Buildup 支持多道加厚和可选平面底座工序，Continuous 支持沿单支管中心线的连续螺旋。三种操作共用生成、检查、参考 XYZAC 求解、NC 后处理、回读、导出和结果过期状态。Generic XYZAC 仍是离线参考机型，尚未取得真实机床资格。
+Tube 的 Indexed 支持受限圆管的分块切层和安全转位，Buildup 支持多道加厚和可选平面底座工序，Continuous 支持沿单支管中心线的连续螺旋。三种操作共用生成、检查、参考 XYZAC 求解、NC 后处理、回读、导出和结果过期状态。Generic XYZAC 是离线参考机型，尚未取得真实机床资格。
 
 管状算法主要学习了相邻 `5AxisSlicer` 工程中的 Fractal Cortex 多方向分块、逐块切层和安全转位流程。Fractal Cortex 由 Fractal Robotics 开发，README 标注 Copyright (C) 2025 Daniel Brogan，许可证为 GPLv3；新实现按 V2.0 的 B-Rep、路径、运动学和验证契约重写。固定 commit、逐文件 SHA-256、方法映射和许可证边界见[Tube Indexed 参考来源登记](docs/planning/tube_reference_provenance.md)。
 
@@ -33,11 +33,11 @@ Tube 的 T01—T12 实现已经聚拢到本仓库：Indexed 支持受限圆管�
 - Preview 页叠加半透明 STEP 模型和 G-code 路径，支持 Feature Type 图例、层范围、travel/extrusion 显隐、五轴姿态抽样和路径段属性面板；默认优先显示正挤出路径，空走和姿态抽样可在面板中打开。
 - G-code 分色采用路径段数据结构中的 `move_type` 与 `extrusion_role` 字段，再由颜色映射表决定渲染颜色。`;TYPE:`、`;LAYER_CHANGE`、`;Layer` 等注释只作为解析线索。
 - A/C 五轴 G-code 仅在调用方显式确认已注册的控制器语义后，采用 `P_part = Rz(-C) * Rx(-A) * P_machine` 反算工件坐标。未确认语义、非零 B、U/V/W 或运动学诊断会让整份文件统一保留 Machine XYZ；纯 E 回抽和 prime 只进入运动类型统计，不写入路径线。
-- T08—T12 已补齐生成/后处理/回读、RMF、时间参数化与离线检查相关实现；其算法为本项目独立复写，受本地 Fractal/V1 项目启发，运行不依赖相邻目录。Generic XYZAC 仅为离线参考，不能作为实机资格。
-- Planar P01—P07 的 Generic XYZAC 同样仅为离线参考；具体控制器、真实机床标定、碰撞资格和试切尚未验证。P07 仅支持从 buildplate 连通的垂直支撑，使用 Lines/Grid 图案和主体/界面分层。
-- Curve C01—C05 的 Generic XYZAC、FK/运动限制、夹具 AABB 扫掠和 G-code 回读也只属于离线检查；真实控制器、机床标定、现场完整碰撞与试切尚未验证。
+- Tube 使用 RMF、时间参数化、离线检查和 G-code 回读；运行不依赖相邻项目目录。Generic XYZAC 仅为离线参考，不能作为实机资格。
+- Planar 的 Generic XYZAC 仅为离线参考；具体控制器、真实机床标定、碰撞资格和试切尚未验证。平台支撑仅支持从 buildplate 连通的垂直支撑，使用 Lines/Grid 图案和主体/界面分层。
+- Curve 的 Generic XYZAC、FK/运动限制、夹具 AABB 扫掠和 G-code 回读也只属于离线检查；真实控制器、机床标定、现场完整碰撞与试切尚未验证。
 
-T08—T12 的公开来源、术语边界和控制器语义限制见[参考资料检索](docs/planning/reference_research.md)；其中 M82 按 Marlin/RepRap 语义处理，不称为 LinuxCNC 定义。
+公开来源、术语边界和控制器语义限制见[参考资料检索](docs/planning/reference_research.md)；其中 M82 按 Marlin/RepRap 语义处理，不称为 LinuxCNC 定义。
 
 ## 环境
 
@@ -72,10 +72,10 @@ python -m venv .venv
 .\scripts\run_app.ps1 -Model "example\叶轮\叶轮.stp" -GCode "example\叶轮\叶轮完整.gcode" -Port 8769
 ```
 
-直接走 Python 入口：
+已安装项目依赖时，也可直接走 Python 入口：
 
 ```powershell
-& "C:\Users\Tang Xufeng\.conda\envs\5AxisSlicer\python.exe" run_app.py --demo --port 8769
+python run_app.py --demo --port 8769
 ```
 
 内置叶轮项目文件：
@@ -85,7 +85,7 @@ python -m venv .venv
 
 ### STEP 导入后的坐标入口
 
-STEP 在平面、曲面、自由曲面、回转工作台或通用操作会话中载入后，点击左侧“进入管状设置（定义坐标）”。当前模型会直接带入管状工作台。也可返回“工作台”并选择“管状工作台”。模型坐标系、构建坐标系和装夹定位只在该页面中提供。
+载入 STEP 后，点击顶部“公共制造设置”，依次核对零件、机床、喷嘴、材料、模型坐标系、构建坐标系和装夹定位。完成后返回“工作台”，选择适合该模型的切片方式。详见[首次使用教程](docs/guides/quickstart_clickthrough_zh.md)。
 
 ## 快捷键
 
@@ -158,7 +158,7 @@ python scripts\automation_client.py /selection/set --payload64 eyJib2R5X2lkcyI6W
 - `project.json`：v2 清单，保存 workbench、`setups[]`、`operations[]`、资源快照、四级拓扑描述、body/face/edge/vertex 选择和预览状态。
 - `preview/`：预留预览产物目录。
 
-项目保存使用临时清单和原子替换。v1 项目在内存迁移，第一次保存 v2 时备份原清单；未来版本、路径越界、源文件哈希变化、冻结快照损坏、顶层资源镜像与 Setup 快照冲突、拓扑签名漂移会被拒绝。用户资源库后来发生分叉时，项目继续使用冻结快照并报告 Warning。
+保存项目时，请选择专用文件夹。重开时选择其中的 `project.json`。若源文件、资源快照或几何引用不一致，软件会提示检查；请核对来源后再更新项目或重新生成路径。
 
 ## 验证
 

@@ -28,6 +28,7 @@ from .manufacturing.resources import (
 from .manufacturing.setup import (
     BUILD_CS_NODE,
     MODEL_CS_NODE,
+    NodeState,
     PLACEMENT_NODE,
     TubeOperationDefinition,
 )
@@ -853,6 +854,16 @@ def _with_type_config(
     operation: TubeOperationDefinition,
     payload: dict[str, Any],
 ) -> TubeOperationDefinition:
+    def updated_config(config: Any) -> TubeOperationDefinition:
+        if config == operation.type_config:
+            return operation
+        return replace(
+            operation,
+            type_config=config,
+            state=NodeState.DIRTY,
+            dirty_reasons=tuple(dict.fromkeys((*operation.dirty_reasons, "operation_parameters_changed"))),
+        )
+
     if operation.operation_type == "tube_buildup":
         if payload["seam_angle_deg"] is not None:
             raise ValueError("seam_angle_deg applies only to tube_continuous")
@@ -863,7 +874,7 @@ def _with_type_config(
             for key in ("maximum_pass_spacing_mm", "include_planar_base", "base_order")
             if payload[key] is not None
         }
-        return replace(operation, type_config=replace(config, **changes))
+        return updated_config(replace(config, **changes))
     if operation.operation_type == "tube_continuous":
         if any(
             payload[key] is not None
@@ -873,9 +884,7 @@ def _with_type_config(
         config = operation.type_config
         assert isinstance(config, TubeContinuousOperationConfig)
         if payload["seam_angle_deg"] is not None:
-            return replace(
-                operation, type_config=replace(config, seam_angle_deg=payload["seam_angle_deg"])
-            )
+            return updated_config(replace(config, seam_angle_deg=payload["seam_angle_deg"]))
     special = ("maximum_pass_spacing_mm", "include_planar_base", "base_order", "seam_angle_deg")
     if any(payload[key] is not None for key in special):
         raise ValueError(f"type-specific parameters do not apply to {operation.operation_type}")
@@ -910,7 +919,8 @@ def _project_resource_id(kind: str, template: Any, overrides: Any) -> str:
     """Derive a replay-stable local identity from source content and inputs."""
 
     content = canonical_content_hash({"template": template, "overrides": overrides})
-    return str(uuid5(NAMESPACE_URL, f"five-axis-slicer:{kind}:{content}"))
+    identifier = uuid5(NAMESPACE_URL, f"five-axis-slicer:{kind}:{content}")
+    return f"project-{kind}-{identifier}"
 
 
 def _nozzle_changed_fields(

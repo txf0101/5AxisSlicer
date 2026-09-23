@@ -18,11 +18,11 @@ from OCP.BRepBuilderAPI import BRepBuilderAPI_Transform
 from OCP.gp import gp_Trsf
 
 from .manufacturing.coordinates import RigidTransform
-from .manufacturing.setup import TubeOperationDefinition
+from .manufacturing.setup import TubeBuildupOperationConfig, TubeOperationDefinition
 from .models import BoundingBox, CadModel, EdgeInfo, FaceInfo, Vector3
 from .validation.indexed_tube import CollisionBox
 
-CONTEXT_VERSION = "tube-build-context-v4"
+CONTEXT_VERSION = "tube-build-context-v5"
 
 
 def tube_input_fingerprint(controller: Any, operation: TubeOperationDefinition) -> str:
@@ -114,7 +114,14 @@ def _collision_boxes(view, setup, operation) -> tuple[CollisionBox, ...]:
     obstacles = []
     substrate = operation.geometry.substrate_body
     roles = {identifier: "fixture" for identifier in setup.assignments.fixture_body_ids}
-    if substrate is not None:
+    base_is_printed = (
+        operation.operation_type == "tube_buildup"
+        and isinstance(operation.type_config, TubeBuildupOperationConfig)
+        and operation.type_config.include_planar_base
+    )
+    # A substrate generated in this sequence is not a pre-existing fixture.
+    # Its deposited paths are checked by the IPW collision pass instead.
+    if substrate is not None and not base_is_printed:
         roles.setdefault(substrate.object_id, "substrate")
     for identifier, role in roles.items():
         body = view.body_map.get(identifier)

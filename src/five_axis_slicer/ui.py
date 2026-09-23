@@ -961,7 +961,14 @@ class MainWindow(QMainWindow):
             phase=str(phase),
             progress=max(0.0, min(1.0, float(fraction))),
         )
-        self.statusBar().showMessage(f"Project {phase}: {float(fraction) * 100.0:.0f}%")
+        self.statusBar().showMessage(
+            tr(
+                self.language,
+                "status_project_loading",
+                phase=phase,
+                percent=float(fraction) * 100.0,
+            )
+        )
 
     def _on_project_load_completed(self, result: LoadResult) -> None:
         request_id = result.request_id
@@ -984,14 +991,18 @@ class MainWindow(QMainWindow):
                 state=state,
                 length_unit_override=result.length_unit_override,
             )
-            self.statusBar().showMessage(f"Project loaded: {result.project.project_json}")
+            self.statusBar().showMessage(
+                tr(self.language, "status_project_loaded", path=result.project.project_json)
+            )
         except ProjectOpenCancelled as exc:
             outcome.update(status="cancelled", message=str(exc), state=None)
             self.statusBar().showMessage(str(exc))
         except Exception as exc:
             message = str(exc)
             outcome.update(status="error", message=message, state=None)
-            self.statusBar().showMessage(f"Project loading failed: {message}")
+            self.statusBar().showMessage(
+                tr(self.language, "status_project_load_failed", message=message)
+            )
             if self._project_load_show_errors.get(request_id, False):
                 self.show_error(message)
         finally:
@@ -1003,7 +1014,9 @@ class MainWindow(QMainWindow):
         if outcome is None or outcome.get("status") != "loading":
             return
         outcome.update(status="error", message=str(message), state=None)
-        self.statusBar().showMessage(f"Project loading failed: {message}")
+        self.statusBar().showMessage(
+            tr(self.language, "status_project_load_failed", message=message)
+        )
         if self._project_load_show_errors.pop(request_id, False):
             self.show_error(str(message))
 
@@ -1429,6 +1442,10 @@ class MainWindow(QMainWindow):
 
     enter_workbench = workbench_navigation.enter_workbench
 
+    def open_manufacturing_setup(self) -> None:
+        self.enter_workbench("tube")
+        self.tube_page.set_common_setup_mode(True)
+
     def set_mode(self, mode: str) -> None:
         if mode not in {"body", "face", "edge", "vertex"}:
             raise RuntimeError(f"Unsupported selection mode: {mode}")
@@ -1457,6 +1474,7 @@ class MainWindow(QMainWindow):
     def retranslate(self) -> None:
         self.setWindowTitle(tr(self.language, "app_title"))
         self.home_action.setText(tr(self.language, "workbench_home"))
+        self.setup_action.setText(tr(self.language, "manufacturing_setup_entry"))
         self.open_project_action.setText(tr(self.language, "open_project"))
         self.open_action.setText(tr(self.language, "open_step"))
         self.open_gcode_action.setText(tr(self.language, "open_gcode"))
@@ -1654,6 +1672,7 @@ class MainWindow(QMainWindow):
 
     def _build_actions(self) -> None:
         self.home_action = QAction(self)
+        self.setup_action = QAction(self)
         self.open_project_action = QAction(self)
         self.open_action = QAction(self)
         self.open_gcode_action = QAction(self)
@@ -1672,6 +1691,7 @@ class MainWindow(QMainWindow):
         self.help_action = QAction(self)
         self.about_action = QAction(self)
         self.home_action.triggered.connect(self._show_home)
+        self.setup_action.triggered.connect(self.open_manufacturing_setup)
         self.open_project_action.triggered.connect(self.open_project_dialog)
         self.open_action.triggered.connect(self._open_model_from_shell)
         self.open_gcode_action.triggered.connect(self._open_gcode_from_shell)
@@ -1759,6 +1779,8 @@ class MainWindow(QMainWindow):
         self.model_menu.addAction(self.open_action)
         self.model_menu.addAction(self.clear_action)
         self.model_menu.addAction(self.result_visibility_actions["show_model"])
+        self.model_menu.addSeparator()
+        self.model_menu.addAction(self.setup_action)
         self.slice_menu.addAction(self.open_results_action)
         self.slice_menu.addAction(self.slice_results_action)
         self.slice_menu.addAction(self.cancel_results_action)
@@ -1791,6 +1813,7 @@ class MainWindow(QMainWindow):
         toolbar.addSeparator()
         for action in (
             self.home_action,
+            self.setup_action,
             self.open_results_action,
             self.open_project_action,
             self.open_action,
@@ -1829,13 +1852,17 @@ class MainWindow(QMainWindow):
             button = QPushButton()
             button.setObjectName("workbenchCard")
             button.setMinimumHeight(128)
-            button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+            button.setMaximumHeight(150)
+            button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+            if workbench.key == "research":
+                button.setEnabled(False)
             button.clicked.connect(
                 lambda _checked=False, key=workbench.key: self.enter_workbench(key)
             )
             self.workbench_buttons[workbench.key] = button
             grid.addWidget(button, index // 3, index % 3)
-        layout.addLayout(grid, 1)
+        layout.addLayout(grid)
+        layout.addStretch(1)
         return page
 
     def _build_session_page(self) -> QWidget:

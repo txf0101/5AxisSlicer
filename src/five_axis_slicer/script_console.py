@@ -525,7 +525,7 @@ class ScriptConsoleManager(QObject):
         window.addDockWidget(Qt.BottomDockWidgetArea, self.dock)
         self.action = QAction(window)
         self.action.setCheckable(True)
-        visible = str(settings.value("script_console/visible", "true")).lower() != "false"
+        visible = str(settings.value("script_console/visible", "false")).lower() == "true"
         self.action.setChecked(visible)
         self.action.toggled.connect(self._set_preference)
         self.dock.visibilityChanged.connect(self._visibility_changed)

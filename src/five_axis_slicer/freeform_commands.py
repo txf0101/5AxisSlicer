@@ -8,6 +8,7 @@ from typing import Any, cast
 
 from .command_kernel import CommandError, CommandInvocation, CommandKernel, CommandOutcome
 from .freeform_controller import FreeformController
+from .manufacturing.controller_profile import ToolChangeStation
 from .manufacturing.freeform_parameters import FreeformProcessParameters
 from .manufacturing.freeform_solid_parameters import (
     SOLID_FILL_OPERATION_TYPES,
@@ -31,6 +32,7 @@ _HISTORY = {"undo": "undo", "redo": "redo"}
 _COMMANDS = _QUERIES | _MUTATIONS | _HISTORY.keys()
 _PARAMETERS = frozenset(FreeformProcessParameters.__dataclass_fields__)
 _SOLID_PARAMETERS = frozenset(SolidFillProcessParameters.__dataclass_fields__)
+_UNSET = object()
 
 
 class FreeformCommandProvider:
@@ -100,8 +102,16 @@ class FreeformCommandProvider:
         guides=None,
         solid_geometry=None,
         material_plan=None,
+        tool_change_station=_UNSET,
         **parameter_changes,
     ):
+        if tool_change_station is not _UNSET:
+            if tool_change_station is not None and not isinstance(tool_change_station, dict):
+                raise ValueError("tool_change_station must be an object or null")
+            controller.configure_tool_change_station(
+                None if tool_change_station is None
+                else ToolChangeStation.from_json(tool_change_station)
+            )
         current = controller.operation(operation_id)
         allowed = _SOLID_PARAMETERS if current.operation_type in SOLID_FILL_OPERATION_TYPES else _PARAMETERS
         unknown = sorted(set(parameter_changes) - allowed)

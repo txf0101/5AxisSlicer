@@ -137,7 +137,11 @@ def configure_tube_operation(
         current,
         geometry=geometry,
         parameters=updated_parameters,
-        state=NodeState.DIRTY,
+        state=(
+            NodeState.DIRTY
+            if geometry != current.geometry or updated_parameters != current.parameters
+            else current.state
+        ),
         dirty_reasons=reasons,
     )
 

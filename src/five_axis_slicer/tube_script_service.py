@@ -512,8 +512,9 @@ class TubeScriptService:
             self.page.refresh()
             self._sync_console()
             self.window.statusBar().showMessage(
-                f"Tube Setup r{result.revision}: "
-                f"{', '.join(result.affected_nodes) or result.command}"
+                "当前项目已更新。"
+                if self.window.language == "zh"
+                else "Current project updated."
             )
         except Exception as exc:
             LOGGER.exception("Tube command committed but UI refresh failed")

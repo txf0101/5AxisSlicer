@@ -2,7 +2,7 @@
 
 > 初次使用请先完成[学习总册](user_learning_manual_zh.md)的 L01—L06；本页是 Curve 专项参考。叶轮边链用于练习有向链和法向，换零件后必须重新选择 edge、邻面和工艺参数。
 
-适用版本：C01—C05，2026-09-12 当前本地版本。Curve 工作台沿 STEP 有向 edge 链生成 Buildup、Multi-pass Buildup 和 Offset Buildup。内部长度为 mm、角度为 rad；界面长度显示 mm。路径从 Source/Model frame 转换到 Build frame，再进入 Workpiece/Machine frame 的离线轨迹检查。
+Curve 工作台沿 STEP 有向 edge 链生成 Buildup、Multi-pass Buildup 和 Offset Buildup。内部长度为 mm、角度为 rad；界面长度显示 mm。路径从 Source/Model frame 转换到 Build frame，再进入 Workpiece/Machine frame 做离线轨迹检查。
 
 ## 1. 前置条件与入口
 
@@ -50,6 +50,8 @@
 真实叶轮样条的 Offset 示例把反向标志设为 `1`，使 `normal × tangent` 的正方向进入所选 trimmed face。相邻两道的独立三维点距为 2.947—3.000 mm（界面证据参数为 3.0 mm）；若保持正向，投影会塌回边界并以 `curve.offset_outside_face` 拒绝，不能用重叠路径冒充三道。
 
 ## 4. 参数
+
+表中默认值和叶轮截图中的设置用于学习界面。自己的曲线模型须按实际机床、喷嘴、材料、目标道宽和试验结果重新确定，不能照抄案例数值。
 
 | 参数 | 默认值 | 作用与有效范围 |
 | --- | ---: | --- |
@@ -147,8 +149,8 @@ HTTP 使用同一命令内核：`/curve/state`、`/curve/issues`、`/curve/valid
 
 ## 10. 当前能力边界
 
-当前仅完成沿 STEP edge 链的有限 Curve 操作。锐角标架反转、自交、裁剪和退化区域按错误退出，不静默丢道。Tree/Organic、自由曲面区域填充、一般工业支撑生态和实机工艺资格不属于 Curve C01—C05。
+Curve 适用于沿 STEP edge 链的有限沉积操作。锐角标架反转、自交、裁剪和退化区域按错误退出，不静默丢道。Tree/Organic、自由曲面区域填充、一般工业支撑和实机工艺资格不属于该工作台的适用范围。
 
 Generic XYZAC、离线 IK/FK、轴限、速度/加速度、奇异检查、保守碰撞接口、G-code 回读和 OpenGL Viewer 已验证。真实控制器语义、真实机床标定、现场夹具/喷嘴完整碰撞、材料适配、可拆卸性和试切均未验证。
 
-当前可追溯证据见 [`2026-09-12_curve_workbench_final`](../reviews/evidence/2026-09-12_curve_workbench_final/validation_manifest.json)。真实叶轮 STEP 的来源、作者和再分发许可证仍未知，本轮只用于本地验收；仓库许可证不自动覆盖该模型。
+示例模型的许可证不随软件仓库许可证自动授予。将模型或 G-code 用于再分发前，请单独核对其来源与授权。

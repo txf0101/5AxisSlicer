@@ -121,6 +121,7 @@ def build_editor(page: Any) -> QWidget:
     page.operation_export_button.clicked.connect(lambda _checked=False, owner=page: export(owner))
     page.operation_generation_status = QLabel()
     page.operation_generation_status.setWordWrap(True)
+    page._operation_generation_status_key = None
     layout.addLayout(actions)
     layout.addWidget(page.operation_generation_status)
     layout.addStretch(1)
@@ -233,14 +234,15 @@ def generate(page: Any) -> None:
     _set_generation_busy(page, True)
     page.controller.set_generation_event_pump(QApplication.processEvents)
     try:
-        page.operation_generation_status.setText(page._t("generation_running"))
+        _set_generation_status(page, "generation_running")
         payload = page._execute_command(
             "generate_operation", operation_id=page._selected_operation_id
         )
         _refresh_product_status(page)
         if isinstance(payload, dict) and payload.get("status") == "cancelled":
-            page.operation_generation_status.setText(page._t("generation_cancelled"))
+            _set_generation_status(page, "generation_cancelled")
     except Exception as exc:
+        page._operation_generation_status_key = None
         page._report_error(exc, page.operation_generation_status)
     finally:
         page.controller.set_generation_event_pump(None)
@@ -250,24 +252,34 @@ def generate(page: Any) -> None:
 
 def cancel(page: Any) -> None:
     page._execute_command("cancel_generation")
-    page.operation_generation_status.setText(page._t("generation_cancel_requested"))
+    _set_generation_status(page, "generation_cancel_requested")
 
 
 def preview(page: Any) -> None:
     try:
-        from .gcode_preview import parse_gcode
+        from .gcode_preview import preview_from_generated_toolpath
 
         state = page.controller.product_state(page._selected_operation_id)
         result = page.controller.product_result(page._selected_operation_id)
         if state is None or state.status not in {"ready", "warning"}:
             raise ValueError(page._t("generation_preview_unavailable"))
-        if result is None or not result.gcode:
+        if result is None or not result.toolpath.points:
             raise ValueError(page._t("generation_preview_unavailable"))
-        gcode = parse_gcode(result.gcode, f"{page._selected_operation_id}.gcode")
+        build = page.controller.setup.build_coordinate_system
+        if build is None:
+            raise ValueError(page._t("generation_preview_unavailable"))
+        path_preview = preview_from_generated_toolpath(
+            result.toolpath,
+            source_from_build=build.T_target_from_source.inverse(),
+        )
         if hasattr(page.viewer, "load_gcode_preview"):
-            page.viewer.load_gcode_preview(gcode)
-        page.operation_generation_status.setText(page._t("generation_preview_ready"))
+            if hasattr(page.viewer, "set_quality_mode"):
+                page.viewer.set_quality_mode(str(page.path_display_combo.currentData()))
+            page.viewer.load_gcode_preview(path_preview)
+        page.show_model_checkbox.setChecked(False)
+        _set_generation_status(page, "generation_preview_ready")
     except Exception as exc:
+        page._operation_generation_status_key = None
         page._report_error(exc, page.operation_generation_status)
 
 
@@ -281,8 +293,9 @@ def export(page: Any) -> None:
             page._selected_operation_id,
             destination,
         )
-        page.operation_generation_status.setText(page._t("generation_exported"))
+        _set_generation_status(page, "generation_exported")
     except Exception as exc:
+        page._operation_generation_status_key = None
         page._report_error(exc, page.operation_generation_status)
 
 
@@ -341,6 +354,22 @@ def retranslate(page: Any, translate: Callable[[str], str]) -> None:
     page.operation_export_button.setText(translate("export_result"))
     if page._operation_feedback_key is not None:
         page.operation_feedback.setText(translate(page._operation_feedback_key))
+    if page.editor_stack.currentWidget() is page.operation_editor:
+        page.editor_title.setText(translate(f"operation_type_{page._selected_operation_type}"))
+        page.operation_type_value.setText(translate(f"operation_type_{page._selected_operation_type}"))
+    if page._operation_generation_status_key is not None:
+        if page._operation_generation_status_key in {
+            "generation_draft",
+            "generation_ready",
+            "generation_warning",
+            "generation_error",
+            "generation_stale",
+        }:
+            _refresh_product_status(page)
+        else:
+            page.operation_generation_status.setText(
+                translate(page._operation_generation_status_key)
+            )
 
 
 def _selected_ids(page: Any, fields: tuple[str, ...]) -> list[str]:
@@ -397,6 +426,7 @@ def _refresh_product_status(page: Any, *, preserve_message: bool = False) -> Non
             detail = _product_error_detail(state.result_payload)
             if detail:
                 message += "\n" + str(detail)
+        page._operation_generation_status_key = f"generation_{status}"
         page.operation_generation_status.setText(message)
     page.operation_preview_button.setEnabled(status in {"ready", "warning"})
     page.operation_export_button.setEnabled(status in {"ready", "warning"})
@@ -420,6 +450,11 @@ def _product_error_detail(payload: Any) -> str:
     if validation.get("collision_check_complete") is False:
         details.append("collision_check_complete=False")
     return "\n".join(details)
+
+
+def _set_generation_status(page: Any, key: str) -> None:
+    page._operation_generation_status_key = key
+    page.operation_generation_status.setText(page._t(key))
 
 
 def _set_generation_busy(page: Any, busy: bool) -> None:

@@ -114,6 +114,7 @@ class VtkModelViewer(BambuNavigationMixin, QVTKRenderWindowInteractor):
         self._init_view_navigation(self._vtk_camera)
 
         self.model: CadModel | None = None
+        self._model_visible = True
         self.selection = SelectionState()
         self.selection_callback: SelectionCallback | None = None
         self.pick_callback: PickCallback | None = None
@@ -411,20 +412,24 @@ class VtkModelViewer(BambuNavigationMixin, QVTKRenderWindowInteractor):
         self.selection.mode = mode
         self.pick_request = request
         for actor in self.body_actors.values():
-            actor.SetVisibility(mode != "face")
-            actor.SetPickable(mode == "body")
+            actor.SetVisibility(self._model_visible and mode != "face")
+            actor.SetPickable(self._model_visible and mode == "body")
         for actor in self.face_actors.values():
-            actor.SetVisibility(mode == "face")
-            actor.SetPickable(mode == "face")
+            actor.SetVisibility(self._model_visible and mode == "face")
+            actor.SetPickable(self._model_visible and mode == "face")
         for actor in self.edge_actors.values():
-            actor.SetVisibility(mode != "face")
-            actor.SetPickable(mode == "edge")
+            actor.SetVisibility(self._model_visible and mode != "face")
+            actor.SetPickable(self._model_visible and mode == "edge")
             actor.GetProperty().SetLineWidth(EDGE_PICK_WIDTH)
             actor.GetProperty().SetOpacity(0.9 if mode == "edge" else 0.45)
         for actor in self.vertex_actors.values():
-            actor.SetVisibility(mode == "vertex")
-            actor.SetPickable(mode == "vertex")
+            actor.SetVisibility(self._model_visible and mode == "vertex")
+            actor.SetPickable(self._model_visible and mode == "vertex")
         self.refresh_selection()
+
+    def set_model_visible(self, visible: bool) -> None:
+        self._model_visible = bool(visible)
+        self.set_mode(self.selection.mode)
 
     def set_pick_request(self, request: PickRequest) -> None:
         self.set_mode(request.kind)

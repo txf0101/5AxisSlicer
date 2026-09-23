@@ -26,6 +26,27 @@ class ScriptConsoleTests(unittest.TestCase):
         directory = tempfile.TemporaryDirectory()
         self.addCleanup(directory.cleanup)
         self.settings = QSettings(str(Path(directory.name) / "settings.ini"), QSettings.IniFormat)
+        self.settings.setValue("script_console/visible", True)
+
+    def test_console_is_hidden_on_first_use_and_can_be_opened(self) -> None:
+        self.settings.remove("script_console/visible")
+        window = QMainWindow()
+        self.addCleanup(window.close)
+        stack = QStackedWidget()
+        stack.addWidget(QWidget())
+        tube = QWidget()
+        stack.addWidget(tube)
+        window.setCentralWidget(stack)
+        manager = ScriptConsoleManager(window, stack, tube, QMenu(window), self.settings)
+        window.show()
+        stack.setCurrentWidget(tube)
+        self.app.processEvents()
+        self.assertFalse(manager.action.isChecked())
+        self.assertFalse(manager.dock.isVisible())
+
+        manager.action.setChecked(True)
+        self.app.processEvents()
+        self.assertTrue(manager.dock.isVisible())
 
     def test_executes_buffer_and_persists_deduplicated_history(self) -> None:
         dock = ScriptConsoleDock(self.settings)

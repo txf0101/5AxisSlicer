@@ -71,7 +71,9 @@ def build_paper_path_arrays(
         spatial = (timeline_arrays.flags & TIMELINE_FLAG_HAS_SPATIAL_LENGTH) != 0
         step_indices: np.ndarray = np.arange(count, dtype=np.int64)
     else:
-        timeline = preview.timeline
+        # Imported NC has a full timeline; generated workbench paths provide
+        # unsampled segments directly. Both must feed the same full-line view.
+        timeline = preview.timeline if preview.timeline else preview.segments
         count = len(timeline)
         starts = np.asarray([step.start for step in timeline], dtype=np.float32).reshape((-1, 3))
         ends = np.asarray([step.end for step in timeline], dtype=np.float32).reshape((-1, 3))

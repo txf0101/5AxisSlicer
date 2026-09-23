@@ -23,9 +23,10 @@ MATERIAL_EVENT_ORDER = (
     "retract",
     "cut",
     "park",
+    "unload",
     "switch",
-    "load",
     "temperature_wait",
+    "load",
     "purge",
     "prime",
     "resume",
@@ -41,6 +42,12 @@ class MaterialChannel:
     purge_length_mm: float
     load_length_mm: float = 0.0
     retract_length_mm: float = 1.0
+    unload_length_mm: float = 0.0
+    retract_feedrate_mm_min: float = 1200.0
+    unload_feedrate_mm_min: float = 300.0
+    load_feedrate_mm_min: float = 300.0
+    purge_feedrate_mm_min: float = 120.0
+    prime_feedrate_mm_min: float = 1200.0
     requires_prepare_pause: bool = False
 
     def __post_init__(self) -> None:
@@ -55,10 +62,18 @@ class MaterialChannel:
         if not 0.0 < temperature <= 500.0:
             raise ValueError("nozzle_temperature_c must be in (0, 500]")
         object.__setattr__(self, "nozzle_temperature_c", temperature)
-        for name in ("purge_length_mm", "load_length_mm", "retract_length_mm"):
+        for name in ("purge_length_mm", "load_length_mm", "retract_length_mm", "unload_length_mm"):
             numeric_value = _finite(getattr(self, name), name)
             if numeric_value < 0.0:
                 raise ValueError(f"{name} must be non-negative")
+            object.__setattr__(self, name, numeric_value)
+        for name in (
+            "retract_feedrate_mm_min", "unload_feedrate_mm_min", "load_feedrate_mm_min",
+            "purge_feedrate_mm_min", "prime_feedrate_mm_min",
+        ):
+            numeric_value = _finite(getattr(self, name), name)
+            if numeric_value <= 0.0:
+                raise ValueError(f"{name} must be positive")
             object.__setattr__(self, name, numeric_value)
         if not isinstance(self.requires_prepare_pause, bool):
             raise TypeError("requires_prepare_pause must be bool")
@@ -78,6 +93,12 @@ class MaterialChannel:
             purge_length_mm=float(payload.get("purge_length_mm", 0.0)),
             load_length_mm=float(payload.get("load_length_mm", 0.0)),
             retract_length_mm=float(payload.get("retract_length_mm", 1.0)),
+            unload_length_mm=float(payload.get("unload_length_mm", 0.0)),
+            retract_feedrate_mm_min=float(payload.get("retract_feedrate_mm_min", 1200.0)),
+            unload_feedrate_mm_min=float(payload.get("unload_feedrate_mm_min", 300.0)),
+            load_feedrate_mm_min=float(payload.get("load_feedrate_mm_min", 300.0)),
+            purge_feedrate_mm_min=float(payload.get("purge_feedrate_mm_min", 120.0)),
+            prime_feedrate_mm_min=float(payload.get("prime_feedrate_mm_min", 1200.0)),
             requires_prepare_pause=bool(payload.get("requires_prepare_pause", False)),
         )
 
@@ -86,6 +107,7 @@ class MaterialChannel:
 class MaterialRegion:
     region_id: str
     channel_id: str
+    stage_prefix: str = ""
 
     def __post_init__(self) -> None:
         for name in ("region_id", "channel_id"):
@@ -93,13 +115,21 @@ class MaterialRegion:
             if not value:
                 raise ValueError(f"{name} must not be empty")
             object.__setattr__(self, name, value)
+        object.__setattr__(self, "stage_prefix", str(self.stage_prefix).strip())
 
     def to_json(self) -> dict[str, str]:
-        return {"region_id": self.region_id, "channel_id": self.channel_id}
+        result = {"region_id": self.region_id, "channel_id": self.channel_id}
+        if self.stage_prefix:
+            result["stage_prefix"] = self.stage_prefix
+        return result
 
     @classmethod
     def from_json(cls, payload: Mapping[str, Any]) -> "MaterialRegion":
-        return cls(str(payload.get("region_id", "")), str(payload.get("channel_id", "")))
+        return cls(
+            str(payload.get("region_id", "")),
+            str(payload.get("channel_id", "")),
+            str(payload.get("stage_prefix", "")),
+        )
 
 
 @dataclass(frozen=True, slots=True)
@@ -133,8 +163,10 @@ class MaterialPlan:
         return MappingProxyType({item.channel_id: item for item in self.channels})
 
     @property
-    def region_map(self) -> Mapping[str, MaterialRegion]:
-        return MappingProxyType({item.region_id: item for item in self.regions})
+    def region_map(self) -> Mapping[tuple[str, str], MaterialRegion]:
+        return MappingProxyType({
+            (item.stage_prefix, item.region_id): item for item in self.regions
+        })
 
     def semantic_sha256(self) -> str:
         return hashlib.sha256(canonical_json_bytes(self.to_json())).hexdigest()
@@ -232,8 +264,8 @@ def apply_material_plan(toolpath: GeneratedToolpath, plan: MaterialPlan) -> Gene
     switch events.  Existing path events are retained.
     """
 
-    points, first_sequence_by_region = _assign_material_points(toolpath, plan)
-    events = [*toolpath.events, *_material_switch_events(toolpath, plan, first_sequence_by_region)]
+    points, switches = _assign_material_points(toolpath, plan)
+    events = [*toolpath.events, *_material_switch_events(toolpath, plan, switches)]
     event_priority = {name: index for index, name in enumerate(MATERIAL_EVENT_ORDER)}
     events.sort(key=lambda item: _event_sort_key(item, event_priority, len(points)))
     return GeneratedToolpath(
@@ -246,52 +278,85 @@ def apply_material_plan(toolpath: GeneratedToolpath, plan: MaterialPlan) -> Gene
 
 
 def _assign_material_points(toolpath, plan):
-    region_map, channel_map = plan.region_map, plan.channel_map
+    channel_map = plan.channel_map
     points = []
-    first_sequence_by_region: dict[str, int] = {}
+    switches: list[tuple[int, str, MaterialChannel, MaterialChannel | None]] = []
+    active: str | None = None
     for index, point in enumerate(toolpath.points):
         if point.point_type != "deposition":
             points.append(point)
             continue
-        assignment = region_map.get(point.region_id)
+        assignment = _region_assignment(point, plan.regions)
         if assignment is None:
-            raise ValueError(f"material.region_unassigned:{point.region_id}")
+            raise ValueError(f"material.region_unassigned:{point.stage_id}:{point.region_id}")
         channel = channel_map[assignment.channel_id]
-        first_sequence_by_region.setdefault(point.region_id, index)
+        if channel.channel_id != active:
+            switches.append((index, point.region_id, channel, channel_map.get(active)))
+            active = channel.channel_id
         points.append(
             replace(point, material_id=channel.material_id, channel_id=channel.channel_id)
         )
-    return points, first_sequence_by_region
+    return points, switches
 
 
-def _material_switch_events(toolpath, plan, first_sequence_by_region):
-    region_map, channel_map = plan.region_map, plan.channel_map
+def _region_assignment(point, regions):
+    matches = [
+        region
+        for region in regions
+        if (region.region_id == point.region_id or region.region_id == "*")
+        and point.stage_id.startswith(region.stage_prefix)
+    ]
+    if not matches:
+        return None
+    matches.sort(key=lambda item: (item.region_id != "*", len(item.stage_prefix)), reverse=True)
+    if len(matches) > 1 and (
+        (matches[0].region_id != "*", len(matches[0].stage_prefix))
+        == (matches[1].region_id != "*", len(matches[1].stage_prefix))
+    ):
+        raise ValueError(f"material.region_ambiguous:{point.stage_id}:{point.region_id}")
+    return matches[0]
+
+
+def _material_switch_events(toolpath, plan, switches):
     events = []
-    active: str | None = None
     ordinal = 0
-    ordered_regions = sorted(first_sequence_by_region, key=first_sequence_by_region.get)
-    for region_id in ordered_regions:
-        assignment = region_map[region_id]
-        if assignment.channel_id == active:
-            continue
+    for first_deposition, region_id, channel, previous_channel in switches:
         ordinal += 1
-        channel = channel_map[assignment.channel_id]
-        sequence = first_sequence_by_region[region_id]
-        for event_type in MATERIAL_EVENT_ORDER:
+        sequence = first_deposition
+        while sequence and toolpath.points[sequence - 1].point_type != "deposition":
+            sequence -= 1
+        initial_selection = previous_channel is None
+        event_types = (
+            ("switch", "temperature_wait")
+            if initial_selection
+            else MATERIAL_EVENT_ORDER
+        )
+        for event_type in event_types:
             if event_type == "prepare_pause" and not channel.requires_prepare_pause:
                 continue
+            event_channel = (
+                previous_channel
+                if event_type in {"retract", "cut", "park", "unload"}
+                and previous_channel is not None
+                else channel
+            )
             context: dict[str, Any] = {
                 "sequence_index": sequence,
                 "material_plan_id": plan.plan_id,
-                "material_id": channel.material_id,
-                "channel_id": channel.channel_id,
+                "material_id": event_channel.material_id,
+                "channel_id": event_channel.channel_id,
                 "tool_command": channel.tool_command,
                 "sensor_required": plan.sensor_required,
             }
             if event_type == "retract":
-                context["extrusion_length_mm"] = -channel.retract_length_mm
+                context["extrusion_length_mm"] = -event_channel.retract_length_mm
+                context["feedrate_mm_min"] = event_channel.retract_feedrate_mm_min
+            elif event_type == "unload":
+                context["extrusion_length_mm"] = -event_channel.unload_length_mm
+                context["feedrate_mm_min"] = event_channel.unload_feedrate_mm_min
             elif event_type == "load":
                 context["extrusion_length_mm"] = channel.load_length_mm
+                context["feedrate_mm_min"] = channel.load_feedrate_mm_min
             elif event_type == "temperature_wait":
                 context.update(
                     target_temperature_c=channel.nozzle_temperature_c,
@@ -299,8 +364,10 @@ def _material_switch_events(toolpath, plan, first_sequence_by_region):
                 )
             elif event_type == "purge":
                 context["extrusion_length_mm"] = channel.purge_length_mm
+                context["feedrate_mm_min"] = channel.purge_feedrate_mm_min
             elif event_type == "prime":
                 context["extrusion_length_mm"] = channel.retract_length_mm
+                context["feedrate_mm_min"] = channel.prime_feedrate_mm_min
             events.append(
                 ToolpathEvent(
                     f"material-{ordinal:04d}-{event_type}",
@@ -311,7 +378,6 @@ def _material_switch_events(toolpath, plan, first_sequence_by_region):
                     context=context,
                 )
             )
-        active = assignment.channel_id
     return events
 
 
@@ -371,7 +437,7 @@ def _validate_plan_members(channels, regions):
     if any(not isinstance(item, MaterialRegion) for item in regions):
         raise TypeError("regions must contain MaterialRegion")
     channel_ids = [item.channel_id for item in channels]
-    region_ids = [item.region_id for item in regions]
+    region_ids = [(item.region_id, item.stage_prefix) for item in regions]
     if len(set(channel_ids)) != len(channel_ids):
         raise ValueError("channel_id values must be unique")
     if len(set(region_ids)) != len(region_ids):

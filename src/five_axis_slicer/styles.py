@@ -143,6 +143,11 @@ QToolButton:disabled, QPushButton:disabled {
     background-color: @PRIMARY_SUBTLE@;
     border-color: @PRIMARY@;
 }
+#workbenchCard:disabled {
+    background-color: @DISABLED_BACKGROUND@;
+    border-color: @BORDER@;
+    color: @DISABLED_TEXT@;
+}
 #glassPanel, #progressPanel, #resultPreviewPanel, #sourcePanel,
 #viewerPanel, #detailsPanel, #codePanel, #thumbnailPanel {
     background-color: @PANEL@;

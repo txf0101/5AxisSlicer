@@ -348,7 +348,22 @@ class CommandKernelTests(unittest.TestCase):
             self.assertEqual(first.setup.nozzle.resource_id, second.setup.nozzle.resource_id)
             self.assertEqual(first.setup.material.content_hash, second.setup.material.content_hash)
             self.assertEqual(first.setup.material.resource_id, second.setup.material.resource_id)
+            self.assertTrue(first.setup.nozzle.resource_id.startswith("project-nozzle-"))
+            self.assertTrue(first.setup.material.resource_id.startswith("project-material-"))
+            self.assertNotIn(
+                "RESOURCE_LIBRARY_ENTRY_MISSING",
+                {issue.code for issue in first.validation_report().issues},
+            )
+            self.assertEqual(
+                first.resolve_resource_profile("nozzle", first.setup.nozzle.resource_id),
+                first.setup.nozzle.as_nozzle_profile(),
+            )
             self.assertEqual([path for path in Path(folder).rglob("*") if path.is_file()], [])
+
+            local_nozzle = first_kernel.execute(
+                invocation("set_nozzle", first.setup.nozzle.resource_id)
+            )
+            self.assertFalse(local_nozzle.changed)
 
             replay = first_kernel.execute(nozzle)
             self.assertFalse(replay.changed)

@@ -8,7 +8,7 @@ from pathlib import Path
 from threading import Event
 from typing import Any
 
-from .manufacturing.setup import TubeOperationDefinition
+from .manufacturing.setup import NodeState, TubeOperationDefinition
 from .models import CadModel
 from .tube_generation_context import make_tube_generation_context, tube_input_fingerprint
 from .postprocessing.indexed_tube import GenerationCancelled
@@ -107,6 +107,12 @@ class TubeGenerationControllerMixin:
         assert service.state is not None
         self._product_states[operation.operation_id] = service.state
         self._product_results[operation.operation_id] = result
+        self._operations = tuple(
+            replace(item, state=NodeState.VALID, dirty_reasons=())
+            if item.operation_id == operation.operation_id
+            else item
+            for item in self._operations
+        )
         self._modified = True
         return result
 

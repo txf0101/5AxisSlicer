@@ -51,9 +51,12 @@ class FreeformPage(CurvePage):
         self.material_plan_edit = QLineEdit()
         self.material_plan_edit.setPlaceholderText("{...}")
         self.material_plan_edit.setToolTip('{"schema_version":1,"plan_id":"..."}')
+        self.tool_change_station_edit = QLineEdit()
+        self.tool_change_station_edit.setPlaceholderText('{"clearance_z_mm":...,"cutter_xyz_mm":[...]}')
         self.face_ids_label = QLabel()
         self.guides_json_label = QLabel()
         self.material_plan_label = QLabel()
+        self.tool_change_station_label = QLabel()
         self.solid_geometry_edit = QLineEdit()
         self.solid_geometry_edit.setPlaceholderText('{"body_ids":["..."]}')
         self.solid_parameters_edit = QLineEdit()
@@ -65,6 +68,7 @@ class FreeformPage(CurvePage):
         extra.addRow(self.solid_geometry_label, self.solid_geometry_edit)
         extra.addRow(self.solid_parameters_label, self.solid_parameters_edit)
         extra.addRow(self.material_plan_label, self.material_plan_edit)
+        extra.addRow(self.tool_change_station_label, self.tool_change_station_edit)
         layout.addLayout(extra)
 
     def set_language(self, language):
@@ -76,6 +80,9 @@ class FreeformPage(CurvePage):
         self.face_ids_label.setText("受限面组 ID" if zh else "Bounded face IDs")
         self.guides_json_label.setText("多导引线 JSON" if zh else "Multiple guides JSON")
         self.material_plan_label.setText("材料计划 JSON" if zh else "Material plan JSON")
+        self.tool_change_station_label.setText(
+            "换料站坐标 JSON" if zh else "Tool-change station JSON"
+        )
         self.solid_geometry_label.setText(
             "实体曲层选择 JSON" if zh else "Solid-fill selection JSON"
         )
@@ -121,6 +128,8 @@ class FreeformPage(CurvePage):
                 face_ids = (guide_face,)
             material_text = self.material_plan_edit.text().strip()
             material = None if not material_text else json.loads(material_text)
+            station_text = self.tool_change_station_edit.text().strip()
+            station = None if not station_text else json.loads(station_text)
             guides_text = self.guides_json_edit.text().strip()
             guides = (
                 tuple(json.loads(guides_text))
@@ -149,6 +158,7 @@ class FreeformPage(CurvePage):
                 face_ids=face_ids,
                 guides=guides,
                 material_plan=material,
+                tool_change_station=station,
                 origin="gui",
                 **parameters,
             )
@@ -181,11 +191,14 @@ class FreeformPage(CurvePage):
         }
         material_text = self.material_plan_edit.text().strip()
         material = None if not material_text else json.loads(material_text)
+        station_text = self.tool_change_station_edit.text().strip()
+        station = None if not station_text else json.loads(station_text)
         self.commands.execute_command(
             "set_operation",
             operation_id=operation.operation_id,
             solid_geometry=geometry,
             material_plan=material,
+            tool_change_station=station,
             origin="gui",
             **parameters,
         )
@@ -223,6 +236,12 @@ class FreeformPage(CurvePage):
             if operation.material_plan is None
             else json.dumps(
                 operation.material_plan.to_json(), ensure_ascii=False, separators=(",", ":")
+            )
+        )
+        station = self.controller.controller_profile.tool_change_station
+        self.tool_change_station_edit.setText(
+            "" if station is None else json.dumps(
+                station.to_json(), ensure_ascii=False, separators=(",", ":")
             )
         )
         source_parameters = (

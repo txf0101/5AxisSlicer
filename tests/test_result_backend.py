@@ -43,6 +43,12 @@ class _ClosableIndex:
 
 
 class ResultStateAndProjectTests(unittest.TestCase):
+    def test_new_result_preview_defaults_to_fast_full_lines(self) -> None:
+        state = ResultPreviewState()
+        self.assertEqual(state.quality_mode, "paper")
+        restored = ResultPreviewState.from_json(state.to_json())
+        self.assertEqual(restored.quality_mode, "paper")
+
     def test_translation_catalogs_have_symmetric_keys_and_placeholders(self) -> None:
         self.assertEqual(set(TRANSLATIONS), {"zh", "en"})
         self.assertEqual(set(TRANSLATIONS["zh"]), set(TRANSLATIONS["en"]))

@@ -186,7 +186,7 @@ class ResultPreviewState:
     progress: float = 0.0
     message: str = ""
     parameters: IllustrativeProcessParameters = field(default_factory=IllustrativeProcessParameters)
-    quality_mode: str = "interactive"
+    quality_mode: str = "paper"
     selected_stage: str = "all"
     playback_progress: float = 1.0
     show_model: bool = True
@@ -314,7 +314,7 @@ class ResultPreviewState:
             progress=float(status.get("progress", 0.0)),
             message=str(status.get("message", "")),
             parameters=IllustrativeProcessParameters.from_json(parameters),
-            quality_mode=str(display.get("quality_mode", "interactive")),
+            quality_mode=str(display.get("quality_mode", "paper")),
             selected_stage=str(display.get("selected_stage", "all")),
             playback_progress=float(display.get("playback_progress", 1.0)),
             show_model=bool(display.get("show_model", True)),

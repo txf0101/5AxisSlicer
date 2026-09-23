@@ -15,6 +15,7 @@ from .manufacturing.machine import MachineProfile, builtin_machine_profiles
 from .manufacturing.resources import (
     MaterialProfile,
     NozzleProfile,
+    ResourceSnapshot,
     builtin_material_profiles,
     builtin_nozzle_profiles,
 )
@@ -27,6 +28,7 @@ class TubeResourceContext:
     def __init__(self, library: UserResourceLibrary | None = None) -> None:
         self._library: UserResourceLibrary | None = None
         self.catalogs: dict[str, tuple[ResourceProfile, ...]] = {}
+        self.project_profiles: dict[str, ResourceProfile] = {}
         self.audits: dict[str, ResourceSnapshotAudit] = {}
         self.audit_failures: dict[str, str] = {}
         self.diagnostics: tuple[ResourceLibraryDiagnostic, ...] = ()
@@ -51,7 +53,12 @@ class TubeResourceContext:
         self.audits.clear()
         self.audit_failures.clear()
         self.catalogs.clear()
+        self.project_profiles.clear()
         self.diagnostics = ()
+        for kind in ("machine", "nozzle", "material"):
+            snapshot = getattr(setup, kind)
+            if snapshot is not None and is_project_resource_id(kind, snapshot.resource_id):
+                self.project_profiles[kind] = snapshot_profile(snapshot)
         if self._library is None:
             return ()
         diagnostics: list[ResourceLibraryDiagnostic] = []
@@ -62,7 +69,7 @@ class TubeResourceContext:
         self.diagnostics = tuple(diagnostics)
         for kind in ("machine", "nozzle", "material"):
             snapshot = getattr(setup, kind)
-            if snapshot is None:
+            if snapshot is None or kind in self.project_profiles:
                 continue
             try:
                 self.audits[kind] = self._library.audit_snapshot(snapshot)
@@ -91,6 +98,9 @@ class TubeResourceContext:
         identifier = str(resource_id).strip()
         if not identifier:
             raise ValueError("resource_id must not be empty")
+        project_profile = self.project_profiles.get(kind)
+        if project_profile is not None and profile_resource_id(project_profile) == identifier:
+            return project_profile
         if self._library is not None:
             return self._library.resolve(kind, identifier)
         for profile in self.available_profiles(kind):
@@ -126,6 +136,21 @@ def profile_resource_id(
     profile: MachineProfile | NozzleProfile | MaterialProfile,
 ) -> str:
     return profile.profile_id if isinstance(profile, MachineProfile) else profile.resource_id
+
+
+def is_project_resource_id(resource_type: str, resource_id: str) -> bool:
+    """Identify command-created profiles that belong only to the project."""
+
+    kind = resource_kind(resource_type)
+    return str(resource_id).startswith(f"project-{kind}-")
+
+
+def snapshot_profile(snapshot: ResourceSnapshot) -> ResourceProfile:
+    if snapshot.resource_type == "machine":
+        return MachineProfile.from_json(snapshot.payload)
+    if snapshot.resource_type == "nozzle":
+        return snapshot.as_nozzle_profile()
+    return snapshot.as_material_profile()
 
 
 __all__ = ["TubeResourceContext", "profile_resource_id", "resource_kind"]

@@ -1,0 +1,207 @@
+{
+  "source": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\example\\三叶扇\\Supportless_sample.stp",
+  "operation_semantic_sha256": "43ddff294190deb5b15c8c98aa7fb4a9591b8d874eda4ca8898f34cb85b9f9d0",
+  "controller_semantic_sha256": "fd0dda1e935306ce1c1d86282a6e5579893b1ca2042d03f312e5b233fadbaea7",
+  "offline_station_only": true,
+  "nozzle_envelope": "reference_profile",
+  "machine_executable": false,
+  "status": "warning",
+  "offline_exportable": true,
+  "point_count": 116893,
+  "layer_height_mm": 0.8,
+  "sampling_step_mm": 1.6,
+  "safe_clearance_mm": 20.0,
+  "material_statistics": {
+    "deposition_volume_mm3_by_material": {
+      "PLA-blue": 8323.678044069888,
+      "PLA-red": 25764.15011639796,
+      "PLA-yellow": 8323.890080328227
+    },
+    "selection_command_count": 3,
+    "effective_channel_transition_count": 2,
+    "purge_length_mm": 16.0
+  },
+  "issue_codes": [
+    "xyzac.rotary_singularity",
+    "motion.intentional_tip_contact",
+    "controller.version_unknown",
+    "controller.macros_unverified",
+    "controller.xyzac_coordination_unverified",
+    "controller.cumulative_c_limit_unknown"
+  ],
+  "issues": [
+    {
+      "code": "xyzac.rotary_singularity",
+      "severity": "warning",
+      "object_id": "op01-point-0000001",
+      "context": {
+        "point_count": 5525,
+        "first_point_id": "op01-point-0000001",
+        "last_point_id": "transition-02-depart",
+        "retained_c_min_rad": 0.0,
+        "retained_c_max_rad": 0.0
+      }
+    },
+    {
+      "code": "motion.intentional_tip_contact",
+      "severity": "warning",
+      "object_id": "",
+      "context": {
+        "allowed_contact_checks": 3,
+        "offline_only": true
+      }
+    },
+    {
+      "code": "controller.version_unknown",
+      "severity": "warning",
+      "object_id": "",
+      "context": {
+        "offline_only": true
+      }
+    },
+    {
+      "code": "controller.macros_unverified",
+      "severity": "warning",
+      "object_id": "",
+      "context": {
+        "offline_only": true
+      }
+    },
+    {
+      "code": "controller.xyzac_coordination_unverified",
+      "severity": "warning",
+      "object_id": "",
+      "context": {
+        "offline_only": true
+      }
+    },
+    {
+      "code": "controller.cumulative_c_limit_unknown",
+      "severity": "warning",
+      "object_id": "",
+      "context": {
+        "offline_only": true
+      }
+    }
+  ],
+  "readback": {
+    "schema_version": 1,
+    "passed": true,
+    "expected_points": 116893,
+    "read_points": 116893,
+    "expected_events": 31636,
+    "read_events": 31636,
+    "machine_executable": false,
+    "issues": []
+  },
+  "elapsed_s": 219.35969509999995,
+  "colour_boundaries": [
+    {
+      "channel": "T0",
+      "sequence_index": 0,
+      "before": null,
+      "after": {
+        "point_id": "op01-point-0000001",
+        "stage_id": "op01-base_shell",
+        "point_type": "approach",
+        "build_xyz_mm": [
+          -16.10754405988895,
+          -9.300666883700085,
+          0.7936506952380948
+        ],
+        "machine_axes": {
+          "X": -16.10754405988895,
+          "Y": -9.300666883700085,
+          "Z": 13.293650695238094,
+          "A": 0.0,
+          "C": 0.0
+        }
+      }
+    },
+    {
+      "channel": "T1",
+      "sequence_index": 42621,
+      "before": {
+        "point_id": "op02-point-00037095",
+        "stage_id": "op02-radial-solid-fill",
+        "point_type": "deposition",
+        "build_xyz_mm": [
+          50.00550768261354,
+          -31.87292693638619,
+          95.0
+        ],
+        "machine_axes": {
+          "X": 3.552713678800501e-15,
+          "Y": 95.0,
+          "Z": 71.79953010006179,
+          "A": -1.5707963267948966,
+          "C": -1.0033381083532982
+        }
+      },
+      "after": {
+        "point_id": "transition-03-depart",
+        "stage_id": "operation-transition",
+        "point_type": "depart",
+        "build_xyz_mm": [
+          66.87090529984067,
+          -42.622734525958634,
+          95.0
+        ],
+        "machine_axes": {
+          "X": 0.0,
+          "Y": 95.0,
+          "Z": 91.79953010006179,
+          "A": -1.5707963267948966,
+          "C": -1.0033381083532982
+        }
+      }
+    },
+    {
+      "channel": "T2",
+      "sequence_index": 79725,
+      "before": {
+        "point_id": "op03-point-00037102",
+        "stage_id": "op03-radial-solid-fill",
+        "point_type": "deposition",
+        "build_xyz_mm": [
+          2.60000959732393,
+          59.242503493538806,
+          95.0
+        ],
+        "machine_axes": {
+          "X": 3.552713678800501e-15,
+          "Y": 95.0,
+          "Z": 71.79953010006179,
+          "A": -1.5707963267948966,
+          "C": -3.0977332273096874
+        }
+      },
+      "after": {
+        "point_id": "transition-04-depart",
+        "stage_id": "operation-transition",
+        "point_type": "depart",
+        "build_xyz_mm": [
+          3.476916916129554,
+          79.22327008429366,
+          95.0
+        ],
+        "machine_axes": {
+          "X": 5.773159728050814e-15,
+          "Y": 95.0,
+          "Z": 91.79953010006179,
+          "A": -1.5707963267948966,
+          "C": -3.0977332273096874
+        }
+      }
+    }
+  ],
+  "candidate_preview_png": "three_color_fan_candidate_preview.png",
+  "tool_commands": [
+    "T0",
+    "T1",
+    "T2"
+  ],
+  "cutter_visits": 2,
+  "nc_sha256": "5b69086d83820d4adf7247965e080c031dad7ec7126ad59527c740d1b33c68f0",
+  "nc_size_bytes": 21621140
+}

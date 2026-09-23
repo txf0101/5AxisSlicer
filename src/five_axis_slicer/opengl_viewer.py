@@ -369,10 +369,11 @@ class OpenGLModelViewer(BambuNavigationMixin, QOpenGLWidget):
         )
         self._path_cache_key = None
         self._settle_timer.stop()
-        self._progress_dragging = True
+        self._progress_dragging = self.quality_mode != "paper"
         self.refresh_selection()
         self.refresh_path_preview()
-        self._settle_timer.start(INITIAL_SOLID_SETTLE_MS)
+        if self._progress_dragging:
+            self._settle_timer.start(INITIAL_SOLID_SETTLE_MS)
         self._refresh_grid_buffer()
         self.fit_view()
 

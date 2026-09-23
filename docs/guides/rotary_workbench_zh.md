@@ -2,9 +2,9 @@
 
 > 初次使用请先完成[学习总册](user_learning_manual_zh.md)的 L01—L06；本页是 Rotary 专项参考。圆柱或轮毂案例用于练习固定轴、零角和周期，不能把示例 face ID、角区间或轴范围复制到其他零件。
 
-适用版本：R01—R05，2026-09-13 当前本地分支。Rotary 工作台在有明确回转轴和圆柱/圆锥表面的 STEP 零件上生成 Rotary Spiral、Rotary Thin Wall 和 Around Part。内部长度使用 mm，内部角度使用 rad；界面的起止角和区域角使用 deg，角速度使用 rad/s。
+Rotary 工作台在有明确回转轴和圆柱/圆锥表面的 STEP 零件上生成 Rotary Spiral、Rotary Thin Wall 和 Around Part。内部长度使用 mm，内部角度使用 rad；界面的起止角和区域角使用 deg，角速度使用 rad/s。
 
-> 图片证据：本手册优先使用 `assets/rotary/live_qt/` 中 7 张当前生产 `RotaryPage` + `ModelViewer` 截图；它们由真实生成结果渲染，并由 Qt `QWidget.grab()` 捕获，尺寸与 SHA-256 见该目录 `summary.json`。Computer Use 在本轮未枚举到 Qt 原生窗口，不能声称由 Computer Use 捕获。`assets/rotary/current_r01_r05/` 中另有 10 张三尺寸中英状态图，使用 `qt_evidence_paint_harness` 核对控件、状态和真实 preview payload，不单独作为 VTK/OpenGL 资格证据。
+本页图片用于定位选轴边、选回转面、设置角区间和检查路径。示例中的 edge、face ID 和角度只适用于图中模型。
 
 ## 1. 支持范围与入口
 
@@ -104,6 +104,8 @@ Around Part 在一个或多个有向角区域内生成局部周向道，再按�
 
 ## 5. 参数、默认值和作用域
 
+下表是界面初始值，图片中的角区间和工艺数值只适用于对应练习模型。自己的设备应重新核定轴范围、喷嘴、材料、道宽、进给和装夹，不能直接使用案例值上机。
+
 | 参数 | 默认值 | 当前规则 |
 | --- | ---: | --- |
 | 螺距 | 5 mm/rev | 大于 0；仅 Spiral 使用；按展开圈数换算轴向位移 |
@@ -184,11 +186,11 @@ Viewer 直接读取 generated shared Toolpath，其 source 标识为 `<generated
 
 ![轴限 Error](assets/rotary/current_r01_r05/07_rotary_axis_limit_error_zh_1366x768.png)
 
-下图是同类错误在生产 Viewer 中的当前画面：状态为 `ERROR`，问题列表包含 `acceleration_limit_exceeded`，导出按钮禁用。它是错误示例，不是成功结果。
+下图是错误状态：问题列表包含 `acceleration_limit_exceeded`，导出按钮禁用。
 
 ![回转轴加速度限制错误示例](assets/rotary/live_qt/06_acceleration_limit_error_zh.png)
 
-![修复后的 Warning 结果](assets/rotary/current_r01_r05/08_rotary_axis_limit_recovered_zh_1366x768.png)
+![调整参数后重新生成的 Warning 结果](assets/rotary/current_r01_r05/08_rotary_axis_limit_recovered_zh_1366x768.png)
 
 ## 10. 六件套与 G-code 回读
 
@@ -196,16 +198,16 @@ Viewer 直接读取 generated shared Toolpath，其 source 标识为 `<generated
 
 | 文件 | 用途 |
 | --- | --- |
-| `main.gcode` | 按注册机型控制器语义输出绝对线性轴、映射后的旋转轴字和绝对 E；协调运动为 `G93` 逆时间进给，Spiral/Thin Wall/Around Part 分别使用 R02/R03/R04 标记；头部记录 `CONTROLLER_AXIS_MAP` |
+| `main.gcode` | 按注册机型控制器语义输出绝对线性轴、映射后的旋转轴字和绝对 E；协调运动为 `G93` 逆时间进给，Spiral/Thin Wall/Around Part 分别带有操作类型标记；头部记录 `CONTROLLER_AXIS_MAP` |
 | `toolpath.json` | shared Toolpath 点、事件、层/区域、姿态、工艺和材料体积 |
 | `machine_axes.csv` | 点 ID、时间、`rotary_phase_rad`、XYZAC 内部轴值；回转轴内部为 rad |
 | `warnings.json` | 检查状态、指标、问题代码、对象和上下文 |
 | `preview.json` | Viewer 可读的分段几何、移动类型、F/E、道宽和层高 |
 | `manifest.json` | 操作类型、RotaryPlan、语义哈希、源指纹、算法版本、轴轨迹、检查和回读结果 |
 
-导出使用同目录临时 stage，六个文件写完且未取消后再替换目标目录。替换失败时恢复上一份完整结果。
+导出目录应同时包含上述六个文件；若导出中断，请核对 `manifest.json` 和结果状态后再使用。
 
-当前证据保留四个产品：非零中心圆柱 Spiral、非零中心圆锥 Spiral、12 道 Thin Wall 和跨零点 Around Part。每个目录均有完整六件套且回读通过；输入 STEP 和逐文件 SHA-256 见 `docs/reviews/evidence/2026-09-13_rotary_workbench_final/products_summary.json`。
+下图展示导出位置和六个文件。换模型后仍需重新检查路径和回读报告。
 
 ![Rotary 六件套导出](assets/rotary/current_r01_r05/09_rotary_export_zh_1600x900.png)
 
@@ -216,7 +218,7 @@ Viewer 直接读取 generated shared Toolpath，其 source 标识为 `<generated
 - 重开后 Ready/Warning 资格显式改为 Stale，几何引用和参数仍可检查，重新 Generate 才能导出。
 - STEP 更新时重绑 axis/contour/surface 引用，并对后台解析期间的 Rotary 输入做并发 token 检查，避免旧草稿覆盖新编辑。
 
-参数变更触发的 Stale 与项目重开的恢复入口相同：左侧保留几何和参数，导出禁用，点击“生成与检查”取得当前运行时结果。下图显示真实生产界面的输入变更 Stale；项目重开的 Stale 证据见紧随其后的三尺寸状态图。
+参数变更与项目重开都会使结果进入 Stale：左侧保留几何和参数，导出禁用。点击“生成与检查”取得当前结果。下图分别展示输入变更和项目重开后的状态。
 
 ![Rotary 输入变化后的 Stale](assets/rotary/live_qt/07_input_change_stale_zh.png)
 
@@ -248,12 +250,6 @@ Viewer 直接读取 generated shared Toolpath，其 source 标识为 `<generated
 
 HTTP 路由为：`/rotary/state`、`/rotary/issues`、`/rotary/validate`、`/rotary/operation/create`、`/rotary/operation/set`、`/rotary/operation/generate`、`/rotary/generation/cancel`、`/rotary/operation/export`、`/rotary/undo`、`/rotary/redo`。远程绑定、token 和访问范围仍由应用 HTTP 设置控制。
 
-## 13. 公开资料与实机边界
-
-本版实施前固定并静态提取了 Open5x commit `500a786e51447b47e00d2a5ca3dcc938ae542926` 的三份原始 Grasshopper 定义，识别了 IK、Simulation、Speed Compensation、Extrusion、Travel 和 Retract/Deretraction 组织。Open5x 为 MIT 许可，Copyright © 2022 Freddie Hong。本项目没有复制或移植其 Grasshopper 程序，当前运行时不新增 Open5x 依赖。
-
-Siemens NX 公开产品页和 2512/2606 发布说明用于核对 Rotary deposition、Thin Wall、局部回转特征和连续 rotary non-cutting move 的产品语义。Siemens Documentation Center 中相关 NX Additive Manufacturing 正文访问属性为 private，本轮没有声称读取私有 NX Help，也没有反推 NX 内部算法。
+## 13. 实机使用边界
 
 当前 Generic XYZAC 只提供离线参考资格。软件已验证自定义轴字会进入四工作台 G-code 和严格回读，但目标固件是否把该字解释为预期物理关节仍未验证。回转正方向、单位/缩放/零偏、轴速度和加速度、回转中心、工具长度、实际喷嘴包络、机床壳体、现场夹具、材料参数和试切均需以目标机床标定与现场证据另行确认。未完成这些工作前，不得把六件套或示例目录中的手工代码直接用于真实机床。
-
-当前 Rotary 专项为 37 passed；最终全仓串行复跑为 820 passed、3 skipped、130 subtests passed，退出码 0。首轮全仓曾在既有 Planar P03 目录替换处遇到一次 Windows `WinError 5`；该用例单测随即 1 passed，换新仓库内 basetemp 后全仓通过，失败日志仍保留。`scripts/check_quality.py` 退出码 0，Ruff、format、context budget 和 Mypy 对 147 个源文件通过。截图 SHA-256 见图片 `summary.json`，六件套指纹见 `products_summary.json`，构建与包检查见最终验证清单。

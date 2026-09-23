@@ -33,6 +33,7 @@ from ..manufacturing.freeform_solid_parameters import (
     SphericalSolidGeometrySelection,
     SurfaceSolidGeometrySelection,
 )
+from ..manufacturing.material_plan import apply_material_plan
 from ..manufacturing.toolpath import GeneratedToolpath
 from ..models import CadModel
 from .toolpath_sequence import merge_toolpath_sequence, transform_toolpath
@@ -180,6 +181,8 @@ def generate_solid_fill_product_path(
         )
     )
     toolpath = transform_toolpath(source_path, T_build_from_source)
+    if operation.material_plan is not None:
+        toolpath = apply_material_plan(toolpath, operation.material_plan)
     return (
         SolidFillPlan(
             operation.operation_id,
