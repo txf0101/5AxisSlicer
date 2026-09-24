@@ -150,10 +150,6 @@ R–Z 外形中的半径和 Z 必须为有限非负值，首点位于喷尖 `Z=0
 | 不知道“安装接口”填什么 | 查看喷嘴或热端图纸中的机械连接规格；可记录螺纹规格或厂家接口型号，未知时留空 |
 | 总长显示“未填写” | 内置喷嘴只含身份数据；按喷尖到安装端最远点的轴向距离填写实测值 |
 
-## 10. 交互依据
+## 10. 鼠标操作提示
 
-鼠标规则按 Bambu Studio 官方源码提交 [`12f17b06f4f537f9c03162d08bb70cf733c42839`](https://github.com/bambulab/BambuStudio/tree/12f17b06f4f537f9c03162d08bb70cf733c42839) 核对：
-
-- [拖动与按键分流](https://github.com/bambulab/BambuStudio/blob/12f17b06f4f537f9c03162d08bb70cf733c42839/src/slic3r/GUI/GLCanvas3D.cpp#L5799-L5895)
-- [空白点击清除选择](https://github.com/bambulab/BambuStudio/blob/12f17b06f4f537f9c03162d08bb70cf733c42839/src/slic3r/GUI/GLCanvas3D.cpp#L5904-L5946)
-- [滚轮与光标锚定](https://github.com/bambulab/BambuStudio/blob/12f17b06f4f537f9c03162d08bb70cf733c42839/src/slic3r/GUI/GLCanvas3D.cpp#L5146-L5168)
+在模型上左键点击可选择当前类型的几何；按住并拖动可旋转视角。点击空白处可清除当前选择，滚轮可放大或缩小。若点击时模型意外旋转，请保持鼠标静止后重试。

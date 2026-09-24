@@ -10,6 +10,8 @@ Zigzag checks bead-width envelope, material by region, and uncovered areas. Smal
 
 Open **Planar Slicing**, create Region, Zigzag, Offset, Thin Wall, Spiral, or Support, select the body, set parameters, and click **Apply**. Region displays sections, holes, and islands but cannot generate NC or export the six-file package. The other five operations use the common Toolpath, machine-axis, validation, postprocessing, and G-code readback chain.
 
+For Support, select **Planar Support**, set **First-layer Z** equal to **Layer height**, then set the last-layer Z, overhang angle, XY/Z gaps, line spacing, interface layers, and Lines or Grid pattern. Click **Apply** and **Generate Preview**. Inspect both support body and interface paths against the model. If no support is required, or a region cannot reach the build plate, check part orientation and layer range before changing parameters.
+
 ![Planar path with the model hidden](assets/product_delivery/07_planar_full_lines_zh.png)
 
 This one-layer screenshot uses `body_001` at Z=0.2 mm. Other practice settings use a different body and Z; do not mix or copy case values. Show the model to check placement, then hide it and choose **Full lines (fast)** for all paths or **Bead width** for width inspection.

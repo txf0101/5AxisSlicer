@@ -1,4 +1,4 @@
-# 5AxisSclicer V2.0 Learning Manual
+# 5AxisSclicer V2.6.2 Learning Manual
 
 This course teaches a repeatable offline workflow: inspect geometry, assign roles, establish Setup, choose a Workbench, generate, inspect, read back, export, save, reopen, and transfer the method to a new part. Example models, IDs, coordinates, dimensions, axis ranges, and settings are practice material only. Re-select and measure for your own machine and part.
 

@@ -118,7 +118,7 @@ Planar、Curve、Rotary 和 Freeform 的左侧都有“制造设置”栏，列�
 
 ![G-code 文件预览：弯管路径完整显示在中央，右侧可控制路径显隐](assets/product_delivery/10_gcode_file_preview_zh.jpg)
 
-图中只载入了 G-code，因此右侧提示“尚未载入 STEP 模型”；这不影响单独查看路径。该图展示文件预览的操作位置，不作为弯管制造程序的验收图。
+图中只载入了 G-code，因此右侧提示“尚未载入 STEP 模型”；这不影响单独查看路径。图片用于定位文件预览控件；检查自己的程序时，应叠加对应 STEP 并核对路径位置。
 
 定位和坐标语义见[G-code 预览手册](gcode_preview_zh.md)。
 

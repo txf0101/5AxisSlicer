@@ -11,7 +11,7 @@ from .ui import MainWindow
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="5AxisSclicer V2.0 workbench and NC preview")
+    parser = argparse.ArgumentParser(description="5AxisSclicer V2.6.2 workbench and NC preview")
     parser.add_argument("--model", help="STEP/STP file to open on startup")
     parser.add_argument("--gcode", help="NC/G-code file to open on startup")
     parser.add_argument(

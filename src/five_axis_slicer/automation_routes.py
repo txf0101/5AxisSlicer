@@ -107,7 +107,7 @@ class AutomationRouter:
         raise RuntimeError(f"Unknown endpoint: {path}")
 
     def _health(self, _payload: Payload) -> Response:
-        return {"status": "ready", "app": "5AxisSclicer V2.0"}
+        return {"status": "ready", "app": "5AxisSclicer V2.6.2"}
 
     def _state(self, _payload: Payload) -> Response:
         return self.window.current_state()

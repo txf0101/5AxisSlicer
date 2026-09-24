@@ -85,7 +85,7 @@ Curve 工作台沿 STEP 有向 edge 链生成 Buildup、Multi-pass Buildup 和 O
 - Error：生成、运动检查或回读失败，禁止导出。
 - Stale：输入已变化，旧结果不可导出，重新生成后恢复。
 
-生成期间“取消生成”可用。取消不会破坏上一份有效 Toolpath；界面继续显示原 Ready/Warning 结果。Viewer 中单道、多层和横向多道都来自生成结果，不从历史 G-code 伪造。
+生成期间“取消生成”可用。取消不会破坏上一份有效 Toolpath；界面继续显示原 Ready/Warning 结果。Viewer 显示当前工作台的生成路径；查看已有 G-code 请使用“G-code 文件预览”。
 
 ## 6. 典型错误与恢复
 

@@ -8,6 +8,8 @@ The left Manufacturing Setup panel shares Common Setup by default. Use **Import 
 
 Choose an axis edge and apply it, then choose the coaxial cylindrical/conical face and apply it. Define a zero-angle direction perpendicular to the axis. Rotary phase is continuous and may span multiple revolutions; intervals crossing zero are unwrapped in travel direction. Specify nonzero angular intervals and an explicit CW/CCW direction.
 
+In the Viewer, switch selection to **Edge**, click the axis reference, and choose **Use selected axis edge**. Switch to **Face**, click the cylindrical or conical surface, and choose **Use selected surface**. Verify the saved IDs and axis direction, then click **Apply geometry and parameters** and **Generate and Validate**. Hide the model to inspect the full path and turn it back on to check placement. A trimmed half-cylinder does not automatically set a 180° region; enter the intended angular interval explicitly.
+
 - **Spiral** winds around the selected surface while advancing by pitch per revolution. The total pitch travel must fit the axial profile and must not cross a degenerate cone apex.
 - **Thin Wall** generates finite radial passes. The interval must cover one full turn (360°); pass widths and spacing must fit the target wall thickness. A reduced bead width may produce a Warning where enabled.
 - **Around Part** creates one or more directed angular regions. Use semicolon-separated non-overlapping intervals, including intervals across the cycle boundary where needed.

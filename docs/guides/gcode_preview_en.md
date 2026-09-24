@@ -20,7 +20,7 @@ Paths generated in a Workbench should first be inspected there. To inspect the e
 
 ![G-code file preview](assets/product_delivery/10_gcode_file_preview_zh.jpg)
 
-The screenshot contains G-code only. The “No STEP model loaded” message does not prevent path inspection. The program shown demonstrates the preview controls and is not a manufacturing qualification for the pipe example.
+The screenshot contains G-code only. The “No STEP model loaded” message does not prevent path inspection. The image shows where the preview controls are; overlay the matching STEP to check your own program's path placement.
 
 ## Model, view, and path filters
 

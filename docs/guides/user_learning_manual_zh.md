@@ -1,4 +1,4 @@
-# 5AxisSclicer V2.0 学习手册
+# 5AxisSclicer V2.6.2 学习手册
 
 想先照界面完成一次操作，请从[五工作台图文点击教程](quickstart_clickthrough_zh.md)开始。本册随后解释为什么选择某种工作台、怎样判断结果和迁移到自己的零件。
 

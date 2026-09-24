@@ -1,6 +1,6 @@
 # Offline Postprocessor Guide for the Own AC Controller
 
-`builtin.controller.own_ac.offline.v1` is an offline review dialect for `builtin.machine.own_ac_fdm.v1`. It uses millimetres, degrees for rotary axes, `G90` for absolute machine axes, `M83` for relative extrusion, and `G94` for feed per minute. It establishes extrusion zero with `G92 E0` and restores `G90/M83/G94` before `M400` and `M2`.
+`builtin.controller.own_ac.offline.v1` is the built-in offline AC G-code format for `builtin.machine.own_ac_fdm.v1`. It uses millimetres, degrees for rotary axes, `G90` for absolute machine axes, `M83` for relative extrusion, and `G94` for feed per minute. It establishes extrusion zero with `G92 E0` and restores `G90/M83/G94` before `M400` and `M2`.
 
 Each point has a readable `PAC POINT` marker. Material events include `PAC EVENT` and JSON context; station moves use `PAC SERVICE`. Readback compares the full command stream, point order, controller axis words, F, relative E, material channels, and event order. Extra commands, a change from M83 to M82, altered E/F/axis values, or a damaged footer cause readback to fail.
 

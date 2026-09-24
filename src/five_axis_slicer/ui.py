@@ -2058,7 +2058,7 @@ class MainWindow(QMainWindow):
         toolbar = QToolBar("Main", self)
         toolbar.setObjectName("mainToolbar")
         toolbar.setMovable(False)
-        self.product_title_label = QLabel("5AxisSclicer V2.0")
+        self.product_title_label = QLabel("5AxisSclicer V2.6.2")
         self.product_title_label.setObjectName("productTitle")
         toolbar.addWidget(self.product_title_label)
         toolbar.addSeparator()
@@ -2628,7 +2628,7 @@ class MainWindow(QMainWindow):
         QMessageBox.about(
             self,
             tr(self.language, "action_about"),
-            "5AxisSclicer V2.0\nPyQt5 · OpenGL/VTK · AC inverse preview",
+            "5AxisSclicer V2.6.2\nPyQt5 · OpenGL/VTK · AC inverse preview",
         )
 
     def _on_operation_changed(self, index: int) -> None:

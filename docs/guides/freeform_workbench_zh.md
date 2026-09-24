@@ -15,7 +15,7 @@ Freeform 的导引模式支持在一个明确修剪面或最多 16 个显式面�
 3. 在中间参数区的“Viewer 选取类型”选“边”，到右侧模型上点导引 edge；再切“面”并点其明确邻接 face。向下滚动点“采用 Viewer 已选边”，核对边的顺序、反向标志和邻面。单导引线可在普通字段中修改；多导引线在“多导引线 JSON”中提交对象数组。
 4. “受限面组 ID”必须包含每条导引线引用的 face。未列入面组的邻面会被拒绝。
 5. 需要分配不同材料时点“编辑材料表…”，需要换料时再点“编辑换料站…”。填写和核对方法见[多色材料与换料站](material_channels_zh.md)。然后点“应用”。
-6. 点“生成与检查 / Generate”。右侧取消“显示模型”可查看原先被 CAD 遮住的完整线条；切换“沉积道宽”可检查线宽效果。状态为 `Warning` 且导出按钮可用时，说明离线产品和严格回读通过；当前内置控制器未知项会保留 Warning。
+6. 点“生成与检查 / Generate”。若 CAD 模型遮住路线，可在右侧取消“显示模型”查看完整线条；切换“沉积道宽”可检查线宽效果。状态为 `Warning` 且导出按钮可用时，说明离线产品和严格回读通过；控制器尚需用户核对的项目会保留 Warning。
 7. 导出目录固定包含 `main.gcode`、`toolpath.json`、`machine_axes.csv`、`warnings.json`、`preview.json`、`manifest.json` 六个文件。
 
 ![Freeform 顶部的新建操作类型和当前操作](assets/product_delivery/04_freeform_mode_zh.jpg)

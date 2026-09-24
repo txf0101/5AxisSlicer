@@ -1,4 +1,4 @@
-# 5AxisSclicer V2.0
+# 5AxisSclicer V2.6.2
 
 5AxisSclicer is a Windows desktop workbench for offline five-axis additive-manufacturing planning. It imports STEP/STP models, records manufacturing Setup, selects geometry for an operation, generates and previews paths, and exports G-code with a strict readback report. It is under active testing. Example values and print results depend on your own machine, nozzle, material, fixture, and trials.
 

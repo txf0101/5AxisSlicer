@@ -3,7 +3,7 @@ from __future__ import annotations
 
 TRANSLATIONS: dict[str, dict[str, str]] = {
     "zh": {
-        "app_title": "5AxisSclicer V2.0 五轴切片工作台",
+        "app_title": "5AxisSclicer V2.6.2 五轴切片工作台",
         "workbench_home": "工作台",
         "manufacturing_setup_entry": "公共制造设置",
         "home_title": "五轴塑料/树脂增材工作台",
@@ -101,7 +101,7 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "check_warning_policy": "策略：Warning 可继续预览并写入项目记录；Error 才阻止最终代码输出。",
     },
     "en": {
-        "app_title": "5AxisSclicer V2.0 5-Axis Slicing Workbench",
+        "app_title": "5AxisSclicer V2.6.2 5-Axis Slicing Workbench",
         "workbench_home": "Workbench",
         "manufacturing_setup_entry": "Manufacturing Setup",
         "home_title": "5-axis polymer/resin additive workbenches",

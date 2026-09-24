@@ -1,6 +1,6 @@
 # 自有 AC 控制器离线后处理指南
 
-`builtin.controller.own_ac.offline.v1` 是论文核心版本的审查方言。它绑定 `builtin.machine.own_ac_fdm.v1`，固定长度为 mm、回转轴为 deg，并使用：
+`builtin.controller.own_ac.offline.v1` 是内置的 AC 离线 G-code 格式。它绑定 `builtin.machine.own_ac_fdm.v1`，长度单位为 mm、回转轴单位为 deg，并使用：
 
 - `G90`：机床轴绝对模式；
 - `M83`：挤出机相对 E；

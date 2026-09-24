@@ -38,6 +38,7 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 
 | 日期 | 任务 | Skill | 本轮用途 | 证据 |
 | --- | --- | --- | --- | --- |
+| 2026-09-25 | PRODUCT-01 V2.6.2 双语教程发布检查 | `five-axis-workbench-development` | 核对 14 个中英文主题成对、教程链接与图片；清理用户教程中的内部对照过程，补充英文 Planar 支撑及 Rotary 选几何步骤，统一公开版本标识 | [教程索引](../guides/README.md)、[交付复盘](../reviews/2026-09-23_product_delivery_review.md) |
 | 2026-09-25 | PRODUCT-01 NC 预览与问题归档 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`skill-creator` | 校徽曲面预览补偿 12.5 mm 刀长，完整 NC 回读路径包络恢复与 Toolpath 一致；产品化过程失效模式归入复用 Skill，并核验有效性 | [交付复盘](../reviews/2026-09-23_product_delivery_review.md)、[校徽六件套](../reviews/evidence/2026-09-24_product_delivery_ui_audit/gui_agent_logo_output/manifest.json) |
 | 2026-09-24 | PRODUCT-01 导出与换姿复核 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`computer-use` | 真实校徽 GUI 暴露导出目标误选会覆盖项目，五类导出器加统一目录保护；叶轮/三叶扇诊断证实模型 Z 抬升不足以保证转台换姿安全，保留错误阻断并转向机床坐标规划 | [交付复盘](../reviews/2026-09-23_product_delivery_review.md)、[交付计划](product_delivery_20260923.md) |
 | 2026-09-24 | PRODUCT-01-MC01 界面复核 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`computer-use` | 实际桌面打开三色项目、编辑换料站、验证错误高度拒绝、生成两种密度的完整扇叶并导出六件套；修复项目控制器站位丢失及 Freeform 路径被模型遮挡 | [GUI 清单](../reviews/evidence/2026-09-24_three_color_fan_gui_release/manifest.json)、[无遮挡路径图](../reviews/evidence/2026-09-24_three_color_fan_gui_release/freeform_path_visible.jpg)、[复盘](../reviews/2026-09-23_product_delivery_review.md) |
