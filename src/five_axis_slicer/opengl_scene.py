@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 import math
-from collections.abc import Iterable
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
+from typing import cast
 
 import numpy as np
 import vtk
@@ -15,6 +16,7 @@ from .gcode_preview import (
     TIMELINE_FLAG_HAS_SPATIAL_LENGTH,
     GCodePathSegment,
     GCodePreview,
+    GCodeTimelineStep,
     PreviewSettings,
 )
 from .models import BuildSurfaceOverlay, CoordinateFrameOverlay
@@ -74,7 +76,10 @@ def build_paper_path_arrays(
     else:
         # Imported NC has a full timeline; generated workbench paths provide
         # unsampled segments directly. Both must feed the same full-line view.
-        timeline = preview.timeline if preview.timeline else preview.segments
+        timeline = cast(
+            Sequence[GCodeTimelineStep | GCodePathSegment],
+            preview.timeline if preview.timeline else preview.segments,
+        )
         count = len(timeline)
         starts = np.asarray([step.start for step in timeline], dtype=np.float32).reshape((-1, 3))
         ends = np.asarray([step.end for step in timeline], dtype=np.float32).reshape((-1, 3))

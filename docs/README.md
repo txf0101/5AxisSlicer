@@ -21,6 +21,7 @@
 - [五轴运动仿真规划复盘](reviews/2026-09-20_motion_simulation_planning_review.md)：现有基础、技术选择、未验证项和本轮边界。
 - [示例模型 PLA 五轴代码生成复盘](reviews/2026-09-20_example_pla_gcode_generation_review.md)：六类示例的工作台选择、论文参数、四份新代码的严格回读结果，以及三叶扇和 STL pipe 的当前阻塞边界。
 - [CI 依赖修复与分支统一复盘](reviews/2026-09-13_ci_branch_consolidation_review.md)：默认 `master` 主线、Actions 隔离环境、依赖漂移原因和本轮验证边界。
+- [GitHub Actions 质量门禁修复复盘](reviews/2026-09-25_ci_quality_recovery.md)：上下文预算与类型错误、精确旧债务约束、本地复核和托管 CI 边界。
 - [论文核心 AC 范围与开源复用研究](planning/paper_core_ac_scope.md)：当前优先路线、四例覆盖缺口、论文批判性核对、固定版本及许可边界；状态统一见台账PC00—PC07。
 - [论文核心范围调整复盘](reviews/2026-09-13_paper_core_ac_planning_review.md)：资源取舍、证据限制和本轮实际Skill使用。
 - [PC01 输入、材料与控制器契约](planning/paper_core_input_contract.md)：单位、frame、G90/M83/G94、两种 Z20、T0—T3、容差、输入指纹和失败矩阵。

@@ -350,7 +350,7 @@ class FreeformPage(CurvePage):
                 operation.material_plan.to_json(), ensure_ascii=False, indent=2
             )
         )
-        station = self.controller.controller_profile.tool_change_station
+        station = cast(FreeformController, self.controller).controller_profile.tool_change_station
         self.tool_change_station_edit.setText(
             "" if station is None else json.dumps(
                 station.to_json(), ensure_ascii=False, indent=2

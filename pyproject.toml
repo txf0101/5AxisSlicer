@@ -171,3 +171,108 @@ complexity = 15
 "tube_ui.py" = { module_lines = 1655, class_lines = 1376 }
 "ui.py" = { module_lines = 2806, class_lines = 2695, function_lines = 148 }
 "viewer.py" = { module_lines = 1150, class_lines = 1006, function_lines = 88, complexity = 16 }
+
+# Accepted V2.6.2 objects only: exact observed ceilings, not file-wide exemptions.
+# New objects keep the default limits; each entry below remains visible refactoring debt.
+[tool.context-budget.legacy-object]
+"algorithms/fan/radial_solid_fill.py:generate_radial_solid_fill" = { function_lines = 79 }
+"algorithms/freeform/surface_solid_fill.py:_generate_root_edge_outward" = { function_lines = 124, complexity = 18 }
+"algorithms/freeform/surface_solid_fill.py:_surface_frame" = { complexity = 18 }
+"algorithms/freeform/surface_solid_fill.py:_SurfacePathBuilder.add_path" = { function_lines = 72 }
+"algorithms/freeform/surface_solid_fill.py:generate_surface_solid_fill" = { function_lines = 85 }
+"algorithms/rotary/geometry.py" = { module_lines = 1110 }
+"algorithms/rotary/geometry.py:_connect_paths" = { function_lines = 232 }
+"algorithms/rotary/geometry.py:RotaryPlan.to_json" = { function_lines = 71 }
+"curve_ui.py:CurvePage" = { class_lines = 539 }
+"freeform_commands.py:FreeformCommandProvider._command_set_operation" = { complexity = 17 }
+"freeform_ui.py:_solid_selection_from_viewer" = { function_lines = 81, complexity = 29 }
+"freeform_ui.py:FreeformPage._load_controls" = { function_lines = 71, complexity = 21 }
+"freeform_ui.py:FreeformPage._update_solid_geometry_summary" = { complexity = 24 }
+"gcode_arrays.py:_segment_npz_arrays" = { complexity = 18 }
+"gcode_arrays.py:_timeline_arrays_from_steps" = { complexity = 18 }
+"gcode_cache.py:write_preview_cache" = { function_lines = 72 }
+"gcode_preview.py" = { module_lines = 1296 }
+"gcode_preview.py:_bundled_controller_setup" = { complexity = 20 }
+"gcode_source.py:GCodeSourceIndex._load_or_build_index" = { function_lines = 64, complexity = 16 }
+"kinematics/rotary.py:solve_prescribed_rotary_trajectory" = { function_lines = 136, complexity = 30 }
+"kinematics/xyzac.py:_motion_limit_issues" = { complexity = 16 }
+"manufacturing/coordinates.py" = { module_lines = 1046 }
+"manufacturing/coordinates.py:DirectionReference.__post_init__" = { complexity = 17 }
+"manufacturing/freeform_parameters.py:FreeformOperationDefinition.__post_init__" = { complexity = 19 }
+"manufacturing/library.py:UserResourceLibrary.scan_user_profiles" = { function_lines = 64 }
+"manufacturing/machine.py" = { module_lines = 1119 }
+"manufacturing/machine.py:generic_xyzac_reference_profile" = { function_lines = 91 }
+"manufacturing/material_plan.py:_material_switch_events" = { function_lines = 62, complexity = 16 }
+"manufacturing/preview_kinematics.py:reconstruct_preview_motion" = { function_lines = 92 }
+"manufacturing/resources.py" = { module_lines = 1013 }
+"manufacturing/resources.py:_normalise_json" = { complexity = 16 }
+"manufacturing/resources.py:NozzleProfile.from_json" = { function_lines = 62 }
+"manufacturing/resources.py:NozzleProfile.validate" = { complexity = 19 }
+"manufacturing/setup.py:ManufacturingSetup.__post_init__" = { complexity = 16 }
+"material_plan_editor.py:MaterialPlanEditor.__init__" = { function_lines = 82, complexity = 18 }
+"material_plan_editor.py:stage_candidates_for_operation" = { function_lines = 73, complexity = 46 }
+"opengl_scene.py:build_paper_path_arrays" = { function_lines = 97, complexity = 23 }
+"opengl_scene.py:build_surface_lines" = { complexity = 20 }
+"opengl_viewer.py" = { module_lines = 1852 }
+"opengl_viewer.py:OpenGLModelViewer" = { class_lines = 1568 }
+"opengl_viewer.py:OpenGLModelViewer.__init__" = { function_lines = 69 }
+"opengl_viewer.py:OpenGLModelViewer._paint_scene" = { function_lines = 80 }
+"opengl_viewer.py:OpenGLModelViewer._pick_entity_by_color_id" = { function_lines = 86, complexity = 17 }
+"opengl_viewer.py:OpenGLModelViewer.render_scene_image" = { function_lines = 65 }
+"postprocessing/freeform_product.py:_validate" = { function_lines = 96, complexity = 23 }
+"postprocessing/freeform_product.py:generate_freeform_product" = { function_lines = 168, complexity = 23 }
+"postprocessing/freeform_solid_product.py:generate_solid_fill_product_path" = { function_lines = 138, complexity = 16 }
+"postprocessing/gcode_readback.py:_read_program" = { function_lines = 61 }
+"postprocessing/indexed_tube.py:postprocess_indexed_gcode" = { function_lines = 66 }
+"postprocessing/operation_transition.py:_find_route" = { function_lines = 130, complexity = 18 }
+"postprocessing/operation_transition.py:plan_machine_non_deposition_travels" = { function_lines = 194, complexity = 39 }
+"postprocessing/operation_transition.py:plan_machine_operation_transitions" = { function_lines = 138, complexity = 27 }
+"postprocessing/own_ac.py:postprocess_own_ac" = { function_lines = 79, complexity = 17 }
+"postprocessing/own_ac.py:readback_own_ac" = { function_lines = 67 }
+"postprocessing/rotary_product.py:_rotary_metrics" = { function_lines = 83 }
+"postprocessing/rotary_product.py:generate_rotary_product" = { function_lines = 69 }
+"postprocessing/tool_change_service.py" = { module_lines = 1336 }
+"postprocessing/tool_change_service.py:_check_printed_part" = { function_lines = 210, complexity = 81 }
+"postprocessing/tool_change_service.py:_check_profiled_tilted_samples" = { function_lines = 123, complexity = 38 }
+"postprocessing/tool_change_service.py:_check_profiled_vertical_planar_samples" = { function_lines = 91, complexity = 31 }
+"postprocessing/tool_change_service.py:_PrintedSegmentIndex.candidates" = { complexity = 17 }
+"postprocessing/tool_change_service.py:_profile_to_segment_distance" = { function_lines = 77, complexity = 16 }
+"postprocessing/tool_change_service.py:_profile_to_segments_distance_batch" = { function_lines = 83 }
+"postprocessing/tool_change_service.py:_service_route" = { function_lines = 70 }
+"postprocessing/tool_change_service.py:check_non_deposition_travel_safety" = { function_lines = 71, complexity = 19 }
+"postprocessing/tool_change_service.py:check_operation_transition_safety" = { function_lines = 61 }
+"postprocessing/tool_change_service.py:plan_tool_change_service" = { function_lines = 122, complexity = 32 }
+"postprocessing/toolpath_sequence.py:merge_toolpath_sequence" = { function_lines = 72, complexity = 16 }
+"postprocessing/tube_product.py:generate_tube_product" = { function_lines = 61 }
+"result_preview.py" = { module_lines = 1667 }
+"result_preview.py:ResultPreviewPage" = { class_lines = 1196 }
+"result_preview.py:ResultPreviewPage._activate_stage" = { function_lines = 63 }
+"rotary_operation_service.py:_rebind_geometry" = { function_lines = 67, complexity = 29 }
+"rotary_operation_service.py:bind_rotary_geometry_references" = { function_lines = 148, complexity = 52 }
+"rotary_ui.py" = { module_lines = 1106 }
+"rotary_ui.py:RotaryPage" = { class_lines = 854 }
+"rotary_ui.py:RotaryPage._build_form" = { function_lines = 118 }
+"rotary_ui.py:RotaryPage._load_operation_controls" = { function_lines = 69 }
+"tube_controller.py" = { module_lines = 1199 }
+"tube_controller.py:TubeSetupController" = { class_lines = 972 }
+"tube_generation_service.py:TubeGenerationControllerMixin.generate_operation" = { function_lines = 63 }
+"tube_ui.py" = { module_lines = 1740 }
+"tube_ui.py:TubeSetupPage" = { class_lines = 1454 }
+"ui.py" = { module_lines = 3049 }
+"ui.py:MainWindow" = { class_lines = 2957 }
+"ui.py:MainWindow.__init__" = { function_lines = 79 }
+"ui.py:MainWindow._build_actions" = { function_lines = 153 }
+"ui.py:MainWindow._build_preview_tab" = { function_lines = 95 }
+"ui.py:MainWindow._commit_loaded_project" = { function_lines = 126, complexity = 19 }
+"ui.py:MainWindow._commit_model" = { function_lines = 68 }
+"ui.py:MainWindow._retranslate_menus" = { function_lines = 71 }
+"ui.py:MainWindow.retranslate" = { function_lines = 74 }
+"ui.py:MainWindow.start_model_load" = { function_lines = 61 }
+"viewer.py" = { module_lines = 1161 }
+"viewer.py:VtkModelViewer" = { class_lines = 1016 }
+"viewer.py:VtkModelViewer._add_solid_groups" = { function_lines = 64 }
+"viewer.py:VtkModelViewer._make_bead_actor" = { function_lines = 69 }
+"viewer.py:VtkModelViewer.load_model" = { function_lines = 88 }
+"viewer.py:VtkModelViewer.refresh_selection" = { complexity = 16 }
+"workbench_setup_panel.py:WorkbenchSetupPanel.__init__" = { function_lines = 69 }
+"workbench_setup_scope.py:resolve_bindings" = { complexity = 17 }

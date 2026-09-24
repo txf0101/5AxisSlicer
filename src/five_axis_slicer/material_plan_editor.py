@@ -49,7 +49,7 @@ def stage_candidates_for_operation(operation, *, language: str = "zh", toolpath=
         features = []
     if features:
         candidates = []
-        if geometry.substrate_body is not None:
+        if geometry is not None and geometry.substrate_body is not None:
             # The planar substrate currently uses planar region IDs, not the CAD body ID.
             if toolpath is not None:
                 base_regions = actual_regions - {body_id for _, body_id in features}
@@ -81,7 +81,7 @@ def stage_candidates_for_operation(operation, *, language: str = "zh", toolpath=
         # denotes a complete CAD body in that mode.
         return tuple(candidates) or (("全部沉积路径" if zh else "All deposition paths", "", "*"),)
     if toolpath is not None:
-        stages = {}
+        stages: dict[str, None] = {}
         for point in toolpath.points:
             if point.point_type == "deposition":
                 stages[point.stage_id] = None

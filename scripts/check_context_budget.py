@@ -132,9 +132,19 @@ def violations(metrics: list[Metric], config: dict[str, Any]) -> list[tuple[Metr
     for metric in metrics:
         limit_key = f"{metric.kind}_lines" if metric.kind != "complexity" else metric.kind
         relative_path = metric.name.partition(":")[0]
-        allowed = int(
-            config.get("legacy", {}).get(relative_path, {}).get(limit_key, config[limit_key])
-        )
+        if metric.kind == "module":
+            file_limit = (
+                config.get("legacy", {}).get(relative_path, {}).get(limit_key, config[limit_key])
+            )
+            allowed = int(
+                config.get("legacy-object", {}).get(metric.name, {}).get(limit_key, file_limit)
+            )
+        else:
+            allowed = int(
+                config.get("legacy-object", {})
+                .get(metric.name, {})
+                .get(limit_key, config[limit_key])
+            )
         if metric.value > allowed:
             failed.append((metric, allowed))
     return failed

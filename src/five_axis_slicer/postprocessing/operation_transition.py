@@ -149,15 +149,15 @@ def plan_machine_operation_transitions(
     new_events = []
     for event in toolpath.events:
         original = int(event.context.get("sequence_index", 0))
-        position = index_map[original]
+        event_index = index_map[original]
         if original in event_positions:
-            position = event_positions[original].get(event.event_type, position)
+            event_index = event_positions[original].get(event.event_type, event_index)
         else:
             for start, end in groups:
                 if start < original <= end:
-                    position = event_positions[start].get(event.event_type, position)
+                    event_index = event_positions[start].get(event.event_type, event_index)
                     break
-        new_events.append(replace(event, context=dict(event.context) | {"sequence_index": position}))
+        new_events.append(replace(event, context=dict(event.context) | {"sequence_index": event_index}))
     revised_path = replace(
         toolpath,
         toolpath_id=f"{toolpath.toolpath_id}-machine-transition-v1",

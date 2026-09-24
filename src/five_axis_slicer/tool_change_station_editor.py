@@ -65,7 +65,7 @@ class ToolChangeStationEditor(QDialog):
         layout.addWidget(buttons)
 
     def build_payload(self) -> dict:
-        values = {}
+        values: dict[str, object] = {}
         for name, _, _ in _FIELDS:
             text = self.edits[name].text().strip()
             if name in _XYZ_FIELDS:
@@ -79,7 +79,7 @@ class ToolChangeStationEditor(QDialog):
                 values[name] = text
             else:
                 values[name] = float(text)
-        return ToolChangeStation(**values).to_json()
+        return ToolChangeStation.from_json(values).to_json()
 
     def _submit(self) -> None:
         try:

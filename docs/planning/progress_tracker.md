@@ -38,6 +38,7 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 
 | 日期 | 任务 | Skill | 本轮用途 | 证据 |
 | --- | --- | --- | --- | --- |
+| 2026-09-25 | CI-QUALITY V2.6.2 后续修复 | `gh-fix-ci`、`five-axis-slicer-validation`、`five-axis-workbench-development` | 核对最新 Actions 失败步骤；本地修复 37 条 Mypy 错误，把上下文预算改成对象级精确旧债务约束，并验证新对象仍受默认上限 | [质量门禁复盘](../reviews/2026-09-25_ci_quality_recovery.md)；本地完整质量通过，CI 同域及相关测试 188 passed、2 skipped、89 subtests；托管检查待新提交 |
 | 2026-09-25 | PRODUCT-01 V2.6.2 双语教程发布检查 | `five-axis-workbench-development` | 核对 14 个中英文主题成对、教程链接与图片；清理用户教程中的内部对照过程，补充英文 Planar 支撑及 Rotary 选几何步骤，统一公开版本标识 | [教程索引](../guides/README.md)、[交付复盘](../reviews/2026-09-23_product_delivery_review.md) |
 | 2026-09-25 | PRODUCT-01 NC 预览与问题归档 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`skill-creator` | 校徽曲面预览补偿 12.5 mm 刀长，完整 NC 回读路径包络恢复与 Toolpath 一致；产品化过程失效模式归入复用 Skill，并核验有效性 | [交付复盘](../reviews/2026-09-23_product_delivery_review.md)、[校徽六件套](../reviews/evidence/2026-09-24_product_delivery_ui_audit/gui_agent_logo_output/manifest.json) |
 | 2026-09-24 | PRODUCT-01 导出与换姿复核 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`computer-use` | 真实校徽 GUI 暴露导出目标误选会覆盖项目，五类导出器加统一目录保护；叶轮/三叶扇诊断证实模型 Z 抬升不足以保证转台换姿安全，保留错误阻断并转向机床坐标规划 | [交付复盘](../reviews/2026-09-23_product_delivery_review.md)、[交付计划](product_delivery_20260923.md) |
@@ -246,6 +247,7 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 
 | 日期 | 变更依据 | 变更内容 | 影响 |
 | --- | --- | --- | --- |
+| 2026-09-25 | 用户要求消除最新 Actions 红叉 | 修复类型错误与上下文预算旧债务登记方式；保留新对象默认上限并补回归，执行本地质量、领域测试与隔离打包 | 本地质量及相关测试通过；GitHub 最终状态以新提交的 Actions 结果为准，未将旧红叉误报为已消失 |
 | 2026-09-14 | 用户要求修复截图中的多个 Actions 红叉，并允许安装 `gh` | 读取运行 `34758493547` 的三个失败任务日志；将 Freeform 的两处旧式 `QFormLayout` 枚举访问改为类型存根与运行时均支持的带类型写法；安装 GitHub CLI 2.100.0 | 三个失败任务共用的 Mypy 根因已修复，运行 `34770465207` 四项全绿；本地质量、同 CI 领域集和论文核心测试通过；无头 Freeform Qt 专项仍受当前 Windows 原生退出限制，不计为通过 |
 | 2026-09-13 | 用户要求按工业软件学习思路整理图文教程矩阵，案例只作练习，并在开篇写明 IDE/PWSH 启动入口 | 新增学习总册；重组手册中心为公共课程、五工作台支线和参考层；加入自检、错误恢复、迁移检查单和编写矩阵；核对 `run_app.py` 与 `scripts/run_app.ps1` | DOC-01 已完成；现有模块手册保留为参考，不再以具体案例组织总学习路线；Computer Use 无法连接窗口，复用当前可追溯 Qt/VTK 图片并单列限制 |
 | 2026-09-13 | 用户要求检查并完成 PC00—PC07，发现问题必须修复 | 冻结输入契约，完成受限 Freeform、T0—T3 多材料事件、自有 AC 离线后处理、Tube 收口、五产品/四项目证据及本地封装；修复质量门发现的可空CAD/输入类型问题和1366×768 Tube顶部按钮重叠 | PC00—PC07、T08、T12改为已完成（受限离线）；57 passed/6 subtests、全仓856 passed/3 skipped/141 subtests、质量/构建/Twine/原生包隔离安装通过；真实控制器、标定、生产VTK/OpenGL、现场碰撞和试切未验证 |

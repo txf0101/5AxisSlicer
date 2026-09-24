@@ -9,7 +9,7 @@ not an unmodelled cutter, fixture, or machine frame.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 from itertools import product
 import math
 from types import MappingProxyType
@@ -524,7 +524,7 @@ def _check_printed_part(
     # Index the short service route, not the potentially million-segment part.
     # Each deposited segment is visited once and can be discarded immediately.
     cell_size = max(1.0, 2.0 * maximum_radius)
-    cells = {}
+    cells: dict[tuple[int, ...], list[int]] = {}
     for sample_id, (
         center, _radius, _axis, _lower_step, _upper_step, _label, _exempt,
         _height, _remaining,
@@ -600,7 +600,7 @@ def _check_printed_part(
         ):
             continue
         if nozzle_profile is not None and not planar_vertical:
-            sample_ids = range(len(service_samples))
+            sample_ids: Iterable[int] = range(len(service_samples))
         else:
             ranges = tuple(
                 range(
@@ -1077,8 +1077,8 @@ def _profile_to_segments_distance_batch(tip, axis, profile, starts, ends):
     radial_linear = np.einsum("ij,ij->i", radial_start, radial_span)
     radial_quadratic = np.einsum("ij,ij->i", radial_span, radial_span)
     count = len(starts)
-    best_distance = np.full(count, np.inf)
-    best_height = np.zeros(count)
+    best_distance: np.ndarray = np.full(count, np.inf)
+    best_height: np.ndarray = np.zeros(count)
 
     for (first_radius, first_height), (last_radius, last_height) in (
         tuple(zip(profile, profile[1:])) or ((profile[0], profile[0]),)
@@ -1098,8 +1098,8 @@ def _profile_to_segments_distance_batch(tip, axis, profile, starts, ends):
                 0.0,
                 radial_constant + fraction * (2.0 * radial_linear + fraction * radial_quadratic),
             ))
-            distance = np.full(count, np.inf)
-            contact_height = np.zeros(count)
+            distance: np.ndarray = np.full(count, np.inf)
+            contact_height: np.ndarray = np.zeros(count)
             for edge_height, edge_radius, dh, dr, length_squared in edges:
                 along = (
                     np.zeros(count) if length_squared <= 1.0e-18
@@ -1130,8 +1130,8 @@ def _profile_to_segments_distance_batch(tip, axis, profile, starts, ends):
                 inside, height, contact_height,
             )
 
-        lower = np.zeros(count)
-        upper = np.ones(count)
+        lower: np.ndarray = np.zeros(count)
+        upper: np.ndarray = np.ones(count)
         for _ in range(28):
             left = lower + (upper - lower) * 0.3819660112501051
             right = upper - (upper - lower) * 0.3819660112501051
@@ -1160,8 +1160,8 @@ class _PrintedSegmentIndex:
         self.cell_size = max(1.0, 4.0 * maximum_radius)
         self.planar_xy_size = max(1.0, 2.0 * maximum_radius)
         self.planar_z_size = 1.0
-        self.nonplanar_cells = {}
-        self.planar_cells = {}
+        self.nonplanar_cells: dict[tuple[int, ...], list[int]] = {}
+        self.planar_cells: dict[tuple[int, ...], list[int]] = {}
         self.planar_broad_cells = None
         self._planar_bounds = []
         self.maximum_radius = maximum_radius
@@ -1207,7 +1207,7 @@ class _PrintedSegmentIndex:
     def _build_planar_broad_cells(self):
         if self.planar_broad_cells is not None:
             return
-        broad = {}
+        broad: dict[tuple[int, ...], list[int]] = {}
         for index, start, end, padding in self._planar_bounds:
             ranges = tuple(
                 range(
@@ -1223,7 +1223,7 @@ class _PrintedSegmentIndex:
     def candidates(
         self, service_samples, sequence, *, planar_exact=True, maximum_height=None,
     ):
-        candidate_indices = set()
+        candidate_indices: set[int] = set()
         vertical_tip_positions = set()
         need_planar_broad = False
         if maximum_height is None:

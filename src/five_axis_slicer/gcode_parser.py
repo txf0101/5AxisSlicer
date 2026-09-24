@@ -584,6 +584,7 @@ class _PreviewStats:
         self.height_max: float | None = None
         self.coordinate_transform = MACHINE_COORDINATE_TRANSFORM
         self.controller_semantics = controller_semantics
+        self.tool_length_mm = 0.0
         self.validation_issues: list[ValidationIssue] = []
         self._issue_keys: set[str] = set()
 

@@ -756,7 +756,7 @@ def preview_from_generated_toolpath(
         total_segment_count=len(segments),
         layer_min=min(layers, default=0),
         layer_max=max(layers, default=-1),
-        bounds=(None if not segments else (tuple(low), tuple(high))),
+        bounds=(None if not segments else ((low[0], low[1], low[2]), (high[0], high[1], high[2]))),
         move_counts=dict(Counter(segment.move_type for segment in segments)),
         role_counts=dict(Counter(segment.extrusion_role for segment in segments)),
         rotary_axes=[],
