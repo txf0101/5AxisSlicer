@@ -41,7 +41,7 @@ LAYER_RE = re.compile(r"^Layer\s+(-?\d+)", re.IGNORECASE)
 TYPE_RE = re.compile(r"^TYPE\s*:\s*(.+)$", re.IGNORECASE)
 WIDTH_RE = re.compile(rf"^WIDTH\s*:\s*({NUMBER_RE})", re.IGNORECASE)
 HEIGHT_RE = re.compile(rf"^HEIGHT\s*:\s*({NUMBER_RE})", re.IGNORECASE)
-CACHE_VERSION = "gcode-preview-v7-file-coordinate-policy"
+CACHE_VERSION = "gcode-preview-v8-tool-length"
 # Older preview caches may contain silently ignored rotary axes.  They are
 # intentionally invalidated at this safety boundary and rebuilt from source.
 LEGACY_CACHE_VERSIONS: tuple[str, ...] = ()
@@ -552,6 +552,7 @@ class GCodePreview:
     controller_semantics: str | None = None
     validation_issues: tuple[ValidationIssue, ...] = ()
     source_fingerprint: GCodeSourceFingerprint | None = None
+    tool_length_mm: float = 0.0
 
     @property
     def layer_count(self) -> int:
@@ -574,6 +575,7 @@ class GCodePreview:
             "rotary_axes": list(self.rotary_axes),
             "coordinate_transform": self.coordinate_transform,
             "controller_semantics": self.controller_semantics,
+            "tool_length_mm": self.tool_length_mm,
             "validation_issues": [issue.to_json() for issue in self.validation_issues],
             "timeline_step_count": self._timeline_count(),
             "height_range": (
@@ -690,6 +692,8 @@ class GCodePreview:
 class PreviewSettings:
     layer_min: int = 0
     layer_max: int = 0
+    line_min: int | None = None
+    line_max: int | None = None
     show_travel: bool = True
     show_extrusion: bool = True
     show_pose_samples: bool = True
@@ -704,6 +708,8 @@ class PreviewSettings:
         return {
             "layer_min": self.layer_min,
             "layer_max": self.layer_max,
+            "line_min": self.line_min,
+            "line_max": self.line_max,
             "show_travel": self.show_travel,
             "show_extrusion": self.show_extrusion,
             "show_pose_samples": self.show_pose_samples,
@@ -754,7 +760,9 @@ def preview_from_generated_toolpath(
         move_counts=dict(Counter(segment.move_type for segment in segments)),
         role_counts=dict(Counter(segment.extrusion_role for segment in segments)),
         rotary_axes=[],
-        coordinate_transform=("source" if source_from_build is not None else toolpath.coordinate_frame),
+        coordinate_transform=(
+            "source" if source_from_build is not None else toolpath.coordinate_frame
+        ),
     )
 
 
@@ -767,6 +775,9 @@ def load_gcode(
     controller_semantics: str | None = None,
 ) -> GCodePreview:
     source_path = _validated_gcode_path(path)
+    tool_length_mm = 0.0
+    if controller_semantics is None:
+        controller_semantics, tool_length_mm = _bundled_controller_setup(source_path)
     _raise_if_cancelled(cancel_check)
     if progress_callback is not None:
         progress_callback(0.02, "cache")
@@ -781,6 +792,7 @@ def load_gcode(
         source_path,
         source_sha256=cache_source_sha256,
         controller_semantics=controller_semantics,
+        tool_length_mm=tool_length_mm,
     )
     if cached is not None:
         _assert_source_unchanged(source_path, initial_fingerprint, cancel_check)
@@ -795,6 +807,7 @@ def load_gcode(
         progress_callback,
         cancel_check,
         controller_semantics,
+        tool_length_mm,
     )
     _assert_source_unchanged(source_path, initial_fingerprint, cancel_check)
     preview.source_fingerprint = initial_fingerprint
@@ -805,6 +818,64 @@ def load_gcode(
     if progress_callback is not None:
         progress_callback(1.0, "ready")
     return preview
+
+
+def _bundled_controller_semantics(source_path: Path) -> str | None:
+    return _bundled_controller_setup(source_path)[0]
+
+
+def _bundled_controller_setup(source_path: Path) -> tuple[str | None, float]:
+    """Recognize only the bundled NC profile's explicit machine declaration."""
+
+    from .manufacturing.own_printer import OWN_AC_ID
+    from .manufacturing.preview_kinematics import OWN_AC_PREVIEW_SEMANTICS
+
+    prefix = b"; CONTROLLER_PROFILE "
+    tool_prefix = b"; TOOL_LENGTH_MM "
+    profile_id: str | None = None
+    tool_length: float | None = None
+    with source_path.open("rb") as stream:
+        for line in stream.read(32768).splitlines():
+            if line.startswith(prefix):
+                try:
+                    profile = json.loads(line[len(prefix) :])
+                except (ValueError, UnicodeDecodeError):
+                    return None, 0.0
+                if isinstance(profile, dict):
+                    profile_id = profile.get("machine_profile_id")
+            elif line.startswith(tool_prefix):
+                try:
+                    value = float(line[len(tool_prefix) :])
+                except ValueError:
+                    continue
+                if math.isfinite(value) and value >= 0.0:
+                    tool_length = value
+    if profile_id != OWN_AC_ID:
+        return None, 0.0
+    if tool_length is None and source_path.name == "main.gcode":
+        # Older bundled exports keep this value in their adjacent manifest.
+        try:
+            manifest = json.loads(
+                (source_path.parent / "manifest.json").read_text(encoding="utf-8")
+            )
+            trajectory = manifest["machine_trajectory_summary"]
+            readback = manifest["readback"]
+            if (
+                manifest["manifest"]["machine_profile_id"] == OWN_AC_ID
+                and trajectory["machine_profile_id"] == OWN_AC_ID
+                and readback["passed"] is True
+                and readback["expected_points"]
+                == readback["read_points"]
+                == trajectory["sample_count"]
+            ):
+                value = float(trajectory["tool_length_mm"])
+                if math.isfinite(value) and value >= 0.0:
+                    tool_length = value
+        except (OSError, KeyError, TypeError, ValueError):
+            pass
+    if tool_length is None:
+        return None, 0.0
+    return OWN_AC_PREVIEW_SEMANTICS, tool_length
 
 
 def _validated_gcode_path(path: str | Path) -> Path:
@@ -822,6 +893,7 @@ def _parse_gcode_file(
     progress_callback: ProgressCallback | None,
     cancel_check: CancelCheck | None,
     controller_semantics: str | None,
+    tool_length_mm: float,
 ) -> GCodePreview:
     sample_stride = max(1, math.ceil(source_size / 25_000_000))
     with source_path.open("r", encoding="utf-8", errors="replace") as stream:
@@ -831,6 +903,7 @@ def _parse_gcode_file(
             sample_stride=sample_stride,
             cancel_check=cancel_check,
             controller_semantics=controller_semantics,
+            tool_length_mm=tool_length_mm,
         )
 
 
@@ -898,6 +971,7 @@ def parse_gcode(
     progress_callback: ProgressCallback | None = None,
     cancel_check: CancelCheck | None = None,
     controller_semantics: str | None = None,
+    tool_length_mm: float = 0.0,
 ) -> GCodePreview:
     return parse_gcode_lines(
         text.splitlines(),
@@ -906,6 +980,7 @@ def parse_gcode(
         progress_callback=progress_callback,
         cancel_check=cancel_check,
         controller_semantics=controller_semantics,
+        tool_length_mm=tool_length_mm,
     )
 
 
@@ -917,6 +992,7 @@ def parse_gcode_lines(
     progress_callback: ProgressCallback | None = None,
     cancel_check: CancelCheck | None = None,
     controller_semantics: str | None = None,
+    tool_length_mm: float = 0.0,
 ) -> GCodePreview:
     from .gcode_parser import parse_lines
 
@@ -927,6 +1003,7 @@ def parse_gcode_lines(
         progress_callback=progress_callback,
         cancel_check=cancel_check,
         controller_semantics=controller_semantics,
+        tool_length_mm=tool_length_mm,
     )
 
 
@@ -977,6 +1054,7 @@ def preview_from_json(payload: dict[str, Any], source_path: Path) -> GCodePrevie
         height_max,
         controller_semantics=summary.get("controller_semantics"),
         validation_issues=_summary_issues(summary),
+        tool_length_mm=float(summary.get("tool_length_mm", 0.0)),
     )
 
 
@@ -1084,6 +1162,7 @@ def _preview_from_binary_cache(
         timeline_arrays,
         summary.get("controller_semantics"),
         _summary_issues(summary),
+        tool_length_mm=float(summary.get("tool_length_mm", 0.0)),
     )
 
 
@@ -1114,6 +1193,7 @@ def _cache_stem(
     *,
     source_sha256: str | None = None,
     controller_semantics: str | None = None,
+    tool_length_mm: float = 0.0,
 ) -> Path:
     from .gcode_cache import cache_stem
 
@@ -1122,6 +1202,7 @@ def _cache_stem(
         version,
         source_sha256=source_sha256,
         controller_semantics=controller_semantics,
+        tool_length_mm=tool_length_mm,
     )
 
 
@@ -1186,6 +1267,7 @@ def _load_preview_cache(
     *,
     source_sha256: str | None = None,
     controller_semantics: str | None = None,
+    tool_length_mm: float = 0.0,
 ) -> GCodePreview | None:
     from .gcode_cache import load_preview_cache
 
@@ -1194,6 +1276,7 @@ def _load_preview_cache(
         stem_factory=_cache_stem,
         source_sha256=source_sha256,
         controller_semantics=controller_semantics,
+        tool_length_mm=tool_length_mm,
     )
 
 

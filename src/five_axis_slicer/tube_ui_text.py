@@ -551,9 +551,17 @@ TUBE_TEXT: dict[str, dict[str, str]] = {
 TUBE_ISSUE_LABELS: dict[str, dict[str, str]] = {
     "zh": {
         "MACHINE_REFERENCE_ONLY": "参考机型仅供离线检查；投入设备前需完成标定",
+        "RESOURCE_LIBRARY_DIVERGED": "项目配置与资源库版本不同，当前继续使用项目内配置",
+        "RESOURCE_LIBRARY_ENTRY_MISSING": "资源库中没有对应条目，当前继续使用项目内配置",
+        "RESOURCE_LIBRARY_AUDIT_FAILED": "资源库核对失败，当前继续使用项目内配置",
+        "RESOURCE_LIBRARY_ENTRY_INVALID": "资源库条目无效，请检查或重新选择配置",
     },
     "en": {
         "MACHINE_REFERENCE_ONLY": "Reference machine for offline review; calibrate before device use",
+        "RESOURCE_LIBRARY_DIVERGED": "Project and library versions differ; using the project copy",
+        "RESOURCE_LIBRARY_ENTRY_MISSING": "Library entry not found; using the project copy",
+        "RESOURCE_LIBRARY_AUDIT_FAILED": "Library check failed; using the project copy",
+        "RESOURCE_LIBRARY_ENTRY_INVALID": "Library entry is invalid; check or select another profile",
     },
 }
 

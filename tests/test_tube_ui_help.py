@@ -31,9 +31,22 @@ from five_axis_slicer.tube_resource_selection import configured_nozzle_copy  # n
 from five_axis_slicer.tube_ui import TubeSetupPage  # noqa: E402
 from five_axis_slicer.tube_ui_text import (  # noqa: E402
     TUBE_HELP_BINDINGS,
+    TUBE_ISSUE_LABELS,
     TUBE_TEXT,
     apply_tube_help,
 )
+
+
+def test_resource_warnings_have_readable_labels_in_both_languages() -> None:
+    resource_codes = (
+        "RESOURCE_LIBRARY_DIVERGED",
+        "RESOURCE_LIBRARY_ENTRY_MISSING",
+        "RESOURCE_LIBRARY_AUDIT_FAILED",
+        "RESOURCE_LIBRARY_ENTRY_INVALID",
+    )
+    for language in ("zh", "en"):
+        for code in resource_codes:
+            assert TUBE_ISSUE_LABELS[language][code] != code
 
 
 @pytest.fixture(scope="module")

@@ -311,7 +311,7 @@ if QT_AVAILABLE:
         def __init__(self, viewer: QWidget, parent: QWidget | None = None) -> None:
             super().__init__(parent)
             self.setObjectName("resultViewerCanvas")
-            self.setMinimumSize(540, 390)
+            self.setMinimumSize(540, 280)
             layout = QVBoxLayout(self)
             layout.setContentsMargins(0, 0, 0, 0)
             layout.addWidget(viewer)
@@ -1097,7 +1097,7 @@ if QT_AVAILABLE:
 
             entries: list[dict[str, Any]] = [{"id": "all", "kind": "all"}]
             stages = () if source_index is None else tuple(source_index.stages)
-            if any(stage.kind == "blade" for stage in stages):
+            if any(stage.kind in {"blade", "operation"} for stage in stages):
                 for stage in stages:
                     entries.append(
                         {
@@ -1140,11 +1140,11 @@ if QT_AVAILABLE:
                         selected_index = index
                         break
                 self.stage_combo.setCurrentIndex(selected_index)
-            has_blade_markers = any(
-                entry.get("kind") == "blade" for entry in (self._stage_entries or [])
+            has_stage_markers = any(
+                entry.get("kind") in {"blade", "operation"} for entry in (self._stage_entries or [])
             )
             self.stage_fallback_label.setVisible(
-                self._preview is not None and not has_blade_markers
+                self._preview is not None and not has_stage_markers
             )
             self._activate_stage(self.stage_combo.currentData() or {"id": "all", "kind": "all"})
 
@@ -1157,6 +1157,8 @@ if QT_AVAILABLE:
             if kind == "blade":
                 ordinal = int(entry.get("ordinal") or 1)
                 return tr(self.language, f"stage_blade_{max(1, min(8, ordinal))}")
+            if kind == "operation":
+                return tr(self.language, "stage_operation", number=entry.get("ordinal") or 1)
             if kind == "layers":
                 return tr(
                     self.language,
@@ -1187,6 +1189,13 @@ if QT_AVAILABLE:
                 return
             self.state.selected_stage = stage_id
             self._stage_uses_layer_filter = entry.get("kind") == "layers"
+            if hasattr(self.viewer, "set_preview_line_range"):
+                if entry.get("kind") in {"base", "blade", "operation"}:
+                    self.viewer.set_preview_line_range(
+                        int(entry["start_line"]), int(entry["end_line"])
+                    )
+                else:
+                    self.viewer.set_preview_line_range(None, None)
             if self._stage_uses_layer_filter:
                 low = int(entry["layer_min"])
                 high = int(entry["layer_max"])
@@ -1198,7 +1207,7 @@ if QT_AVAILABLE:
             else:
                 if hasattr(self.viewer, "set_preview_layers"):
                     self.viewer.set_preview_layers(self._preview.layer_min, self._preview.layer_max)
-                if entry.get("kind") in {"base", "blade"}:
+                if entry.get("kind") in {"base", "blade", "operation"}:
                     start, end = self._timeline_bounds_for_lines(
                         int(entry["start_line"]),
                         int(entry["end_line"]),

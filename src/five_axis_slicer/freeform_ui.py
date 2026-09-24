@@ -5,12 +5,32 @@ from __future__ import annotations
 import json
 from typing import Any, cast
 
-from PyQt5.QtWidgets import QFormLayout, QLabel, QLineEdit
+from PyQt5.QtWidgets import (
+    QComboBox, QFormLayout, QLabel, QLineEdit, QPlainTextEdit, QPushButton, QSizePolicy,
+)
 
 from .curve_ui import CurvePage
 from .freeform_commands import FreeformCommandService
 from .freeform_controller import FreeformController
+from .material_plan_editor import MaterialPlanEditor, stage_candidates_for_operation
 from .manufacturing.freeform_solid_parameters import SOLID_FILL_OPERATION_TYPES
+from .tool_change_station_editor import ToolChangeStationEditor
+
+
+class _JsonEditor(QPlainTextEdit):
+    """Show complete structured inputs while keeping the editor's text API."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.setLineWrapMode(QPlainTextEdit.WidgetWidth)
+        self.setTabChangesFocus(True)
+        self.setFixedHeight(112)
+
+    def text(self) -> str:
+        return self.toPlainText()
+
+    def setText(self, value: str) -> None:  # noqa: N802 - QLineEdit-compatible adapter
+        self.setPlainText(value)
 
 
 class FreeformPage(CurvePage):
@@ -44,31 +64,50 @@ class FreeformPage(CurvePage):
             QFormLayout.FieldGrowthPolicy.AllNonFixedFieldsGrow
         )
         self.face_ids_edit = QLineEdit()
-        self.guides_json_edit = QLineEdit()
+        self.guides_json_edit = _JsonEditor()
         guides_example = '[{"edge_ids":["..."],"reversed_flags":[false],"face_id":"..."}]'
         self.guides_json_edit.setPlaceholderText("[{...}]")
         self.guides_json_edit.setToolTip(guides_example)
-        self.material_plan_edit = QLineEdit()
+        self.material_plan_edit = _JsonEditor()
         self.material_plan_edit.setPlaceholderText("{...}")
         self.material_plan_edit.setToolTip('{"schema_version":1,"plan_id":"..."}')
-        self.tool_change_station_edit = QLineEdit()
+        self.material_plan_button = QPushButton()
+        self.material_plan_button.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Fixed)
+        self.material_plan_button.clicked.connect(self._edit_material_plan)
+        self.tool_change_station_edit = _JsonEditor()
         self.tool_change_station_edit.setPlaceholderText('{"clearance_z_mm":...,"cutter_xyz_mm":[...]}')
+        self.tool_change_station_button = QPushButton()
+        self.tool_change_station_button.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Fixed)
+        self.tool_change_station_button.clicked.connect(self._edit_tool_change_station)
         self.face_ids_label = QLabel()
         self.guides_json_label = QLabel()
         self.material_plan_label = QLabel()
         self.tool_change_station_label = QLabel()
-        self.solid_geometry_edit = QLineEdit()
+        self.solid_geometry_edit = _JsonEditor()
+        self.solid_geometry_edit.setFixedHeight(180)
         self.solid_geometry_edit.setPlaceholderText('{"body_ids":["..."]}')
-        self.solid_parameters_edit = QLineEdit()
+        self.solid_geometry_summary = QLabel()
+        self.solid_geometry_summary.setWordWrap(True)
+        self.solid_geometry_edit.textChanged.connect(self._update_solid_geometry_summary)
+        self.solid_parameters_edit = _JsonEditor()
+        self.solid_parameters_edit.setFixedHeight(148)
         self.solid_parameters_edit.setPlaceholderText('{"substrate_radius_mm":40.0}')
+        self.surface_growth_label = QLabel()
+        self.surface_growth_combo = QComboBox()
+        self.surface_growth_combo.addItem("", "surface_thickness")
+        self.surface_growth_combo.addItem("", "root_edge_outward")
         self.solid_geometry_label = QLabel()
         self.solid_parameters_label = QLabel()
         extra.addRow(self.face_ids_label, self.face_ids_edit)
         extra.addRow(self.guides_json_label, self.guides_json_edit)
         extra.addRow(self.solid_geometry_label, self.solid_geometry_edit)
+        extra.addRow(self.solid_geometry_summary)
         extra.addRow(self.solid_parameters_label, self.solid_parameters_edit)
+        extra.addRow(self.surface_growth_label, self.surface_growth_combo)
         extra.addRow(self.material_plan_label, self.material_plan_edit)
+        extra.addRow(self.material_plan_button)
         extra.addRow(self.tool_change_station_label, self.tool_change_station_edit)
+        extra.addRow(self.tool_change_station_button)
         layout.addLayout(extra)
 
     def set_language(self, language):
@@ -80,8 +119,14 @@ class FreeformPage(CurvePage):
         self.face_ids_label.setText("受限面组 ID" if zh else "Bounded face IDs")
         self.guides_json_label.setText("多导引线 JSON" if zh else "Multiple guides JSON")
         self.material_plan_label.setText("材料计划 JSON" if zh else "Material plan JSON")
+        self.material_plan_button.setText(
+            "编辑材料表…" if zh else "Edit material table…"
+        )
         self.tool_change_station_label.setText(
             "换料站坐标 JSON" if zh else "Tool-change station JSON"
+        )
+        self.tool_change_station_button.setText(
+            "编辑换料站…" if zh else "Edit tool-change station…"
         )
         self.solid_geometry_label.setText(
             "实体曲层选择 JSON" if zh else "Solid-fill selection JSON"
@@ -89,6 +134,14 @@ class FreeformPage(CurvePage):
         self.solid_parameters_label.setText(
             "实体曲层附加参数 JSON" if zh else "Solid-fill extra parameters JSON"
         )
+        self.surface_growth_label.setText("曲面实体生长方式" if zh else "Surface-solid growth")
+        self.surface_growth_combo.setItemText(
+            0, "沿侧面厚度叠层" if zh else "Layers through surface thickness"
+        )
+        self.surface_growth_combo.setItemText(
+            1, "从根边向外生长" if zh else "Grow outward from root edge"
+        )
+        self._update_solid_geometry_summary()
         self._refresh_mode_text(self._selected_operation())
         if not zh:
             self.generate_button.setText("Generate")
@@ -107,6 +160,7 @@ class FreeformPage(CurvePage):
             self.viewer.clear_model()
         else:
             self.viewer.load_model(controller.cad_model)
+        self._set_pick_kind()
         self.refresh()
 
     def _apply(self):
@@ -167,6 +221,55 @@ class FreeformPage(CurvePage):
             self._last_error = str(exc)
         self.refresh()
 
+    def _edit_material_plan(self):
+        try:
+            source = self.material_plan_edit.text().strip()
+            payload = {} if not source else json.loads(source)
+            if not isinstance(payload, dict):
+                raise ValueError("material plan JSON must be an object")
+        except (TypeError, ValueError) as exc:
+            self._last_error = str(exc)
+            self.status_label.setText(self._last_error)
+            return
+        operation = self._selected_operation()
+        result = None if operation is None else self.controller.product_result(operation.operation_id)
+        product_state = (
+            None if operation is None else self.controller.product_state(operation.operation_id)
+        )
+        if product_state is None or product_state.status not in {"ready", "warning"}:
+            result = None
+        editor = MaterialPlanEditor(
+            payload,
+            language=self.language,
+            stage_candidates=stage_candidates_for_operation(
+                operation,
+                language=self.language,
+                toolpath=None if result is None else result.toolpath,
+            ),
+            parent=self,
+        )
+        if editor.exec_() and editor.result_payload is not None:
+            self.material_plan_edit.setText(
+                json.dumps(editor.result_payload, ensure_ascii=False, indent=2)
+            )
+
+    def _edit_tool_change_station(self):
+        try:
+            source = self.tool_change_station_edit.text().strip()
+            payload = {} if not source else json.loads(source)
+            if not isinstance(payload, dict):
+                raise ValueError("tool-change station JSON must be an object")
+        except (TypeError, ValueError) as exc:
+            self._last_error = str(exc)
+            self.status_label.setText(self._last_error)
+            return
+        editor = ToolChangeStationEditor(payload, language=self.language, parent=self)
+        if editor.exec_() and editor.result_payload is not None:
+            self.tool_change_station_edit.setText(
+                json.dumps(editor.result_payload, ensure_ascii=False, indent=2)
+            )
+            self._last_error = None
+
     def _apply_solid(self, operation):
         geometry_text = self.solid_geometry_edit.text().strip()
         if not geometry_text:
@@ -189,6 +292,8 @@ class FreeformPage(CurvePage):
             "path_spacing_mm": values["offset_spacing_mm"],
             **extra,
         }
+        if operation.operation_type == "surface_solid_fill":
+            parameters["surface_growth_strategy"] = self.surface_growth_combo.currentData()
         material_text = self.material_plan_edit.text().strip()
         material = None if not material_text else json.loads(material_text)
         station_text = self.tool_change_station_edit.text().strip()
@@ -216,8 +321,15 @@ class FreeformPage(CurvePage):
             else json.dumps(
                 _solid_extra_parameters(operation.solid_parameters),
                 ensure_ascii=False,
-                separators=(",", ":"),
+                indent=2,
             )
+        )
+        growth_strategy = (
+            "surface_thickness" if operation.solid_parameters is None
+            else operation.solid_parameters.surface_growth_strategy
+        )
+        self.surface_growth_combo.setCurrentIndex(
+            self.surface_growth_combo.findData(growth_strategy)
         )
         guide = operation.geometry.guides[0] if operation.geometry.guides else None
         self.face_ids_edit.setText(",".join(item.object_id for item in operation.geometry.faces))
@@ -235,13 +347,13 @@ class FreeformPage(CurvePage):
             ""
             if operation.material_plan is None
             else json.dumps(
-                operation.material_plan.to_json(), ensure_ascii=False, separators=(",", ":")
+                operation.material_plan.to_json(), ensure_ascii=False, indent=2
             )
         )
         station = self.controller.controller_profile.tool_change_station
         self.tool_change_station_edit.setText(
             "" if station is None else json.dumps(
-                station.to_json(), ensure_ascii=False, separators=(",", ":")
+                station.to_json(), ensure_ascii=False, indent=2
             )
         )
         source_parameters = (
@@ -292,6 +404,55 @@ class FreeformPage(CurvePage):
         ):
             label.setVisible(is_solid)
             field.setVisible(is_solid)
+        self.solid_geometry_summary.setVisible(is_solid)
+        is_surface_solid = (
+            is_solid and self._selected_operation() is not None
+            and self._selected_operation().operation_type == "surface_solid_fill"
+        )
+        self.surface_growth_label.setVisible(is_surface_solid)
+        self.surface_growth_combo.setVisible(is_surface_solid)
+
+    def _update_solid_geometry_summary(self) -> None:
+        zh = self.language == "zh"
+        source = self.solid_geometry_edit.text().strip()
+        if not source:
+            summary = "未选择实体角色" if zh else "No solid roles selected"
+        else:
+            try:
+                payload = json.loads(source)
+                if not isinstance(payload, dict):
+                    raise ValueError("solid roles must be an object")
+            except (ValueError, TypeError):
+                summary = "角色 JSON 格式有误" if zh else "Invalid role JSON"
+            else:
+                parts = []
+                substrate = payload.get("substrate_body_id")
+                if substrate:
+                    parts.append(("基体" if zh else "Substrate") + f": {substrate}")
+                hub = payload.get("hub_body_id")
+                if hub:
+                    parts.append(("轮毂" if zh else "Hub") + f": {hub}")
+                bodies = payload.get("blades", payload.get("bodies", payload.get("body_ids", [])))
+                if isinstance(bodies, list):
+                    ids = [
+                        item.get("body_id", "") if isinstance(item, dict) else str(item)
+                        for item in bodies
+                    ]
+                    ids = [item for item in ids if item]
+                    if ids:
+                        label = (
+                            ("叶片" if zh else "Blades")
+                            if "blades" in payload
+                            else ("实体" if zh else "Bodies")
+                        )
+                        parts.append(f"{label}: {', '.join(ids)}")
+                separator = "；" if zh else "; "
+                summary = (
+                    ("待核对角色：" if zh else "Review roles: ") + separator.join(parts)
+                    if parts
+                    else ("未选择实体角色" if zh else "No solid roles selected")
+                )
+        self.solid_geometry_summary.setText(summary)
 
     def _refresh_mode_text(self, operation) -> None:
         solid = operation is not None and operation.operation_type in SOLID_FILL_OPERATION_TYPES
@@ -301,18 +462,18 @@ class FreeformPage(CurvePage):
                 "从 Viewer 已选几何建立候选" if zh else "Use selected geometry"
             )
             self.help_label.setText(
-                "核对实体、基体、面和根边的角色及生长轴，再应用。多实体自动候选按体积推断基体，必须人工复核。输出仅供离线检查。"
+                "核对实体、基体、面和根边的角色及生长轴，再应用。多实体自动候选按体积推断基体，必须人工复核。实际参数与打印效果以设备调试为准。"
                 if zh else
-                "Confirm feature/substrate bodies, surface/root roles and growth axis before Apply. The multi-body candidate guesses the substrate by volume; verify it. Offline review only."
+                "Confirm feature/substrate bodies, surface/root roles and growth axis before Apply. The multi-body candidate guesses the substrate by volume; verify it. Actual settings and print results depend on testing with your equipment."
             )
         else:
             self.use_selection_button.setText(
                 "采用 Viewer 已选边" if zh else "Use selected edges"
             )
             self.help_label.setText(
-                "选择受限面组和贴附于明确邻面的导引边链。可用普通字段编辑一条导引线，也可用 JSON 一次提交多条。输出仅供离线审查，真实宏和控制器未验证。"
+                "选择受限面组和贴附于明确邻面的导引边链。可用普通字段编辑一条导引线，也可用 JSON 一次提交多条。实际参数与打印效果以设备调试为准。"
                 if zh else
-                "Select a bounded face group and guide chains attached to explicit faces. Edit one guide with the normal fields or submit multiple guides as JSON. Output is offline-only until controller macros are qualified."
+                "Select a bounded face group and guide chains attached to explicit faces. Edit one guide with the normal fields or submit multiple guides as JSON. Actual settings and print results depend on testing with your equipment."
             )
 
     def _refresh_buttons(self, operation, result, state):
@@ -327,7 +488,7 @@ class FreeformPage(CurvePage):
             try:
                 payload = _solid_selection_from_viewer(operation.operation_type, self.controller.cad_model, self.viewer.selection)
                 self.solid_geometry_edit.setText(
-                    json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
+                    json.dumps(payload, ensure_ascii=False, indent=2)
                 )
                 self._last_error = None
             except Exception as exc:
@@ -352,7 +513,7 @@ def _guides_json(operation):
         }
         for guide in operation.geometry.guides
     ]
-    return json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
+    return json.dumps(payload, ensure_ascii=False, indent=2)
 
 
 def _solid_geometry_input_json(operation):
@@ -383,7 +544,7 @@ def _solid_geometry_input_json(operation):
             }
             for item in payload["blades"]
         ]
-    return json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
+    return json.dumps(payload, ensure_ascii=False, indent=2)
 
 
 def _solid_extra_parameters(parameters):
@@ -395,6 +556,7 @@ def _solid_extra_parameters(parameters):
         "travel_feedrate_mm_min",
         "retract_length_mm",
         "path_spacing_mm",
+        "surface_growth_strategy",
     }
     return {key: value for key, value in parameters.to_json().items() if key not in common}
 

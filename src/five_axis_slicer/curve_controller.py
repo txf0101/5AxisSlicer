@@ -312,7 +312,10 @@ class CurveController:
             if not isinstance(setup, ManufacturingSetup):
                 raise TypeError("setup must be ManufacturingSetup")
             self._setup = setup
-        self._operations = tuple(item.mark_dirty(reason) for item in self._operations)
+        self._operations = tuple(
+            replace(item, setup_id=self._setup.setup_id).mark_dirty(reason)
+            for item in self._operations
+        )
         self._mark_all_products_stale()
         self._modified = True
 

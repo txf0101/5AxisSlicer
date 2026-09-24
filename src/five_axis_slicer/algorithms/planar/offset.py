@@ -16,6 +16,7 @@ from OCP.GeomAbs import GeomAbs_Arc
 
 from ...models import Vector3
 from ...step_topology import sample_edge_points
+from .._segment_pairs import nonadjacent_overlap_pairs
 from .region import PlanarRegion
 
 _GEOMETRY_TOLERANCE = 1.0e-7
@@ -355,12 +356,9 @@ def _finite_coplanar(loop: tuple[Vector3, ...], z_mm: float) -> bool:
 
 def _self_intersects(loop: tuple[Vector3, ...]) -> bool:
     segments = list(zip(loop, loop[1:]))
-    count = len(segments)
     return any(
         _segments_intersect(*segments[left], *segments[right])
-        for left in range(count)
-        for right in range(left + 1, count)
-        if right != left + 1 and not (left == 0 and right == count - 1)
+        for left, right in nonadjacent_overlap_pairs(loop, tolerance=_GEOMETRY_TOLERANCE)
     )
 
 
@@ -373,6 +371,13 @@ def _loops_intersect(left: tuple[Vector3, ...], right: tuple[Vector3, ...]) -> b
 
 
 def _segments_intersect(a: Vector3, b: Vector3, c: Vector3, d: Vector3) -> bool:
+    if (
+        max(a[0], b[0]) + _GEOMETRY_TOLERANCE < min(c[0], d[0])
+        or max(c[0], d[0]) + _GEOMETRY_TOLERANCE < min(a[0], b[0])
+        or max(a[1], b[1]) + _GEOMETRY_TOLERANCE < min(c[1], d[1])
+        or max(c[1], d[1]) + _GEOMETRY_TOLERANCE < min(a[1], b[1])
+    ):
+        return False
     values = (_cross(a, b, c), _cross(a, b, d), _cross(c, d, a), _cross(c, d, b))
     if (
         values[0] * values[1] < -_GEOMETRY_TOLERANCE

@@ -291,6 +291,9 @@ def export_rotary_product(
 
     if not result.exportable:
         raise ValueError("validation Error or failed G-code readback blocks export")
+    from .export_target_guard import validate_export_target
+
+    validate_export_target(Path(destination))
     target = Path(destination).resolve()
     target.parent.mkdir(parents=True, exist_ok=True)
     stage = Path(mkdtemp(prefix=f".{target.name}.stage-", dir=target.parent))
@@ -299,8 +302,9 @@ def export_rotary_product(
         _checkpoint(cancelled)
         _write_artifacts(stage, result)
         _checkpoint(cancelled)
+        validate_export_target(target)
         if backup.exists():
-            shutil.rmtree(backup)
+            raise ValueError(f"previous export backup requires review: {backup}")
         moved_old = False
         if target.exists():
             os.replace(target, backup)

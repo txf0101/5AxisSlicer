@@ -22,6 +22,9 @@ def _page(host: Any, key: str) -> Any | None:
 
 
 def enter_workbench(host: Any, key: str) -> None:
+    commit_editor = getattr(host, "_commit_local_setup_editor", None)
+    if callable(commit_editor) and not commit_editor():
+        return
     if key not in {workbench.key for workbench in WORKBENCHES}:
         raise RuntimeError(f"Unknown workbench: {key}")
     shell = _SHELLS.get(key)
@@ -29,10 +32,16 @@ def enter_workbench(host: Any, key: str) -> None:
     if shell is not None and page is None:
         raise RuntimeError(f"Workbench page is unavailable: {key}")
     page = cast(Any, page)
-    if shell is not None and shell.sync_shared_setup(
-        page.controller, host.tube_page.controller.setup
+    common_setup = host.tube_page.controller.setup
+    if (
+        shell is not None
+        and page.controller.setup.setup_id == common_setup.setup_id
+        and shell.sync_shared_setup(page.controller, common_setup)
     ):
         page.refresh()
+    refresh_panels = getattr(host, "_refresh_setup_panels", None)
+    if callable(refresh_panels):
+        refresh_panels()
     host.current_workbench_key = key
     if key == "tube":
         host.tube_page.set_common_setup_mode(False)
@@ -92,6 +101,9 @@ def show_session(host: Any) -> None:
 
 
 def show_home(host: Any) -> None:
+    commit_editor = getattr(host, "_commit_local_setup_editor", None)
+    if callable(commit_editor) and not commit_editor():
+        return
     host.stack.setCurrentWidget(host.home_page)
 
 

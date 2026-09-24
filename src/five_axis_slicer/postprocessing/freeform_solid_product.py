@@ -73,6 +73,11 @@ def generate_solid_fill_product_path(
     parameters = operation.solid_parameters
     if geometry is None or parameters is None:
         raise ValueError("solid-fill operation requires selected geometry and parameters")
+    if (
+        not isinstance(geometry, SurfaceSolidGeometrySelection)
+        and parameters.surface_growth_strategy != "surface_thickness"
+    ):
+        raise ValueError("root-edge outward growth requires surface solid geometry")
     _checkpoint(cancelled)
     raw_paths: tuple[GeneratedToolpath, ...]
     audit: SphericalFillAudit | SurfaceSolidFillAudit | RadialSolidFillAudit
@@ -120,6 +125,7 @@ def generate_solid_fill_product_path(
                 retract_length_mm=parameters.retract_length_mm,
                 metric_across_samples=parameters.metric_across_samples,
                 metric_along_samples=parameters.metric_along_samples,
+                surface_growth_strategy=parameters.surface_growth_strategy,
             ),
             cancelled=cancelled,
         )

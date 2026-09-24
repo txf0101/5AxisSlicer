@@ -41,12 +41,14 @@ from five_axis_slicer.postprocessing.freeform_product import (  # noqa: E402
 )
 from five_axis_slicer.step_loader import load_step  # noqa: E402
 
-from run_fan15_solid_product import CASES, reference_nozzle  # noqa: E402
+from run_fan15_solid_product import CASES, prepare_ui_project, reference_nozzle  # noqa: E402
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--prepare-project", type=Path,
+                        help="save a configured project for desktop Generate/Export testing")
     parser.add_argument("--layer-height", type=float, default=0.4)
     parser.add_argument("--sampling-step", type=float, default=0.8)
     parser.add_argument("--safe-clearance", type=float, default=20.0)
@@ -101,6 +103,12 @@ def main() -> None:
     nozzle = reference_nozzle()
     if args.tip_only:
         nozzle = replace(nozzle, outer_profile_rz_mm=())
+    if args.prepare_project is not None:
+        print(prepare_ui_project(
+            args.prepare_project, model, operation, controller_profile=controller,
+            mount_translation_mm=(0, 0, 0),
+        ))
+        return
     print("Generating complete three-colour fan through Freeform product chain", flush=True)
     result = generate_freeform_product(
         model, operation, own_ac_profile(), nozzle, controller,

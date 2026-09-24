@@ -267,6 +267,12 @@ class VtkModelViewer(BambuNavigationMixin, QVTKRenderWindowInteractor):
         )
         self.refresh_path_preview()
 
+    def set_preview_line_range(self, line_min: int | None, line_max: int | None) -> None:
+        self.preview_settings.line_min = line_min
+        self.preview_settings.line_max = line_max
+        if self.gcode_preview is not None:
+            self.refresh_path_preview()
+
     def set_preview_progress(self, progress_index: int, interactive: bool | None = None) -> None:
         if self.gcode_preview is None:
             return

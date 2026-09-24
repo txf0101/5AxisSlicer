@@ -107,7 +107,7 @@ def generate_radial_solid_fill(
         _checkpoint(cancelled)
         _validate_selection(model, selection)
         layers, bridge_count, supported_radius, root_radius, outer_radius = _manufacturing_layers(
-            model, selection, parameters
+            model, selection, parameters, cancelled=cancelled
         )
         plans = radial_feature_fill(
             layers,
@@ -172,7 +172,7 @@ def _checkpoint(cancelled: Callable[[], bool] | None) -> None:
         raise GenerationCancelled("radial solid-fill generation cancelled")
 
 
-def _manufacturing_layers(model, selection, parameters):
+def _manufacturing_layers(model, selection, parameters, *, cancelled=None):
     root_min, _ = _face_radial_range(
         model.face_shapes[selection.root_face_id], parameters.face_metric_samples
     )
@@ -194,6 +194,7 @@ def _manufacturing_layers(model, selection, parameters):
         model.shapes[selection.hub_body_id],
         source_radius,
         parameters.bead_width_mm / 2,
+        cancelled=cancelled,
     )
     count = math.ceil(
         (outer_max + parameters.layer_height_mm / 2 - support_radius) / parameters.layer_height_mm
@@ -202,6 +203,7 @@ def _manufacturing_layers(model, selection, parameters):
     layers = []
     bridge_count = 0
     for radius in radii:
+        _checkpoint(cancelled)
         if radius < source_radius - _EPSILON:
             layers.append(_relocate_layer(seed, radius))
             bridge_count += 1
@@ -217,7 +219,7 @@ def _manufacturing_layers(model, selection, parameters):
     return tuple(layers), bridge_count, support_radius, source_radius, outer_max
 
 
-def _supported_projection_radius(seed, hub, source_radius, support_distance):
+def _supported_projection_radius(seed, hub, source_radius, support_distance, *, cancelled=None):
     source = tuple(
         chart_to_source(point)
         for region in seed.regions
@@ -226,23 +228,27 @@ def _supported_projection_radius(seed, hub, source_radius, support_distance):
     )
     low = max(_EPSILON, source_radius - 2.0)
     high = source_radius
-    if _projected_gap(source, hub, low) > support_distance + 0.001:
+    if _projected_gap(source, hub, low, cancelled=cancelled) > support_distance + 0.001:
         raise ValueError("fan.hub_bond_search_failed")
-    if _projected_gap(source, hub, high) <= support_distance:
+    if _projected_gap(source, hub, high, cancelled=cancelled) <= support_distance:
         return high
-    for _ in range(20):
+    # The radius only needs bead-scale accuracy. Twenty fixed OCC distance passes
+    # resolve nanometres while each pass evaluates dozens of CAD point distances.
+    while high - low > 0.005:
         middle = (low + high) / 2
-        if _projected_gap(source, hub, middle) <= support_distance:
+        if _projected_gap(source, hub, middle, cancelled=cancelled) <= support_distance:
             low = middle
         else:
             high = middle
     return low
 
 
-def _projected_gap(source, hub, target_radius):
+def _projected_gap(source, hub, target_radius, *, cancelled=None):
     maximum = 0.0
     stride = max(1, len(source) // 64)
-    for x, y, z in source[::stride]:
+    for index, (x, y, z) in enumerate(source[::stride]):
+        if index % 8 == 0:
+            _checkpoint(cancelled)
         scale = target_radius / math.hypot(x, y)
         maximum = max(maximum, _point_shape_gap((x * scale, y * scale, z), hub))
     return maximum

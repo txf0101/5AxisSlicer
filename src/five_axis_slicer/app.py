@@ -4,7 +4,7 @@ import argparse
 import os
 import sys
 
-from PyQt5.QtCore import QTimer, Qt
+from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import QApplication
 
 from .ui import MainWindow

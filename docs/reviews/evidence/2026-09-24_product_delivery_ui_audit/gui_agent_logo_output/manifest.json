@@ -1,0 +1,212 @@
+{
+  "freeform_plan": {
+    "audit": {
+      "bodies_per_layer": [
+        37,
+        37,
+        37
+      ],
+      "body_count": 37,
+      "cad_volume_mm3": 792.8026325524355,
+      "first_layer_root_gap_mm": -7.105427357601002e-15,
+      "layer_count": 3,
+      "material_volume_mm3": 737.5221092826309,
+      "maximum_cross_path_spacing_mm": 0.39965483612607605,
+      "raster_only_region_count": 105,
+      "relative_volume_error": 0.06972797642185977
+    },
+    "operation_id": "fan15-logo",
+    "operation_type": "spherical_solid_fill",
+    "schema_version": 1,
+    "source_toolpath_ids": [
+      "fan15-logo-base-features-v1",
+      "fan15-logo-spherical-solid-v1"
+    ]
+  },
+  "machine_executable": false,
+  "machine_trajectory_summary": {
+    "machine_profile_id": "builtin.machine.own_ac_fdm.v1",
+    "sample_count": 76101,
+    "source_toolpath_id": "fan15-logo-sequence-v1-machine-transition-v1",
+    "tool_length_mm": 12.5,
+    "trajectory_id": "fan15-logo-sequence-v1-xyzac-v1-machine-transition-v1"
+  },
+  "manifest": {
+    "algorithm_version": "paper-core-freeform-product-v2",
+    "generated_at_utc": "2026-09-24T10:24:53.180829+00:00",
+    "input_sources": [
+      {
+        "path": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\docs\\reviews\\evidence\\2026-09-24_product_delivery_ui_audit\\gui_agent_logo\\project.json\\source\\0812eebe0c43c57b0e280a981d4c1521889a26e85d1ec567cbf97d22aeac64c0.STEP",
+        "role": "freeform_step",
+        "sha256": "0812eebe0c43c57b0e280a981d4c1521889a26e85d1ec567cbf97d22aeac64c0",
+        "source_id": "cad_source"
+      }
+    ],
+    "issues": [
+      "xyzac.rotary_singularity",
+      "motion.intentional_tip_contact",
+      "controller.version_unknown",
+      "controller.macros_unverified",
+      "controller.xyzac_coordination_unverified",
+      "controller.cumulative_c_limit_unknown"
+    ],
+    "machine_profile_id": "builtin.machine.own_ac_fdm.v1",
+    "operation_id": "fan15-logo",
+    "parameter_semantic_sha256": "288dc069354254d49aec98fcec2cb8666dc4f4497c846b715ec4e8ae53f99390",
+    "ready_for_export": true,
+    "result_id": "fan15-logo-sequence-v1-machine-transition-v1-result-v1",
+    "status": "warning"
+  },
+  "offline_exportable": true,
+  "operation_type": "freeform",
+  "readback": {
+    "expected_events": 21984,
+    "expected_points": 76101,
+    "issues": [],
+    "machine_executable": false,
+    "passed": true,
+    "read_events": 21984,
+    "read_points": 76101,
+    "schema_version": 1
+  },
+  "schema_version": 2,
+  "thermal_parameters": {
+    "bed_c": 60.0,
+    "nozzle_c": 200.0
+  },
+  "toolpath_summary": {
+    "coordinate_frame": "workpiece_build",
+    "event_count": 21984,
+    "point_count": 76101,
+    "toolpath_id": "fan15-logo-sequence-v1-machine-transition-v1"
+  },
+  "validation": {
+    "controller_qualification": {
+      "axis_mode": "absolute",
+      "controller_family": "custom-klipper-derived",
+      "controller_version": null,
+      "coordinated_xyzac_verified": false,
+      "cumulative_c_span_rad": 7.775013568210624,
+      "cumulative_c_travel_rad": 1413.6106866680154,
+      "cutter_relative_z_mm": 20.0,
+      "extrusion_mode": "relative",
+      "feed_mode": "units_per_minute",
+      "machine_executable": false,
+      "machine_profile_id": "builtin.machine.own_ac_fdm.v1",
+      "macro_version": null,
+      "maximum_cumulative_c_rad": null,
+      "profile_id": "builtin.controller.own_ac.offline.v1",
+      "qualification_issues": [
+        "controller.version_unknown",
+        "controller.macros_unverified",
+        "controller.xyzac_coordination_unverified",
+        "controller.cumulative_c_limit_unknown"
+      ],
+      "reorientation_absolute_z_mm": 20.0,
+      "schema_version": 1,
+      "tool_change_station": null
+    },
+    "issues": [
+      {
+        "code": "xyzac.rotary_singularity",
+        "context": {
+          "first_point_id": "op01-point-0000001",
+          "last_point_id": "op01-point-0065564",
+          "point_count": 65564,
+          "retained_c_max_rad": 0.0,
+          "retained_c_min_rad": 0.0
+        },
+        "object_id": "op01-point-0000001",
+        "severity": "warning"
+      },
+      {
+        "code": "motion.intentional_tip_contact",
+        "context": {
+          "allowed_contact_checks": 10,
+          "offline_only": true
+        },
+        "object_id": "",
+        "severity": "warning"
+      },
+      {
+        "code": "controller.version_unknown",
+        "context": {
+          "offline_only": true
+        },
+        "object_id": "",
+        "severity": "warning"
+      },
+      {
+        "code": "controller.macros_unverified",
+        "context": {
+          "offline_only": true
+        },
+        "object_id": "",
+        "severity": "warning"
+      },
+      {
+        "code": "controller.xyzac_coordination_unverified",
+        "context": {
+          "offline_only": true
+        },
+        "object_id": "",
+        "severity": "warning"
+      },
+      {
+        "code": "controller.cumulative_c_limit_unknown",
+        "context": {
+          "offline_only": true
+        },
+        "object_id": "",
+        "severity": "warning"
+      }
+    ],
+    "material_statistics": {
+      "deposition_volume_mm3_by_material": {},
+      "effective_channel_transition_count": 0,
+      "purge_length_mm": 0,
+      "selection_command_count": 0
+    },
+    "metrics": [
+      {
+        "limit": 0.4,
+        "name": "solid_maximum_cross_path_spacing",
+        "passed": true,
+        "unit": "mm",
+        "value": 0.39965483612607605
+      },
+      {
+        "limit": 0.1,
+        "name": "solid_relative_volume_error",
+        "passed": true,
+        "unit": "ratio",
+        "value": 0.06972797642185977
+      },
+      {
+        "limit": 0.201,
+        "name": "solid_first_layer_root_gap",
+        "passed": true,
+        "unit": "mm",
+        "value": -7.105427357601002e-15
+      },
+      {
+        "limit": 0.01,
+        "name": "freeform_fk_position_error",
+        "passed": true,
+        "unit": "mm",
+        "value": 2.1900397950137233e-14
+      },
+      {
+        "limit": 0.00017453292519943296,
+        "name": "freeform_fk_orientation_error",
+        "passed": true,
+        "unit": "rad",
+        "value": 1.4901161193847656e-08
+      }
+    ],
+    "ready_for_offline_export": true,
+    "report_id": "fan15-logo-sequence-v1-machine-transition-v1-validation-v1",
+    "schema_version": 1,
+    "status": "warning"
+  }
+}

@@ -4,18 +4,22 @@
 
 Curve 工作台沿 STEP 有向 edge 链生成 Buildup、Multi-pass Buildup 和 Offset Buildup。内部长度为 mm、角度为 rad；界面长度显示 mm。路径从 Source/Model frame 转换到 Build frame，再进入 Workpiece/Machine frame 做离线轨迹检查。
 
+左侧“制造设置”栏默认使用公共设置。需要只为 Curve 调整机床、喷嘴、材料或坐标时，先点“导入公共设置到本工作台”，编辑后保存项目；需要让其他共用工作台也使用这份设置，再点“保存到公共制造设置”。具体按钮和作用范围见[图文点击教程](quickstart_clickthrough_zh.md#公共设置与本工作台设置)。
+
 ## 1. 前置条件与入口
 
-1. 打开 STEP，并在 Tube Setup 中完成零件、Model CS、Build CS、机型、喷嘴、已审阅材料和安装位置。
+1. 打开 STEP，并在公共制造设置中完成零件、Model CS、Build CS、机型、喷嘴、已审阅材料和安装位置。
 2. 回到工作台首页，进入“曲线工作台 / Curve Workbench”。
-3. Viewer 中切换到 edge 选择模式，按行进顺序选择边；单击“采用 Viewer 已选边”。也可以直接填写稳定 edge ID。
-4. 双邻面的边必须填写明确的邻面 ID；若没有权威邻面，选择“用户指定方向”并填写单位法向 X,Y,Z。
+3. 在“Viewer 选取类型”中选“边”，按行进顺序逐条点击；需要邻面时切到“面”再点该面。向下滚动单击“采用 Viewer 已选边”。也可以直接填写稳定 edge ID。
+4. 双邻面的边必须确认“法向邻面 ID”；若没有权威邻面，选择“用户指定方向”并填写单位法向 X,Y,Z。
+
+生成后，右侧默认隐藏 CAD 模型以显示完整沉积线。需要核对路径与零件的相对位置时勾选“显示模型”；“完整线条（快速）”适合检查全程，“沉积道宽”适合查看局部线宽。
 
 项目保存的是 edge/face 的完整 `GeometryReference` 描述符、父实体信息和 kernel signature。STEP 更新后会做唯一重绑；缺失、重复候选或拓扑漂移会使操作无效并要求重新选择。
 
-![Curve 工作台总览：有向 edge 链与明确邻面](assets/curve/current_c01_c05/09_curve_overview_edge_normal_zh_1366x768.png)
+![在 Viewer 中选边并写入有向边链](assets/product_delivery/20_curve_edge_selected_zh.png)
 
-总览图显示当前 Buildup、`body_002_edge_0011` 有向链、反向标志和 `body_002_face_0006` 明确邻面。左侧使用滚动区；1366 × 768 下没有横向滚动，按钮未截断。
+图中蓝色边已通过“采用 Viewer 已选边”写入“有向边链”；这是几何选择状态，还没有创建或生成操作。选择自己的模型时，边 ID 会不同。左侧设置栏和中间操作栏均可独立滚动。
 
 ## 2. 边链顺序、反向和法向
 
@@ -33,21 +37,19 @@ Curve 工作台沿 STEP 有向 edge 链生成 Buildup、Multi-pass Buildup 和 O
 | Multi-pass Buildup | 按层高沿法向累计抬升；相邻层交替方向 | 层数、累计高度、换向、Retract/Prime/Dwell 与沉积段分离 |
 | Offset Buildup | 以原链为第 0 道，沿 `normal × tangent` 正方向生成横向多道 | 道间距、道序、局部标架反转、自交、trimmed face 越界 |
 
-![真实 STEP 的 Curve Buildup 中文界面](assets/curve/current_c01_c05/01_curve_buildup_zh_1366x768.png)
+![当前界面选面和选边；橙色为面、蓝色为边](assets/product_delivery/06_curve_pick_edge_face_zh.png)
 
-图中右侧 Viewer 直接读取本次生成的 shared Toolpath。状态为 Ready，问题列表保留 Generic XYZAC 参考机型警告。
+图中只完成了 Viewer 几何拾取，还没有创建或生成操作。生成后请在结果预览中单独检查路径；不能以 CAD 高亮代替路径检查。
 
 ![Buildup 生成 Toolpath 的路径专用视图](assets/curve/current_c01_c05/06_curve_buildup_zh_1366x768_path_only.png)
 
-![Multi-pass Buildup 英文界面](assets/curve/current_c01_c05/02_curve_multi_pass_en_1600x900.png)
-
 ![Multi-pass 三层路径专用视图](assets/curve/current_c01_c05/07_curve_multi_pass_en_1600x900_path_only.png)
-
-![Offset Buildup 与真实叶轮曲面](assets/curve/current_c01_c05/03_curve_offset_buildup_en_1920x1080.png)
 
 ![Offset Buildup 三道横向路径专用视图](assets/curve/current_c01_c05/08_curve_offset_buildup_en_1920x1080_path_only.png)
 
-真实叶轮样条的 Offset 示例把反向标志设为 `1`，使 `normal × tangent` 的正方向进入所选 trimmed face。相邻两道的独立三维点距为 2.947—3.000 mm（界面证据参数为 3.0 mm）；若保持正向，投影会塌回边界并以 `curve.offset_outside_face` 拒绝，不能用重叠路径冒充三道。
+后两图关闭了模型显示，避免 CAD 遮住路径。生成时先打开模型核对路径落在哪片面上，再关闭模型查看所有道；该显示切换不改变输出 G-code。
+
+图中叶轮样条的 Offset 示例把反向标志设为 `1`，使 `normal × tangent` 的正方向进入所选 trimmed face。道间距输入为 3.0 mm；若路径被拒绝为 `curve.offset_outside_face`，应检查所选面和边方向，再重新生成，不能用重叠路径冒充多道。示例数值仅适用于该模型。
 
 ## 4. 参数
 

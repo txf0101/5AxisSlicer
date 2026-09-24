@@ -14,6 +14,8 @@ os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+from PyQt5.QtCore import QPoint, QPointF, Qt
+from PyQt5.QtGui import QWheelEvent
 from PyQt5.QtWidgets import QApplication
 
 from five_axis_slicer.algorithms.rotary import build_rotary_plan
@@ -38,12 +40,25 @@ from five_axis_slicer.rotary_operation_service import (
     bind_rotary_geometry_references,
     rebind_rotary_operation_geometry,
 )
-from five_axis_slicer.rotary_ui import RotaryPage
+from five_axis_slicer.rotary_ui import RotaryPage, _ScrollSafeDoubleSpinBox, _ScrollSafeSpinBox
 from five_axis_slicer.step_loader import load_step
 from test_curve_workbench import _setup
 from test_tube_ui import TubeViewerStub
 
 APP = QApplication.instance() or QApplication([])
+
+
+@pytest.mark.parametrize("spin_type", [_ScrollSafeDoubleSpinBox, _ScrollSafeSpinBox])
+def test_rotary_spinboxes_ignore_wheel_to_preserve_values(spin_type) -> None:
+    spin = spin_type()
+    spin.setValue(5)
+    event = QWheelEvent(
+        QPointF(4, 4), QPointF(4, 4), QPoint(0, 0), QPoint(0, 120),
+        Qt.NoButton, Qt.NoModifier, Qt.ScrollUpdate, False,
+    )
+    spin.wheelEvent(event)
+    assert spin.value() == 5
+    assert not event.isAccepted()
 
 
 def _rotary_model(tmp_path: Path):
@@ -258,6 +273,9 @@ def test_rotary_qt_page_binds_selected_edge_and_face_and_generates(tmp_path: Pat
     controller, _operation, _model, axis, surface = _controller(tmp_path, "rotary_spiral")
     page = RotaryPage(controller=controller, viewer_factory=TubeViewerStub)
     page.set_language("en")
+    page.pick_kind_combo.setCurrentIndex(page.pick_kind_combo.findData("face"))
+    assert page.viewer.selection.mode == "face"
+    assert page.pick_kind_label.text() == "Viewer selection type"
     page.viewer.set_selection(edge_ids=[axis.edge_id], face_ids=[surface.face_id])
     page._use_selected_axis()
     page._use_selected_surfaces()
@@ -268,6 +286,14 @@ def test_rotary_qt_page_binds_selected_edge_and_face_and_generates(tmp_path: Pat
     assert controller.product_result(controller.operation().operation_id).readback.passed
     assert page.export_button.isEnabled()
     assert page.current_machine_trajectory() is not None
+    assert page.viewer.quality_mode == "paper"
+    page.show_model_checkbox.setChecked(False)
+    assert not page.viewer.model_visible
+    page.path_display_combo.setCurrentIndex(1)
+    assert page.viewer.quality_mode == "interactive"
+    page.set_language("zh")
+    assert page.show_model_checkbox.text() == "显示模型"
+    assert page.path_display_combo.itemText(0) == "完整线条（快速）"
 
 
 def test_preview_only_region_and_missing_reference_block_generation(tmp_path: Path) -> None:

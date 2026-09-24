@@ -8,7 +8,9 @@
 
 路径操作要求零件、坐标、机型、喷嘴、已审阅材料和装夹全部应用。源 STEP 或这些输入变化会使结果 Stale，需要重新生成。Error 禁止导出；Warning 需查看具体限制。
 
-Zigzag 现检查实际道宽包络与逐区域材料量。三叶扇全高 Z=56.3→95.9、层高/道宽 0.6、间距 0.65 mm 的离线对照为 7475 点，回读通过，采样未覆盖约 5.98%，属于稀疏填充。相同模型间距 0.6 mm 的密排有 5 层过填，禁止导出。pipe2 的 0.6 mm 密排也被阻断；0.4 mm 道宽/层高与 0.5 mm 间距对照可导出，但不代表实心资格。
+左侧“制造设置”栏可直接打开七项设置。默认共用公共制造设置；需要只为 Planar 调整时，点“导入公共设置到本工作台”，编辑并返回后可选择保存项目中的独立副本，或“保存到公共制造设置”供其他工作台使用。各按钮的位置和影响范围见[图文点击教程](quickstart_clickthrough_zh.md#公共设置与本工作台设置)。
+
+Zigzag 检查道宽包络、逐区域材料量和未覆盖区域。线间距变小可能导致过填，间距变大可能留下空隙；请结合切层预览和问题列表调整，不要把能导出等同于实体已填满。
 
 Spiral 使用中间 Z 的真实实体有限采样；支撑检查完整运动段与目标 CAD，但零件/支撑联合逐层调度和完整喷嘴扫掠仍未验证。下文图片和数值用于说明界面操作与结果判断，模型和参数变化后须重新检查。
 
@@ -20,7 +22,9 @@ Spiral 使用中间 Z 的真实实体有限采样；支撑检查完整运动段�
 
 工作台包含一个预览操作和五个制造操作。`Planar Region` 只显示分层区域、孔和岛，不生成 NC，也不导出六件套；`Planar Zigzag`、`Planar Offset`、`Planar Thin Wall`、`Planar Spiral` 和 `Planar Support` 都进入共享 Toolpath、MachineAxisTrajectory、ValidationReport、后处理与 G-code 回读链。新建类型和现有操作使用两个独立选择框，可在一个项目中切换多个操作及其 Viewer 结果。
 
-![Planar Zigzag 当前中文总览](assets/planar/current_p01_p07/p02/01_planar_zh_1366x768.png)
+![Planar Zigzag 单层填充线和显示选项](assets/product_delivery/07_planar_full_lines_zh.png)
+
+图中已取消“显示模型”，预览方式为“完整线条（快速）”，因此可以直接看到整层路径。这个单层示例使用 `body_001`、`Z=0.2 mm`；本手册下方的 `body_002`、`Z=60 mm` 是另一组练习设置，不能混用。需要检查路径与模型的贴合关系时重新勾选“显示模型”；需要观察道宽时切换为“沉积道宽”。
 
 ## 创建操作与参数
 
@@ -61,7 +65,7 @@ Spiral 使用中间 Z 的真实实体有限采样；支撑检查完整运动段�
 1. 打开 STEP，选择 body，确认 Setup 和资源均为有效状态。
 2. 新建操作并选择类型；填写参数，点击“应用”。
 3. 点击“生成预览 / Generate preview”。路径操作会生成共享 Toolpath、检查报告、Generic XYZAC 离线参考轨迹、G-code 和独立回读。
-4. 在三维预览中核对沉积路径、空移、层和模型的相对位置；再查看 Warning/Error 与导出按钮状态。
+4. 在三维预览中先显示模型，核对路径与 STEP 的相对位置；模型遮挡路径时取消“显示模型”，用“完整线条（快速）”核对全部沉积线和空移。再切换“沉积道宽”观察宽度，并查看 Warning/Error 与导出按钮状态。
 5. 只有状态为 Ready 或允许导出的 Warning，且没有阻止性 Error 时，点击“导出结果 / Export result”。
 6. 用“保存项目 / Save project”保存并重新打开。操作、稳定引用、参数和既有资格摘要会恢复；运行时 Toolpath/G-code 不写入项目文件，所以原 Ready/Warning 会在重开后显示 Stale，重新 Generate 后才能查看或导出当前结果。
 7. “撤销 / Undo”和“重做 / Redo”覆盖创建、编辑等领域命令；撤销参数修改会恢复上一份有效 Viewer/导出结果。问题列表是可定位索引，激活条目会显示完整 code/object，并尽量定位到对应层或路径点。
@@ -117,17 +121,7 @@ Spiral 使用中间 Z 的真实实体有限采样；支撑检查完整运动段�
 | Thin Wall | 单层，壁厚 0.6 mm、最多 3 道 | 6 | 材料量 38.015905 mm³，残余覆盖 Warning，回读通过。 |
 | Spiral | 两层，Z=60.0–60.6 mm，64 点/轮廓 | 129 | 连续 Z 路径；离散层投影 Warning，回读通过。 |
 
-![Offset 中文正常结果，1366×768](assets/planar/current_p01_p07/p06/01_planar_offset_zh_1366x768.png)
-
-上图为 Offset 正常结果。英文等距视图见 [Offset 英文截图](assets/planar/current_p01_p07/p06/02_planar_offset_en_1600x900.png)。
-
-![Thin Wall 中文正常结果，1600×900](assets/planar/current_p01_p07/p06/03_planar_thin_wall_zh_1600x900.png)
-
-Thin Wall 的英文模型叠加视图见 [Thin Wall 英文截图](assets/planar/current_p01_p07/p06/04_planar_thin_wall_en_1920x1080.png)。残余覆盖 Warning 不等于失败，但表示当前参数与区域未完全覆盖，需审阅后再使用导出结果。
-
-![Spiral 中文正常结果，1920×1080](assets/planar/current_p01_p07/p06/05_planar_spiral_zh_1920x1080.png)
-
-Spiral 的英文顶视图见 [Spiral 英文截图](assets/planar/current_p01_p07/p06/06_planar_spiral_en_1366x768.png)。它必须至少跨两个相邻层；单层输入会被拒绝。
+查看 Offset、Thin Wall 或 Spiral 时，先保留模型确认截面位置，再取消“显示模型”，用“完整线条（快速）”检查轮廓和道间连接。上方 Zigzag 图片示范了该切换。Thin Wall 的残余覆盖 Warning 表示参数与区域尚未完全覆盖，应逐项审阅。Spiral 必须至少跨两个相邻层；单层输入会被拒绝。
 
 ## Warning、Error 与恢复
 
@@ -141,9 +135,9 @@ Spiral 的英文顶视图见 [Spiral 英文截图](assets/planar/current_p01_p07
 | Stale | 参数、实体引用、坐标或资源在生成后改变。 | 不使用旧结果导出，重新 Generate。 |
 | 取消生成 | 用户取消或后台任务中断。 | 上一份 Ready 结果保留；确认输入后重新生成。 |
 
-![Spiral 单层错误示例，1366×768](assets/planar/current_p01_p07/p06/07_planar_spiral_error_zh_1366x768.png)
+![Spiral 单层输入：首层与末层 Z 相同](assets/planar/current_p01_p07/p06/07_planar_spiral_error_zh_1366x768.png)
 
-此图是错误示例，导出按钮被禁用。将末层改为相邻层后，生成与回读恢复成功：
+图中首层和末层都为 60 mm，尚未构成连续螺旋所需的两个相邻层；导出按钮禁用。错误详情需在右侧参数区向下滚动查看。将末层改为相邻层后，再应用、生成并检查回读：
 
 ![Spiral 恢复后的英文结果，1600×900](assets/planar/current_p01_p07/p06/08_planar_spiral_recovered_en_1600x900.png)
 

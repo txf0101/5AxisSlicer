@@ -269,6 +269,7 @@ class SolidFillProcessParameters:
     metric_across_samples: int = 129
     metric_along_samples: int = 129
     face_metric_samples: int = 65
+    surface_growth_strategy: str = "surface_thickness"
 
     def __post_init__(self) -> None:
         for name in (
@@ -287,6 +288,10 @@ class SolidFillProcessParameters:
             object.__setattr__(self, name, _finite(getattr(self, name), name))
         if self.path_spacing_mm > self.bead_width_mm:
             raise ValueError("path_spacing_mm must not exceed bead_width_mm")
+        strategy = str(self.surface_growth_strategy).strip().lower()
+        if strategy not in {"surface_thickness", "root_edge_outward"}:
+            raise ValueError("unsupported surface_growth_strategy")
+        object.__setattr__(self, "surface_growth_strategy", strategy)
         for name, minimum in (
             ("sample_segments", 32),
             ("metric_across_samples", 17),
@@ -297,7 +302,7 @@ class SolidFillProcessParameters:
             if isinstance(value, bool) or not isinstance(value, int) or value < minimum:
                 raise ValueError(f"{name} must be an integer >= {minimum}")
 
-    def to_json(self) -> dict[str, float | int]:
+    def to_json(self) -> dict[str, float | int | str]:
         return {name: getattr(self, name) for name in self.__dataclass_fields__}
 
     @classmethod

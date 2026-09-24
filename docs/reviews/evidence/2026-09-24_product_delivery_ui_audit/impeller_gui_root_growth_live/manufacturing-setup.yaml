@@ -1,0 +1,407 @@
+format: five-axis-slicer.manufacturing-setup
+schema_version: 1
+units:
+  length: mm
+  script_angle: deg
+coordinate_convention: source_mm_right_handed_column_vector
+part_policy: preserve_current
+metadata:
+  revision: 1
+  content_sha256: 7f00ebaf203df078f8c034dfc0fc4f99e93d2f484a6b6cd55c337bb15f09b8fd
+  base_project_setup_sha256: 7f00ebaf203df078f8c034dfc0fc4f99e93d2f484a6b6cd55c337bb15f09b8fd
+setup:
+  name: Manufacturing Setup 1
+  resources:
+    machine:
+      schema_version: 1
+      resource_type: machine
+      resource_id: builtin.machine.own_ac_fdm.v1
+      profile_version: 1
+      payload:
+        build_surfaces:
+          - depth_mm: null
+            diameter_mm: 180.0
+            id: xyzac_plate
+            name: Own AC heated table
+            shape: circle
+            thickness_mm: 0.0
+            width_mm: null
+        id: builtin.machine.own_ac_fdm.v1
+        joints:
+          - T_parent_from_child_zero:
+              T_target_from_source:
+                -   - 1.0
+                    - 0.0
+                    - 0.0
+                    - 0.0
+                -   - 0.0
+                    - 1.0
+                    - 0.0
+                    - 0.0
+                -   - 0.0
+                    - 0.0
+                    - 1.0
+                    - 0.0
+                -   - 0.0
+                    - 0.0
+                    - 0.0
+                    - 1.0
+              source_frame: x_carriage
+              target_frame: machine
+            axis_direction:
+              - 1.0
+              - 0.0
+              - 0.0
+            child_link_id: x_carriage
+            id: X
+            joint_type: linear
+            max_acceleration: null
+            max_velocity: null
+            motion_side: tool
+            name: X linear axis
+            parent_link_id: machine
+            post_axis_map:
+              offset: 0.0
+              output_unit: mm
+              scale: 1.0
+              word: X
+            rotation_center_mm:
+              - 0.0
+              - 0.0
+              - 0.0
+            soft_limit_max: null
+            soft_limit_min: null
+            zero_offset: 0.0
+          - T_parent_from_child_zero:
+              T_target_from_source:
+                -   - 1.0
+                    - 0.0
+                    - 0.0
+                    - 0.0
+                -   - 0.0
+                    - 1.0
+                    - 0.0
+                    - 0.0
+                -   - 0.0
+                    - 0.0
+                    - 1.0
+                    - 0.0
+                -   - 0.0
+                    - 0.0
+                    - 0.0
+                    - 1.0
+              source_frame: y_carriage
+              target_frame: x_carriage
+            axis_direction:
+              - 0.0
+              - 1.0
+              - 0.0
+            child_link_id: y_carriage
+            id: Y
+            joint_type: linear
+            max_acceleration: null
+            max_velocity: null
+            motion_side: tool
+            name: Y linear axis
+            parent_link_id: x_carriage
+            post_axis_map:
+              offset: 0.0
+              output_unit: mm
+              scale: 1.0
+              word: Y
+            rotation_center_mm:
+              - 0.0
+              - 0.0
+              - 0.0
+            soft_limit_max: null
+            soft_limit_min: null
+            zero_offset: 0.0
+          - T_parent_from_child_zero:
+              T_target_from_source:
+                -   - 1.0
+                    - 0.0
+                    - 0.0
+                    - 0.0
+                -   - 0.0
+                    - 1.0
+                    - 0.0
+                    - 0.0
+                -   - 0.0
+                    - 0.0
+                    - 1.0
+                    - 0.0
+                -   - 0.0
+                    - 0.0
+                    - 0.0
+                    - 1.0
+              source_frame: tool
+              target_frame: y_carriage
+            axis_direction:
+              - 0.0
+              - 0.0
+              - 1.0
+            child_link_id: tool
+            id: Z
+            joint_type: linear
+            max_acceleration: null
+            max_velocity: null
+            motion_side: tool
+            name: Z linear axis
+            parent_link_id: y_carriage
+            post_axis_map:
+              offset: 0.0
+              output_unit: mm
+              scale: 1.0
+              word: Z
+            rotation_center_mm:
+              - 0.0
+              - 0.0
+              - 0.0
+            soft_limit_max: null
+            soft_limit_min: null
+            zero_offset: 0.0
+          - T_parent_from_child_zero:
+              T_target_from_source:
+                -   - 1.0
+                    - 0.0
+                    - 0.0
+                    - 0.0
+                -   - 0.0
+                    - 1.0
+                    - 0.0
+                    - 0.0
+                -   - 0.0
+                    - 0.0
+                    - 1.0
+                    - 0.0
+                -   - 0.0
+                    - 0.0
+                    - 0.0
+                    - 1.0
+              source_frame: a_cradle
+              target_frame: machine
+            axis_direction:
+              - 1.0
+              - 0.0
+              - 0.0
+            child_link_id: a_cradle
+            id: A
+            joint_type: rotary
+            max_acceleration: null
+            max_velocity: null
+            motion_side: workpiece
+            name: A rotary axis
+            parent_link_id: machine
+            post_axis_map:
+              offset: 0.0
+              output_unit: deg
+              scale: 1.0
+              word: A
+            rotation_center_mm:
+              - 0.0
+              - 0.0
+              - 0.0
+            soft_limit_max: 3.141592653589793
+            soft_limit_min: -3.141592653589793
+            zero_offset: 0.0
+          - T_parent_from_child_zero:
+              T_target_from_source:
+                -   - 1.0
+                    - 0.0
+                    - 0.0
+                    - 0.0
+                -   - 0.0
+                    - 1.0
+                    - 0.0
+                    - 0.0
+                -   - 0.0
+                    - 0.0
+                    - 1.0
+                    - 0.0
+                -   - 0.0
+                    - 0.0
+                    - 0.0
+                    - 1.0
+              source_frame: c_table
+              target_frame: a_cradle
+            axis_direction:
+              - 0.0
+              - 0.0
+              - 1.0
+            child_link_id: c_table
+            id: C
+            joint_type: rotary
+            max_acceleration: null
+            max_velocity: null
+            motion_side: workpiece
+            name: C rotary axis
+            parent_link_id: a_cradle
+            post_axis_map:
+              offset: 0.0
+              output_unit: deg
+              scale: 1.0
+              word: C
+            rotation_center_mm:
+              - 0.0
+              - 0.0
+              - 0.0
+            soft_limit_max: 6.283185307179586
+            soft_limit_min: -6.283185307179586
+            zero_offset: 0.0
+        manufacturer: 自研 / In-house
+        model: AC rotary-table FDM
+        mount_datums:
+          - T_parent_from_mount:
+              T_target_from_source:
+                -   - 1.0
+                    - 0.0
+                    - 0.0
+                    - 0.0
+                -   - 0.0
+                    - 1.0
+                    - 0.0
+                    - 0.0
+                -   - 0.0
+                    - 0.0
+                    - 1.0
+                    - 0.0
+                -   - 0.0
+                    - 0.0
+                    - 0.0
+                    - 1.0
+              source_frame: build_plate_mount
+              target_frame: c_table
+            build_surface_id: xyzac_plate
+            id: build_plate_mount
+            name: Rotary table center
+            parent_link_id: c_table
+        name: 自有 AC 五轴打印机 / Own AC FDM
+        reference_only: true
+        root_link_id: machine
+        source_uri: manuscript.docx#section-2.1-table-1
+        tool_link_id: tool
+        version: 1
+        workpiece_link_id: c_table
+      content_hash: a98ffc8688ac1378780c3ed7f345b5d7f4408edf6bc5807470f66faa2ba44eed
+    nozzle:
+      schema_version: 1
+      resource_type: nozzle
+      resource_id: offline-envelope
+      profile_version: 1
+      payload:
+        construction_material: null
+        display_name: Offline reference only
+        filament_diameter_mm: 1.75
+        flow_category: null
+        interface: M6
+        is_builtin: false
+        length_mm: 12.5
+        orifice_diameter_mm: 0.4
+        outer_profile_rz_mm:
+          -   - 0.2
+              - 0.0
+          -   - 3.0
+              - 2.0
+          -   - 3.0
+              - 12.5
+        profile_version: 1
+        resource_id: offline-envelope
+        schema_version: 1
+        source: null
+        temperature_limit_c: null
+        wear_resistance_rating: null
+      content_hash: 20444b2563de3451bd7cf9676e19f6fded7d1d1bd86db3a77141662562102d60
+    material:
+      schema_version: 1
+      resource_type: material
+      resource_id: fan15-offline-pla
+      profile_version: 1
+      payload:
+        brand: Generic
+        density_g_cm3: 1.24
+        display_name: Cura Generic PLA 1.75 mm
+        filament_diameter_mm: 1.75
+        form: filament
+        guid: 0ff92885-617b-4144-a03c-9989872454bc
+        is_builtin: false
+        material: PLA
+        process: FFF/FDM
+        profile_version: 1
+        recommendations:
+          build_plate_temperature_c: 60.0
+          nozzle_temperature_c: 200.0
+        resource_id: fan15-offline-pla
+        review_confirmed: true
+        review_required: true
+        schema_version: 1
+        source:
+          file_path: generic_pla_175.xml.fdm_material
+          revision: 886e7ad927463493cc9c64f427b1ae2cf4ce12c1
+          sha256: 5bc7c562e14cb10c15323bca26f1afddedcf6e18166c92adf4d638611907a4be
+          title: 'Ultimaker fdm_materials: Generic PLA 1.75 mm'
+          url: 
+            https://github.com/Ultimaker/fdm_materials/blob/886e7ad927463493cc9c64f427b1ae2cf4ce12c1/generic_pla_175.xml.fdm_material
+        upstream_version: 13
+      content_hash: 2214a85a20a2481bd2c36fae513acb1c9fe341a615655f341fff832bac1b2556
+  coordinate_systems:
+    model:
+      name: model
+      origin_in_source_mm:
+        - 0.0
+        - 0.0
+        - 0.0
+      z_direction_in_source:
+        - 0.0
+        - 0.0
+        - 1.0
+      x_direction_in_source:
+        - 1.0
+        - 0.0
+        - 0.0
+      provenance:
+        origin: numeric
+        z_direction: numeric
+        x_direction: numeric
+        geometry_resolved: false
+    build:
+      name: build
+      origin_in_source_mm:
+        - 0.0
+        - 0.0
+        - 0.0
+      z_direction_in_source:
+        - 0.0
+        - 0.0
+        - 1.0
+      x_direction_in_source:
+        - 1.0
+        - 0.0
+        - 0.0
+      provenance:
+        origin: numeric
+        z_direction: numeric
+        x_direction: numeric
+        geometry_resolved: false
+  placement:
+    mount_datum_id: build_plate_mount
+    reference:
+      translation_mm:
+        - 250.0
+        - 250.0
+        - 250.0
+      quaternion_xyzw:
+        - 0.0
+        - 0.0
+        - 0.0
+        - 1.0
+    adjustment:
+      translation_mm:
+        - 0.0
+        - 0.0
+        - 0.0
+      quaternion_xyzw:
+        - 0.0
+        - 0.0
+        - 0.0
+        - 1.0
+operations: []

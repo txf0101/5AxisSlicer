@@ -237,6 +237,10 @@ def current_progress_step(
 def segment_visible(segment: GCodePathSegment, settings: PreviewSettings) -> bool:
     if not settings.layer_min <= segment.layer <= settings.layer_max:
         return False
+    if settings.line_min is not None and segment.line_number < settings.line_min:
+        return False
+    if settings.line_max is not None and segment.line_number > settings.line_max:
+        return False
     if segment.move_type == "extrude":
         return settings.show_extrusion and segment.extrusion_role in settings.visible_roles
     if segment.move_type == "travel":

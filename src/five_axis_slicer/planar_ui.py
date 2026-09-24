@@ -10,6 +10,7 @@ from typing import Any, Callable
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import (
     QApplication,
+    QCheckBox,
     QComboBox,
     QDoubleSpinBox,
     QFileDialog,
@@ -35,7 +36,9 @@ from .planar_generation_context import (
 from .planar_ui_diagnostics import generation_error_text, product_issues_text, product_status_text
 from .command_kernel import CommandError
 from .gcode_preview import GCodePreview
+from .generation_event_pump import throttled_event_pump
 from .manufacturing.toolpath import GeneratedToolpath
+from .ui_controls import ScrollSafeDoubleSpinBox, ScrollSafeSpinBox
 from .viewer import ModelViewer
 
 
@@ -44,6 +47,9 @@ _TEXT = {
         "title": "平面切片",
         "back": "返回",
         "open": "打开 STEP",
+        "show_model": "显示模型",
+        "path_lines": "完整线条（快速）",
+        "path_beads": "沉积道宽",
         "operation": "新建操作类型",
         "operation_instance": "现有操作",
         "body": "实体",
@@ -79,6 +85,7 @@ _TEXT = {
         "issue_location": "问题位置",
         "help": "帮助：先选择“新建操作类型”创建操作，再用“现有操作”切换、编辑、生成、查看或导出。长度单位为 mm，角度输入为 deg；修改已生成操作后结果会变为 Stale。",
         "no_cad": "请先打开 STEP 模型。",
+        "no_operation": "请选择操作类型并点“新建操作”。",
         "coordinates": "坐标未就绪。请点顶部“公共制造设置”，依次完成 Model CS、Build CS 和 Placement。",
         "unsupported": "该操作当前不可用，请选择可用的平面路径类型。",
         "resources": "请点顶部“公共制造设置”，完成 Part、机床、喷嘴、已审阅材料、坐标和装夹定位；下方列出未完成项。",
@@ -104,6 +111,9 @@ _TEXT = {
         "title": "Planar Slicing",
         "back": "Back",
         "open": "Open STEP",
+        "show_model": "Show model",
+        "path_lines": "Full lines (fast)",
+        "path_beads": "Bead width",
         "operation": "New operation type",
         "operation_instance": "Existing operation",
         "body": "Body",
@@ -139,6 +149,7 @@ _TEXT = {
         "issue_location": "Issue location",
         "help": "Help: choose New operation type to create, then use Existing operation to switch, edit, generate, inspect or export. Lengths use mm and the angle input uses deg; changing a generated operation makes its result Stale.",
         "no_cad": "Open a STEP model first.",
+        "no_operation": "Choose an operation type and click Create operation.",
         "coordinates": "Coordinates are not ready. Open Manufacturing Setup in the top toolbar and complete Model CS, Build CS and Placement.",
         "unsupported": "This operation is unavailable. Select an available planar path type.",
         "resources": "Open Manufacturing Setup in the top toolbar and complete part, machine, nozzle, reviewed material, coordinates and placement. See missing items below.",
@@ -275,6 +286,15 @@ class _PlanarPageView(QWidget):
         navigation.addWidget(self.back_button)
         navigation.addWidget(self.open_step_button)
         header.addLayout(navigation)
+        self.show_model_checkbox = QCheckBox()
+        self.show_model_checkbox.setChecked(True)
+        self.path_display_combo = QComboBox()
+        self.path_display_combo.addItem("", "paper")
+        self.path_display_combo.addItem("", "interactive")
+        display_row = QHBoxLayout()
+        display_row.addWidget(self.show_model_checkbox)
+        display_row.addWidget(self.path_display_combo)
+        header.addLayout(display_row)
         return header
 
     def _build_parameter_form(self) -> QFormLayout:
@@ -318,6 +338,8 @@ class _PlanarPageView(QWidget):
     def _connect_controls(self) -> None:
         self.back_button.clicked.connect(self.back_requested)
         self.open_step_button.clicked.connect(self.open_step_requested)
+        self.show_model_checkbox.toggled.connect(self._set_model_visible)
+        self.path_display_combo.currentIndexChanged.connect(self._set_path_display)
         self.create_button.clicked.connect(self._create)
         self.apply_button.clicked.connect(self._apply)
         self.generate_button.clicked.connect(self._generate)
@@ -382,7 +404,7 @@ class _PlanarPageView(QWidget):
 
     @staticmethod
     def _spin(value: float, minimum: float) -> QDoubleSpinBox:
-        spin = QDoubleSpinBox()
+        spin = ScrollSafeDoubleSpinBox()
         spin.setRange(minimum, 100000.0)
         spin.setDecimals(6)
         spin.setValue(value)
@@ -390,7 +412,7 @@ class _PlanarPageView(QWidget):
 
     @staticmethod
     def _integer_spin(value: int, minimum: int, maximum: int) -> QSpinBox:
-        spin = QSpinBox()
+        spin = ScrollSafeSpinBox()
         spin.setRange(minimum, maximum)
         spin.setValue(value)
         return spin
@@ -414,6 +436,9 @@ class _PlanarPageView(QWidget):
         self.title_label.setText(t("title"))
         self.back_button.setText(t("back"))
         self.open_step_button.setText(t("open"))
+        self.show_model_checkbox.setText(t("show_model"))
+        self.path_display_combo.setItemText(0, t("path_lines"))
+        self.path_display_combo.setItemText(1, t("path_beads"))
         self.create_button.setText(t("create"))
         self.apply_button.setText(t("apply"))
         self.generate_button.setText(t("generate"))
@@ -444,6 +469,14 @@ class _PlanarPageView(QWidget):
             "status": self.status_label.text(),
         }
         return state
+
+    def _set_model_visible(self, visible: bool) -> None:
+        if hasattr(self.viewer, "set_model_visible"):
+            self.viewer.set_model_visible(visible)
+
+    def _set_path_display(self, _index: int) -> None:
+        if hasattr(self.viewer, "set_quality_mode") and getattr(self.viewer, "gcode_preview", None) is not None:
+            self.viewer.set_quality_mode(str(self.path_display_combo.currentData()))
 
     def refresh(self, *_ignored: Any) -> None:
         self._refresh_operations()
@@ -593,6 +626,8 @@ class _PlanarPageView(QWidget):
     def _generation_reason(self, operation_type: str, has_operation: bool) -> str | None:
         if self.controller.cad_model is None:
             return self._t("no_cad")
+        if not has_operation:
+            return self._t("no_operation")
         try:
             self.controller.T_model_from_build()
         except ValueError:
@@ -615,8 +650,8 @@ class _PlanarPageView(QWidget):
                 )
             except ValueError:
                 return self._t("resources")
-        if not has_operation or not self.body_combo.currentText():
-            return self._t("no_cad")
+        if not self.body_combo.currentText():
+            return self._t("apply_required")
         operation = self._selected_operation()
         if not operation.enabled:
             return self._t("disabled")
@@ -736,7 +771,9 @@ class PlanarPage(_PlanarPageView):
         self.refresh()
 
     def _install_generation_event_pump(self) -> None:
-        self.controller.set_generation_event_pump(QApplication.processEvents)
+        self.controller.set_generation_event_pump(
+            throttled_event_pump(QApplication.processEvents)
+        )
 
     def _show_selected_result(self, operation: Any, result: Any, *, emit: bool = False) -> None:
         if operation is None or result is None:
@@ -747,6 +784,7 @@ class PlanarPage(_PlanarPageView):
             self.viewer.load_gcode_preview(
                 _preview_from_generated_toolpath(result.preview_toolpath)
             )
+            self._set_path_display(self.path_display_combo.currentIndex())
         self._viewer_operation_id = operation.operation_id
         if emit:
             self.preview_ready.emit(result.preview_toolpath)

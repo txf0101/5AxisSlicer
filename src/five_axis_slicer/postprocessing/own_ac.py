@@ -83,6 +83,7 @@ def postprocess_own_ac(
         "; 5AxisSclicer paper-core AC offline review program",
         "; CONTROLLER_PROFILE "
         + json.dumps(controller.to_json(), sort_keys=True, separators=(",", ":")),
+        f"; TOOL_LENGTH_MM {trajectory.tool_length_mm:.6f}",
         "; EXECUTION_QUALIFICATION "
         + (
             "machine_executable"

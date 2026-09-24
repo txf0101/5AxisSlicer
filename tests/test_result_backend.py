@@ -161,6 +161,89 @@ class ResultStateAndProjectTests(unittest.TestCase):
 
 
 class GCodeSourceIndexTests(unittest.TestCase):
+    def test_bundled_ac_header_reconstructs_rotary_only_deposition(self) -> None:
+        source = (
+            '; CONTROLLER_PROFILE {"machine_profile_id":"builtin.machine.own_ac_fdm.v1"}\n'
+            "; TOOL_LENGTH_MM 12.500000\n"
+            "G21\nG90\nM83\n"
+            "G1 A90 C0 X0 Y0 Z10 F3000\n"
+            "G1 A90 C90 X0 Y0 Z10 E0.1 F1200\n"
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "own_ac.gcode"
+            path.write_text(source, encoding="utf-8")
+            preview = gcode_preview.load_gcode(path)
+            self.assertEqual(
+                preview.controller_semantics,
+                "builtin.machine.own_ac_fdm.v1.ac_table_deg",
+            )
+            self.assertEqual(preview.tool_length_mm, 12.5)
+            self.assertEqual(preview.coordinate_transform, "ac_inverse_rz_minus_c_after_rx_minus_a")
+            deposition = next(segment for segment in preview.segments if segment.move_type == "extrude")
+            self.assertTrue(deposition.has_spatial_length)
+            self.assertNotEqual(deposition.start, deposition.end)
+
+    def test_bundled_ac_file_without_tool_length_keeps_machine_coordinates(self) -> None:
+        source = (
+            '; CONTROLLER_PROFILE {"machine_profile_id":"builtin.machine.own_ac_fdm.v1"}\n'
+            "G90\nG1 A30 C0 X0 Y0 Z12.7 E0.1\n"
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "standalone.gcode"
+            path.write_text(source, encoding="utf-8")
+            preview = gcode_preview.load_gcode(path)
+            self.assertIsNone(preview.controller_semantics)
+            self.assertEqual(preview.coordinate_transform, "machine_xyz")
+
+    def test_legacy_bundle_recovers_tool_length_from_matching_manifest(self) -> None:
+        source = (
+            '; CONTROLLER_PROFILE {"machine_profile_id":"builtin.machine.own_ac_fdm.v1"}\n'
+            "G90\nG1 A0 C0 X1 Y2 Z12.7 E0.1\n"
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            path = root / "main.gcode"
+            path.write_text(source, encoding="utf-8")
+            (root / "manifest.json").write_text(
+                json.dumps({
+                    "manifest": {"machine_profile_id": "builtin.machine.own_ac_fdm.v1"},
+                    "machine_trajectory_summary": {
+                        "machine_profile_id": "builtin.machine.own_ac_fdm.v1",
+                        "tool_length_mm": 12.5,
+                        "sample_count": 1,
+                    },
+                    "readback": {"passed": True, "expected_points": 1, "read_points": 1},
+                }),
+                encoding="utf-8",
+            )
+            preview = gcode_preview.load_gcode(path)
+            self.assertEqual(preview.tool_length_mm, 12.5)
+            self.assertAlmostEqual(preview.segments[0].end[2], 0.2)
+
+    def test_pac_operation_markers_are_indexed_and_cached(self) -> None:
+        lines = [
+            "; offline program",
+            "; PAC POINT 1 op01-point-0001 approach - -",
+            "G1 X0 Y0 Z0.2 F3000",
+            "; PAC POINT 2 op01-point-0002 deposition - -",
+            "G1 X1 Y0 Z0.2 E0.1 F1200",
+            "; PAC POINT 3 op02-point-0001 approach - -",
+            "G1 X1 Y0 Z1 A30 C15 F3000",
+            "; PAC POINT 4 op02-point-0002 deposition - -",
+            "G1 X2 Y0 Z1 A30 C15 E0.1 F1200",
+        ]
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "pac.gcode"
+            source.write_text("\n".join(lines), encoding="utf-8")
+            for _ in range(2):
+                with GCodeSourceIndex(source, root / "cache") as index:
+                    self.assertEqual(
+                        [(stage.stage_id, stage.kind, stage.start_line, stage.end_line)
+                         for stage in index.stages],
+                        [("op01", "operation", 1, 5), ("op02", "operation", 6, 9)],
+                    )
+
     def test_line_window_search_wrap_stages_and_cached_reload(self) -> None:
         lines = [
             "; header",

@@ -12,6 +12,7 @@ from five_axis_slicer.manufacturing.preview_kinematics import (
     DEFAULT_PREVIEW_KINEMATICS_REGISTRY,
     GENERIC_XYZAC_AC_SEMANTICS,
     MACHINE_COORDINATE_TRANSFORM,
+    OWN_AC_PREVIEW_SEMANTICS,
     reconstruct_preview_motion,
     reconstruct_preview_pose,
 )
@@ -43,6 +44,28 @@ class PreviewKinematicsTests(unittest.TestCase):
         self.assertEqual(result.coordinate_transform, AC_INVERSE_TRANSFORM)
         self.assertVectorAlmostEqual(result.point, (3.0, -1.0, -2.0))
         self.assertEqual(result.issues, ())
+
+    def test_own_ac_tip_offset_is_removed_before_inverse_table_rotation(self) -> None:
+        result = reconstruct_preview_pose(
+            (0.0, 0.0, 52.666667),
+            {"A": -33.520231, "C": 6.973745},
+            controller_semantics=OWN_AC_PREVIEW_SEMANTICS,
+            tool_length_mm=12.5,
+        )
+        self.assertVectorAlmostEqual(
+            result.point,
+            (-2.693130998121035, -22.017194459813766, 33.48658395024516),
+            places=5,
+        )
+
+    def test_own_ac_zero_rotation_still_removes_tip_offset(self) -> None:
+        result = reconstruct_preview_pose(
+            (1.0, 2.0, 12.7),
+            {},
+            controller_semantics=OWN_AC_PREVIEW_SEMANTICS,
+            tool_length_mm=12.5,
+        )
+        self.assertVectorAlmostEqual(result.point, (1.0, 2.0, 0.2))
 
     def test_fixed_machine_nozzle_axis_follows_same_inverse_chain(self) -> None:
         result = reconstruct_preview_pose(

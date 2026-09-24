@@ -414,6 +414,13 @@ class OpenGLModelViewer(BambuNavigationMixin, QOpenGLWidget):
         self._path_cache_key = None
         self.refresh_path_preview()
 
+    def set_preview_line_range(self, line_min: int | None, line_max: int | None) -> None:
+        self.preview_settings.line_min = line_min
+        self.preview_settings.line_max = line_max
+        self._path_cache_key = None
+        if self.gcode_preview is not None:
+            self.refresh_path_preview()
+
     def set_preview_progress(self, progress_index: int, interactive: bool | None = None) -> None:
         if self.gcode_preview is None:
             return
@@ -572,8 +579,11 @@ class OpenGLModelViewer(BambuNavigationMixin, QOpenGLWidget):
         self.update()
 
     def set_model_visible(self, visible: bool) -> None:
-        self._model_visible = bool(visible)
-        self.update()
+        visible = bool(visible)
+        if self._model_visible == visible:
+            return
+        self._model_visible = visible
+        self.fit_view()
 
     def set_start_end_visible(self, visible: bool) -> None:
         self._start_end_visible = bool(visible)
@@ -739,7 +749,14 @@ class OpenGLModelViewer(BambuNavigationMixin, QOpenGLWidget):
             self._center = (low + high) * 0.5
             diag = float(np.linalg.norm(high - low))
             self._radius = max(diag * 0.5, 1.0)
-            self._distance = max(self._radius * 1.78, 20.0)
+            aspect = max(self.width(), 1) / max(self.height(), 1)
+            vertical_half_angle = math.radians(22.5)
+            horizontal_half_angle = math.atan(math.tan(vertical_half_angle) * aspect)
+            limiting_half_angle = min(vertical_half_angle, horizontal_half_angle)
+            self._distance = max(
+                self._radius / math.sin(limiting_half_angle) * 1.08,
+                20.0,
+            )
             self._pan = np.array([0.0, 0.0, 0.0], dtype=np.float32)
         self._refresh_endpoint_buffers(*self._endpoint_points)
         self.update()
@@ -789,6 +806,8 @@ class OpenGLModelViewer(BambuNavigationMixin, QOpenGLWidget):
             mode_key,
             self.preview_settings.layer_min,
             self.preview_settings.layer_max,
+            self.preview_settings.line_min,
+            self.preview_settings.line_max,
             self.preview_settings.show_travel,
             self.preview_settings.show_extrusion,
             tuple(sorted(self.preview_settings.visible_roles)),
@@ -1725,7 +1744,7 @@ class OpenGLModelViewer(BambuNavigationMixin, QOpenGLWidget):
     def _scene_bounds(self) -> tuple[np.ndarray, np.ndarray] | None:
         points: list[np.ndarray] = []
         model_buffer = self._buffers.get("model")
-        if model_buffer is not None and model_buffer.count:
+        if self._model_visible and model_buffer is not None and model_buffer.count:
             points.append(_transform_points(model_buffer.vertices, self._model_transform))
         for key in (
             "path_line",

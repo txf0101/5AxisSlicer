@@ -3,10 +3,22 @@
 from collections.abc import Callable
 
 from PyQt5.QtCore import QEvent, QObject, QTimer
-from PyQt5.QtWidgets import QDoubleSpinBox, QPushButton
+from PyQt5.QtWidgets import QDoubleSpinBox, QPushButton, QSpinBox
 
 
-class OptionalDoubleSpinBox(QDoubleSpinBox):
+class ScrollSafeDoubleSpinBox(QDoubleSpinBox):
+    """Pass wheel motion to a surrounding editor instead of changing a value."""
+
+    def wheelEvent(self, event: QEvent) -> None:  # noqa: N802 - Qt API
+        event.ignore()
+
+
+class ScrollSafeSpinBox(QSpinBox):
+    def wheelEvent(self, event: QEvent) -> None:  # noqa: N802 - Qt API
+        event.ignore()
+
+
+class OptionalDoubleSpinBox(ScrollSafeDoubleSpinBox):
     """Let direct typing replace the label shown for an unset minimum value."""
 
     def __init__(self) -> None:
@@ -41,4 +53,9 @@ def action_button(
     return button
 
 
-__all__ = ["OptionalDoubleSpinBox", "action_button"]
+__all__ = [
+    "OptionalDoubleSpinBox",
+    "ScrollSafeDoubleSpinBox",
+    "ScrollSafeSpinBox",
+    "action_button",
+]

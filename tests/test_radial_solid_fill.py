@@ -1,12 +1,15 @@
 from pathlib import Path
 
 import cadquery as cq
+import pytest
 
 from five_axis_slicer.algorithms.fan.radial_solid_fill import (
     RadialSolidBladeSelection,
     RadialSolidFillParameters,
+    _projected_gap,
     generate_radial_solid_fill,
 )
+from five_axis_slicer.postprocessing.indexed_tube import GenerationCancelled
 from five_axis_slicer.step_loader import load_step
 
 
@@ -56,3 +59,8 @@ def test_radial_solid_fill_rejects_invalid_parameters():
         assert "bead_width_mm" in str(error)
     else:
         raise AssertionError("zero bead width accepted")
+
+
+def test_hub_gap_distance_search_checks_cancellation_before_native_query():
+    with pytest.raises(GenerationCancelled):
+        _projected_gap(((10.0, 0.0, 0.0),), object(), 9.0, cancelled=lambda: True)

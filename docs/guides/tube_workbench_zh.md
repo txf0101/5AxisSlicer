@@ -17,10 +17,12 @@ Indexed 喷嘴在同一分区内方向固定，仅在安全转位时改变；管
 可用 `Ctrl+O` 导入 STEP/STP，也可先选择任一工作台再打开模型。模型载入后：
 
 1. 点击顶部“公共制造设置”完成 Part、机型、喷嘴、材料和坐标，再返回“工作台”选择“管状工作台”。
-2. 在左侧选择 Indexed、Buildup 或 Continuous，再点击“创建 Tube 操作”。
-3. 若已有操作，在左侧树中选择它；同一 Setup 可交互创建最多三条 Tube 操作。
+2. 在左侧选择 Indexed、Buildup 或 Continuous，再点击“创建 Tube 操作”。若已有操作，在左侧树中选中它；同一 Setup 可交互创建最多三条 Tube 操作。
+3. 在右侧依次点击“管体实体”“入口端口”“出口端口”旁的“拾取”，到中央模型点击对应实体或端口圆边。需要承接既有打印体时，再拾取“既有基体”。核对四项输入后点右下角“应用”。
 
-![STEP 导入后进入管状设置](assets/tube_coordinate_setup/01_imported_step_entry.png)
+![Tube 操作已选择管体、入口、出口和既有基体，右侧为应用按钮](assets/product_delivery/12_tube_geometry_selected_zh.jpg)
+
+图中四项几何已选定；左侧“待更新”表示该操作需要重新生成，不能沿用保存前的导出状态。换自己的管件时，重新拾取管体、两端口和所需基体，不沿用 pipe2 的几何 ID。
 
 ## 2. 完成 Setup
 
@@ -30,7 +32,7 @@ Indexed 喷嘴在同一分区内方向固定，仅在安全转位时改变；管
 
 在“零件（Part）”页把参与制造的封闭 solid 设为 Part。sheet、shell、忽略实体和未分配实体不会进入 Tube 制造计算，但仍可保留在模型显示中。`pipe2` 的圆盘和弯管应作为同一个打印件的 Part。
 
-![Tube Part 归属](assets/tube_coordinate_setup/02_tube_setup_part.png)
+![Part 页把弯管的两个实体设为零件并显示设置状态](assets/product_delivery/11_setup_part_ready_zh.jpg)
 
 ### Machine、Nozzle、Material
 
@@ -99,13 +101,7 @@ Buildup 另有“最大道间距”（默认 0.6 mm）、“包含平面底座�
 
 图中蓝线是所选管体与底座的完整路径；“显示模型”未勾选。右下角保留参考机型的标定警告，投入真实设备前仍需核对机床配置。
 
-![Indexed 中文操作页面](../reviews/evidence/2026-09-13_paper_core_ac/tube_ui/01-zh-1366x768-indexed.png)
-
-![Buildup 中文操作页面](../reviews/evidence/2026-09-13_paper_core_ac/tube_ui/02-zh-1600x900-buildup.png)
-
-![Continuous 英文操作页面](../reviews/evidence/2026-09-13_paper_core_ac/tube_ui/03-en-1920x1080-continuous.png)
-
-以上三图展示操作树、字段和按钮位置，其中可能显示未就绪或错误状态。判断结果时，以问题列表无 Error、结果可导出且 NC 回读通过为准。
+Indexed、Buildup、Continuous 共用上面的几何拾取和生成按钮。切换操作类型后，请以当前面板中出现的字段为准；核对结果时看问题列表、导出状态和 NC 回读，不把未填写的输入面板当作成功结果。
 
 ## 5. 导出结果与六件套
 

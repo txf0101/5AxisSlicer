@@ -15,12 +15,14 @@ from typing import Iterable, Mapping
 
 from .coordinates import RigidTransform
 from .machine import GENERIC_XYZAC_REFERENCE, MachineProfile
+from .own_printer import own_ac_profile
 from .setup import IssueSeverity, ValidationIssue
 
 
 MACHINE_COORDINATE_TRANSFORM = "machine_xyz"
 AC_INVERSE_TRANSFORM = "ac_inverse_rz_minus_c_after_rx_minus_a"
 GENERIC_XYZAC_AC_SEMANTICS = "generic_xyzac_reference.ac_table_deg.v1"
+OWN_AC_PREVIEW_SEMANTICS = "builtin.machine.own_ac_fdm.v1.ac_table_deg"
 NC_PREVIEW_OBJECT_ID = "imported_nc_preview"
 
 _ROTARY_WORDS = frozenset({"A", "B", "C", "U", "V", "W"})
@@ -143,7 +145,16 @@ GENERIC_XYZAC_SEMANTICS = ControllerAxisSemantics(
     transform_name=AC_INVERSE_TRANSFORM,
 )
 
-DEFAULT_PREVIEW_KINEMATICS_REGISTRY = PreviewKinematicsRegistry((GENERIC_XYZAC_SEMANTICS,))
+OWN_AC_SEMANTICS = ControllerAxisSemantics(
+    semantics_id=OWN_AC_PREVIEW_SEMANTICS,
+    machine_profile=own_ac_profile(),
+    workpiece_link_id="c_table",
+    transform_name=AC_INVERSE_TRANSFORM,
+)
+
+DEFAULT_PREVIEW_KINEMATICS_REGISTRY = PreviewKinematicsRegistry(
+    (GENERIC_XYZAC_SEMANTICS, OWN_AC_SEMANTICS)
+)
 
 
 def reconstruct_preview_pose(
@@ -151,6 +162,7 @@ def reconstruct_preview_pose(
     rotary_values: Mapping[str, float],
     *,
     controller_semantics: str | None = None,
+    tool_length_mm: float = 0.0,
     fixed_machine_nozzle_axis: tuple[float, float, float] = (0.0, 0.0, -1.0),
     registry: PreviewKinematicsRegistry = DEFAULT_PREVIEW_KINEMATICS_REGISTRY,
 ) -> PreviewPoseReconstruction:
@@ -162,6 +174,7 @@ def reconstruct_preview_pose(
         rotary_values,
         rotary_values,
         controller_semantics=controller_semantics,
+        tool_length_mm=tool_length_mm,
         fixed_machine_nozzle_axis=fixed_machine_nozzle_axis,
         registry=registry,
     )
@@ -180,6 +193,7 @@ def reconstruct_preview_motion(
     rotary_end: Mapping[str, float],
     *,
     controller_semantics: str | None = None,
+    tool_length_mm: float = 0.0,
     fixed_machine_nozzle_axis: tuple[float, float, float] = (0.0, 0.0, -1.0),
     registry: PreviewKinematicsRegistry = DEFAULT_PREVIEW_KINEMATICS_REGISTRY,
 ) -> PreviewMotionReconstruction:
@@ -187,6 +201,8 @@ def reconstruct_preview_motion(
 
     start = _vector3(machine_start, "machine_start")
     end = _vector3(machine_end, "machine_end")
+    if not math.isfinite(tool_length_mm) or tool_length_mm < 0.0:
+        raise ValueError("tool_length_mm must be finite and non-negative")
     nozzle_axis = _unit_vector3(fixed_machine_nozzle_axis, "fixed_machine_nozzle_axis")
     start_values, start_issue = _normalise_rotary_values(rotary_start)
     end_values, end_issue = _normalise_rotary_values(rotary_end)
@@ -200,7 +216,9 @@ def reconstruct_preview_motion(
         if abs(value) > _ZERO_TOLERANCE
     }
     semantics_required_words = active_words | (present_words & {"U", "V", "W"})
-    if not semantics_required_words:
+    if not semantics_required_words and not (
+        controller_semantics == OWN_AC_PREVIEW_SEMANTICS and tool_length_mm
+    ):
         return _raw_motion(start, end, nozzle_axis)
 
     semantics = registry.get(controller_semantics)
@@ -252,8 +270,10 @@ def reconstruct_preview_motion(
         return _raw_motion(start, end, nozzle_axis, (issue,))
 
     return PreviewMotionReconstruction(
-        start=start_transform.transform_point(start),
-        end=end_transform.transform_point(end),
+        start=start_transform.transform_point(
+            (start[0], start[1], start[2] - tool_length_mm)
+        ),
+        end=end_transform.transform_point((end[0], end[1], end[2] - tool_length_mm)),
         start_nozzle_axis=start_transform.transform_vector(nozzle_axis),
         end_nozzle_axis=end_transform.transform_vector(nozzle_axis),
         coordinate_transform=semantics.transform_name,

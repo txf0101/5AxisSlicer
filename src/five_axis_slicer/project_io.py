@@ -691,10 +691,11 @@ def _validate_setup_resource_mirror(setups: Any, resources: Any) -> None:
     A Manufacturing Setup owns the selected snapshots.  The project-level
     ``resources`` object remains a compatibility mirror for existing callers.
     Missing entries are accepted, while two present copies must be identical.
-    Multiple setups are left to a future project-level resource registry.
+    The first Setup is the shared/common Setup. Additional workbench-local
+    Setups are bound by ``workbench.setup_bindings`` in the project payload.
     """
 
-    if not isinstance(setups, list) or len(setups) != 1:
+    if not isinstance(setups, list) or not setups:
         return
     setup = setups[0]
     if not isinstance(setup, Mapping) or "setup_id" not in setup:

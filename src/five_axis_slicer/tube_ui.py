@@ -73,8 +73,8 @@ from .step_loader import geometry_candidates
 from .tube_commands import TubeCommandProvider
 from .tube_controller import BodyRole, DraftNotFoundError, TubeSetupController
 from .tube_drafts import CoordinateFrameDraft
-from .tube_resource_selection import NozzleEditorError
 from .tube_resource_context import is_project_resource_id
+from .tube_resource_selection import NozzleEditorError
 from .tube_ui_text import (
     TUBE_CONTROL_TEXT,
     TUBE_ISSUE_LABELS,
@@ -140,6 +140,7 @@ class TubeSetupPage(QWidget):
         super().__init__(parent)
         self.language = "zh"
         self._common_setup_mode = False
+        self._local_setup_workbench: str | None = None
         self.model: CadModel | None = None
         self.resource_library = resource_library or UserResourceLibrary(
             default_user_resource_library_root()
@@ -689,12 +690,36 @@ class TubeSetupPage(QWidget):
         return _TEXT[self.language][key]
 
     def set_common_setup_mode(self, enabled: bool) -> None:
+        self._local_setup_workbench = None
         self._common_setup_mode = bool(enabled)
         self.operation_type_combo.setVisible(not enabled)
         self.create_operation_button.setVisible(not enabled)
         self._update_page_heading()
 
+    def set_local_setup_mode(self, workbench: str) -> None:
+        self._local_setup_workbench = workbench
+        self._common_setup_mode = True
+        self.operation_type_combo.setVisible(False)
+        self.create_operation_button.setVisible(False)
+        self._update_page_heading()
+        self.refresh()
+
     def _update_page_heading(self) -> None:
+        if self._local_setup_workbench is not None:
+            self.back_button.setText(
+                "返回当前工作台" if self.language == "zh" else "Back to workbench"
+            )
+            self.title_label.setText(
+                f"{self._local_setup_workbench.title()} 本工作台制造设置"
+                if self.language == "zh"
+                else f"{self._local_setup_workbench.title()} local Manufacturing Setup"
+            )
+            self.subtitle_label.setText(
+                "此处修改只影响当前工作台；返回后可在侧栏保存到公共制造设置。"
+                if self.language == "zh"
+                else "Changes here affect this workbench only. Publish to common from its sidebar."
+            )
+            return
         if self._common_setup_mode:
             self.title_label.setText(self._t("common_setup_title"))
             self.subtitle_label.setText(self._t("common_setup_subtitle"))
@@ -774,20 +799,22 @@ class TubeSetupPage(QWidget):
         self.tree.addTopLevelItem(project)
         project.addChild(model)
         project.addChild(setup)
-        project.addChild(operations)
+        if self._local_setup_workbench is None:
+            project.addChild(operations)
         self._tree_items["model"] = model
         for node in _NODE_ORDER:
             item = QTreeWidgetItem((self._t(node),))
             item.setData(0, Qt.UserRole, node)
             setup.addChild(item)
             self._tree_items[node] = item
-        for operation in self.controller.operations:
-            item = QTreeWidgetItem((operation.name,))
-            operation_node = f"operation:{operation.operation_id}"
-            item.setData(0, Qt.UserRole, operation_node)
-            operations.addChild(item)
-            self._tree_items[operation_node] = item
-        self._tree_items[OPERATION_NODE] = operations
+        if self._local_setup_workbench is None:
+            for operation in self.controller.operations:
+                item = QTreeWidgetItem((operation.name,))
+                operation_node = f"operation:{operation.operation_id}"
+                item.setData(0, Qt.UserRole, operation_node)
+                operations.addChild(item)
+                self._tree_items[operation_node] = item
+            self._tree_items[OPERATION_NODE] = operations
         project.setExpanded(True)
         setup.setExpanded(True)
         operations.setExpanded(True)
@@ -1415,7 +1442,10 @@ class TubeSetupPage(QWidget):
             self.viewer.set_model_visible(visible)
 
     def _set_path_display(self, _index: int) -> None:
-        if hasattr(self.viewer, "set_quality_mode") and getattr(self.viewer, "gcode_preview", None) is not None:
+        if (
+            hasattr(self.viewer, "set_quality_mode")
+            and getattr(self.viewer, "gcode_preview", None) is not None
+        ):
             self.viewer.set_quality_mode(str(self.path_display_combo.currentData()))
 
     def _set_view_mode_state(self, mode: str) -> None:

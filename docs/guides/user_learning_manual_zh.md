@@ -43,8 +43,8 @@
 - 当前产品资格限于离线生成、检查、NC 回读、项目保存和重开。
 - `Ready` 或 `Warning` 表示软件内流程达到对应状态；`Warning` 必须逐条复核。
 - `Error` 会阻止导出；`Stale` 表示输入已经改变，旧结果不可继续作为当前结果使用。
-- Generic XYZAC 是参考机型。自有 AC 的控制器/宏版本、标定、现场碰撞和试切仍未验证。
-- 当前自有 AC 输出保持 `machine_executable=false`。不要把“能导出 G-code”理解为“可以直接上机”。
+- Generic XYZAC 是参考机型。控制器、宏、机床和装夹参数应按用户设备核对，并结合现场调试结果使用。
+- 当前自有 AC 输出保持 `machine_executable=false`，表示软件尚未完成针对具体设备的自动核验。实际参数和打印效果以用户设备的调试结果为准；本项目持续测试和完善中。
 - 长度默认用 mm；内部角度用 rad，界面角度字段会明确显示 deg 或 rad。坐标必须区分 Source、Model、Build、Workpiece 和 Machine frame。
 
 ## 2. 学习路径
@@ -95,9 +95,11 @@ flowchart LR
 4. 右侧编辑器：当前树节点或操作的参数。
 5. 底部问题列表：Error、Warning 和可定位诊断。
 
-![导入 STEP 后的界面总览](assets/tube_coordinate_setup/01_imported_step_entry.png)
+![首页的工作台、公共制造设置和打开模型入口](assets/product_delivery/01_home_zh.jpg)
 
-图中的 pipe2 只用于认识模型、body/edge 列表和入口。此时不要求记住它的实体编号。换一个 STEP 后编号可能改变，应根据几何角色和稳定引用重新确认。
+图中是工作台首页，可在顶部打开 STEP 或公共制造设置。打开 STEP 后再到对应工作台观察模型、body/edge 列表和问题列表；此时不用记住实体编号。换一个 STEP 后，应根据几何角色重新确认。
+
+Planar、Curve、Rotary、Freeform 的左侧还有“制造设置”栏。这里能看到当前机床、喷嘴、材料和设置作用范围，点击 Part、Machine、Nozzle、Material、Model CS、Build CS、Placement 会打开对应编辑页。Tube 的左侧项目树提供相同的公共设置节点。公共设置与独立设置的复制、保存和影响范围，按[点击教程的设置作用域](quickstart_clickthrough_zh.md#公共设置与本工作台设置)操作。
 
 **自检**：关闭模型再重新打开，能找到工作台入口、Viewer、问题列表和保存项目按钮；能说明“打开现有 G-code”和“创建制造操作”的用途不同。
 
@@ -107,9 +109,9 @@ flowchart LR
 
 Part 可以包含多个封闭 solid。参与制造的实体设为 Part；辅助 sheet、基体、夹具或明确忽略的实体保留各自角色。不要因为示例里两个 body 都是 Part，就把新模型中的所有对象全部选为 Part。
 
-![Part 归属和问题列表](assets/tube_coordinate_setup/02_tube_setup_part.png)
+![公共制造设置已就绪的 Part 页面](assets/product_delivery/11_setup_part_ready_zh.jpg)
 
-上图是尚未完成 Setup 的教学画面，问题列表中的缺失项是预期错误示例。完成对应节点后，错误应逐项消失。
+上图是弯管案例已完成公共设置的状态：两个实体设为“零件”，Part、Machine、Nozzle 和 Material 均显示“有效”。参考机型仍会在问题列表中保留标定警告。右侧修改角色后，向下滚动点“确认”；再按问题列表核对其他设置。
 
 ### 5.2 按固定顺序完成 Setup
 
@@ -128,7 +130,7 @@ Part 可以包含多个封闭 solid。参与制造的实体设为 Part；辅助 
 
 ### 5.3 机型选择只冻结当前项目快照
 
-![机型选择和参考资格提示](assets/machine_profiles/zh_1600x900.png)
+![当前公共制造设置中的机型选择和参考资格提示](assets/product_delivery/08_machine_setup_zh.png)
 
 内置资源是只读模板。项目保存的是冻结快照，之后用户资源库发生变化不会静默改写旧项目。参考机型产生 Warning 是正常安全边界，不应删除警告来获得绿色状态。
 
@@ -145,7 +147,7 @@ Part 可以包含多个封闭 solid。参与制造的实体设为 Part；辅助 
 | 区域能由一条固定轴和同轴圆柱/圆锥面表达吗？ | Rotary | 弯管中心线会随空间位置变化 |
 | 零件是单支、恒定圆截面的管体吗？ | Tube | 分叉、变径或任意截面 |
 | 已有有限修剪面组和明确导引边链吗？ | 受限 Freeform | 需要自动识别全局曲面或任意网格参数化 |
-| 只有外部 NC，需要查看和诊断吗？ | Imported NC Review | 不能用它代替路径生成 |
+| 只有外部 NC，需要查看和诊断吗？ | G-code 文件预览 | 不能用它代替路径生成 |
 
 ### 6.1 几何外观相似也可能选择不同
 
@@ -153,9 +155,9 @@ Part 可以包含多个封闭 solid。参与制造的实体设为 Part；辅助 
 
 叶轮可用于学习 Curve 的 edge 链，也可用有限面组学习 Freeform；两者的输入契约不同。选择 Curve 时制造中心是边链，选择 Freeform 时区域由面组和导引线共同限定。
 
-![Rotary 的固定轴、回转面和路径](assets/rotary/live_qt/01_spiral_overview_zh.png)
+![Rotary 关闭模型后显示的两个局部环绕沉积区域](assets/product_delivery/09_rotary_around_part_paths_zh.png)
 
-Rotary 要求固定回转轴。弯管虽然局部截面呈圆形，中心线方向持续变化，通常应进入 Tube，而不是把每个弯曲段硬解释成一个 Rotary 操作。
+图中紫色轨迹是圆柱表面的两个局部环绕区域；它们共用固定回转轴。弯管虽然局部截面呈圆形，中心线方向持续变化，通常应进入 Tube，而不是把每个弯曲段硬解释成一个 Rotary 操作。
 
 **自检**：为待处理零件写一句选择理由和一句拒绝条件。例如：“选择 Rotary，因为区域与固定 Z 轴同轴；若实际轴随中心线变化，则退回 Tube 判断。”
 
@@ -184,7 +186,9 @@ Rotary 要求固定回转轴。弯管虽然局部截面呈圆形，中心线方�
 
 从 Region 或 Zigzag 开始，观察层高、道宽、填充间距如何改变路径。Offset、Thin Wall、Spiral 和 Planar Support 放在掌握区域与层以后学习。
 
-![Planar 生成结果和参数区](assets/planar/current_p01_p07/p02/02_planar_zh_1600x900_generated.png)
+![Planar 单层往复填充路径，已隐藏模型并选完整线条](assets/product_delivery/07_planar_full_lines_zh.png)
+
+这张图使用三叶扇 STEP 的 `body_001`、`Z=0.2 mm` 单层来练习查看路径。看不清内部线条时，取消“显示模型”；核对路径与实体是否对齐时，再勾选它。此图不表示整件已经完成切片。
 
 迁移任务：换一个带孔或岛的平面截面，确认路径没有穿过孔洞，层数和首末 Z 与输入一致。
 

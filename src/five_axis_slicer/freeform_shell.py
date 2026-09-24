@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from .freeform_controller import FreeformController
 from .freeform_ui import FreeformPage
+from .manufacturing.controller_profile import ControllerProfile, OWN_AC_OFFLINE_CONTROLLER
 from .manufacturing.freeform_parameters import FreeformOperationDefinition
 
 
@@ -27,8 +28,15 @@ def controller_for_model(previous, setup, model):
     return FreeformController.from_json(payload, cad_model=model)
 
 
-def controller_for_project(setup, model, operations):
-    return FreeformController(model, setup=setup, operations=operations)
+def controller_for_project(setup, model, operations, *, controller_profile_payload=None):
+    profile = (
+        OWN_AC_OFFLINE_CONTROLLER
+        if controller_profile_payload is None
+        else ControllerProfile.from_json(controller_profile_payload)
+    )
+    return FreeformController(
+        model, setup=setup, operations=operations, controller_profile=profile
+    )
 
 
 def freeform_operations(operations):

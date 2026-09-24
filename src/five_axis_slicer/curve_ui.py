@@ -10,6 +10,7 @@ from typing import Any, Callable
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import (
     QApplication,
+    QCheckBox,
     QComboBox,
     QDoubleSpinBox,
     QFileDialog,
@@ -30,7 +31,10 @@ from .command_kernel import CommandError
 from .curve_commands import CurveCommandService
 from .curve_controller import CurveController
 from .gcode_preview import GCodePreview
+from .generation_event_pump import throttled_event_pump
 from .manufacturing.toolpath import GeneratedToolpath
+from .tube_ui_text import TUBE_ISSUE_LABELS
+from .ui_controls import ScrollSafeDoubleSpinBox, ScrollSafeSpinBox
 from .viewer import ModelViewer
 
 
@@ -39,6 +43,9 @@ _TEXT = {
         "title": "曲线沉积工作台",
         "back": "返回",
         "open": "打开 STEP",
+        "show_model": "显示模型",
+        "path_lines": "完整线条（快速）",
+        "path_beads": "沉积道宽",
         "type": "新建操作类型",
         "existing": "现有操作",
         "edges": "有向边链（逗号分隔）",
@@ -75,6 +82,9 @@ _TEXT = {
         "title": "Curve Deposition Workbench",
         "back": "Back",
         "open": "Open STEP",
+        "show_model": "Show model",
+        "path_lines": "Full lines (fast)",
+        "path_beads": "Bead width",
         "type": "New operation type",
         "existing": "Existing operation",
         "edges": "Directed edge chain (comma-separated)",
@@ -129,6 +139,7 @@ class CurvePage(QWidget):
         self._selected_operation_id: str | None = None
         self._last_error: str | None = None
         self._generation_in_progress = False
+        self._auto_hide_model_on_result = True
         self.viewer = (viewer_factory or ModelViewer)(self)
         if controller.cad_model is not None:
             self.viewer.load_model(controller.cad_model)
@@ -151,12 +162,35 @@ class CurvePage(QWidget):
         nav.addWidget(self.back_button)
         nav.addWidget(self.open_button)
         layout.addLayout(nav)
+        pick_row = QHBoxLayout()
+        self.pick_kind_label = QLabel()
+        self.pick_kind_combo = QComboBox()
+        for kind in ("edge", "face", "body", "vertex"):
+            self.pick_kind_combo.addItem("", kind)
+        pick_row.addWidget(self.pick_kind_label)
+        pick_row.addWidget(self.pick_kind_combo, 1)
+        layout.addLayout(pick_row)
         self._build_parameter_form(layout)
         self._build_action_area(layout)
         self.editor_scroll.setWidget(editor)
         self.editor_scroll.setMinimumWidth(450)
+        self.editor_scroll.setMaximumWidth(620)
         root.addWidget(self.editor_scroll, 0)
-        root.addWidget(self.viewer, 1)
+        viewer_panel = QWidget(self)
+        viewer_layout = QVBoxLayout(viewer_panel)
+        viewer_layout.setContentsMargins(0, 0, 0, 0)
+        display_row = QHBoxLayout()
+        self.show_model_checkbox = QCheckBox()
+        self.show_model_checkbox.setChecked(True)
+        self.path_display_combo = QComboBox()
+        self.path_display_combo.addItem("", "paper")
+        self.path_display_combo.addItem("", "interactive")
+        display_row.addWidget(self.show_model_checkbox)
+        display_row.addWidget(self.path_display_combo)
+        display_row.addStretch(1)
+        viewer_layout.addLayout(display_row)
+        viewer_layout.addWidget(self.viewer, 1)
+        root.addWidget(viewer_panel, 1)
         self._connect_controls()
         self.set_language("zh")
 
@@ -220,7 +254,7 @@ class CurvePage(QWidget):
             "spacing",
         )
         for (name, value, minimum), label in zip(defaults, labels, strict=True):
-            spin = QDoubleSpinBox()
+            spin = ScrollSafeDoubleSpinBox()
             spin.setDecimals(4)
             spin.setRange(minimum, 1_000_000.0)
             spin.setValue(value)
@@ -230,7 +264,7 @@ class CurvePage(QWidget):
             ("layer_count", 3, "layers"),
             ("offset_pass_count", 3, "passes"),
         ):
-            spin = QSpinBox()
+            spin = ScrollSafeSpinBox()
             spin.setRange(1, 100)
             spin.setValue(value)
             self._spins[name] = spin
@@ -285,7 +319,18 @@ class CurvePage(QWidget):
         self.redo_button.clicked.connect(self._redo)
         self.operation_combo.currentIndexChanged.connect(self._operation_changed)
         self.use_selection_button.clicked.connect(self._use_selected_edges)
+        self.pick_kind_combo.currentIndexChanged.connect(self._set_pick_kind)
         self.issue_list.itemDoubleClicked.connect(lambda _item: self._jump_to_issue())
+        self.show_model_checkbox.toggled.connect(self._set_model_visible)
+        self.path_display_combo.currentIndexChanged.connect(self._set_path_display)
+
+    def _set_model_visible(self, visible: bool) -> None:
+        if hasattr(self.viewer, "set_model_visible"):
+            self.viewer.set_model_visible(visible)
+
+    def _set_path_display(self, _index: int) -> None:
+        if hasattr(self.viewer, "set_quality_mode") and getattr(self.viewer, "gcode_preview", None) is not None:
+            self.viewer.set_quality_mode(str(self.path_display_combo.currentData()))
 
     def _add_row(self, form: QFormLayout, widget: QWidget, key: str) -> None:
         label = QLabel()
@@ -297,6 +342,13 @@ class CurvePage(QWidget):
         self.language = language if language in _TEXT else "zh"
         text = _TEXT[self.language]
         self.title_label.setText(text["title"])
+        self.show_model_checkbox.setText(text["show_model"])
+        self.path_display_combo.setItemText(0, text["path_lines"])
+        self.path_display_combo.setItemText(1, text["path_beads"])
+        self.pick_kind_label.setText("Viewer 选取类型" if self.language == "zh" else "Viewer selection type")
+        for index, kind in enumerate(("edge", "face", "body", "vertex")):
+            names = {"edge": "边", "face": "面", "body": "实体", "vertex": "顶点"}
+            self.pick_kind_combo.setItemText(index, names[kind] if self.language == "zh" else kind.title())
         for _, label, key in self._rows:
             label.setText(text[key])
         self.normal_mode_combo.setItemText(0, text["adjacent"])
@@ -315,18 +367,27 @@ class CurvePage(QWidget):
         ):
             button.setText(text[key])
         self.help_label.setText(text["help"])
+        if hasattr(self, "controller"):
+            self._update_status_label()
 
     def set_controller(self, controller: CurveController) -> None:
         self.controller = controller
         self.commands = CurveCommandService(controller)
         self._selected_operation_id = None
         self._last_error = None
+        self._auto_hide_model_on_result = True
         self._install_generation_event_pump()
         if controller.cad_model is None:
             self.viewer.clear_model()
         else:
             self.viewer.load_model(controller.cad_model)
+        self._set_pick_kind()
         self.refresh()
+
+    def _set_pick_kind(self, *_ignored: Any) -> None:
+        kind = self.pick_kind_combo.currentData()
+        if kind is not None:
+            self.viewer.set_mode(kind)
 
     def state_json(self) -> dict[str, Any]:
         state = self.controller.state_json()
@@ -349,10 +410,42 @@ class CurvePage(QWidget):
         state = None if operation is None else self.controller.product_state(operation.operation_id)
         self._refresh_issues(self.controller.validation_report().issues, result)
         self._refresh_buttons(operation, result, state)
-        status = "draft" if state is None else state.status
-        self.status_label.setText(self._last_error or f"Status: {status}")
+        self._update_status_label(state)
         if result is not None and state is not None and state.status in {"ready", "warning"}:
             self.viewer.load_gcode_preview(_preview_from_toolpath(result.preview_toolpath))
+            if self._auto_hide_model_on_result:
+                self.show_model_checkbox.setChecked(False)
+                self._auto_hide_model_on_result = False
+
+    def _update_status_label(self, state: Any = None) -> None:
+        if self._generation_in_progress:
+            self.status_label.setText(
+                "正在生成并检查路径，完成前请保留当前结果。"
+                if self.language == "zh"
+                else "Generating and checking paths. Keep the current result until completion."
+            )
+            return
+        if state is None:
+            operation = self._selected_operation()
+            state = (
+                None
+                if operation is None
+                else self.controller.product_state(operation.operation_id)
+            )
+        status = "draft" if state is None else state.status
+        if self.language == "zh":
+            labels = {
+                "draft": "草稿",
+                "ready": "就绪",
+                "warning": "有警告",
+                "error": "错误",
+                "stale": "待更新",
+                "invalid": "无效",
+            }
+            message = f"状态：{labels.get(status, status)}"
+        else:
+            message = f"Status: {status}"
+        self.status_label.setText(self._last_error or message)
 
     def _refresh_operation_combo(self) -> None:
         operations = self.controller.operations
@@ -446,7 +539,11 @@ class CurvePage(QWidget):
             self._last_error = (
                 None
                 if response.payload.get("status") != "cancelled"
-                else "Generation cancelled; previous valid result retained."
+                else (
+                    "已取消生成；先前可用的结果仍会保留。"
+                    if self.language == "zh"
+                    else "Generation cancelled; previous valid result retained."
+                )
             )
             result = self.controller.product_result(operation.operation_id)
             if result is not None:
@@ -531,11 +628,16 @@ class CurvePage(QWidget):
         if result is not None:
             issues.extend(result.validation.issues)
         for issue in issues:
-            item_text = f"[{getattr(issue.severity, 'value', issue.severity).upper()}] {issue.code} · {issue.object_id}"
+            severity = getattr(issue.severity, "value", issue.severity).upper()
+            label = TUBE_ISSUE_LABELS[self.language].get(issue.code)
+            item_text = (
+                f"[{severity}] {label}"
+                if label else f"[{severity}] {issue.code} · {issue.object_id}"
+            )
             self.issue_list.addItem(item_text)
             item = self.issue_list.item(self.issue_list.count() - 1)
             item.setData(Qt.UserRole, issue.to_json())
-            item.setToolTip(item_text)
+            item.setToolTip(f"{issue.code} · {issue.object_id}")
         if not issues:
             self.issue_list.addItem(self._t("no_issues"))
 
@@ -551,7 +653,9 @@ class CurvePage(QWidget):
             self.status_label.setText(f"{payload.get('code', '')} · {object_id}")
 
     def _install_generation_event_pump(self) -> None:
-        self.controller.set_generation_event_pump(QApplication.processEvents)
+        self.controller.set_generation_event_pump(
+            throttled_event_pump(QApplication.processEvents)
+        )
 
     def _t(self, key: str) -> str:
         return _TEXT[self.language][key]

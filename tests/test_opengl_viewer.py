@@ -3,7 +3,9 @@ from __future__ import annotations
 import os
 import sys
 import unittest
+from itertools import product
 from pathlib import Path
+from types import SimpleNamespace
 
 import numpy as np
 
@@ -38,6 +40,48 @@ class OpenGLPaperPathTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.app = QApplication.instance() or QApplication([])
+
+    def test_fit_view_keeps_all_model_corners_visible_in_narrow_viewport(self) -> None:
+        viewer = OpenGLModelViewer()
+        viewer.resize(540, 900)
+        viewer._scene_bounds = lambda: (
+            np.asarray([-50.0, -50.0, -50.0]),
+            np.asarray([50.0, 50.0, 50.0]),
+        )
+
+        viewer.fit_view()
+
+        projection = viewer._projection_matrix()
+        view = viewer._view_matrix()
+        for x, y, z in product((-50.0, 50.0), repeat=3):
+            clip = projection @ view @ np.asarray([x, y, z, 1.0])
+            ndc = clip[:3] / clip[3]
+            self.assertLess(max(abs(ndc[0]), abs(ndc[1])), 0.95)
+        viewer.close()
+
+    def test_hiding_model_fits_visible_path_only(self) -> None:
+        viewer = OpenGLModelViewer()
+        viewer.resize(1100, 850)
+        viewer._buffers["model"] = SimpleNamespace(
+            count=2,
+            vertices=np.asarray([(-100.0, -100.0, 0.0), (100.0, 100.0, 100.0)]),
+            vbo=0,
+        )
+        viewer._buffers["path_line"] = SimpleNamespace(
+            count=2,
+            vertices=np.asarray([(0.0, 0.0, 0.2), (10.0, 10.0, 0.2)]),
+            vbo=0,
+        )
+        viewer.fit_view()
+        whole_model_distance = viewer._distance
+
+        viewer.set_model_visible(False)
+
+        self.assertLess(viewer._distance, whole_model_distance / 5)
+        np.testing.assert_allclose(viewer._center, [5.0, 5.0, 0.2])
+        viewer.set_model_visible(True)
+        self.assertAlmostEqual(viewer._distance, whole_model_distance)
+        viewer.close()
 
     def test_continuous_segments_join_within_tolerance_and_break_on_style(self) -> None:
         starts = np.asarray(
@@ -160,6 +204,23 @@ class OpenGLPaperPathTests(unittest.TestCase):
         self.assertEqual(arrays.segment_count, 1)
         self.assertEqual(arrays.draw_counts.tolist(), [2])
         self.assertEqual(arrays.last_point, (1.0, 0.0, 0.0))
+
+    def test_paper_path_only_draws_selected_source_lines(self) -> None:
+        preview = parse_gcode(
+            "G1 X0 Y0 Z0.2 F1200\n"
+            "G1 X1 Y0 Z0.2 E0.1\n"
+            "G1 X2 Y0 Z0.2 E0.2\n"
+            "G1 X3 Y0 Z0.2 E0.3\n"
+        )
+        settings = PreviewSettings(layer_min=preview.layer_min, layer_max=preview.layer_max)
+        settings.line_min = 3
+        settings.line_max = 3
+
+        arrays = _build_paper_path_arrays(preview, settings, current_global_step=None)
+
+        self.assertEqual(arrays.segment_count, 1)
+        np.testing.assert_allclose(arrays.first_point, (1.0, 0.0, 0.2))
+        np.testing.assert_allclose(arrays.last_point, (2.0, 0.0, 0.2))
 
     def test_paper_path_renders_generated_segments_without_nc_timeline(self) -> None:
         segments = [

@@ -4,6 +4,8 @@
 
 Rotary 工作台在有明确回转轴和圆柱/圆锥表面的 STEP 零件上生成 Rotary Spiral、Rotary Thin Wall 和 Around Part。内部长度使用 mm，内部角度使用 rad；界面的起止角和区域角使用 deg，角速度使用 rad/s。
 
+左侧“制造设置”栏默认使用公共设置。需要只为 Rotary 调整机床、喷嘴、材料或坐标时，点“导入公共设置到本工作台”，编辑后保存项目；若要让其他共用工作台也使用它，再点“保存到公共制造设置”。具体按钮和作用范围见[图文点击教程](quickstart_clickthrough_zh.md#公共设置与本工作台设置)。
+
 本页图片用于定位选轴边、选回转面、设置角区间和检查路径。示例中的 edge、face ID 和角度只适用于图中模型。
 
 ## 1. 支持范围与入口
@@ -21,16 +23,16 @@ Rotary 工作台在有明确回转轴和圆柱/圆锥表面的 STEP 零件上生
 
 工作流入口：
 
-1. 打开 STEP，在 Tube Setup 完成零件分配、Model CS、Build CS、机型、喷嘴、已审阅材料和安装位置，点击应用。目标固件若不用 A/C，可先按[机型轴字指南](machine_profiles_zh.md#旋转轴输出字ac-改为-uw)建立用户机型副本。
+1. 打开 STEP，在公共制造设置中完成零件分配、Model CS、Build CS、机型、喷嘴、已审阅材料和安装位置，点击应用。目标固件若不用 A/C，可先按[机型轴字指南](machine_profiles_zh.md#旋转轴输出字ac-改为-uw)建立用户机型副本。
 2. 返回首页，进入“Rotary 回转增材工作台”。
 3. 选择操作类型，点击“新建操作”。
-4. 在 Viewer 分别选择轴 edge、轮廓 edge（可选）和圆柱/圆锥 face，逐项点击“采用 Viewer 已选…”。
+4. 在左侧“Viewer 选取类型”先选“边”并点轴向参考边，点击“采用 Viewer 已选轴向边”；轮廓边可选。再切到“面”并点圆柱/圆锥面，点击“采用 Viewer 已选表面”。
 5. 核对回转坐标、轮廓和工艺参数，点击“应用几何与参数”。
-6. 点击“生成与检查”，核对状态、问题列表、三维路径和机床轴轨迹，只导出 Ready/Warning 结果。
+6. 点击“生成与检查”，核对状态、问题列表、三维路径和机床轴轨迹。模型挡住周向道时，取消“显示模型”；用“完整线条（快速）”检查轨迹连贯性，用“沉积道宽”检查相邻道覆盖。只导出 Ready/Warning 结果。
 
-下图为当前 1600 × 900 中文生产界面。左侧是操作、稳定几何引用和坐标，右侧是加载 STEP 与 generated Toolpath 后的真实 Viewer。
+下图是中文工作台界面。左侧可查看操作与几何引用；右侧显示从圆柱面生成的 Around Part 路径。为看清两段周向道，画面已关闭模型并切到“沉积道宽”。
 
-![Rotary 工作台总览](assets/rotary/live_qt/01_spiral_overview_zh.png)
+![Rotary 工作台生成结果与路径显示控制](assets/product_delivery/09_rotary_around_part_paths_zh.png)
 
 ## 2. 选边、选面与稳定引用
 
@@ -77,7 +79,7 @@ Rotary frame 在 Source 坐标中包含：
 
 Spiral 使用起始角、终止/展开角、CCW/CW 和螺距定义一条连续螺旋。轴向位移等于圈数乘以螺距，起点使用 profile 的轴向起点；计算终点不能超出 profile 轴向终点。圆柱的半径不变，圆锥的半径按轴向坐标线性变化，法向包含锥度分量。
 
-![Rotary Spiral 结果](assets/rotary/live_qt/01_spiral_overview_zh.png)
+生成后先保留模型核对螺旋轴线和圆柱/圆锥的位置，再关闭“显示模型”检查每一圈是否连续。需要看道宽时切换“沉积道宽”；该视图只改变显示，不修改输出路径。
 
 ### 4.2 Rotary Thin Wall
 
@@ -88,7 +90,7 @@ Thin Wall 要求起止角明确构成一个完整周期。轴向从 profile 起�
 - `error`：报 `rotary.thin_wall_below_minimum`，禁止生成/导出；
 - `reduce`：把该操作的有效道宽缩减为目标壁厚，结果带 `rotary.thin_wall_width_reduced` Warning。该策略是几何退化处理，不代表实际材料能稳定拉出更窄道。
 
-![Rotary Thin Wall 结果](assets/rotary/live_qt/04_thin_wall_result_zh.png)
+检查结果时从侧面确认每个轴向高度都有完整周向道，并用“完整线条（快速）”查看各道的起止连接。模型遮挡时先关闭“显示模型”。
 
 ### 4.3 Around Part
 
@@ -96,7 +98,9 @@ Around Part 在一个或多个有向角区域内生成局部周向道，再按�
 
 轴向相邻道交替方向。程序从净空半径上的首个安全点开始，经 safe approach 到首道起点。跨区域时先 Retract，沿“当前/目标半径的较大值 + 安全连接间隙”离开表面，在该净空半径上插值相位和轴向位置，然后 Approach 到下一道起点并 Prime。最后一道结束后执行 Retract、safe depart 和 finish，使入口、段间和出口均进入后续轴限和碰撞检查。
 
-![Around Part 多区域结果](assets/rotary/live_qt/05_around_part_cross_zero_zh.png)
+![关闭圆柱模型后显示的两个 Around Part 周向区域](assets/product_delivery/09_rotary_around_part_paths_zh.png)
+
+图中两个紫色区域是 `350:20;120:210` 的沉积道宽视图，间隔处没有沉积。示例角度、轴边 ID 和表面 ID 只适用于图中的圆柱；自己的模型必须重新选择并核对角区间。
 
 下图同时显示 `350:20;120:210`、跨 0° 展开和区域间非沉积安全连接。
 
@@ -142,7 +146,7 @@ Around Part 在一个或多个有向角区域内生成局部周向道，再按�
 | Error | 计划、IK/FK、限位、运动、碰撞或回读失败 | 禁止 |
 | Stale | 已有结果与当前输入不同，或项目重开后没有运行时产品 | 禁止，需重新生成 |
 
-生成过程中点击“取消生成”会设置取消标记。计划在采样和连接节点响应取消；提交结果前还会再次核对输入指纹。取消或生成期间输入变化不会覆盖上一份 Ready/Warning 运行时结果。
+生成过程中可点击“取消生成”。取消完成后检查状态；若参数或几何已改变，重新点击“生成与检查”，确认新结果为 Ready/Warning 后再导出。
 
 ## 7. 周期接缝、事件和安全连接
 

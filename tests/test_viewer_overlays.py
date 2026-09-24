@@ -11,9 +11,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from PyQt5.QtCore import QPointF, Qt
 from PyQt5.QtGui import QImage, QPainter
 from PyQt5.QtTest import QTest
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QWidget
 
-from five_axis_slicer.viewer_overlays import OrientationCubeOverlay, _FACE_TEXT_RECT
+from five_axis_slicer.viewer_overlays import (
+    AxisTriadOverlay,
+    OrientationCubeOverlay,
+    _FACE_TEXT_RECT,
+    _triad_directions,
+)
 
 
 class _ViewerStub:
@@ -65,6 +70,49 @@ class OrientationCubeOverlayTests(unittest.TestCase):
         ):
             QTest.mouseClick(cube, Qt.LeftButton, pos=point.toPoint())
             self.assertEqual(viewer.views[-1], expected)
+
+
+class AxisTriadOverlayTests(unittest.TestCase):
+    def test_part_axes_follow_camera_orientation(self) -> None:
+        front = _triad_directions(
+            {"position": [0, -10, 0], "focal_point": [0, 0, 0], "view_up": [0, 0, 1]}
+        )
+        right = _triad_directions(
+            {"position": [10, 0, 0], "focal_point": [0, 0, 0], "view_up": [0, 0, 1]}
+        )
+        self.assertGreater(front["X"][0], 0.9)
+        self.assertLess(front["Z"][1], -0.9)
+        self.assertAlmostEqual(front["Y"][0], 0.0)
+        self.assertGreater(right["Y"][0], 0.9)
+        self.assertAlmostEqual(right["X"][0], 0.0)
+
+    def test_camera_repaint_updates_overlay(self) -> None:
+        app = QApplication.instance() or QApplication([])
+
+        class CameraViewer(QWidget):
+            def __init__(self) -> None:
+                super().__init__()
+                self.position = [0, -10, 0]
+
+            def camera_state(self) -> dict:
+                return {
+                    "position": self.position,
+                    "focal_point": [0, 0, 0],
+                    "view_up": [0, 0, 1],
+                }
+
+        viewer = CameraViewer()
+        overlay = AxisTriadOverlay(viewer)
+        self.addCleanup(viewer.close)
+        self.addCleanup(overlay.close)
+        viewer.show()
+        overlay.show()
+        app.processEvents()
+        before = overlay._camera_signature
+        viewer.position = [10, 0, 0]
+        viewer.repaint()
+        app.processEvents()
+        self.assertNotEqual(overlay._camera_signature, before)
 
 
 if __name__ == "__main__":

@@ -77,6 +77,7 @@ def cache_stem(
     *,
     source_sha256: str | None = None,
     controller_semantics: str | None = None,
+    tool_length_mm: float = 0.0,
 ) -> Path:
     stat = source_path.stat()
     if version == CACHE_VERSION:
@@ -84,9 +85,7 @@ def cache_stem(
         semantics_key = (
             "<unconfirmed>" if controller_semantics is None else str(controller_semantics).strip()
         )
-        key_text = (
-            f"{version}|{source_path}|{stat.st_size}|{stat.st_mtime_ns}|{identity}|{semantics_key}"
-        )
+        key_text = f"{version}|{source_path}|{stat.st_size}|{stat.st_mtime_ns}|{identity}|{semantics_key}|{tool_length_mm:.9f}"
     else:
         key_text = f"{version}|{source_path}|{stat.st_size}|{stat.st_mtime_ns}"
     key = hashlib.sha1(key_text.encode("utf-8", errors="replace")).hexdigest()
@@ -99,6 +98,7 @@ def load_preview_cache(
     stem_factory: CacheStemFactory,
     source_sha256: str | None = None,
     controller_semantics: str | None = None,
+    tool_length_mm: float = 0.0,
 ) -> GCodePreview | None:
     """Return a complete cache generation; corrupt or partial generations miss."""
 
@@ -112,8 +112,13 @@ def load_preview_cache(
                 stem_factory,
                 source_sha256 if version == CACHE_VERSION else None,
                 controller_semantics if version == CACHE_VERSION else None,
+                tool_length_mm if version == CACHE_VERSION else 0.0,
             )
-            if preview is None or preview.controller_semantics != controller_semantics:
+            if (
+                preview is None
+                or preview.controller_semantics != controller_semantics
+                or preview.tool_length_mm != tool_length_mm
+            ):
                 continue
             if version != CACHE_VERSION:
                 try:
@@ -133,6 +138,7 @@ def _load_generation(
     stem_factory: CacheStemFactory,
     source_sha256: str | None,
     controller_semantics: str | None,
+    tool_length_mm: float,
 ) -> GCodePreview | None:
     manifest_path = _cache_path(
         source_path,
@@ -140,6 +146,7 @@ def _load_generation(
         stem_factory,
         source_sha256,
         controller_semantics,
+        tool_length_mm,
         ".json.gz",
     )
     if not manifest_path.exists():
@@ -152,6 +159,7 @@ def _load_generation(
         stem_factory,
         source_sha256,
         controller_semantics,
+        tool_length_mm,
         ".npz",
     )
     binary_name = payload.get("binary_arrays")
@@ -195,6 +203,7 @@ def write_preview_cache(
         stem_factory,
         source_sha256,
         preview.controller_semantics,
+        preview.tool_length_mm,
         ".json.gz",
     )
     legacy_index_path = _cache_path(
@@ -203,6 +212,7 @@ def write_preview_cache(
         stem_factory,
         source_sha256,
         preview.controller_semantics,
+        preview.tool_length_mm,
         ".npz",
     )
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
@@ -249,9 +259,10 @@ def _cache_path(
     stem_factory: CacheStemFactory,
     source_sha256: str | None,
     controller_semantics: str | None,
+    tool_length_mm: float,
     suffix: str,
 ) -> Path:
-    if source_sha256 is None and controller_semantics is None:
+    if source_sha256 is None and controller_semantics is None and tool_length_mm == 0.0:
         stem = stem_factory(source_path, version)
     else:
         stem = stem_factory(
@@ -259,6 +270,7 @@ def _cache_path(
             version,
             source_sha256=source_sha256,
             controller_semantics=controller_semantics,
+            tool_length_mm=tool_length_mm,
         )
     return stem.with_suffix(suffix)
 

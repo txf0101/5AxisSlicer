@@ -20,7 +20,6 @@ from PyQt5.QtWidgets import (
     QScrollArea,
     QSizePolicy,
     QSlider,
-    QSpinBox,
     QToolButton,
     QVBoxLayout,
     QWidget,
@@ -34,6 +33,7 @@ from .result_preview import (
     _WrappingLabel,
 )
 from .theme import LIGHT_THEME, UI_TYPOGRAPHY
+from .ui_controls import ScrollSafeDoubleSpinBox, ScrollSafeSpinBox
 
 
 def build_result_preview_ui(page: Any) -> None:
@@ -156,8 +156,8 @@ def _build_parameter_grid(page: Any, card: _Card) -> QGridLayout:
     page.extrusion_width_spin = _double_spin(page, 0.01, 10.0, 0.01, 2, " mm")
     page.nozzle_diameter_spin = _double_spin(page, 0.01, 10.0, 0.01, 2, " mm")
     page.shell_checkbox = QCheckBox(card)
-    page.top_layers_spin = QSpinBox(card)
-    page.bottom_layers_spin = QSpinBox(card)
+    page.top_layers_spin = ScrollSafeSpinBox(card)
+    page.bottom_layers_spin = ScrollSafeSpinBox(card)
     for spin in (page.top_layers_spin, page.bottom_layers_spin):
         spin.setRange(0, 999)
     top_bottom = _top_bottom_editor(page, card)
@@ -216,8 +216,8 @@ def build_center_column(page: Any) -> QWidget:
     page.viewer_canvas = _ViewerCanvas(page.viewer, column)
     page.viewer_canvas.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
     layout.addWidget(page.viewer_canvas, 1)
-    layout.addWidget(_build_navigation_card(page, column))
-    layout.addWidget(_build_visibility_card(page, column))
+    page.navigation_card = _build_navigation_card(page, column)
+    layout.addWidget(page.navigation_card)
     return column
 
 
@@ -236,11 +236,9 @@ def _build_navigation_card(page: Any, parent: QWidget) -> _Card:
     layout.addWidget(page.play_button, 1, 1)
     layout.addWidget(page.progress_slider, 1, 2, 1, 3)
     layout.addWidget(page.progress_value, 1, 5)
-    layout.addWidget(page.quality_title, 2, 0)
-    layout.addWidget(page.quality_combo, 2, 2, 1, 2)
     page.stage_fallback_label = _WrappingLabel(parent=card)
     page.stage_fallback_label.setObjectName("mutedNote")
-    layout.addWidget(page.stage_fallback_label, 3, 0, 1, 6)
+    layout.addWidget(page.stage_fallback_label, 2, 0, 1, 6)
     return card
 
 
@@ -267,6 +265,7 @@ def _create_navigation_widgets(page: Any, card: _Card) -> None:
     page.quality_title = QLabel(card)
     page.quality_title.setObjectName("formLabel")
     page.quality_combo = QComboBox(card)
+    page.quality_combo.setMinimumWidth(220)
     page.quality_combo.addItem("", "interactive")
     page.quality_combo.addItem("", "paper")
 
@@ -278,6 +277,8 @@ def _build_visibility_card(page: Any, parent: QWidget) -> _Card:
     layout.setSpacing(5)
     page.visibility_title = _card_title(card)
     layout.addWidget(page.visibility_title)
+    layout.addWidget(page.quality_title)
+    layout.addWidget(page.quality_combo)
     grid = QGridLayout()
     grid.setHorizontalSpacing(12)
     grid.setVerticalSpacing(4)
@@ -312,8 +313,10 @@ def build_right_column(page: Any) -> QWidget:
     layout.setSpacing(8)
     page.analysis_heading = _column_heading(content)
     layout.addWidget(page.analysis_heading)
+    page.visibility_card = _build_visibility_card(page, content)
     for card in (
         _build_status_card(page, content),
+        page.visibility_card,
         _build_statistics_card(page, content),
         _build_thumbnail_card(page, content),
         _build_context_card(page, content),
@@ -503,7 +506,7 @@ def _double_spin(
     decimals: int,
     suffix: str,
 ) -> QDoubleSpinBox:
-    spin = QDoubleSpinBox(page)
+    spin = ScrollSafeDoubleSpinBox(page)
     spin.setRange(minimum, maximum)
     spin.setSingleStep(step)
     spin.setDecimals(decimals)

@@ -1,6 +1,6 @@
 # 六个工作台开发进度台账
 
-最近更新：2026-09-23。关联[开发计划](development_plan.md)、[产品交付计划](product_delivery_20260923.md)、[参考资料](reference_research.md)与[文档索引](../README.md)。**下方主表是任务进度的唯一维护位置**，计划和复盘引用任务编号，不另行维护一份状态表。
+最近更新：2026-09-25。关联[开发计划](development_plan.md)、[产品交付计划](product_delivery_20260923.md)、[参考资料](reference_research.md)与[文档索引](../README.md)。**下方主表是任务进度的唯一维护位置**，计划和复盘引用任务编号，不另行维护一份状态表。
 
 当前优先版本：**论文核心 AC（Paper Core AC）**。PC00—PC07 已于 2026-09-13 按 **契约/来源 → 受限 Freeform → 多材料 → 自有 AC 后处理 → Tube 收口 → 四例与双通道回归 → 本地封装** 完成受限离线验收。DOC-01 随后把使用文档整理为学习总册、五条工作台支线和参考手册，当前入口为[学习总册](../guides/user_learning_manual_zh.md)。范围和许可证依据见[论文核心说明](paper_core_ac_scope.md)，实施、失败和验收见[本轮复盘](../reviews/2026-09-13_paper_core_ac_implementation_review.md)。六工作台完整目标保留为后续路线，不作为核心版前置依赖。
 
@@ -38,6 +38,9 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 
 | 日期 | 任务 | Skill | 本轮用途 | 证据 |
 | --- | --- | --- | --- | --- |
+| 2026-09-25 | PRODUCT-01 NC 预览与问题归档 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`skill-creator` | 校徽曲面预览补偿 12.5 mm 刀长，完整 NC 回读路径包络恢复与 Toolpath 一致；产品化过程失效模式归入复用 Skill，并核验有效性 | [交付复盘](../reviews/2026-09-23_product_delivery_review.md)、[校徽六件套](../reviews/evidence/2026-09-24_product_delivery_ui_audit/gui_agent_logo_output/manifest.json) |
+| 2026-09-24 | PRODUCT-01 导出与换姿复核 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`computer-use` | 真实校徽 GUI 暴露导出目标误选会覆盖项目，五类导出器加统一目录保护；叶轮/三叶扇诊断证实模型 Z 抬升不足以保证转台换姿安全，保留错误阻断并转向机床坐标规划 | [交付复盘](../reviews/2026-09-23_product_delivery_review.md)、[交付计划](product_delivery_20260923.md) |
+| 2026-09-24 | PRODUCT-01-MC01 界面复核 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`computer-use` | 实际桌面打开三色项目、编辑换料站、验证错误高度拒绝、生成两种密度的完整扇叶并导出六件套；修复项目控制器站位丢失及 Freeform 路径被模型遮挡 | [GUI 清单](../reviews/evidence/2026-09-24_three_color_fan_gui_release/manifest.json)、[无遮挡路径图](../reviews/evidence/2026-09-24_three_color_fan_gui_release/freeform_path_visible.jpg)、[复盘](../reviews/2026-09-23_product_delivery_review.md) |
 | 2026-09-24 | PRODUCT-01-MC01 多色换料 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`skill-creator` | 公共产品链完成材料分区、机床站位、换料动作与喷嘴包络检查；三色扇叶 116,893 点、两次切换、31,636 事件严格回读通过，保留实机资格限制；反例与有限根部接触边界写入工艺 Skill | [三色验收](../reviews/evidence/2026-09-24_three_color_fan_final_check/acceptance.json)、[三色路径图](../reviews/evidence/2026-09-24_three_color_fan_final_check/three_color_fan_candidate_preview.png)、[复盘](../reviews/2026-09-23_product_delivery_review.md) |
 | 2026-09-23 | PRODUCT-01 启动 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`computer-use`、`plugin-management` | 读当前基线与来源，确认电脑控制可列出桌面窗口，制定真实点击与离线交付门槛；后续测试结果待逐项登记 | [交付计划](product_delivery_20260923.md) |
 | 2026-09-23 | PRODUCT-01 预览与教程 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`computer-use`、`screenshot` | 真实界面生成 pipe2，修复生成路径仅含 segments 时全线预览空白、模型遮挡和语言状态残留；按当前界面抓取完整路径图；案例数值说明改为仅供练习并要求按自有设备调整 | [交付计划](product_delivery_20260923.md)、[Tube 教程](../guides/tube_workbench_zh.md)、[复盘](../reviews/2026-09-23_product_delivery_review.md) |
@@ -110,8 +113,8 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 
 | 编号 | 阶段与交付 | 依赖 | 状态 | 完成判据 | 证据或阻塞 | 下一步 | 更新日期 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| PRODUCT-01 | 离线产品交付闭环 | FAN11/FP01—FP06、现有五工作台 | 进行中 | 首次使用和四例真实点击：加载、Setup、选几何、生成/取消、预览、六件套导出、严格回读、保存重开；界面和图文教程完成 | [交付计划](product_delivery_20260923.md)；pipe2 已真实点击生成、全线预览、六件套导出并严格回读 140,644 点；[界面图](../guides/assets/product_delivery/pipe2_full_path_zh_20260923.png)；其余三例本轮 GUI 验收待做 | 继续 P1—P4，特别是剩余工作台真实预览与长任务响应 | 2026-09-23 |
-| PRODUCT-01-MC01 | 五轴安全换姿与多色换料 | PRODUCT-01、Freeform 实体路径 | 离线验证通过；实机和真实界面待测 | 配置换料站、三色 PLA 叶片分区；生成切断/退丝/进丝/排料/擦嘴/返回的完整 NC，避开已沉积材料，严格回读通过；无站位或无安全路线阻止导出 | 公共 Freeform 产品链、Qt 站位持久化与中英文教程已接入；[三色 NC 验收](../reviews/evidence/2026-09-24_three_color_fan_final_check/acceptance.json) 116,893 点、T0/T1/T2、两次切换、31,636 事件回读通过；[路径图](../reviews/evidence/2026-09-24_three_color_fan_final_check/three_color_fan_candidate_preview.png)；18 项聚焦测试通过；0.8 mm 层高仅供快速功能测试，实机包络/宏/夹具待标定 | 用实际 PLA 层高和喷嘴/站位复核，再做桌面首次使用点击及宏联调；保持 `machine_executable=false` | 2026-09-24 |
+| PRODUCT-01 | 离线产品交付闭环 | FAN11/FP01—FP06、现有五工作台 | 进行中 | 首次使用和四例真实点击：加载、Setup、选几何、生成/取消、预览、六件套导出、严格回读、保存重开；界面和图文教程完成 | pipe2 已真实点击生成、全线预览、六件套导出并严格回读 140,644 点；三色扇叶 GUI 回读 116,852 点通过；校徽 GUI 完整 NC 回读通过，预览刀长纠正后曲面半径 33.7384 mm 小于基体 39.7998 mm；叶轮八片[离线完整程序](../reviews/evidence/2026-09-24_product_delivery_ui_audit/impeller_root_growth_offline/acceptance.json)183,342 点、16,983 事件严格回读通过，尚未完成 GUI 全链。工作台作用域、选边、材料表、阶段预览和方向标已做 UI 定向复核；[复盘](../reviews/2026-09-23_product_delivery_review.md)。其余首次使用/窄窗与实机参数仍待复核 | 日常以弯管、校徽、叶轮为主；三叶扇按相关变更和最终门槛运行；继续核对 GUI 导出与教程 | 2026-09-25 |
+| PRODUCT-01-MC01 | 五轴安全换姿与多色换料 | PRODUCT-01、Freeform 实体路径 | 进行中 | 配置换料站、三色 PLA 叶片分区；生成切断/退丝/进丝/排料/擦嘴/返回的完整 NC，避开已沉积材料，严格回读通过；无站位或无安全路线阻止导出 | 三色材料切换的受限离线链和 GUI 已通过：[GUI NC](../reviews/evidence/2026-09-24_three_color_fan_gui_release/manifest.json) 116,852 点、T0/T1/T2、两次切换、31,636 事件严格回读。叶轮原首道换姿碰撞已由机床坐标候选路线和同体安全空移处理；[完整离线程序](../reviews/evidence/2026-09-24_product_delivery_ui_audit/impeller_root_growth_offline/acceptance.json)183,342 点严格回读、无碰撞 Error。实机喷嘴/夹具、切刀宏和传感器尚未标定，`machine_executable=false` | 用现有结果做界面预览与重开验证，实机资格另行核准 | 2026-09-25 |
 | FAN00 | 规划与项目调研 | 用户计划授权 | 已完成 | 详细计划、六仓库研究、电脑验收方案齐全 | [任务设计与边界](fan_complete_program_plan.md)；[研究](fan_complete_program_research.md)，仅规划完成 | FAN01 | 2026-09-20 |
 | FAN01 | 输入与制造契约 | FAN00 | 已完成 | 参数来源、实体角色、坐标、姿态及误差阈值冻结 | [契约JSON](../reviews/evidence/2026-09-20_fan_complete_program/fan_contract_v1.json)；机床包络、零点、宏版本保持实机资格待测 | FAN02 | 2026-09-20 |
 | FAN02 | 旧NC和CAD独立基线 | FAN01 | 重新核查中 | 分工序模态解析、径向层序、坐标注册与填充覆盖 | [模态运动统计](../reviews/evidence/2026-09-20_fan_complete_program/radial_correction/legacy_motion.json)：叶片A90、C连续联动；原全文件TYPE统计不能证明叶片内部填充 | FAN04纠正 | 2026-09-20 |

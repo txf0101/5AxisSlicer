@@ -1,11 +1,43 @@
 from __future__ import annotations
 
-from PyQt5.QtCore import QPointF, QRectF, Qt, pyqtSignal
+import math
+
+from PyQt5.QtCore import QEvent, QPointF, QRectF, Qt, pyqtSignal
 from PyQt5.QtGui import QColor, QFont, QPainter, QPainterPath, QPen, QPolygonF, QTransform
 from PyQt5.QtWidgets import QWidget
 
 
 _FACE_TEXT_RECT = QRectF(0.0, 0.0, 100.0, 100.0)
+
+
+def _unit3(values) -> tuple[float, float, float]:
+    vector = tuple(float(value) for value in values)
+    if len(vector) != 3 or not all(math.isfinite(value) for value in vector):
+        raise ValueError("Expected a finite 3D camera vector")
+    length = math.sqrt(sum(value * value for value in vector))
+    if length < 1e-9:
+        raise ValueError("Camera direction must have nonzero length")
+    return tuple(value / length for value in vector)
+
+
+def _cross3(left, right) -> tuple[float, float, float]:
+    return (
+        left[1] * right[2] - left[2] * right[1],
+        left[2] * right[0] - left[0] * right[2],
+        left[0] * right[1] - left[1] * right[0],
+    )
+
+
+def _triad_directions(camera: dict) -> dict[str, tuple[float, float]]:
+    eye = tuple(float(value) for value in camera["position"])
+    focal = tuple(float(value) for value in camera["focal_point"])
+    forward = _unit3(tuple(focal[index] - eye[index] for index in range(3)))
+    right = _unit3(_cross3(forward, _unit3(camera["view_up"])))
+    up = _cross3(right, forward)
+    return {
+        label: (right[index], -up[index])
+        for index, label in enumerate("XYZ")
+    }
 
 
 def _orientation_faces() -> list[tuple[QPolygonF, str]]:
@@ -132,7 +164,7 @@ class OrientationCubeOverlay(QWidget):
 
 
 class AxisTriadOverlay(QWidget):
-    """Vector Part XYZ triad that stays crisp in high-DPI exports."""
+    """Project Part XYZ with the same camera as the 3D viewer."""
 
     def __init__(self, viewer=None, parent: QWidget | None = None) -> None:
         super().__init__(parent)
@@ -140,32 +172,75 @@ class AxisTriadOverlay(QWidget):
         self.setAttribute(Qt.WA_TransparentForMouseEvents)
         self.setFixedSize(116, 104)
         self.setToolTip("Part XYZ")
+        self._camera_signature: tuple[float, ...] | None = None
+        if viewer is not None:
+            viewer.installEventFilter(self)
+
+    def eventFilter(self, watched, event) -> bool:  # noqa: N802 - Qt API
+        if watched is self.viewer and event.type() in {
+            QEvent.Paint,
+            QEvent.MouseMove,
+            QEvent.MouseButtonRelease,
+            QEvent.Wheel,
+            QEvent.KeyPress,
+        }:
+            camera = self._camera_state()
+            if camera is not None:
+                try:
+                    signature = tuple(
+                        float(value)
+                        for key in ("position", "focal_point", "view_up")
+                        for value in camera[key]
+                    )
+                except (KeyError, TypeError, ValueError):
+                    signature = None
+                if signature != self._camera_signature:
+                    self._camera_signature = signature
+                    self.update()
+        return super().eventFilter(watched, event)
+
+    def _camera_state(self) -> dict | None:
+        if self.viewer is None or not hasattr(self.viewer, "camera_state"):
+            return None
+        try:
+            return self.viewer.camera_state()
+        except (AttributeError, RuntimeError, ValueError):
+            return None
 
     def paintEvent(self, _event) -> None:  # noqa: N802 - Qt API
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
-        origin = QPointF(37, 73)
-        axes = (
-            (QPointF(91, 88), QColor("#E5484D"), "X"),
-            (QPointF(12, 92), QColor("#2E9B61"), "Y"),
-            (QPointF(37, 17), QColor("#2563EB"), "Z"),
+        origin = QPointF(58, 59)
+        try:
+            directions = _triad_directions(self._camera_state() or {})
+        except (KeyError, TypeError, ValueError):
+            directions = {"X": (1.0, 0.25), "Y": (-0.65, 0.5), "Z": (0.0, -1.0)}
+        axes = tuple(
+            (
+                QPointF(origin.x() + 31 * directions[label][0], origin.y() + 31 * directions[label][1]),
+                QColor(color),
+                label,
+            )
+            for label, color in (("X", "#E5484D"), ("Y", "#2E9B61"), ("Z", "#2563EB"))
         )
         painter.setFont(QFont("Segoe UI", 11, QFont.DemiBold))
         for end, color, label in axes:
             painter.setPen(QPen(color, 2.4, Qt.SolidLine, Qt.RoundCap))
-            painter.drawLine(origin, end)
             direction = end - origin
-            length = max(1.0, (direction.x() ** 2 + direction.y() ** 2) ** 0.5)
+            length = (direction.x() ** 2 + direction.y() ** 2) ** 0.5
+            if length < 4.0:
+                painter.setBrush(color)
+                painter.drawEllipse(origin, 3.5, 3.5)
+                painter.drawText(int(origin.x() + 6), int(origin.y() - 4), label)
+                continue
+            painter.drawLine(origin, end)
             ux, uy = direction.x() / length, direction.y() / length
             left = QPointF(end.x() - ux * 8 - uy * 4, end.y() - uy * 8 + ux * 4)
             right = QPointF(end.x() - ux * 8 + uy * 4, end.y() - uy * 8 - ux * 4)
             painter.setBrush(color)
             painter.drawPolygon(QPolygonF([end, left, right]))
             painter.setPen(color)
-            if label == "Z":
-                painter.drawText(int(end.x() + 5), int(end.y() + 14), label)
-            else:
-                painter.drawText(int(end.x() + 3), int(end.y() + 3), label)
+            painter.drawText(int(end.x() + 3), int(end.y() + 3), label)
         painter.setPen(QColor("#475569"))
         painter.setFont(QFont("Segoe UI", 9))
         painter.drawText(5, 12, "Part XYZ")

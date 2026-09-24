@@ -75,6 +75,14 @@ from .tube_script_service import ProjectOpenCancelled, TubeScriptService
 from .tube_ui import TubeSetupPage
 from .ui_controls import action_button
 from .viewer import ModelViewer
+from .workbench_setup_panel import WorkbenchSetupPanel
+from .workbench_setup_scope import (
+    LOCAL_WORKBENCHES,
+    binding_ids,
+    local_copy,
+    publish_to_common,
+    resolve_bindings,
+)
 from .workbenches import WORKBENCHES, WorkbenchInfo
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -102,6 +110,9 @@ class MainWindow(QMainWindow):
         self.last_project_dir: Path | None = None
         self.current_workbench_key = "curve"
         self.current_operation = "imported_nc_review"
+        self._setup_panels: dict[str, WorkbenchSetupPanel] = {}
+        self._local_setup_editor: TubeSetupPage | None = None
+        self._local_setup_editor_key: str | None = None
         self._updating_layer_controls = False
         self._updating_progress_controls = False
         self._result_request_sequence = 0
@@ -704,6 +715,8 @@ class MainWindow(QMainWindow):
     def _commit_model(self, model: CadModel) -> None:
         """Publish one fully loaded CAD model to both workbench viewers."""
 
+        if not self._commit_local_setup_editor():
+            raise RuntimeError("model import cancelled while local Setup has unapplied drafts")
         started_from_home = self.stack.currentWidget() is self.home_page
         with model_commit.publication_transaction(self):
             previous_controller = self.tube_page.controller
@@ -726,28 +739,32 @@ class MainWindow(QMainWindow):
             else:
                 controller = TubeSetupController(model, setup=default_printer_setup())
             self.tube_page.set_controller(controller, model)
+            keep_setups = previous_source in {None, model.source_hash}
             planar_controller = planar_shell.controller_for_model(
-                previous_planar, controller.setup, model
+                previous_planar, previous_planar.setup if keep_setups else controller.setup, model
             )
             self.planar_page.set_controller(planar_controller)
             self.planar_command_service = self.planar_page.commands
             curve_controller = curve_shell.controller_for_model(
-                previous_curve, controller.setup, model
+                previous_curve, previous_curve.setup if keep_setups else controller.setup, model
             )
             self.curve_page.set_controller(curve_controller)
             self.curve_command_service = self.curve_page.commands
             freeform_controller = freeform_shell.controller_for_model(
-                previous_freeform, controller.setup, model
+                previous_freeform,
+                previous_freeform.setup if keep_setups else controller.setup,
+                model,
             )
             self.freeform_page.set_controller(freeform_controller)
             self.freeform_command_service = self.freeform_page.commands
             rotary_controller = rotary_shell.controller_for_model(
-                previous_rotary, controller.setup, model
+                previous_rotary, previous_rotary.setup if keep_setups else controller.setup, model
             )
             self.rotary_page.set_controller(rotary_controller)
             self.rotary_command_service = self.rotary_page.commands
             if controller is not previous_controller:
                 self.last_project_dir = None
+            self._refresh_setup_panels()
             model_commit.refresh_publication_ui(self)
             workbench_navigation.show_after_model_import(self, started_from_home)
             message = tr(
@@ -814,16 +831,42 @@ class MainWindow(QMainWindow):
     def _commit_source_update(self, model: CadModel) -> None:
         """Atomically publish a parsed source revision after unique rebinding."""
 
+        if not self._commit_local_setup_editor():
+            raise RuntimeError("source update cancelled while local Setup has unapplied drafts")
         controller = self.tube_page.controller
         result = controller.update_cad_model(model)
         planar_controller = self.planar_page.controller
-        planar_shell.sync_source_update(planar_controller, controller.setup, model)
+        planar_shell.sync_source_update(
+            planar_controller,
+            controller.setup
+            if planar_controller.setup.setup_id == controller.setup.setup_id
+            else planar_controller.setup,
+            model,
+        )
         curve_controller = self.curve_page.controller
-        curve_shell.sync_source_update(curve_controller, controller.setup, model)
+        curve_shell.sync_source_update(
+            curve_controller,
+            controller.setup
+            if curve_controller.setup.setup_id == controller.setup.setup_id
+            else curve_controller.setup,
+            model,
+        )
         freeform_controller = self.freeform_page.controller
-        freeform_shell.sync_source_update(freeform_controller, controller.setup, model)
+        freeform_shell.sync_source_update(
+            freeform_controller,
+            controller.setup
+            if freeform_controller.setup.setup_id == controller.setup.setup_id
+            else freeform_controller.setup,
+            model,
+        )
         rotary_controller = self.rotary_page.controller
-        rotary_shell.sync_source_update(rotary_controller, controller.setup, model)
+        rotary_shell.sync_source_update(
+            rotary_controller,
+            controller.setup
+            if rotary_controller.setup.setup_id == controller.setup.setup_id
+            else rotary_controller.setup,
+            model,
+        )
         self.viewer.load_model(model)
         self.tube_page.set_controller(controller, model)
         self.planar_page.set_controller(planar_controller)
@@ -834,6 +877,7 @@ class MainWindow(QMainWindow):
         self.freeform_command_service = self.freeform_page.commands
         self.rotary_page.set_controller(rotary_controller)
         self.rotary_command_service = self.rotary_page.commands
+        self._refresh_setup_panels()
         self.model = model
         self._original_step_path = Path(model.source_path).expanduser().resolve()
         model_commit.refresh_publication_ui(self)
@@ -1036,36 +1080,53 @@ class MainWindow(QMainWindow):
     ) -> dict[str, Any]:
         """Publish one fully verified worker result on the Qt main thread."""
 
-        if len(loaded.setups) > 1:
+        if not self._commit_local_setup_editor():
             raise ProjectFormatError(
-                "this application release can open at most one Manufacturing Setup; "
-                f"the project contains {len(loaded.setups)}"
+                "project open cancelled while local Setup has unapplied drafts"
             )
-        if loaded.setup is not None and not isinstance(loaded.setup, ManufacturingSetup):
+        if any(not isinstance(item, ManufacturingSetup) for item in loaded.setups):
             raise ProjectFormatError("project Setup was not reconstructed as ManufacturingSetup")
-        setup = loaded.setup or ManufacturingSetup()
+        try:
+            setup, workbench_setups = resolve_bindings(loaded.setups, loaded.workbench)
+        except ValueError as exc:
+            raise ProjectFormatError(str(exc)) from exc
         # Validate candidates before publishing; errors leave the prior project untouched.
         tube_operations, planar_operations, curve_operations = curve_shell.split_operations(
             loaded.operations
         )
+        if any(item.setup_id != setup.setup_id for item in tube_operations):
+            raise ProjectFormatError("Tube operation Setup binding differs from common Setup")
         freeform_operations = freeform_shell.freeform_operations(loaded.operations)
         rotary_operations = rotary_shell.rotary_operations(loaded.operations)
+        for key, operations in (
+            ("planar", planar_operations),
+            ("curve", curve_operations),
+            ("freeform", freeform_operations),
+            ("rotary", rotary_operations),
+        ):
+            if any(item.setup_id != workbench_setups[key].setup_id for item in operations):
+                raise ProjectFormatError(
+                    f"{key} operation Setup binding differs from project binding"
+                )
         controller = TubeSetupController(
             loaded.model,
             setup=setup,
             operations=tube_operations,
         )
         planar_controller = planar_shell.PlanarController(
-            loaded.model, setup=setup, operations=planar_operations
+            loaded.model, setup=workbench_setups["planar"], operations=planar_operations
         )
         curve_controller = curve_shell.CurveController(
-            loaded.model, setup=setup, operations=curve_operations
+            loaded.model, setup=workbench_setups["curve"], operations=curve_operations
         )
         freeform_controller = freeform_shell.controller_for_project(
-            setup, loaded.model, freeform_operations
+            workbench_setups["freeform"],
+            loaded.model,
+            freeform_operations,
+            controller_profile_payload=loaded.workbench.get("freeform_controller_profile"),
         )
         rotary_controller = rotary_shell.controller_for_project(
-            setup, loaded.model, rotary_operations
+            workbench_setups["rotary"], loaded.model, rotary_operations
         )
         self.tube_script_service.prepare_project_controller(
             controller,
@@ -1085,6 +1146,7 @@ class MainWindow(QMainWindow):
         if workbench not in {item.key for item in WORKBENCHES}:
             workbench = "curve"
         with model_commit.publication_transaction(self):
+            self._local_setup_editor_key = None
             self.model = loaded.model
             self._original_step_path = original_step_path
             if loaded.model is None:
@@ -1114,6 +1176,7 @@ class MainWindow(QMainWindow):
             self.freeform_command_service = self.freeform_page.commands
             self.rotary_page.set_controller(rotary_controller)
             self.rotary_command_service = self.rotary_page.commands
+            self._refresh_setup_panels()
             if loaded.model is not None:
                 self.tube_page.viewer.set_selection(
                     body_ids=list(loaded.selection.body_ids),
@@ -1329,9 +1392,20 @@ class MainWindow(QMainWindow):
         *,
         draft_resolution: str | None = None,
     ) -> dict[str, Any]:
+        if not self._commit_local_setup_editor():
+            raise RuntimeError("local Manufacturing Setup has unapplied drafts")
         if self.model is None and self.gcode_preview is None:
             raise RuntimeError(tr(self.language, "no_project_content"))
+        self._sync_common_workbenches()
         controller = self.tube_page.controller
+        bindings = {key: getattr(self, f"{key}_page").controller.setup for key in LOCAL_WORKBENCHES}
+        setups_by_id = {controller.setup.setup_id: controller.setup}
+        for setup in bindings.values():
+            if setup.setup_id in setups_by_id and setups_by_id[setup.setup_id] != setup:
+                raise ProjectFormatError(
+                    f"conflicting values for Manufacturing Setup {setup.setup_id}"
+                )
+            setups_by_id[setup.setup_id] = setup
         selection_viewer = self._active_workbench_viewer()
         with controller.draft_resolution_transaction(draft_resolution):
             path = save_project(
@@ -1342,7 +1416,7 @@ class MainWindow(QMainWindow):
                 self.gcode_preview,
                 self.viewer.preview_settings,
                 result_preview_state=self.result_page.state,
-                setup=controller.setup,
+                setups=tuple(setups_by_id.values()),
                 operations=(
                     controller.operations
                     + self.planar_page.controller.operations
@@ -1443,8 +1517,181 @@ class MainWindow(QMainWindow):
     enter_workbench = workbench_navigation.enter_workbench
 
     def open_manufacturing_setup(self) -> None:
+        if not self._commit_local_setup_editor():
+            return
         self.enter_workbench("tube")
         self.tube_page.set_common_setup_mode(True)
+
+    def _install_workbench_setup_panels(self) -> None:
+        for key in LOCAL_WORKBENCHES:
+            page = getattr(self, f"{key}_page")
+            panel = WorkbenchSetupPanel(
+                key,
+                edit_node=self._edit_workbench_setup_node,
+                copy_common=self._copy_common_to_workbench,
+                use_common=self._use_common_setup,
+                publish_common=self._publish_workbench_setup,
+                save_local=self.save_project_dialog,
+            )
+            page.layout().insertWidget(0, panel)
+            self._setup_panels[key] = panel
+        self._refresh_setup_panels()
+
+    def _refresh_setup_panels(self) -> None:
+        common_id = self.tube_page.controller.setup.setup_id
+        for key, panel in self._setup_panels.items():
+            setup = getattr(self, f"{key}_page").controller.setup
+            panel.refresh_setup(setup, local=setup.setup_id != common_id, language=self.language)
+
+    def _copy_common_to_workbench(self, key: str) -> None:
+        if not self._commit_local_setup_editor():
+            return
+        page = getattr(self, f"{key}_page")
+        if page.controller.setup.setup_id != self.tube_page.controller.setup.setup_id:
+            message = (
+                "重新导入公共制造设置会覆盖本工作台当前独立设置。继续吗？"
+                if self.language == "zh"
+                else "Importing the common Setup replaces this workbench's current local Setup. Continue?"
+            )
+            if QMessageBox.question(self, "Manufacturing Setup", message) != QMessageBox.Yes:
+                return
+        page.controller.mark_setup_changed(
+            local_copy(self.tube_page.controller.setup, key), reason="local_setup_selected"
+        )
+        page.refresh()
+        self._refresh_setup_panels()
+        self._edit_workbench_setup_node(key, "machine")
+
+    def _use_common_setup(self, key: str) -> None:
+        if not self._commit_local_setup_editor():
+            return
+        page = getattr(self, f"{key}_page")
+        if page.controller.setup.setup_id == self.tube_page.controller.setup.setup_id:
+            return
+        message = (
+            "改用公共制造设置会替换本工作台的独立设置，当前生成结果需重新生成。继续吗？"
+            if self.language == "zh"
+            else "Replace this workbench's local Setup with the common Setup? Generated results must be regenerated."
+        )
+        if QMessageBox.question(self, "Manufacturing Setup", message) != QMessageBox.Yes:
+            return
+        page.controller.mark_setup_changed(
+            self.tube_page.controller.setup, reason="common_setup_selected"
+        )
+        page.refresh()
+        self._refresh_setup_panels()
+
+    def _publish_workbench_setup(self, key: str) -> None:
+        if not self._commit_local_setup_editor():
+            return
+        page = getattr(self, f"{key}_page")
+        local = page.controller.setup
+        common = self.tube_page.controller.setup
+        if local.setup_id == common.setup_id:
+            return
+        message = (
+            "将本工作台设置保存到公共制造设置？其他使用公共设置的工作台，其已有生成结果会变为待更新。"
+            if self.language == "zh"
+            else "Save this workbench's Setup to the common Setup? Results in other shared workbenches become stale."
+        )
+        if QMessageBox.question(self, "Manufacturing Setup", message) != QMessageBox.Yes:
+            return
+        published = publish_to_common(local, common)
+        # The Tube controller owns the common identity and its saved operations.
+        try:
+            self.tube_page.controller.replace_setup(published, reason="shared_setup_published")
+        except Exception as exc:
+            self.show_error(str(exc))
+            return
+        self.tube_page.refresh()
+        self.tube_script_service.synchronize_external_controller(write_config=False)
+        self._sync_common_workbenches()
+        self._refresh_setup_panels()
+
+    def _sync_common_workbenches(self) -> None:
+        common = self.tube_page.controller.setup
+        for key in LOCAL_WORKBENCHES:
+            page = getattr(self, f"{key}_page")
+            if page.controller.setup.setup_id != common.setup_id:
+                continue
+            if page.controller.setup != common:
+                page.controller.mark_setup_changed(common, reason="shared_setup_changed")
+                page.refresh()
+
+    def _edit_workbench_setup_node(self, key: str, node: str) -> None:
+        if key not in LOCAL_WORKBENCHES:
+            raise ValueError(f"unknown Setup workbench: {key}")
+        if not self._commit_local_setup_editor():
+            return
+        setup = getattr(self, f"{key}_page").controller.setup
+        if setup.setup_id == self.tube_page.controller.setup.setup_id:
+            self.open_manufacturing_setup()
+            self.tube_page.select_setup_node(node)
+            return
+        if self._local_setup_editor is None:
+            editor = TubeSetupPage(
+                self,
+                viewer_factory=self._model_viewer_factory,
+                resource_library=self.tube_page.resource_library,
+            )
+            editor.back_requested.connect(self._leave_local_setup_editor)
+            editor.open_step_requested.connect(self.open_model_dialog)
+            editor.update_source_requested.connect(self._update_model_from_source_ui)
+            editor.save_requested.connect(self._save_from_local_setup_editor)
+            editor.error_raised.connect(self.show_error)
+            self.stack.addWidget(editor)
+            self._local_setup_editor = editor
+        editor = self._local_setup_editor
+        editor.set_controller(TubeSetupController(self.model, setup=setup), self.model)
+        editor.set_local_setup_mode(key)
+        editor.select_setup_node(node)
+        self._local_setup_editor_key = key
+        self.stack.setCurrentWidget(editor)
+
+    def _commit_local_setup_editor(self) -> bool:
+        editor = self._local_setup_editor
+        key = self._local_setup_editor_key
+        if editor is None or key is None:
+            return True
+        if editor.controller.has_drafts:
+            prompt = QMessageBox(self)
+            prompt.setWindowTitle("Manufacturing Setup")
+            prompt.setText(
+                "本工作台设置有未应用草稿。应用、丢弃，还是继续编辑？"
+                if self.language == "zh"
+                else "Local Setup has unapplied drafts. Apply, discard, or continue editing?"
+            )
+            prompt.setStandardButtons(QMessageBox.Apply | QMessageBox.Discard | QMessageBox.Cancel)
+            choice = prompt.exec()
+            if choice == QMessageBox.Cancel:
+                return False
+            try:
+                if choice == QMessageBox.Apply:
+                    editor.controller.apply_all_drafts()
+                else:
+                    editor.controller.discard_all_drafts()
+            except Exception as exc:
+                self.show_error(str(exc))
+                return False
+        page = getattr(self, f"{key}_page")
+        if page.controller.setup != editor.controller.setup:
+            page.controller.mark_setup_changed(
+                editor.controller.setup, reason="local_setup_changed"
+            )
+            page.refresh()
+        self._local_setup_editor_key = None
+        self._refresh_setup_panels()
+        return True
+
+    def _leave_local_setup_editor(self) -> None:
+        key = self._local_setup_editor_key
+        if key is None or not self._commit_local_setup_editor():
+            return
+        self.enter_workbench(key)
+
+    def _save_from_local_setup_editor(self) -> None:
+        if self._commit_local_setup_editor():
+            self.save_project_dialog()
 
     def set_mode(self, mode: str) -> None:
         if mode not in {"body", "face", "edge", "vertex"}:
@@ -1530,6 +1777,9 @@ class MainWindow(QMainWindow):
         self.curve_page.set_language(self.language)
         self.freeform_page.set_language(self.language)
         self.rotary_page.set_language(self.language)
+        if self._local_setup_editor is not None:
+            self._local_setup_editor.set_language(self.language)
+        self._refresh_setup_panels()
         for group, key in self.localized_groups:
             group.setTitle(tr(self.language, key))
         for label, key in self.localized_labels:
@@ -1639,6 +1889,7 @@ class MainWindow(QMainWindow):
         self.freeform_command_service = self.freeform_page.commands
         self.rotary_page = rotary_shell.install_rotary_page(self)
         self.rotary_command_service = self.rotary_page.commands
+        self._install_workbench_setup_panels()
         self.result_page = ResultPreviewPage(
             viewer_factory=self._result_viewer_factory, parent=self
         )
@@ -2770,10 +3021,14 @@ class MainWindow(QMainWindow):
         )
 
     def _workbench_state(self) -> dict[str, Any]:
+        common = self.tube_page.controller.setup
+        bindings = {key: getattr(self, f"{key}_page").controller.setup for key in LOCAL_WORKBENCHES}
         return {
             "workbench": self.current_workbench_key,
             "operation": self.current_operation,
             "operation_label": workbench_navigation.operation_label(self, self.language),
+            "setup_bindings": binding_ids(common, bindings),
+            "freeform_controller_profile": self.freeform_page.controller.controller_profile.to_json(),
         }
 
     def _body_rows(self) -> list[SelectionRow]:

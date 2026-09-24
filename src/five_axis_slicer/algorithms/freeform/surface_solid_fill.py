@@ -1,9 +1,10 @@
 """Finite-width solid fill for a rectangular trimmed freeform face.
 
 The selected root edge must be one complete parametric boundary of the face.
-Paths advance across the face from that supported boundary, then repeat through
-the solid thickness along the inward face normal. This is the bounded topology
-used by the paper impeller: it is not a general arbitrary-face offsetter.
+The explicit root-edge-outward strategy deposits root-parallel growth layers,
+filling the wall thickness inside each layer. The legacy default advances
+across the face inside each thickness layer. Both strategies require a bounded
+parametric face; neither is a general arbitrary-face offsetter.
 """
 
 from __future__ import annotations
@@ -39,6 +40,7 @@ class SurfaceSolidFillParameters:
     retract_length_mm: float = 1.0
     metric_across_samples: int = 129
     metric_along_samples: int = 129
+    surface_growth_strategy: str = "surface_thickness"
 
     def __post_init__(self) -> None:
         for name in (
@@ -56,10 +58,20 @@ class SurfaceSolidFillParameters:
                 raise ValueError(f"{name} must be finite and positive")
         if self.path_spacing_mm > self.bead_width_mm:
             raise ValueError("path_spacing_mm must not exceed bead_width_mm")
-        if self.layer_height_mm > self.solid_thickness_mm:
+        if (
+            self.surface_growth_strategy == "surface_thickness"
+            and self.layer_height_mm > self.solid_thickness_mm
+        ):
             raise ValueError("layer_height_mm exceeds solid thickness")
+        if (
+            self.surface_growth_strategy == "root_edge_outward"
+            and self.layer_height_mm > self.bead_width_mm * 2
+        ):
+            raise ValueError("growth layer height exceeds twice the bead width")
         if self.metric_across_samples < 17 or self.metric_along_samples < 9:
             raise ValueError("surface metric sampling is too sparse")
+        if self.surface_growth_strategy not in {"surface_thickness", "root_edge_outward"}:
+            raise ValueError("unknown surface solid growth strategy")
 
 
 @dataclass(frozen=True, slots=True)
@@ -84,6 +96,8 @@ class SurfaceSolidFillAudit:
     cad_volume_mm3: float
     relative_volume_error: float
     root_edge_max_gap_mm: float
+    growth_layer_count: int = 0
+    surface_growth_strategy: str = "surface_thickness"
 
 
 def generate_surface_solid_fill(
@@ -99,6 +113,10 @@ def generate_surface_solid_fill(
     if not selections or len({item.body_id for item in selections}) != len(selections):
         raise ValueError("unique non-empty body selections required")
     depth_count = math.ceil(parameters.solid_thickness_mm / parameters.layer_height_mm - 1e-10)
+    if parameters.surface_growth_strategy == "root_edge_outward":
+        return _generate_root_edge_outward(
+            model, selections, operation_prefix, parameters, cancelled=cancelled
+        )
     depth_height = parameters.solid_thickness_mm / depth_count
     results = []
     paths_per_layer = []
@@ -166,6 +184,132 @@ def generate_surface_solid_fill(
         cad_volume,
         abs(material_volume - cad_volume) / cad_volume,
         root_gap,
+    )
+
+
+def _generate_root_edge_outward(model, selections, operation_prefix, parameters, *, cancelled):
+    """Fill each root-parallel growth layer across its complete wall thickness."""
+
+    # Each thickness pass owns one equal-width volume band. The deposited bead
+    # keeps the requested physical width; neighboring tracks meet because
+    # the center spacing is bounded by path_spacing_mm <= bead_width_mm.
+    depth_count = math.ceil(
+        parameters.solid_thickness_mm / min(parameters.bead_width_mm, parameters.path_spacing_mm)
+        - 1.0e-10
+    )
+    depth_width = parameters.solid_thickness_mm / depth_count
+    depth_centers = tuple((index + 0.5) * depth_width for index in range(depth_count))
+    results = []
+    paths_per_layer = []
+    maximum_spacing = maximum_segment = 0.0
+    thickness_values = []
+    material_volume = 0.0
+    root_gap = 0.0
+    growth_layer_count = 0
+    for selection in selections:
+        _validate_selection(model, selection)
+        if selection.substrate_body_id is None:
+            raise ValueError(f"freeform.root_support_missing: {selection.body_id}")
+        surface = BRep_Tool.Surface_s(model.face_shapes[selection.face_id])
+        orientation = model.face_shapes[selection.face_id].Orientation()
+        frame = _surface_frame(model, selection, surface, parameters)
+        thickness = _thickness_samples(model, selection, surface, orientation)
+        thickness_values.extend(thickness)
+        if min(thickness) < parameters.solid_thickness_mm - 0.02:
+            raise ValueError(f"freeform.solid_thickness_exceeds_body: {selection.body_id}")
+        root_gap = max(root_gap, _root_edge_gap(model, selection))
+        # The root edge must touch the already built substrate within the first
+        # growth layer. This is a necessary local support check, not IPW proof.
+        if root_gap > parameters.layer_height_mm / 2 + 0.01:
+            raise ValueError(f"freeform.root_support_gap: {selection.body_id}")
+        extent = max(frame.metric_grid.total_by_along)
+        # The first center sits half a growth layer outside the root. Its bead
+        # touches the substrate without placing the nozzle tip on the final
+        # substrate track; the last center is also inside the far boundary.
+        growth_count = math.ceil(extent / parameters.layer_height_mm - 1.0e-10)
+        growth_height = extent / growth_count
+        growth_layer_count += growth_count
+        first_contours = _sample_surface_contours(
+            surface,
+            orientation,
+            frame,
+            growth_height / 2,
+            parameters.sampling_step_mm,
+            include_growth=True,
+        )
+        if not first_contours:
+            raise ValueError(f"freeform.growth_layer_empty: {selection.body_id}:0")
+        # The first thickness track must touch the substrate. Later tracks in
+        # the same growth layer meet the preceding deposited bead side by side.
+        first_support_gap = _first_track_support_gap(
+            model, selection.substrate_body_id, first_contours, depth_centers[0]
+        )
+        if first_support_gap > growth_height / 2 + 0.01:
+            raise ValueError(f"freeform.first_layer_unsupported: {selection.body_id}")
+        operation_id = f"{operation_prefix}-{selection.body_id}-growth"
+        builder = _SurfacePathBuilder(
+            operation_id,
+            selection.body_id,
+            1,
+            growth_count,
+            depth_centers[0],
+            growth_height,
+            parameters,
+            growth_layer_index=1,
+            effective_bead_width=depth_width,
+        )
+        for growth_index in range(growth_count):
+            _checkpoint(cancelled)
+            distance = (growth_index + 0.5) * growth_height
+            contours = (
+                first_contours
+                if growth_index == 0
+                else _sample_surface_contours(
+                    surface,
+                    orientation,
+                    frame,
+                    distance,
+                    parameters.sampling_step_mm,
+                    include_growth=True,
+                )
+            )
+            if not contours:
+                raise ValueError(f"freeform.growth_layer_empty: {selection.body_id}:{growth_index}")
+            builder.growth_layer_index = growth_index + 1
+            strip_index = 0
+            for depth_index, depth in enumerate(depth_centers):
+                for samples in contours:
+                    strip_index += 1
+                    if (strip_index + growth_index) % 2 == 0:
+                        samples = tuple(reversed(samples))
+                    builder.add_path(
+                        strip_index,
+                        samples,
+                        boundary_strip=depth_index in {0, depth_count - 1},
+                        depth=depth,
+                        growth_reference=tuple(sample[2] for sample in samples),
+                    )
+            paths_per_layer.append(strip_index)
+            maximum_spacing = max(maximum_spacing, depth_width)
+        path = builder.toolpath()
+        results.append(path)
+        maximum_segment = max(maximum_segment, builder.maximum_segment_length_mm)
+        material_volume += math.fsum(point.material_volume_mm3 for point in path.points)
+    cad_volume = math.fsum(model.body_map[item.body_id].volume or 0 for item in selections)
+    return tuple(results), SurfaceSolidFillAudit(
+        len(selections),
+        depth_count,
+        tuple(paths_per_layer),
+        maximum_spacing,
+        maximum_segment,
+        min(thickness_values),
+        max(thickness_values),
+        material_volume,
+        cad_volume,
+        abs(material_volume - cad_volume) / cad_volume,
+        root_gap,
+        growth_layer_count,
+        "root_edge_outward",
     )
 
 
@@ -279,7 +423,9 @@ def _interpolate_cumulative(coordinates, cumulative, target):
     return coordinates[index - 1] + (coordinates[index] - coordinates[index - 1]) * ratio
 
 
-def _sample_surface_contours(surface, orientation, frame, distance, maximum_step):
+def _sample_surface_contours(
+    surface, orientation, frame, distance, maximum_step, *, include_growth=False
+):
     grid = frame.metric_grid
     raw: list[tuple[float, float] | None] = []
     for index, total in enumerate(grid.total_by_along):
@@ -314,8 +460,10 @@ def _sample_surface_contours(surface, orientation, frame, distance, maximum_step
                     surface,
                     orientation,
                     frame.across_is_u,
+                    1.0 if frame.far_coordinate > frame.root_coordinate else -1.0,
                     tuple(parameters),
                     maximum_step,
+                    include_growth=include_growth,
                 )
             )
         index += 1
@@ -333,7 +481,9 @@ def _terminal_parameter(frame, distance, invalid_index, valid_index):
     return frame.far_coordinate, along
 
 
-def _resample_surface_polyline(surface, orientation, across_is_u, parameters, maximum_step):
+def _resample_surface_polyline(
+    surface, orientation, across_is_u, across_sign, parameters, maximum_step, *, include_growth
+):
     points = tuple(
         _surface_point(surface, across_is_u, across, along) for across, along in parameters
     )
@@ -354,7 +504,13 @@ def _resample_surface_polyline(surface, orientation, across_is_u, parameters, ma
         across = first[0] + (second[0] - first[0]) * ratio
         along = first[1] + (second[1] - first[1]) * ratio
         u, v = (across, along) if across_is_u else (along, across)
-        result.append((_point(surface.Value(u, v)), _surface_normal(surface, orientation, u, v)))
+        normal = _surface_normal(surface, orientation, u, v)
+        across = (0.0, 0.0, 0.0)
+        if include_growth:
+            properties = GeomLProp_SLProps(surface, float(u), float(v), 1, 1.0e-9)
+            derivative = properties.D1U() if across_is_u else properties.D1V()
+            across = _scale(_unit(_direction(derivative)), across_sign)
+        result.append((_point(surface.Value(u, v)), normal, across))
     return tuple(result)
 
 
@@ -368,6 +524,9 @@ class _SurfacePathBuilder:
         depth,
         layer_height,
         parameters,
+        *,
+        growth_layer_index=None,
+        effective_bead_width=None,
     ):
         self.operation_id = operation_id
         self.body_id = body_id
@@ -376,28 +535,70 @@ class _SurfacePathBuilder:
         self.depth = depth
         self.layer_height = layer_height
         self.parameters = parameters
+        self.growth_layer_index = growth_layer_index
+        self.effective_bead_width = effective_bead_width or parameters.bead_width_mm
         self.points = []
         self.events = []
         self.maximum_segment_length_mm = 0.0
+        self.strip_index = 0
 
-    def add_path(self, strip_index, samples, *, boundary_strip=False):
-        positions = tuple(_subtract(point, _scale(normal, self.depth)) for point, normal in samples)
-        normals = tuple(normal for _, normal in samples)
+    def add_path(
+        self, strip_index, samples, *, boundary_strip=False, depth=None, growth_reference=None
+    ):
+        self.strip_index = strip_index
+        actual_depth = self.depth if depth is None else depth
+        positions = tuple(
+            _subtract(point, _scale(normal, actual_depth)) for point, normal, _ in samples
+        )
+        normals = tuple(normal for _, normal, _ in samples)
+        nozzle_axes = (
+            tuple(_scale(normal, -1.0) for normal in normals)
+            if growth_reference is None
+            else _growth_nozzle_axes(positions, normals, growth_reference)
+        )
         path_id = f"strip-{strip_index:03d}"
-        layer_id = f"depth-{self.depth_index:03d}"
-        region_id = f"{self.body_id}-{path_id}"
+        layer_id = (
+            f"depth-{self.depth_index:03d}"
+            if self.growth_layer_index is None
+            else f"growth-{self.growth_layer_index:03d}"
+        )
+        region_id = f"{self.body_id}-{path_id}" if self.growth_layer_index is None else self.body_id
         tangent = _unit(_subtract(positions[1], positions[0]))
         if self.points:
             self._event("retract", layer_id, region_id)
-            self._point(positions[0], normals[0], tangent, layer_id, region_id, "travel", "none", 0)
+            self._point(
+                positions[0],
+                normals[0],
+                nozzle_axes[0],
+                tangent,
+                layer_id,
+                region_id,
+                "travel",
+                "none",
+                0,
+            )
         else:
             self._point(
-                positions[0], normals[0], tangent, layer_id, region_id, "approach", "none", 0
+                positions[0],
+                normals[0],
+                nozzle_axes[0],
+                tangent,
+                layer_id,
+                region_id,
+                "approach",
+                "none",
+                0,
             )
         self._event("prime", layer_id, region_id)
-        skin = self.depth_index in {1, self.depth_count} or boundary_strip
+        skin = (
+            self.depth_index in {1, self.depth_count} or boundary_strip
+            if self.growth_layer_index is None
+            else self.growth_layer_index in {1, self.depth_count} or boundary_strip
+        )
         role = "skin" if skin else "infill"
-        for previous, current, normal in zip(positions, positions[1:], normals[1:], strict=False):
+        for previous, current, normal, nozzle_axis in zip(
+            positions, positions[1:], normals[1:], nozzle_axes[1:], strict=False
+        ):
             length = math.dist(previous, current)
             if length <= _EPSILON:
                 continue
@@ -405,22 +606,30 @@ class _SurfacePathBuilder:
             self._point(
                 current,
                 normal,
+                nozzle_axis,
                 _unit(_subtract(current, previous)),
                 layer_id,
                 region_id,
                 "deposition",
                 role,
-                length * self.parameters.bead_width_mm * self.layer_height,
+                length * self.effective_bead_width * self.layer_height,
             )
 
-    def _point(self, position, normal, tangent, layer_id, region_id, kind, role, volume):
+    def _point(
+        self, position, normal, nozzle_axis, tangent, layer_id, region_id, kind, role, volume
+    ):
         deposition = kind == "deposition"
+        point_id = (
+            f"point-{len(self.points) + 1:08d}"
+            if self.growth_layer_index is None
+            else f"strip-{self.strip_index:03d}-point-{len(self.points) + 1:08d}"
+        )
         self.points.append(
             ToolpathPoint(
-                f"point-{len(self.points) + 1:08d}",
+                point_id,
                 position,
                 tangent,
-                tuple(-value for value in normal),
+                nozzle_axis,
                 self.operation_id,
                 "surface-solid-fill",
                 layer_id,
@@ -508,6 +717,25 @@ def _root_edge_gap(model, selection):
     return result
 
 
+def _first_track_support_gap(model, substrate_body_id, contours, first_depth):
+    from OCP.BRepBuilderAPI import BRepBuilderAPI_MakeVertex
+    from OCP.BRepExtrema import BRepExtrema_DistShapeShape
+
+    substrate = model.shapes[substrate_body_id]
+    maximum = 0.0
+    for contour in contours:
+        for point, normal, _ in contour:
+            center = _subtract(point, _scale(normal, first_depth))
+            distance = BRepExtrema_DistShapeShape(
+                BRepBuilderAPI_MakeVertex(gp_Pnt(*center)).Vertex(), substrate
+            )
+            distance.Perform()
+            if not distance.IsDone():
+                raise ValueError("freeform.first_layer_support_distance_failed")
+            maximum = max(maximum, distance.Value())
+    return maximum
+
+
 def _validate_selection(model, selection):
     if selection.body_id not in model.shapes:
         raise ValueError(f"unknown body: {selection.body_id}")
@@ -544,6 +772,37 @@ def _surface_normal(surface, orientation, u, v):
 
 def _point(point) -> Vector3:
     return float(point.X()), float(point.Y()), float(point.Z())
+
+
+def _direction(direction) -> Vector3:
+    return float(direction.X()), float(direction.Y()), float(direction.Z())
+
+
+def _growth_nozzle_axes(positions, normals, references):
+    result = []
+    for index, (normal, reference) in enumerate(zip(normals, references, strict=True)):
+        before = positions[max(0, index - 1)]
+        after = positions[min(len(positions) - 1, index + 1)]
+        tangent = _unit(_subtract(after, before))
+        across = _unit(_cross(normal, tangent))
+        if _dot(across, reference) < 0:
+            across = _scale(across, -1.0)
+        if _dot(across, reference) < 0.5:
+            raise ValueError("freeform.growth_direction_ambiguous")
+        result.append(_scale(across, -1.0))
+    return tuple(result)
+
+
+def _cross(left: Vector3, right: Vector3) -> Vector3:
+    return (
+        left[1] * right[2] - left[2] * right[1],
+        left[2] * right[0] - left[0] * right[2],
+        left[0] * right[1] - left[1] * right[0],
+    )
+
+
+def _dot(left: Vector3, right: Vector3) -> float:
+    return math.fsum(a * b for a, b in zip(left, right, strict=True))
 
 
 def _subtract(left: Vector3, right: Vector3) -> Vector3:

@@ -1072,6 +1072,21 @@ class TubeSetupController(
         for operation in self._operations:
             self._mark_product_stale(operation)
 
+    def replace_setup(self, setup: ManufacturingSetup, *, reason: str) -> None:
+        """Publish shared Setup values without replacing its operation identity."""
+
+        if not isinstance(setup, ManufacturingSetup):
+            raise TypeError("setup must be ManufacturingSetup")
+        if setup.setup_id != self._setup.setup_id:
+            raise ValueError("replacement Setup must retain the common setup_id")
+        if self.has_drafts:
+            raise PendingDraftError(self.draft_nodes)
+        if setup == self._setup:
+            return
+        self._setup = setup
+        self._mark_operations_dirty(reason)
+        self._modified = True
+
 
 def _vector3(values: Sequence[float], name: str) -> tuple[float, float, float]:
     try:

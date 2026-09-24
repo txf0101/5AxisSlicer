@@ -31,6 +31,7 @@ from .manufacturing.preview_kinematics import (
     DEFAULT_PREVIEW_KINEMATICS_REGISTRY,
     MACHINE_COORDINATE_TRANSFORM,
     NC_PREVIEW_OBJECT_ID,
+    OWN_AC_PREVIEW_SEMANTICS,
     reconstruct_preview_motion,
 )
 from .manufacturing.setup import IssueSeverity, ValidationIssue
@@ -47,6 +48,7 @@ def parse_lines(
     progress_callback: ProgressCallback | None = None,
     cancel_check: CancelCheck | None = None,
     controller_semantics: str | None = None,
+    tool_length_mm: float = 0.0,
 ) -> GCodePreview:
     """Parse a line source and commit one coordinate space for the whole file."""
 
@@ -55,6 +57,7 @@ def parse_lines(
     segments: list[GCodePathSegment] = []
     timeline: list[GCodeTimelineStep] = []
     stats = _PreviewStats(controller_semantics)
+    stats.tool_length_mm = tool_length_mm
     sample_stride = max(1, int(sample_stride))
 
     total_lines = len(lines) if hasattr(lines, "__len__") else None
@@ -80,6 +83,7 @@ def parse_lines(
             comment,
             sample_stride,
             controller_semantics,
+            tool_length_mm,
         )
 
     # Per-step reconstruction is provisional. One unresolved rotary word makes
@@ -330,6 +334,7 @@ def _append_motion(
     comment: str,
     sample_stride: int,
     controller_semantics: str | None,
+    tool_length_mm: float,
 ) -> None:
     step_index = stats.timeline_step_count
     reconstruction = reconstruct_preview_motion(
@@ -338,6 +343,7 @@ def _append_motion(
         values.rotary_start,
         values.rotary_end,
         controller_semantics=controller_semantics,
+        tool_length_mm=tool_length_mm,
     )
     display_start, display_end = reconstruction.start, reconstruction.end
     has_spatial_length = _points_differ(display_start, display_end)
@@ -476,7 +482,9 @@ def _file_coordinate_policy(
     active_words: set[str],
 ) -> tuple[str, tuple[ValidationIssue, ...]]:
     required_words = active_words | (present_words & {"U", "V", "W"})
-    if not required_words:
+    if not required_words and not (
+        stats.controller_semantics == OWN_AC_PREVIEW_SEMANTICS and stats.tool_length_mm
+    ):
         return MACHINE_COORDINATE_TRANSFORM, ()
 
     semantics = DEFAULT_PREVIEW_KINEMATICS_REGISTRY.get(stats.controller_semantics)
@@ -668,6 +676,7 @@ def _build_preview(
             [],
             timeline=[],
             controller_semantics=stats.controller_semantics,
+            tool_length_mm=stats.tool_length_mm,
             validation_issues=tuple(stats.validation_issues),
         )
     bounds = None
@@ -691,6 +700,7 @@ def _build_preview(
         stats.height_min,
         stats.height_max,
         controller_semantics=stats.controller_semantics,
+        tool_length_mm=stats.tool_length_mm,
         validation_issues=tuple(stats.validation_issues),
     )
 

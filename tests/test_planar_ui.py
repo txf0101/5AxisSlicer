@@ -68,6 +68,51 @@ def _path_controller() -> PlanarController:
     return controller
 
 
+def test_loaded_model_without_operation_prompts_for_creation_in_both_languages() -> None:
+    page = PlanarPage(controller=_controller(), viewer_factory=TubeViewerStub)
+    assert "新建操作" in page.status_label.text()
+    assert "打开 STEP" not in page.status_label.text()
+    page.set_language("en")
+    assert "Create operation" in page.status_label.text()
+    page.close()
+
+
+def test_model_visibility_toggle_exposes_internal_planar_paths() -> None:
+    page = PlanarPage(controller=_controller(), viewer_factory=TubeViewerStub)
+    calls: list[bool] = []
+    page.viewer.set_model_visible = calls.append
+
+    assert page.show_model_checkbox.text() == "显示模型"
+    assert page.path_display_combo.currentData() == "paper"
+    assert page.path_display_combo.currentText() == "完整线条（快速）"
+    page.show_model_checkbox.setChecked(False)
+    assert calls == [False]
+    page.set_language("en")
+    assert page.show_model_checkbox.text() == "Show model"
+    assert page.path_display_combo.currentText() == "Full lines (fast)"
+    page.show_model_checkbox.setChecked(True)
+    assert calls == [False, True]
+    page.close()
+
+
+def test_generated_planar_preview_defaults_to_full_lines_and_can_show_beads() -> None:
+    page = PlanarPage(controller=_path_controller(), viewer_factory=TubeViewerStub)
+    page.operation_type_combo.setCurrentIndex(page.operation_type_combo.findData("planar_zigzag"))
+    page.create_button.click()
+    page.first_layer_spin.setValue(0.0)
+    page.last_layer_spin.setValue(0.0)
+    page.feedrate_spin.setValue(100.0)
+    page.travel_feedrate_spin.setValue(100.0)
+    page.apply_button.click()
+    page.generate_button.click()
+
+    assert page.viewer.gcode_preview is not None
+    assert page.viewer.quality_mode == "paper"
+    page.path_display_combo.setCurrentIndex(1)
+    assert page.viewer.quality_mode == "interactive"
+    page.close()
+
+
 def test_apply_routes_planar_inputs_through_gui_command_service() -> None:
     _app()
     page = PlanarPage(controller=_controller(), viewer_factory=TubeViewerStub)

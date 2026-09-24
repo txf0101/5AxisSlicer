@@ -20,6 +20,7 @@ from PyQt5.QtWidgets import (
 )
 
 from .ui_controls import OptionalDoubleSpinBox
+from .generation_event_pump import throttled_event_pump
 from .models import PickHit, PickRequest
 
 GEOMETRY_FIELDS = (
@@ -232,7 +233,9 @@ def apply(page: Any) -> None:
 
 def generate(page: Any) -> None:
     _set_generation_busy(page, True)
-    page.controller.set_generation_event_pump(QApplication.processEvents)
+    page.controller.set_generation_event_pump(
+        throttled_event_pump(QApplication.processEvents)
+    )
     try:
         _set_generation_status(page, "generation_running")
         payload = page._execute_command(

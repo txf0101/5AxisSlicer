@@ -24,13 +24,13 @@ from PyQt5.QtWidgets import (
     QPushButton,
     QScrollArea,
     QSizePolicy,
-    QSpinBox,
     QVBoxLayout,
     QWidget,
 )
 
 from .command_kernel import CommandError
 from .gcode_preview import GCodePreview
+from .generation_event_pump import throttled_event_pump
 from .manufacturing.rotary_parameters import (
     RotaryAngularRegion,
     RotaryFrame,
@@ -42,6 +42,10 @@ from .models import Vector3
 from .rotary_commands import RotaryCommandService
 from .rotary_controller import RotaryController
 from .rotary_operation_service import bind_rotary_geometry_references
+from .ui_controls import (
+    ScrollSafeDoubleSpinBox as _ScrollSafeDoubleSpinBox,
+    ScrollSafeSpinBox as _ScrollSafeSpinBox,
+)
 from .viewer import ModelViewer
 
 
@@ -50,6 +54,9 @@ _TEXT = {
         "title": "Rotary 回转增材工作台",
         "back": "返回",
         "open": "打开 STEP",
+        "show_model": "显示模型",
+        "path_lines": "完整线条（快速）",
+        "path_beads": "沉积道宽",
         "new_type": "新建操作类型",
         "existing": "现有操作",
         "spiral": "回转螺旋",
@@ -128,6 +135,9 @@ _TEXT = {
         "title": "Rotary Additive Workbench",
         "back": "Back",
         "open": "Open STEP",
+        "show_model": "Show model",
+        "path_lines": "All lines (fast)",
+        "path_beads": "Bead width",
         "new_type": "New operation type",
         "existing": "Existing operation",
         "spiral": "Rotary Spiral",
@@ -259,6 +269,23 @@ class RotaryPage(QWidget):
         nav.addWidget(self.back_button)
         nav.addWidget(self.open_button)
         layout.addLayout(nav)
+        pick_row = QHBoxLayout()
+        self.pick_kind_label = QLabel()
+        self.pick_kind_combo = QComboBox()
+        for kind in ("edge", "face", "body", "vertex"):
+            self.pick_kind_combo.addItem("", kind)
+        pick_row.addWidget(self.pick_kind_label)
+        pick_row.addWidget(self.pick_kind_combo, 1)
+        layout.addLayout(pick_row)
+        display_row = QHBoxLayout()
+        self.show_model_checkbox = QCheckBox()
+        self.show_model_checkbox.setChecked(True)
+        self.path_display_combo = QComboBox()
+        self.path_display_combo.addItem("", "paper")
+        self.path_display_combo.addItem("", "interactive")
+        display_row.addWidget(self.show_model_checkbox)
+        display_row.addWidget(self.path_display_combo, 1)
+        layout.addLayout(display_row)
         self._build_form(layout)
         self._build_actions(layout)
         self.editor_scroll.setWidget(editor)
@@ -354,7 +381,7 @@ class RotaryPage(QWidget):
         self.retract_length_spin = self._double_spin(1.0, 0.0)
         self.dwell_spin = self._double_spin(0.0, 0.0)
         self.axial_step_spin = self._double_spin(2.0, 0.001)
-        self.radial_pass_count_spin = QSpinBox()
+        self.radial_pass_count_spin = _ScrollSafeSpinBox()
         self.radial_pass_count_spin.setRange(1, 100)
         self.radial_pass_count_spin.setValue(1)
         self.radial_spacing_spin = self._double_spin(0.6, 0.001)
@@ -441,6 +468,9 @@ class RotaryPage(QWidget):
         self.pick_axis_button.clicked.connect(self._use_selected_axis)
         self.pick_contours_button.clicked.connect(self._use_selected_contours)
         self.pick_surfaces_button.clicked.connect(self._use_selected_surfaces)
+        self.pick_kind_combo.currentIndexChanged.connect(self._set_pick_kind)
+        self.show_model_checkbox.toggled.connect(self._set_model_visible)
+        self.path_display_combo.currentIndexChanged.connect(self._set_path_display)
         self.issue_list.itemActivated.connect(self._jump_to_issue)
 
     def set_controller(self, controller: RotaryController) -> None:
@@ -453,7 +483,21 @@ class RotaryPage(QWidget):
         self._last_error = None
         self._install_generation_event_pump()
         self._load_model_into_viewer()
+        self._set_pick_kind()
         self.refresh()
+
+    def _set_pick_kind(self, *_ignored: Any) -> None:
+        kind = self.pick_kind_combo.currentData()
+        if kind is not None:
+            self.viewer.set_mode(kind)
+
+    def _set_model_visible(self, visible: bool) -> None:
+        if hasattr(self.viewer, "set_model_visible"):
+            self.viewer.set_model_visible(visible)
+
+    def _set_path_display(self, _index: int) -> None:
+        if hasattr(self.viewer, "set_quality_mode") and getattr(self.viewer, "gcode_preview", None) is not None:
+            self.viewer.set_quality_mode(str(self.path_display_combo.currentData()))
 
     def set_language(self, language: str) -> None:
         self.language = _normalise_language(language)
@@ -469,6 +513,17 @@ class RotaryPage(QWidget):
         self.thin_wall_policy_combo.setItemText(0, self._t("policy_error"))
         self.thin_wall_policy_combo.setItemText(1, self._t("policy_reduce"))
         self.title_label.setText(self._t("title"))
+        self.pick_kind_label.setText(
+            "Viewer 选取类型" if self.language == "zh" else "Viewer selection type"
+        )
+        self.show_model_checkbox.setText(self._t("show_model"))
+        self.path_display_combo.setItemText(0, self._t("path_lines"))
+        self.path_display_combo.setItemText(1, self._t("path_beads"))
+        for index, kind in enumerate(("edge", "face", "body", "vertex")):
+            names = {"edge": "边", "face": "面", "body": "实体", "vertex": "顶点"}
+            self.pick_kind_combo.setItemText(
+                index, names[kind] if self.language == "zh" else kind.title()
+            )
         for button, key in (
             (self.back_button, "back"),
             (self.open_button, "open"),
@@ -937,6 +992,7 @@ class RotaryPage(QWidget):
             return
         if hasattr(self.viewer, "load_gcode_preview"):
             self.viewer.load_gcode_preview(_preview_from_toolpath(result.preview_toolpath))
+            self._set_path_display(self.path_display_combo.currentIndex())
         self._viewer_operation_id = operation.operation_id
 
     def _selected_operation(self) -> Any | None:
@@ -960,7 +1016,9 @@ class RotaryPage(QWidget):
             self.viewer.load_model(model)
 
     def _install_generation_event_pump(self) -> None:
-        self.controller.set_generation_event_pump(QApplication.processEvents)
+        self.controller.set_generation_event_pump(
+            throttled_event_pump(QApplication.processEvents)
+        )
 
     def _add_row(self, form: QFormLayout, key: str, widget: QWidget) -> None:
         label = QLabel()
@@ -975,7 +1033,7 @@ class RotaryPage(QWidget):
 
     @staticmethod
     def _double_spin(value: float, minimum: float) -> QDoubleSpinBox:
-        spin = QDoubleSpinBox()
+        spin = _ScrollSafeDoubleSpinBox()
         spin.setDecimals(4)
         spin.setRange(minimum, 1_000_000.0)
         spin.setValue(value)
@@ -983,7 +1041,7 @@ class RotaryPage(QWidget):
 
     @staticmethod
     def _angle_spin(value: float) -> QDoubleSpinBox:
-        spin = QDoubleSpinBox()
+        spin = _ScrollSafeDoubleSpinBox()
         spin.setDecimals(4)
         spin.setRange(-1_000_000.0, 1_000_000.0)
         spin.setValue(value)

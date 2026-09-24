@@ -15,6 +15,7 @@ from collections.abc import Callable
 
 from ...manufacturing.toolpath import GeneratedToolpath, ToolpathEvent, ToolpathPoint
 from ...models import CadModel, Vector3
+from .._segment_pairs import nonadjacent_overlap_pairs
 from ..planar.region import PlanarRegion
 from .spherical_domain import SphericalChart, spherical_section
 
@@ -411,14 +412,10 @@ def _simplified_vertices(loop):
 
 def _self_intersects(loop):
     edges = tuple(zip(loop, loop[1:], strict=False))
-    for index, (a, b) in enumerate(edges):
-        for other_index in range(index + 2, len(edges)):
-            if index == 0 and other_index == len(edges) - 1:
-                continue
-            c, d = edges[other_index]
-            if _segments_cross(a, b, c, d):
-                return True
-    return False
+    return any(
+        _segments_cross(*edges[left], *edges[right])
+        for left, right in nonadjacent_overlap_pairs(loop, tolerance=_EPSILON)
+    )
 
 
 def _segments_cross(a, b, c, d):

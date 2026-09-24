@@ -135,13 +135,13 @@ class UiStateTests(unittest.TestCase):
         window = MainWindow(http_port=0)
         self.addCleanup(window.close)
 
-        self.assertEqual(window.gcode_viewer_button.text(), "切片成果预览")
+        self.assertEqual(window.gcode_viewer_button.text(), "G-code 文件预览")
         window.gcode_viewer_button.click()
 
         self.assertIs(window.stack.currentWidget(), window.result_page)
         self.assertEqual(window.result_page.state.status, "empty")
         window.toggle_language()
-        self.assertEqual(window.gcode_viewer_button.text(), "Slicing Result Preview")
+        self.assertEqual(window.gcode_viewer_button.text(), "G-code File Preview")
 
     def test_result_menus_and_language_preference_are_global(self) -> None:
         window = MainWindow(http_port=0, result_viewer_factory=ResultViewerStub)

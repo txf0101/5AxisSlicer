@@ -16,6 +16,7 @@ import numpy as np
 
 
 _BLADE_MARKER = re.compile(rb"^[ \t]*;[ \t]*\xe5\x8f\xb6\xe8\xbd\xae[ \t]*([1-8])[ \t]*$")
+_OPERATION_POINT = re.compile(rb"^[ \t]*;[ \t]*PAC[ \t]+POINT[ \t]+\d+[ \t]+(op\d{1,6})-")
 _FIVE_AXIS_WORDS = tuple(axis.encode("ascii") for axis in ("F", "X", "Y", "Z", "A", "C", "E"))
 _SOURCE_HASH_CHUNK_SIZE = 1024 * 1024
 
@@ -121,10 +122,11 @@ class GCodeSourceIndex:
             )
             self._source_signature = self._capture_source_signature()
             if self._mmap is None:
-                marker_rows: list[tuple[int, int]] = []
+                blade_markers: list[tuple[int, int]] = []
+                operation_markers: list[tuple[int, str]] = []
             else:
-                self._offsets, marker_rows = self._load_or_build_index()
-            self.stages = self._build_stages(marker_rows)
+                self._offsets, blade_markers, operation_markers = self._load_or_build_index()
+            self.stages = self._build_stages(blade_markers, operation_markers)
             self._report_progress(1.0)
         except Exception:
             self.close()
@@ -226,7 +228,7 @@ class GCodeSourceIndex:
     def _cache_key(self) -> str:
         signature = self._source_signature
         value = (
-            "gcode-source-v2|"
+            "gcode-source-v3|"
             f"{signature['path']}|{signature['size_bytes']}|{signature['mtime_ns']}|"
             f"{signature['sha256']}"
         ).encode("utf-8")
@@ -260,7 +262,9 @@ class GCodeSourceIndex:
             "sha256": digest.hexdigest(),
         }
 
-    def _load_or_build_index(self) -> tuple[np.ndarray, list[tuple[int, int]]]:
+    def _load_or_build_index(
+        self,
+    ) -> tuple[np.ndarray, list[tuple[int, int]], list[tuple[int, str]]]:
         self._raise_if_cancelled()
         key = self._cache_key()
         offsets_path = self._cache_dir / f"{key}.npy"
@@ -272,6 +276,9 @@ class GCodeSourceIndex:
             if not self._valid_offsets(offsets):
                 raise ValueError("Invalid G-code source-index offsets")
             markers = self._validated_markers(payload, line_count=max(0, int(offsets.size) - 1))
+            operations = self._validated_operation_markers(
+                payload, line_count=max(0, int(offsets.size) - 1)
+            )
         except Exception:
             if isinstance(offsets, np.memmap):
                 mapping = getattr(offsets, "_mmap", None)
@@ -281,10 +288,11 @@ class GCodeSourceIndex:
             assert offsets is not None
             self._raise_if_cancelled()
             self._report_progress(1.0)
-            return offsets, markers
+            return offsets, markers, operations
 
         offsets: list[int] = [0]
         markers: list[tuple[int, int]] = []
+        operations: list[tuple[int, str]] = []
         self._mmap.seek(0)
         line_number = 0
         while True:
@@ -296,6 +304,11 @@ class GCodeSourceIndex:
             match = _BLADE_MARKER.match(raw.rstrip(b"\r\n"))
             if match:
                 markers.append((line_number, int(match.group(1))))
+            operation = _OPERATION_POINT.match(raw)
+            if operation:
+                operation_id = operation.group(1).decode("ascii")
+                if not operations or operation_id != operations[-1][1]:
+                    operations.append((line_number, operation_id))
             if line_number % 4096 == 0:
                 self._raise_if_cancelled()
                 self._report_progress(self._mmap.tell() / max(1, len(self._mmap)))
@@ -304,7 +317,7 @@ class GCodeSourceIndex:
             offsets.append(len(self._mmap))
         array = np.asarray(offsets, dtype=np.uint64)
         try:
-            self._write_cache(offsets_path, metadata_path, array, markers)
+            self._write_cache(offsets_path, metadata_path, array, markers, operations)
         except GCodeSourceIndexCancelled:
             raise
         except Exception:
@@ -312,7 +325,7 @@ class GCodeSourceIndex:
             # available when a profile, roaming drive, or explicit cache is read-only.
             self._raise_if_cancelled()
         self._report_progress(1.0)
-        return array, markers
+        return array, markers, operations
 
     def _valid_offsets(self, offsets: np.ndarray) -> bool:
         if offsets.dtype != np.uint64 or offsets.ndim != 1 or offsets.size < 1:
@@ -337,6 +350,29 @@ class GCodeSourceIndex:
             previous_line = line
         return markers
 
+    def _validated_operation_markers(
+        self, payload: object, *, line_count: int
+    ) -> list[tuple[int, str]]:
+        if not isinstance(payload, dict) or "operations" not in payload:
+            raise ValueError("Missing G-code operation metadata")
+        operations: list[tuple[int, str]] = []
+        previous_line = 0
+        for item in payload["operations"]:
+            if not isinstance(item, dict):
+                raise ValueError("Invalid G-code operation marker")
+            line = int(item["line"])
+            operation_id = str(item["id"])
+            if (
+                line <= previous_line
+                or line < 1
+                or line > line_count
+                or re.fullmatch(r"op\d{1,6}", operation_id) is None
+            ):
+                raise ValueError("Invalid G-code operation marker")
+            operations.append((line, operation_id))
+            previous_line = line
+        return operations
+
     def _raise_if_cancelled(self) -> None:
         if self._cancel_check is not None and self._cancel_check():
             raise GCodeSourceIndexCancelled("G-code source indexing cancelled")
@@ -351,6 +387,7 @@ class GCodeSourceIndex:
         metadata_path: Path,
         offsets: np.ndarray,
         markers: Iterable[tuple[int, int]],
+        operations: Iterable[tuple[int, str]],
     ) -> None:
         self._raise_if_cancelled()
         self._cache_dir.mkdir(parents=True, exist_ok=True)
@@ -364,7 +401,8 @@ class GCodeSourceIndex:
                 np.save(stream, offsets, allow_pickle=False)
             self._raise_if_cancelled()
             metadata = {
-                "markers": [{"line": line, "ordinal": ordinal} for line, ordinal in markers]
+                "markers": [{"line": line, "ordinal": ordinal} for line, ordinal in markers],
+                "operations": [{"line": line, "id": op_id} for line, op_id in operations],
             }
             with tempfile.NamedTemporaryFile(
                 dir=self._cache_dir,
@@ -393,7 +431,28 @@ class GCodeSourceIndex:
                 except OSError:
                     pass
 
-    def _build_stages(self, marker_rows: list[tuple[int, int]]) -> list[GCodeStage]:
+    def _build_stages(
+        self,
+        marker_rows: list[tuple[int, int]],
+        operation_rows: list[tuple[int, str]],
+    ) -> list[GCodeStage]:
+        if not marker_rows and operation_rows:
+            stages: list[GCodeStage] = []
+            occurrences: dict[str, int] = {}
+            for index, (line, operation_id) in enumerate(operation_rows):
+                occurrences[operation_id] = occurrences.get(operation_id, 0) + 1
+                occurrence = occurrences[operation_id]
+                stage_id = operation_id if occurrence == 1 else f"{operation_id}_{occurrence}"
+                start = 1 if index == 0 else line
+                end = (
+                    operation_rows[index + 1][0] - 1
+                    if index + 1 < len(operation_rows)
+                    else self.line_count
+                )
+                stages.append(
+                    GCodeStage(stage_id, "operation", int(operation_id[2:]), start, end)
+                )
+            return stages
         if not marker_rows:
             return [GCodeStage("all", "all", None, 1, max(1, self.line_count))]
         stages: list[GCodeStage] = []

@@ -30,6 +30,8 @@ class _FakeViewer(QWidget):
         self.preview = None
         self.layer_min = 0
         self.layer_max = 0
+        self.line_min = None
+        self.line_max = None
         self.progress_index = 0
         self.quality_mode = "interactive"
         self.visibility: dict[str, object] = {}
@@ -64,6 +66,10 @@ class _FakeViewer(QWidget):
     def set_preview_layers(self, layer_min: int, layer_max: int) -> None:
         self.layer_min = layer_min
         self.layer_max = layer_max
+
+    def set_preview_line_range(self, line_min: int | None, line_max: int | None) -> None:
+        self.line_min = line_min
+        self.line_max = line_max
 
     def set_preview_progress(self, progress_index: int, interactive=None) -> None:
         self.progress_index = progress_index
@@ -154,7 +160,7 @@ class ResultPreviewPageTests(unittest.TestCase):
             [18, 56, 26],
         )
         page.retranslate("en")
-        self.assertEqual(page.title_label.text(), "Slicing Result Preview")
+        self.assertEqual(page.title_label.text(), "G-code File Preview")
 
         slice_requests: list[bool] = []
         parameter_events: list[object] = []
@@ -196,6 +202,14 @@ class ResultPreviewPageTests(unittest.TestCase):
                 for button in buttons:
                     right_edge = button.mapTo(content, button.rect().topRight()).x()
                     self.assertLess(right_edge, content.width(), button.objectName())
+
+    def test_viewer_does_not_extend_behind_navigation(self) -> None:
+        page = self.make_page()
+        page.resize(1700, 890)
+        page.show()
+        self.app.processEvents()
+        self.assertGreaterEqual(page.viewer_canvas.height(), 280)
+        self.assertLess(page.viewer_canvas.geometry().bottom(), page.navigation_card.geometry().top())
 
     def test_bilingual_type_ramp_is_readable_and_product_text_is_not_clipped(self) -> None:
         page = self.make_page()
@@ -346,6 +360,38 @@ G1 X3 Y0 Z0.4 A90 C-40 E0.2 F1200
             self.assertLessEqual(len(rendered_lines), 41)
             self.assertTrue(any("A90" in line and "C-20" in line for line in rendered_lines))
 
+            page.shutdown()
+            self.app.processEvents()
+
+    def test_pac_operations_drive_stage_navigation(self) -> None:
+        source = """; PAC POINT 1 op01-point-0001 approach - -
+G1 X0 Y0 Z0.2 A0 C0 F3000
+; PAC POINT 2 op01-point-0002 deposition - -
+G1 X1 Y0 Z0.2 A0 C0 E0.2 F1200
+; PAC POINT 3 op02-point-0001 approach - -
+G1 X1 Y0 Z1.0 A30 C15 F3000
+; PAC POINT 4 op02-point-0002 deposition - -
+G1 X2 Y0 Z1.0 A30 C15 E0.2 F1200
+"""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir) / "operations.gcode"
+            path.write_text(source, encoding="utf-8")
+            index = GCodeSourceIndex(path, Path(tmpdir) / "index")
+            page = self.make_page()
+            page.set_gcode(parse_gcode(source), index, owns_index=True)
+
+            self.assertEqual(
+                [page.stage_combo.itemData(row)["id"] for row in range(page.stage_combo.count())],
+                ["all", "op01", "op02"],
+            )
+            self.assertEqual(page.stage_combo.itemText(2), "操作 2")
+            self.assertFalse(page.stage_fallback_label.isVisible())
+            page.stage_combo.setCurrentIndex(2)
+            self.assertGreater(page._stage_progress_start, 0)
+            self.assertEqual(page.viewer.line_min, 5)
+            self.assertEqual(page.viewer.line_max, 8)
+            page.stage_combo.setCurrentIndex(0)
+            self.assertIsNone(page.viewer.line_min)
             page.shutdown()
             self.app.processEvents()
 

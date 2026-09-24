@@ -65,6 +65,7 @@ def build_paper_path_arrays(
         starts = timeline_arrays.starts
         ends = timeline_arrays.ends
         layers = timeline_arrays.layers
+        line_numbers = timeline_arrays.line_numbers
         move_codes = timeline_arrays.move_codes
         role_codes = timeline_arrays.role_codes
         delta_es = timeline_arrays.delta_es
@@ -78,6 +79,7 @@ def build_paper_path_arrays(
         starts = np.asarray([step.start for step in timeline], dtype=np.float32).reshape((-1, 3))
         ends = np.asarray([step.end for step in timeline], dtype=np.float32).reshape((-1, 3))
         layers = np.asarray([step.layer for step in timeline], dtype=np.int32)
+        line_numbers = np.asarray([step.line_number for step in timeline], dtype=np.int64)
         move_codes = np.asarray(
             [MOVE_CODES.get(step.move_type, MOVE_CODES["noop"]) for step in timeline],
             dtype=np.uint8,
@@ -96,6 +98,10 @@ def build_paper_path_arrays(
     layer_mask = (layers >= min(settings.layer_min, settings.layer_max)) & (
         layers <= max(settings.layer_min, settings.layer_max)
     )
+    if settings.line_min is not None:
+        layer_mask &= line_numbers >= settings.line_min
+    if settings.line_max is not None:
+        layer_mask &= line_numbers <= settings.line_max
     extrusion_mask = (move_codes == MOVE_CODES["extrude"]) & (delta_es > 0.0) & spatial
     allowed_roles = np.asarray(
         [ROLE_CODES[role] for role in settings.visible_roles if role in ROLE_CODES],

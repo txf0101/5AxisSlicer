@@ -34,10 +34,16 @@ from ..manufacturing.toolpath import (
 from ..models import CadModel
 from ..validation.indexed_tube import ValidationMetric
 from .own_ac import OwnACReadbackReport, postprocess_own_ac, readback_own_ac
+from .operation_transition import (
+    OperationTransitionError,
+    plan_machine_non_deposition_travels,
+    plan_machine_operation_transitions,
+)
 from .freeform_solid_product import SolidFillPlan, generate_solid_fill_product_path
 from .tool_change_service import (
     ToolChangeCollisionError,
     ToolChangeServicePlan,
+    check_non_deposition_travel_safety,
     check_operation_transition_safety,
     plan_tool_change_service,
 )
@@ -47,7 +53,7 @@ from .thermal_program import (
     wrap_thermal_program,
 )
 
-FREEFORM_ALGORITHM_VERSION = "paper-core-freeform-product-v1"
+FREEFORM_ALGORITHM_VERSION = "paper-core-freeform-product-v2"
 CancelCheck = Callable[[], bool]
 
 
@@ -260,19 +266,46 @@ def generate_freeform_product(
         checkpoint=lambda: _checkpoint(cancelled),
     )
     _checkpoint(cancelled)
-    service_plan: ToolChangeServicePlan | None = None
-    service_error: ValueError | None = None
+    transition_error: ValueError | None = None
     try:
-        service_plan = plan_tool_change_service(
-            toolpath, trajectory, machine, nozzle, controller,
+        toolpath, trajectory = plan_machine_operation_transitions(
+            toolpath, trajectory, machine, nozzle,
+            safe_clearance_mm=(
+                operation.solid_parameters.safe_clearance_mm
+                if operation.solid_parameters is not None else 5.0
+            ),
             T_workpiece_from_build=T_workpiece_from_build,
             checkpoint=lambda: _checkpoint(cancelled),
         )
     except ValueError as exc:
-        service_error = exc
-    transition_error: ValueError | None = None
+        transition_error = exc
+    travel_error: ValueError | None = None
+    if transition_error is None:
+        try:
+            toolpath, trajectory = plan_machine_non_deposition_travels(
+                toolpath, trajectory, machine, nozzle,
+                safe_clearance_mm=(
+                    operation.solid_parameters.safe_clearance_mm
+                    if operation.solid_parameters is not None else 5.0
+                ),
+                T_workpiece_from_build=T_workpiece_from_build,
+                checkpoint=lambda: _checkpoint(cancelled),
+            )
+        except ValueError as exc:
+            travel_error = exc
+    service_plan: ToolChangeServicePlan | None = None
+    service_error: ValueError | None = None
+    if transition_error is None and travel_error is None:
+        try:
+            service_plan = plan_tool_change_service(
+                toolpath, trajectory, machine, nozzle, controller,
+                T_workpiece_from_build=T_workpiece_from_build,
+                checkpoint=lambda: _checkpoint(cancelled),
+            )
+        except ValueError as exc:
+            service_error = exc
     transition_tip_contacts = 0
-    if service_error is None:
+    if service_error is None and transition_error is None and travel_error is None:
         try:
             _, transition_tip_contacts = check_operation_transition_safety(
                 toolpath, trajectory, machine, nozzle,
@@ -281,11 +314,23 @@ def generate_freeform_product(
             )
         except ValueError as exc:
             transition_error = exc
+    travel_tip_contacts = 0
+    if transition_error is None and travel_error is None:
+        try:
+            _, travel_tip_contacts = check_non_deposition_travel_safety(
+                toolpath, trajectory, machine, nozzle,
+                T_workpiece_from_build=T_workpiece_from_build,
+                checkpoint=lambda: _checkpoint(cancelled),
+            )
+        except ValueError as exc:
+            travel_error = exc
     validation = _validate(
         plan, toolpath, trajectory, operation, controller,
         service_plan=service_plan, service_error=service_error,
         transition_error=transition_error,
+        travel_error=travel_error,
         transition_tip_contacts=transition_tip_contacts,
+        travel_tip_contacts=travel_tip_contacts,
     )
     manifest = GeneratedResultManifest(
         f"{toolpath.toolpath_id}-result-v1",
@@ -356,7 +401,7 @@ def generate_freeform_product(
 def _validate(
     plan, toolpath, trajectory, operation, controller, *,
     service_plan=None, service_error=None, transition_error=None,
-    transition_tip_contacts=0,
+    travel_error=None, transition_tip_contacts=0, travel_tip_contacts=0,
 ):
     metrics = _validation_metrics(plan, trajectory, operation)
     c_values = [item.joint_positions.get("C", 0.0) for item in trajectory.samples]
@@ -377,7 +422,13 @@ def _validate(
                 context={"reason": str(service_error)},
             ))
     if transition_error is not None:
-        if isinstance(transition_error, ToolChangeCollisionError):
+        if isinstance(transition_error, OperationTransitionError):
+            issues.append(ValidationIssue(
+                transition_error.code, IssueSeverity.ERROR,
+                object_id=transition_error.point_id,
+                context=transition_error.context,
+            ))
+        elif isinstance(transition_error, ToolChangeCollisionError):
             issues.append(ValidationIssue(
                 transition_error.code, IssueSeverity.ERROR,
                 object_id=transition_error.point_id,
@@ -388,10 +439,28 @@ def _validate(
                 "motion.transition_check_failed", IssueSeverity.ERROR,
                 context={"reason": str(transition_error)},
             ))
-    if transition_tip_contacts:
+    if travel_error is not None:
+        if isinstance(travel_error, OperationTransitionError):
+            issues.append(ValidationIssue(
+                travel_error.code, IssueSeverity.ERROR,
+                object_id=travel_error.point_id,
+                context=travel_error.context,
+            ))
+        elif isinstance(travel_error, ToolChangeCollisionError):
+            issues.append(ValidationIssue(
+                travel_error.code, IssueSeverity.ERROR,
+                object_id=travel_error.point_id,
+                context=travel_error.context,
+            ))
+        else:
+            issues.append(ValidationIssue(
+                "motion.non_deposition_travel_check_failed", IssueSeverity.ERROR,
+                context={"reason": str(travel_error)},
+            ))
+    if transition_tip_contacts or travel_tip_contacts:
         issues.append(ValidationIssue(
             "motion.intentional_tip_contact", IssueSeverity.WARNING,
-            context={"allowed_contact_checks": transition_tip_contacts,
+            context={"allowed_contact_checks": transition_tip_contacts + travel_tip_contacts,
                      "offline_only": True},
         ))
     elif service_plan is not None and service_plan.moves_before_event:
@@ -584,6 +653,9 @@ def export_freeform_product(
 ) -> Path:
     if not result.offline_exportable:
         raise ValueError("validation Error or failed readback blocks offline export")
+    from .export_target_guard import validate_export_target
+
+    validate_export_target(Path(destination))
     target = Path(destination).resolve()
     target.parent.mkdir(parents=True, exist_ok=True)
     stage = Path(mkdtemp(prefix=f".{target.name}.stage-", dir=target.parent))
@@ -592,8 +664,9 @@ def export_freeform_product(
         _checkpoint(cancelled)
         _write_artifacts(stage, result)
         _checkpoint(cancelled)
+        validate_export_target(target)
         if backup.exists():
-            shutil.rmtree(backup)
+            raise ValueError(f"previous export backup requires review: {backup}")
         moved = False
         if target.exists():
             os.replace(target, backup)

@@ -81,8 +81,17 @@ def test_solid_process_parameters_roundtrip_and_spacing_guard() -> None:
         solid_thickness_mm=1.0,
     )
     assert SolidFillProcessParameters.from_json(parameters.to_json()) == parameters
+    outward = SolidFillProcessParameters(surface_growth_strategy="root_edge_outward")
+    assert SolidFillProcessParameters.from_json(outward.to_json()) == outward
+    legacy_payload = parameters.to_json()
+    legacy_payload.pop("surface_growth_strategy")
+    assert SolidFillProcessParameters.from_json(legacy_payload).surface_growth_strategy == (
+        "surface_thickness"
+    )
     with pytest.raises(ValueError, match="path_spacing_mm"):
         SolidFillProcessParameters(bead_width_mm=0.4, path_spacing_mm=0.5)
+    with pytest.raises(ValueError, match="surface_growth_strategy"):
+        SolidFillProcessParameters(surface_growth_strategy="unknown")
 
 
 def test_freeform_operation_roundtrip_keeps_solid_contract() -> None:

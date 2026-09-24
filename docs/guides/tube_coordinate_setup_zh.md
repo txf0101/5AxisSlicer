@@ -12,9 +12,9 @@ STEP 可在工作台中导入。模型出现后，点击顶部“公共制造设
 
 模型会保留在当前项目中，无需再次导入。完成公共设置后，点击顶部“工作台”，选择“管状工作台”。
 
-![STEP 导入后进入管状设置的按钮](assets/tube_coordinate_setup/01_imported_step_entry.png)
+![首页的打开 STEP 和公共制造设置入口](assets/product_delivery/01_home_zh.jpg)
 
-> 图中展示从已导入的 STEP 进入设置页。请以界面顶部的“公共制造设置”为入口。
+> 图中展示首页入口。打开 STEP 后，点顶部“公共制造设置”；完成设置再由“工作台”进入 Tube。
 
 ## 2. 三维预览鼠标操作
 
@@ -49,7 +49,7 @@ STEP 可在工作台中导入。模型出现后，点击顶部“公共制造设
 
 `pipe2` 示例中的圆盘和弯管属于同一个打印件，两项都应设为“零件”。Part 需要封闭实体；sheet 或 shell 不符合该角色要求。
 
-![管状工作台中的零件归属页面](assets/tube_coordinate_setup/02_tube_setup_part.png)
+![Part 页把参与打印的实体设为零件并显示设置状态](assets/product_delivery/11_setup_part_ready_zh.jpg)
 
 ## 4. 选择机床、喷嘴和材料
 

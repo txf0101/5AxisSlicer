@@ -87,7 +87,10 @@ CASES: dict[str, CaseConfig] = {
                 for index in range(2, 10)
             ],
         },
-        "parameters": {"solid_thickness_mm": 1.0},
+        "parameters": {
+            "solid_thickness_mm": 1.0,
+            "surface_growth_strategy": "root_edge_outward",
+        },
     },
     "three_leaf": {
         "source": ROOT / "example/三叶扇/Supportless_sample.stp",
@@ -128,7 +131,10 @@ def _reference_frame(frame_id: str) -> CoordinateFrameDefinition:
     )
 
 
-def prepare_ui_project(destination: Path, model, operation) -> Path:
+def prepare_ui_project(
+    destination: Path, model, operation, *, controller_profile=None,
+    mount_translation_mm=(0, 0, 0),
+) -> Path:
     """Prepare a realistic project fixture; generation remains in the public UI command."""
 
     setup = ManufacturingSetup(
@@ -144,17 +150,25 @@ def prepare_ui_project(destination: Path, model, operation) -> Path:
         build_coordinate_system=_reference_frame("build"),
         mount_datum_id="build_plate_mount",
         T_mount_from_build=RigidTransform.from_translation(
-            (250, 250, 250), source_frame="build", target_frame="build_plate_mount"
+            mount_translation_mm, source_frame="build", target_frame="build_plate_mount"
         ),
     )
     operation = replace(operation, setup_id=setup.setup_id)
+    workbench_state = {"workbench": "freeform"}
+    if controller_profile is not None:
+        workbench_state["freeform_controller_profile"] = controller_profile.to_json()
     saved = save_project(
-        destination, model, SelectionState(), setup=setup, operations=(operation,),
+        destination, model, SelectionState(), workbench_state=workbench_state,
+        setup=setup, operations=(operation,),
         original_source_path=model.source_path,
     )
     restored = load_project(saved)
-    if restored.operations != (operation,) or restored.setup != setup:
-        raise RuntimeError("prepared UI project did not roundtrip")
+    if restored.operations != (operation,):
+        raise RuntimeError("prepared UI operation did not roundtrip")
+    if restored.setup != setup:
+        raise RuntimeError("prepared UI Setup did not roundtrip")
+    if restored.workbench != json.loads(json.dumps(workbench_state)):
+        raise RuntimeError("prepared UI workbench settings did not roundtrip")
     return saved
 
 
@@ -164,6 +178,11 @@ def main() -> None:
     parser.add_argument("--output", type=Path)
     parser.add_argument("--prepare-project", type=Path,
                         help="save a configured project for real GUI generate/export testing")
+    parser.add_argument("--layer-height", type=float, help="override radial layer height in mm")
+    parser.add_argument("--sampling-step", type=float, help="override path sampling step in mm")
+    parser.add_argument("--safe-clearance", type=float, help="override operation transition clearance in mm")
+    parser.add_argument("--diagnose-only", action="store_true",
+                        help="generate and print compact validation issues without exporting")
     args = parser.parse_args()
     case = CASES[args.case]
     destination = args.output or (
@@ -176,11 +195,18 @@ def main() -> None:
     operation = create_freeform_operation(
         (), "fan15-public-setup", case["operation_type"], operation_id=f"fan15-{args.case}"
     )
+    parameters = dict(case["parameters"])
+    if args.layer_height is not None:
+        parameters["layer_height_mm"] = args.layer_height
+    if args.sampling_step is not None:
+        parameters["sampling_step_mm"] = args.sampling_step
+    if args.safe_clearance is not None:
+        parameters["safe_clearance_mm"] = args.safe_clearance
     operation = configure_freeform_solid_operation(
         operation,
         model,
         geometry=case["geometry"](model),
-        parameters=SolidFillProcessParameters(**cast(Any, case["parameters"])),
+        parameters=SolidFillProcessParameters(**cast(Any, parameters)),
     )
     if args.prepare_project is not None:
         print(prepare_ui_project(args.prepare_project, model, operation))
@@ -196,6 +222,24 @@ def main() -> None:
         source_path=case["source"],
         thermal_parameters=ThermalProgramParameters(195.0, 45.0),
     )
+    if args.diagnose_only:
+        transitions = [
+            {"index": index, "point_id": point.point_id,
+             "position_mm": list(point.position), "nozzle_axis": list(point.nozzle_axis),
+             "joints": dict(result.trajectory.samples[index].joint_positions)}
+            for index, point in enumerate(result.toolpath.points)
+            if point.stage_id == "operation-transition"
+        ][:8]
+        print(json.dumps({
+            "case": args.case,
+            "points": len(result.toolpath.points),
+            "events": len(result.toolpath.events),
+            "offline_exportable": result.offline_exportable,
+            "issues": [issue.to_json() for issue in result.validation.issues],
+            "first_transitions": transitions,
+            "elapsed_s": time.perf_counter() - started,
+        }, ensure_ascii=False, indent=2))
+        return
     if not result.offline_exportable:
         raise RuntimeError(json.dumps(result.to_json(), ensure_ascii=False))
     export_freeform_product(result, destination)

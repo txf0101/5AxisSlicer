@@ -5,17 +5,19 @@ from __future__ import annotations
 import os
 from pathlib import Path
 import sys
+from types import SimpleNamespace
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QListWidget
 
 from five_axis_slicer.automation_routes import AutomationRouter
 from five_axis_slicer.curve_commands import CurveCommandService
 from five_axis_slicer.curve_ui import CurvePage
 from five_axis_slicer.manufacturing.curve_parameters import CurveOperationDefinition
+from five_axis_slicer.manufacturing.setup import IssueSeverity, ValidationIssue
 from five_axis_slicer.models import SelectionState
 from five_axis_slicer.project_io import load_project, save_project
 from five_axis_slicer.restricted_script import ScriptParseError, parse_script
@@ -44,6 +46,7 @@ def test_curve_qt_generates_shared_toolpath_and_switches_language(tmp_path: Path
     controller, operation = _configured(model, edge.edge_id, "curve_multi_pass")
     page = CurvePage(controller=controller, viewer_factory=TubeViewerStub)
     page.set_language("en")
+    assert page.editor_scroll.maximumWidth() == 620
 
     assert page.generate_button.isEnabled()
     page.generate_button.click()
@@ -52,8 +55,17 @@ def test_curve_qt_generates_shared_toolpath_and_switches_language(tmp_path: Path
     assert result is not None and result.readback.passed
     assert str(page.viewer.gcode_preview.source_path) == f"<generated:{operation.operation_id}>"
     assert page.viewer.visible_path_segment_count > 0
+    assert not page.show_model_checkbox.isChecked()
+    assert not page.viewer.model_visible
+    page.show_model_checkbox.setChecked(True)
+    assert page.viewer.model_visible
+    page.path_display_combo.setCurrentIndex(1)
+    assert page.viewer.quality_mode == "interactive"
+    page.path_display_combo.setCurrentIndex(0)
+    assert page.viewer.quality_mode == "paper"
     assert page.export_button.isEnabled()
     assert page.title_label.text() == "Curve Deposition Workbench"
+    assert page.show_model_checkbox.text() == "Show model"
     assert "Stale" in page.help_label.text()
 
 
@@ -74,6 +86,19 @@ def test_curve_qt_error_then_parameter_recovery(tmp_path: Path) -> None:
 
     assert controller.product_result(operation.operation_id) is not None
     assert page.export_button.isEnabled()
+
+
+def test_curve_viewer_selection_type_can_switch_between_edge_and_face(tmp_path: Path) -> None:
+    model, edge = _line_model(tmp_path)
+    controller, _operation = _configured(model, edge.edge_id)
+    page = CurvePage(controller=controller, viewer_factory=TubeViewerStub)
+    assert page.viewer.selection.mode == "edge"
+    page.pick_kind_combo.setCurrentIndex(page.pick_kind_combo.findData("face"))
+    assert page.viewer.selection.mode == "face"
+    assert page.pick_kind_label.text() == "Viewer 选取类型"
+    page.set_language("en")
+    assert page.pick_kind_label.text() == "Viewer selection type"
+    page.close()
 
 
 def test_curve_http_routes_share_the_domain_command_entrypoint(tmp_path: Path) -> None:
@@ -150,3 +175,18 @@ def test_curve_service_rejects_planar_namespace(tmp_path: Path) -> None:
     output = CurveCommandService(controller).execute_script("planar.state()")
     assert output.startswith("ERROR")
     assert "only curve" in output.lower()
+
+
+def test_curve_and_freeform_show_setup_warning_in_selected_language() -> None:
+    page = SimpleNamespace(issue_list=QListWidget(), language="zh")
+    issue = ValidationIssue(
+        "MACHINE_REFERENCE_ONLY", IssueSeverity.WARNING, "builtin.machine.own_ac_fdm.v1"
+    )
+    CurvePage._refresh_issues(page, (issue,), None)
+    assert "参考机型仅供离线检查" in page.issue_list.item(0).text()
+    assert "MACHINE_REFERENCE_ONLY" not in page.issue_list.item(0).text()
+    assert "MACHINE_REFERENCE_ONLY" in page.issue_list.item(0).toolTip()
+
+    page.language = "en"
+    CurvePage._refresh_issues(page, (issue,), None)
+    assert "Reference machine for offline review" in page.issue_list.item(0).text()
