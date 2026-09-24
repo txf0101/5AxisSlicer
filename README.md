@@ -1,5 +1,9 @@
 # 5AxisSclicer V2.6.2
 
+5AxisSclicer 是面向五轴增材制造的 Windows 桌面切片软件。它导入 STEP/STP 模型，按零件几何选择平面、曲线、回转、管体或自由曲面工作台，设置机床与材料，生成并预览路径，检查运动和 G-code 回读后导出离线 NC 结果。本项目正在测试和持续完善中；实际参数与打印效果以用户设备调试为准。
+
+2026 年 3 月之后，Codex 参与了本项目的代码编写。
+
 **English:** [Product README](README.en.md) · [Quick start](docs/guides/quickstart_clickthrough_en.md) · [Learning manual](docs/guides/user_learning_manual_en.md) · [Guide index](docs/guides/README.md#english-guides)
 
 **第一次使用：**先看[五个工作台图文点击教程](docs/guides/quickstart_clickthrough_zh.md)，依次完成公共制造设置、选几何、应用参数、生成检查和离线导出。按对象跳转：[Planar](docs/guides/quickstart_clickthrough_zh.md#1-planar平面切片) · [Curve](docs/guides/quickstart_clickthrough_zh.md#2-curve沿边沉积) · [Rotary](docs/guides/quickstart_clickthrough_zh.md#3-rotary固定轴回转) · [Tube](docs/guides/quickstart_clickthrough_zh.md#4-tube管体生长) · [Freeform](docs/guides/quickstart_clickthrough_zh.md#5-freeform曲面与实体) · [已有 G-code 预览](docs/guides/quickstart_clickthrough_zh.md#6-查看已有-g-code)。参数和排错见[学习总册](docs/guides/user_learning_manual_zh.md)与[手册索引](docs/guides/README.md)。Research 入口暂不可用；本项目正在测试并持续完善。
