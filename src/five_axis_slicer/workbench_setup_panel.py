@@ -63,10 +63,10 @@ class WorkbenchSetupPanel(QScrollArea):
         self.setMaximumWidth(270)
         self.setFrameShape(QFrame.NoFrame)
         self.setWidgetResizable(True)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         content = QWidget(self)
         layout = QVBoxLayout(content)
-        layout.setSizeConstraint(QLayout.SetMinimumSize)
+        layout.setSizeConstraint(QLayout.SizeConstraint.SetMinimumSize)
         self.title = QLabel()
         self.title.setObjectName("panelTitle")
         self.scope = QLabel()
@@ -74,13 +74,13 @@ class WorkbenchSetupPanel(QScrollArea):
         self.scope.setObjectName(f"{key}SetupScope")
         self.resources = QLabel()
         self.resources.setWordWrap(True)
-        self.resources.setTextInteractionFlags(Qt.TextSelectableByMouse)
+        self.resources.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         self.nodes = QListWidget()
         self.nodes.setObjectName(f"{key}SetupNodes")
         self.nodes.setMinimumHeight(225)
         for node, label in _NODES:
             item = QListWidgetItem(label)
-            item.setData(Qt.UserRole, node)
+            item.setData(Qt.ItemDataRole.UserRole, node)
             self.nodes.addItem(item)
         self.nodes.itemActivated.connect(self._open_node)
         self.nodes.itemClicked.connect(self._open_node)
@@ -116,7 +116,7 @@ class WorkbenchSetupPanel(QScrollArea):
         self.set_language("zh")
 
     def _open_node(self, item: QListWidgetItem) -> None:
-        self._edit_node(self.key, str(item.data(Qt.UserRole)))
+        self._edit_node(self.key, str(item.data(Qt.ItemDataRole.UserRole)))
 
     def set_language(self, language: str) -> None:
         zh = language != "en"

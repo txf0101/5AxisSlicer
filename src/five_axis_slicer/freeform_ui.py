@@ -387,11 +387,14 @@ class FreeformPage(CurvePage):
         }
         for form, label, key in self._rows:
             row, _role = form.getWidgetPosition(label)
-            field = form.itemAt(row, QFormLayout.FieldRole)
+            if row is None:
+                continue
+            field = form.itemAt(row, QFormLayout.ItemRole.FieldRole)
             visible = key not in hidden_for_solid if is_solid else key != "normal_mode"
             label.setVisible(visible)
-            if field is not None and field.widget() is not None:
-                field.widget().setVisible(visible)
+            widget = field.widget() if field is not None else None
+            if widget is not None:
+                widget.setVisible(visible)
         for label, field in (
             (self.face_ids_label, self.face_ids_edit),
             (self.guides_json_label, self.guides_json_edit),

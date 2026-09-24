@@ -186,7 +186,7 @@ class MaterialPlanEditor(QDialog):
         for column, value in enumerate(values):
             item = QTableWidgetItem(str(value))
             if column == 0 and source is not None:
-                item.setData(Qt.UserRole, deepcopy(source))
+                item.setData(Qt.ItemDataRole.UserRole, deepcopy(source))
             table.setItem(row, column, item)
 
     @staticmethod
@@ -230,7 +230,7 @@ class MaterialPlanEditor(QDialog):
         channels = []
         for row in range(self.channels_table.rowCount()):
             first = self.channels_table.item(row, 0)
-            original = first.data(Qt.UserRole) if first is not None else None
+            original = first.data(Qt.ItemDataRole.UserRole) if first is not None else None
             channel = deepcopy(original) if isinstance(original, dict) else {}
             channel_id = self._cell(self.channels_table, row, 0)
             channel.update(

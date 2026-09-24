@@ -18,4 +18,10 @@
 
 此处核验的是静态门禁、领域测试和打包。桌面完整交互、实机控制器及材料测试不在本轮范围。GitHub 托管检查须在推送后以新运行结果单独判定；本地通过不能替代托管 CI。
 
+## 第二轮：Qt 类型定义差异
+
+提交 `bc3a2b5` 对应的 [#15](https://github.com/txf0101/5AxisSlicer/actions/runs/36042043785) 中，Windows 原生冒烟通过，其余三个任务仍在 Mypy 处失败。用户提供的 Windows 3.10 和 3.12 日志一致：12 条错误集中在四个界面文件。干净 CI 安装的 Qt 类型定义不接受 `Qt.UserRole`、`QFormLayout.FieldRole` 等旧式别名；本地环境接受，因此第一轮本地检查没有发现该差异。
+
+把这些调用改为 `Qt.ItemDataRole.UserRole`、`QFormLayout.ItemRole.FieldRole` 等明确的枚举类型。Freeform 表单同时对可能为空的行号和字段控件做检查，保留原有的显示条件。本地验证：完整质量脚本通过；材料计划编辑、工作台设置和 Freeform 集成测试共 31 项通过。是否恢复托管 CI，仍以本轮推送后的新运行结果为准。
+
 使用的 Skills：`gh-fix-ci` 用于确认失败任务与实施边界；`five-axis-slicer-validation` 用于解释器、质量门禁和环境错误分类。项目工作台开发 Skill 仅用于核对既有领域契约，未启动新的算法阶段验收。
