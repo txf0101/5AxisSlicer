@@ -299,6 +299,8 @@ def test_surface_solid_gui_converts_selected_root_edge_and_faces(configured) -> 
     page._generation_in_progress = False
     page.set_language("en")
     assert page.use_selection_button.text() == "Use selected geometry"
+    assert page.operation_type_combo.itemText(0) == "Surface"
+    assert page.operation_type_combo.itemText(4) == "Radial Solid"
     assert page.status_label.text().startswith("Status: ")
     valid_geometry = page.solid_geometry_edit.text()
     page.solid_geometry_edit.setText("{")
@@ -307,6 +309,7 @@ def test_surface_solid_gui_converts_selected_root_edge_and_faces(configured) -> 
     assert page.solid_geometry_edit.text() == "{"
     assert not page.generate_button.isEnabled()
     page.set_language("zh")
+    assert page.operation_type_combo.itemText(0) == "Surface / 曲面贴合"
     assert page.solid_geometry_edit.text() == "{"
     page.solid_geometry_edit.setText(valid_geometry)
     page.apply_button.click()

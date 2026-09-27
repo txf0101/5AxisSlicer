@@ -14,7 +14,7 @@ In the Viewer, switch selection to **Edge**, click the axis reference, and choos
 - **Thin Wall** generates finite radial passes. The interval must cover one full turn (360°); pass widths and spacing must fit the target wall thickness. A reduced bead width may produce a Warning where enabled.
 - **Around Part** creates one or more directed angular regions. Use semicolon-separated non-overlapping intervals, including intervals across the cycle boundary where needed.
 
-![Around Part path regions (Chinese-interface example)](assets/hd_v27/rotary_around_zh.png)
+![Around Part path regions](assets/hd_v27/rotary_around_en.png)
 
 The displayed blue `350:20;120:210` cylindrical regions use CCW expansion: the first crosses 0°, the second does not. Travel is not displayed. The example uses a CAD-derived R20 mm/H20 mm cylinder, 2 mm axial step, 5° sampling, 600/300 mm/min deposition/travel feed and 0.1 rad/s angular velocity. Reselect references and angles for your own part.
 

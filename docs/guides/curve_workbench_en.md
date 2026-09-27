@@ -4,7 +4,7 @@ Curve creates Buildup, Multi-pass Buildup, and Offset Buildup along an ordered S
 
 Before starting, complete Part, Model CS, Build CS, machine, nozzle, reviewed material, and placement in Setup. Choose edges in travel order with **Viewer Selection Type: Edge**, then click **Use selected Viewer edges**. Select a face when an authoritative adjacent normal is needed. A two-sided edge requires an explicit normal face; otherwise choose **User direction** and enter a unit normal.
 
-![Selected edges highlighted in the Viewer ](assets/hd_v27/curve_edges_en.png)
+![Selected edges highlighted in the Viewer](assets/hd_v27/curve_edges_en.png)
 
 This Viewer view shows two selected blue edges. Highlighting only identifies selection: it does not establish a continuous ordered chain or a generated toolpath. Use the editor to check edge order, connectivity, reverse flags, and normal reference before applying. Edge IDs depend on the loaded model; Setup and operation panels scroll independently.
 

@@ -1,6 +1,7 @@
 {
   "references": 88,
-  "unique_images": 48,
+  "unique_images": 56,
+  "english_references": 15,
   "missing_links": [],
   "images": [
     {
@@ -11,8 +12,8 @@
       ],
       "sha256": "db0055e8d6adf0be7674f391cbc0436844a8be5402a174f5c5f5b7b6df58a382",
       "guides": [
-        "docs\\guides\\tube_coordinate_setup_zh.md",
-        "docs\\guides\\tube_workbench_zh.md"
+        "docs/guides/tube_coordinate_setup_zh.md",
+        "docs/guides/tube_workbench_zh.md"
       ]
     },
     {
@@ -23,7 +24,7 @@
       ],
       "sha256": "6677b22e0375b3406cfd75050b47ddf3ee6fd7728910cd5aeac264af13c49f50",
       "guides": [
-        "docs\\guides\\curve_workbench_zh.md"
+        "docs/guides/curve_workbench_zh.md"
       ]
     },
     {
@@ -34,7 +35,7 @@
       ],
       "sha256": "c0c1346303af6efcb8626a794b2f4d526d8ae564a39a7964819069b4a3a14a75",
       "guides": [
-        "docs\\guides\\curve_workbench_zh.md"
+        "docs/guides/curve_workbench_zh.md"
       ]
     },
     {
@@ -45,7 +46,7 @@
       ],
       "sha256": "c0842eebcfe8df84ef2627af754f2253ec2101734a10357b6485369334991a77",
       "guides": [
-        "docs\\guides\\curve_workbench_zh.md"
+        "docs/guides/curve_workbench_zh.md"
       ]
     },
     {
@@ -56,7 +57,7 @@
       ],
       "sha256": "a50ef0fdb5bde01944cbf71d2a5274d1a01bd021037e3754a319d5ead6cc4e20",
       "guides": [
-        "docs\\guides\\curve_workbench_zh.md"
+        "docs/guides/curve_workbench_zh.md"
       ]
     },
     {
@@ -67,7 +68,7 @@
       ],
       "sha256": "f674682b73439604300472817adac9774fc6411eac9e6771163378df0c05d1d8",
       "guides": [
-        "docs\\guides\\curve_workbench_zh.md"
+        "docs/guides/curve_workbench_zh.md"
       ]
     },
     {
@@ -78,7 +79,7 @@
       ],
       "sha256": "6a48b8ced1fea0f720eb43282e1ea0ae777e94ce158216de65ccbc8efcbb20dd",
       "guides": [
-        "docs\\guides\\user_learning_manual_zh.md"
+        "docs/guides/user_learning_manual_zh.md"
       ]
     },
     {
@@ -89,7 +90,18 @@
       ],
       "sha256": "76e1fb768ecc881361ed8c06b67184bc9c6b1f6495dd41a0b25900b9b7ac3baf",
       "guides": [
-        "docs\\guides\\curve_workbench_en.md"
+        "docs/guides/curve_workbench_en.md"
+      ]
+    },
+    {
+      "path": "docs/guides/assets/hd_v27/curve_edges_normal_face_en.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "76e1fb768ecc881361ed8c06b67184bc9c6b1f6495dd41a0b25900b9b7ac3baf",
+      "guides": [
+        "docs/guides/quickstart_clickthrough_en.md"
       ]
     },
     {
@@ -100,9 +112,8 @@
       ],
       "sha256": "96d641233fdc5bd67ab105dce6b9213bec87bea0c820560736d4774472dc6098",
       "guides": [
-        "docs\\guides\\curve_workbench_zh.md",
-        "docs\\guides\\quickstart_clickthrough_en.md",
-        "docs\\guides\\quickstart_clickthrough_zh.md"
+        "docs/guides/curve_workbench_zh.md",
+        "docs/guides/quickstart_clickthrough_zh.md"
       ]
     },
     {
@@ -113,7 +124,18 @@
       ],
       "sha256": "96d641233fdc5bd67ab105dce6b9213bec87bea0c820560736d4774472dc6098",
       "guides": [
-        "docs\\guides\\curve_workbench_zh.md"
+        "docs/guides/curve_workbench_zh.md"
+      ]
+    },
+    {
+      "path": "docs/guides/assets/hd_v27/freeform_existing_surface_solid_en.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "97c1ac84fdd2e780d1aac27921a86fef76f09e4e4f54d6bda2936de39064549b",
+      "guides": [
+        "docs/guides/freeform_workbench_en.md"
       ]
     },
     {
@@ -124,9 +146,19 @@
       ],
       "sha256": "880fcd298c85a9eaca66d2f74589d7465f3ce2f6d9bd58a86ec6156ab358d8d4",
       "guides": [
-        "docs\\guides\\freeform_workbench_en.md",
-        "docs\\guides\\freeform_workbench_zh.md",
-        "docs\\guides\\quickstart_clickthrough_zh.md"
+        "docs/guides/freeform_workbench_zh.md",
+        "docs/guides/quickstart_clickthrough_zh.md"
+      ]
+    },
+    {
+      "path": "docs/guides/assets/hd_v27/freeform_three_leaf_roles_en.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "df8b74feda2214818e3ade4363b7e98d3d52bc2c5d6f66dd9d03fc3fe8902afa",
+      "guides": [
+        "docs/guides/quickstart_clickthrough_en.md"
       ]
     },
     {
@@ -137,8 +169,19 @@
       ],
       "sha256": "f165418ddcd908611af5b105df4f6caf75faa88edd437e6cef4a5f2629dbbbad",
       "guides": [
-        "docs\\guides\\quickstart_clickthrough_en.md",
-        "docs\\guides\\quickstart_clickthrough_zh.md"
+        "docs/guides/quickstart_clickthrough_zh.md"
+      ]
+    },
+    {
+      "path": "docs/guides/assets/hd_v27/gcode_logo_file_preview_en.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "01101edd764e0fdd5de59e894b7f18370a76d1d1009ad673e7fbc7af89acdadb",
+      "guides": [
+        "docs/guides/gcode_preview_en.md",
+        "docs/guides/quickstart_clickthrough_en.md"
       ]
     },
     {
@@ -149,10 +192,8 @@
       ],
       "sha256": "c58d430ac6bc91b6b0bd8caa436f21b7b618d9dc1bfe84609190a12401a709a8",
       "guides": [
-        "docs\\guides\\gcode_preview_en.md",
-        "docs\\guides\\gcode_preview_zh.md",
-        "docs\\guides\\quickstart_clickthrough_en.md",
-        "docs\\guides\\quickstart_clickthrough_zh.md"
+        "docs/guides/gcode_preview_zh.md",
+        "docs/guides/quickstart_clickthrough_zh.md"
       ]
     },
     {
@@ -163,7 +204,7 @@
       ],
       "sha256": "ddb09a401d434405f380bde4711d49d6ad80cb595ac23e53d56d010fb8c56851",
       "guides": [
-        "docs\\guides\\quickstart_clickthrough_en.md"
+        "docs/guides/quickstart_clickthrough_en.md"
       ]
     },
     {
@@ -174,9 +215,9 @@
       ],
       "sha256": "646be8681562064664f56b3f15cc60d812ec038a733a76eb08fa799f8e95dce9",
       "guides": [
-        "docs\\guides\\quickstart_clickthrough_zh.md",
-        "docs\\guides\\tube_coordinate_setup_zh.md",
-        "docs\\guides\\user_learning_manual_zh.md"
+        "docs/guides/quickstart_clickthrough_zh.md",
+        "docs/guides/tube_coordinate_setup_zh.md",
+        "docs/guides/user_learning_manual_zh.md"
       ]
     },
     {
@@ -187,7 +228,7 @@
       ],
       "sha256": "b1ffdde574542c653ca3ccd7fab20f2312d211ea6d1f49d36888e34ae181cefb",
       "guides": [
-        "docs\\guides\\gcode_preview_zh.md"
+        "docs/guides/gcode_preview_zh.md"
       ]
     },
     {
@@ -198,7 +239,7 @@
       ],
       "sha256": "63c24e364e681d29bec90b205da84e22e47a2b5afc6f9a1a09680535181f4046",
       "guides": [
-        "docs\\guides\\machine_profiles_en.md"
+        "docs/guides/machine_profiles_en.md"
       ]
     },
     {
@@ -209,8 +250,8 @@
       ],
       "sha256": "a0343923650e7b60638723432e5b7a8114fb9874510560d47fd61157646e220f",
       "guides": [
-        "docs\\guides\\machine_profiles_zh.md",
-        "docs\\guides\\user_learning_manual_zh.md"
+        "docs/guides/machine_profiles_zh.md",
+        "docs/guides/user_learning_manual_zh.md"
       ]
     },
     {
@@ -221,7 +262,7 @@
       ],
       "sha256": "f4be590ac11f6bbb5cde1520967ca5686b1b956e5ecdfa43e7d78e681f657189",
       "guides": [
-        "docs\\guides\\material_channels_en.md"
+        "docs/guides/material_channels_en.md"
       ]
     },
     {
@@ -232,7 +273,7 @@
       ],
       "sha256": "59f37151643e99e6aaf58472af7a6e1c90a7037d0e80d8e468c233c207b29634",
       "guides": [
-        "docs\\guides\\material_channels_zh.md"
+        "docs/guides/material_channels_zh.md"
       ]
     },
     {
@@ -243,10 +284,10 @@
       ],
       "sha256": "7041e2d9b053298493d6686f38735f85af66136f5a3a22c37378691876cdb570",
       "guides": [
-        "docs\\guides\\quickstart_clickthrough_zh.md",
-        "docs\\guides\\tube_coordinate_setup_zh.md",
-        "docs\\guides\\tube_workbench_zh.md",
-        "docs\\guides\\user_learning_manual_zh.md"
+        "docs/guides/quickstart_clickthrough_zh.md",
+        "docs/guides/tube_coordinate_setup_zh.md",
+        "docs/guides/tube_workbench_zh.md",
+        "docs/guides/user_learning_manual_zh.md"
       ]
     },
     {
@@ -257,10 +298,10 @@
       ],
       "sha256": "faeba519b9bbbe1c3641ed9eb8748a8b17dbd2f50496b02c11e8e43bddaa6cf8",
       "guides": [
-        "docs\\guides\\quickstart_clickthrough_zh.md",
-        "docs\\guides\\tube_coordinate_setup_zh.md",
-        "docs\\guides\\tube_workbench_zh.md",
-        "docs\\guides\\user_learning_manual_zh.md"
+        "docs/guides/quickstart_clickthrough_zh.md",
+        "docs/guides/tube_coordinate_setup_zh.md",
+        "docs/guides/tube_workbench_zh.md",
+        "docs/guides/user_learning_manual_zh.md"
       ]
     },
     {
@@ -271,8 +312,8 @@
       ],
       "sha256": "442bcc9ff6c95a3042916d49c6d49ab91de27783ec16b9ee7ee1103bac9a491c",
       "guides": [
-        "docs\\guides\\tube_coordinate_setup_zh.md",
-        "docs\\guides\\tube_workbench_zh.md"
+        "docs/guides/tube_coordinate_setup_zh.md",
+        "docs/guides/tube_workbench_zh.md"
       ]
     },
     {
@@ -283,7 +324,7 @@
       ],
       "sha256": "83c77748175c7b11e217516536b3baee5e44fa21af9c8332e4b39d53f979af06",
       "guides": [
-        "docs\\guides\\quickstart_clickthrough_zh.md"
+        "docs/guides/quickstart_clickthrough_zh.md"
       ]
     },
     {
@@ -294,7 +335,7 @@
       ],
       "sha256": "71af6e476f8407acc5f4d5a1292c0c38eb6b1bcfee1aec6c2c4da3740f30c166",
       "guides": [
-        "docs\\guides\\quickstart_clickthrough_zh.md"
+        "docs/guides/quickstart_clickthrough_zh.md"
       ]
     },
     {
@@ -305,7 +346,7 @@
       ],
       "sha256": "f8129fd4ce0c0e50c994fd186157d5e5a27b57b9379b63a57abb83f4436b68d8",
       "guides": [
-        "docs\\guides\\quickstart_clickthrough_zh.md"
+        "docs/guides/quickstart_clickthrough_zh.md"
       ]
     },
     {
@@ -316,7 +357,7 @@
       ],
       "sha256": "238266b7a4e5c955873b51b82ff9213990267e174e389e14c9cd93e1695089e4",
       "guides": [
-        "docs\\guides\\planar_workbench_zh.md"
+        "docs/guides/planar_workbench_zh.md"
       ]
     },
     {
@@ -327,7 +368,7 @@
       ],
       "sha256": "84953fa648b11509525429c2708c53ee6900c1d1388c050a5b2e75a65bb18612",
       "guides": [
-        "docs\\guides\\planar_workbench_zh.md"
+        "docs/guides/planar_workbench_zh.md"
       ]
     },
     {
@@ -338,7 +379,7 @@
       ],
       "sha256": "ea47ce3caeb67d3816c75742cabe5c3d0ae87c5c5882dc8d46beb6470e7ef6a5",
       "guides": [
-        "docs\\guides\\planar_workbench_zh.md"
+        "docs/guides/planar_workbench_zh.md"
       ]
     },
     {
@@ -349,7 +390,7 @@
       ],
       "sha256": "aea53b8d8bde504f1c00d4dd3fe0d2394fbfa89e466c2585dc756f30058b2928",
       "guides": [
-        "docs\\guides\\planar_workbench_zh.md"
+        "docs/guides/planar_workbench_zh.md"
       ]
     },
     {
@@ -360,7 +401,7 @@
       ],
       "sha256": "5128e403d21ce1758780ab075a91fd7195adb86a1c0ecfbee5180f24d5acfd6a",
       "guides": [
-        "docs\\guides\\planar_workbench_zh.md"
+        "docs/guides/planar_workbench_zh.md"
       ]
     },
     {
@@ -371,7 +412,7 @@
       ],
       "sha256": "221e6e7ec5bb1a30427f38a2e1da28843ad87e0de08e90dfcd88f657f3638d5d",
       "guides": [
-        "docs\\guides\\planar_workbench_zh.md"
+        "docs/guides/planar_workbench_zh.md"
       ]
     },
     {
@@ -382,7 +423,7 @@
       ],
       "sha256": "490ddf82a2eeec6eb8716f9065d8ee06848b462d9f94e20e00f61663148a11d0",
       "guides": [
-        "docs\\guides\\planar_workbench_zh.md"
+        "docs/guides/planar_workbench_zh.md"
       ]
     },
     {
@@ -393,7 +434,7 @@
       ],
       "sha256": "a41e987af49ea5a5a590b43c11927bbb553206f921155550f35ab8b2a708eb42",
       "guides": [
-        "docs\\guides\\planar_workbench_zh.md"
+        "docs/guides/planar_workbench_zh.md"
       ]
     },
     {
@@ -404,7 +445,7 @@
       ],
       "sha256": "2e341f600c1096f86863cdf5ae6479a1f6dadcdad2497043f725845ac12a99e0",
       "guides": [
-        "docs\\guides\\planar_workbench_zh.md"
+        "docs/guides/planar_workbench_zh.md"
       ]
     },
     {
@@ -415,11 +456,33 @@
       ],
       "sha256": "2fe0f687da4d99efbde11151e03a94e4e97fb66d938dfd032cb7c05d7edb6ccd",
       "guides": [
-        "docs\\guides\\planar_workbench_en.md",
-        "docs\\guides\\planar_workbench_zh.md",
-        "docs\\guides\\quickstart_clickthrough_en.md",
-        "docs\\guides\\quickstart_clickthrough_zh.md",
-        "docs\\guides\\user_learning_manual_zh.md"
+        "docs/guides/planar_workbench_zh.md",
+        "docs/guides/quickstart_clickthrough_zh.md",
+        "docs/guides/user_learning_manual_zh.md"
+      ]
+    },
+    {
+      "path": "docs/guides/assets/hd_v27/planar_zigzag_path_detail_en.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "02f53659869d0ab663bc1ce76c24b2cff8ab6eb899a1bdbc4417e3c8e4cb3e1e",
+      "guides": [
+        "docs/guides/planar_workbench_en.md",
+        "docs/guides/quickstart_clickthrough_en.md"
+      ]
+    },
+    {
+      "path": "docs/guides/assets/hd_v27/rotary_around_en.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "f507ff28bab1809fffbe8495bf9db4e1f933e2dff4f5fd02066c7448afd8c873",
+      "guides": [
+        "docs/guides/quickstart_clickthrough_en.md",
+        "docs/guides/rotary_workbench_en.md"
       ]
     },
     {
@@ -430,13 +493,11 @@
       ],
       "sha256": "777e3290c428ae45ab86d5f30656f05e2043b66446bb6d036a9bfbaed72f6469",
       "guides": [
-        "docs\\guides\\quickstart_clickthrough_en.md",
-        "docs\\guides\\quickstart_clickthrough_zh.md",
-        "docs\\guides\\rotary_workbench_en.md",
-        "docs\\guides\\rotary_workbench_zh.md",
-        "docs\\guides\\rotary_workbench_zh.md",
-        "docs\\guides\\rotary_workbench_zh.md",
-        "docs\\guides\\user_learning_manual_zh.md"
+        "docs/guides/quickstart_clickthrough_zh.md",
+        "docs/guides/rotary_workbench_zh.md",
+        "docs/guides/rotary_workbench_zh.md",
+        "docs/guides/rotary_workbench_zh.md",
+        "docs/guides/user_learning_manual_zh.md"
       ]
     },
     {
@@ -447,7 +508,7 @@
       ],
       "sha256": "b7925f24b25d8afa33cc1471485cf0ee8008146d309eea2605f646a1612b3025",
       "guides": [
-        "docs\\guides\\machine_profiles_zh.md"
+        "docs/guides/machine_profiles_zh.md"
       ]
     },
     {
@@ -458,7 +519,7 @@
       ],
       "sha256": "c6aed35aeac1637cc0d20c31b1885bddacc881913983a447708c2dde5a8216ce",
       "guides": [
-        "docs\\guides\\rotary_workbench_zh.md"
+        "docs/guides/rotary_workbench_zh.md"
       ]
     },
     {
@@ -469,9 +530,9 @@
       ],
       "sha256": "a9fb6b2a46b9c8a9acf70aeba6879a7ddc71f6dccbe20cf95c246331bea4d21b",
       "guides": [
-        "docs\\guides\\rotary_workbench_zh.md",
-        "docs\\guides\\rotary_workbench_zh.md",
-        "docs\\guides\\user_learning_manual_zh.md"
+        "docs/guides/rotary_workbench_zh.md",
+        "docs/guides/rotary_workbench_zh.md",
+        "docs/guides/user_learning_manual_zh.md"
       ]
     },
     {
@@ -482,7 +543,7 @@
       ],
       "sha256": "e4ec4c148d1909def5a81e0302803aef5ca99071645e7700c881e1974d6466dc",
       "guides": [
-        "docs\\guides\\rotary_workbench_zh.md"
+        "docs/guides/rotary_workbench_zh.md"
       ]
     },
     {
@@ -493,9 +554,9 @@
       ],
       "sha256": "87d7000911f00cb4128fb823c4811f7316a3049b79b3b4e2afb09f48630566e2",
       "guides": [
-        "docs\\guides\\rotary_workbench_zh.md",
-        "docs\\guides\\rotary_workbench_zh.md",
-        "docs\\guides\\user_learning_manual_zh.md"
+        "docs/guides/rotary_workbench_zh.md",
+        "docs/guides/rotary_workbench_zh.md",
+        "docs/guides/user_learning_manual_zh.md"
       ]
     },
     {
@@ -506,7 +567,7 @@
       ],
       "sha256": "05d34f63899c5ded9f110fd8ca336f100c9914c4027cbdaea3a951803c67ac58",
       "guides": [
-        "docs\\guides\\rotary_workbench_zh.md"
+        "docs/guides/rotary_workbench_zh.md"
       ]
     },
     {
@@ -517,8 +578,8 @@
       ],
       "sha256": "e2f69eb1346460e0265c36d3af0e2b0580529058f10ee59686424f85d46d2b87",
       "guides": [
-        "docs\\guides\\quickstart_clickthrough_zh.md",
-        "docs\\guides\\rotary_workbench_zh.md"
+        "docs/guides/quickstart_clickthrough_zh.md",
+        "docs/guides/rotary_workbench_zh.md"
       ]
     },
     {
@@ -529,8 +590,8 @@
       ],
       "sha256": "cb6399fceda5b431050f82ab23252f418a73a432fe2927b83a96339ac9a24e59",
       "guides": [
-        "docs\\guides\\rotary_workbench_zh.md",
-        "docs\\guides\\user_learning_manual_zh.md"
+        "docs/guides/rotary_workbench_zh.md",
+        "docs/guides/user_learning_manual_zh.md"
       ]
     },
     {
@@ -541,7 +602,18 @@
       ],
       "sha256": "c3eb348a667a6206a929da1a0e1e4487c4e9ba89ac87d25d5e59c97d95ecdeb2",
       "guides": [
-        "docs\\guides\\material_channels_zh.md"
+        "docs/guides/material_channels_zh.md"
+      ]
+    },
+    {
+      "path": "docs/guides/assets/hd_v27/tube_indexed_export_en.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "75d69b49fa20bef2b32b9e7a9b73d546bb2e59e69e5f1e6d5b3ffe234b399598",
+      "guides": [
+        "docs/guides/tube_workbench_en.md"
       ]
     },
     {
@@ -552,10 +624,20 @@
       ],
       "sha256": "b8b35b943bcfb09af3898cd506cce78de6706dfb5a3b570ec75dd2b1651a5324",
       "guides": [
-        "docs\\guides\\gcode_preview_zh.md",
-        "docs\\guides\\quickstart_clickthrough_zh.md",
-        "docs\\guides\\tube_workbench_en.md",
-        "docs\\guides\\tube_workbench_zh.md"
+        "docs/guides/gcode_preview_zh.md",
+        "docs/guides/quickstart_clickthrough_zh.md",
+        "docs/guides/tube_workbench_zh.md"
+      ]
+    },
+    {
+      "path": "docs/guides/assets/hd_v27/tube_roles_en.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "7d8eedc514c6d133ff3a7634ea4437e70b4cb16d8b1c977855ae83814fbd0ca2",
+      "guides": [
+        "docs/guides/quickstart_clickthrough_en.md"
       ]
     },
     {
@@ -566,9 +648,8 @@
       ],
       "sha256": "d063b7f6f7f2ff42a7815367bd86b761c297897a4cf4161e2da70dfc8768286a",
       "guides": [
-        "docs\\guides\\quickstart_clickthrough_en.md",
-        "docs\\guides\\quickstart_clickthrough_zh.md",
-        "docs\\guides\\tube_workbench_zh.md"
+        "docs/guides/quickstart_clickthrough_zh.md",
+        "docs/guides/tube_workbench_zh.md"
       ]
     }
   ]

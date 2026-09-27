@@ -29,7 +29,7 @@ To share settings across Workbenches, edit Common Manufacturing Setup and return
 
 Choose **Planar Slicing**, then create **Planar Region** to inspect sections or choose Zigzag, Offset, Thin Wall, Spiral, or Support for a path. Select the body, set layer range and process values, and click **Apply**. Support is vertical from the build plate only; its first-layer Z equals the layer height. Click **Generate Preview**. Keep the model visible to check placement; hide it and use **Full lines (fast)** to inspect occluded paths. Region is inspection-only and cannot export NC.
 
-![Planar path with the model hidden](assets/hd_v27/planar_zigzag_path_detail.png)
+![Planar path with the model hidden](assets/hd_v27/planar_zigzag_path_detail_en.png)
 
 The screenshot uses one layer of `body_001` from a fan STEP. It demonstrates path visibility, not a complete fan program. Reselect the body, layer range, and process values for your model. See the [Planar guide](planar_workbench_en.md).
 
@@ -37,7 +37,7 @@ The screenshot uses one layer of `body_001` from a fan STEP. It demonstrates pat
 
 Choose **Curve Workbench** and create Buildup (one bead), Multi-pass Buildup (multiple layers), or Offset Buildup (side-by-side passes). Set Viewer selection to **Edge**, select edges in deposition order, and select an adjacent face when a normal is needed. Click **Use selected Viewer edges** and verify order, reverse flags, and face ID. Apply parameters and generate. For curves without an authoritative adjacent face, use a defined user direction. See the [Curve guide](curve_workbench_en.md).
 
-![Curve edge and face selection (Chinese-interface example)](assets/hd_v27/curve_edges_normal_face_zh.png)
+![Curve edge and face selection](assets/hd_v27/curve_edges_normal_face_en.png)
 
 This view shows two adjacent selected edges and a normal face in an existing operation. Adopting Viewer edges fills IDs in click order with default reverse flags of 0. Check the edge order, reverse flags and normal face before applying; this selection view does not establish valid direction or completed generation.
 
@@ -45,7 +45,7 @@ This view shows two adjacent selected edges and a normal face in an existing ope
 
 Choose **Rotary Workbench** and create Spiral, Thin Wall, or Around Part. Select an axis edge and click **Use selected axis edge**, then select a coaxial cylindrical/conical face and click **Use selected surface**. Select an optional profile edge separately. Verify axis, zero direction, angular regions, and process values; apply geometry and parameters, then generate. Show the model to verify the selected surface, then hide it and inspect the full path. Angular intervals crossing 0° must be unwrapped in the intended direction.
 
-![Rotary Around Part paths (Chinese-interface example)](assets/hd_v27/rotary_around_zh.png)
+![Rotary Around Part paths](assets/hd_v27/rotary_around_en.png)
 
 The two separated blue line groups show the generated regions; travel is not displayed. This example uses a CAD-derived R20 mm/H20 mm cylinder, 2 mm axial step, 5° sampling, 600/300 mm/min deposition/travel feed and 0.1 rad/s angular velocity. Reselect axis, surface, and intervals for your model. A freeform blade surface is not a cylindrical face. See the [Rotary guide](rotary_workbench_en.md).
 
@@ -53,7 +53,7 @@ The two separated blue line groups show the generated regions; travel is not dis
 
 Enter **Tube Workbench**, complete Setup, choose an operation type, and create it. Use the **Pick** controls for the tube body, inlet edge, outlet edge, and—when needed—substrate. Confirm that none of the fields are blank and that inlet-to-outlet direction matches the intended build. Apply operation values, generate, then open **View path**. Check layer support, base connection, indexing moves, and travel against deposited material.
 
-![Tube body, ports, and substrate fields (Chinese interface)](assets/hd_v27/tube_roles_zh.png)
+![Tube body, ports, and substrate fields](assets/hd_v27/tube_roles_en.png)
 
 The IDs shown belong only to that STEP model. Stale means the saved operation needs regeneration. See the [Tube guide](tube_workbench_en.md).
 
@@ -63,7 +63,7 @@ In **Freeform Workbench**, the new-operation selector controls the next operatio
 
 For **Surface Solid Fill**, choose **Layers through surface thickness** or **Grow outward from root edge** in **Surface-solid growth**. The outward method requires a supported root edge. Check bead width and layer height, then click **Apply**. For multiple colours, open **Edit material table**, choose a body or stage in the region selector, click **Add selected region**, and assign each row to T0/T1. Apply again after editing materials. See the [material guide](material_channels_en.md) for channels and station settings.
 
-![Freeform solid roles (Chinese-interface example)](assets/hd_v27/freeform_three_leaf_roles_zh.png)
+![Freeform solid roles](assets/hd_v27/freeform_three_leaf_roles_en.png)
 
 The screenshot shows role settings after reopening the saved three-blade fan project, before regenerating any path: body_001 is the substrate/hub and body_002 through body_004 are blades. These roles still require review against the geometry; this settings image does not show a completed result. The IDs belong only to this example STEP. Generate and inspect whether the first beads attach to the substrate, later layers follow the chosen growth direction, and travel avoids the deposited part. Export is enabled only when the current result allows it. Choose values for your own model and equipment; the illustrated settings apply only to the example. See the [Freeform guide](freeform_workbench_en.md) and [solid-growth method guide](solid_fill_method_en.md).
 
@@ -71,7 +71,7 @@ The screenshot shows role settings after reopening the saved three-blade fan pro
 
 Choose **G-code File Preview** or **Open Existing G-code…** and select an existing file. Open the matching STEP only when needed. Use FIT, zoom, and scene visibility controls for model, extrusion, and travel; scroll the right panel for statistics and code context. Confirm the source controller semantics before interpreting rotary axes.
 
-![G-code file preview: logo operation 2 (Chinese interface)](assets/hd_v27/gcode_logo_file_preview_zh.png)
+![G-code file preview: logo operation 2](assets/hd_v27/gcode_logo_file_preview_en.png)
 
 The screenshot contains G-code only. See the [G-code preview guide](gcode_preview_en.md).
 

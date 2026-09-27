@@ -18,9 +18,9 @@ python -m five_axis_slicer.app --results --model "example\叶轮\叶轮.stp" --g
 
 Paths generated in a Workbench should first be inspected there. To inspect the exported code in this page, export it and open `main.gcode`. G-code can be viewed without a model; open the matching STEP when checking path placement. Keep the source of historical or external code clear; its appearance does not establish how it was generated.
 
-![G-code file preview: logo operation 2 (Chinese interface)](assets/hd_v27/gcode_logo_file_preview_zh.png)
+![G-code file preview: logo operation 2](assets/hd_v27/gcode_logo_file_preview_en.png)
 
-The Chinese interface shows file controls, logo operation 2, statistics, and visibility controls with no STEP loaded. Overlay the matching STEP to check your own program’s path placement.
+The interface shows file controls, logo operation 2, statistics, and visibility controls with no STEP loaded. Overlay the matching STEP to check your own program’s path placement.
 
 ## Model, view, and path filters
 

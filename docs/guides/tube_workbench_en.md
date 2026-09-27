@@ -28,7 +28,7 @@ The `tube.bounded_boundary_accuracy_deferred` Warning means that small seam gaps
 4. Review issues and report. Error blocks export; review each Warning. Inspect layers, deposition/travel, and five-axis poses rather than relying on an overall screenshot.
 5. Export only after checks and NC readback pass.
 
-![Preview of the exported Indexed tube G-code (Chinese interface)](assets/hd_v27/tube_indexed_export_zh.png)
+![Preview of the exported Indexed tube G-code](assets/hd_v27/tube_indexed_export_en.png)
 
 The G-code File Preview opens the exported Indexed tube `main.gcode` and displays the readback path with travel hidden. Use this overall view to inspect the path layout and zoom in separately to inspect local seams. Review the actual machine configuration and calibration before physical printing.
 

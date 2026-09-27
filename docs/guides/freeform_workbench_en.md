@@ -16,9 +16,9 @@ The left Manufacturing Setup panel edits the current machine, nozzle, material, 
 6. Click **Generate**. Hide the model to see occluded lines; use bead-width display to inspect local width. Warning can allow offline export after review; Error blocks export.
 7. Export the six files: `main.gcode`, `toolpath.json`, `machine_axes.csv`, `warnings.json`, `preview.json`, and `manifest.json`.
 
-![Freeform operation controls (Chinese-interface example)](assets/hd_v27/freeform_existing_surface_solid_zh.png)
+![Freeform operation controls](assets/hd_v27/freeform_existing_surface_solid_en.png)
 
-The Chinese-interface screenshot shows an existing Surface Solid Fill operation to explain the difference between operation selectors. For this guide's finite guide workflow, create Surface or Thin Wall. The screenshot has no generated path.
+The screenshot shows an existing Surface Solid Fill operation to explain the difference between operation selectors. For this guide's finite guide workflow, create Surface or Thin Wall. The screenshot has no generated path.
 
 ## Guide references and parameters
 

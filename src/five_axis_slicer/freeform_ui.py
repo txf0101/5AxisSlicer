@@ -17,6 +17,21 @@ from .manufacturing.freeform_solid_parameters import SOLID_FILL_OPERATION_TYPES
 from .models import PickRequest
 from .tool_change_station_editor import ToolChangeStationEditor
 
+_OPERATION_LABELS = {
+    "freeform_surface": ("Surface / 曲面贴合", "Surface"),
+    "freeform_thin_wall": ("Thin Wall / 薄壁", "Thin Wall"),
+    "spherical_solid_fill": ("Spherical Solid / 球面实体", "Spherical Solid"),
+    "surface_solid_fill": ("Surface Solid / 曲面实体", "Surface Solid"),
+    "radial_solid_fill": ("Radial Solid / 径向实体", "Radial Solid"),
+}
+
+
+def _set_operation_labels(combo, language):
+    for index in range(combo.count()):
+        labels = _OPERATION_LABELS.get(combo.itemData(index))
+        if labels is not None:
+            combo.setItemText(index, labels[0 if language == "zh" else 1])
+
 
 class _JsonEditor(QPlainTextEdit):
     """Show complete structured inputs while keeping the editor's text API."""
@@ -117,6 +132,7 @@ class FreeformPage(CurvePage):
         if not hasattr(self, "face_ids_label"):
             return
         zh = self.language == "zh"
+        _set_operation_labels(self.operation_type_combo, self.language)
         self.title_label.setText("自由曲面离线工作台" if zh else "Freeform Offline Workbench")
         self.face_ids_label.setText("受限面组 ID" if zh else "Bounded face IDs")
         self.guides_json_label.setText("多导引线 JSON" if zh else "Multiple guides JSON")

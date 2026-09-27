@@ -1,0 +1,45 @@
+from pathlib import Path
+import os,sys,json,time,hashlib
+ROOT=Path(__file__).resolve().parents[1]
+os.environ['QT_QPA_PLATFORM']='windows'
+os.environ['QT_SCALE_FACTOR']='1'
+os.environ['QT_AUTO_SCREEN_SCALE_FACTOR']='0'
+sys.path.insert(0,str(ROOT/'src'))
+from PyQt5.QtCore import Qt,QSettings
+from PyQt5.QtWidgets import QApplication
+from five_axis_slicer import ui
+OUT=ROOT/'docs/guides/assets/hd_v27'
+OUT.mkdir(parents=True,exist_ok=True)
+QApplication.setAttribute(Qt.AA_DisableHighDpiScaling,True)
+app=QApplication([])
+ui.QSettings=lambda *args: QSettings(str(ROOT/'tmp/guide_hd.ini'),QSettings.IniFormat)
+w=ui.MainWindow(http_port=0)
+w.resize(1920,1080);w.show()
+def pump(t=.4):
+ end=time.monotonic()+t
+ while time.monotonic()<end:
+  app.processEvents();time.sleep(.015)
+records=[]
+def capture(name):
+ w.resize(1920,1080);w.statusBar().clearMessage();pump()
+ pix=w.grab();assert pix.width()>=1920 and pix.height()>=1080,(pix.width(),pix.height())
+ path=OUT/(name+'.png');assert pix.save(str(path),'PNG')
+ records.append({'file':path.name,'size':[pix.width(),pix.height()],'method':'Live QWidget.grab, native pixels, no OS cursor or computer-use overlay','sha256':hashlib.sha256(path.read_bytes()).hexdigest()})
+ print(name,flush=True)
+e=ROOT/'docs/reviews/evidence/2026-09-26_v2_final_delivery'
+def load(folder,key):
+ w.open_project(e/folder/'project.json');w.set_language('en');w.enter_workbench(key);pump();return getattr(w,key+'_page')
+p=load('impeller_completed150_gui_project','freeform');p.viewer.fit_view();capture('freeform_existing_surface_solid_en')
+p=load('three_color_completed150_gui_project','freeform');p.viewer.fit_view();p.editor_scroll.ensureWidgetVisible(p.solid_geometry_edit);pump();bar=p.editor_scroll.verticalScrollBar();bar.setValue(bar.value()+650);capture('freeform_three_leaf_roles_en')
+p=load('tube_v7_gui_project','tube');p.tree.setCurrentItem(next(v for k,v in p._tree_items.items() if k.startswith('operation:')));p.activate_selected_editor();p.viewer.fit_view();p.editor_scroll.ensureWidgetVisible(p._operation_geometry_combos['tube_body_id']);capture('tube_roles_en')
+p=load('curve_zh1366_current150','curve');p.editor_scroll.ensureWidgetVisible(p.edge_ids_edit);p.viewer.set_selection(edge_ids=[s.strip() for s in p.edge_ids_edit.text().split(',') if s.strip()],face_ids=[p.normal_face_edit.text().strip()]);p.viewer.set_build_surface(None);p.viewer.set_coordinate_frames(());p.viewer.fit_view();capture('curve_edges_normal_face_en')
+p=load('planar_zh1366_current150','planar');op=next(o for o in p.controller.operations if o.operation_type=='planar_zigzag');p.controller.generate_operation(op.operation_id);p.refresh();p.viewer.set_model_visible(False);p.viewer.set_build_surface(None);p.viewer.fit_view();capture('planar_zigzag_path_detail_en')
+for name,folder in [('gcode_logo_file_preview_en','logo_current150_gui_export'),('tube_indexed_export_en','tube_v7_gui_export')]:
+ w.start_result_load(gcode_path=e/folder/'main.gcode');deadline=time.monotonic()+600
+ while w.result_page.state.status=='loading' and time.monotonic()<deadline:pump(.1)
+ assert w.result_page.state.status in {'ready','warning'}
+ page=w.result_page;page.set_visibility(show_model=False,show_travel=False,show_pose_samples=False)
+ if 'logo' in name and page.stage_combo.count()>2:page.stage_combo.setCurrentIndex(2)
+ page.viewer.fit_view();capture(name)
+(OUT/'english_capture_manifest.json').write_text(json.dumps(records,ensure_ascii=False,indent=2),encoding='utf-8')
+w.close();pump(.2)

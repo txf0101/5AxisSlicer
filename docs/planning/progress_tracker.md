@@ -606,3 +606,5 @@ V2-02下一输入已定位：2026-09-24_three_color_fan_gui_project_corrected/pr
 2026-09-27 Skill 调用记录：V2.7 发布使用 five-axis-workbench-development 与 five-axis-slicer-validation，统一界面/命令行/包回退版本标识，复用刚完成的离线验收，执行发行质量核查；发布说明见 ../reviews/2026-09-27_v2_7_release.md。
 
 2026-09-27 Skill 调用记录：教程高清纠正使用 computer-use、five-axis-workbench-development、five-axis-slicer-validation。用户本轮要求覆盖此前光晕暂缓决定；全部指南图片采用原生至少1920×1080、无光标叠层的新图。处理与证据见[高清重拍复盘](../reviews/2026-09-27_guide_hd_review.md)。
+
+2026-09-27 Skill 调用记录：英文教程配图纠正沿用 five-axis-workbench-development、five-axis-slicer-validation。补拍8张英文截图，修订7份英文指南；英文15处引用全部使用英文界面，原生1920×1080且无光标叠层。补齐Freeform操作类型语言切换，29项集成测试通过。详见[高清重拍复盘](../reviews/2026-09-27_guide_hd_review.md)。
