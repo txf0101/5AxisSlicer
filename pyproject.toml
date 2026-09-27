@@ -67,7 +67,7 @@ where = ["src"]
 "share/doc/five-axis-slicer/guides" = ["docs/guides/*.md"]
 
 [tool.setuptools_scm]
-fallback_version = "2.6.2"
+fallback_version = "2.7"
 
 [tool.ruff]
 target-version = "py310"

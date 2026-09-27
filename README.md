@@ -1,4 +1,4 @@
-# 5AxisSclicer V2.6.2
+# 5AxisSclicer V2.7
 
 5AxisSclicer 是面向五轴增材制造的 Windows 桌面切片软件。它导入 STEP/STP 模型，按零件几何选择平面、曲线、回转、管体或自由曲面工作台，设置机床与材料，生成并预览路径，检查运动和 G-code 回读后导出离线 NC 结果。本项目正在测试和持续完善中；实际参数与打印效果以用户设备调试为准。
 
@@ -10,11 +10,11 @@
 
 四个示例的模型、原始代码、离线切片代码及路径文件见[示例文件索引](example/README.md)。大文件使用 Git LFS；克隆后需安装 Git LFS 并执行 `git lfs pull`。示例参数和打印效果以用户设备的实际调试结果为准；上机调试前请核对机床设置、装夹和路径安全。
 
-5AxisSclicer V2.6.2 以 Workbench 为入口。“G-code 文件预览”用于已有 NC/G-code 的空间路径、层范围和路径类型预览。Tube 支持 Indexed、Buildup、Continuous；Planar 支持 Region、Zigzag、Offset、Thin Wall、Spiral 和 buildplate-only Planar Support；Curve 支持 Buildup、Multi-pass Buildup 和 Offset Buildup；Rotary 支持圆柱/圆锥 Spiral、圆周多道 Thin Wall 和跨周期 Around Part；Freeform 支持有限修剪面组、曲面贴合、薄壁及明确几何角色的实体填充。这五类制造入口共用路径、状态、检查、回读、保存重开和六件套离线导出链。
+5AxisSclicer V2.7 以 Workbench 为入口。“G-code 文件预览”用于已有 NC/G-code 的空间路径、层范围和路径类型预览。Tube 支持 Indexed、Buildup、Continuous；Planar 支持 Region、Zigzag、Offset、Thin Wall、Spiral 和 buildplate-only Planar Support；Curve 支持 Buildup、Multi-pass Buildup 和 Offset Buildup；Rotary 支持圆柱/圆锥 Spiral、圆周多道 Thin Wall 和跨周期 Around Part；Freeform 支持有限修剪面组、曲面贴合、薄壁及明确几何角色的实体填充。这五类制造入口共用路径、状态、检查、回读、保存重开和六件套离线导出链。
 
 Freeform 的球面、一般曲面与径向实体填充需要明确选择对应的实体角色和几何参考。实际参数和打印效果以用户设备的调试结果为准；运行前请核对控制器、喷嘴、装夹及路径。
 
-初次使用请从[《5AxisSclicer V2.6.2 学习手册》](docs/guides/user_learning_manual_zh.md)开始。手册首页写明 IDE 的 `run_app.py` 和 PowerShell 的 `scripts/run_app.ps1` 启动方式，并按界面、Setup、工作台选择、操作、生成恢复、回读、六件套和独立迁移组织课程。pipe2、平面件、叶轮、扇叶和半球只作为练手材料，不要求复制案例 ID 或参数。熟悉公共流程后，可从[学习与参考手册中心](docs/guides/README.md)进入 Tube、Planar、Curve、Rotary、Freeform、多材料、机型和 G-code 专项参考。
+初次使用请从[《5AxisSclicer 学习手册》](docs/guides/user_learning_manual_zh.md)开始。手册首页写明 IDE 的 `run_app.py` 和 PowerShell 的 `scripts/run_app.ps1` 启动方式，并按界面、Setup、工作台选择、操作、生成恢复、回读、六件套和独立迁移组织课程。pipe2、平面件、叶轮、扇叶和半球只作为练手材料，不要求复制案例 ID 或参数。熟悉公共流程后，可从[学习与参考手册中心](docs/guides/README.md)进入 Tube、Planar、Curve、Rotary、Freeform、多材料、机型和 G-code 专项参考。
 
 开发计划、验证记录与公开资料统一从[开发文档索引](docs/README.md)进入。Research 入口不可用；第二机型需要独立配置与验证。
 

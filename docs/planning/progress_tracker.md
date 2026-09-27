@@ -602,3 +602,5 @@ V2-02下一输入已定位：2026-09-24_three_color_fan_gui_project_corrected/pr
 2026-09-27 V2-04关闭：主线程复核v2_04_final_closure.md与final_disposition.json，原始83引用及15低对比候选均有最终处置；29原图66引用替换、16编号图+3普通链接图按用途保留，48唯一原图覆盖完整。6张退役过程标记图迁移后逐项SHA一致且旧assets路径不存在，8份过程JSON迁移有清单。218本地链接有效，84内嵌图missing0。两处非关键光晕按计划§8保留并明确记录，不称绝无光晕；英文复用中文图有说明。主表PRODUCT-01/V2C同步当前状态，V2-01/03/04完成、V2-02/05未关闭。使用Skills：five-axis-workbench-development阶段门槛、five-axis-slicer-validation；证据不替代实机验收。
 
 2026-09-27 V2-02三叶扇多色生成完成：原进程2448生成结束、last_error=null，真实GUI显示路径、Warning及可用导出。v2_02_three_color_completed_state.json确认offline_exportable=true、machine_executable=false，strict readback340193/340193点、62716/62716事件、issues为空。实际点击导出到three_color_current150_gui_export，六文件已落盘（main.gcode59135880、toolpath.json330029556、preview.json236696908、manifest.json1522272、machine_axes.csv38330179、warnings.json1418956字节）；generated截图已保存，磁盘独立摘要及哈希由Agent核对。尝试Ctrl+S时工具报告用户正在操作，刷新确认用户在放大查看，故未继续抢输入；当前保存重开及NC空移/工序可视核验待做，不预报V2-02关闭。使用Skills：computer-use、开发与验证。目标active。
+
+2026-09-27 Skill 调用记录：V2.7 发布使用 five-axis-workbench-development 与 five-axis-slicer-validation，统一界面/命令行/包回退版本标识，复用刚完成的离线验收，执行发行质量核查；发布说明见 ../reviews/2026-09-27_v2_7_release.md。
