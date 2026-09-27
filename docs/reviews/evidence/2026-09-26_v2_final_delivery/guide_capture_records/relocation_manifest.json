@@ -1,0 +1,48 @@
+{
+  "moved": [
+    {
+      "original": "docs\\guides\\assets\\machine_profiles\\summary.json",
+      "current": "docs\\reviews\\evidence\\2026-09-26_v2_final_delivery\\guide_capture_records\\machine_profiles\\summary.json",
+      "sha256": "963a518c49b84c4ed172642097064ea8dca9d9e2d984ade3a19265ab0b9a97c1"
+    },
+    {
+      "original": "docs\\guides\\assets\\planar\\current_p01_p07\\p02\\summary.json",
+      "current": "docs\\reviews\\evidence\\2026-09-26_v2_final_delivery\\guide_capture_records\\planar\\current_p01_p07\\p02\\summary.json",
+      "sha256": "01d536db2d8bbeeb256e5856fbc3de044341a9784ec76139c2ab6d655b2e26d7"
+    },
+    {
+      "original": "docs\\guides\\assets\\planar\\current_p01_p07\\p06\\summary.json",
+      "current": "docs\\reviews\\evidence\\2026-09-26_v2_final_delivery\\guide_capture_records\\planar\\current_p01_p07\\p06\\summary.json",
+      "sha256": "7470e01fb4339db9c67571d04cd9461187dbffc7724833ae9bb80f130385178a"
+    },
+    {
+      "original": "docs\\guides\\assets\\planar\\current_p01_p07\\p07\\summary.json",
+      "current": "docs\\reviews\\evidence\\2026-09-26_v2_final_delivery\\guide_capture_records\\planar\\current_p01_p07\\p07\\summary.json",
+      "sha256": "4783a784e954d9a1b6898bdeaabcaf921591bdcbef0352c58c4a81e4eafde8a7"
+    },
+    {
+      "original": "docs\\guides\\assets\\planar\\summary.json",
+      "current": "docs\\reviews\\evidence\\2026-09-26_v2_final_delivery\\guide_capture_records\\planar\\summary.json",
+      "sha256": "a682bfbb67fa50ef1bc3a94a8d7ba64331e930dc717391911e7a181857135cec"
+    },
+    {
+      "original": "docs\\guides\\assets\\rotary\\current_r01_r05\\summary.json",
+      "current": "docs\\reviews\\evidence\\2026-09-26_v2_final_delivery\\guide_capture_records\\rotary\\current_r01_r05\\summary.json",
+      "sha256": "3a3f133d4d1c6db4ed1e710c34562276e01e763aeede516206cf82177dfd688b"
+    },
+    {
+      "original": "docs\\guides\\assets\\rotary\\fan_blade_check\\figure_summary.json",
+      "current": "docs\\reviews\\evidence\\2026-09-26_v2_final_delivery\\guide_capture_records\\rotary\\fan_blade_check\\figure_summary.json",
+      "sha256": "7ac9ea7abf12c0900117f7d85753c7ace0c1a0a604d33a7589dc3d1fc9349501"
+    },
+    {
+      "original": "docs\\guides\\assets\\rotary\\live_qt\\summary.json",
+      "current": "docs\\reviews\\evidence\\2026-09-26_v2_final_delivery\\guide_capture_records\\rotary\\live_qt\\summary.json",
+      "sha256": "3d2603ddead66a6d3a5e3c5a56d213b1aa867f316a027dc61ee6652c2be8f776"
+    }
+  ],
+  "updated_documents": [
+    "docs\\reviews\\2026-09-12_p07_planar_support_review.md",
+    "docs\\reviews\\2026-09-13_rotary_workbench_review.md"
+  ]
+}

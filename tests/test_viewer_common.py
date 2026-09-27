@@ -51,6 +51,23 @@ def test_pick_selection_enforces_request_kind_cardinality_and_allowlist() -> Non
     assert not selection.edge_ids
 
 
+def test_edge_pick_order_survives_toggle_and_resets_with_selection() -> None:
+    from five_axis_slicer.viewer_common import replace_selection
+
+    selection = SelectionState()
+    request = PickRequest("edge", multiple=True)
+    for edge in ("edge_z", "edge_a", "edge_m"):
+        apply_pick_selection(selection, request, "edge", edge)
+    assert selection.ordered_edge_ids() == ["edge_z", "edge_a", "edge_m"]
+    apply_pick_selection(selection, request, "edge", "edge_a")
+    apply_pick_selection(selection, request, "edge", "edge_a")
+    assert selection.ordered_edge_ids() == ["edge_z", "edge_m", "edge_a"]
+    replace_selection(selection, edge_ids=["edge_m", "edge_z"])
+    assert selection.ordered_edge_ids() == ["edge_m", "edge_z"]
+    selection.clear()
+    assert selection.ordered_edge_ids() == []
+
+
 def test_representative_segment_prefers_a_visible_extrusion_without_progress() -> None:
     travel = _segment(0, "travel")
     extrusion = _segment(1, "extrude")

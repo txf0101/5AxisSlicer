@@ -1,0 +1,77 @@
+......................................................F................. [  5%]
+........................................................................ [ 11%]
+..................................................................... [ 16%]
+.................................................. [ 20%]
+................................. [ 23%]
+.................................................................... [ 28%]
+........................................................................ [ 33%]
+........................................................................ [ 39%]
+........................................................................ [ 45%]
+........................................................................ [ 50%]
+.................s.............s....................... [ 55%]
+................................... [ 57%]
+...................................................................... [ 63%]
+.....s.................................................................. [ 68%]
+.................................................................. [ 74%]
+................................................F.................. [ 79%]
+........................................................................ [ 84%]
+................................................................... [ 90%]
+Windows fatal exception: access violation
+
+Thread 0x0000e67c (most recent call first):
+  File "C:\ProgramData\anaconda3\Lib\threading.py", line 359 in wait
+  File "C:\ProgramData\anaconda3\Lib\threading.py", line 655 in wait
+  File "C:\ProgramData\anaconda3\Lib\threading.py", line 1431 in run
+  File "C:\ProgramData\anaconda3\Lib\threading.py", line 1075 in _bootstrap_inner
+  File "C:\ProgramData\anaconda3\Lib\threading.py", line 1032 in _bootstrap
+
+Thread 0x00001294 (most recent call first):
+  File "C:\ProgramData\anaconda3\Lib\selectors.py", line 314 in _select
+  File "C:\ProgramData\anaconda3\Lib\selectors.py", line 323 in select
+  File "C:\ProgramData\anaconda3\Lib\socketserver.py", line 235 in serve_forever
+  File "C:\ProgramData\anaconda3\Lib\threading.py", line 1012 in run
+  File "C:\ProgramData\anaconda3\Lib\threading.py", line 1075 in _bootstrap_inner
+  File "C:\ProgramData\anaconda3\Lib\threading.py", line 1032 in _bootstrap
+
+Current thread 0x00002948 (most recent call first):
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\src\five_axis_slicer\viewer.py", line 1072 in render
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\src\five_axis_slicer\viewer.py", line 553 in set_build_surface
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\src\five_axis_slicer\tube_ui.py", line 1471 in _refresh_overlays
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\src\five_axis_slicer\tube_ui.py", line 869 in refresh
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\src\five_axis_slicer\tube_ui.py", line 689 in set_language
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\src\five_axis_slicer\tube_ui.py", line 176 in __init__
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\src\five_axis_slicer\ui.py", line 1862 in _build_ui
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\src\five_axis_slicer\ui.py", line 167 in __init__
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tests\test_ui_state.py", line 135 in test_home_gcode_viewer_entry_opens_empty_result_preview
+  File "C:\ProgramData\anaconda3\Lib\unittest\case.py", line 589 in _callTestMethod
+  File "C:\ProgramData\anaconda3\Lib\unittest\case.py", line 634 in run
+  File "C:\ProgramData\anaconda3\Lib\unittest\case.py", line 690 in __call__
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\_pytest\unittest.py", line 410 in runtest
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\_pytest\runner.py", line 184 in pytest_runtest_call
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\pluggy\_callers.py", line 121 in _multicall
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\pluggy\_manager.py", line 120 in _hookexec
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\pluggy\_hooks.py", line 512 in __call__
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\_pytest\runner.py", line 250 in <lambda>
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\_pytest\runner.py", line 361 in from_call
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\_pytest\runner.py", line 249 in call_and_report
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\_pytest\runner.py", line 139 in runtestprotocol
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\_pytest\runner.py", line 118 in pytest_runtest_protocol
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\pluggy\_callers.py", line 121 in _multicall
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\pluggy\_manager.py", line 120 in _hookexec
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\pluggy\_hooks.py", line 512 in __call__
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\_pytest\main.py", line 408 in pytest_runtestloop
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\pluggy\_callers.py", line 121 in _multicall
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\pluggy\_manager.py", line 120 in _hookexec
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\pluggy\_hooks.py", line 512 in __call__
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\_pytest\main.py", line 384 in _main
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\_pytest\main.py", line 330 in wrap_session
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\_pytest\main.py", line 377 in pytest_cmdline_main
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\pluggy\_callers.py", line 121 in _multicall
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\pluggy\_manager.py", line 120 in _hookexec
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\pluggy\_hooks.py", line 512 in __call__
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\_pytest\config\__init__.py", line 229 in _main
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\_pytest\config\__init__.py", line 253 in _console_main
+  File "F:\\u3010\u9879\u76ee\u548c\u4efb\u52a1\u3011\5AxisSclicer_V2.0\tmp\pytest9\Lib\site-packages\pytest\__main__.py", line 9 in <module>
+  File "<frozen runpy>", line 88 in _run_code
+  File "<frozen runpy>", line 198 in _run_module_as_main
+...............................................

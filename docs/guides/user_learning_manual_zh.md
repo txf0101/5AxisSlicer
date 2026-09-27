@@ -95,9 +95,9 @@ flowchart LR
 4. 右侧编辑器：当前树节点或操作的参数。
 5. 底部问题列表：Error、Warning 和可定位诊断。
 
-![首页的工作台、公共制造设置和打开模型入口](assets/product_delivery/01_home_zh.jpg)
+![首页的五个工作台入口与 G-code 文件预览入口](assets/current_delivery/home_zh.png)
 
-图中是工作台首页，可在顶部打开 STEP 或公共制造设置。打开 STEP 后再到对应工作台观察模型、body/edge 列表和问题列表；此时不用记住实体编号。换一个 STEP 后，应根据几何角色重新确认。
+图中裁取工作台首页卡片区域；打开 STEP 和公共制造设置位于上方工具栏，未包含在裁图中。打开 STEP 后再到对应工作台观察模型、body/edge 列表和问题列表；此时不用记住实体编号。换一个 STEP 后，应根据几何角色重新确认。
 
 Planar、Curve、Rotary、Freeform 的左侧还有“制造设置”栏。这里能看到当前机床、喷嘴、材料和设置作用范围，点击 Part、Machine、Nozzle、Material、Model CS、Build CS、Placement 会打开对应编辑页。Tube 的左侧项目树提供相同的公共设置节点。公共设置与独立设置的复制、保存和影响范围，按[点击教程的设置作用域](quickstart_clickthrough_zh.md#公共设置与本工作台设置)操作。
 
@@ -107,11 +107,13 @@ Planar、Curve、Rotary、Freeform 的左侧还有“制造设置”栏。这里
 
 ### 5.1 先给对象分配角色
 
-Part 可以包含多个封闭 solid。参与制造的实体设为 Part；辅助 sheet、基体、夹具或明确忽略的实体保留各自角色。不要因为示例里两个 body 都是 Part，就把新模型中的所有对象全部选为 Part。
+Part 可以包含多个封闭 solid。参与制造的实体设为 Part；辅助 sheet、基体、夹具或明确忽略的实体保留各自角色。不要因为示例里多个 body 都是 Part，就把新模型中的所有对象全部选为 Part。
 
-![公共制造设置已就绪的 Part 页面](assets/product_delivery/11_setup_part_ready_zh.jpg)
+![叶轮项目的九个实体角色表（局部）](assets/current_delivery/part_impeller_roles_zh.png)
 
-上图是弯管案例已完成公共设置的状态：两个实体设为“零件”，Part、Machine、Nozzle 和 Material 均显示“有效”。参考机型仍会在问题列表中保留标定警告。右侧修改角色后，向下滚动点“确认”；再按问题列表核对其他设置。
+图例来自叶轮项目：九个封闭实体的角色均为“零件”，只用于说明角色表。它不代表弯管的实体数量或完整设置就绪状态；自己的模型须逐项判断。
+
+上图仅展示叶轮角色表，其他设置状态不在裁图内。参考机型仍会在问题列表中保留标定警告。右侧修改角色后，向下滚动点“确认”；再按问题列表核对其他设置。
 
 ### 5.2 按固定顺序完成 Setup
 
@@ -124,13 +126,15 @@ Part 可以包含多个封闭 solid。参与制造的实体设为 Part；辅助 
 5. **Build CS**：定义构建方向和构建平面。
 6. **Placement**：把 Build CS 放入机床安装位，并录入有证据的微调。
 
-![Model CS 三参考编辑器](assets/tube_coordinate_setup/03_model_cs_editor.png)
+![Model CS 三参考编辑器](assets/current_delivery/modelcs_draft_zh.png)
+
+图为叶轮项目的坐标编辑草稿：原点为 (0, 0, 0)，Z 方向为 +Z，X 方向为 +X。它说明三参考编辑器的位置和确认方式，不代表已应用，也不是弯管的推荐坐标值；自己的模型须按几何和构建方向重新定义。
 
 原点、Z 和 X 要分别确认；X 与 Z 不得为零向量或共线。没有标定依据时，Placement 的六项微调保持 0，并把真实标定列为未完成项。
 
 ### 5.3 机型选择只冻结当前项目快照
 
-![当前公共制造设置中的机型选择和参考资格提示](assets/product_delivery/08_machine_setup_zh.png)
+![当前公共制造设置中的机型选择和参考资格提示](assets/current_delivery/machine150_zh.png)
 
 内置资源是只读模板。项目保存的是冻结快照，之后用户资源库发生变化不会静默改写旧项目。参考机型产生 Warning 是正常安全边界，不应删除警告来获得绿色状态。
 
@@ -155,9 +159,9 @@ Part 可以包含多个封闭 solid。参与制造的实体设为 Part；辅助 
 
 叶轮可用于学习 Curve 的 edge 链，也可用有限面组学习 Freeform；两者的输入契约不同。选择 Curve 时制造中心是边链，选择 Freeform 时区域由面组和导引线共同限定。
 
-![Rotary 关闭模型后显示的两个局部环绕沉积区域](assets/product_delivery/09_rotary_around_part_paths_zh.png)
+![Rotary 关闭模型后显示的两个局部环绕沉积区域](assets/current_delivery/rotary_around_two_regions_zh.png)
 
-图中紫色轨迹是圆柱表面的两个局部环绕区域；它们共用固定回转轴。弯管虽然局部截面呈圆形，中心线方向持续变化，通常应进入 Tube，而不是把每个弯曲段硬解释成一个 Rotary 操作。
+图中蓝色细线是圆柱表面的两个局部环绕区域，当前图没有显示空移；它们共用固定回转轴。弯管虽然局部截面呈圆形，中心线方向持续变化，通常应进入 Tube，而不是把每个弯曲段硬解释成一个 Rotary 操作。
 
 **自检**：为待处理零件写一句选择理由和一句拒绝条件。例如：“选择 Rotary，因为区域与固定 Z 轴同轴；若实际轴随中心线变化，则退回 Tube 判断。”
 
@@ -186,9 +190,9 @@ Part 可以包含多个封闭 solid。参与制造的实体设为 Part；辅助 
 
 从 Region 或 Zigzag 开始，观察层高、道宽、填充间距如何改变路径。Offset、Thin Wall、Spiral 和 Planar Support 放在掌握区域与层以后学习。
 
-![Planar 单层往复填充路径，已隐藏模型并选完整线条](assets/product_delivery/07_planar_full_lines_zh.png)
+![Planar 单层往复填充路径，已隐藏模型并选完整线条](assets/current_delivery/planar_zigzag_path_detail.png)
 
-这张图使用三叶扇 STEP 的 `body_001`、`Z=0.2 mm` 单层来练习查看路径。看不清内部线条时，取消“显示模型”；核对路径与实体是否对齐时，再勾选它。此图不表示整件已经完成切片。
+这张局部图使用矩形试件的 `body_001`、`Z=0.2 mm` 单层来练习查看路径。看不清内部线条时，取消“显示模型”；核对路径与实体是否对齐时，再勾选它。此图不表示整件已经完成切片。
 
 迁移任务：换一个带孔或岛的平面截面，确认路径没有穿过孔洞，层数和首末 Z 与输入一致。
 
@@ -244,9 +248,9 @@ Indexed 用于分段转位薄壁，Buildup 用于多道加厚和可选底座，C
 2. **运动层**：空移、退离、转位、接近、速度、加速度、轴限、FK 回代和碰撞报告。
 3. **代码层**：G90/G91、M82/M83、G93/G94、轴字、E、F、材料事件和宏展开是否符合注册控制器语义。
 
-![Warning 状态下的当前生成路径](assets/rotary/current_r01_r05/09_rotary_export_zh_1600x900.png)
+![离线参考机型 Warning 状态及可用导出入口](assets/current_delivery/rotary_recovered_controls_zh.png)
 
-这张图说明 `Warning` 可保留有效离线路径，但必须审查警告后才允许人工决定是否导出。Viewer 看起来连续不能替代 NC 回读；NC 回读通过也不能替代真实控制器和现场碰撞验证。
+这张当前界面局部显示离线参考机型重新生成后的 `Warning` 和可用导出入口；图中没有路径细节或导出目录。必须审查警告后才允许人工决定是否导出。Viewer 看起来连续不能替代 NC 回读；NC 回读通过也不能替代真实控制器和现场碰撞验证。
 
 ## 10. L08：理解六件套、保存和重开
 

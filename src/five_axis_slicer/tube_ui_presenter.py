@@ -10,6 +10,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 
+from .build_surface_presentation import source_build_surface
 from .manufacturing.coordinates import (
     CoordinateFrameDefinition,
     DirectionReference,
@@ -69,7 +70,9 @@ def viewer_presentation(
     active_coordinate_node: str,
 ) -> ViewerPresentation:
     if not has_model:
-        return ViewerPresentation(IDENTITY_MATRIX, (), None, None)
+        return ViewerPresentation(
+            IDENTITY_MATRIX, (), None, source_build_surface(controller.setup, has_model=False)
+        )
     transform = _display_transform(controller, view_mode)
     overlays = _coordinate_overlays(controller, transform)
     if view_mode == "machine":
@@ -83,7 +86,11 @@ def viewer_presentation(
         if active_coordinate_node == BUILD_CS_NODE
         else "model"
     )
-    surface = _machine_surface_overlay(controller) if view_mode == "machine" else None
+    surface = (
+        (_machine_surface_overlay(controller) if transform is not None else None)
+        if view_mode == "machine"
+        else source_build_surface(controller.setup, has_model=True)
+    )
     matrix = IDENTITY_MATRIX if transform is None else transform.matrix
     return ViewerPresentation(matrix, tuple(overlays), active, surface)
 

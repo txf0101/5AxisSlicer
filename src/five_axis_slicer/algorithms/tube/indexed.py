@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from collections.abc import Callable
+from dataclasses import dataclass, replace
 import math
 
 from ...manufacturing.setup import TubeProcessParameters
@@ -114,6 +115,7 @@ def generate_indexed_toolpath(
     parameters: TubeProcessParameters,
     *,
     model: CadModel | None = None,
+    checkpoint: Callable[[], None] | None = None,
 ) -> GeneratedToolpath:
     """Generate mid-wall circular contours plus explicit safe transitions."""
 
@@ -125,6 +127,8 @@ def generate_indexed_toolpath(
     builder = _PathBuilder(operation_id, parameters)
     previous_region: str | None = None
     for layer in plan.layers:
+        if checkpoint is not None:
+            checkpoint()
         center, _tangent = feature.point_tangent_at(layer.centerline_distance_mm)
         loop = (
             _exact_section_loop(model, feature, layer, parameters.contour_chord_error_mm)
@@ -146,6 +150,22 @@ def generate_indexed_toolpath(
     )
 
 
+def _validate_path_dimensions(loop, heights_mm, segment_volumes_mm3, widths_mm=None):
+    if len(loop) < 2:
+        raise ValueError("Tube path requires at least two points")
+    for values in (heights_mm, widths_mm):
+        if values is not None:
+            if len(values) != len(loop) or any(not math.isfinite(v) or v <= 0 for v in values):
+                raise ValueError("Tube path requires one positive dimension per point")
+            if segment_volumes_mm3 is None:
+                raise ValueError("Variable dimensions require independently integrated segment volumes")
+    if segment_volumes_mm3 is not None and (
+        len(segment_volumes_mm3) != len(loop) - 1
+        or any(not math.isfinite(v) or v <= 0 for v in segment_volumes_mm3)
+    ):
+        raise ValueError("Tube path requires one positive volume per segment")
+
+
 class _PathBuilder:
     def __init__(self, operation_id: str, parameters: TubeProcessParameters) -> None:
         self.operation_id = operation_id
@@ -160,19 +180,25 @@ class _PathBuilder:
         loop: tuple[tuple[Vector3, Vector3, Vector3], ...],
         *,
         indexed: bool,
+        heights_mm: tuple[float, ...] | None = None,
+        widths_mm: tuple[float, ...] | None = None,
+        segment_volumes_mm3: tuple[float, ...] | None = None,
     ) -> None:
+        _validate_path_dimensions(loop, heights_mm, segment_volumes_mm3, widths_mm)
+        widths = widths_mm or (self.parameters.bead_width_mm,) * len(loop)
+        start_layer = layer if heights_mm is None else replace(layer, deposited_height_mm=heights_mm[0])
         first_position, first_tangent, first_normal = loop[0]
         if self.points:
-            self._connect(layer, first_position, first_tangent, first_normal, indexed=indexed)
+            self._connect(start_layer, first_position, first_tangent, first_normal, indexed=indexed, bead_width_mm=widths[0])
         else:
-            self._append_point(layer, first_position, first_tangent, first_normal, "approach")
+            self._append_point(start_layer, first_position, first_tangent, first_normal, "approach", bead_width_mm=widths[0])
             self._event("prime", layer)
         previous = first_position
-        for position, tangent, normal in loop[1:]:
-            volume = math.dist(previous, position) * (
-                self.parameters.bead_width_mm * layer.deposited_height_mm
-            )
-            self._append_point(layer, position, tangent, normal, "deposition", volume)
+        for index, (position, tangent, normal) in enumerate(loop[1:]):
+            point_layer = layer if heights_mm is None else replace(layer, deposited_height_mm=heights_mm[index + 1])
+            volume = (segment_volumes_mm3[index] if segment_volumes_mm3 is not None else
+                      math.dist(previous, position) * self.parameters.bead_width_mm * layer.deposited_height_mm)
+            self._append_point(point_layer, position, tangent, normal, "deposition", volume, bead_width_mm=widths[index + 1])
             previous = position
 
     def _connect(
@@ -183,6 +209,7 @@ class _PathBuilder:
         normal: Vector3,
         *,
         indexed: bool,
+        bead_width_mm: float | None = None,
     ) -> None:
         previous = self.points[-1]
         self._event("retract", layer)
@@ -196,14 +223,15 @@ class _PathBuilder:
             previous.surface_normal or normal,
             "depart",
             nozzle_axis=previous.nozzle_axis,
+            bead_width_mm=previous.bead_width_mm,
         )
         if indexed:
             self._event("index_start", layer)
         safe_target = _add(target, _scale(layer.plane_normal, self.parameters.safe_clearance_mm))
-        self._append_point(layer, safe_target, tangent, normal, "travel")
+        self._append_point(layer, safe_target, tangent, normal, "travel", bead_width_mm=bead_width_mm)
         if indexed:
             self._event("index_end", layer)
-        self._append_point(layer, target, tangent, normal, "approach")
+        self._append_point(layer, target, tangent, normal, "approach", bead_width_mm=bead_width_mm)
         self._event("prime", layer)
 
     def _append_point(
@@ -216,6 +244,7 @@ class _PathBuilder:
         material_volume_mm3: float = 0.0,
         *,
         nozzle_axis: Vector3 | None = None,
+        bead_width_mm: float | None = None,
     ) -> None:
         self._sequence += 1
         deposition = point_type == "deposition"
@@ -237,8 +266,8 @@ class _PathBuilder:
                     if deposition
                     else self.parameters.travel_feedrate_mm_min
                 ),
-                bead_width_mm=self.parameters.bead_width_mm if deposition else None,
-                layer_height_mm=layer.deposited_height_mm if deposition else None,
+                bead_width_mm=bead_width_mm if bead_width_mm is not None else (self.parameters.bead_width_mm if deposition else None),
+                layer_height_mm=layer.deposited_height_mm if point_type in {"deposition", "approach", "travel"} else None,
                 material_volume_mm3=material_volume_mm3,
             )
         )

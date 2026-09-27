@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Iterator
+from collections.abc import Iterator, Mapping
 from contextlib import contextmanager
 from copy import deepcopy
 from dataclasses import dataclass
@@ -11,6 +11,7 @@ from typing import Any, Protocol
 
 from .gcode_preview import GCodePreview, PreviewSettings
 from .models import CadModel, PickHit, PickRequest, SelectionState
+from .project_io import ProjectLoaded
 from .tube_controller import StaleDraftError, TubeSetupController
 from .viewer_common import ViewerProtocol
 
@@ -281,6 +282,48 @@ def source_update_transaction(
     with publication_transaction(host):
         with controller.draft_resolution_transaction(draft_resolution):
             yield
+
+
+def original_project_source(payload: Mapping[str, Any]) -> Path | None:
+    """Resolve provenance before entering the UI publication transaction."""
+    source_payload = payload.get("source")
+    original_path = (
+        source_payload.get("original_path") if isinstance(source_payload, Mapping) else None
+    )
+    return (
+        Path(original_path).expanduser().resolve()
+        if isinstance(original_path, str) and original_path.strip()
+        else None
+    )
+
+
+def publish_project_viewer(
+    host: ModelHostProtocol,
+    loaded: ProjectLoaded,
+    original_step_path: Path | None,
+    play_tooltip: str,
+) -> None:
+    """Restore model, selection and preview inside the caller's publication transaction."""
+    host.model = loaded.model
+    host._original_step_path = original_step_path
+    if loaded.model is None:
+        host.viewer.clear_model()
+    else:
+        host.viewer.load_model(loaded.model)
+        host.viewer.set_selection(
+            body_ids=list(loaded.selection.body_ids),
+            face_ids=list(loaded.selection.face_ids),
+            edge_ids=list(loaded.selection.edge_ids),
+            vertex_ids=list(loaded.selection.vertex_ids),
+        )
+    host.progress_timer.stop()
+    host.progress_play_button.setText(">")
+    host.progress_play_button.setToolTip(play_tooltip)
+    host.gcode_preview = loaded.gcode_preview
+    if loaded.gcode_preview is None:
+        host.viewer.clear_gcode_preview()
+    else:
+        host.viewer.load_gcode_preview(loaded.gcode_preview)
 
 
 def refresh_publication_ui(host: ModelHostProtocol) -> None:

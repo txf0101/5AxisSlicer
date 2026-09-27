@@ -39,7 +39,7 @@ Prusa 官方 Support 文档用于核对 `Supports on build plate only`、悬垂�
 
 ## UI 证据
 
-[当前 UI 摘要](../guides/assets/planar/current_p01_p07/p07/summary.json)包含 9 个 Qt/OpenGL 控件抓图案例：中文与英文，1366×768、1600×900、1920×1080 三种窗口尺寸，覆盖顶部参数、Grid/Lines Warning、过窄 Error 及恢复、参数变化 Stale 及重新生成。参数标签、单位、帮助、按钮和紧凑问题索引均可见；全部案例 `horizontal_scroll_max=0`、`collisions=[]`，可见按钮无文字裁切。该证据是 Qt widget grab 加项目 OpenGL Viewer，不是真人桌面点击；Planar 页面不使用 VTK 后端。
+[当前 UI 摘要](evidence/2026-09-26_v2_final_delivery/guide_capture_records/planar/current_p01_p07/p07/summary.json)包含 9 个 Qt/OpenGL 控件抓图案例：中文与英文，1366×768、1600×900、1920×1080 三种窗口尺寸，覆盖顶部参数、Grid/Lines Warning、过窄 Error 及恢复、参数变化 Stale 及重新生成。参数标签、单位、帮助、按钮和紧凑问题索引均可见；全部案例 `horizontal_scroll_max=0`、`collisions=[]`，可见按钮无文字裁切。该证据是 Qt widget grab 加项目 OpenGL Viewer，不是真人桌面点击；Planar 页面不使用 VTK 后端。
 
 ## 性能补充观察
 

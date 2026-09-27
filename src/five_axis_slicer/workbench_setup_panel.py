@@ -11,6 +11,7 @@ from PyQt5.QtWidgets import (
     QLayout,
     QListWidget,
     QListWidgetItem,
+    QMessageBox,
     QPushButton,
     QScrollArea,
     QVBoxLayout,
@@ -31,15 +32,52 @@ _NODES = (
 )
 
 
+def confirm_setup_change(parent: QWidget, language: str, message: str) -> bool:
+    """Use the application's language without depending on Qt translation bundles."""
+    prompt = QMessageBox(parent)
+    prompt.setIcon(QMessageBox.Question)
+    prompt.setWindowTitle("制造设置" if language == "zh" else "Manufacturing Setup")
+    prompt.setText(message)
+    prompt.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+    for role, label in (
+        (QMessageBox.Yes, "是" if language == "zh" else "Yes"),
+        (QMessageBox.No, "否" if language == "zh" else "No"),
+    ):
+        button = prompt.button(role)
+        if button is not None:
+            button.setText(label)
+    prompt.setDefaultButton(QMessageBox.No)
+    prompt.setEscapeButton(QMessageBox.No)
+    return prompt.exec_() == QMessageBox.Yes
+
+
+def draft_setup_prompt(parent: QWidget, language: str, *, saving: bool = False) -> QMessageBox:
+    """Keep standard result codes while displaying the selected application language."""
+    prompt = QMessageBox(parent)
+    prompt.setWindowTitle("制造设置" if language == "zh" else "Manufacturing Setup")
+    messages = {
+        (True, "zh"): "制造设置含未应用草稿，请选择应用、丢弃或取消保存。",
+        (True, "en"): "Manufacturing Setup has unapplied drafts. Apply, discard, or cancel saving.",
+        (False, "zh"): "本工作台设置有未应用草稿。应用、丢弃，还是继续编辑？",
+        (False, "en"): "Local Setup has unapplied drafts. Apply, discard, or continue editing?",
+    }
+    prompt.setText(messages[saving, language])
+    prompt.setStandardButtons(QMessageBox.Apply | QMessageBox.Discard | QMessageBox.Cancel)
+    labels = ("应用", "丢弃", "取消") if language == "zh" else ("Apply", "Discard", "Cancel")
+    for role, label in zip((QMessageBox.Apply, QMessageBox.Discard, QMessageBox.Cancel), labels):
+        button = prompt.button(role)
+        if button is not None:
+            button.setText(label)
+    prompt.setDefaultButton(QMessageBox.Cancel)
+    prompt.setEscapeButton(QMessageBox.Cancel)
+    return prompt
+
+
 def _resource_label(snapshot: object | None, missing: str) -> str:
     if snapshot is None:
         return missing
     payload = getattr(snapshot, "payload", {})
-    name = (
-        payload.get("display_name") or payload.get("name")
-        if hasattr(payload, "get")
-        else None
-    )
+    name = payload.get("display_name") or payload.get("name") if hasattr(payload, "get") else None
     readable = str(name or getattr(snapshot, "resource_id", "")).split("\ufffd", 1)[0].strip()
     return readable or str(getattr(snapshot, "resource_id", missing))
 
@@ -121,13 +159,19 @@ class WorkbenchSetupPanel(QScrollArea):
     def set_language(self, language: str) -> None:
         zh = language != "en"
         self.title.setText("制造设置" if zh else "Manufacturing Setup")
-        self.copy_button.setText("导入公共设置到本工作台" if zh else "Import common into this workbench")
+        self.copy_button.setText("导入公共设置" if zh else "Copy common Setup")
+        self.copy_button.setToolTip(
+            "从公共设置创建本工作台的独立副本。"
+            if zh
+            else "Create an independent Setup for this workbench from the common Setup."
+        )
         self.save_local_button.setText("保存本工作台设置…" if zh else "Save local Setup…")
         self.use_common_button.setText("改用公共设置" if zh else "Use common Setup")
         self.publish_button.setText("保存到公共制造设置" if zh else "Save to common Setup")
         self.note.setText(
             "点上方项目可编辑当前设置。保存项目会保留本工作台设置。"
-            if zh else "Open a node to edit the active Setup. Save Project keeps local settings."
+            if zh
+            else "Open a node to edit the active Setup. Save Project keeps local settings."
         )
         for index, (node, label) in enumerate(_NODES):
             item = self.nodes.item(index)

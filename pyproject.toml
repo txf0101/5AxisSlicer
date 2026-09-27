@@ -21,6 +21,7 @@ classifiers = [
     "Topic :: Scientific/Engineering",
 ]
 dependencies = [
+    "cadquery>=2.7,<2.8",
     "cadquery-ocp==7.8.1.1.post1",
     "jsonschema>=4.23,<5",
     "numpy>=1.26,<2.3",
@@ -47,9 +48,9 @@ dev = [
     "twine>=6,<7",
 ]
 
-# STEP fixture generation uses CadQuery; the application reads STEP through OCP directly.
+# Runtime planar offsets/supports use CadQuery; tests also generate STEP fixtures.
 # CasADi 3.8.0 ships an invalid duplicate-parameter type stub that breaks mypy.
-cad-tests = ["cadquery>=2.7,<2.8", "casadi==3.7.2"]
+cad-tests = ["casadi==3.7.2"]
 
 [project.scripts]
 five-axis-slicer = "five_axis_slicer.app:main"
@@ -80,6 +81,8 @@ select = ["E4", "E7", "E9", "F"]
 "scripts/*.py" = ["E402"]
 "tests/*.py" = ["E402"]
 "src/five_axis_slicer/result_preview.py" = ["E402"]
+# Archived capture initializes Qt environment and source paths before imports; preserve its hash.
+"docs/reviews/evidence/2026-09-26_paper_screenshot_refresh/capture.py" = ["E402"]
 # This file is restricted command text; its host names are checked by the DSL parser.
 "example/pipe2/tube_setup_coordinate_demo/setup_demo.py" = ["F821"]
 

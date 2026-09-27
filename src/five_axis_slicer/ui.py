@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import time
-from collections.abc import Callable, Mapping
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
@@ -75,7 +75,8 @@ from .tube_script_service import ProjectOpenCancelled, TubeScriptService
 from .tube_ui import TubeSetupPage
 from .ui_controls import action_button
 from .viewer import ModelViewer
-from .workbench_setup_panel import WorkbenchSetupPanel
+from .workbench_issue_ui import command_error_text
+from .workbench_setup_panel import WorkbenchSetupPanel, confirm_setup_change, draft_setup_prompt
 from .workbench_setup_scope import (
     LOCAL_WORKBENCHES,
     binding_ids,
@@ -1133,40 +1134,15 @@ class MainWindow(QMainWindow):
             loaded.project_directory,
             interactive=interactive,
         )
-        source_payload = loaded.payload.get("source")
-        original_path = (
-            source_payload.get("original_path") if isinstance(source_payload, Mapping) else None
-        )
-        original_step_path = (
-            Path(original_path).expanduser().resolve()
-            if isinstance(original_path, str) and original_path.strip()
-            else None
-        )
+        original_step_path = model_commit.original_project_source(loaded.payload)
         workbench = str(loaded.workbench.get("workbench", "curve"))
         if workbench not in {item.key for item in WORKBENCHES}:
             workbench = "curve"
         with model_commit.publication_transaction(self):
             self._local_setup_editor_key = None
-            self.model = loaded.model
-            self._original_step_path = original_step_path
-            if loaded.model is None:
-                self.viewer.clear_model()
-            else:
-                self.viewer.load_model(loaded.model)
-                self.viewer.set_selection(
-                    body_ids=list(loaded.selection.body_ids),
-                    face_ids=list(loaded.selection.face_ids),
-                    edge_ids=list(loaded.selection.edge_ids),
-                    vertex_ids=list(loaded.selection.vertex_ids),
-                )
-            self.progress_timer.stop()
-            self.progress_play_button.setText(">")
-            self.progress_play_button.setToolTip(tr(self.language, "progress_play"))
-            self.gcode_preview = loaded.gcode_preview
-            if loaded.gcode_preview is None:
-                self.viewer.clear_gcode_preview()
-            else:
-                self.viewer.load_gcode_preview(loaded.gcode_preview)
+            model_commit.publish_project_viewer(
+                self, loaded, original_step_path, tr(self.language, "progress_play")
+            )
             self.tube_page.set_controller(controller, loaded.model)
             self.planar_page.set_controller(planar_controller)
             self.planar_command_service = self.planar_page.commands
@@ -1189,6 +1165,9 @@ class MainWindow(QMainWindow):
             self.last_project_dir = loaded.project_directory
             model_commit.refresh_publication_ui(self)
             self._show_session()
+            self.tube_page.set_common_setup_mode(
+                workbench == "tube" and loaded.workbench.get("common_setup_view") is True
+            )
         config_recovered = self.tube_script_service.bind_prepared_project(controller)
         if not config_recovered:
             controller.mark_saved()
@@ -1369,14 +1348,7 @@ class MainWindow(QMainWindow):
             return
         draft_resolution: str | None = None
         if self.tube_page.controller.has_drafts:
-            prompt = QMessageBox(self)
-            prompt.setWindowTitle(tr(self.language, "save"))
-            prompt.setText(
-                "制造 Setup 含未应用草稿，请选择 Apply、Discard 或取消保存。"
-                if self.language == "zh"
-                else "Manufacturing Setup has unapplied drafts. Apply, discard, or cancel saving."
-            )
-            prompt.setStandardButtons(QMessageBox.Apply | QMessageBox.Discard | QMessageBox.Cancel)
+            prompt = draft_setup_prompt(self, self.language, saving=True)
             choice = prompt.exec()
             if choice == QMessageBox.Cancel:
                 return
@@ -1500,6 +1472,7 @@ class MainWindow(QMainWindow):
         tube_state["commands"] = self.tube_script_service.state_json()
         return {
             "language": self.language,
+            "display": self._display_state(),
             "page": self._current_page_name(),
             "workbench": self._workbench_state(),
             "model": model_state,
@@ -1512,6 +1485,22 @@ class MainWindow(QMainWindow):
             "rotary": self.rotary_page.state_json(),
             "results": self.result_page.state_json(),
             "result_load_metrics": self._public_load_metrics(),
+        }
+
+    def _display_state(self) -> dict[str, Any]:
+        """Report logical window dimensions separately from display scaling."""
+        screen = self.screen()
+        frame = self.frameGeometry()
+        available = screen.availableGeometry() if screen is not None else None
+        return {
+            "client_size": [self.width(), self.height()],
+            "frame_size": [frame.width(), frame.height()],
+            "device_pixel_ratio": self.devicePixelRatioF(),
+            "maximized": self.isMaximized(),
+            "screen_available_size": (
+                [available.width(), available.height()] if available is not None else None
+            ),
+            "screen_logical_dpi": screen.logicalDotsPerInch() if screen is not None else None,
         }
 
     enter_workbench = workbench_navigation.enter_workbench
@@ -1553,12 +1542,12 @@ class MainWindow(QMainWindow):
                 if self.language == "zh"
                 else "Importing the common Setup replaces this workbench's current local Setup. Continue?"
             )
-            if QMessageBox.question(self, "Manufacturing Setup", message) != QMessageBox.Yes:
+            if not confirm_setup_change(self, self.language, message):
                 return
         page.controller.mark_setup_changed(
             local_copy(self.tube_page.controller.setup, key), reason="local_setup_selected"
         )
-        page.refresh()
+        page.refresh(reload_controls=False)
         self._refresh_setup_panels()
         self._edit_workbench_setup_node(key, "machine")
 
@@ -1573,12 +1562,12 @@ class MainWindow(QMainWindow):
             if self.language == "zh"
             else "Replace this workbench's local Setup with the common Setup? Generated results must be regenerated."
         )
-        if QMessageBox.question(self, "Manufacturing Setup", message) != QMessageBox.Yes:
+        if not confirm_setup_change(self, self.language, message):
             return
         page.controller.mark_setup_changed(
             self.tube_page.controller.setup, reason="common_setup_selected"
         )
-        page.refresh()
+        page.refresh(reload_controls=False)
         self._refresh_setup_panels()
 
     def _publish_workbench_setup(self, key: str) -> None:
@@ -1594,7 +1583,7 @@ class MainWindow(QMainWindow):
             if self.language == "zh"
             else "Save this workbench's Setup to the common Setup? Results in other shared workbenches become stale."
         )
-        if QMessageBox.question(self, "Manufacturing Setup", message) != QMessageBox.Yes:
+        if not confirm_setup_change(self, self.language, message):
             return
         published = publish_to_common(local, common)
         # The Tube controller owns the common identity and its saved operations.
@@ -1616,7 +1605,7 @@ class MainWindow(QMainWindow):
                 continue
             if page.controller.setup != common:
                 page.controller.mark_setup_changed(common, reason="shared_setup_changed")
-                page.refresh()
+                page.refresh(reload_controls=False)
 
     def _edit_workbench_setup_node(self, key: str, node: str) -> None:
         if key not in LOCAL_WORKBENCHES:
@@ -1625,8 +1614,8 @@ class MainWindow(QMainWindow):
             return
         setup = getattr(self, f"{key}_page").controller.setup
         if setup.setup_id == self.tube_page.controller.setup.setup_id:
-            self.open_manufacturing_setup()
             self.tube_page.select_setup_node(node)
+            self.open_manufacturing_setup()
             return
         if self._local_setup_editor is None:
             editor = TubeSetupPage(
@@ -1642,6 +1631,7 @@ class MainWindow(QMainWindow):
             self.stack.addWidget(editor)
             self._local_setup_editor = editor
         editor = self._local_setup_editor
+        editor.set_language(self.language)
         editor.set_controller(TubeSetupController(self.model, setup=setup), self.model)
         editor.set_local_setup_mode(key)
         editor.select_setup_node(node)
@@ -1654,14 +1644,7 @@ class MainWindow(QMainWindow):
         if editor is None or key is None:
             return True
         if editor.controller.has_drafts:
-            prompt = QMessageBox(self)
-            prompt.setWindowTitle("Manufacturing Setup")
-            prompt.setText(
-                "本工作台设置有未应用草稿。应用、丢弃，还是继续编辑？"
-                if self.language == "zh"
-                else "Local Setup has unapplied drafts. Apply, discard, or continue editing?"
-            )
-            prompt.setStandardButtons(QMessageBox.Apply | QMessageBox.Discard | QMessageBox.Cancel)
+            prompt = draft_setup_prompt(self, self.language)
             choice = prompt.exec()
             if choice == QMessageBox.Cancel:
                 return False
@@ -1678,7 +1661,7 @@ class MainWindow(QMainWindow):
             page.controller.mark_setup_changed(
                 editor.controller.setup, reason="local_setup_changed"
             )
-            page.refresh()
+            page.refresh(reload_controls=False)
         self._local_setup_editor_key = None
         self._refresh_setup_panels()
         return True
@@ -1866,6 +1849,7 @@ class MainWindow(QMainWindow):
         self.help_action.setToolTip(tr(self.language, "tooltip_help"))
 
     def show_error(self, message: str) -> None:
+        message = command_error_text(message, self.language)
         self.statusBar().showMessage(tr(self.language, "status_error", message=message))
         QMessageBox.warning(self, tr(self.language, "app_title"), message)
 
@@ -2512,6 +2496,7 @@ class MainWindow(QMainWindow):
 
     def _open_model_from_shell(self) -> None:
         if self.stack.currentWidget() in {
+            self.home_page,
             self.session_page,
             self.tube_page,
             self.planar_page,
@@ -3027,6 +3012,9 @@ class MainWindow(QMainWindow):
             "workbench": self.current_workbench_key,
             "operation": self.current_operation,
             "operation_label": workbench_navigation.operation_label(self, self.language),
+            "common_setup_view": (
+                self.current_workbench_key == "tube" and self.tube_page.common_setup_view
+            ),
             "setup_bindings": binding_ids(common, bindings),
             "freeform_controller_profile": self.freeform_page.controller.controller_profile.to_json(),
         }

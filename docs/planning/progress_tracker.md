@@ -1,6 +1,6 @@
 # 六个工作台开发进度台账
 
-最近更新：2026-09-25。关联[开发计划](development_plan.md)、[产品交付计划](product_delivery_20260923.md)、[参考资料](reference_research.md)与[文档索引](../README.md)。**下方主表是任务进度的唯一维护位置**，计划和复盘引用任务编号，不另行维护一份状态表。
+最近更新：2026-09-26。关联[开发计划](development_plan.md)、[产品交付计划](product_delivery_20260923.md)、[参考资料](reference_research.md)与[文档索引](../README.md)。**下方主表是任务进度的唯一维护位置**，计划和复盘引用任务编号，不另行维护一份状态表。
 
 当前优先版本：**论文核心 AC（Paper Core AC）**。PC00—PC07 已于 2026-09-13 按 **契约/来源 → 受限 Freeform → 多材料 → 自有 AC 后处理 → Tube 收口 → 四例与双通道回归 → 本地封装** 完成受限离线验收。DOC-01 随后把使用文档整理为学习总册、五条工作台支线和参考手册，当前入口为[学习总册](../guides/user_learning_manual_zh.md)。范围和许可证依据见[论文核心说明](paper_core_ac_scope.md)，实施、失败和验收见[本轮复盘](../reviews/2026-09-13_paper_core_ac_implementation_review.md)。六工作台完整目标保留为后续路线，不作为核心版前置依赖。
 
@@ -32,12 +32,153 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 
 ## Skill 调用记录
 
+2026-09-27 PRODUCT-01-V2C 使用开发/验证Skills接入Indexed分区端点承接门禁并升v5，旧pipe2数据检出699个Error；共享边界计划新增。41项模块测试通过，新增禁止导出集成断言后承接7项通过；完整回归和新GUI尚待，仍须完成有效过渡路径，不能以拒绝结果关闭V2-02。见收尾复盘与v2_02_support_integration_tests.xml。
+
+2026-09-27 PRODUCT-01-V2C 使用开发与验证Skills完成直线珠道裁剪体积模块wedge_volume.py，边界/截面/体积共32项解析测试通过，局部Ruff通过。证据v2_02_wedge_volume_tests.xml；尚未接入Indexed变厚路径、承接或扫掠，旧弯管资格继续撤回，目标未完成。
+
+2026-09-27 PRODUCT-01-V2C 使用开发与验证Skills新增有限道宽截面裁剪wedge_material.py，与共同边界模块共22项解析测试通过，局部Ruff通过；尚需沿程材料体积、喷嘴位置与实际承接验证，未接入生成链，旧弯管资格不恢复。证据v2_02_wedge_material_tests.xml；见收尾复盘。
+
+2026-09-27 PRODUCT-01-V2C 使用开发与验证Skills实施弯管分区修复基础模块：wedge_boundary.py及9项独立解析测试通过；尚未接生成、材料积分和承接检查，旧弯管资格保持撤回。证据v2_02_wedge_boundary_tests.xml，实施说明见收尾复盘。下一步完成区内路径和有限道宽边界材料处理。
+
+2026-09-27 PRODUCT-01-V2C 使用开发阶段门槛、验证及computer-use完成Freeform双语1920差异验收，V2-01矩阵30/30；复用范围见[记录](../reviews/evidence/2026-09-26_v2_final_delivery/freeform_1920_difference_record.md)。V2-02—V2-05继续进行。
+
+2026-09-27 PRODUCT-01-V2C 使用开发、验证及computer-use推进V2-02：弯管150 mm项目实际生成、路径预览、六件套导出及本轮另存重开完成，独立磁盘回读43775/43775通过，CSV/工具路径一致；局部首层承接、生长和空移视觉检查待补。多Agent证据定位与独立回读完成。见[弯管记录](../reviews/evidence/2026-09-26_v2_final_delivery/v2_02_tube_current150_record.md)。
+
+2026-09-27 PRODUCT-01-V2C后续检查：弯管分区0011→0012出现1.79024 mm局部分离；对全部此前253层32462条实际沉积段复核后距离不变，53/128端点超出0.6×0.2 mm截面保守接触上界，确认该包络假设下局部无承接。当前导出仅保留为诊断证据，撤回制造承接通过资格。下一步修复Indexed共同边界与残余沉积、补独立承接检查，不能仅用拒绝关闭案例。真实NC空移显隐已检查；默认显示后续路径且统一蓝色，不能用进度画面证明逐层承接。Skills：开发、验证、computer-use；证据同弯管记录及v2_02_tube_prior_support_measurements.json。
+
+2026-09-27 PRODUCT-01-V2C 使用开发阶段门槛、验证及computer-use完成Tube双语1920差异验收，197个源码哈希与复用证据一致，累计28/30。见[记录](../reviews/evidence/2026-09-26_v2_final_delivery/tube_1920_difference_record.md)。
+
+2026-09-27 PRODUCT-01-V2C 使用开发阶段门槛、验证及computer-use，完成Rotary双语1920差异验收；197个源码哈希与复用基线一致，累计26/30。见[记录](../reviews/evidence/2026-09-26_v2_final_delivery/rotary_1920_difference_record.md)。
+
+2026-09-27 PRODUCT-01-V2C 使用开发、验证和computer-use完成Curve双语1920差异验收，源码指纹与英文1366共用证据一致，累计24/30；见curve_1920_difference_record.md。
+
+2026-09-27 PRODUCT-01-V2C 主Agent使用computer-use继续差异验收准备，子Agent使用开发、验证Skills建立[83处教程图片清单](../reviews/evidence/2026-09-26_v2_final_delivery/v2_04_image_reference_checklist.md)，45张图片视觉及图注待核；完成数仍21/30。
+
+2026-09-27 PRODUCT-01-V2C 使用开发 Skill 阶段门槛、验证及 computer-use，完成 Planar 英文1920×1080失效引用拒绝恢复与整组证据核对，累计21/30；见[点击记录](../reviews/evidence/2026-09-26_v2_final_delivery/planar_en1920_click_record.md)。
+
+2026-09-27 PRODUCT-01-V2C Freeform 中文 1366×768 已补齐角色拒绝恢复、导引/实体切换、双模式保存重开；导引重新生成9点/1事件严格回读通过。累计15/30，余15组。Skills：开发、验证、computer-use；见[点击记录](../reviews/evidence/2026-09-26_v2_final_delivery/freeform_zh1366_click_record.md)。
+
+2026-09-27 PRODUCT-01-V2C 沿用开发、验证与 computer-use Skills，推进 Freeform 中文 1366×768：空白门禁、边面拾取、公共七节点、9点/1事件回读和独立/公共两次 Stale 已实测；模式角色和保存重开待补，累计仍14/30。见[点击记录](../reviews/evidence/2026-09-26_v2_final_delivery/freeform_zh1366_click_record.md)。
+
+2026-09-27 PRODUCT-01-V2C Tube 中文 1366×768 重开后实际生成 Warning、43775/43775 严格回读通过，预览/导出恢复；本组合关闭，累计 14/30，余 16 组。Skills：开发、验证、computer-use；见[点击记录](../reviews/evidence/2026-09-26_v2_final_delivery/tube_zh1366_click_record.md)。
+
+2026-09-27 PRODUCT-01-V2C 使用开发、验证和 computer-use Skills，推进 Tube 中文 1366×768：公共七节点、四角色与错误恢复、43775 点回读、材料 Stale 及保存重开已实测；重开后再生成待核对。累计仍 13/30，见[点击记录](../reviews/evidence/2026-09-26_v2_final_delivery/tube_zh1366_click_record.md)。
+
+2026-09-27 PRODUCT-01-V2C 沿用开发、验证和 computer-use Skills，完成 Rotary 中文 1366×768 公共七节点、端面拒绝与侧面恢复、两次 Stale、保存重开及 75/75 严格回读；放大后轴边 Viewer 拾取及应用生成补验通过。累计 13/30，见[点击记录](../reviews/evidence/2026-09-26_v2_final_delivery/rotary_zh1366_click_record.md)。
+
+2026-09-27 PRODUCT-01-V2C 沿用开发、验证和 computer-use Skills，完成 Curve 中文 1366×768 空白入口、公共七节点、Viewer 有向拾取与断链恢复、两次 Stale、保存重开及 17/17 严格回读。累计 12/30，见[点击记录](../reviews/evidence/2026-09-26_v2_final_delivery/curve_zh1366_click_record.md)。
+
+2026-09-27 PRODUCT-01-V2C 沿用开发、验证与 computer-use Skills，完成 Planar 中文 1366×768 保存重开、27/27 严格回读、空零件与失效引用恢复及坐标中文提示桌面复验；完整组合累计 11/30，见[点击记录](../reviews/evidence/2026-09-26_v2_final_delivery/planar_zh1366_click_record.md)。
+
+2026-09-27 PRODUCT-01-V2C 沿用开发、验证及computer-use Skills，启动Planar中文1366×768真实检查，公共七节点完成；修复坐标确认临时状态英文残留，六项文本断言和Ruff通过，重启显示待验。累计10/30，见收尾复盘。
+
+2026-09-27 PRODUCT-01-V2C 使用 five-axis-workbench-development、five-axis-slicer-validation、computer-use，完成 Tube 中文公共七节点、150 mm设置、角色拒绝恢复、Stale及保存重开生成；43775/43775严格回读通过，完整组合累计10/30。证据见[逐项记录](../reviews/evidence/2026-09-26_v2_final_delivery/tube_zh1600_click_record.md)。
+
+
+2026-09-27 使用开发 Skill stage-gates、验证证据规则和 computer-use 汇总 [Rotary 中文验收](../reviews/evidence/2026-09-26_v2_final_delivery/rotary_zh1600_click_record.md)，25个证据引用存在且指纹归档，累计9/30。仅关闭本组合，目标仍进行中。
+
+2026-09-27 使用 computer-use 完成 Curve 中文两次 Stale、保存重开与再生成，按开发 Skill stage-gates 与验证证据规则汇总 [Curve 中文记录](../reviews/evidence/2026-09-26_v2_final_delivery/curve_zh1600_click_record.md)，累计 8/30。无源码修改，目标仍进行中。
+
+2026-09-27 PRODUCT-01-V2C 使用开发 Skill 阶段门槛与验证证据规则，核对 Freeform 中文真实点击记录并关闭中文 1600×900 单组合，累计 7/30；[逐项记录](../reviews/evidence/2026-09-26_v2_final_delivery/freeform_zh1600_click_record.md)。使用 computer-use 完成缺设置恢复、角色恢复、模式切换、项目重开和新增中文提示复验；草稿确认相关回归 31 项直接通过、4 项临时目录权限修正后通过。整体目标仍进行中。
+
+2026-09-27 PRODUCT-01-V2C 使用 computer-use 补验 Freeform 中文公共七节点、150 mm 机床及装夹失效恢复，证据 freeform_zh1600_machine150_placement_recovered.png/json；中文生成及独立/公共两次 Stale 已实测；恢复公共确认框标题及 Yes/No 已修复代码，设置作用域回归 35 passed，中文新弹窗及是/否行为已桌面复验，最新源码中文空白缺项门禁、直接 STEP 和视口选边已补验；中文组合继续进行中。
+
+2026-09-27 PRODUCT-01-V2C 使用 computer-use 实测 Freeform 缺少对侧面时拒绝及禁用；沿用开发、验证 Skills 补齐双语恢复说明，5 项直接回归、Ruff、Context budget 通过，真实中英文新文案及补回对侧面后的 Apply 恢复已通过，模式编辑器切换、几何角色保留及独立生成后恢复公共的新一轮 Stale 已实测，完整组合已汇总为 [Freeform 英文点击记录](../reviews/evidence/2026-09-26_v2_final_delivery/freeform_en1600_click_record.md)，累计 6/30。见同一收尾复盘、freeform_missing_opposite.xml 及 freeform_missing_opposite_recovered_live_en.png/json。
+
+2026-09-27 PRODUCT-01-V2C 使用 computer-use 实际补齐 Tube 英文空白首页、四角色缺失 Apply 提示及底部按钮门禁，按开发阶段门槛汇总 [Tube 英文点击记录](../reviews/evidence/2026-09-26_v2_final_delivery/tube_en1600_click_record.md)，英文 1600×900 通过，累计 5/30。
+
+2026-09-27 PRODUCT-01-V2C 使用 computer-use 补验 Rotary 独立生成后恢复公共设置的新一轮 Stale，按开发阶段门槛汇总 [Rotary 英文点击记录](../reviews/evidence/2026-09-26_v2_final_delivery/rotary_en1600_click_record.md)；英文 1600×900 通过，累计 4/30。
+
+2026-09-27 PRODUCT-01-V2C 使用 five-axis-workbench-development 阶段门槛核对 Curve 历次 computer-use 实际证据，形成 [Curve 英文点击记录](../reviews/evidence/2026-09-26_v2_final_delivery/curve_en1600_click_record.md)，英文 1600×900 单组合通过，矩阵累计 3/30。其余组合及五个完整工作包不随之关闭。
+
+2026-09-27 PRODUCT-01-V2C 使用 computer-use 补齐 Curve 公共七节点实际点击，保存并重开 curve_en1600_current150；150 mm 配置与有向边链保留，坐标编辑 Cancel 恢复 Valid。待汇总既有证据核对整格，完整组合仍为 2/30。
+
+2026-09-27 PRODUCT-01-V2C 使用 computer-use 补齐 Curve 英文 1600×900 独立喷嘴长度拒绝与恢复、17/17 点重新生成回读，以及恢复公共设置后的新一轮 Stale；证据 curve_en1600_*，公共设置逐节点覆盖仍待核对，完整组合仍为 2/30。
+
+2026-09-27 PRODUCT-01-V2C 使用开发、验证和 computer-use Skills 修复首页 STEP 误入预览的路由遗漏；旧代码新增反例失败，修复后 3 项回归及 3 项子测试、Ruff、Context budget 通过；真实首页载入后公共 Part 可见 body_001。见同一收尾复盘与 home_step_route_* 证据。
+
+2026-09-27 PRODUCT-01-V2C 使用 computer-use 完成中文 Planar 生成、独立/公共设置 Stale、失效引用恢复和保存重开；按开发 Skill 阶段门槛核对证据，仅关闭中文 1600×900 内部入口组合。共享首页 STEP 路由差异及其余矩阵仍待处理，见[中文点击记录](../reviews/evidence/2026-09-26_v2_final_delivery/planar_zh1600_click_record.md)。
+
+2026-09-27 PRODUCT-01-V2C 使用 computer-use 恢复插件读取后，完成中文 Planar 小平板实体角色、机床、喷嘴、材料、两个坐标和装夹的实际设置；Part 与喷嘴缺项及补回恢复已有截图。组合保持进行中，见同一复盘。
+
+2026-09-27 PRODUCT-01-V2C 使用开发、验证及 computer-use Skills 核对当前证据并更新主表：Planar 英文 1600×900 为唯一完整通过组合；已完成的 Tube 遗漏出口恢复和 Freeform 两面拾取不再标为待复验。电脑插件窗口状态读取两次失败，本次不新增 GUI 通过项，见同一收尾复盘。
+
+2026-09-27 PRODUCT-01-V2C 沿用开发、验证及 computer-use Skills 开始 Planar 中文 1600×900 流程；发现并修复公共 Part 空实体提示遗漏中文，局部 2 项语言/角色测试、Ruff、Context budget 通过，重启后的中文弹窗已实测。该组合仍进行中，见[复盘](../reviews/2026-09-26_v2_final_delivery_review.md#planar-中文-1600900-首次使用)。
+
+2026-09-27 PRODUCT-01-V2C 沿用开发、验证及 computer-use Skills，补齐 Planar 英文 1600×900 失效引用拒绝/恢复，新增中英文恢复说明，29 项诊断回归及 Ruff 通过；本组合 V2-01 点击记录已逐项归档。其余组合和 V2-02—V2-05 保持待完成，见[点击记录](../reviews/evidence/2026-09-26_v2_final_delivery/planar_en1600_click_record.md)。
+
+2026-09-27 PRODUCT-01-V2C 使用 computer-use 重启修复后的源码，实际重开 Planar 项目，确认从 Placement 返回后打开 Part 不产生草稿；完成空 Part 拒绝、恢复及确认按钮滚动检查。见[真实复验记录](../reviews/2026-09-26_v2_final_delivery_review.md#planar-英文-1600900-首次使用)，其余矩阵和失效引用恢复继续待验。
+
+2026-09-27 PRODUCT-01-V2C 使用开发、验证及 computer-use Skills 检查 Planar 英文 1600×900 首次使用，发现公共设置入口意外创建 Placement 草稿，保存现场并修复进入顺序。矩阵继续进行，见[本轮记录](../reviews/2026-09-26_v2_final_delivery_review.md#planar-英文-1600900-首次使用)。
+
+2026-09-27 PRODUCT-01-V2C 使用开发、验证及 computer-use Skills 完成旧项目 180 mm 快照保留、新 150 mm 配置应用、过期装夹隐藏/恢复及 RX 30°双视图检查；修正高 DPI 线宽并加入原生抗锯齿，16 项 Viewer/几何测试及 2 项子测试通过。完整矩阵继续待验，见[平台复验记录](../reviews/2026-09-26_v2_final_delivery_review.md#平台桌面复验的空白显示诊断)。
+
+2026-09-27 PRODUCT-01-V2C 使用开发、验证 Skills 核对非零旋转/平移的平台 Source 坐标，发现并修复过期装夹仍显示平台；六种失效状态与相关配置测试通过，桌面装夹和旧项目复验待完成，见[同一平台记录](../reviews/2026-09-26_v2_final_delivery_review.md#平台桌面复验的空白显示诊断)。
+
+2026-09-27 PRODUCT-01-V2C 使用 computer-use 重启复验英文窄视口 Fit，并真实进入 Curve、Freeform、Rotary、Tube 确认空白圆台可见；连同先前 Planar 留存五工作台平台入口证据。网格质量、装夹/旧项目及正式矩阵尚未完成，见[平台记录](../reviews/2026-09-26_v2_final_delivery_review.md#平台桌面复验的空白显示诊断)。
+
+2026-09-27 PRODUCT-01-V2C 沿用开发、验证 Skills 修复空白圆台随视口变窄而裁切，新增窄视口投影反例并通过相关回归；实际重启复验和网格清晰度待完成，见[平台诊断记录](../reviews/2026-09-26_v2_final_delivery_review.md#平台桌面复验的空白显示诊断)。
+
+2026-09-27 PRODUCT-01-V2C 使用 computer-use 恢复原生 Windows 显示后，实际完成 Planar 圆台与公共 Machine 双语 150.0 mm 核对；保存原生截图与状态。当前尺寸不计入正式矩阵，网格质量、窄视口 Fit、其他工作台及旧项目继续待验，见[同一诊断记录](../reviews/2026-09-26_v2_final_delivery_review.md#平台桌面复验的空白显示诊断)。
+
+2026-09-27 PRODUCT-01-V2C 使用 computer-use 复验平台，发现窗口截图空白但控件响应；修复绘制调用遗漏的必需参数并通过类型检查，软件渲染对照仍空白，保留待诊断与真实验收状态。见[诊断记录](../reviews/2026-09-26_v2_final_delivery_review.md#平台桌面复验的空白显示诊断)。
+
+2026-09-27 PRODUCT-01-V2C 沿用开发、验证 Skills，接入五工作台圆平台显示和 VTK 共享几何；原生烟测、设置 36 项、后续几何/Rotary 17 项及 Tube 5 项回归通过，真实显示待验。相关 Ruff、Mypy 和 Context budget 通过，见[同一复盘](../reviews/2026-09-26_v2_final_delivery_review.md#150-mm-可用平台配置)。
+
+2026-09-27 PRODUCT-01-V2C 继续使用开发、验证 Skills，完成 OpenGL 圆平台填充和边界内网格，24 项测试及 2 项子测试通过；Context budget 通过，完整质量检查受新增截图脚本规则错误影响。VTK、工作台入口和真实显示继续待验，见[平台记录](../reviews/2026-09-26_v2_final_delivery_review.md#150-mm-可用平台配置)。
+
+2026-09-27 PRODUCT-01-V2C 使用开发、验证 Skills，将用户确认的直径 150 mm 圆形可用平台写入默认机型版本 2，并同步双语说明；9 项配置测试通过。平台预览样式与真实界面检查待完成，原 V2 全部完成判据保持不变。见[同一复盘](../reviews/2026-09-26_v2_final_delivery_review.md#150-mm-可用平台配置)。
+
+2026-09-27 DOC-IMG-01 沿用开发、验证及截图 Skills，针对路径密集反馈恢复 CAD 遮挡并调整独立捕获进程的线色、线宽请求及深度偏移，保留全部路径；交付新版左图，代码图不变，见[同一复盘](../reviews/2026-09-26_paper_screenshot_refresh.md#2026-09-27-密集路径显示调整)。
+
+2026-09-27 DOC-IMG-01 沿用本任务开发、验证和截图 Skills，按用户反馈改用 1366×900 窗口并截取 24 行代码，完成两图视觉检查和哈希核对；见[同一复盘的 A4 调整](../reviews/2026-09-26_paper_screenshot_refresh.md#2026-09-27-a4-文字可读性调整)。
+
+2026-09-27 PRODUCT-01-V2C 使用 computer-use 重启当前源码，完成 Freeform 不可达姿态说明的双语真实复验：说明换行完整、代码与点编号保留、导出禁用；见[复盘](../reviews/2026-09-26_v2_final_delivery_review.md#9-月-27-日不可达姿态说明的真实复验)。
+
+2026-09-26 PRODUCT-01-V2C 使用开发、验证 Skills 整理主窗口项目恢复，9 项发布/回滚测试通过；当前完整质量门禁通过，Mypy 覆盖 194 个源文件。完整 GUI 与发行验收继续待办，见[复盘](../reviews/2026-09-26_v2_final_delivery_review.md#主窗口项目恢复整理与质量门禁通过)。
+
+2026-09-26 PRODUCT-01-V2C 使用开发、验证 Skills 整理 Rotary 显示/按钮/回填和 Tube 碰撞筛选，分别 23 项、33 项及 3 子测试通过，5 项超限消除；余 ui.py 四项，见[复盘](../reviews/2026-09-26_v2_final_delivery_review.md#rotary-显示与碰撞筛选职责整理)。
+
+2026-09-26 PRODUCT-01-V2C 使用开发、验证 Skills 分离 Tube 设置诊断显示，62 项测试和 2 项子测试通过，Tube 三项质量超限消除。整体仍余 9 项，未替代真实多尺寸验收，见[复盘](../reviews/2026-09-26_v2_final_delivery_review.md#tube-设置诊断显示职责整理)。
+
+2026-09-26 PRODUCT-01-V2C 使用开发与验证 Skills 整理 Freeform 路径起点、数值回填和父操作合并职责，15 项回归与三文件类型检查通过；三项超限消除，剩余 12 项。归档截图脚本设置精确 E402 例外并保留原件，Ruff/安全/格式通过，见[复盘](../reviews/2026-09-26_v2_final_delivery_review.md#freeform-质量整理与相关回归)。
+
+2026-09-26 PRODUCT-01-V2C 使用 computer-use 实测 Freeform 双语 Error 首屏排序；沿用开发和验证 Skills 补齐不可达姿态恢复提示，7 项相关测试通过，Curve 长度门槛恢复合格，其余 15 项仍待处理。新增提示待桌面复验，见[复盘](../reviews/2026-09-26_v2_final_delivery_review.md#错误首屏实测与不可达姿态提示)。
+
+2026-09-26 PRODUCT-01-V2C 使用开发、验证和 computer-use Skills 拆分诊断显示职责（双语测试 2 passed，类型检查通过），并完成 Tube 遗漏出口的双语真实拒绝、禁用及补回恢复复验。完整矩阵和质量门禁仍未完成，见[复盘](../reviews/2026-09-26_v2_final_delivery_review.md#诊断显示职责拆分与-tube-缺失角色实测)。
+
+2026-09-26 DOC-IMG-01 使用 `five-axis-workbench-development`、`five-axis-slicer-validation`、`screenshot`，追溯旧图后用当前 Qt/OpenGL 与 9 月 24 日叶轮离线程序重新取两张无后期标注截图；完成最终视觉检查、代码无横向裁切检查及来源哈希记录，见[复盘](../reviews/2026-09-26_paper_screenshot_refresh.md)。
+
+2026-09-26 PRODUCT-01-V2C 使用开发、验证 Skills 检查累计修改的质量门禁：修复一处 UP038 与四个文件格式偏差，Ruff、安全及格式检查通过，Mypy 193 个源文件通过；Context budget 尚有 16 项超限，保留待处理。桌面存在另一论文截图进程，暂避开窗口操作，错误优先级和 Tube 缺失角色的真实复验继续待办。见[复盘](../reviews/2026-09-26_v2_final_delivery_review.md#累计修改的质量检查)。
+
+2026-09-26 PRODUCT-01-V2C 使用 `five-axis-slicer-validation` 核查并修复 Curve/Freeform 错误显示优先级，双语回归 2 passed；桌面复验和 Tube 遗漏角色继续待验，见[复盘](../reviews/2026-09-26_v2_final_delivery_review.md#阻止导出的错误优先显示)。
+
+2026-09-26 PRODUCT-01-V2C 使用 `computer-use` 完成 v4 底面承载角色编辑及实际生成：首层 Z=0.2 mm、体积误差 5%，原层间方向拒绝消失，同层喷嘴接触继续阻止导出；完整恢复尚未通过，见[复盘](../reviews/2026-09-26_v2_final_delivery_review.md#v4-底面承载角色的真实生成)。
+
+2026-09-26 PRODUCT-01-V2C 使用 `five-axis-slicer-validation` 确认厚度方向修改后的产品回归 2 passed，并补充层间转换拒绝的双语提示及详情回归 2 passed；真实 v4 与承接仍待验，见[复盘](../reviews/2026-09-26_v2_final_delivery_review.md#厚度模式喷嘴轴修复)。
+
+2026-09-26 PRODUCT-01-V2C 按开发与验证 Skills 修复厚度模式喷嘴轴，保留承载面向对面的层序；8 项算法测试通过，产品回归及真实 v4 界面复验继续，见[复盘](../reviews/2026-09-26_v2_final_delivery_review.md#厚度模式喷嘴轴修复)。
+
+2026-09-26 PRODUCT-01-V2C 复用开发 Skill 的承接/生长门槛及验证 Skill，建立 Surface Solid 厚度模式方向反例：层间位移与喷嘴轴同向，新增测试当前失败。需明确面角色并修正层序或轴向，未放行实体结果，见[复盘](../reviews/2026-09-26_v2_final_delivery_review.md#厚度模式生长方向反例)。
+
+2026-09-26 PRODUCT-01-V2C 继续使用 `computer-use`：双语生成诊断实际换行与导出禁用复验通过；厚度 1 mm 恢复后体积错误消失，剩余层间转换接触须结合角色生长方向检查，见[本轮复盘](../reviews/2026-09-26_v2_final_delivery_review.md#双语实测与厚度错误恢复)。
+
+2026-09-26 PRODUCT-01-V2C 使用 `computer-use`、`five-axis-slicer-validation` 核查 Freeform 中文诊断，补充体积偏差及空移拒绝的双语恢复说明和数值详情；2 项界面测试通过，实际重启显示及参数恢复待验，详见[本轮复盘](../reviews/2026-09-26_v2_final_delivery_review.md#实体生成诊断的双语说明)。
+
+2026-09-26 PRODUCT-01-V2C 使用 `computer-use` 保存重开实体项目并实测最新生成修复：工序 ID 异常消失，结果被厚度体积误差与当前喷嘴接触检查拒绝，导出正确禁用；具体设置及恢复待验项见[本轮复盘](../reviews/2026-09-26_v2_final_delivery_review.md#实体项目保存重开与生成修复实测)。
+
+2026-09-26 PRODUCT-01-V2C 使用 `computer-use`、`five-axis-slicer-validation` 继续检查 Freeform：实际生成复现单实体子路径工序 ID 不一致，已修复适配器并增加回归；导引模式恢复单面拾取已实测。测试和修复后桌面生成证据继续补齐，见[本轮复盘](../reviews/2026-09-26_v2_final_delivery_review.md#单个实体子路径的工序身份修复)。
+
+2026-09-26 PRODUCT-01-V2C 继续使用 `computer-use`，重启最新源码并完成 Freeform 英文 1600×900 实体根边与两面逐次拾取、回填及 Apply 复验；修复有效，生成及其余矩阵继续核查。证据见[本轮复盘](../reviews/2026-09-26_v2_final_delivery_review.md#多面选择修复后的桌面复验)。
+
 2026-09-12 AUD-02 收尾另实际调用 `skill-creator`，更新个人工作台开发 Skill 的制造验证经验；[归档快照](../reviews/evidence/2026-09-12_audit_fixes/skill_snapshot/)随项目提交。
 
 实施或收尾 P/C/F/R/X/I 及后续 Tube 工作台任务时，先调用 `five-axis-workbench-development`；进入测试、Qt/VTK 回归、失败诊断或阶段验收时再调用 `five-axis-slicer-validation`。每次只登记实际加载并影响工作的 Skill，详细判断放入对应复盘。
 
 | 日期 | 任务 | Skill | 本轮用途 | 证据 |
 | --- | --- | --- | --- | --- |
+| 2026-09-26 | PRODUCT-01-V2C | `five-axis-workbench-development`、`five-axis-slicer-validation`、`computer-use` | 建立五工作台双语三尺寸矩阵；实际检查 Planar、Curve、Rotary、Tube、Freeform 的入口、设置、几何选择及恢复，修复布局、双语提示、选边顺序、编辑保留、失败应用门禁和 Tube 取消响应；核查并修正尖端球包络误报；各尺寸按实际证据逐项核查 | [收尾复核](../reviews/2026-09-26_v2_final_delivery_review.md) |
+| 2026-09-26 | FAN00/FAN01 顺序复核 | `five-axis-workbench-development`、`five-axis-slicer-validation` | 核对当前 STEP 四实体签名与契约，重扫旧 NC；纠正计划旧资格，重新打开未完整冻结判据的 FAN01 | [复核记录](../reviews/2026-09-26_fan_sequential_audit.md) |
 | 2026-09-25 | CI-QUALITY V2.6.2 后续修复 | `gh-fix-ci`、`five-axis-slicer-validation`、`five-axis-workbench-development` | 核对最新 Actions 失败步骤；本地修复 37 条 Mypy 错误，把上下文预算改成对象级精确旧债务约束，并验证新对象仍受默认上限 | [质量门禁复盘](../reviews/2026-09-25_ci_quality_recovery.md)；本地完整质量通过，CI 同域及相关测试 188 passed、2 skipped、89 subtests；托管检查待新提交 |
 | 2026-09-25 | PRODUCT-01 V2.6.2 双语教程发布检查 | `five-axis-workbench-development` | 核对 14 个中英文主题成对、教程链接与图片；清理用户教程中的内部对照过程，补充英文 Planar 支撑及 Rotary 选几何步骤，统一公开版本标识 | [教程索引](../guides/README.md)、[交付复盘](../reviews/2026-09-23_product_delivery_review.md) |
 | 2026-09-25 | PRODUCT-01 NC 预览与问题归档 | `five-axis-workbench-development`、`five-axis-slicer-validation`、`skill-creator` | 校徽曲面预览补偿 12.5 mm 刀长，完整 NC 回读路径包络恢复与 Toolpath 一致；产品化过程失效模式归入复用 Skill，并核验有效性 | [交付复盘](../reviews/2026-09-23_product_delivery_review.md)、[校徽六件套](../reviews/evidence/2026-09-24_product_delivery_ui_audit/gui_agent_logo_output/manifest.json) |
@@ -115,15 +256,17 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 
 | 编号 | 阶段与交付 | 依赖 | 状态 | 完成判据 | 证据或阻塞 | 下一步 | 更新日期 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| PRODUCT-01 | 离线产品交付闭环 | FAN11/FP01—FP06、现有五工作台 | 进行中 | 首次使用和四例真实点击：加载、Setup、选几何、生成/取消、预览、六件套导出、严格回读、保存重开；界面和图文教程完成 | pipe2 已真实点击生成、全线预览、六件套导出并严格回读 140,644 点；三色扇叶 GUI 回读 116,852 点通过；校徽 GUI 完整 NC 回读通过，预览刀长纠正后曲面半径 33.7384 mm 小于基体 39.7998 mm；叶轮八片[离线完整程序](../reviews/evidence/2026-09-24_product_delivery_ui_audit/impeller_root_growth_offline/acceptance.json)183,342 点、16,983 事件严格回读通过，尚未完成 GUI 全链。工作台作用域、选边、材料表、阶段预览和方向标已做 UI 定向复核；[复盘](../reviews/2026-09-23_product_delivery_review.md)。其余首次使用/窄窗与实机参数仍待复核 | 日常以弯管、校徽、叶轮为主；三叶扇按相关变更和最终门槛运行；继续核对 GUI 导出与教程 | 2026-09-25 |
-| PRODUCT-01-MC01 | 五轴安全换姿与多色换料 | PRODUCT-01、Freeform 实体路径 | 进行中 | 配置换料站、三色 PLA 叶片分区；生成切断/退丝/进丝/排料/擦嘴/返回的完整 NC，避开已沉积材料，严格回读通过；无站位或无安全路线阻止导出 | 三色材料切换的受限离线链和 GUI 已通过：[GUI NC](../reviews/evidence/2026-09-24_three_color_fan_gui_release/manifest.json) 116,852 点、T0/T1/T2、两次切换、31,636 事件严格回读。叶轮原首道换姿碰撞已由机床坐标候选路线和同体安全空移处理；[完整离线程序](../reviews/evidence/2026-09-24_product_delivery_ui_audit/impeller_root_growth_offline/acceptance.json)183,342 点严格回读、无碰撞 Error。实机喷嘴/夹具、切刀宏和传感器尚未标定，`machine_executable=false` | 用现有结果做界面预览与重开验证，实机资格另行核准 | 2026-09-25 |
+| DOC-IMG-01 | 叶轮论文双图更新 | 旧图制作记录与现有离线程序 | 已完成 | 当前软件界面及同源代码两张独立 PNG，无后期标注，来源可追溯 | [复盘及图片](../reviews/2026-09-26_paper_screenshot_refresh.md)；3840×2560 / 2300×1500；最终视觉检查及代码横向范围为零 | 本截图任务完成；不变更其他开发或制造资格 | 2026-09-26 |
+| PRODUCT-01 | 离线产品交付闭环 | FAN11/FP01—FP06、现有五工作台 | 进行中 | 首次使用和四例真实点击：加载、Setup、选几何、生成/取消、预览、六件套导出、严格回读、保存重开；界面和图文教程完成 | 当前V2-01为30/30；弯管v7、校徽、居中叶轮完成GUI生成、预览、六件套、严格回读及输入保存重开，分别91516、102969、810990点。V2-03长任务与取消完成；V2-04教程完成。证据与有限精度/性能限制见[收尾复盘](../reviews/2026-09-26_v2_final_delivery_review.md)。当前三叶扇多色完整GUI链亦已完成：340193点、62716事件严格回读通过，保存重开操作/控制器/模型哈希一致，NC空移、工序、旋转和缩放实测完成。 | 完成最终全仓回归及提交CI；实机资格单独验收。 | 2026-09-27 |
+| PRODUCT-01-V2C | 第二代离线产品收尾计划 | PRODUCT-01 当前证据、用户确定的第三代边界 | 进行中 | 五工作台首次使用与代表案例界面闭环、长任务、双语图片和发行核验按计划逐项通过 | [计划](v2_final_delivery_plan_20260925.md)；[点击矩阵](../reviews/evidence/2026-09-26_v2_final_delivery/v2_01_click_matrix.md)30/30。V2-03已完成；V2-04已完成，29旧图66引用替换，48唯一原图有处置，见[教程收口](../reviews/evidence/2026-09-26_v2_final_delivery/v2_04_final_closure.md)。V2-02四例当前完整链已完成；V2-05独立wheel安装启动及短流程通过，最终回归/提交CI未完成。 | 串行全仓回归、明确范围提交及四项CI；Research与仿真不作为二代门槛。 | 2026-09-27 |
+| PRODUCT-01-MC01 | 五轴安全换姿与多色换料 | PRODUCT-01、Freeform 实体路径 | 离线验收完成，实机待标定 | 配置换料站、三色 PLA 叶片分区；生成切断/退丝/进丝/排料/擦嘴/返回的完整 NC，避开已沉积材料，严格回读通过；无站位或无安全路线阻止导出 | 当前三叶扇340193点、62716事件，T0→T1→T2、两次切刀与完整退离/换料/排料/两遍擦嘴/返回顺序核对通过；4142条Warning、0条Error。真实GUI生成、导出、NC空移/工序预览、保存重开完成，见[磁盘核查](../reviews/evidence/2026-09-26_v2_final_delivery/v2_02_three_color_disk_audit.json)与[收尾复盘](../reviews/2026-09-26_v2_final_delivery_review.md)。`machine_executable=false`。 | 喷嘴/夹具、切刀宏、传感器与现场站位标定属于后续实机资格，不纳入本轮离线完成条件。 | 2026-09-27 |
 | FAN00 | 规划与项目调研 | 用户计划授权 | 已完成 | 详细计划、六仓库研究、电脑验收方案齐全 | [任务设计与边界](fan_complete_program_plan.md)；[研究](fan_complete_program_research.md)，仅规划完成 | FAN01 | 2026-09-20 |
-| FAN01 | 输入与制造契约 | FAN00 | 已完成 | 参数来源、实体角色、坐标、姿态及误差阈值冻结 | [契约JSON](../reviews/evidence/2026-09-20_fan_complete_program/fan_contract_v1.json)；机床包络、零点、宏版本保持实机资格待测 | FAN02 | 2026-09-20 |
+| FAN01 | 输入与制造契约 | FAN00 | 进行中 | 参数来源、实体角色、坐标、姿态及误差阈值冻结 | [本轮复核](../reviews/2026-09-26_fan_sequential_audit.md)：STEP 与四实体签名/体积匹配；候选契约补齐 12 项来源，来源失配与待测拒绝 9 项通过，质量检查通过；局部覆盖/空洞/承接判据尚缺，实机参数仍待测 | 解析夹具量测与收敛，冻结局部判据后继续 FAN02 | 2026-09-26 |
 | FAN02 | 旧NC和CAD独立基线 | FAN01 | 重新核查中 | 分工序模态解析、径向层序、坐标注册与填充覆盖 | [模态运动统计](../reviews/evidence/2026-09-20_fan_complete_program/radial_correction/legacy_motion.json)：叶片A90、C连续联动；原全文件TYPE统计不能证明叶片内部填充 | FAN04纠正 | 2026-09-20 |
 | FAN03 | 作业依赖和状态模型 | FAN01 | 已完成 | 序列化、依赖图、Stale、取消、程序索引 | [作业JSON](../reviews/evidence/2026-09-20_fan_complete_program/fan_job_v1.json)；循环/缺依赖、下游失效、JSON和取消事务已测；G-code行号索引属FAN10 | FAN06 | 2026-09-20 |
 | FAN04 | 全体积层域和90°可行性 | FAN01,FAN02 | 撤回原验收，修正中 | 柱面起印、径向曲层、层间承接、AC联动与独立FK | 原固定A平面截层只证明几何积分，不符合绕轴生长；[纠正复盘](../reviews/2026-09-20_fan_radial_correction.md) | 曲层域与承接验证 | 2026-09-20 |
 | FAN05 | 公共壳层和内部填充 | FAN01,FAN02 | 待验证 | 带孔/多岛/窄缝、顶底层、0/20/100%矩阵 | [历史248项回归](../reviews/evidence/2026-09-20_fan_complete_program/pytest_fan01_fan05_final_retry.xml)保留；FAN15发现偏置异常吞并、原边界回退及多实体嵌套误判孔，[原完整资格撤回](../reviews/2026-09-20_fan15_example_acceptance.md) | 修复反例后重新验收 | 2026-09-20 |
-| FAN06 | 全高底座和支撑联合调度 | FAN03,FAN05 | 已完成 | 全部层、孔和接口保留，支撑逐层排序 | [真实模型统计与路径图](../reviews/evidence/2026-09-20_fan_complete_program/fan06_fan07/fan06_fan07_summary.json)：325/325层有实体路径，309层支撑，零支撑诊断；图示按层抽样，完整统计未抽样 | FAN09 | 2026-09-20 |
+| FAN06 | 全高底座和支撑联合调度 | FAN03,FAN05 | 历史已验收 | 全部层、孔和接口保留，支撑逐层排序 | [历史统计](../reviews/evidence/2026-09-20_fan_complete_program/fan06_fan07/fan06_fan07_summary.json)：325/325层、309层支撑；上游 FAN05 已撤回，本轮未重新验证底座，不能据此放行 FAN09 | FAN05 重新验收后复核底座与支撑 | 2026-09-26 |
 | FAN07 | 单叶片完整Freeform填充 | FAN04,FAN05 | 撤回原验收，修正中 | 真实曲层填充、叶根和逐层承接、材料覆盖、非穿透路径 | 旧平面生成入口已拒绝继续生成；径向替代仅研发预览，G2撤回；[纠正复盘](../reviews/2026-09-20_fan_radial_correction.md) | 修复并验证后才进入FAN08 | 2026-09-20 |
 | FAN08 | 三叶片推广与接口归属 | FAN07 | 实施中，未验收 | 三份稳定引用、无漏片、无重复体积 | [三实体独立生成](../reviews/evidence/2026-09-20_fan_complete_program/radial_repair_full/summary.json)：各329径向层，六对体积交集为零，叶根间隙近零；沉积覆盖与承接未关闭 | 完成FAN07物理覆盖后验收 | 2026-09-20 |
 | FAN09 | 换姿与已打印体碰撞 | FAN06,FAN08 | 部分实现，未验收 | 90°转位和跨叶片全段验证、Z20方向与扫掠 | `fan/transitions.py`：外绕候选和线段/球形尖端距离；穿柱及先打印叶片障碍反例已测；完整喷头与机器插补扫掠未接通 | 整件轨迹及换姿扫掠 | 2026-09-20 |
@@ -276,3 +419,186 @@ Rotary R01—R05 已完成稳定回转轴/面/轮廓引用、非零中心、连�
 | 2026-09-10 | 用户说明没有开源计划 | 计划采用自用定位及公开方法独立实现 | 不沿用旧目标的开源交付要求；现有许可文件本轮未改 |
 
 本表新增任务或改变范围时同步记录变更，并更新顶部任务数量。未来若估算工时，先用已完成任务的实际记录校准；当前不填没有依据的工期。
+
+2026-09-27 Skill 调用补记：PRODUCT-01-V2C 使用开发/验证 Skills 与 computer-use 定位 Rotary 中文草稿阻止提示，补齐双语恢复说明；4 项纯呈现断言、Ruff 与上下文预算通过，新提示真实桌面复验待补。详见收尾复盘，整体状态不变。
+
+
+
+2026-09-27 PRODUCT-01-V2C：Planar 英文1366×768公共七节点实际设置完成，150 mm圆台、坐标和装夹有效；生成等余项待补，累计仍15/30。Skills：开发、验证、computer-use；见[点击记录](../reviews/evidence/2026-09-26_v2_final_delivery/planar_en1366_click_record.md)。
+
+2026-09-27 PRODUCT-01-V2C：Planar英文1366×768完成公共/独立生成、两次Stale、保存重开再生成，三次27/27严格回读通过；空零件/失效引用恢复待补，累计15/30不变。Skills：开发、验证、computer-use。
+
+2026-09-27 PRODUCT-01-V2C：Planar英文1366×768空Part拒绝恢复、失效引用拒绝恢复完成，四次生成27/27回读通过，本组合关闭，累计16/30。Skills：five-axis-workbench-development（阶段门槛）、five-axis-slicer-validation、computer-use。见[点击记录](../reviews/evidence/2026-09-26_v2_final_delivery/planar_en1366_click_record.md)。
+
+2026-09-27 PRODUCT-01-V2C：Curve英文1366×768空白入口、缺项门禁、实际STEP和Viewer两边拾取回填已完成，公共设置等待补，累计16/30不变。Skills：开发、验证、computer-use。见[点击记录](../reviews/evidence/2026-09-26_v2_final_delivery/curve_en1366_click_record.md)。
+
+2026-09-27 PRODUCT-01-V2C：Curve英文1366×768公共七节点全部实际确认，150 mm圆台及坐标/装夹有效；待生成及错误恢复，累计16/30不变。Skills：开发、验证、computer-use。
+
+2026-09-27 PRODUCT-01-V2C：Curve英文1366×768断链8 mm拒绝与方向恢复、公共/独立两次17/17回读、独立/公共两次Stale已实测；保存重开待补，仍16/30。Skills：开发、验证、computer-use。
+
+2026-09-27 PRODUCT-01-V2C：Curve英文1366×768实际保存重开及再生成17/17回读通过，按V2-01核对完整记录，本组合关闭，累计17/30。Skills：five-axis-workbench-development、five-axis-slicer-validation、computer-use。见[点击记录](../reviews/evidence/2026-09-26_v2_final_delivery/curve_en1366_click_record.md)。
+
+2026-09-27 PRODUCT-01-V2C：Rotary英文1366×768已重新空白启动，检查缺STEP/设置提示、底部动作可达与直接加载圆柱；组合进行中，累计17/30。Skills：开发、验证、computer-use。见[点击记录](../reviews/evidence/2026-09-26_v2_final_delivery/rotary_en1366_click_record.md)。
+
+2026-09-27 PRODUCT-01-V2C：Rotary英文1366×768公共七节点全部实际应用，150 mm圆台、坐标及零偏移装夹Valid；Viewer放大拾取轴边0002并回填。回转面和后续生成待补，累计17/30不变。Skills：开发、验证、computer-use。
+
+2026-09-27 PRODUCT-01-V2C：Rotary英文1366×768端面拒绝/侧面恢复、两次Stale、实际保存重开和三次75/75严格回读完成，本组合关闭，累计18/30。Skills：five-axis-workbench-development（阶段门槛）、five-axis-slicer-validation、computer-use。见[点击记录](../reviews/evidence/2026-09-26_v2_final_delivery/rotary_en1366_click_record.md)。
+
+2026-09-27 PRODUCT-01-V2C：Tube英文1366×768重新空白启动，缺四角色拒绝及底部生成/预览/导出禁用已检查；原生载入弯管，两实体Part实际确认有效。其余公共设置及工序检查待补，累计18/30。Skills：开发、验证、computer-use。见[点击记录](../reviews/evidence/2026-09-26_v2_final_delivery/tube_en1366_click_record.md)。
+
+2026-09-27 PRODUCT-01-V2C：Tube英文1366×768公共七节点全部实际应用，150 mm平台、喷嘴/材料、两坐标及装夹有效；四角色与生成验证待补，累计18/30不变。Skills：开发、验证、computer-use。
+
+2026-09-27 PRODUCT-01-V2C：Tube英文1366×768四角色实际选择、遗漏出口拒绝恢复、43775/43775严格回读及材料Stale门禁完成；材料已恢复有效，错误内圆及保存重开待补，累计18/30。Skills：开发、验证、computer-use。
+
+2026-09-27 PRODUCT-01-V2C：Tube英文1366×768内圆拒绝/外圆恢复、保存重开及再次43775/43775严格回读完成，本组合关闭，累计19/30，余11组。Skills：five-axis-workbench-development（阶段门槛）、five-axis-slicer-validation、computer-use。见[点击记录](../reviews/evidence/2026-09-26_v2_final_delivery/tube_en1366_click_record.md)。
+
+2026-09-27 PRODUCT-01-V2C：Freeform英文1366×768空白启动、缺项门禁、原生小STEP及Viewer边0012/面0006实际拾取已完成；公共设置及后续待补，累计19/30。Skills：开发、验证、computer-use。见[点击记录](../reviews/evidence/2026-09-26_v2_final_delivery/freeform_en1366_click_record.md)。
+
+2026-09-27 PRODUCT-01-V2C：Freeform英文1366×768公共七节点实际应用，导引生成与独立设置重新生成均9/9点、1/1事件严格回读通过；独立/公共两次Stale及导出禁用已实测。角色恢复与保存重开待补，累计19/30。Skills：开发、验证、computer-use。
+
+2026-09-27 PRODUCT-01-V2C：Freeform英文1366×768实际保存重开、再生成9点1事件严格回读通过；实体角色缺少对侧面拒绝和补齐恢复已实测，双模式切换与实体项目重开待补，累计19/30。Skills：开发、验证、computer-use。
+
+2026-09-27 PRODUCT-01-V2C：Freeform英文1366×768双模式切换和角色项目保存重开完成；公共/独立/重开三次9点1事件回读通过，本组合关闭，累计20/30，余10组。Skills：five-axis-workbench-development（阶段门槛）、five-axis-slicer-validation、computer-use。见freeform_en1366_click_record.md。
+
+2026-09-27 PRODUCT-01-V2C：开始Planar英文1920×1080，真实空白启动和尺寸核对完成，缺项门禁、载入STEP、Part及150 mm机床已实际确认，组合进行中，累计20/30。Skills：开发、验证、computer-use。见planar_en1920_click_record.md。
+
+2026-09-27 PRODUCT-01-V2C：Planar英文1920×1080公共七节点实际完成，区域预览门禁及zigzag生成27/27严格回读通过；Stale、错误恢复、保存重开待补，累计20/30。Skills：开发、验证、computer-use。见planar_en1920_click_record.md。
+
+2026-09-27 PRODUCT-01-V2C：Planar英文1920×1080两次Stale、保存重开再生成、空Part拒绝恢复已完成；独立和重开均27/27回读通过，失效引用恢复待补，累计20/30。Skills：开发、验证、computer-use。
+
+2026-09-27 V2-02层带规划：wedge_layers.py按完整凸截面投影计算入口最低点和出口最高点，避免仅按中心线端点截断倾斜区域。新增5项解析测试全部通过（v2_02_wedge_layers_tests.xml），覆盖短尾层、斜出口柱厚守恒、中心线/共线输入拒绝和交叉边界拒绝；局部Ruff通过。当前仍为候选层带，未接入实际沉积路径，不能恢复弯管制造资格。支撑错误补充中英文提示，真实GUI复验待做。用户截图仍为旧NC，不能作为修复后结果。使用Skills：five-axis-workbench-development、five-axis-slicer-validation。下一步需将完整CAD截面投影与开放残余路径接入，并分别验证可沉积厚度、支撑及喷嘴运动；不得仅凭裁剪体积正确放行。
+
+2026-09-27 V2-02用户指出NC预览形状不符：独立检查确认Tube输出MACHINE_PROFILE，预览器只认CONTROLLER_PROFILE，且缺TOOL_LENGTH_MM，实际自动识别(None,0)并显示machine_xyz。已让预览识别自有AC机床的明确标准轴映射，补齐Tube刀长声明，并兼容旧Tube manifest中的machine_trajectory；未知映射或缺刀长仍不猜测。4项专项通过，首次系统pytest临时目录WinError5改用项目独立临时目录后通过，失败JUnit保留。实际旧NC全部43775点与生成Toolpath比较，正确还原最大误差0.00000104394mm，原机床坐标最大偏差83.80316mm。证据：v2_02_nc_shape_audit.py/.json、v2_02_nc_preview_header_tests_localtemp.xml。该证据仅证明NC坐标还原，尚未证明与CAD完整珠道一致或制造承接正确。GUI仍为旧运行实例，尚未重启验证；统计栏固定逆变换公式在降级时仍显示的问题待修。使用Skills：开发、验证；独立Agent只读核对。V2-02不关闭。
+
+2026-09-27预览坐标提示修复：移除统计栏固定逆变换文字，改为根据实际coordinate_transform显示机床XYZ未还原、含实际刀长的AC逆变换或路径坐标系。中英文6项呈现断言与局部Ruff通过。已通过computer-use关闭旧实例并启动新实例（窗口349965134），实际打开同一main.gcode，解析正在进行；尚未记录完成画面或CAD叠加。使用Skills：开发、验证、computer-use。
+
+2026-09-27真实GUI复验：新实例完成同一旧NC加载，恢复直立弯管形状；实际打开example/pipe2/弯管新.stp并在同相机切换实体显示。弯管整体位置/轮廓对应，CAD基底存在而该工序只打印管体；实体遮挡路径，不能用此图证明逐段覆盖或承接。三张原生截图为v2_02_nc_corrected_gui.png、v2_02_nc_corrected_with_step.png、v2_02_nc_corrected_step_hidden.png。未更改诊断NC字节。坐标形状显示问题已获当前GUI证据；制造承接错误仍未修复，V2-02继续进行。Skills：开发、验证、computer-use。
+
+2026-09-27 NC修复回归补充：既有GCodeSourceIndexTests、PreviewCacheTests连同首版新用例13项通过（v2_02_nc_preview_regression.xml）。新增实际postprocess_indexed_gcode→独立文件→load_gcode闭环，采用Rx(90°)与18mm刀长解析真值，不依赖manifest；新文件5项通过（v2_02_nc_export_roundtrip.xml）。Ruff通过。此项关闭文件声明互操作的测试缺口，不恢复弯管承接资格。Skills：开发、验证。
+
+2026-09-27 CAD区域接入准备：新增wedge_footprint.py，从实际BRep与共同半空间交集计算容差扩展的保守投影，5项解析测试通过。真实pipe2全部14区的footprint→layer bands组成成功，合计450候选带，见v2_02_cad_wedge_probe.py/json；尚无沉积路径且保守矩形可能增加空候选，不把层数当制造通过。同步拆分新增超长函数，未修改预算；本轮check_context_budget.py exit0。拆分后承接7项、wedge layers/plan/volume18项、NC预览14项通过（v2_02_tube_prior_support_refactor_junit.xml、wedge_responsibility_split.xml、v2_02_nc_preview_refactor.xml）。新增gcode_preview_profile.py和result_statistics_text.py承接解析/提示职责，GUI此前证据早于该等价拆分，后续相关GUI仍需复验。Skills：开发、验证；多Agent分文件实施。下一步真实候选截面与开放过渡路径，V2-02不关闭。
+
+2026-09-27过渡首末截面实测：14区各首末带共28次原始环截交成功，12个末带在中面裁中心线后为空，见v2_02_cad_wedge_sections.py/json。独立用实际CAD与共同半空间及层带上下平面求交体积，region2/3/4各0.01150559mm³、region13为0.001507026mm³仍有材料；region5-12尾带为0。证据v2_02_cad_wedge_tail_volume.py/json。因此不能以中面无中心线直接丢弃层带，需残余材料任务与完整带厚检查。这些量是完整CAD壁体积，不是0.6mm珠道实际体积；未生成新沉积路径或恢复制造资格。Skills：开发、验证。开放残余候选模块正在独立实现，V2-02继续。
+
+2026-09-27全部层带候选检查：450次真实CAD截面无错误（v2_02_cad_all_sections.py/json）。新增wedge_path_candidates.py与6项解析测试，保留跨中面残余、零厚边界、闭环接缝及缺失截面的任务，尚未接入Indexed输出。真实数据形成430条候选路径/430个含路径层带，233个零厚几何端点和14738个残余任务（v2_02_all_path_candidates.py/json）。按0.6mm道宽与实际层带厚度的直线矩形棱柱逐段裁剪，14182任务为零体积，556任务为正体积，无计算错误；逐段体积和0.1633263323mm³，范围8.27e-9至0.0031133mm³，见v2_02_residual_prism_probe.py/json。此和不是几何并集体积，不计角点珠道重叠，也不是可成形或承接证明；零厚端点不能变成沉积命令，残余不能静默丢弃。Skills：开发、验证。V2-02保持进行中。
+2026-09-27残余方案依据补充：查阅Song等原文并提出有界柱厚重分配，避免趋零独立沉积，具体公式及限制写入v2_02_tube_transition_design.md。58616个真实截面顶点柱厚抽样最小1.9618147mm，证据v2_02_region_column_height_probe.json；尚未证明有限道宽或可打印性。Skills：开发、验证。V2-02继续。
+
+2026-09-27新增column_partition.py几何残余并层，14项解析测试通过；未接实际沉积。独立Agent及主线程核对发现Tube珠道中心/TCP混用：indexed中心层面首层Z5.1，OpenGL按±h/2显示5.0—5.2；xyzac._solve_linear却直接将point.position作为contact，NC23.1减18刀长后尖端5.1，距基底5仅0.1mm。此为物理契约冲突，FK/严格回读只能证明该目标自洽。需明确中心与尖端转换并同步碰撞、预览、后处理及读回，不能直接全局平移共享Toolpath影响其他工作台。V2-02不关闭；下一步优先核对并修复该接口与残余路径的统一语义。Skills：开发、验证。
+
+2026-09-27 TCP接口修复进行中：新增manufacturing/tube_tcp.py，仅按Indexed连接语义从材料中心转换尖端；depart取前一沉积层高，travel/approach取后一沉积层高，保留IDs/events/体积。已接indexed_tube._solve_and_validate；碰撞新增独立nozzle_toolpath，仅喷嘴采样使用TCP，IPW记录仍用材料中心。Indexed算法版本两处升v6。16相关测试通过（首次PYTHONPATH缺失、随后旧简化夹具缺depart/travel失败，修正环境和夹具后通过，失败记录保留）；上下文门禁通过。真实旧路径首两个点独立转换与求解得中心Z5.1、尖端5.2、机器Z23.2、基底5，见v2_02_tcp_first_layer.json。当前修复未完成NC珠道中心元数据/预览及全路径回归，GUI仍早于此变更，不能据此关闭V2-02或恢复旧导出资格。下一步补齐NC明确位置语义并与中心线预览一致。Skills：开发、验证。
+
+2026-09-27 NC中心/TCP闭环：Indexed专属声明与逐点宽高/偏移元数据已接后处理及独立预览，机器轴保持真实TCP。水平、倾斜、不同层高、旧NC兼容、未知/缺失元数据拒绝及严格回读共19项测试通过，证据v2_02_tube_nc_material_preview_junit.xml；Agent完成Ruff/Mypy/context检查，未运行Qt。新增bounded_wedge_paths.py将柱厚并层转换为候选路径，厚度突变保留双侧端点并断开挤出，4项解析检查通过（v2_02_bounded_wedge_paths.xml），局部Ruff和context通过。仍未接完整弯管生产生成，有限道宽覆盖、承接、碰撞及当前GUI复验待做。V2-02不关闭。使用Skills：five-axis-workbench-development、five-axis-slicer-validation；本轮实际调用登记。方法限制：中心柱区间守恒不能替代真实珠道覆盖证明。
+
+2026-09-27有界候选完整数据检查：复用已保存的450个实际CAD截面，形成429个含路径层带、800条开放/闭合候选路径，厚度0.1—0.3mm（浮点尾差约3e-15），零厚端点0，15532项残余检查任务，见v2_02_bounded_path_candidates.py/json。对13处分区转换的首层全部候选端点，与此前所有候选线段作连续最近距离和保守包络半径检查，明确不接触点为0，见v2_02_bounded_transition_probe.py/json；这只是必要条件，不能证明足够支撑、有限宽覆盖、无重叠或无碰撞，也未输出实际制造路径。45项组合领域回归通过（v2_02_tube_v6_combined.xml）。下一步核对移动后中心线是否仍符合真实管壁，并处理有限道宽/残余任务及生产接入。Skills：开发、验证。V2-02继续。
+
+2026-09-27变高路径接口补充：发现开放弧起点approach不能沿用首个沉积终点的高度，否则斜变厚段的起点TCP偏移错误。tube_tcp.py优先使用点上显式layer_height_mm，旧无显式值连接继续使用相邻沉积高度。独立0.1→0.3mm反例验证起点偏移0.05mm、终点0.15mm；16项TCP/碰撞/NC相关测试通过（v2_02_tcp_variable_start.xml），局部Ruff通过。该接口准备尚未接入新候选路径生成，真实管壁贴合量测由独立Agent进行，V2-02不关闭。使用Skills：开发、验证。
+
+2026-09-27开放路径生成接口与独立壁厚核查：现有_PathBuilder.add_layer增加逐点层厚与外部积分段体积输入，变高路径缺体积拒绝，路径间保持depart/travel/approach而不补闭合挤出；approach/travel显式保存起点层厚。32项相关测试及3子测试通过（v2_02_open_builder.xml），Ruff/Mypy/context通过。既有碰撞回归首轮2失败源于障碍仍放材料中心，按解析h=1mm将障碍移至真实TCP后21项及3子测试通过，保留v2_02_pipeline_v6.xml失败与tipfixture成功证据。Agent独立v2_02_bounded_shape_audit.py/json/md量测44202中心点轴向移动max0.05mm，径向中壁偏差max0.00721281mm；88404横向边缘点未越壁，但实际壁厚1mm，0.6mm单珠留下两侧约0.2mm未覆盖材料。现有0.02弦误差和0.05分区弧垂误差不可挪作覆盖容差。新候选尚未接正式生成；下一步明确并实现完整壁厚覆盖和有限珠道验证，不能只以单中心线形状接近CAD恢复资格。Skills：开发、验证。V2-02继续。
+
+2026-09-27壁厚分道与逐点宽度：参考Prusa官方Arachne说明 https://help.prusa3d.com/article/arachne-perimeter-generator_352769 的变道宽填壁方向，独立实现受限wall_tracks.py等分截面柱候选，不复现Arachne。Agent完成8项解析测试、Ruff/Mypy；1mm圆环/.6目标形成两道.5mm，保留斜截面宽度/完整覆盖/未校准最小宽度限制。主线程_PathBuilder增加widths_mm并要求外部段体积，NC逐点宽度不再按layer_id取最后值，避免同层多道宽度串用。29项相关测试及3子测试通过（v2_02_width_builder.xml），Ruff/context通过。真实450截面的wall_tracks_probe运行中，尚未生产接入及制造放行。使用Skills：开发、验证。
+2026-09-27真实分道候选完成：450个实际CAD截面全部生成2道，各点宽度0.500000—0.509035mm（浮点尾差忽略于显示），见v2_02_wall_tracks_probe.py/json。该结果仅覆盖截面柱几何，尚未与共同边界、残余层和完整珠道并集组合。主线程2源码Mypy通过。V2-02继续。
+
+2026-09-27双道残余完整诊断组合：新增wedge_tracks按严格投影匹配插值道宽/法向，5项测试通过；ruled_bead_volume按固定生长轴及线性横向跨度/层厚解析积分Jacobian，4项解析测试通过，拒绝折叠单元。19项组合测试通过（v2_02_combination.xml）；Mypy首次发现依赖wedge_volume的cap center三元组类型问题，复用_vector修复后Mypy及10项体积回归通过。真实450截面形成1600条诊断开放/闭合路径、91516点，其中86718沉积点，31150残余任务，组合错误0，见v2_02_combined_diagnostic.py/toolpath.json/summary.json。逐段体积和6477.4620mm³，对解析圆环扫掠6473.0720mm³偏多4.3900mm³（0.06782%），见v2_02_combined_volume_comparison.json；总量不能证明局部无遗漏/重叠，未做CAD裁剪/并集、碰撞或完整承接。禁止视为合格制造路径，未接正式入口。下一步局部有限珠道检查及变尺寸段包络一致性。Skills：开发、验证。V2-02继续。
+
+2026-09-27组合路径承接与角点核查：tube_support对变尺寸前段采用两个端点最大包络半径，防止只用终点小尺寸误报悬空；8项测试（v2_02_taper_support.xml）、Mypy/context通过。91516点诊断路径执行transition_support_issues得到0问题（v2_02_combined_support.py/json），仅为分区首层端点必要接触条件。独立Agent角点核查86718段693744个起止角点，entry越界仅浮点尾差；exit最大0.0256528921mm、内壁最大0.0114693172mm、外壁0.0109477930mm，见v2_02_combined_corners_audit.py/json/md。1e-8仅数值统计阈值，不是新增制造容差。总量近似正确不能掩盖这些局部偏差；需处理有限道宽斜边界、重叠/缺料与当前IPW变尺寸包络，不能直接放行制造。Skills：开发、验证。V2-02继续。
+
+2026-09-27变尺寸IPW与实际诊断碰撞：_record_deposition改为两个端点宽高最大值建立既有椭圆珠道胶囊，防止较宽起点漏入索引，未把该模型称为矩形珠道完整几何。14项碰撞相关测试通过（v2_02_variable_ipw.xml），Ruff通过。完整91516点诊断路径经TCP转换，在0.05mm采样参数下对IPW检查1947046次，0碰撞（v2_02_combined_ipw_probe.py/json）；该轮无基底/夹具，另已启动加入原source/settings对应基底AABB的补查。用户已收到独立CAD几何验收公差问题（0.02/0.01/自行指定），当前未据已测偏差反设容差；仍继续独立工作。Skills：开发、验证。V2-02不关闭。
+2026-09-27基底补查完成：同一完整诊断路径加入已保存基底AABB后，1947046次采样检查仍无碰撞，见v2_02_combined_substrate_probe.py/json。来源基底范围与原输入/设置对应，未增加不存在的夹具。保留采样/椭圆胶囊及未放行限制。
+
+2026-09-27完整诊断机器轴与NC回读：91516点完成真实自有AC机型、18mm喷嘴TCP求解，生成明确标注DIAGNOSTIC ONLY/NOT MANUFACTURING QUALIFIED/machine_executable=false的v2_02_combined_diagnostic_only.gcode。严格磁盘回读91516/91516通过，坐标/进给/挤出/事件顺序差异均0；文件预览94715时间步中91516空间点，材料中心恢复最大偏差1.2155744e-6mm，见v2_02_combined_nc_roundtrip.py/json。唯一轴警告为首19049点直立奇异段保留C=0，未产生轴错误。该证据验证诊断路径忠实转换，不证明局部几何、材料并集或真实GUI；没有恢复生产导出资格。Skills：开发、验证。V2-02继续。
+
+2026-09-27当前GUI诊断预览复验：旧窗口已不存在，使用当前源码启动新实例（窗口148573352，运行会话50416），真实点击打开v2_02_combined_diagnostic_only.gcode并完成加载，再打开example/pipe2/弯管新.stp、同相机切换实体显示。截图v2_02_combined_gui_nc.png、v2_02_combined_gui_with_step.png、v2_02_combined_gui_step_hidden.png；整体位置与轮廓对应，实体遮挡及密集路径不能证明局部覆盖。界面检测层数仍1，需Indexed NC明确层标记，已分派修复，截图早于该修复。加载过程持续推进但耗时较长；只读代码审查v2_03_nc_parse_code_audit.md发现每运动段起终点重复完整FK/机型验证（约183032次），未测性能占比，候选改进为会话内精确姿态缓存，不能删校验或取消。生产几何与V2-02全链未关闭。使用Skills：开发、验证、computer-use（本轮实际调用登记）。
+
+2026-09-27层导航与解析性能：Indexed专属后处理新增indexed_layers.py，按真实layer_id首次顺序输出标准Layer标记，同层双道/开放弧不增层、非平面Z不猜层、空移沿源目标层；Agent后处理→parse及头声明7项通过，尚未重生成完整带层NC/GUI复验。小样本cProfile定位2000运动中4000次机床变换，5.262s中4.903s在该路径；新增每parse会话独立128项精确姿态缓存，保持每次轴字/异常回退验证，不舍入角度、不缓存失败、机型对象强引用隔离。19项及3子测试通过（v2_03_pose_cache.xml）、Ruff/Mypy/context通过。相同2000运动剖析0.332s；完整原诊断NC不使用磁盘缓存的parse耗时6.591s，91516点最大中心偏差仍1.2155744e-6mm，道宽误差0、层厚误差8.19e-15mm（v2_03_full_parse_cached_pose.py/json）。这是纯解析测量，未将其当作GUI加载/取消验收。Skills：开发、验证。V2-02及V2-03均未关闭。
+
+2026-09-27带层诊断NC归档：核对v2_02_combined_layered_roundtrip.json与实际G-code SHA256一致（46b50f726b9a4d0e5819574ceee9cfce252e4aee7b3a894c9ff0cc814b5ee1be），严格回读91516/91516通过。新增独立v2_02_layer_identity_audit.py/json逐点比较源layer_id与文件预览层编号：91516个空间点、429层，层身份差异0，避免仅凭层数相等判断正确。该证据只关闭诊断文件的层标记对应检查，GUI层导航尚未复验，生产几何越界、覆盖及正式生成接入仍未完成，V2-02保持开放。使用Skills：five-axis-workbench-development、five-axis-slicer-validation，本轮实际调用登记。上一轮为用户解释未改变项目状态，本轮补充当前磁盘核验与逐点证据。
+
+2026-09-27真实GUI带层复验：当前窗口569313924真实打开带层诊断NC，观察加载进度23.9%→92.9%→完成；界面检测429层、91516空间段、86718正挤出段。实际下拉选择层0—24后仅显示底部环带，点击下一组后显示层25—49及上移环带。截图v2_02_layered_gui_loaded.png、v2_02_layered_gui_first25.png、v2_02_layered_gui_next25.png。本轮证明该文件层范围过滤及下一组按钮可用；没有量测端到端加载时间或取消，不扩大为V2-03通过。几何后续调整检查方向：内部共同分区面的越界需与相邻沉积材料组合检查，不能直接当作CAD外表面误差；已委派最坏分区局部覆盖/重叠量测，暂停增加仅返回残余任务的候选模块。V2-02仍开放。使用Skills：computer-use、five-axis-workbench-development、five-axis-slicer-validation。
+
+2026-09-27局部并集与加载测量：独立Agent完成v2_02_boundary_union_probe.py/md/json及fine.json。region12内部越界656角点中630仍在CAD壁内，全部在region13平面域；不能将0.02565mm内部归属越界误报为外形误差。最坏接缝0.8×0.8×0.12mm区域以0.005mm采样，CAD体积0.0768mm³、材料并集0.07324425、重叠0.003393、未填0.00355575，局部外超0；未填全部在region12侧。下一步应调整有限宽末层及邻区起始层，沿同一局部区域比较，再扩大到完整接缝。V2-02不关闭。
+V2-03新增可复现v2_03_finalize_cancel_probe.py/json：10万运动输入耗尽时请求取消，最终处理后0.331s抛出取消，未据静态怀疑增加无依据改动。真实GUI重载后读只读状态记录request3 complete、端到端7.377614s、worker6.765127s、cache_hit=false（v2_03_gui_reload_metrics.json）。两次尝试点击取消时，最终状态都是complete，未证明取消成功；不可将旧图保留当取消证据。后续需在耗时更长的实际任务中检查取消。使用Skills：开发、验证、computer-use；当前目标保持active。
+
+2026-09-27按用户最新要求调整：计划§7明确暂缓新弯管诊断方案微小接缝优化，保留局部缺口/重叠证据和未验证限制；不恢复旧单道欠填及大间隙方案资格，不放宽公差、不删除核心Error。后续优先新方案生产接入与完整GUI六件套/回读/保存重开，再推进其余工作包。用户关于实物鲁棒性的判断不替代实机证据，machine_executable=false保持。此次是任务优先级调整，非验收通过。使用Skills：five-axis-workbench-development、five-axis-slicer-validation（沿用本任务已读流程）；目标active。
+
+2026-09-27正式接入准备已实现：新增bounded_indexed.py从当前BRep实时生成双道/有界厚度Toolpath及BoundedIndexedSlicePlan，保留全部band、非空layer映射与residual_task_count，逐band/track/path取消检查，异常不吞、空region明确报错。Agent实时CAD直管3项测试、Ruff/Mypy/context通过，尚未切换产品入口。新增bounded_tube_geometry.sampled_wall_errors为多道中心采用真实内外半径包含检查及段内弦误差，避免旧中壁半径检查误报；5项解析测试通过，Ruff/Mypy通过。首次测试夹具遗漏extrusion_role导致5失败，修正后证据v2_02_bounded_geometry_fixed.xml；失败XML保留。中心包含不能证明珠道完整覆盖。下一步将策略接到product生成、序列化及策略对应验证，并用真实弯管全链复验。Skills：开发、验证。V2-02继续，微小接缝优化按计划§7暂缓。
+
+2026-09-27用户明确要求“不要钻牛角尖”，已写入交付计划§8：停止微小接缝精细采样/新候选模块，非阻塞项登记后推进，不新增交付门槛，不无变化重复验证；优先现有方案正式接入和完整案例，减少细碎回合。此执行纪律覆盖此前继续优化微小接缝的后续建议，核心错误和原计划必要验证仍保留。目标继续active。
+
+2026-09-27 V2-04独立推进：将教程assets内8份捕获过程JSON移至本轮evidence/guide_capture_records，逐字节及SHA256核对，relocation_manifest保留原路径，README说明历史相对图片路径解析；更新2份历史复盘显式链接，未修改历史事实。图片审计83引用/0缺失，15低对比仍待视觉，独立Agent进行实际逐图检查。新Tube正式service接入由领域Agent执行中，未宣称完成。当前不再深挖微小接缝，按计划§8并行推进独立交付项。
+
+2026-09-27 V2-02正式产品链已接bounded实时CAD生成，原支撑/碰撞/轴/回读保留，边界精度待验证为Warning，计划序列化含策略/bands/layer映射/残余计数，版本v7。Agent相关领域回归及Ruff/Mypy/context通过；真实pipe2正式service已启动，执行会话23630仍运行，证据脚本v2_02_live_service_v7.py，不重复启动。GUI闭环待做。
+V2-05新建tmp/v2_clean_install，include-system-site-packages=false，按README执行pip install -e .退出0，pip check无冲突，OCP/Qt/VTK/NumPy导入通过；日志及freeze归档。此为干净运行依赖安装，不是最终wheel或完整新环境GUI验收，V2-05不关闭。V2-04修正rotary_workbench_zh图注：原图只显示Warning路径，不声称展示导出目录/六文件；图片替换仍待做。使用Skills：开发、验证。
+
+2026-09-27正式pipe2服务完成：v2_02_live_service_v7.py/log/json，209.226s，429层/91516点，exportable=true、strict readback=true，仅xyzac.rotary_singularity与tube.bounded_boundary_accuracy_deferred警告，check_ipw=true及原基底AABB保留。此为正式服务真实CAD链证据，GUI闭环仍待完成。V2-04累计48唯一图已实际复核（含4普通图片链接），重拍归并11组连续场景，见v2_04_visual_review.md与replacement_candidates.json。
+V2-05首次独立GUI启动失败：ModuleNotFoundError cadquery，定位Planar offset/support在运行时导入CadQuery，而原pyproject仅列cad-tests。已把既有2.7范围移入运行依赖并修正README，不改算法；参考CadQuery官方安装说明与实际源码。修正后独立环境重装会话2796正在运行，日志v2_05_clean_install_runtime_fix.log；旧GUI已正常退出，尚未启动替代实例。此失败说明仅pip check/import OCP不等于应用启动通过，保留未完成状态。
+
+2026-09-27独立环境Qt启动修复：用户提供无Qt平台插件弹窗。实际QLibraryInfo.PluginsPath返回F:/???????/...，路径不存在；PyQt5.__file__计算真实中文路径，qwindows.dll实际存在。参考Qt QCoreApplication.addLibraryPath官方API，在app.main仅默认插件目录失效时加入绑定包内真实Qt5/plugins目录，不改系统环境。Windows QApplication最小实测platformName=windows、退出0，Ruff通过；同一独立环境真实主界面成功启动，窗口4131906，会话65755，截图v2_05_clean_start_fixed.png。CadQuery补依赖重装亦已退出0、pip check通过，freeze已归档。启动通过不替代示例生成/导出与最终wheel验收；下一步在此界面继续项目闭环。
+
+2026-09-27 V2-02 v7非Qt产品回归收口：使用合法短直管夹具替换旧10mm道宽/层高快速夹具；低速正常流程与真实加速度超限拒绝导出分开验证。独立双道半径5.25/5.75mm、材料中心到TCP半层偏移及v7版本断言更新，保留坐标变换/FK、弦误差、取消状态、旧上下文失效、六件套和严格回读断言，未放宽产品校验。19 passed、2 subtests passed，见evidence/2026-09-26_v2_final_delivery/v2_02_v7_product_regression_final.xml；两轮发现过期断言的失败XML保留，Ruff通过。仅测试文件修改，未运行Qt或重复大pipe2，不替代GUI验收。实际使用Skills：five-axis-slicer-validation、five-axis-workbench-development。
+
+2026-09-27 V2-02/V2-03真实GUI推进：独立安装环境窗口4131906打开tube_en1366_current150，点击生成后实际取消，界面显示生成已取消、生成按钮恢复且导出未误启用（v2_03_tube_generating.png、v2_03_tube_cancelled.png）。本次取消前没有有效结果，尚不证明旧结果保留。随后重新完整生成、查看路径及缩放、实际导出tube_v7_gui_export六件套；manifest严格回读91516/91516点通过，四类差异均空，collision_check_complete=true，511685采样，仅奇异/边界暂缓/参考设备Warning。保存tube_v7_gui_project并真实重开，参数及几何引用恢复；路径运行时未恢复、查看/导出禁用，待核对持久化设计，不宣称全部闭环完成。截图v2_02_v7_gui_path/exported/reopened.png。使用Skills：computer-use、five-axis-workbench-development、five-axis-slicer-validation；本次实际调用登记。V2-02/V2-03/V2-05保持进行中，微接缝按计划§7暂缓。
+
+2026-09-27弯管重开行为核清：tube_generation_service恢复product_states但不恢复内存product_results，tube_serialization只保存状态；tube_workbench_zh.md第132行明确重开恢复输入后需重新生成，属于既有合同，不新增运行时缓存恢复要求。当前GUI另实际打开tube_v7_gui_export/main.gcode，429层、91516空间点，切换空移并拖动旋转，路径及方向标响应，截图v2_02_v7_gui_nc_travel_rotated.png。弯管本次正式生成/预览/六件套/严格回读/输入保存重开已形成证据；微小接缝限制保留。V2-02其余代表案例、V2-03有效旧结果取消保留及V2-04/V2-05剩余门槛继续。
+
+2026-09-27 V2-02校徽当前配置复验启动：真实GUI载入gui_agent_logo/project.json/project.json，原机型快照v1为180mm；通过机型下拉选择内置自有AC v2、应用并重新应用Placement，当前machine hash ac7738eb81c857223aca1a69db9e81710d37dcd659f34cd1821c4f837673714c（150mm）。进入Freeform点击生成与检查，窗口4131906仍运行，HTTP generation_in_progress=true，状态归档v2_02_logo_current150_generating.json；尚未报告成功或重启计算。V2-04仅修正Tube中英文教程v7多道/实际层厚/TCP及暂缓Warning说明，原有重开输入合同保留，旧截图明确为操作示例，本地链接通过，图片重制仍待做。实际Skills：开发、验证、computer-use。目标active。
+
+2026-09-27 V2-05当前完整静态门禁通过：quality_v7_current.log首次因诊断脚本格式/导入失败；对22份证据脚本仅作格式与等价静态整理，前后SHA见v7_static_script_changes.json，历史结果未修改、未重跑模型。产品源码仅导入/格式及workbench_issue_ui局部变量重命名消除str与str|None复用。最终quality_v7_static_final.log中Ruff、迁移Ruff、安全规则、61文件格式、上下文预算及Mypy218源码全部通过，退出0；没有排除目录或放宽基线。校徽GUI当前仍generation_in_progress，应用会话65755确认存活，未重启。此静态通过不等同于完整回归、最终包或托管CI完成。实际Skills：开发、验证；目标active。
+
+2026-09-27 V2-05当前源码包检查：python -m build --outdir tmp/v2_release_current退出0，wheel/sdist版本2.6.3.dev3+gedacd49.d20260927，twine check两包PASSED。日志v2_05_build_current.log、v2_05_twine_current.log；v2_05_package_current.json记录SHA并核对wheel包含bounded_indexed、bounded_tube_geometry及own_ac_fdm资源，METADATA包含运行时CadQuery。当前为未封版工作区构建，不称最终提交CI或wheel新环境完整流程已通过。校徽仍为原GUI生成任务，未重复启动。Skills：five-axis-slicer-validation、five-axis-workbench-development。目标继续active。
+
+2026-09-27 V2-02校徽GUI完成生成及六件套导出：logo_current150_gui_export含六文件，manifest严格回读102969/102969点、21984/21984事件通过、issues为空，machine_executable=false；ready状态见v2_02_logo_current150_ready.json。V2-03补齐真实有效结果取消保留：在同窗口点击再次生成后取消，HTTP生成状态false且提示已取消，产品与取消前完整JSON相等，GUI导出重新启用、路径保留；证据v2_03_logo_cancel_state.json及v2_03_logo_cancel_preserved.png。不把工具调用耗时当精确取消延迟。校徽尚需补预览细看、保存重开；整体目标不关闭。使用Skills：computer-use、开发、验证。
+
+2026-09-27校徽保存重开通过：真实GUI保存logo_current150_gui_project并重新选择其project.json载入，正常使用项目内STEP副本；与生成前ready快照比较，freeform.operations完整JSON一致，机型仍v2及150mm资源hash一致。状态v2_02_logo_reopened.json。生成路径依既有合同不持久化，未误称恢复运行时结果。生成路径已实际缩放，完整密集显示尚不能辨清校徽局部沉积，后续用导出NC阶段筛选补查，不重跑生成。V2-02继续，整体目标未完成。
+
+2026-09-27校徽NC真实预览补验：打开logo_current150_gui_export/main.gcode，实际选择操作2、切换空移、放大后文字/环线/顶部图案可辨，点击上一操作切至底座工序，截图v2_02_logo_nc_stage2.png、v2_02_logo_nc_stage1.png。该预览连同前述GUI生成、六件套严格回读及输入保存重开构成当前校徽流程证据，不当作实物精度证明。V2-05补查wheel全部218个Python文件与src逐字节一致，v2_05_wheel_source_match.json差异为空。下一代表案例为叶轮，目标active。
+
+2026-09-27 V2-02叶轮装夹纠正：用户指出模型远离圆台。核对原impeller_gui_root_growth_live/project.json，Build CS为单位变换，Placement的T_mount_from_build却含XYZ各+250mm，局部adjustment为0；因此界面零微调不等于绝对居中。真实GUI取消旧装夹生成，设置局部DX/DY/DZ各-250mm并应用，显示模型后叶轮与150mm圆台同心、底面落台（v2_02_impeller_centered.png）。保存impeller_centered150_gui_project/project.json，回读确认实际T_mount_from_build为单位矩阵、圆台diameter_mm=150；未改源STEP、未缩放、未仅移动相机。已按新装夹重新生成，尚未完成该轮路径检查，旧偏移结果不作为本轮居中验收。UI补充显式重置安装位入口由独立Agent处理。外部参考为Prusa官方对象操作面板的落台/位置操作，https://help.prusa3d.com/article/object-manipulation-panel_1757 ，具体修正依据本项目实际持久化矩阵。使用Skills：five-axis-workbench-development、five-axis-slicer-validation、computer-use；本次实际调用登记。目标保持active。
+
+2026-09-27装夹防复发补充：Placement新增中英文“重置到安装位原点”按钮，清除历史reference与局部adjustment，仅更新草稿，保留应用/取消语义；帮助说明零微调不代表平台中心，模型底面位置仍由Build CS定义。独立Agent完成tube_controller纯领域回归12 passed、6 subtests，证据placement_reset_domain.xml；Ruff、context和新helper Mypy通过。主Agent复核helper/调用和测试；正在运行的GUI尚未重启，新增按钮真实点击未验收，不计为界面通过。用户当前叶轮居中操作已通过旧界面实际完成并保存。无新增精度优化范围，后续继续原计划。
+
+2026-09-27 V2-04本轮完成实质替换：当前真实GUI拍摄中英首页、中英150mm机床、叶轮现有曲面操作、Model CS和Build CS编辑器；坐标编辑未修改，拍摄后均取消草稿。复用已验证Tube导出图及校徽阶段2局部。独立Agent逐图查看、裁除外围光晕/内部路径，更新6张旧图共20处引用，另新增校徽局部图；来源/裁剪/SHA及逐批链接核验见v2_04_current_image_replacements.md/json，candidate相应replacement_applied=true。原证据不变，设置草稿不冒称生成完成，其余图片仍待。使用Skills：five-axis-workbench-development、computer-use。
+V2-05装夹重置后完整质量检查：首次quality_placement_current.log发现tube_ui导入排序，修正后quality_placement_fixed.log退出0，Ruff/security/format/context/Mypy219全部通过；无修改基线。V2-03本机为i7-12700H、14核20线程、31.8GB、Windows11，归档v2_03_machine_environment.json。居中叶轮生成期间曾实际响应显隐、语言及页面切换；15:55附近出现未响应，v2_03_impeller_busy_observed.png。15:56进程57380仍在、CPU累计2588.17s、Responding=false，HTTP15s观察超时，不当作任务终止、不重启生成；该长任务响应判据仍待核对恢复。v2_02_impeller_centered_generating.json保留此前活跃快照。完整目标保持active；本轮有教程替换及质量证据进展。
+
+2026-09-27 V2-03叶轮长任务热点确认与修复：临时工具py-spy按官方dump用法只读采样进程57380，两次均停在_PrintedSegmentIndex.candidates；第二次局部量显示sequence=682。原查询对重复样本反复合并含未来沉积的大桶且无检查点。已在postprocessing/printed_segment_index.py保持原空间桶及精确碰撞判定，按网格去重、bisect_left取index<sequence前缀、批量调用既有checkpoint。25项相关回归通过，合成基准候选681个完全一致，1.129792s→0.001925s；不外推整件耗时。简报impeller_candidate_fix.md、栈v2_03_impeller_stack.txt、测试impeller_candidate_index_final.xml、基准impeller_candidate_benchmark.json。确认源码热点、保存项目哈希并尝试UI返回无响应后，结束本任务旧进程57380，session65755退出1；不是把HTTP超时当自然终止。
+新版独立环境GUI会话4797、窗口53152702已启动，真实打开impeller_centered150_gui_project，点击新增重置/取消/再次重置/应用；保存impeller_reset150_gui_project并回读actualT为单位矩阵、adjustment全0，v2_03_placement_reset_applied.png。取消后树恢复有效，但控件仍保留草稿显示，不误称字段自动刷新；领域取消语义已有测试。随后真实点击完整生成，起始观察时刻见v2_03_impeller_fixed_start.txt，当前进程2448、generation_in_progress=true且last_error=null；完成/导出仍待。新增源码后quality_impeller_candidate_final.log全套门禁退出0。使用Skills：开发、验证、computer-use；目标继续active。
+
+2026-09-27 V2-04追加实际替换：独立Agent逐张查看12个当前V2-01候选，新增Curve中英选边、Planar本地编辑器、Rotary侧面选取4张旧图的5处替换，累计10张旧图、25处引用，另新增校徽局部图。保留状态和用途，不用Zigzag冒充三角填充、不用Spiral冒充Around Part；最新51相关链接有效。中英坐标指南同步说明重置安装位需Apply、按Build CS配对而非自动寻找底面；不用-250补偿作为用户操作要求。来源和裁图仍见v2_04_current_image_replacements.md/json。使用Skill：five-axis-workbench-development。
+V2-02下一输入已定位：2026-09-24_three_color_fan_gui_project_corrected/project.json/project.json可同时检查三叶整件与T0/T1/T2换料，需换当前150mm机型；原保存层高0.4/采样0.8，历史0.8/1.6粗参数仅功能证据，不当作0.4喷嘴打印资格。机床/站位仍离线。新叶轮16:13状态正常响应，16:14栈在solve_xyzac_trajectory，v2_03_impeller_fixed_stack.txt及fixed_generating.json；尚未完成整件。V2-03/04/05均不提前关闭。
+
+2026-09-27 V2-04第二批复用完成：独立Agent实际查看12张候选，替换IMG-010/026/029/031共4张旧图9处引用，累计14张旧图34处引用，另新增校徽局部图；52个相关链接有效。Part空面板不能代替实体表、Placement光晕贴应用按钮，均未伪造替换。来源与保留判断见v2_04_current_image_replacements.md/json。V2-05已启动包含装夹重置和候选索引修复的当前包构建，session75541，完成状态待核对。叶轮进程2448仍存活、Responding=true且generation_in_progress=true；实际截图确认居中及生成状态，不将等待记为完成。Skills沿用开发、验证、computer-use。
+
+2026-09-27 V2-05当前包构建完成：session75541退出0，tmp/v2_release_final的wheel与sdist经Twine均PASSED；v2_05_build_final.log、v2_05_twine_final.log、v2_05_final_package_hashes.json保留结果。逐文件核对wheel内220个Python源码与当前src字节一致，无遗漏/差异，见v2_05_final_wheel_source_check.json。此包包含装夹重置与候选索引修复；安装启动、最终全回归和提交CI尚待，源码再改需重新构建，不关闭V2-05。
+
+2026-09-27 V2-03当前叶轮运行观察：16:25—16:28进程2448保持Responding=true，实际点击显示模型关闭/恢复均响应，截图v2_03_impeller_fixed_hide_responsive.png；16:26只读栈位于_sample_move/forward_kinematics的换姿空移规划，已进入原热点所属阶段，尚未证明整件完成。16:27:59仍generation_in_progress=true、last_error=null、CPU累计1033.3125s。未重启计算。V2-05独立只读提交范围审查发现历史输入manufacturing-setup.yaml被GUI自动保存，当前不stage历史变更；新证据含超100MiB文件，后续明确选择摘要及必要文件，不整目录加入。Skills：开发、验证、computer-use。
+
+2026-09-27 V2-04保留与补拍收口：独立Agent逐图判定16张编号图及3张普通链接图可按原教学用途保留，新增当前Planar Zigzag替换5处，累计15张旧图39处引用；修正Rotary零原点和Spiral导出状态图注，218本地链接有效，剩余14张旧图归并7组，见v2_04_minimum_remaining_captures.md。主GUI本轮实拍中文/英文材料T0/T1草稿表和中文换料站空字段，文件v2_04_material_zh_draft_raw.png、material_en_draft_raw.png、station_zh_fields_raw.png（均v2_04前缀）；两次材料草稿和换料站均Cancel，未应用到叶轮。已交独立Agent替换相关教程，尚未计入上述累计。16:33叶轮仍运行无last_error，语言及对话框实际响应；不重启。Skills：开发、验证、computer-use。
+
+2026-09-27 V2-02叶轮完整GUI生成成功：当前产品generated_at为16:33:54.992，起始观察16:09:53，相差约24分02秒（非独立精确点击计时）。真实自由曲面界面显示完整叶轮沉积路径、生成恢复及导出可用，仅Warning；v2_02_impeller_fixed_generated.png和completed_state.json。严格回读810990/810990路径点、16983/16983事件，issues空，offline_exportable=true、machine_executable=false；摘要v2_02_impeller_fixed_summary.json。导出目录已建但两次工具检测到用户正在操作窗口而拒绝点击，因此尚未导出，不与用户抢鼠标，六件套/重开待继续。V2-04材料三图已替换，累计18图42引用；又实拍Part角色和Placement编辑控件，未改字段并取消，已交Agent整理。Skills：开发、验证、computer-use。
+
+2026-09-27 V2-02叶轮GUI导出与保存完成：用户截图窗口关闭后真实点击导出，impeller_reset150_gui_export生成main.gcode、machine_axes.csv、manifest.json、preview.json、toolpath.json、warnings.json共六文件；manifest回读810990点/16983事件一致，issues空，machine_executable=false。逐文件大小与SHA256见v2_02_impeller_export_hashes.json，导出后截图v2_02_impeller_fixed_exported.png。实际Ctrl+S保存到impeller_completed150_gui_project，project.json及STEP/Setup已落盘；重开及NC界面预览仍待。V2-04 Part/Placement两图已替换，累计20旧图48处引用，剩余9图5组，218链接有效。Skills：开发、验证、computer-use。
+
+2026-09-27 V2-02叶轮保存重开完成：真实打开impeller_completed150_gui_project/project.json，source_hash保持3776fe6e…f21f，操作1项恢复、last_error=null；模型显隐后确认仍位于圆台中心。v2_02_impeller_reopened.png及reopened_state.json。产品内存结果0、导出禁用符合此前已核实的输入持久化合同，不新增重算要求。随后真实打开impeller_reset150_gui_export/main.gcode进入NC页，request1正在parse，进度约30.6%；空移和阶段导航待载入完成。用户已表示叶轮路径视觉无明显问题，本轮不追加几何精度优化。Skills：开发、验证、computer-use。
+
+2026-09-27 V2-02叶轮代表案例GUI链完成：导出NC request1首次加载complete，worker403.274s、端到端407.922s、cache_hit=false。实际显示全部沉积、打开橙色空移、下拉操作2、缩放并拖动旋转、下一阶段到操作3，单叶片及转场可见且操作响应；v2_02_impeller_nc_travel.png、stage2_rotated.png、stage3.png及nc_preview_summary.json。NC页未单独加载STEP的Warning解释明确，不是生成Error。输入保存重开、生成六件套与严格回读证据已齐，本例不再重复生成或精度优化。首次NC加载较慢如实保留，不宣称快速。V2-02整体仍待三叶/多色案例；V2-04剩余9图5组、V2-05最终回归/安装包启动/CI继续。Skills：开发、验证、computer-use。
+
+2026-09-27 V2-02三叶扇多色当前流程启动：复制历史输入到three_color_current150_gui_project后真实GUI打开，取消残留Placement草稿，应用内置150mm机型并重新应用零微调装夹，树恢复有效。实际打开材料表核对T0/T1/T2（v2_02_three_color_materials.png），取消未修改的表格后点击生成与检查。当前generation_in_progress=true、last_error=null，进程2448响应正常；状态v2_02_three_color_generating_state.json。保存参数为层高0.4mm、采样0.8mm，未为加速改成历史粗参数。生成、导出和回读尚待完成，不提前计为通过。使用Skills：five-axis-workbench-development、five-axis-slicer-validation、computer-use；本次调用登记。
+
+
+2026-09-27 V2-03完成：按计划逐项复核明确生成状态、空结果取消、校徽有效结果取消保留、索引检查点25项回归、修复后81万点叶轮生成期间显隐/语言/对话框响应、完整NC路线与工序过滤/旋转/放大真实操作。证据映射见v2_03_v2_05_remaining_current.md。首次无缓存NC载入407.922秒保留为性能限制，不宣称快速或所有阶段相同取消延迟；不因该限制新增优化门槛。V2-04当前角色图IMG027已替换，两指南如实说明生成期间设置及角色待核对，累计21图50引用，剩余8图4组；最短操作见next_capture_steps.md。三叶扇换料站实际打开核对并取消未修改草稿，v2_02_three_color_station.png；生成仍在运行，未重启。V2-05独立新venv tmp/v2_wheel_install_final已启动最终候选wheel安装，session90351，结果待核对；未修改运行中GUI环境。Skills：开发、验证、computer-use。PRODUCT-01仍进行中。
+
+
+2026-09-27 V2-05最终候选wheel独立安装通过：session90351退出0，全新tmp/v2_wheel_install_final不继承系统site-packages；pip check输出No broken requirements found。清除PYTHONPATH后导入来自该环境Lib/site-packages，direct_url记录wheel SHA256为6402ac8d6b08bdffa36bebfb52f33a9a2f0e0fd301ae8985697fe7f06ba400a9，与候选包一致，证据v2_05_final_wheel_install.log及v2_05_final_wheel_installed.json。尚需实际启动、最终串行回归及最终提交CI，不提前关闭V2-05。三叶扇原任务仍generation_in_progress且无last_error，未重启。使用Skills：five-axis-slicer-validation、five-axis-workbench-development。
+
+
+2026-09-27 V2-05最终候选wheel实际短流程完成：独立环境真实启动窗口787998（session76309、端口8766；原三叶扇窗口53152702端口8765继续运行）。打开tutorial_rotary_limits_reference，实际生成得到acceleration_limit_exceeded且导出禁用；角速度改0.1rad/s、空移300mm/min并应用、再生成恢复Warning和导出。真实导出tutorial_rotary_wheel_export六文件，manifest严格回读75/75点通过，坐标/挤出/进给/顺序差异均空。真实保存tutorial_rotary_wheel_saved并重开，参数恢复，界面Stale及导出禁用符合输入恢复合同。截图v2_05_final_wheel_started.png、v2_04_rotary_acceleration_error_raw.png、recovered_raw.png、reopened_raw.png（后三者均v2_04_rotary前缀），生成状态v2_05_wheel_rotary_generated_state.json。错误/恢复/重开图交教程Agent替换，尚不预填替换数。该独立参考机型仅教学离线验证，不修改真实公共机型，也不证明上机资格。V2-05仍待最终回归及提交CI；Skills：开发、验证、computer-use。
+
+
+2026-09-27 V2-04教程补拍继续：独立wheel窗口实际选择圆柱平端面并点击应用，显示rotary.surface_reference_invalid且生成/导出禁用，截图v2_04_rotary_flat_face_rejected_raw.png；仅证明平端面拒绝，不称本轮已测试叶片拒绝。Curve实际点击两条相邻边及顶面，截图v2_04_curve_edges_normal_face_raw.png；采用后v2_04_curve_edges_adopted_raw.png为未应用草稿，边序0008/0012且默认反向0/0，教程需明确方向仍需核对，不称路径已生成。两组交教程Agent更新；此前累计25旧图55引用，新增替换尚待完成。三叶扇原进程2448本轮只读确认Responding=true、CPU3537.30s、generation_in_progress=true、last_error=null，继续原计算。Skill实际调用：computer-use；沿用开发与验证流程。目标保持active。
+
+2026-09-27 V2-04最后场景已真实生成：先完成IMG003/033替换，累计27图59引用、218本地链接有效。独立wheel GUI新建Rotary Around Part，实际点选侧面face0001与轴向边edge0002并采用，输入350:20;120:210、CCW，应用由CAD解析R20/H20后生成WARNING、导出可用。保留默认轴步2mm、采样5°、进给900/空移1800mm/min、角速度0.5rad/s，并未使用建议草案的缩小参数；本例仅离线教程。隐藏模型并放大，真实截图v2_04_rotary_around_two_regions_raw.png同时显示两分离蓝色区域与跨零输入；状态v2_04_rotary_around_generated_state.json确认crosses_zero分别true/false。无空移显示，不称截图显示旅行连接。交Agent替换最后IMG025/035并最终核链，完成前不关闭V2-04。三叶扇原进程2448仍Responding=true、CPU3998.97s、生成中无last_error，未重启。使用Skills：computer-use，沿用开发/验证流程。
+
+2026-09-27发行收口核对：教程累计29原图/66引用已替换、48唯一原图均有处置；主线程运行audit_guide_images.py退出0，当前84图片引用missing0，23低对比度仅人工候选，不自动判失败。教程Agent正迁移6张已无指南引用的旧过程标记图并完成最终说明，尚不提前关闭V2-04。独立wheel窗口已实际点击关闭，session76309退出0；三叶扇原窗口继续，v2_02_three_color_stack_followup.txt显示从freeform_product.py:285空移规划推进到:320空移安全检查，当前生成中无last_error，不重启。提交候选v2_05_commit_candidates.json列249项及排除项，尚未暂存/提交；git ls-remote核实远端master仍edacd49。gh未登录但已有GitHub连接工具可核对CI，不因此提前判阻塞。全仓回归待运行中GUI验收完成后串行执行，避免QSettings相互影响。使用Skills：five-axis-slicer-validation、five-axis-workbench-development、computer-use。
+
+2026-09-27 V2-04关闭：主线程复核v2_04_final_closure.md与final_disposition.json，原始83引用及15低对比候选均有最终处置；29原图66引用替换、16编号图+3普通链接图按用途保留，48唯一原图覆盖完整。6张退役过程标记图迁移后逐项SHA一致且旧assets路径不存在，8份过程JSON迁移有清单。218本地链接有效，84内嵌图missing0。两处非关键光晕按计划§8保留并明确记录，不称绝无光晕；英文复用中文图有说明。主表PRODUCT-01/V2C同步当前状态，V2-01/03/04完成、V2-02/05未关闭。使用Skills：five-axis-workbench-development阶段门槛、five-axis-slicer-validation；证据不替代实机验收。
+
+2026-09-27 V2-02三叶扇多色生成完成：原进程2448生成结束、last_error=null，真实GUI显示路径、Warning及可用导出。v2_02_three_color_completed_state.json确认offline_exportable=true、machine_executable=false，strict readback340193/340193点、62716/62716事件、issues为空。实际点击导出到three_color_current150_gui_export，六文件已落盘（main.gcode59135880、toolpath.json330029556、preview.json236696908、manifest.json1522272、machine_axes.csv38330179、warnings.json1418956字节）；generated截图已保存，磁盘独立摘要及哈希由Agent核对。尝试Ctrl+S时工具报告用户正在操作，刷新确认用户在放大查看，故未继续抢输入；当前保存重开及NC空移/工序可视核验待做，不预报V2-02关闭。使用Skills：computer-use、开发与验证。目标active。

@@ -3,8 +3,10 @@ from __future__ import annotations
 import argparse
 import os
 import sys
+from pathlib import Path
 
-from PyQt5.QtCore import Qt, QTimer
+import PyQt5
+from PyQt5.QtCore import QCoreApplication, QLibraryInfo, Qt, QTimer
 from PyQt5.QtWidgets import QApplication
 
 from .ui import MainWindow
@@ -37,6 +39,12 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
+    # Some Windows Qt5 wheels lose Unicode characters in their embedded prefix.
+    # Use the installed binding's real directory only when that prefix is invalid.
+    if not Path(QLibraryInfo.location(QLibraryInfo.PluginsPath)).is_dir():
+        plugins = Path(PyQt5.__file__).resolve().parent / "Qt5" / "plugins"
+        if plugins.is_dir():
+            QCoreApplication.addLibraryPath(str(plugins))
     QApplication.setAttribute(Qt.ApplicationAttribute.AA_EnableHighDpiScaling, True)
     QApplication.setAttribute(Qt.ApplicationAttribute.AA_UseHighDpiPixmaps, True)
     app = QApplication(sys.argv[:1])

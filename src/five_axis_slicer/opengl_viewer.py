@@ -230,8 +230,7 @@ class OpenGLModelViewer(BambuNavigationMixin, QOpenGLWidget):
         if not OPENGL_AVAILABLE:
             raise RuntimeError("PyOpenGL is not available")
         super().__init__(parent)
-        self.setFocusPolicy(Qt.StrongFocus)
-        self.setMouseTracking(True)
+        self._configure_display()
 
         self.model: CadModel | None = None
         self.selection = SelectionState()
@@ -903,6 +902,13 @@ class OpenGLModelViewer(BambuNavigationMixin, QOpenGLWidget):
         self._progress_dragging = False
         self.refresh_path_preview()
 
+    def _configure_display(self) -> None:
+        surface_format = self.format()
+        surface_format.setSamples(4)
+        self.setFormat(surface_format)
+        self.setFocusPolicy(Qt.StrongFocus)
+        self.setMouseTracking(True)
+
     def initializeGL(self) -> None:  # noqa: N802 - Qt API
         glClearColor(*BG_COLOR)
         glEnable(GL_DEPTH_TEST)
@@ -921,9 +927,17 @@ class OpenGLModelViewer(BambuNavigationMixin, QOpenGLWidget):
 
     def resizeGL(self, width: int, height: int) -> None:  # noqa: N802 - Qt API
         glViewport(0, 0, max(1, width), max(1, height))
+        if self._build_surface is not None and self.model is None and self.gcode_preview is None:
+            self.fit_view()
 
     def paintGL(self) -> None:  # noqa: N802 - Qt API
-        self._paint_scene(max(1, self.width()), max(1, self.height()), record_metrics=True)
+        # OpenGL line widths use framebuffer pixels, unlike Qt widget dimensions.
+        ratio = self.devicePixelRatioF()
+        self._paint_scene(
+            max(1, round(self.width() * ratio)),
+            max(1, round(self.height() * ratio)),
+            record_metrics=True,
+        )
 
     def _paint_scene(self, width: int, height: int, *, record_metrics: bool) -> None:
         started = time.perf_counter()
@@ -946,7 +960,7 @@ class OpenGLModelViewer(BambuNavigationMixin, QOpenGLWidget):
             ),
         )
 
-        draw_count = 0
+        draw_count = self._draw_buffer("build_surface_fill", line_width=1.0, depth_bias=-0.0002)
         if self._grid_visible:
             draw_count += self._draw_buffer("grid", line_width=1.0 * line_scale)
         draw_count += self._draw_buffer(
@@ -1218,32 +1232,18 @@ class OpenGLModelViewer(BambuNavigationMixin, QOpenGLWidget):
         self._set_buffer("pose", vertices, colors, GL_LINES)
 
     def _refresh_grid_buffer(self) -> None:
-        bounds = self._scene_bounds()
-        if bounds is None:
-            low = np.array([-50.0, -50.0, 0.0], dtype=np.float32)
-            high = np.array([50.0, 50.0, 0.0], dtype=np.float32)
-        else:
-            low, high = bounds
-        span = max(float(high[0] - low[0]), float(high[1] - low[1]), 20.0)
-        step = _nice_grid_step(span / 12.0)
-        x_min = math.floor((float(low[0]) - step) / step) * step
-        x_max = math.ceil((float(high[0]) + step) / step) * step
-        y_min = math.floor((float(low[1]) - step) / step) * step
-        y_max = math.ceil((float(high[1]) + step) / step) * step
-        z = float(low[2]) - max(0.02, span * 0.002)
-        vertices: list[tuple[float, float, float]] = []
-        colors: list[tuple[float, float, float, float]] = []
-
-        x_values = _inclusive_grid_values(x_min, x_max, step)
-        y_values = _inclusive_grid_values(y_min, y_max, step)
-        for x in x_values:
-            color = GRID_MAJOR_COLOR if int(round(x / step)) % 5 == 0 else GRID_MINOR_COLOR
-            vertices.extend([(x, y_min, z), (x, y_max, z)])
-            colors.extend([color, color])
-        for y in y_values:
-            color = GRID_MAJOR_COLOR if int(round(y / step)) % 5 == 0 else GRID_MINOR_COLOR
-            vertices.extend([(x_min, y, z), (x_max, y, z)])
-            colors.extend([color, color])
+        surface = self._build_surface
+        fill = [] if surface is None else _scene.build_surface_triangles(surface)
+        self._set_buffer(
+            "build_surface_fill", fill, [(0.18, 0.21, 0.25, 1.0)] * len(fill), GL_TRIANGLES
+        )
+        if surface is not None:
+            grid = _scene.build_surface_grid(surface)
+            self._set_buffer("grid", grid, [GRID_MAJOR_COLOR] * len(grid), GL_LINES)
+            return
+        vertices, colors = _scene.world_grid_geometry(
+            self._scene_bounds(), GRID_MAJOR_COLOR, GRID_MINOR_COLOR
+        )
         self._set_buffer("grid", vertices, colors, GL_LINES)
 
     def _refresh_body_buffer(self) -> None:
@@ -1384,10 +1384,7 @@ class OpenGLModelViewer(BambuNavigationMixin, QOpenGLWidget):
             self.pick_callback(hit)
 
     def _toggle_edge(self, edge_id: str) -> None:
-        if edge_id in self.selection.edge_ids:
-            self.selection.edge_ids.remove(edge_id)
-        else:
-            self.selection.edge_ids.add(edge_id)
+        apply_pick_selection(self.selection, PickRequest("edge", multiple=True), "edge", edge_id)
         self.refresh_selection()
         if self.selection_callback is not None:
             self.selection_callback("edge", edge_id)

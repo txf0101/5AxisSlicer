@@ -9,9 +9,9 @@ In Freeform, the material table assigns deposition regions to T0, T1, and other 
 3. Click Edit tool-change station. Enter calibrated machine-frame nozzle-tip positions for clearance, cutter, exchange, purge, and wipe start/end, plus speeds, wipe passes, and the cutter command. Confirming the form fills Tool-change station JSON. Each station Z must be below clearance Z. A real channel transition without a station blocks NC export.
 4. Click Apply and then Generate and validate. Inspect the issues, path preview, and `PAC SERVICE`/`PAC EVENT` records and T commands in the NC. Uncheck Show model to see deposition lines inside the part. Saving the project also saves the plan and station.
 
-The table below shows T0/T1 channels and body-region assignments. Its temperature and filament-length values illustrate the controls; tune them for the actual material, extruder, and machine.
+The table shows a T0/T1 channel draft with no region assignments yet. Use the region selector and Add selected region to populate the lower table. These values have not been confirmed or applied and do not mean the current impeller is configured for multicolour printing. Tune temperature and filament lengths for the actual material, extruder, and machine.
 
-![Two-colour PLA channel and region assignments](assets/product_delivery/19_material_table_two_color_en.png)
+![T0/T1 channel draft and region-assignment controls](assets/current_delivery/material_en_draft.png)
 
 The following JSON is an advanced example for the three-blade fan. `op01-` through `op04-` describe only that example's merged order. For another model, choose its displayed region candidates instead of copying these IDs:
 

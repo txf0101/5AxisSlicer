@@ -551,8 +551,10 @@ class _SurfacePathBuilder:
             _subtract(point, _scale(normal, actual_depth)) for point, normal, _ in samples
         )
         normals = tuple(normal for _, normal, _ in samples)
+        # Thickness layers grow inward from the selected supporting face.
+        # The nozzle points back toward that face, opposite to material growth.
         nozzle_axes = (
-            tuple(_scale(normal, -1.0) for normal in normals)
+            normals
             if growth_reference is None
             else _growth_nozzle_axes(positions, normals, growth_reference)
         )
@@ -564,31 +566,20 @@ class _SurfacePathBuilder:
         )
         region_id = f"{self.body_id}-{path_id}" if self.growth_layer_index is None else self.body_id
         tangent = _unit(_subtract(positions[1], positions[0]))
+        kind = "travel" if self.points else "approach"
         if self.points:
             self._event("retract", layer_id, region_id)
-            self._point(
-                positions[0],
-                normals[0],
-                nozzle_axes[0],
-                tangent,
-                layer_id,
-                region_id,
-                "travel",
-                "none",
-                0,
-            )
-        else:
-            self._point(
-                positions[0],
-                normals[0],
-                nozzle_axes[0],
-                tangent,
-                layer_id,
-                region_id,
-                "approach",
-                "none",
-                0,
-            )
+        self._point(
+            positions[0],
+            normals[0],
+            nozzle_axes[0],
+            tangent,
+            layer_id,
+            region_id,
+            kind,
+            "none",
+            0,
+        )
         self._event("prime", layer_id, region_id)
         skin = (
             self.depth_index in {1, self.depth_count} or boundary_strip

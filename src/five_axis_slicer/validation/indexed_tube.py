@@ -22,6 +22,7 @@ from ..manufacturing.resources import NozzleProfile
 from ..manufacturing.setup import IssueSeverity, ValidationIssue
 from ..manufacturing.toolpath import GeneratedResultStatus, GeneratedToolpath, ToolpathPoint
 from ..models import Vector3
+from .tube_support import transition_support_issues
 
 
 @dataclass(frozen=True, slots=True)
@@ -113,24 +114,39 @@ def validate_indexed_tube(
     layer_spacing_error_limit_mm: float = 0.01,
     motion_sample_error_mm: float = 0.25,
     check_ipw: bool = True,
+    checkpoint: Callable[[], None] | None = None,
 ) -> IndexedValidationReport:
+    from ..manufacturing.tube_tcp import indexed_centerline_to_tcp
+
     if not nozzle.is_ready:
         raise ValueError("collision validation requires a complete Nozzle Profile")
     if len(toolpath.points) != len(trajectory.samples):
         raise ValueError("toolpath and machine trajectory sample counts differ")
     if motion_sample_error_mm <= 0.0:
         raise ValueError("motion_sample_error_mm must be positive")
-    metrics = _geometry_metrics(
-        feature, plan, toolpath, radial_error_limit_mm, layer_spacing_error_limit_mm
-    )
-    issues = list(trajectory.issues)
+    metrics, geometry_issues = _strategy_geometry(
+        feature, plan, toolpath, radial_error_limit_mm, layer_spacing_error_limit_mm, checkpoint)
+    issues = [*trajectory.issues, *geometry_issues]
     issues.extend(_metric_issues(metrics))
+    issues.extend(
+        transition_support_issues(
+            toolpath,
+            substrate_bounds=tuple(
+                (box.minimum_mm, box.maximum_mm)
+                for box in obstacles
+                if box.role == "substrate"
+            ),
+            checkpoint=checkpoint,
+        )
+    )
     collision_issues, checked = _collision_issues(
         toolpath,
         nozzle,
         obstacles,
         motion_sample_error_mm,
         check_ipw=check_ipw,
+        checkpoint=checkpoint,
+        nozzle_toolpath=indexed_centerline_to_tcp(toolpath),
     )
     issues.extend(collision_issues)
     return IndexedValidationReport(
@@ -150,14 +166,18 @@ def _geometry_metrics(
     toolpath: GeneratedToolpath,
     radial_limit: float,
     spacing_limit: float,
+    checkpoint: Callable[[], None] | None = None,
 ) -> list[ValidationMetric]:
-    radial_errors = [
-        abs(_distance_to_centerline(point.position, feature) - feature.path_radius_mm)
-        for point in toolpath.points
-        if point.point_type == "deposition"
-    ]
+    radial_errors = []
+    for index, point in enumerate(toolpath.points):
+        _collision_checkpoint(checkpoint, index)
+        if point.point_type == "deposition":
+            radial_errors.append(
+                abs(_distance_to_centerline(point.position, feature) - feature.path_radius_mm)
+            )
     chord_errors = []
-    for left, right in zip(toolpath.points, toolpath.points[1:]):
+    for index, (left, right) in enumerate(zip(toolpath.points, toolpath.points[1:])):
+        _collision_checkpoint(checkpoint, index)
         if right.point_type != "deposition" or left.layer_id != right.layer_id:
             continue
         left_radius = _distance_to_centerline(left.position, feature)
@@ -257,19 +277,25 @@ def _collision_issues(
     check_ipw: bool,
     checkpoint: Callable[[], None] | None = None,
     stop_on_collision: bool = False,
+    nozzle_toolpath: GeneratedToolpath | None = None,
 ) -> tuple[list[ValidationIssue], int]:
     issues: list[ValidationIssue] = []
     checked = 0
     deposited: list[tuple[Vector3, Vector3, float, str]] = []
     index = _DepositedSegmentIndex(max(radius for radius, _ in nozzle.outer_profile_rz_mm))
+    behind_tip = all(z >= 0.0 for _, z in nozzle.outer_profile_rz_mm)
+    motion_points = _nozzle_motion_points(toolpath, nozzle_toolpath)
     for segment_index, (left, right) in enumerate(zip(toolpath.points, toolpath.points[1:])):
         _collision_checkpoint(checkpoint, segment_index)
-        samples = _motion_samples(left, right, nozzle, sample_error)
+        samples = _motion_samples(
+            motion_points[segment_index], motion_points[segment_index + 1], nozzle, sample_error
+        )
         for motion_index, (position, axis) in enumerate(samples):
             checked += 1
+            nearby = _nozzle_side_obstacles(position, axis, obstacles, behind_tip)
             for profile_index, (radius, z_value) in enumerate(nozzle.outer_profile_rz_mm):
                 center = _subtract(position, _scale(axis, z_value))
-                for obstacle in obstacles:
+                for obstacle in nearby:
                     if _allowed_substrate_contact(
                         obstacle,
                         left,
@@ -296,13 +322,25 @@ def _collision_issues(
     return issues, checked
 
 
+def _nozzle_motion_points(toolpath, nozzle_toolpath):
+    points = toolpath.points if nozzle_toolpath is None else nozzle_toolpath.points
+    if tuple(p.point_id for p in points) != tuple(p.point_id for p in toolpath.points):
+        raise ValueError("nozzle motion and material path point identifiers differ")
+    return points
+
+
 def _stop_after_collision(enabled: bool, issues: list[ValidationIssue]) -> bool:
     return enabled and bool(issues)
 
 
 def _record_deposition(left, right, deposited, index, check_ipw):
     if right.point_type == "deposition":
-        radius = max(right.bead_width_mm or 0.0, right.layer_height_mm or 0.0) * 0.5
+        # Preserve the existing elliptical bead envelope while enclosing both
+        # endpoints of a linearly varying width/height segment.
+        radius = max(
+            left.bead_width_mm or 0.0, left.layer_height_mm or 0.0,
+            right.bead_width_mm or 0.0, right.layer_height_mm or 0.0,
+        ) * 0.5
         if check_ipw:
             index.add(len(deposited), left.position, right.position, radius)
         deposited.append((left.position, right.position, radius, right.point_id))
@@ -439,6 +477,33 @@ def _allowed_substrate_contact(
     )
 
 
+def _nozzle_side_obstacles(
+    position: Vector3,
+    axis: Vector3,
+    obstacles: tuple[CollisionBox, ...],
+    behind_tip: bool,
+) -> tuple[CollisionBox, ...]:
+    """Retain every obstacle unless the whole nozzle is behind a separating tip plane."""
+    return tuple(
+        box for box in obstacles
+        if not (behind_tip and _box_ahead_of_tip(position, axis, box))
+    )
+
+
+def _box_ahead_of_tip(position: Vector3, axis: Vector3, box: CollisionBox) -> bool:
+    """Reject boxes strictly beyond the tip plane, outside the physical R-Z solid.
+
+    Profile spheres extend in front of the tip although the nozzle does not.
+    Minimise the plane projection over the entire AABB; crossing boxes remain
+    subject to the existing conservative collision checks.
+    """
+    minimum_projection = sum(
+        component * ((low if component >= 0.0 else high) - origin)
+        for component, low, high, origin in zip(axis, box.minimum_mm, box.maximum_mm, position)
+    )
+    return minimum_projection > 1.0e-9
+
+
 def _sphere_box_intersects(center: Vector3, radius: float, box: CollisionBox) -> bool:
     distance_sq = 0.0
     for value, low, high in zip(center, box.minimum_mm, box.maximum_mm):
@@ -506,3 +571,13 @@ __all__ = [
     "ValidationMetric",
     "validate_indexed_tube",
 ]
+
+
+
+def _strategy_geometry(feature, plan, toolpath, radial_limit, spacing_limit, checkpoint):
+    from ..algorithms.tube.bounded_indexed import BoundedIndexedSlicePlan
+    from .bounded_tube_geometry import bounded_geometry_validation
+    if isinstance(plan, BoundedIndexedSlicePlan):
+        return bounded_geometry_validation(feature, plan, toolpath, radial_limit, checkpoint)
+    return _geometry_metrics(feature, plan, toolpath, radial_limit, spacing_limit, checkpoint), []
+

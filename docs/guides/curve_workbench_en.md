@@ -4,9 +4,9 @@ Curve creates Buildup, Multi-pass Buildup, and Offset Buildup along an ordered S
 
 Before starting, complete Part, Model CS, Build CS, machine, nozzle, reviewed material, and placement in Setup. Choose edges in travel order with **Viewer Selection Type: Edge**, then click **Use selected Viewer edges**. Select a face when an authoritative adjacent normal is needed. A two-sided edge requires an explicit normal face; otherwise choose **User direction** and enter a unit normal.
 
-![Select an edge in the Viewer and copy it into the directed chain](assets/product_delivery/20_curve_edge_selected_en.png)
+![Selected edges highlighted in the Viewer (detail)](assets/current_delivery/curve_edges_en.png)
 
-The blue edge has been copied into **Directed edge chain**. This shows geometry selection only; no operation or toolpath has been generated. Edge IDs depend on the loaded model. The Setup and operation panels scroll independently.
+This Viewer crop shows two selected blue edges. Highlighting only identifies selection: it does not establish a continuous ordered chain or a generated toolpath. Use the editor to check edge order, connectivity, reverse flags, and normal reference before applying. Edge IDs depend on the loaded model; Setup and operation panels scroll independently.
 
 Generated-path view hides the CAD model by default so deposited lines remain visible. Turn on **Show model** to check placement; **Full lines (fast)** shows the whole path, while **Bead width** helps inspect local width. Projects save complete geometry references and kernel signatures. If STEP topology changes, references are rebound only when the match is unique; missing or ambiguous matches invalidate the operation.
 

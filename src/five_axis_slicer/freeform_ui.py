@@ -14,6 +14,7 @@ from .freeform_commands import FreeformCommandService
 from .freeform_controller import FreeformController
 from .material_plan_editor import MaterialPlanEditor, stage_candidates_for_operation
 from .manufacturing.freeform_solid_parameters import SOLID_FILL_OPERATION_TYPES
+from .models import PickRequest
 from .tool_change_station_editor import ToolChangeStationEditor
 
 
@@ -37,6 +38,7 @@ class FreeformPage(CurvePage):
     """Reuse the proven Curve editor shell while exposing Freeform semantics."""
 
     def __init__(self, parent=None, *, controller: FreeformController, viewer_factory=None):
+        self._apply_failed = False
         super().__init__(
             parent,
             controller=cast(Any, controller),
@@ -163,6 +165,16 @@ class FreeformPage(CurvePage):
         self._set_pick_kind()
         self.refresh()
 
+    def _set_pick_kind(self, *_ignored):
+        kind = self.pick_kind_combo.currentData()
+        if kind is None:
+            return
+        operation = self._selected_operation()
+        solid = operation is not None and operation.operation_type in SOLID_FILL_OPERATION_TYPES
+        self.viewer.set_pick_request(
+            PickRequest(kind, multiple=kind in {"body", "edge"} or (kind == "face" and solid))
+        )
+
     def _apply(self):
         operation = self._selected_operation()
         if operation is None:
@@ -219,6 +231,9 @@ class FreeformPage(CurvePage):
             self._last_error = None
         except Exception as exc:
             self._last_error = str(exc)
+            self._apply_failed = True
+            self.refresh(reload_controls=False)
+            return
         self.refresh()
 
     def _edit_material_plan(self):
@@ -309,6 +324,8 @@ class FreeformPage(CurvePage):
         )
 
     def _load_controls(self, operation):
+        self._apply_failed = False
+        self._set_pick_kind()
         is_solid = operation.operation_type in SOLID_FILL_OPERATION_TYPES
         self._set_mode_visibility(is_solid)
         self._refresh_mode_text(operation)
@@ -356,6 +373,9 @@ class FreeformPage(CurvePage):
                 station.to_json(), ensure_ascii=False, indent=2
             )
         )
+        self._load_numeric_controls(operation, is_solid)
+
+    def _load_numeric_controls(self, operation, is_solid: bool) -> None:
         source_parameters = (
             operation.solid_parameters if is_solid else operation.parameters
         )
@@ -484,6 +504,9 @@ class FreeformPage(CurvePage):
         if operation is not None and operation.operation_type in SOLID_FILL_OPERATION_TYPES:
             complete = operation.solid_geometry is not None
             self.generate_button.setEnabled(complete and not self._generation_in_progress)
+        if self._apply_failed:
+            self.generate_button.setEnabled(False)
+            self.export_button.setEnabled(False)
 
     def _use_selected_edges(self):
         operation = self._selected_operation()

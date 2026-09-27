@@ -17,7 +17,7 @@ Complete manufacturing Setup, choose a Workbench that matches the geometry and p
 2. Open **Common Manufacturing Setup**. In **Part**, mark each closed body that belongs to the build. Apply **Machine → Model CS → Build CS → Placement** and review **Nozzle** and **Material**. Apply or confirm each draft.
 3. Return to Workbench and check **Setup Ready**. Use the issue list to resolve Errors. Review reference-machine Warnings; they do not qualify a real machine.
 
-![Home page: open STEP, manufacturing Setup, and Workbench entry](assets/product_delivery/01_home_zh.jpg)
+![Home page: five Workbench cards and G-code File Preview](assets/current_delivery/home_en.png)
 
 The left Manufacturing Setup panel in Planar, Curve, Rotary, and Freeform shows whether settings are shared or Workbench-specific. Tube edits Setup through its project tree.
 
@@ -29,7 +29,7 @@ To share settings across Workbenches, edit Common Manufacturing Setup and return
 
 Choose **Planar Slicing**, then create **Planar Region** to inspect sections or choose Zigzag, Offset, Thin Wall, Spiral, or Support for a path. Select the body, set layer range and process values, and click **Apply**. Support is vertical from the build plate only; its first-layer Z equals the layer height. Click **Generate Preview**. Keep the model visible to check placement; hide it and use **Full lines (fast)** to inspect occluded paths. Region is inspection-only and cannot export NC.
 
-![Planar path with the model hidden](assets/product_delivery/07_planar_full_lines_zh.png)
+![Planar path with the model hidden](assets/current_delivery/planar_zigzag_path_detail.png)
 
 The screenshot uses one layer of `body_001` from a fan STEP. It demonstrates path visibility, not a complete fan program. Reselect the body, layer range, and process values for your model. See the [Planar guide](planar_workbench_en.md).
 
@@ -37,23 +37,23 @@ The screenshot uses one layer of `body_001` from a fan STEP. It demonstrates pat
 
 Choose **Curve Workbench** and create Buildup (one bead), Multi-pass Buildup (multiple layers), or Offset Buildup (side-by-side passes). Set Viewer selection to **Edge**, select edges in deposition order, and select an adjacent face when a normal is needed. Click **Use selected Viewer edges** and verify order, reverse flags, and face ID. Apply parameters and generate. For curves without an authoritative adjacent face, use a defined user direction. See the [Curve guide](curve_workbench_en.md).
 
-![Curve edge and face selection](assets/product_delivery/06_curve_pick_edge_face_zh.png)
+![Curve edge and face selection (Chinese-interface example)](assets/current_delivery/curve_edges_normal_face_zh.png)
 
-Selection alone does not create or generate an operation.
+This crop shows two adjacent selected edges and a normal face in an existing operation. Adopting Viewer edges fills IDs in click order with default reverse flags of 0. Check the edge order, reverse flags and normal face before applying; this selection view does not establish valid direction or completed generation.
 
 ## 3. Rotary fixed-axis deposition
 
 Choose **Rotary Workbench** and create Spiral, Thin Wall, or Around Part. Select an axis edge and click **Use selected axis edge**, then select a coaxial cylindrical/conical face and click **Use selected surface**. Select an optional profile edge separately. Verify axis, zero direction, angular regions, and process values; apply geometry and parameters, then generate. Show the model to verify the selected surface, then hide it and inspect the full path. Angular intervals crossing 0° must be unwrapped in the intended direction.
 
-![Rotary Around Part paths](assets/product_delivery/09_rotary_around_part_paths_zh.png)
+![Rotary Around Part paths (Chinese-interface example)](assets/current_delivery/rotary_around_two_regions_zh.png)
 
-The two regions shown are an example only. Reselect axis, surface, and intervals for your model. A freeform blade surface is not a cylindrical face. See the [Rotary guide](rotary_workbench_en.md).
+The two separated blue line groups show the generated regions; travel is not displayed. This example uses a CAD-derived R20 mm/H20 mm cylinder, 2 mm axial step, 5° sampling, 900/1800 mm/min deposition/travel feed and 0.5 rad/s angular velocity. Reselect axis, surface, and intervals for your model. A freeform blade surface is not a cylindrical face. See the [Rotary guide](rotary_workbench_en.md).
 
 ## 4. Tube growth
 
 Enter **Tube Workbench**, complete Setup, choose an operation type, and create it. Use the **Pick** controls for the tube body, inlet edge, outlet edge, and—when needed—substrate. Confirm that none of the fields are blank and that inlet-to-outlet direction matches the intended build. Apply operation values, generate, then open **View path**. Check layer support, base connection, indexing moves, and travel against deposited material.
 
-![Tube body, ports, and substrate selected](assets/product_delivery/12_tube_geometry_selected_zh.jpg)
+![Tube body, ports, and substrate fields (Chinese interface crop)](assets/current_delivery/tube_roles_zh.png)
 
 The IDs shown belong only to that STEP model. Stale means the saved operation needs regeneration. See the [Tube guide](tube_workbench_en.md).
 
@@ -63,15 +63,15 @@ In **Freeform Workbench**, the new-operation selector controls the next operatio
 
 For **Surface Solid Fill**, choose **Layers through surface thickness** or **Grow outward from root edge** in **Surface-solid growth**. The outward method requires a supported root edge. Check bead width and layer height, then click **Apply**. For multiple colours, open **Edit material table**, choose a body or stage in the region selector, click **Add selected region**, and assign each row to T0/T1. Apply again after editing materials. See the [material guide](material_channels_en.md) for channels and station settings.
 
-![Freeform solid roles](assets/product_delivery/13_freeform_role_fields_zh.jpg)
+![Freeform solid roles (Chinese-interface example)](assets/current_delivery/freeform_three_leaf_roles_zh.png)
 
-The IDs and roles shown belong to the example STEP. Generate and inspect whether the first beads attach to the substrate, later layers follow the chosen growth direction, and travel avoids the deposited part. Export is enabled only when the current result allows it. Choose values for your own model and equipment; the illustrated settings apply only to the example. See the [Freeform guide](freeform_workbench_en.md) and [solid-growth method guide](solid_fill_method_en.md).
+The crop shows the three-blade fan settings while generation is running: body_001 is the substrate/hub and body_002 through body_004 are blades. These roles still require review against the geometry; this settings image does not show a completed result. The IDs belong only to this example STEP. Generate and inspect whether the first beads attach to the substrate, later layers follow the chosen growth direction, and travel avoids the deposited part. Export is enabled only when the current result allows it. Choose values for your own model and equipment; the illustrated settings apply only to the example. See the [Freeform guide](freeform_workbench_en.md) and [solid-growth method guide](solid_fill_method_en.md).
 
 ## 6. View existing G-code
 
 Choose **G-code File Preview** or **Open Existing G-code…** and select an existing file. Open the matching STEP only when needed. Use FIT, zoom, and scene visibility controls for model, extrusion, and travel; scroll the right panel for statistics and code context. Confirm the source controller semantics before interpreting rotary axes.
 
-![G-code file preview](assets/product_delivery/10_gcode_file_preview_zh.jpg)
+![G-code file preview detail: logo operation 2 (Chinese interface)](assets/current_delivery/gcode_logo_file_preview_zh.png)
 
 The screenshot contains G-code only. See the [G-code preview guide](gcode_preview_en.md).
 

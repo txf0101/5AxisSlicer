@@ -1,5 +1,7 @@
 # Curve 工作台图文手册
 
+本页路径类型和错误恢复图用于说明道线、参数和状态；完整布局与公共设置入口以前面的当前界面局部图为准。图中参考机型与示例 ID 不能直接用于自己的零件。
+
 > 初次使用请先完成[学习总册](user_learning_manual_zh.md)的 L01—L06；本页是 Curve 专项参考。叶轮边链用于练习有向链和法向，换零件后必须重新选择 edge、邻面和工艺参数。
 
 Curve 工作台沿 STEP 有向 edge 链生成 Buildup、Multi-pass Buildup 和 Offset Buildup。内部长度为 mm、角度为 rad；界面长度显示 mm。路径从 Source/Model frame 转换到 Build frame，再进入 Workpiece/Machine frame 做离线轨迹检查。
@@ -17,9 +19,9 @@ Curve 工作台沿 STEP 有向 edge 链生成 Buildup、Multi-pass Buildup 和 O
 
 项目保存的是 edge/face 的完整 `GeometryReference` 描述符、父实体信息和 kernel signature。STEP 更新后会做唯一重绑；缺失、重复候选或拓扑漂移会使操作无效并要求重新选择。
 
-![在 Viewer 中选边并写入有向边链](assets/product_delivery/20_curve_edge_selected_zh.png)
+![在 Viewer 中选边并写入有向边链](assets/current_delivery/curve_edges_zh.png)
 
-图中蓝色边已通过“采用 Viewer 已选边”写入“有向边链”；这是几何选择状态，还没有创建或生成操作。选择自己的模型时，边 ID 会不同。左侧设置栏和中间操作栏均可独立滚动。
+图中裁取有向边链字段和两条蓝色选中边，表示几何选择状态，不代表路径已生成或验证通过。采用边后仍须检查顺序、连通性、反向标志和法向引用。选择自己的模型时，边 ID 会不同。左侧设置栏和中间操作栏均可独立滚动。
 
 ## 2. 边链顺序、反向和法向
 
@@ -37,9 +39,9 @@ Curve 工作台沿 STEP 有向 edge 链生成 Buildup、Multi-pass Buildup 和 O
 | Multi-pass Buildup | 按层高沿法向累计抬升；相邻层交替方向 | 层数、累计高度、换向、Retract/Prime/Dwell 与沉积段分离 |
 | Offset Buildup | 以原链为第 0 道，沿 `normal × tangent` 正方向生成横向多道 | 道间距、道序、局部标架反转、自交、trimmed face 越界 |
 
-![当前界面选面和选边；橙色为面、蓝色为边](assets/product_delivery/06_curve_pick_edge_face_zh.png)
+![当前界面选面和选边；橙色为面、蓝色为边](assets/current_delivery/curve_edges_normal_face_zh.png)
 
-图中只完成了 Viewer 几何拾取，还没有创建或生成操作。生成后请在结果预览中单独检查路径；不能以 CAD 高亮代替路径检查。
+图中是现有 Curve 操作的 Viewer 几何选择局部：两条相邻蓝边和橙色法向面。采用 Viewer 选边会按点击顺序填入边 ID，并默认反向标志为 0；应用前必须核对边序、反向和法向面。此图不证明方向已通过检查或路径已生成。生成后请在结果预览中单独检查路径；不能以 CAD 高亮代替路径检查。
 
 ![Buildup 生成 Toolpath 的路径专用视图](assets/curve/current_c01_c05/06_curve_buildup_zh_1366x768_path_only.png)
 

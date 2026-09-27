@@ -13,6 +13,7 @@ os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
+from PyQt5.QtCore import Qt  # noqa: E402
 from PyQt5.QtWidgets import QApplication, QWidget  # noqa: E402
 
 from five_axis_slicer.command_kernel import CommandKernel  # noqa: E402
@@ -174,6 +175,51 @@ class ResourceLibraryUiTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.app = QApplication.instance() or QApplication([])
+
+    def test_nozzle_issue_names_actual_blocking_field_and_clears_after_repair(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            library = UserResourceLibrary(tmp)
+            controller = TubeSetupController(resource_library=library)
+            controller.select_nozzle(replace(complete_nozzle(), interface=None))
+            page = TubeSetupPage(viewer_factory=ViewerStub, resource_library=library)
+            self.addCleanup(page.close)
+            page.set_controller(controller, None)
+            page.tree.setCurrentItem(page._tree_items["nozzle"])
+            for language, field in (("zh", "安装接口"), ("en", "mounting interface")):
+                page.set_language(language)
+                self.assertEqual(page.editor_title.text(), "喷嘴" if language == "zh" else "Nozzle")
+                items = [page.issue_list.item(i) for i in range(page.issue_list.count())]
+                item = next(
+                    item
+                    for item in items
+                    if item.data(Qt.UserRole)["code"] == "SETUP_NOZZLE_INVALID"
+                )
+                self.assertIn(field, item.text())
+                self.assertNotIn("total length", item.text())
+                self.assertIn("SETUP_NOZZLE_INVALID", item.toolTip())
+            controller.select_nozzle(complete_nozzle())
+            page.refresh()
+            self.assertNotIn(
+                "SETUP_NOZZLE_INVALID",
+                {
+                    page.issue_list.item(i).data(Qt.UserRole)["code"]
+                    for i in range(page.issue_list.count())
+                },
+            )
+
+    def test_missing_part_issue_explains_action_and_preserves_diagnostic_identity(self) -> None:
+        page = TubeSetupPage(viewer_factory=ViewerStub)
+        self.addCleanup(page.close)
+        for language, action in (("zh", "闭合实体"), ("en", "closed solid")):
+            page.set_language(language)
+            item = next(
+                page.issue_list.item(i)
+                for i in range(page.issue_list.count())
+                if page.issue_list.item(i).data(Qt.UserRole)["code"] == "SETUP_PART_MISSING"
+            )
+            self.assertIn(action, item.text())
+            self.assertNotIn("SETUP_PART_MISSING", item.text())
+            self.assertIn("SETUP_PART_MISSING", item.toolTip())
 
     def test_page_lists_user_resources_and_keeps_editor_copies_in_project(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

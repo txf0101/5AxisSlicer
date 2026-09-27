@@ -1,0 +1,8 @@
+{
+  "request_id": 3,
+  "status": "complete",
+  "worker_elapsed_seconds": 6.765127,
+  "end_to_end_seconds": 7.377614,
+  "cache_format": "memory+render-index-v2",
+  "cache_hit": false
+}

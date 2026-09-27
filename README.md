@@ -60,7 +60,7 @@ python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -e ".[dev,cad-tests]"
 ```
 
-应用运行时直接使用 `cadquery-ocp`，兼容 NumPy 1.26 至 2.2。`cad-tests` 会引入 CadQuery 及其 NLopt 依赖，干净环境中的解析器可能选择 NumPy 2.x；只运行应用时无需安装该 extra。
+应用通过 `cadquery-ocp` 读取 STEP，平面偏置和支撑算法还使用 CadQuery，因此普通安装会同时安装两者。兼容 NumPy 1.26 至 2.2；依赖解析可能选择 NumPy 2.x。`cad-tests` 固定测试所需的 CasADi 版本，只运行应用时无需安装该 extra。
 
 `scripts/run_app.ps1` 默认调用当前 `PATH` 中的 `python`。可用 `-Python` 传入虚拟环境或 conda 解释器的完整路径。
 

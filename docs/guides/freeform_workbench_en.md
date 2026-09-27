@@ -16,9 +16,9 @@ The left Manufacturing Setup panel edits the current machine, nozzle, material, 
 6. Click **Generate**. Hide the model to see occluded lines; use bead-width display to inspect local width. Warning can allow offline export after review; Error blocks export.
 7. Export the six files: `main.gcode`, `toolpath.json`, `machine_axes.csv`, `warnings.json`, `preview.json`, and `manifest.json`.
 
-![Freeform operation controls](assets/product_delivery/04_freeform_mode_zh.jpg)
+![Freeform operation controls (Chinese-interface example)](assets/current_delivery/freeform_existing_surface_solid_zh.png)
 
-The screenshot shows an existing radial-solid operation to explain the difference between operation selectors. For this guide's finite guide workflow, create Surface or Thin Wall. The screenshot has no generated path.
+The cropped Chinese-interface screenshot shows an existing Surface Solid Fill operation to explain the difference between operation selectors. For this guide's finite guide workflow, create Surface or Thin Wall. The screenshot has no generated path.
 
 ## Guide references and parameters
 
@@ -38,6 +38,8 @@ Each guide entry needs `edge_ids`, one `reversed_flags` value per edge, and `fac
 Changes to geometry, materials, Setup, parameters, or controller contract make the result Stale. Undo can restore the previous valid result; cancellation before publication preserves it. If export is disabled, check operation state and issues; a visible CAD model does not mean a path was generated.
 
 ### Solid modes: growth direction and material regions
+
+In solid modes, successive face clicks add faces to the selection; clicking a selected face removes it. Drag with the left mouse button to rotate the model and select the opposite face. Surface and Thin Wall guide modes use one adjacent face at a time.
 
 For **Surface Solid Fill**, select the body, supporting face, opposite face, and root edge in the Viewer. Click **Build candidate from selected Viewer geometry** and verify each role. The **Surface-solid growth** selector appears for this operation type only. **Layers through surface thickness** keeps the original thickness-wise method. Choose **Grow outward from root edge** when a supported root edge is defined and layers should extend outward along the surface. Inspect first-bead support, layer-to-layer connection, and travel in the preview for either choice; see the [solid-growth method guide](solid_fill_method_en.md) for selection conditions.
 

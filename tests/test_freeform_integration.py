@@ -50,6 +50,7 @@ from five_axis_slicer.manufacturing.setup import (  # noqa: E402
     ManufacturingSetup,
 )
 from five_axis_slicer.models import SelectionState  # noqa: E402
+from five_axis_slicer.viewer_common import apply_pick_selection  # noqa: E402
 from five_axis_slicer.postprocessing.indexed_tube import GenerationCancelled  # noqa: E402
 from five_axis_slicer.project_io import load_project, save_project  # noqa: E402
 from five_axis_slicer.step_loader import load_step  # noqa: E402
@@ -262,10 +263,15 @@ def test_surface_solid_gui_converts_selected_root_edge_and_faces(configured) -> 
         "surface_solid_fill", operation_id="solid-gui-selection"
     )
     page = FreeformPage(controller=controller, viewer_factory=TubeViewerStub)
-    page.viewer.set_selection(
-        edge_ids={"body_002_edge_0011"},
-        face_ids={"body_002_face_0005", "body_002_face_0006"},
-    )
+    for kind, ids in (
+        ("edge", ("body_002_edge_0011",)),
+        ("face", ("body_002_face_0005", "body_002_face_0006")),
+    ):
+        page.pick_kind_combo.setCurrentIndex(page.pick_kind_combo.findData(kind))
+        page._set_pick_kind()
+        for entity_id in ids:
+            apply_pick_selection(page.viewer.selection, page.viewer.pick_request, kind, entity_id)
+    assert len(page.viewer.selection.face_ids) == 2
 
     page.use_selection_button.click()
     payload = json.loads(page.solid_geometry_edit.text())
@@ -294,6 +300,20 @@ def test_surface_solid_gui_converts_selected_root_edge_and_faces(configured) -> 
     page.set_language("en")
     assert page.use_selection_button.text() == "Use selected geometry"
     assert page.status_label.text().startswith("Status: ")
+    valid_geometry = page.solid_geometry_edit.text()
+    page.solid_geometry_edit.setText("{")
+    page.apply_button.click()
+    assert page._last_error
+    assert page.solid_geometry_edit.text() == "{"
+    assert not page.generate_button.isEnabled()
+    page.set_language("zh")
+    assert page.solid_geometry_edit.text() == "{"
+    page.solid_geometry_edit.setText(valid_geometry)
+    page.apply_button.click()
+    assert page._last_error is None
+    assert page.generate_button.isEnabled()
+    page.operation_combo.setCurrentIndex(page.operation_combo.findData(_operation.operation_id))
+    assert not page.viewer.pick_request.multiple
     page.close()
 
 
@@ -323,6 +343,39 @@ def test_project_switch_clears_old_freeform_path_overlay(configured) -> None:
     assert page.viewer.gcode_preview is None
     assert page.viewer.model is model
     page.close()
+
+
+def test_rejected_freeform_apply_preserves_draft_and_blocks_old_result(configured) -> None:
+    base, operation, _model, _guides = configured
+    controller = base.fork()
+    controller.generate_operation(operation.operation_id)
+    page = FreeformPage(controller=controller, viewer_factory=TubeViewerStub)
+    try:
+        assert page.export_button.isEnabled()
+        original = controller.operation(operation.operation_id)
+        valid_guides = page.guides_json_edit.text()
+        page.guides_json_edit.setText("[")
+        page._spins["feedrate_mm_min"].setValue(1023)
+        page.apply_button.click()
+        assert page._last_error
+        assert page.guides_json_edit.text() == "["
+        assert page._spins["feedrate_mm_min"].value() == 1023
+        assert controller.operation(operation.operation_id) is original
+        assert not page.generate_button.isEnabled()
+        assert not page.export_button.isEnabled()
+        page.set_language("en")
+        page.refresh(reload_controls=False)
+        assert page.guides_json_edit.text() == "["
+        assert not page.generate_button.isEnabled()
+        page.guides_json_edit.setText(valid_guides)
+        assert not page.export_button.isEnabled()
+        page.apply_button.click()
+        assert page._last_error is None
+        assert page.generate_button.isEnabled()
+        assert not page.export_button.isEnabled()
+        assert controller.product_state(operation.operation_id).status == "stale"
+    finally:
+        page.close()
 
 
 def test_freeform_viewer_can_pick_body_then_face_and_preserves_mode_after_reload(configured) -> None:
@@ -483,6 +536,31 @@ def test_station_button_updates_controller_after_apply(configured, monkeypatch) 
     page.close()
 
 
+def test_single_surface_solid_path_uses_parent_operation_identity(configured) -> None:
+    base, _operation, _model, _guides = configured
+    controller = base.fork()
+    solid = controller.create_operation("surface_solid_fill", operation_id="single-solid")
+    controller.configure_solid_operation(
+        operation_id=solid.operation_id,
+        solid_geometry={
+            "bodies": [{
+                "body_id": "body_002",
+                "surface_face_id": "body_002_face_0006",
+                "opposite_face_id": "body_002_face_0005",
+                "root_edge_id": "body_002_edge_0011",
+            }],
+        },
+        parameters=SolidFillProcessParameters(solid_thickness_mm=0.2),
+    )
+    result = controller.generate_operation(solid.operation_id)
+    assert len(result.plan.source_toolpath_ids) == 1
+    assert result.toolpath.operation_id == solid.operation_id
+    assert result.manifest.operation_id == solid.operation_id
+    assert all(p.operation_id == solid.operation_id for p in result.toolpath.points)
+    assert all(e.operation_id == solid.operation_id for e in result.toolpath.events)
+    assert not any(e.event_type == "operation_change" for e in result.toolpath.events)
+
+
 def test_surface_solid_controller_blocks_unsafe_operation_transition(configured) -> None:
     base, _operation, _model, _guides = configured
     controller = base.fork()
@@ -594,3 +672,86 @@ def test_controller_profile_remains_offline_only(configured) -> None:
     state = controller.state_json()
     assert state["capabilities"]["offline_only"]
     assert not OWN_AC_OFFLINE_CONTROLLER.machine_executable
+
+
+@pytest.mark.parametrize("language", ["zh", "en"])
+def test_solid_diagnostics_explain_recovery_and_preserve_details(configured, language):
+    from types import SimpleNamespace
+    from PyQt5.QtCore import Qt
+    from five_axis_slicer.manufacturing.setup import IssueSeverity, ValidationIssue
+
+    controller, *_ = configured
+    page = FreeformPage(controller=controller.fork(), viewer_factory=TubeViewerStub)
+    page.set_language(language)
+    issues = (
+        ValidationIssue("freeform.metric.solid_relative_volume_error", IssueSeverity.ERROR,
+                        "", {"value": 0.79, "limit": 0.1}),
+        ValidationIssue("motion.non_deposition_route_unavailable", IssueSeverity.ERROR,
+                        "point-43", {"required_clearance_mm": 0.2}),
+        ValidationIssue("motion.transition_route_unavailable", IssueSeverity.ERROR,
+                        "transition-02-depart", {"measured_distance_mm": 0.06339}),
+    )
+    warnings = tuple(
+        ValidationIssue("xyzac.rotary_singularity", IssueSeverity.WARNING, f"warning-{i}")
+        for i in range(5)
+    )
+    page._refresh_issues(warnings, SimpleNamespace(validation=SimpleNamespace(issues=issues)))
+    assert ("填充厚度" if language == "zh" else "fill thickness") in page.issue_list.item(0).text()
+    assert ("喷嘴" if language == "zh" else "nozzle") in page.issue_list.item(1).text()
+    assert "0.79" in page.issue_list.item(0).toolTip()
+    assert "point-43" in page.issue_list.item(1).toolTip()
+    assert "0.2" in page.issue_list.item(1).toolTip()
+    assert page.issue_list.item(1).data(Qt.UserRole) == issues[1].to_json()
+    assert ("生长方向" if language == "zh" else "growth direction") in page.issue_list.item(2).text()
+    assert "0.06339" in page.issue_list.item(2).toolTip()
+    assert [page.issue_list.item(i).data(Qt.UserRole) for i in range(3, 8)] == [
+        issue.to_json() for issue in warnings
+    ]
+    page.close()
+
+
+@pytest.mark.parametrize("language", ["zh", "en"])
+def test_missing_opposite_face_explains_recovery_and_preserves_draft(configured, language):
+    base, _operation, model, _guides = configured
+    controller = FreeformController(model, setup=base.setup)
+    controller.create_operation("surface_solid_fill", operation_id="missing-opposite")
+    page = FreeformPage(controller=controller, viewer_factory=TubeViewerStub)
+    payload = {"bodies": [{
+        "body_id": "body_002", "surface_face_id": "body_002_face_0006",
+        "root_edge_id": "body_002_edge_0011",
+    }]}
+    draft = json.dumps(payload)
+    page.solid_geometry_edit.setText(draft)
+    page.apply_button.click()
+    page.set_language(language)
+    assert page._last_error == "opposite_face_id is required"
+    assert ("对侧面" if language == "zh" else "Opposite face") in page.status_label.text()
+    assert "opposite_face_id" in page.status_label.text()
+    assert page.solid_geometry_edit.text() == draft
+    assert not page.generate_button.isEnabled()
+    assert not page.export_button.isEnabled()
+    payload["bodies"][0]["opposite_face_id"] = "body_002_face_0005"
+    page.solid_geometry_edit.setText(json.dumps(payload))
+    page.apply_button.click()
+    assert page._last_error is None
+    assert page.generate_button.isEnabled()
+    page.close()
+
+
+@pytest.mark.parametrize("language", ["zh", "en"])
+def test_unreachable_orientation_has_actionable_status(configured, language):
+    controller, *_ = configured
+    page = FreeformPage(controller=controller.fork(), viewer_factory=TubeViewerStub)
+    raw = "xyzac.orientation_unreachable at op01-point-00000001:"
+    page._last_error = raw
+    page.set_language(language)
+    page._update_status_label()
+    assert ("承载面" if language == "zh" else "supporting face") in page.status_label.text()
+    assert "A/C" in page.status_label.text()
+    assert raw in page.status_label.text()
+    assert page.status_label.toolTip() == raw
+    page._last_error = None
+    page._update_status_label()
+    assert raw not in page.status_label.text()
+    assert page.status_label.toolTip() == ""
+    page.close()

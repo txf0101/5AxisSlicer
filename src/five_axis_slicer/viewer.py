@@ -16,6 +16,7 @@ from vtk.util.numpy_support import vtk_to_numpy
 from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
 from . import viewer_common as _viewer_common
+from .build_surface_vtk import build_surface_actor
 from .gcode_preview import (
     GCodePathSegment,
     GCodePreview,
@@ -546,53 +547,7 @@ class VtkModelViewer(BambuNavigationMixin, QVTKRenderWindowInteractor):
         if surface is None:
             self.render()
             return
-        local_points: list[tuple[float, float]]
-        if surface.shape == "circle" and surface.diameter_mm is not None:
-            radius = surface.diameter_mm * 0.5
-            local_points = [
-                (
-                    radius * math.cos(2.0 * math.pi * index / 64),
-                    radius * math.sin(2.0 * math.pi * index / 64),
-                )
-                for index in range(64)
-            ]
-        else:
-            width = float(surface.width_mm or 100.0)
-            depth = float(surface.depth_mm or width)
-            local_points = [
-                (-width * 0.5, -depth * 0.5),
-                (width * 0.5, -depth * 0.5),
-                (width * 0.5, depth * 0.5),
-                (-width * 0.5, depth * 0.5),
-            ]
-        points = vtk.vtkPoints()
-        for left, up in local_points:
-            points.InsertNextPoint(
-                *tuple(
-                    surface.origin[index]
-                    + left * surface.x_axis[index]
-                    + up * surface.y_axis[index]
-                    for index in range(3)
-                )
-            )
-        line = vtk.vtkPolyLine()
-        line.GetPointIds().SetNumberOfIds(len(local_points) + 1)
-        for index in range(len(local_points)):
-            line.GetPointIds().SetId(index, index)
-        line.GetPointIds().SetId(len(local_points), 0)
-        cells = vtk.vtkCellArray()
-        cells.InsertNextCell(line)
-        polydata = vtk.vtkPolyData()
-        polydata.SetPoints(points)
-        polydata.SetLines(cells)
-        mapper = vtk.vtkPolyDataMapper()
-        mapper.SetInputData(polydata)
-        actor = vtk.vtkActor()
-        actor.SetMapper(mapper)
-        actor.GetProperty().SetColor(0.42, 0.48, 0.58)
-        actor.GetProperty().SetLineWidth(2.0)
-        actor.GetProperty().SetOpacity(0.75)
-        actor.SetPickable(False)
+        actor = build_surface_actor(surface)
         self.renderer.AddActor(actor)
         self.build_surface_actor = actor
         self.render()
@@ -1114,7 +1069,8 @@ class VtkModelViewer(BambuNavigationMixin, QVTKRenderWindowInteractor):
         return actor
 
     def render(self) -> None:
-        self.GetRenderWindow().Render()
+        # 由 Qt 绘制事件触发渲染，避免构造期间提前创建原生 OpenGL 上下文。
+        super().Render()
 
 
 def _vtk_matrix(values: Iterable[Iterable[float]]) -> vtk.vtkMatrix4x4:

@@ -72,6 +72,25 @@ def test_surface_solid_fill_covers_face_and_thickness_from_supported_root(tmp_pa
     assert roles == {"skin", "infill"}
 
 
+def test_thickness_growth_moves_away_from_nozzle(tmp_path):
+    model, selection = _box_case(tmp_path)
+    paths, _ = generate_surface_solid_fill(
+        model, (selection,), "growth-direction", SurfaceSolidFillParameters(1.0)
+    )
+    centers = [
+        tuple(sum(p.position[axis] for p in path.points) / len(path.points)
+              for axis in range(3))
+        for path in paths
+    ]
+    assert [center[1] for center in centers] == pytest.approx([-0.3, -0.1, 0.1, 0.3, 0.5])
+    assert all(point.nozzle_axis == pytest.approx((0, -1, 0))
+               for path in paths for point in path.points)
+    # The nozzle axis points toward the deposited surface; growth must oppose it.
+    for previous, current, path in zip(centers, centers[1:], paths[1:]):
+        displacement = tuple(b - a for a, b in zip(previous, current))
+        assert sum(a * b for a, b in zip(displacement, path.points[0].nozzle_axis)) < 0
+
+
 def test_surface_solid_fill_rejects_root_edge_on_another_face(tmp_path):
     model, selection = _box_case(tmp_path)
     wrong = next(

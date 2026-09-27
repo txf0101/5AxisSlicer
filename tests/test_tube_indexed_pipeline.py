@@ -550,6 +550,9 @@ class IndexedValidationTests(unittest.TestCase):
         self.assertFalse(clear.has_errors)
         first, second = self.toolpath.points[:2]
         midpoint = tuple((a + b) * 0.5 for a, b in zip(first.position, second.position))
+        # This analytic vertical tube has h=1: the tip is 0.5 mm above
+        # the bead center. Place the obstacle on the actual nozzle sweep.
+        midpoint = (midpoint[0], midpoint[1], midpoint[2] + 0.5)
         obstacle = CollisionBox(
             "fixture-mid-motion",
             "fixture",
@@ -574,9 +577,10 @@ class IndexedValidationTests(unittest.TestCase):
         deposition = next(
             point for point in self.toolpath.points if point.point_type == "deposition"
         )
+        tip = (deposition.position[0], deposition.position[1], deposition.position[2] + 0.5)
         bounds = (
-            tuple(value - 0.02 for value in deposition.position),
-            tuple(value + 0.02 for value in deposition.position),
+            tuple(value - 0.02 for value in tip),
+            tuple(value + 0.02 for value in tip),
         )
         substrate = CollisionBox("substrate", "substrate", *bounds)
         fixture = CollisionBox("fixture", "fixture", *bounds)

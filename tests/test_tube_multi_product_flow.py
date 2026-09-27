@@ -183,7 +183,7 @@ def test_continuous_reads_back_exports_six_artifacts_and_reopens_state(
 
     assert result.operation_type == "tube_continuous"
     assert result.exportable and result.readback.passed
-    assert result.manifest.algorithm_version == "tube-continuous-product-v2"
+    assert result.manifest.algorithm_version == "tube-continuous-product-v3"
     destination = export_tube_product(result, tmp_path / "continuous-result")
     assert {item.name for item in destination.iterdir()} == {
         "machine_axes.csv",

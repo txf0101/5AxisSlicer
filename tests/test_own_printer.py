@@ -36,7 +36,9 @@ def test_paper_values_unknown_limits_and_portable_file():
     assert profile.reference_only
     assert profile.joint_map["A"].soft_limit_max == math.pi
     assert profile.joint_map["C"].soft_limit_min == -2 * math.pi
-    assert profile.build_surfaces[0].diameter_mm == 180
+    assert profile.build_surfaces[0].diameter_mm == 150
+    assert profile.build_surfaces[0].shape == "circle"
+    assert profile.version == 2
     for joint in profile.joints:
         assert joint.max_velocity is None
         assert joint.max_acceleration is None

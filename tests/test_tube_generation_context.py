@@ -127,9 +127,9 @@ def test_printed_planar_base_is_not_treated_as_an_existing_obstacle(source_model
         operation_type="tube_buildup",
         type_config=TubeBuildupOperationConfig(include_planar_base=True),
     )
-    assert [(box.obstacle_id, box.role) for box in _collision_boxes(source_model, ctrl.setup, existing)] == [
-        ("body_002", "substrate")
-    ]
+    assert [
+        (box.obstacle_id, box.role) for box in _collision_boxes(source_model, ctrl.setup, existing)
+    ] == [("body_002", "substrate")]
     assert _collision_boxes(source_model, ctrl.setup, printed) == ()
 
 
@@ -154,13 +154,17 @@ def test_source_build_mount_and_independent_machine_fk(source_model, build):
     for point, sample in zip(result.toolpath.points, result.trajectory.samples, strict=True):
         delta = tuple(point.position[k] - centre[k] for k in range(3))
         assert math.dist(point.nozzle_axis, tuple(-v for v in axis)) < 1e-7
-        assert abs(sum(delta[k] * axis[k] for k in range(3))) < 1e-7
-        assert abs(math.sqrt(sum(v * v for v in delta)) - 5.5) < 0.001
+        if point.point_type == "deposition":
+            assert abs(sum(delta[k] * axis[k] for k in range(3))) < 1e-7
+            assert (
+                min(abs(math.sqrt(sum(v * v for v in delta)) - radius) for radius in (5.25, 5.75))
+                < 0.001
+            )
         machine = ctrl.machine_profile()
         physical = (
             machine.mount_transform(ctrl.setup.mount_datum_id, sample.joint_positions)
             @ ctrl.setup.T_mount_from_build
-        ).transform_point(point.position)
+        ).transform_point(tuple(point.position[k] - point.nozzle_axis[k] * 0.25 for k in range(3)))
         tool = machine.link_transform(machine.tool_link_id, sample.joint_positions).translation
         actual_tip = (tool[0], tool[1], tool[2] - 2)
         assert math.dist(physical, actual_tip) < 1e-7
@@ -218,7 +222,8 @@ def test_step_chord_limit_checks_real_segment_interiors(source_model):
     for left, right in zip(result.toolpath.points, result.toolpath.points[1:]):
         if right.point_type == "deposition":
             midpoint = tuple((a + b) * 0.5 for a, b in zip(left.position, right.position))
-            errors.append(abs(5.5 - math.hypot(midpoint[0] - 50, midpoint[1] - 50)))
+            radius = math.hypot(left.position[0] - 50, left.position[1] - 50)
+            errors.append(abs(radius - math.hypot(midpoint[0] - 50, midpoint[1] - 50)))
     assert max(errors) <= 0.001
     assert result.generation_context["collision"]["check_ipw"] is True
     assert {box["id"] for box in result.generation_context["collision"]["obstacles"]} == {
@@ -287,7 +292,7 @@ def test_nonzero_rotary_centres_and_mount_offset_use_one_motion_transform(source
         physical = (
             machine.mount_transform(ctrl.setup.mount_datum_id, sample.joint_positions)
             @ ctrl.setup.T_mount_from_build
-        ).transform_point(point.position)
+        ).transform_point(tuple(point.position[k] - point.nozzle_axis[k] * 0.25 for k in range(3)))
         tool = machine.link_transform(machine.tool_link_id, sample.joint_positions).translation
         assert math.dist(physical, (tool[0], tool[1], tool[2] - 2)) < 1e-7
 
@@ -368,7 +373,7 @@ def test_partial_tail_product_readback_and_old_context_stale(source_model, monke
     )
     result = ctrl.generate_operation("tube")
     assert result.exportable and result.readback.passed
-    assert result.manifest.algorithm_version == "tube-indexed-product-v3"
+    assert result.manifest.algorithm_version == "tube-indexed-product-v7"
     deposition = [p for p in result.toolpath.points if p.point_type == "deposition"]
     assert {p.layer_height_mm for p in deposition} == {0.5}
     assert sum(p.material_volume_mm3 for p in deposition) == pytest.approx(

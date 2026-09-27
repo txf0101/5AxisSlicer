@@ -190,6 +190,35 @@ class TubeControllerTests(unittest.TestCase):
         self.assertEqual(build.origin_reference.resolved_point, (15.0, 0.0, 0.0))
         self.assertEqual(build.T_target_from_source.transform_point((15, 0, 0)), (0.0, 0.0, 0.0))
 
+    def test_reset_mount_draft_removes_hidden_reference_only_when_applied(self) -> None:
+        controller = TubeSetupController(cad_model())
+        controller.confirm_assignments(("solid-base", "solid-tube"))
+        apply_numeric_frame(controller, MODEL_CS_NODE, (0, 0, 0))
+        apply_numeric_frame(controller, BUILD_CS_NODE, (0, 0, 0))
+        controller.select_machine(CARTESIAN_REFERENCE)
+        offset = RigidTransform.from_translation(
+            (250, 250, 250), source_frame="build", target_frame="build_plate_mount"
+        )
+        controller.begin_placement_draft(
+            mount_datum_id="build_plate_mount", reference_transform=offset
+        )
+        controller.apply_placement_draft()
+        controller.begin_placement_draft()
+        controller.set_placement_mount("build_plate_mount")
+        controller.set_placement_adjustment((0, 0, 0))
+        self.assertEqual(controller.setup.T_mount_from_build, offset)
+        self.assertEqual(
+            controller.placement_draft().T_mount_from_build.transform_point((0, 0, 0)),
+            (0, 0, 0),
+        )
+        controller.cancel_draft(PLACEMENT_NODE)
+        self.assertEqual(controller.setup.T_mount_from_build, offset)
+        controller.begin_placement_draft()
+        controller.set_placement_mount("build_plate_mount")
+        controller.set_placement_adjustment((0, 0, 0))
+        actual = controller.apply_placement_draft()
+        self.assertEqual(actual.transform_point((0, 0, 0)), (0, 0, 0))
+
     def test_dependencies_reach_coordinates_valid_and_setup_ready(self) -> None:
         controller = TubeSetupController(cad_model())
         controller.create_operation(operation_id="tube-1")

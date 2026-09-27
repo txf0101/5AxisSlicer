@@ -7,6 +7,10 @@ import re
 from typing import Any
 
 _MESSAGES = {
+    "planar.body_missing": (
+        "当前操作引用的实体不存在。请在“实体”中重新选择当前模型的实体，然后点击“应用”。",
+        "The operation's referenced body is missing. Select a current model body under Body, then click Apply.",
+    ),
     "MACHINE_REFERENCE_ONLY": (
         "当前为内置参考机型，仅用于离线检查。",
         "The selected built-in reference machine is for offline checks only.",
@@ -155,6 +159,22 @@ _MESSAGES = {
     "SETUP_NOZZLE_MISSING": ("尚未选择喷嘴。", "Select a nozzle."),
     "SETUP_MACHINE_MISSING": ("尚未选择机型。", "Select a machine."),
     "SETUP_PART_MISSING": ("尚未指定制造零件。", "Assign the manufacturing part."),
+    "MODEL_CS_MISSING": (
+        "请在制造设置中定义并应用模型坐标系。",
+        "Define and apply Model CS in Manufacturing Setup.",
+    ),
+    "BUILD_CS_MISSING": (
+        "请在制造设置中定义并应用构建坐标系。",
+        "Define and apply Build CS in Manufacturing Setup.",
+    ),
+    "PLACEMENT_MISSING": (
+        "请在制造设置中选择并应用装夹。",
+        "Select and apply Placement in Manufacturing Setup.",
+    ),
+    "PLACEMENT_DIRTY": (
+        "坐标或机床设置已变化，请重新检查并应用装夹。",
+        "Coordinates or machine settings changed; review and apply Placement again.",
+    ),
 }
 _CODE = re.compile(r"(?:planar|xyzac|material)\.[a-z_]+")
 _SEVERITIES = {"error": ("错误", "Error"), "warning": ("警告", "Warning"), "info": ("提示", "Info")}

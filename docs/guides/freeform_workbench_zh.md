@@ -18,9 +18,9 @@ Freeform 的导引模式支持在一个明确修剪面或最多 16 个显式面�
 6. 点“生成与检查 / Generate”。若 CAD 模型遮住路线，可在右侧取消“显示模型”查看完整线条；切换“沉积道宽”可检查线宽效果。状态为 `Warning` 且导出按钮可用时，说明离线产品和严格回读通过；控制器尚需用户核对的项目会保留 Warning。
 7. 导出目录固定包含 `main.gcode`、`toolpath.json`、`machine_axes.csv`、`warnings.json`、`preview.json`、`manifest.json` 六个文件。
 
-![Freeform 顶部的新建操作类型和当前操作](assets/product_delivery/04_freeform_mode_zh.jpg)
+![Freeform 顶部的新建操作类型和当前操作](assets/current_delivery/freeform_existing_surface_solid_zh.png)
 
-图中“现有操作”为径向实体，只用来说明两个选择框的区别；执行本节导引模式时，应新建 `Surface` 或 `Thin Wall`。图中只有 CAD 模型，尚未生成路径。
+图中“现有操作”为 Surface Solid Fill 曲面实体，只用来说明两个选择框的区别；执行本节导引模式时，应新建 `Surface` 或 `Thin Wall`。图中只有 CAD 模型，尚未生成路径。
 
 ## 2. 多导引线格式
 
@@ -63,6 +63,8 @@ Freeform 的导引模式支持在一个明确修剪面或最多 16 个显式面�
 GUI、受限脚本 `freeform/自由曲面` 与 `/freeform/*` HTTP 路由使用同一套操作参数和检查规则。
 
 ### 实体模式：生长方式与材料区域
+
+实体模式下，依次单击可选中多个面，再次单击已选面可取消该面。按住鼠标左键拖动可旋转模型，再选对侧面。Surface 和 Thin Wall 导引模式仍一次选一个邻面。
 
 在 `Surface Solid Fill` 中，先从 Viewer 选择实体、承载面、对面和根边，点“从 Viewer 已选几何建立候选”并核对角色。“曲面实体生长方式”有两个选项：“沿侧面厚度叠层”保持原有厚度方向；“从根边向外生长”用于有明确承载根边、路径需沿曲面向外逐层延伸的模型。选项仅在 `Surface Solid Fill` 操作中显示。两种方式都应在预览中检查首道承接、每层连接和空移，不要根据外形相似直接选模式；具体适用条件见[实体方法说明](solid_fill_method_zh.md)。
 

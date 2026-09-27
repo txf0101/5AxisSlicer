@@ -27,6 +27,7 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
+from .build_surface_presentation import refresh_source_platform
 from .planar_commands import PlanarCommandService
 from .planar_controller import PlanarController
 from .planar_generation_context import (
@@ -475,15 +476,20 @@ class _PlanarPageView(QWidget):
             self.viewer.set_model_visible(visible)
 
     def _set_path_display(self, _index: int) -> None:
-        if hasattr(self.viewer, "set_quality_mode") and getattr(self.viewer, "gcode_preview", None) is not None:
+        if (
+            hasattr(self.viewer, "set_quality_mode")
+            and getattr(self.viewer, "gcode_preview", None) is not None
+        ):
             self.viewer.set_quality_mode(str(self.path_display_combo.currentData()))
 
-    def refresh(self, *_ignored: Any) -> None:
+    def refresh(self, *_ignored: Any, reload_controls: bool = True) -> None:
+        refresh_source_platform(self)
         self._refresh_operations()
         current_type = str(self.operation_type_combo.currentData() or "planar_region")
-        self._refresh_bodies()
+        if reload_controls:
+            self._refresh_bodies()
         operation = self._selected_operation()
-        if operation is not None:
+        if operation is not None and reload_controls:
             self._load_operation_controls(operation)
         effective_type = current_type if operation is None else operation.operation_type
         reason = self._generation_reason(effective_type, operation is not None)
@@ -771,9 +777,7 @@ class PlanarPage(_PlanarPageView):
         self.refresh()
 
     def _install_generation_event_pump(self) -> None:
-        self.controller.set_generation_event_pump(
-            throttled_event_pump(QApplication.processEvents)
-        )
+        self.controller.set_generation_event_pump(throttled_event_pump(QApplication.processEvents))
 
     def _show_selected_result(self, operation: Any, result: Any, *, emit: bool = False) -> None:
         if operation is None or result is None:

@@ -1,0 +1,32 @@
+[
+  {
+    "name": "machine_axes.csv",
+    "bytes": 91167165,
+    "sha256": "8cef9d64e9f7099c22ef9404a5a49549ffc024e0540fbbf880487eaa96746389"
+  },
+  {
+    "name": "main.gcode",
+    "bytes": 124552449,
+    "sha256": "cdee2ed4a2452e37606f48ab2fcae242c3e66057d9d80ae3658a88093f09f499"
+  },
+  {
+    "name": "manifest.json",
+    "bytes": 2017195,
+    "sha256": "e71e0dc23bb69674a2aa45768ab56f1a2460e92b30fdcb224863ff68f05538ad"
+  },
+  {
+    "name": "preview.json",
+    "bytes": 580316286,
+    "sha256": "e66370a0c5abb080f9b626186e92d994bbc409d362e4d59577f7662d2da54471"
+  },
+  {
+    "name": "toolpath.json",
+    "bytes": 782223143,
+    "sha256": "65a2c19a22cc0c1caeb62538d2808f4fefaaa6ea18e15f8e0aaa703e266ff6b5"
+  },
+  {
+    "name": "warnings.json",
+    "bytes": 1873324,
+    "sha256": "f5fc3d95f9360776a0c2d831560c607c085c2a48803ce4784174ba6d12f048f6"
+  }
+]

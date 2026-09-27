@@ -536,3 +536,32 @@ def test_batched_nozzle_frustum_distance_matches_scalar_geometry():
 
     assert distances == pytest.approx([item[0] for item in scalar], abs=1.0e-7)
     assert heights == pytest.approx([item[1] for item in scalar], abs=1.0e-5)
+
+@pytest.mark.parametrize("planar_exact", [True, False])
+@pytest.mark.parametrize("sequence", [1, 4, 9, 10000])
+def test_printed_index_repeated_cells_keep_exact_prefix(planar_exact, sequence):
+    index = _PrintedSegmentIndex(_operation("planar", 0, (0, 0, -1)), 3.0)
+    index.nonplanar_cells = {(0, 0, 0): [1, 3, 8, 1000], (1, 0, 0): [2, 4, 7]}
+    index.planar_cells = {(0, 0, 0): [5, 9], (2, 0, 0): [6, 10]}
+    index.planar_broad_cells = {(0, 0, 0): [5, 9], (1, 0, 0): [6, 10]}
+    samples = [
+        ((0., 0., 0.), .2, (0., 0., 1.), 0., 0., "tip", False, 0., 0.),
+        ((12., 0., 0.), .2, (1., 0., 0.), 0., 0., "tilt", False, 0., 0.),
+    ] * 1100
+    # Independent union from the known occupied cells, including the tilted
+    # broad-planar branch and both sides of the strict prefix boundary.
+    expected = [value for value in range(1, 11) if value < sequence]
+    if sequence > 1000:
+        expected.append(1000)
+    assert index.candidates(samples, sequence, planar_exact=planar_exact) == expected
+
+
+def test_printed_index_candidate_query_is_cancellable_before_large_scan():
+    index = _PrintedSegmentIndex(_operation("planar", 0, (0, 0, -1)), 3.0)
+    sample = ((0., 0., 0.), .2, (0., 0., 1.), 0., 0., "tip", False, 0., 0.)
+
+    def cancel():
+        raise RuntimeError("cancelled query")
+
+    with pytest.raises(RuntimeError, match="cancelled query"):
+        index.candidates([sample] * 5000, 2, checkpoint=cancel)

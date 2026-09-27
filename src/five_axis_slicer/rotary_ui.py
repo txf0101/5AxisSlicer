@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from collections import Counter
-from collections.abc import Mapping
 import math
 from pathlib import Path
 from typing import Any, Callable, cast
@@ -28,6 +27,8 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
+from .workbench_issue_ui import jump_to_rotary_issue
+from .build_surface_presentation import refresh_source_platform
 from .command_kernel import CommandError
 from .gcode_preview import GCodePreview
 from .generation_event_pump import throttled_event_pump
@@ -47,6 +48,7 @@ from .ui_controls import (
     ScrollSafeSpinBox as _ScrollSafeSpinBox,
 )
 from .viewer import ModelViewer
+from .workbench_issue_ui import refresh_rotary_issues, rotary_status_text
 
 
 _TEXT = {
@@ -119,6 +121,7 @@ _TEXT = {
         "no_cad": "请先打开 STEP 模型。",
         "setup": "需要完整且已应用的 Setup：坐标、机型、喷嘴、材料与安装。",
         "operation_required": "请先新建操作。",
+        "apply_required": "参数应用失败；请修正输入并重新应用后再生成或导出。",
         "region_required": "Around Part 至少需要一个有向角区间。",
         "select_one_axis": "请在 Viewer 中只选一条可确定轴向的边。",
         "select_contours": "请在 Viewer 中选择一条或多条轮廓边。",
@@ -146,9 +149,9 @@ _TEXT = {
         "axis_edge": "Rotary axis-direction edge",
         "contour_edges": "Profile edges",
         "surface_faces": "Rotary surfaces",
-        "pick_axis": "Use Viewer-selected axis-direction edge",
-        "pick_contours": "Use Viewer-selected profile edges",
-        "pick_surfaces": "Use Viewer-selected surfaces",
+        "pick_axis": "Use Viewer selection:\naxis-direction edge",
+        "pick_contours": "Use Viewer selection:\nprofile edges",
+        "pick_surfaces": "Use Viewer selection:\nsurfaces",
         "axis_origin": "Axis origin X,Y,Z (Source mm)",
         "axis_direction": "Axis unit direction X,Y,Z",
         "zero_direction": "Zero-angle direction X,Y,Z",
@@ -200,6 +203,7 @@ _TEXT = {
         "no_cad": "Open a STEP model first.",
         "setup": "A complete applied Setup is required: coordinates, machine, nozzle, material and placement.",
         "operation_required": "Create an operation first.",
+        "apply_required": "Applying parameters failed; correct and apply the inputs before generating or exporting.",
         "region_required": "Around Part requires at least one directed angular region.",
         "select_one_axis": "Select exactly one axis-bearing edge in Viewer.",
         "select_contours": "Select one or more profile edges in Viewer.",
@@ -241,6 +245,7 @@ class RotaryPage(QWidget):
         self._selected_operation_id: str | None = None
         self._viewer_operation_id: str | None = None
         self._last_error: str | None = None
+        self._apply_failed = False
         self._generation_in_progress = False
         self.viewer = (viewer_factory or ModelViewer)(self)
         self._build_ui()
@@ -323,8 +328,8 @@ class RotaryPage(QWidget):
         self.pick_contours_button = QPushButton()
         self.pick_surfaces_button = QPushButton()
         selection_actions.addWidget(self.pick_axis_button, 0, 0)
-        selection_actions.addWidget(self.pick_contours_button, 0, 1)
-        selection_actions.addWidget(self.pick_surfaces_button, 1, 0, 1, 2)
+        selection_actions.addWidget(self.pick_contours_button, 1, 0)
+        selection_actions.addWidget(self.pick_surfaces_button, 2, 0)
         layout.addLayout(form)
         layout.addLayout(selection_actions)
 
@@ -481,6 +486,7 @@ class RotaryPage(QWidget):
         self._selected_operation_id = None
         self._viewer_operation_id = None
         self._last_error = None
+        self._apply_failed = False
         self._install_generation_event_pump()
         self._load_model_into_viewer()
         self._set_pick_kind()
@@ -496,7 +502,10 @@ class RotaryPage(QWidget):
             self.viewer.set_model_visible(visible)
 
     def _set_path_display(self, _index: int) -> None:
-        if hasattr(self.viewer, "set_quality_mode") and getattr(self.viewer, "gcode_preview", None) is not None:
+        if (
+            hasattr(self.viewer, "set_quality_mode")
+            and getattr(self.viewer, "gcode_preview", None) is not None
+        ):
             self.viewer.set_quality_mode(str(self.path_display_combo.currentData()))
 
     def set_language(self, language: str) -> None:
@@ -541,12 +550,14 @@ class RotaryPage(QWidget):
             button.setText(self._t(key))
         self.preview_only_check.setText("")
         self.help_label.setText(self._t("help"))
-        self.refresh()
+        self.refresh(reload_controls=False)
 
     def state_json(self) -> dict[str, Any]:
         state = self.controller.state_json()
         operation = self._selected_operation()
-        result = None if operation is None else self.controller.product_result(operation.operation_id)
+        result = (
+            None if operation is None else self.controller.product_result(operation.operation_id)
+        )
         trajectory = None if result is None else result.trajectory.to_json()
         state["ui"] = {
             "language": self.language,
@@ -566,18 +577,31 @@ class RotaryPage(QWidget):
         """Return the selected result trajectory for axis-table/viewer consumers."""
 
         operation = self._selected_operation()
-        result = None if operation is None else self.controller.product_result(operation.operation_id)
+        result = (
+            None if operation is None else self.controller.product_result(operation.operation_id)
+        )
         return None if result is None else result.trajectory
 
-    def refresh(self, *_ignored: Any) -> None:
+    def refresh(self, *_ignored: Any, reload_controls: bool = True) -> None:
+        refresh_source_platform(self)
         self._refresh_operations()
         operation = self._selected_operation()
-        if operation is not None:
+        if operation is not None and reload_controls:
             self._load_operation_controls(operation)
         self._update_operation_visibility()
-        result = None if operation is None else self.controller.product_result(operation.operation_id)
-        product = None if operation is None else self.controller.product_state(operation.operation_id)
+        result = (
+            None if operation is None else self.controller.product_result(operation.operation_id)
+        )
+        product = (
+            None if operation is None else self.controller.product_state(operation.operation_id)
+        )
         self._refresh_issues(result)
+        reason = self._refresh_buttons(operation, product, result)
+        self.status_label.setText(self._status_text(product, reason))
+        self._show_result(operation, result)
+        self.state_changed.emit(self.state_json())
+
+    def _refresh_buttons(self, operation: Any, product: Any, result: Any) -> str | None:
         reason = self._generation_reason(operation)
         self.generate_button.setEnabled(reason is None and not self._generation_in_progress)
         self.generate_button.setToolTip(reason or "")
@@ -592,13 +616,16 @@ class RotaryPage(QWidget):
             and product.status in {"ready", "warning"}
             and result
             and result.exportable
+            and not self._apply_failed
         )
         self.export_button.setEnabled(exportable and not self._generation_in_progress)
-        self.undo_button.setEnabled(self.commands.kernel.can_undo and not self._generation_in_progress)
-        self.redo_button.setEnabled(self.commands.kernel.can_redo and not self._generation_in_progress)
-        self.status_label.setText(self._status_text(product, reason))
-        self._show_result(operation, result)
-        self.state_changed.emit(self.state_json())
+        self.undo_button.setEnabled(
+            self.commands.kernel.can_undo and not self._generation_in_progress
+        )
+        self.redo_button.setEnabled(
+            self.commands.kernel.can_redo and not self._generation_in_progress
+        )
+        return reason
 
     def _create(self) -> None:
         try:
@@ -645,13 +672,13 @@ class RotaryPage(QWidget):
             )
             self._last_error = None
             self._viewer_operation_id = None
+            self._apply_failed = False
         except (CommandError, KeyError, TypeError, ValueError) as exc:
             self._last_error = str(exc)
-        self.refresh()
+            self._apply_failed = True
+        self.refresh(reload_controls=self._last_error is None)
 
-    def _geometry_from_controls(
-        self, current: RotaryGeometrySelection
-    ) -> RotaryGeometrySelection:
+    def _geometry_from_controls(self, current: RotaryGeometrySelection) -> RotaryGeometrySelection:
         regions = self._parse_regions()
         frame = RotaryFrame(
             self._vector(self.axis_origin_edit.text(), "axis_origin_mm"),
@@ -817,6 +844,7 @@ class RotaryPage(QWidget):
         self.operation_combo.blockSignals(False)
 
     def _load_operation_controls(self, operation: Any) -> None:
+        self._apply_failed = False
         operation_index = self.operation_type_combo.findData(operation.operation_type)
         if operation_index >= 0:
             self.operation_type_combo.blockSignals(True)
@@ -841,6 +869,20 @@ class RotaryPage(QWidget):
         self.positive_direction_combo.setCurrentIndex(
             max(0, self.positive_direction_combo.findData(frame.positive_direction))
         )
+        self._load_numeric_controls(profile, parameters)
+        if geometry.angular_regions:
+            self.region_direction_combo.setCurrentIndex(
+                max(0, self.region_direction_combo.findData(geometry.angular_regions[0].direction))
+            )
+        self.region_intervals_edit.setText(
+            ";".join(
+                f"{math.degrees(item.start_angle_rad):g}:{math.degrees(item.end_angle_rad):g}"
+                for item in geometry.angular_regions
+            )
+        )
+        self.preview_only_check.setChecked(geometry.preview_only)
+
+    def _load_numeric_controls(self, profile: Any, parameters: Any) -> None:
         for widget, value in (
             (self.axial_start_spin, profile.axial_start_mm),
             (self.axial_end_spin, profile.axial_end_mm),
@@ -873,18 +915,6 @@ class RotaryPage(QWidget):
                 self.thin_wall_policy_combo.findData(parameters.thin_wall_width_policy),
             )
         )
-        if geometry.angular_regions:
-            self.region_direction_combo.setCurrentIndex(
-                max(0, self.region_direction_combo.findData(geometry.angular_regions[0].direction))
-            )
-        self.region_intervals_edit.setText(
-            ";".join(
-                f"{math.degrees(item.start_angle_rad):g}:"
-                f"{math.degrees(item.end_angle_rad):g}"
-                for item in geometry.angular_regions
-            )
-        )
-        self.preview_only_check.setChecked(geometry.preview_only)
 
     def _update_operation_visibility(self) -> None:
         operation = self._selected_operation()
@@ -912,6 +942,8 @@ class RotaryPage(QWidget):
     def _generation_reason(self, operation: Any) -> str | None:
         if operation is None:
             return self._t("operation_required")
+        if self._apply_failed:
+            return self._t("apply_required")
         if self.controller.cad_model is None:
             return self._t("no_cad")
         if self.controller.has_drafts or not self.controller.setup_ready:
@@ -920,70 +952,31 @@ class RotaryPage(QWidget):
             return self._t("error")
         if operation.geometry.preview_only:
             return self._t("preview_only")
-        if operation.operation_type == "rotary_around_part" and not operation.geometry.angular_regions:
+        if (
+            operation.operation_type == "rotary_around_part"
+            and not operation.geometry.angular_regions
+        ):
             return self._t("region_required")
         return None
 
     def _status_text(self, product: Any, reason: str | None) -> str:
-        if self._last_error:
-            return f"{self._t('status')}: {self._last_error}"
-        if product is not None:
-            return f"{self._t('status')}: {product.status.upper()} · {self._t(product.status)}"
-        return f"{self._t('status')}: {reason or self._t('draft')}"
+        return rotary_status_text(
+            product, reason, self._last_error, self.language, _TEXT[self.language]
+        )
 
     def _refresh_issues(self, result: Any) -> None:
-        self.issue_list.clear()
-        issues: list[Any] = list(self.controller.validation_report().issues)
-        if result is not None:
-            issues.extend(result.validation.issues)
         operation = self._selected_operation()
         state = None if operation is None else self.controller.product_state(operation.operation_id)
-        failure = (
-            None
-            if state is None or not isinstance(state.result_payload, Mapping)
-            else state.result_payload.get("issue")
+        refresh_rotary_issues(
+            self.issue_list,
+            self.controller.validation_report().issues,
+            result,
+            state,
+            self._t("no_issues"),
         )
-        if isinstance(failure, Mapping):
-            issues.append(failure)
-        seen: set[tuple[str, str]] = set()
-        for index, issue in enumerate(issues, 1):
-            payload = issue if isinstance(issue, Mapping) else issue.to_json()
-            code = str(payload.get("code", ""))
-            object_id = str(payload.get("object_id", ""))
-            key = (code, object_id)
-            if key in seen:
-                continue
-            seen.add(key)
-            severity = str(payload.get("severity", "error")).upper()
-            text = f"{severity[:1]}{index}: {code.rsplit('.', 1)[-1]}"
-            self.issue_list.addItem(text)
-            item = self.issue_list.item(self.issue_list.count() - 1)
-            item.setData(Qt.UserRole, dict(payload))
-            item.setToolTip(f"[{severity}] {code} · {object_id}")
-        if not seen:
-            self.issue_list.addItem(self._t("no_issues"))
 
     def _jump_to_issue(self) -> None:
-        item = self.issue_list.currentItem()
-        payload = None if item is None else item.data(Qt.UserRole)
-        if not isinstance(payload, Mapping):
-            return
-        object_id = str(payload.get("object_id", ""))
-        model = self.controller.cad_model
-        if model is not None and object_id in model.edge_map:
-            self.viewer.set_selection(edge_ids=[object_id])
-        elif model is not None and object_id in model.face_map:
-            self.viewer.set_selection(face_ids=[object_id])
-        else:
-            result = self._selected_result()
-            if result is not None:
-                for index, point in enumerate(result.preview_toolpath.points):
-                    if point.point_id == object_id and hasattr(self.viewer, "set_preview_progress"):
-                        self.viewer.set_preview_progress(max(0, index - 1))
-                        break
-        self.status_label.setText(
-            f"{self.status_label.text()}\n{payload.get('code', '')} · {object_id}"
-        )
+        jump_to_rotary_issue(self)
 
     def _show_result(self, operation: Any, result: Any) -> None:
         if operation is None or result is None:
@@ -1016,9 +1009,7 @@ class RotaryPage(QWidget):
             self.viewer.load_model(model)
 
     def _install_generation_event_pump(self) -> None:
-        self.controller.set_generation_event_pump(
-            throttled_event_pump(QApplication.processEvents)
-        )
+        self.controller.set_generation_event_pump(throttled_event_pump(QApplication.processEvents))
 
     def _add_row(self, form: QFormLayout, key: str, widget: QWidget) -> None:
         label = QLabel()

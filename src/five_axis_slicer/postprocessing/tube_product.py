@@ -75,9 +75,9 @@ from .thermal_program import (
 )
 
 ALGORITHM_VERSIONS = {
-    "tube_thin_wall_indexed": "tube-indexed-product-v3",
-    "tube_buildup": "tube-buildup-product-v5",
-    "tube_continuous": "tube-continuous-product-v2",
+    "tube_thin_wall_indexed": "tube-indexed-product-v7",
+    "tube_buildup": "tube-buildup-product-v6",
+    "tube_continuous": "tube-continuous-product-v3",
 }
 PRODUCT_STATE_SCHEMA_VERSION = 2
 CancelCheck = Callable[[], bool]
@@ -888,7 +888,9 @@ def _plan_json(plan: IndexedSlicePlan | TubeBuildupPlan | None) -> dict[str, Any
                 for layer in plan.layers
             ],
         }
+    from .bounded_plan_json import bounded_plan_metadata
     return {
+        **bounded_plan_metadata(plan),
         "kind": "tube_thin_wall_indexed",
         "regions": [item.region_id for item in plan.regions],
         "layers": [item.layer_id for item in plan.layers],
@@ -914,3 +916,4 @@ __all__ = [
     "readback_tube_gcode",
     "tube_operation_semantic_sha256",
 ]
+

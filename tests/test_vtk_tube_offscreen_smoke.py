@@ -150,8 +150,9 @@ _VTK_TUBE_SMOKE_SCRIPT = textwrap.dedent(
         assert viewer.build_surface_actor is not None
         viewer.build_surface_actor.GetMapper().Update()
         plate_data = viewer.build_surface_actor.GetMapper().GetInput()
-        assert plate_data.GetNumberOfPoints() == 4
-        assert plate_data.GetNumberOfLines() == 1
+        assert plate_data.GetNumberOfPolys() == 4
+        assert plate_data.GetNumberOfLines() > 4
+        np.testing.assert_allclose(plate_data.GetBounds(), (-170, 90, -95, 125, -8, -8))
         assert viewer.build_surface_actor.GetPickable() == 0
 
         angle = math.radians(32.0)

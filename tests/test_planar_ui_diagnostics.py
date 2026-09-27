@@ -18,6 +18,18 @@ from test_planar_ui import _app, _path_controller
 from test_tube_ui import TubeViewerStub
 
 
+@pytest.mark.parametrize("language", ["zh", "en"])
+@pytest.mark.parametrize(
+    "code", ["MODEL_CS_MISSING", "BUILD_CS_MISSING", "PLACEMENT_MISSING", "PLACEMENT_DIRTY"]
+)
+def test_missing_coordinate_diagnostics_explain_required_action(language, code):
+    from five_axis_slicer.planar_ui_diagnostics import diagnostic_text
+
+    text = diagnostic_text(code, language)
+    assert text.startswith(code + ": ")
+    assert ("应用" if language == "zh" else "apply") in text
+
+
 def _page(language="zh", operation_type="planar_thin_wall"):
     _app()
     page = PlanarPage(controller=_path_controller(), viewer_factory=TubeViewerStub)
@@ -129,7 +141,7 @@ def test_generate_is_disabled_before_click_for_incomplete_applied_setup(language
         page.generate_button.click()
     generate.assert_not_called()
     assert not page.generate_button.isEnabled()
-    assert ("已应用" if language == "zh" else "applied Setup") in page.status_label.text()
+    assert ("制造设置" if language == "zh" else "Manufacturing Setup") in page.status_label.text()
     assert page.generate_button.toolTip() == page.status_label.text()
     assert page.issues_label.text()
     page.close()

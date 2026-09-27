@@ -22,6 +22,13 @@ _NOZZLE_PHYSICAL_FIELDS = (
 )
 
 
+def project_profile_name(display_name: str) -> str:
+    suffix = " · project profile"
+    while display_name.endswith(suffix):
+        display_name = display_name.removesuffix(suffix)
+    return display_name + suffix
+
+
 class NozzleEditorError(ValueError):
     """Stable editor failure code with a developer-facing message."""
 
@@ -84,7 +91,7 @@ def nozzle_editor_profile(
     return replace(
         template.editable_copy(
             str(uuid4()),
-            display_name=f"{template.display_name} · project profile",
+            display_name=project_profile_name(template.display_name),
         ),
         interface=requested_interface or None,
         length_mm=length or None,

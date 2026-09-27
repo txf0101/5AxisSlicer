@@ -112,7 +112,10 @@ def replace_selection(
         ("vertex", vertex_ids),
     ):
         if values is not None:
-            setattr(selection, f"{kind}_ids", set(values))
+            items = sorted(values) if isinstance(values, set | frozenset) else list(values)
+            setattr(selection, f"{kind}_ids", set(items))
+            if kind == "edge":
+                selection.edge_pick_order = list(dict.fromkeys(items))
 
 
 def apply_pick_selection(
@@ -128,12 +131,17 @@ def apply_pick_selection(
     if request.allowed_ids is not None and entity_id not in request.allowed_ids:
         return False
     selected: set[str] = getattr(selection, f"{kind}_ids")
+    order = selection.ordered_edge_ids() if kind == "edge" else []
     if request.multiple and entity_id in selected:
         selected.remove(entity_id)
     else:
         if not request.multiple:
             selected.clear()
         selected.add(entity_id)
+    if kind == "edge":
+        selection.edge_pick_order = [value for value in order if value in selected] + (
+            [entity_id] if entity_id in selected and entity_id not in order else []
+        )
     return True
 
 

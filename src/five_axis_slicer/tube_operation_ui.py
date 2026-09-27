@@ -22,6 +22,7 @@ from PyQt5.QtWidgets import (
 from .ui_controls import OptionalDoubleSpinBox
 from .generation_event_pump import throttled_event_pump
 from .models import PickHit, PickRequest
+from .tube_ui_text import TUBE_ISSUE_LABELS
 
 GEOMETRY_FIELDS = (
     ("tube_body_id", "tube_body"),
@@ -103,6 +104,7 @@ def build_editor(page: Any) -> QWidget:
     page.operation_feedback = QLabel()
     page.operation_feedback.setWordWrap(True)
     page._operation_feedback_key = None
+    page._operation_apply_failed = False
     layout.addWidget(page.operation_help)
     layout.addLayout(form)
     actions = QGridLayout()
@@ -206,6 +208,12 @@ def accept_pick(page: Any, hit: PickHit) -> bool:
 
 
 def apply(page: Any) -> None:
+    if any(not combo.currentData() for combo in page._operation_geometry_combos.values()):
+        page._operation_apply_failed = True
+        page._operation_feedback_key = "operation_roles_required"
+        page.operation_feedback.setText(page._t(page._operation_feedback_key))
+        _refresh_product_status(page, preserve_message=True)
+        return
     try:
         kwargs = {
             key: combo.currentData()
@@ -224,9 +232,13 @@ def apply(page: Any) -> None:
         elif operation_type == "tube_continuous":
             kwargs["seam_angle_deg"] = page.operation_seam_angle_deg.value()
         page._execute_command("set_operation", **kwargs)
+        page._operation_apply_failed = False
+        _refresh_product_status(page)
         page._operation_feedback_key = "operation_applied"
         page.operation_feedback.setText(page._t(page._operation_feedback_key))
     except Exception as exc:
+        page._operation_apply_failed = True
+        _refresh_product_status(page, preserve_message=True)
         page._operation_feedback_key = None
         page._report_error(exc, page.operation_feedback)
 
@@ -304,6 +316,7 @@ def export(page: Any) -> None:
 
 def populate_editor(page: Any, operation_id: str | None = None) -> None:
     page._operation_pick_field = None
+    page._operation_apply_failed = False
     if not page.controller.operations:
         return
     operation = _selected_operation(page, operation_id)
@@ -342,6 +355,7 @@ def retranslate(page: Any, translate: Callable[[str], str]) -> None:
     for field, label_key in GEOMETRY_FIELDS:
         getattr(page, f"operation_{field}_label").setText(translate(label_key))
         page._operation_pick_buttons[field].setText(translate("operation_pick"))
+        page._operation_geometry_combos[field].setItemText(0, translate("not_set"))
     for field, label_key, _low, _high in PARAMETER_FIELDS:
         getattr(page, f"operation_{field}_label").setText(translate(label_key))
     page.operation_maximum_pass_spacing_mm_label.setText(translate("maximum_pass_spacing"))
@@ -426,26 +440,33 @@ def _refresh_product_status(page: Any, *, preserve_message: bool = False) -> Non
     if not preserve_message:
         message = page._t(f"generation_{status}")
         if state is not None and status == "error" and state.result_payload:
-            detail = _product_error_detail(state.result_payload)
+            detail = _product_error_detail(state.result_payload, page.language)
             if detail:
                 message += "\n" + str(detail)
         page._operation_generation_status_key = f"generation_{status}"
         page.operation_generation_status.setText(message)
-    page.operation_preview_button.setEnabled(status in {"ready", "warning"})
-    page.operation_export_button.setEnabled(status in {"ready", "warning"})
+    applied = not page._operation_apply_failed
+    page.operation_preview_button.setEnabled(applied and status in {"ready", "warning"})
+    page.operation_export_button.setEnabled(applied and status in {"ready", "warning"})
     page.operation_generate_button.setEnabled(
-        page.model is not None and page.controller.setup_ready and not page.controller.has_drafts
+        applied and page.model is not None and page.controller.setup_ready and not page.controller.has_drafts
     )
     page.operation_cancel_button.setEnabled(status == "running")
 
 
-def _product_error_detail(payload: Any) -> str:
+def _product_error_detail(payload: Any, language: str = "en") -> str:
     if payload.get("error"):
-        return str(payload["error"])
+        error = str(payload["error"])
+        code = error.partition(":")[0].strip()
+        label = TUBE_ISSUE_LABELS[language].get(code)
+        return f"{label} [{code}]" if label else error
     validation = payload.get("validation", {})
     details = list(
         dict.fromkeys(
-            f"{item.get('code', '')}: {item.get('object_id', '')}"
+            (
+                f"{TUBE_ISSUE_LABELS[language].get(item.get('code', ''), item.get('code', ''))}"
+                f" [{item.get('code', '')}]: {item.get('object_id', '')}"
+            )
             for item in validation.get("issues", ())
             if item.get("severity") == "error"
         )

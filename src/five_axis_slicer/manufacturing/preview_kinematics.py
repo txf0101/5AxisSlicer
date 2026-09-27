@@ -9,6 +9,7 @@ in machine coordinates and emit stable, localisable validation issues.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from collections import OrderedDict
 import math
 from types import MappingProxyType
 from typing import Iterable, Mapping
@@ -186,6 +187,31 @@ def reconstruct_preview_pose(
     )
 
 
+class PreviewTransformCache:
+    """Bounded exact-pose cache owned by one parse session.
+
+    Strong semantics references prevent identity reuse. Failed transforms are
+    never cached, and rotary word validation still precedes every lookup.
+    """
+
+    def __init__(self) -> None:
+        self._entries: OrderedDict[
+            tuple[int, tuple[tuple[str, float], ...]],
+            tuple[ControllerAxisSemantics, RigidTransform],
+        ] = OrderedDict()
+
+    def get(self, semantics: ControllerAxisSemantics, values: Mapping[str, float]) -> RigidTransform:
+        key = (id(semantics), tuple(sorted(values.items())))
+        if key in self._entries:
+            self._entries.move_to_end(key)
+            return self._entries[key][1]
+        transform = _machine_to_workpiece_transform(semantics, values)
+        self._entries[key] = (semantics, transform)
+        if len(self._entries) > 128:
+            self._entries.popitem(last=False)
+        return transform
+
+
 def reconstruct_preview_motion(
     machine_start: tuple[float, float, float],
     machine_end: tuple[float, float, float],
@@ -196,6 +222,7 @@ def reconstruct_preview_motion(
     tool_length_mm: float = 0.0,
     fixed_machine_nozzle_axis: tuple[float, float, float] = (0.0, 0.0, -1.0),
     registry: PreviewKinematicsRegistry = DEFAULT_PREVIEW_KINEMATICS_REGISTRY,
+    transform_cache: PreviewTransformCache | None = None,
 ) -> PreviewMotionReconstruction:
     """Reconstruct a complete motion atomically or preserve both machine points."""
 
@@ -255,8 +282,7 @@ def reconstruct_preview_motion(
         return _raw_motion(start, end, nozzle_axis, (issue,))
 
     try:
-        start_transform = _machine_to_workpiece_transform(semantics, start_values)
-        end_transform = _machine_to_workpiece_transform(semantics, end_values)
+        start_transform, end_transform = _endpoint_transforms(semantics, start_values, end_values, transform_cache)
     except (KeyError, TypeError, ValueError) as exc:
         issue = ValidationIssue(
             code="nc_preview.kinematic_reconstruction_failed",
@@ -278,6 +304,11 @@ def reconstruct_preview_motion(
         end_nozzle_axis=end_transform.transform_vector(nozzle_axis),
         coordinate_transform=semantics.transform_name,
     )
+
+
+def _endpoint_transforms(semantics, start_values, end_values, cache):
+    transform = _machine_to_workpiece_transform if cache is None else cache.get
+    return transform(semantics, start_values), transform(semantics, end_values)
 
 
 def _machine_to_workpiece_transform(

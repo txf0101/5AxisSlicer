@@ -25,13 +25,13 @@ from typing import Any, cast
 from ..algorithms.tube.geometry import TubeFeature, recognise_tube
 from ..algorithms.tube.indexed import (
     IndexedSlicePlan,
-    generate_indexed_toolpath,
     plan_indexed_slices,
 )
 from ..kinematics.xyzac import MachineAxisTrajectory, solve_xyzac_trajectory
 from ..manufacturing.coordinates import RigidTransform
 from ..manufacturing.machine import MachineProfile
 from ..manufacturing.resources import NozzleProfile
+from ..manufacturing.tube_tcp import indexed_centerline_to_tcp
 from ..manufacturing.setup import TubeOperationDefinition
 from ..manufacturing.toolpath import (
     GeneratedResultManifest,
@@ -51,7 +51,7 @@ from .gcode_contract import (
 )
 from .gcode_readback import GCodeReadbackReport, readback_absolute_xyzac
 
-ALGORITHM_VERSION = "tube-indexed-product-v3"
+ALGORITHM_VERSION = "tube-indexed-product-v7"
 PRODUCT_STATE_SCHEMA_VERSION = 1
 CancelCheck = Callable[[], bool]
 
@@ -215,6 +215,7 @@ def generate_indexed_product(
         obstacles,
         check_ipw,
         radial_error_limit_mm,
+        cancelled,
     )
     _checkpoint(cancelled)
     manifest = _manifest(model, source_path, operation, machine, toolpath, validation)
@@ -230,7 +231,9 @@ def generate_indexed_product(
             "",
             _blocked_readback(toolpath),
         )
-    gcode = postprocess_indexed_gcode(toolpath, trajectory, machine, nozzle)
+    gcode = postprocess_indexed_gcode(
+        toolpath, trajectory, machine, nozzle, indexed_tip_preview=True
+    )
     readback = readback_indexed_gcode(gcode, toolpath, trajectory, machine, nozzle)
     if not readback.passed:
         manifest = replace(
@@ -250,8 +253,10 @@ def _generate_geometry(
     feature = recognise_tube(model, operation.geometry)
     _checkpoint(cancelled)
     plan = plan_indexed_slices(feature, operation.parameters)
-    toolpath = generate_indexed_toolpath(
-        operation.operation_id, feature, plan, operation.parameters, model=model
+    from ..algorithms.tube.bounded_indexed import generate_bounded_indexed_toolpath
+    plan, toolpath, _residual_count = generate_bounded_indexed_toolpath(
+        operation.operation_id, model, feature, plan, operation.parameters,
+        checkpoint=lambda: _checkpoint(cancelled),
     )
     _checkpoint(cancelled)
     return feature, plan, toolpath
@@ -267,12 +272,14 @@ def _solve_and_validate(
     obstacles: tuple[CollisionBox, ...],
     check_ipw: bool,
     radial_limit: float,
+    cancelled: CancelCheck | None = None,
 ) -> tuple[MachineAxisTrajectory, IndexedValidationReport]:
     trajectory = solve_xyzac_trajectory(
-        toolpath,
+        indexed_centerline_to_tcp(toolpath),
         machine,
         tool_length_mm=nozzle.length_mm or 0.0,
         T_workpiece_from_build=transform,
+        checkpoint=lambda: _checkpoint(cancelled),
     )
     validation = validate_indexed_tube(
         feature,
@@ -283,6 +290,7 @@ def _solve_and_validate(
         obstacles=obstacles,
         radial_error_limit_mm=radial_limit,
         check_ipw=check_ipw,
+        checkpoint=lambda: _checkpoint(cancelled),
     )
     return trajectory, validation
 
@@ -319,6 +327,7 @@ def postprocess_indexed_gcode(
     header: str = "5AxisSclicer T08 Tube Thin-Wall Indexed",
     marker_tag: str = "T08",
     inverse_time: bool = False,
+    indexed_tip_preview: bool = False,
 ) -> str:
     """Emit conservative absolute NC using the machine's controller axis words."""
 
@@ -327,15 +336,12 @@ def postprocess_indexed_gcode(
     events = events_by_sequence(toolpath)
     marker_identifier(marker_tag)
     e_position = Decimal(0)
-    lines = [
-        f"; {header}",
-        _machine_profile_comment(machine),
-        _controller_axis_map_comment(machine),
-        "G21 ; millimetres",
-        "G90 ; absolute axes",
-        "M82 ; absolute extrusion",
-        "G92 E0 ; known initial extrusion position",
-    ]
+    lines = _program_header(header, machine, trajectory.tool_length_mm)
+    from .indexed_layers import indexed_layer_preview_comments
+
+    metadata = indexed_layer_preview_comments(toolpath) if indexed_tip_preview else []
+    if metadata:
+        lines.append("; INDEXED_TUBE_POSITION tip_from_center_v1")
     if inverse_time:
         lines.append("G93 ; inverse-time coordinated motion")
     previous_time_s: float | None = None
@@ -361,6 +367,8 @@ def postprocess_indexed_gcode(
             else point.feedrate_mm_min or 1.0
         )
         point_id = marker_identifier(point.point_id)
+        if metadata:
+            lines.append(metadata[index - 1])
         lines.append(f"; {marker_tag} POINT {index} {point_id} {point.point_type}")
         lines.append(f"G1 {words}{e_word} F{feed:.6f}")
         previous_time_s = sample.time_s
@@ -376,6 +384,19 @@ def postprocess_indexed_gcode(
         lines.append("G94 ; restore units-per-minute mode")
     lines.extend(("M400 ; finish queued motion", "M2"))
     return "\n".join(lines) + "\n"
+
+
+def _program_header(header: str, machine: MachineProfile, tool_length_mm: float) -> list[str]:
+    return [
+        f"; {header}",
+        _machine_profile_comment(machine),
+        _controller_axis_map_comment(machine),
+        f"; TOOL_LENGTH_MM {tool_length_mm:.6f}",
+        "G21 ; millimetres",
+        "G90 ; absolute axes",
+        "M82 ; absolute extrusion",
+        "G92 E0 ; known initial extrusion position",
+    ]
 
 
 def _validate_post_inputs(
@@ -577,7 +598,9 @@ def _source_fingerprint(model: CadModel, source_path: str | Path | None) -> Sour
 
 
 def _plan_json(plan: IndexedSlicePlan) -> dict[str, Any]:
+    from .bounded_plan_json import bounded_plan_metadata
     return {
+        **bounded_plan_metadata(plan),
         "regions": [
             {
                 "region_id": item.region_id,
@@ -647,3 +670,7 @@ __all__ = [
     "postprocess_indexed_gcode",
     "readback_indexed_gcode",
 ]
+
+
+
+

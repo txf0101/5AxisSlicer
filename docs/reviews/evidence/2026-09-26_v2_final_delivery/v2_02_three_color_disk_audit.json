@@ -1,0 +1,881 @@
+{
+  "manifest": {
+    "algorithm_version": "paper-core-freeform-product-v4",
+    "generated_at_utc": "2026-09-27T09:56:44.751781+00:00",
+    "input_sources": [
+      {
+        "path": "F:\\【项目和任务】\\5AxisSclicer_V2.0\\docs\\reviews\\evidence\\2026-09-26_v2_final_delivery\\three_color_current150_gui_project\\source\\291155b64dace255937bbcddb496da4f11f8319a2fe6b9d32aa29a340686befc.stp",
+        "role": "freeform_step",
+        "sha256": "291155b64dace255937bbcddb496da4f11f8319a2fe6b9d32aa29a340686befc",
+        "source_id": "cad_source"
+      }
+    ],
+    "issues": [
+      "xyzac.rotary_singularity",
+      "motion.intentional_tip_contact",
+      "controller.version_unknown",
+      "controller.macros_unverified",
+      "controller.xyzac_coordination_unverified",
+      "controller.cumulative_c_limit_unknown"
+    ],
+    "machine_profile_id": "builtin.machine.own_ac_fdm.v1",
+    "operation_id": "fan-three-colour",
+    "parameter_semantic_sha256": "425ab754ac9b28c15c7462cda4308c3891ccb280c327ac33e426cdf724c368c1",
+    "ready_for_export": true,
+    "result_id": "fan-three-colour-sequence-v1-machine-transition-v1-machine-air-v1-result-v1",
+    "status": "warning"
+  },
+  "readback": {
+    "expected_events": 62716,
+    "expected_points": 340193,
+    "issues": [],
+    "machine_executable": false,
+    "passed": true,
+    "read_events": 62716,
+    "read_points": 340193,
+    "schema_version": 1
+  },
+  "toolpath_summary": {
+    "coordinate_frame": "workpiece_build",
+    "event_count": 62716,
+    "point_count": 340193,
+    "toolpath_id": "fan-three-colour-sequence-v1-machine-transition-v1-machine-air-v1"
+  },
+  "offline_exportable": true,
+  "machine_executable": false,
+  "warnings_by_severity": {
+    "warning": 4142
+  },
+  "warnings_by_code": {
+    "xyzac.rotary_singularity": 4137,
+    "motion.intentional_tip_contact": 1,
+    "controller.version_unknown": 1,
+    "controller.macros_unverified": 1,
+    "controller.xyzac_coordination_unverified": 1,
+    "controller.cumulative_c_limit_unknown": 1
+  },
+  "material_statistics": {
+    "deposition_volume_mm3_by_material": {
+      "PLA-blue": 8362.386044765602,
+      "PLA-red": 24804.636691216045,
+      "PLA-yellow": 8361.954367129883
+    },
+    "effective_channel_transition_count": 2,
+    "purge_length_mm": 16.0,
+    "selection_command_count": 3
+  },
+  "disk_nc_audit": {
+    "pac_points": 340193,
+    "pac_events": 62716,
+    "csv_extra_rows": 0,
+    "point_id_and_xyzac_errors": [],
+    "maximum_absolute_xyz_mm_ac_degree_difference": {
+      "X": 5.000000005139782e-07,
+      "Y": 5.000000129484761e-07,
+      "Z": 4.73000000056345e-07,
+      "A": 1.175156683075329e-08,
+      "C": 5.283573045744561e-07
+    },
+    "axis_compare_tolerance": 1e-06,
+    "tool_commands": [
+      {
+        "command": "T0",
+        "line": 17
+      },
+      {
+        "command": "T1",
+        "line": 343255
+      },
+      {
+        "command": "T2",
+        "line": 605993
+      }
+    ],
+    "cutter_count": 2,
+    "material_event_sequence": [
+      {
+        "group": "0001",
+        "action": "switch",
+        "line": 15
+      },
+      {
+        "group": "0001",
+        "action": "temperature_wait",
+        "line": 18
+      },
+      {
+        "group": "0002",
+        "action": "retract",
+        "line": 343230
+      },
+      {
+        "group": "0002",
+        "action": "cut",
+        "line": 343233
+      },
+      {
+        "group": "0002",
+        "action": "park",
+        "line": 343242
+      },
+      {
+        "group": "0002",
+        "action": "unload",
+        "line": 343250
+      },
+      {
+        "group": "0002",
+        "action": "switch",
+        "line": 343253
+      },
+      {
+        "group": "0002",
+        "action": "temperature_wait",
+        "line": 343256
+      },
+      {
+        "group": "0002",
+        "action": "load",
+        "line": 343259
+      },
+      {
+        "group": "0002",
+        "action": "purge",
+        "line": 343262
+      },
+      {
+        "group": "0002",
+        "action": "prime",
+        "line": 343271
+      },
+      {
+        "group": "0002",
+        "action": "resume",
+        "line": 343274
+      },
+      {
+        "group": "0003",
+        "action": "retract",
+        "line": 605968
+      },
+      {
+        "group": "0003",
+        "action": "cut",
+        "line": 605971
+      },
+      {
+        "group": "0003",
+        "action": "park",
+        "line": 605980
+      },
+      {
+        "group": "0003",
+        "action": "unload",
+        "line": 605988
+      },
+      {
+        "group": "0003",
+        "action": "switch",
+        "line": 605991
+      },
+      {
+        "group": "0003",
+        "action": "temperature_wait",
+        "line": 605994
+      },
+      {
+        "group": "0003",
+        "action": "load",
+        "line": 605997
+      },
+      {
+        "group": "0003",
+        "action": "purge",
+        "line": 606000
+      },
+      {
+        "group": "0003",
+        "action": "prime",
+        "line": 606009
+      },
+      {
+        "group": "0003",
+        "action": "resume",
+        "line": 606012
+      }
+    ],
+    "service_sequence": [
+      {
+        "group": "0002",
+        "action": "safe_depart",
+        "line": 343235
+      },
+      {
+        "group": "0002",
+        "action": "cutter_above",
+        "line": 343237
+      },
+      {
+        "group": "0002",
+        "action": "cutter",
+        "line": 343239
+      },
+      {
+        "group": "0002",
+        "action": "leave_cutter",
+        "line": 343244
+      },
+      {
+        "group": "0002",
+        "action": "exchange_above",
+        "line": 343246
+      },
+      {
+        "group": "0002",
+        "action": "exchange",
+        "line": 343248
+      },
+      {
+        "group": "0002",
+        "action": "leave_exchange",
+        "line": 343264
+      },
+      {
+        "group": "0002",
+        "action": "purge_above",
+        "line": 343266
+      },
+      {
+        "group": "0002",
+        "action": "purge",
+        "line": 343268
+      },
+      {
+        "group": "0002",
+        "action": "leave_purge",
+        "line": 343276
+      },
+      {
+        "group": "0002",
+        "action": "reorient_at_station",
+        "line": 343278
+      },
+      {
+        "group": "0002",
+        "action": "wipe_above",
+        "line": 343280
+      },
+      {
+        "group": "0002",
+        "action": "wipe_start",
+        "line": 343282
+      },
+      {
+        "group": "0002",
+        "action": "wipe_out_0",
+        "line": 343284
+      },
+      {
+        "group": "0002",
+        "action": "wipe_back_0",
+        "line": 343286
+      },
+      {
+        "group": "0002",
+        "action": "wipe_out_1",
+        "line": 343288
+      },
+      {
+        "group": "0002",
+        "action": "wipe_back_1",
+        "line": 343290
+      },
+      {
+        "group": "0002",
+        "action": "leave_wipe",
+        "line": 343292
+      },
+      {
+        "group": "0002",
+        "action": "safe_approach",
+        "line": 343294
+      },
+      {
+        "group": "0003",
+        "action": "safe_depart",
+        "line": 605973
+      },
+      {
+        "group": "0003",
+        "action": "cutter_above",
+        "line": 605975
+      },
+      {
+        "group": "0003",
+        "action": "cutter",
+        "line": 605977
+      },
+      {
+        "group": "0003",
+        "action": "leave_cutter",
+        "line": 605982
+      },
+      {
+        "group": "0003",
+        "action": "exchange_above",
+        "line": 605984
+      },
+      {
+        "group": "0003",
+        "action": "exchange",
+        "line": 605986
+      },
+      {
+        "group": "0003",
+        "action": "leave_exchange",
+        "line": 606002
+      },
+      {
+        "group": "0003",
+        "action": "purge_above",
+        "line": 606004
+      },
+      {
+        "group": "0003",
+        "action": "purge",
+        "line": 606006
+      },
+      {
+        "group": "0003",
+        "action": "leave_purge",
+        "line": 606014
+      },
+      {
+        "group": "0003",
+        "action": "reorient_at_station",
+        "line": 606016
+      },
+      {
+        "group": "0003",
+        "action": "wipe_above",
+        "line": 606018
+      },
+      {
+        "group": "0003",
+        "action": "wipe_start",
+        "line": 606020
+      },
+      {
+        "group": "0003",
+        "action": "wipe_out_0",
+        "line": 606022
+      },
+      {
+        "group": "0003",
+        "action": "wipe_back_0",
+        "line": 606024
+      },
+      {
+        "group": "0003",
+        "action": "wipe_out_1",
+        "line": 606026
+      },
+      {
+        "group": "0003",
+        "action": "wipe_back_1",
+        "line": 606028
+      },
+      {
+        "group": "0003",
+        "action": "leave_wipe",
+        "line": 606030
+      },
+      {
+        "group": "0003",
+        "action": "safe_approach",
+        "line": 606032
+      }
+    ],
+    "service_axes": [
+      {
+        "group": "0002",
+        "action": "safe_depart",
+        "axes": {
+          "A": -90.0,
+          "C": -33.109319,
+          "X": 0.0,
+          "Y": 56.88842,
+          "Z": 192.5
+        }
+      },
+      {
+        "group": "0002",
+        "action": "cutter_above",
+        "axes": {
+          "A": -90.0,
+          "C": -33.109319,
+          "X": 130.0,
+          "Y": 100.0,
+          "Z": 192.5
+        }
+      },
+      {
+        "group": "0002",
+        "action": "cutter",
+        "axes": {
+          "A": -90.0,
+          "C": -33.109319,
+          "X": 130.0,
+          "Y": 100.0,
+          "Z": 92.5
+        }
+      },
+      {
+        "group": "0002",
+        "action": "leave_cutter",
+        "axes": {
+          "A": -90.0,
+          "C": -33.109319,
+          "X": 130.0,
+          "Y": 100.0,
+          "Z": 192.5
+        }
+      },
+      {
+        "group": "0002",
+        "action": "exchange_above",
+        "axes": {
+          "A": -90.0,
+          "C": -33.109319,
+          "X": 140.0,
+          "Y": 100.0,
+          "Z": 192.5
+        }
+      },
+      {
+        "group": "0002",
+        "action": "exchange",
+        "axes": {
+          "A": -90.0,
+          "C": -33.109319,
+          "X": 140.0,
+          "Y": 100.0,
+          "Z": 92.5
+        }
+      },
+      {
+        "group": "0002",
+        "action": "leave_exchange",
+        "axes": {
+          "A": -90.0,
+          "C": -33.109319,
+          "X": 140.0,
+          "Y": 100.0,
+          "Z": 192.5
+        }
+      },
+      {
+        "group": "0002",
+        "action": "purge_above",
+        "axes": {
+          "A": -90.0,
+          "C": -33.109319,
+          "X": 150.0,
+          "Y": 100.0,
+          "Z": 192.5
+        }
+      },
+      {
+        "group": "0002",
+        "action": "purge",
+        "axes": {
+          "A": -90.0,
+          "C": -33.109319,
+          "X": 150.0,
+          "Y": 100.0,
+          "Z": 92.5
+        }
+      },
+      {
+        "group": "0002",
+        "action": "leave_purge",
+        "axes": {
+          "A": -90.0,
+          "C": -33.109319,
+          "X": 150.0,
+          "Y": 100.0,
+          "Z": 192.5
+        }
+      },
+      {
+        "group": "0002",
+        "action": "reorient_at_station",
+        "axes": {
+          "A": -90.0,
+          "C": -33.109319,
+          "X": 150.0,
+          "Y": 100.0,
+          "Z": 192.5
+        }
+      },
+      {
+        "group": "0002",
+        "action": "wipe_above",
+        "axes": {
+          "A": -90.0,
+          "C": -33.109319,
+          "X": 160.0,
+          "Y": 100.0,
+          "Z": 192.5
+        }
+      },
+      {
+        "group": "0002",
+        "action": "wipe_start",
+        "axes": {
+          "A": -90.0,
+          "C": -33.109319,
+          "X": 160.0,
+          "Y": 100.0,
+          "Z": 92.5
+        }
+      },
+      {
+        "group": "0002",
+        "action": "wipe_out_0",
+        "axes": {
+          "A": -90.0,
+          "C": -33.109319,
+          "X": 170.0,
+          "Y": 100.0,
+          "Z": 92.5
+        }
+      },
+      {
+        "group": "0002",
+        "action": "wipe_back_0",
+        "axes": {
+          "A": -90.0,
+          "C": -33.109319,
+          "X": 160.0,
+          "Y": 100.0,
+          "Z": 92.5
+        }
+      },
+      {
+        "group": "0002",
+        "action": "wipe_out_1",
+        "axes": {
+          "A": -90.0,
+          "C": -33.109319,
+          "X": 170.0,
+          "Y": 100.0,
+          "Z": 92.5
+        }
+      },
+      {
+        "group": "0002",
+        "action": "wipe_back_1",
+        "axes": {
+          "A": -90.0,
+          "C": -33.109319,
+          "X": 160.0,
+          "Y": 100.0,
+          "Z": 92.5
+        }
+      },
+      {
+        "group": "0002",
+        "action": "leave_wipe",
+        "axes": {
+          "A": -90.0,
+          "C": -33.109319,
+          "X": 160.0,
+          "Y": 100.0,
+          "Z": 192.5
+        }
+      },
+      {
+        "group": "0002",
+        "action": "safe_approach",
+        "axes": {
+          "A": -90.0,
+          "C": -33.109319,
+          "X": 0.0,
+          "Y": 56.88842,
+          "Z": 72.997327
+        }
+      },
+      {
+        "group": "0003",
+        "action": "safe_depart",
+        "axes": {
+          "A": -90.0,
+          "C": -153.109318,
+          "X": 0.0,
+          "Y": 56.88843,
+          "Z": 192.5
+        }
+      },
+      {
+        "group": "0003",
+        "action": "cutter_above",
+        "axes": {
+          "A": -90.0,
+          "C": -153.109318,
+          "X": 130.0,
+          "Y": 100.0,
+          "Z": 192.5
+        }
+      },
+      {
+        "group": "0003",
+        "action": "cutter",
+        "axes": {
+          "A": -90.0,
+          "C": -153.109318,
+          "X": 130.0,
+          "Y": 100.0,
+          "Z": 92.5
+        }
+      },
+      {
+        "group": "0003",
+        "action": "leave_cutter",
+        "axes": {
+          "A": -90.0,
+          "C": -153.109318,
+          "X": 130.0,
+          "Y": 100.0,
+          "Z": 192.5
+        }
+      },
+      {
+        "group": "0003",
+        "action": "exchange_above",
+        "axes": {
+          "A": -90.0,
+          "C": -153.109318,
+          "X": 140.0,
+          "Y": 100.0,
+          "Z": 192.5
+        }
+      },
+      {
+        "group": "0003",
+        "action": "exchange",
+        "axes": {
+          "A": -90.0,
+          "C": -153.109318,
+          "X": 140.0,
+          "Y": 100.0,
+          "Z": 92.5
+        }
+      },
+      {
+        "group": "0003",
+        "action": "leave_exchange",
+        "axes": {
+          "A": -90.0,
+          "C": -153.109318,
+          "X": 140.0,
+          "Y": 100.0,
+          "Z": 192.5
+        }
+      },
+      {
+        "group": "0003",
+        "action": "purge_above",
+        "axes": {
+          "A": -90.0,
+          "C": -153.109318,
+          "X": 150.0,
+          "Y": 100.0,
+          "Z": 192.5
+        }
+      },
+      {
+        "group": "0003",
+        "action": "purge",
+        "axes": {
+          "A": -90.0,
+          "C": -153.109318,
+          "X": 150.0,
+          "Y": 100.0,
+          "Z": 92.5
+        }
+      },
+      {
+        "group": "0003",
+        "action": "leave_purge",
+        "axes": {
+          "A": -90.0,
+          "C": -153.109318,
+          "X": 150.0,
+          "Y": 100.0,
+          "Z": 192.5
+        }
+      },
+      {
+        "group": "0003",
+        "action": "reorient_at_station",
+        "axes": {
+          "A": -90.0,
+          "C": -153.109318,
+          "X": 150.0,
+          "Y": 100.0,
+          "Z": 192.5
+        }
+      },
+      {
+        "group": "0003",
+        "action": "wipe_above",
+        "axes": {
+          "A": -90.0,
+          "C": -153.109318,
+          "X": 160.0,
+          "Y": 100.0,
+          "Z": 192.5
+        }
+      },
+      {
+        "group": "0003",
+        "action": "wipe_start",
+        "axes": {
+          "A": -90.0,
+          "C": -153.109318,
+          "X": 160.0,
+          "Y": 100.0,
+          "Z": 92.5
+        }
+      },
+      {
+        "group": "0003",
+        "action": "wipe_out_0",
+        "axes": {
+          "A": -90.0,
+          "C": -153.109318,
+          "X": 170.0,
+          "Y": 100.0,
+          "Z": 92.5
+        }
+      },
+      {
+        "group": "0003",
+        "action": "wipe_back_0",
+        "axes": {
+          "A": -90.0,
+          "C": -153.109318,
+          "X": 160.0,
+          "Y": 100.0,
+          "Z": 92.5
+        }
+      },
+      {
+        "group": "0003",
+        "action": "wipe_out_1",
+        "axes": {
+          "A": -90.0,
+          "C": -153.109318,
+          "X": 170.0,
+          "Y": 100.0,
+          "Z": 92.5
+        }
+      },
+      {
+        "group": "0003",
+        "action": "wipe_back_1",
+        "axes": {
+          "A": -90.0,
+          "C": -153.109318,
+          "X": 160.0,
+          "Y": 100.0,
+          "Z": 92.5
+        }
+      },
+      {
+        "group": "0003",
+        "action": "leave_wipe",
+        "axes": {
+          "A": -90.0,
+          "C": -153.109318,
+          "X": 160.0,
+          "Y": 100.0,
+          "Z": 192.5
+        }
+      },
+      {
+        "group": "0003",
+        "action": "safe_approach",
+        "axes": {
+          "A": -90.0,
+          "C": -153.109318,
+          "X": 0.0,
+          "Y": 56.88843,
+          "Z": 72.997327
+        }
+      }
+    ]
+  },
+  "source_sha256_actual": "291155b64dace255937bbcddb496da4f11f8319a2fe6b9d32aa29a340686befc",
+  "source_matches_manifest": true,
+  "controller_qualification": {
+    "axis_mode": "absolute",
+    "controller_family": "custom-klipper-derived",
+    "controller_version": null,
+    "coordinated_xyzac_verified": false,
+    "cumulative_c_span_rad": 5.388212664542059,
+    "cumulative_c_travel_rad": 2849.9643974026303,
+    "cutter_relative_z_mm": 20.0,
+    "extrusion_mode": "relative",
+    "feed_mode": "units_per_minute",
+    "machine_executable": false,
+    "machine_profile_id": "builtin.machine.own_ac_fdm.v1",
+    "macro_version": null,
+    "maximum_cumulative_c_rad": null,
+    "profile_id": "builtin.controller.own_ac.offline.v1",
+    "qualification_issues": [
+      "controller.version_unknown",
+      "controller.macros_unverified",
+      "controller.xyzac_coordination_unverified",
+      "controller.cumulative_c_limit_unknown"
+    ],
+    "reorientation_absolute_z_mm": 20.0,
+    "schema_version": 1,
+    "service_checked_samples": 5330,
+    "service_nozzle_envelope_complete": true,
+    "tool_change_station": {
+      "clearance_z_mm": 180.0,
+      "cutter_command": "M98 P100",
+      "cutter_xyz_mm": [
+        130.0,
+        100.0,
+        80.0
+      ],
+      "exchange_xyz_mm": [
+        140.0,
+        100.0,
+        80.0
+      ],
+      "purge_xyz_mm": [
+        150.0,
+        100.0,
+        80.0
+      ],
+      "travel_feedrate_mm_min": 3000.0,
+      "wipe_end_xyz_mm": [
+        170.0,
+        100.0,
+        80.0
+      ],
+      "wipe_feedrate_mm_min": 1200.0,
+      "wipe_passes": 2,
+      "wipe_start_xyz_mm": [
+        160.0,
+        100.0,
+        80.0
+      ]
+    }
+  },
+  "scope": "只读扫描已导出NC及CSV并比较量化轴值，不重复生成/碰撞/完整路径计算；严格语义回读结论来自本轮manifest。未证明实机资格。"
+}

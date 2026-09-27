@@ -4,7 +4,7 @@
   "profile": {
     "id": "builtin.machine.own_ac_fdm.v1",
     "name": "自有 AC 五轴打印机 / Own AC FDM",
-    "version": 1,
+    "version": 2,
     "root_link_id": "machine",
     "tool_link_id": "tool",
     "workpiece_link_id": "c_table",
@@ -350,16 +350,23 @@
     "build_surfaces": [
       {
         "id": "xyzac_plate",
-        "name": "Own AC heated table",
+        "name": "Own AC usable circular platform",
         "shape": "circle",
         "width_mm": null,
         "depth_mm": null,
-        "diameter_mm": 180.0,
+        "diameter_mm": 150.0,
         "thickness_mm": 0.0
       }
     ]
   },
   "provenance": {
+    "usable_platform_confirmation": {
+      "source": "User confirmation, 2026-09-27",
+      "shape": "circle",
+      "diameter_mm": 150.0,
+      "supersedes": "Paper bed diameter is not the usable printing diameter."
+    },
+    "paper_physical_bed_diameter_mm": 180.0,
     "source_sha256": "3a4fa546b0468f114b9d86c1125f9b03a363286f67caaafb3d44d34974b25c59",
     "sections": [
       "2.1",

@@ -1,0 +1,30 @@
+.F                                                                       [100%]
+================================== FAILURES ===================================
+_____ test_continuous_reads_back_exports_six_artifacts_and_reopens_state ______
+
+tmp_path = WindowsPath('F:/【项目和任务】/5AxisSclicer_V2.0/tmp/v2_targeted_render_fix/test_continuous_reads_back_exp0')
+model = CadModel(source_path=WindowsPath('F:/【项目和任务】/5AxisSclicer_V2.0/tmp/v2_targeted_render_fix/test_continuous_reads_back_e...red_length_unit=None, conversion_source='step_declaration'), bounds=None, source_size_bytes=None, source_mtime_ns=None)
+feature = TubeFeature(tube_body_id='tube-body', entry_port_id='manual-entry', exit_port_id='manual-exit', outer_radius_mm=3.0, i...0, 50.75), length_mm=0.75, source_face_id='manual', center=None, axis=None, sweep_rad=0.0),), source='manual_polyline')
+machine = MachineProfile(profile_id='builtin.machine.generic_xyzac_reference.v1', name='Generic XYZAC Reference', version=1, joi...er='5AxisSclicer', model='Generic XYZAC reference template', source_uri='builtin://machine/generic-xyzac-reference/v1')
+nozzle = NozzleProfile(resource_id='multi-product-test', display_name='slender', orifice_diameter_mm=0.02, filament_diameter_mm...mit_c=None, wear_resistance_rating=None, outer_profile_rz_mm=((0.01, 0.0), (0.01, 2.0)), source=None, is_builtin=False)
+placement = RigidTransform(T_target_from_source=((1.0, 0.0, 0.0, 250.0), (0.0, 1.0, 0.0, 250.0), (0.0, 0.0, 1.0, -300.0), (0.0, 0.0, 0.0, 1.0)), source_frame='build', target_frame='workpiece')
+
+    def test_continuous_reads_back_exports_six_artifacts_and_reopens_state(
+        tmp_path, model, feature, machine, nozzle, placement
+    ) -> None:
+        result, operation = _generate_continuous(model, feature, machine, nozzle, placement)
+    
+        assert result.operation_type == "tube_continuous"
+        assert result.exportable and result.readback.passed
+>       assert result.manifest.algorithm_version == "tube-continuous-product-v2"
+E       AssertionError: assert 'tube-continuous-product-v3' == 'tube-continuous-product-v2'
+E         
+E         - tube-continuous-product-v2
+E         ?                          ^
+E         + tube-continuous-product-v3
+E         ?                          ^
+
+tests\test_tube_multi_product_flow.py:186: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_tube_multi_product_flow.py::test_continuous_reads_back_exports_six_artifacts_and_reopens_state
+1 failed, 1 passed in 4.14s

@@ -17,6 +17,8 @@ from typing import Mapping
 
 import numpy as np
 
+from .printed_segment_index import _PrintedSegmentIndex
+
 from ..kinematics.xyzac import MachineAxisTrajectory
 from ..manufacturing.controller_profile import ControllerProfile, ToolChangeStation
 from ..manufacturing.coordinates import RigidTransform
@@ -546,7 +548,7 @@ def _check_printed_part(
         else printed_index.candidates(
             query_samples, sequence, planar_exact=nozzle_profile is not None,
             maximum_height=(nozzle_profile[-1][1] if nozzle_profile is not None else None),
-        )
+            checkpoint=checkpoint)
     )
     if nozzle_profile is not None and not vertical_nozzle:
         return _check_profiled_tilted_samples(
@@ -1147,116 +1149,6 @@ def _profile_to_segments_distance_batch(tip, axis, profile, starts, ends):
             best_height = np.where(better, candidate_height, best_height)
     return best_distance, best_height
 
-
-class _PrintedSegmentIndex:
-    """Conservative spatial cache for deposited segments before a service move.
-
-    Each segment occupies every grid cell intersecting its bead/nozzle-padded
-    bounding box. Querying sample-centre cells can only add candidates; the
-    existing exact section-to-segment check remains the collision criterion.
-    """
-
-    def __init__(self, toolpath, maximum_radius, *, checkpoint=None):
-        self.cell_size = max(1.0, 4.0 * maximum_radius)
-        self.planar_xy_size = max(1.0, 2.0 * maximum_radius)
-        self.planar_z_size = 1.0
-        self.nonplanar_cells: dict[tuple[int, ...], list[int]] = {}
-        self.planar_cells: dict[tuple[int, ...], list[int]] = {}
-        self.planar_broad_cells = None
-        self._planar_bounds = []
-        self.maximum_radius = maximum_radius
-        points = toolpath.points
-        for index in range(1, len(points)):
-            if checkpoint is not None and index % 4096 == 0:
-                checkpoint()
-            right = points[index]
-            if right.point_type != "deposition":
-                continue
-            start, end = points[index - 1].position, right.position
-            bead_radius = max(right.bead_width_mm or 0.0, right.layer_height_mm or 0.0) / 2.0
-            padding = bead_radius + maximum_radius + 0.5
-            planar = (
-                right.bead_width_mm is not None
-                and right.layer_height_mm is not None
-                and abs(start[2] - end[2]) <= 1.0e-6
-                and math.dist(right.nozzle_axis, (0.0, 0.0, -1.0)) <= 1.0e-6
-            )
-            if planar:
-                self._planar_bounds.append((index, start, end, padding))
-                xy_ranges = tuple(
-                    range(
-                        math.floor((min(start[axis], end[axis]) - padding) / self.planar_xy_size),
-                        math.floor((max(start[axis], end[axis]) + padding) / self.planar_xy_size) + 1,
-                    )
-                    for axis in (0, 1)
-                )
-                top_bucket = math.floor(end[2] / self.planar_z_size)
-                for xy in product(*xy_ranges):
-                    self.planar_cells.setdefault((*xy, top_bucket), []).append(index)
-                continue
-            ranges = tuple(
-                range(
-                    math.floor((min(start[axis], end[axis]) - padding) / self.cell_size),
-                    math.floor((max(start[axis], end[axis]) + padding) / self.cell_size) + 1,
-                )
-                for axis in range(3)
-            )
-            for key in product(*ranges):
-                self.nonplanar_cells.setdefault(key, []).append(index)
-
-    def _build_planar_broad_cells(self):
-        if self.planar_broad_cells is not None:
-            return
-        broad: dict[tuple[int, ...], list[int]] = {}
-        for index, start, end, padding in self._planar_bounds:
-            ranges = tuple(
-                range(
-                    math.floor((min(start[axis], end[axis]) - padding) / self.cell_size),
-                    math.floor((max(start[axis], end[axis]) + padding) / self.cell_size) + 1,
-                )
-                for axis in range(3)
-            )
-            for key in product(*ranges):
-                broad.setdefault(key, []).append(index)
-        self.planar_broad_cells = broad
-
-    def candidates(
-        self, service_samples, sequence, *, planar_exact=True, maximum_height=None,
-    ):
-        candidate_indices: set[int] = set()
-        vertical_tip_positions = set()
-        need_planar_broad = False
-        if maximum_height is None:
-            maximum_height = max(sample[7] for sample in service_samples)
-        for center, _radius, axis, _lower, _upper, _label, _exempt, height, _remaining in service_samples:
-            key = tuple(math.floor(value / self.cell_size) for value in center)
-            candidate_indices.update(self.nonplanar_cells.get(key, ()))
-            if planar_exact and math.dist(axis, (0.0, 0.0, 1.0)) <= 1.0e-6:
-                if height <= 1.0e-9:
-                    vertical_tip_positions.add(tuple(center))
-            else:
-                need_planar_broad = True
-        for tip in vertical_tip_positions:
-            x_bucket = math.floor(tip[0] / self.planar_xy_size)
-            y_bucket = math.floor(tip[1] / self.planar_xy_size)
-            # A horizontal bead can meet the vertical nozzle only at or above
-            # the tip.  Query its actual layer-top bin, not every lower layer
-            # inside the nozzle's broad 3-D sphere.
-            first_z = math.floor((tip[2] - 1.0e-9) / self.planar_z_size)
-            last_z = math.floor((tip[2] + maximum_height + 1.0e-9) / self.planar_z_size)
-            for z_bucket in range(first_z, last_z + 1):
-                candidate_indices.update(self.planar_cells.get(
-                    (x_bucket, y_bucket, z_bucket), (),
-                ))
-        if need_planar_broad:
-            self._build_planar_broad_cells()
-            assert self.planar_broad_cells is not None
-            for center, _radius, axis, *_ in service_samples:
-                if planar_exact and math.dist(axis, (0.0, 0.0, 1.0)) <= 1.0e-6:
-                    continue
-                key = tuple(math.floor(value / self.cell_size) for value in center)
-                candidate_indices.update(self.planar_broad_cells.get(key, ()))
-        return sorted(index for index in candidate_indices if index < sequence)
 
 
 def _section_radial_distance(center, axis, axial_tolerance, start, end):

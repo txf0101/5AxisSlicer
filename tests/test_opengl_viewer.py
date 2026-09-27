@@ -6,6 +6,7 @@ import unittest
 from itertools import product
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import patch
 
 import numpy as np
 
@@ -32,7 +33,7 @@ from five_axis_slicer.opengl_viewer import (  # noqa: E402
     _build_continuous_line_strips,
     _build_paper_path_arrays,
 )
-from five_axis_slicer.models import SelectionState  # noqa: E402
+from five_axis_slicer.models import BuildSurfaceOverlay, SelectionState  # noqa: E402
 from five_axis_slicer.viewer import ModelViewer  # noqa: E402
 
 
@@ -40,6 +41,18 @@ class OpenGLPaperPathTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.app = QApplication.instance() or QApplication([])
+
+    def test_empty_platform_refits_when_viewport_becomes_narrow(self) -> None:
+        viewer = OpenGLModelViewer()
+        viewer.set_build_surface(BuildSurfaceOverlay("plate", "circle", diameter_mm=150))
+        viewer.resize(300, 800)
+        with patch("five_axis_slicer.opengl_viewer.glViewport"):
+            viewer.resizeGL(300, 800)
+        matrix = viewer._projection_matrix() @ viewer._view_matrix()
+        for vertex in viewer._buffers["build_surface"].vertices:
+            clip = matrix @ np.append(vertex, 1.0)
+            self.assertLess(max(abs(clip[0] / clip[3]), abs(clip[1] / clip[3])), 0.95)
+        viewer.close()
 
     def test_fit_view_keeps_all_model_corners_visible_in_narrow_viewport(self) -> None:
         viewer = OpenGLModelViewer()

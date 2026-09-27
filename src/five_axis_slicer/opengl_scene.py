@@ -347,6 +347,42 @@ def build_surface_lines(
     return vertices
 
 
+def build_surface_grid(surface: BuildSurfaceOverlay) -> list[tuple[float, float, float]]:
+    """Return a millimetre grid clipped to the configured surface in its own frame."""
+    boundary = build_surface_lines(surface)
+    origin = np.asarray(surface.origin, dtype=float)
+    x_vector = np.asarray(boundary[-3]) - origin
+    y_vector = np.asarray(boundary[-1]) - origin
+    half_x, half_y = float(np.linalg.norm(x_vector)), float(np.linalg.norm(y_vector))
+    x_axis, y_axis = x_vector / half_x, y_vector / half_y
+    step = max(10.0, nice_grid_step(max(half_x, half_y) / 25.0))
+    vertices: list[tuple[float, float, float]] = []
+    for extent, other_extent, axis, other_axis in (
+        (half_x, half_y, x_axis, y_axis),
+        (half_y, half_x, y_axis, x_axis),
+    ):
+        for index in range(math.ceil(-extent / step), math.floor(extent / step) + 1):
+            offset = index * step
+            reach = (
+                math.sqrt(max(0.0, extent**2 - offset**2))
+                if surface.shape.lower() == "circle"
+                else other_extent
+            )
+            vertices.extend(
+                vector3(origin + offset * axis + sign * reach * other_axis) for sign in (-1, 1)
+            )
+    return vertices
+
+
+def build_surface_triangles(surface: BuildSurfaceOverlay) -> list[tuple[float, float, float]]:
+    boundary = build_surface_lines(surface)[:-4]
+    return [
+        point
+        for index in range(0, len(boundary), 2)
+        for point in (surface.origin, boundary[index], boundary[index + 1])
+    ]
+
+
 def vertex_marker_lines(
     point: tuple[float, float, float],
     radius: float,
@@ -520,3 +556,36 @@ _polydata_lines = polydata_lines
 _build_line_arrays = build_line_arrays
 _build_bead_arrays = build_bead_arrays
 _render_stride = render_stride
+
+
+def world_grid_geometry(
+    bounds: tuple[np.ndarray, np.ndarray] | None,
+    major_color: tuple[float, float, float, float],
+    minor_color: tuple[float, float, float, float],
+) -> tuple[list[tuple[float, float, float]], list[tuple[float, float, float, float]]]:
+    if bounds is None:
+        low = np.array([-50.0, -50.0, 0.0], dtype=np.float32)
+        high = np.array([50.0, 50.0, 0.0], dtype=np.float32)
+    else:
+        low, high = bounds
+    span = max(float(high[0] - low[0]), float(high[1] - low[1]), 20.0)
+    step = nice_grid_step(span / 12.0)
+    x_min = math.floor((float(low[0]) - step) / step) * step
+    x_max = math.ceil((float(high[0]) + step) / step) * step
+    y_min = math.floor((float(low[1]) - step) / step) * step
+    y_max = math.ceil((float(high[1]) + step) / step) * step
+    z = float(low[2]) - max(0.02, span * 0.002)
+    vertices: list[tuple[float, float, float]] = []
+    colors: list[tuple[float, float, float, float]] = []
+
+    x_values = inclusive_grid_values(x_min, x_max, step)
+    y_values = inclusive_grid_values(y_min, y_max, step)
+    for x in x_values:
+        color = major_color if int(round(x / step)) % 5 == 0 else minor_color
+        vertices.extend([(x, y_min, z), (x, y_max, z)])
+        colors.extend([color, color])
+    for y in y_values:
+        color = major_color if int(round(y / step)) % 5 == 0 else minor_color
+        vertices.extend([(x_min, y, z), (x_max, y, z)])
+        colors.extend([color, color])
+    return vertices, colors

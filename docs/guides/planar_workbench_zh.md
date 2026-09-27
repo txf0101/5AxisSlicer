@@ -1,5 +1,7 @@
 # Planar 平面工作台使用手册
 
+本页支撑和 Spiral 参数、状态图用于说明案例输入、路线与错误恢复；窗口布局与公共设置入口按当前点击教程操作。图中背景网格及模型显隐不改变工艺参数。
+
 > 初次使用请先完成[学习总册](user_learning_manual_zh.md)的 L01—L06；本页是 Planar 专项参考。随附平面件用于练习区域、层、道距和孔岛判断，示例参数不是其他零件的默认答案。
 
 本手册覆盖 Region 截面预览、Zigzag Fill、Offset Fill、Thin Wall、Spiral，以及 buildplate-only 垂直支撑。导出前请检查报告和回读状态；离线参考结果不代表真实设备资格。
@@ -22,9 +24,9 @@ Spiral 使用中间 Z 的真实实体有限采样；支撑检查完整运动段�
 
 工作台包含一个预览操作和五个制造操作。`Planar Region` 只显示分层区域、孔和岛，不生成 NC，也不导出六件套；`Planar Zigzag`、`Planar Offset`、`Planar Thin Wall`、`Planar Spiral` 和 `Planar Support` 都进入共享 Toolpath、MachineAxisTrajectory、ValidationReport、后处理与 G-code 回读链。新建类型和现有操作使用两个独立选择框，可在一个项目中切换多个操作及其 Viewer 结果。
 
-![Planar Zigzag 单层填充线和显示选项](assets/product_delivery/07_planar_full_lines_zh.png)
+![Planar Zigzag 单层填充线局部](assets/current_delivery/planar_zigzag_path_detail.png)
 
-图中已取消“显示模型”，预览方式为“完整线条（快速）”，因此可以直接看到整层路径。这个单层示例使用 `body_001`、`Z=0.2 mm`；本手册下方的 `body_002`、`Z=60 mm` 是另一组练习设置，不能混用。需要检查路径与模型的贴合关系时重新勾选“显示模型”；需要观察道宽时切换为“沉积道宽”。
+图中裁取矩形试件的整层路径，模型已隐藏；显示开关不在此裁图中。这个单层示例使用 `body_001`、`Z=0.2 mm`；本手册下方的 `body_002`、`Z=60 mm` 是另一组练习设置，不能混用。需要检查路径与模型的贴合关系时重新勾选“显示模型”；需要观察道宽时切换为“沉积道宽”。
 
 ## 创建操作与参数
 
@@ -137,9 +139,9 @@ Spiral 使用中间 Z 的真实实体有限采样；支撑检查完整运动段�
 
 ![Spiral 单层输入：首层与末层 Z 相同](assets/planar/current_p01_p07/p06/07_planar_spiral_error_zh_1366x768.png)
 
-图中首层和末层都为 60 mm，尚未构成连续螺旋所需的两个相邻层；导出按钮禁用。错误详情需在右侧参数区向下滚动查看。将末层改为相邻层后，再应用、生成并检查回读：
+图中首层和末层都为 60 mm，尚未构成连续螺旋所需的两个相邻层；这张图只显示输入，未包含错误详情或导出按钮。生成后应向下滚动核对错误提示和导出禁用状态。将末层改为相邻层后，再应用、生成并检查回读：
 
-![Spiral 恢复后的英文结果，1600×900](assets/planar/current_p01_p07/p06/08_planar_spiral_recovered_en_1600x900.png)
+![Spiral 相邻两层参数与轮廓路径（英文界面）](assets/planar/current_p01_p07/p06/08_planar_spiral_recovered_en_1600x900.png)
 
 ## 导出文件
 

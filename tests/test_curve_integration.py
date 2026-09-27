@@ -55,6 +55,7 @@ def test_curve_qt_generates_shared_toolpath_and_switches_language(tmp_path: Path
     assert result is not None and result.readback.passed
     assert str(page.viewer.gcode_preview.source_path) == f"<generated:{operation.operation_id}>"
     assert page.viewer.visible_path_segment_count > 0
+    assert page.viewer.quality_mode == "paper"
     assert not page.show_model_checkbox.isChecked()
     assert not page.viewer.model_visible
     page.show_model_checkbox.setChecked(True)
@@ -76,6 +77,7 @@ def test_curve_qt_error_then_parameter_recovery(tmp_path: Path) -> None:
     page.edge_ids_edit.setText("missing-edge")
     page.apply_button.click()
     assert "missing-edge" in page.status_label.text()
+    assert page.edge_ids_edit.text() == "missing-edge"
 
     page.edge_ids_edit.setText(edge.edge_id)
     page.reverse_flags_edit.setText("0")
@@ -86,6 +88,59 @@ def test_curve_qt_error_then_parameter_recovery(tmp_path: Path) -> None:
 
     assert controller.product_result(operation.operation_id) is not None
     assert page.export_button.isEnabled()
+
+
+def test_language_switch_translates_issues_without_replacing_unapplied_geometry(tmp_path: Path) -> None:
+    model, edge = _line_model(tmp_path)
+    controller, _operation = _configured(model, edge.edge_id)
+    page = CurvePage(controller=controller, viewer_factory=TubeViewerStub)
+    try:
+        page.edge_ids_edit.setText("unapplied-edge-draft")
+        page.reverse_flags_edit.setText("1")
+        for language, expected in (("en", "Reference machine"), ("zh", "参考机型")):
+            page.set_language(language)
+            labels = [page.issue_list.item(i).text() for i in range(page.issue_list.count())]
+            assert any(expected in label for label in labels)
+            assert page.edge_ids_edit.text() == "unapplied-edge-draft"
+            assert page.reverse_flags_edit.text() == "1"
+    finally:
+        page.close()
+
+
+def test_curve_normal_error_switches_language_and_preserves_raw_diagnostic(tmp_path: Path) -> None:
+    model, edge = _line_model(tmp_path)
+    controller, _operation = _configured(model, edge.edge_id)
+    page = CurvePage(controller=controller, viewer_factory=TubeViewerStub)
+    try:
+        raw = "curve.normal_ambiguous: choose one adjacent face"
+        page._last_error = raw
+        for language, expected in (("zh", "法向不明确"), ("en", "Normal is ambiguous")):
+            page.set_language(language)
+            assert expected in page.status_label.text()
+            assert page.status_label.toolTip() == raw
+            assert page.state_json()["last_error"] == raw
+        page._last_error = None
+        page._update_status_label()
+        assert page.status_label.toolTip() == ""
+    finally:
+        page.close()
+
+
+def test_chain_error_explains_recovery_without_hiding_gap(tmp_path: Path) -> None:
+    model, edge = _line_model(tmp_path)
+    controller, _operation = _configured(model, edge.edge_id)
+    page = CurvePage(controller=controller, viewer_factory=TubeViewerStub)
+    raw = "curve.chain_disconnected [edge_b]: gap 8 mm exceeds 0.01 mm"
+    try:
+        page._last_error = raw
+        for language, expected in (("zh", "反向标志"), ("en", "reverse flags")):
+            page.set_language(language)
+            assert expected in page.status_label.text()
+            assert raw in page.status_label.text()
+            assert page.status_label.toolTip() == raw
+            assert page.state_json()["last_error"] == raw
+    finally:
+        page.close()
 
 
 def test_curve_viewer_selection_type_can_switch_between_edge_and_face(tmp_path: Path) -> None:
@@ -177,8 +232,27 @@ def test_curve_service_rejects_planar_namespace(tmp_path: Path) -> None:
     assert "only curve" in output.lower()
 
 
+def test_curve_adopts_viewer_edges_in_click_order(tmp_path: Path) -> None:
+    from five_axis_slicer.models import PickRequest
+    from five_axis_slicer.viewer_common import apply_pick_selection
+
+    model, edge = _line_model(tmp_path)
+    controller, _operation = _configured(model, edge.edge_id)
+    page = CurvePage(controller=controller, viewer_factory=TubeViewerStub)
+    try:
+        request = PickRequest("edge", multiple=True)
+        for edge in ("edge_z", "edge_a"):
+            apply_pick_selection(page.viewer.selection, request, "edge", edge)
+        page.use_selection_button.click()
+        assert page.edge_ids_edit.text() == "edge_z,edge_a"
+        assert page.reverse_flags_edit.text() == "0,0"
+    finally:
+        page.close()
+
+
 def test_curve_and_freeform_show_setup_warning_in_selected_language() -> None:
     page = SimpleNamespace(issue_list=QListWidget(), language="zh")
+    page._t = lambda key: CurvePage._t(page, key)
     issue = ValidationIssue(
         "MACHINE_REFERENCE_ONLY", IssueSeverity.WARNING, "builtin.machine.own_ac_fdm.v1"
     )

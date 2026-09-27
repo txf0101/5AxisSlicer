@@ -306,6 +306,22 @@ class TubeUiTests(unittest.TestCase):
             page.operation_feedback.text(),
             "Operation geometry roles and process parameters applied.",
         )
+        previous = page.controller.operations[0]
+        exit_combo = page._operation_geometry_combos["exit_port_id"]
+        exit_combo.setCurrentIndex(0)
+        QTest.mouseClick(page.operation_apply_button, Qt.LeftButton)
+        self.assertIs(page.controller.operations[0], previous)
+        self.assertIn("Select the tube body, inlet, outlet", page.operation_feedback.text())
+        self.assertFalse(page.operation_generate_button.isEnabled())
+        self.assertFalse(page.operation_export_button.isEnabled())
+        window.set_language("zh")
+        self.assertIn("请补齐", page.operation_feedback.text())
+        self.assertFalse(page.operation_generate_button.isEnabled())
+        exit_combo.setCurrentIndex(exit_combo.findData(role_ids["exit_port_id"]))
+        self.assertTrue(page._operation_apply_failed)
+        QTest.mouseClick(page.operation_apply_button, Qt.LeftButton)
+        self.assertFalse(page._operation_apply_failed)
+        self.assertEqual(page.operation_feedback.text(), page._t("operation_applied"))
 
     def test_selected_pipe_edges_bind_explicit_roles_before_generation(self) -> None:
         window = self._loaded_tube_window()
@@ -353,7 +369,13 @@ class TubeUiTests(unittest.TestCase):
         state = TubeProductState(operation.operation_id, "0" * 64, "error", {"error": error})
         with mock.patch.object(page.controller, "product_state", return_value=state):
             tube_operation_ui._refresh_product_status(page)
-        self.assertIn(error, page.operation_generation_status.text())
+        self.assertIn("端口必须使用管体外圆边", page.operation_generation_status.text())
+        self.assertIn("tube.port_not_outer_boundary", page.operation_generation_status.text())
+        with mock.patch.object(page.controller, "product_state", return_value=state):
+            page.set_language("en")
+        self.assertIn(
+            "Ports must use outer circular edges", page.operation_generation_status.text()
+        )
         self.assertFalse(page.operation_export_button.isEnabled())
         state = TubeProductState(
             operation.operation_id,
@@ -377,6 +399,36 @@ class TubeUiTests(unittest.TestCase):
             page.set_language("en")
         self.assertIn("tube.nozzle_ipw_collision", page.operation_generation_status.text())
         self.assertIn("collision_check_complete=False", page.operation_generation_status.text())
+        self.assertFalse(page.operation_export_button.isEnabled())
+
+    def test_operation_apply_refreshes_error_to_stale_without_reselecting(self) -> None:
+        from five_axis_slicer import tube_operation_ui
+        from five_axis_slicer.postprocessing.tube_product import TubeProductState
+
+        page = self._loaded_tube_window().tube_page
+        page._create_operation()
+        operation = page.controller.operations[0]
+        page.tree.setCurrentItem(page._tree_items[f"operation:{operation.operation_id}"])
+        for key, identifier in {
+            "tube_body_id": "body_002",
+            "entry_port_id": "body_002_edge_0003",
+            "exit_port_id": "body_002_edge_0014",
+            "substrate_body_id": "body_001",
+        }.items():
+            combo = page._operation_geometry_combos[key]
+            combo.setCurrentIndex(combo.findData(identifier))
+        page.controller._product_states[operation.operation_id] = TubeProductState(
+            operation.operation_id, "0" * 64, "error", {"error": "old failure"}
+        )
+        tube_operation_ui._refresh_product_status(page)
+        page._operation_parameter_spins["bead_width_mm"].setValue(0.7)
+
+        with mock.patch.object(page, "_report_error") as report_error:
+            QTest.mouseClick(page.operation_apply_button, Qt.LeftButton)
+        report_error.assert_not_called()
+
+        self.assertEqual(page.controller.product_state(operation.operation_id).status, "stale")
+        self.assertEqual(page.operation_generation_status.text(), page._t("generation_stale"))
         self.assertFalse(page.operation_export_button.isEnabled())
 
     def test_operation_viewer_picks_bind_draft_and_reject_invalid_hits(self) -> None:
@@ -746,7 +798,29 @@ class TubeUiTests(unittest.TestCase):
         self.assertIsNone(page._pick_context)
         self.assertEqual(page._two_point_hits, [])
 
-    def test_ui_rejects_multiple_setups_before_committing_project(self) -> None:
+    def test_replacing_controller_rebinds_matching_operation_and_clears_old_result(self) -> None:
+        page = self._loaded_tube_window().tube_page
+        page._create_operation()
+        operation = page.controller.operations[0]
+        page.tree.setCurrentItem(page._tree_items[f"operation:{operation.operation_id}"])
+        page.viewer.gcode_preview = object()
+        page.operation_preview_button.setEnabled(True)
+        page.operation_export_button.setEnabled(True)
+        page.operation_generation_status.setText("Generated result exported.")
+        replacement = TubeSetupController(
+            page.model, setup=page.controller.setup, operations=(operation,)
+        )
+
+        page.set_controller(replacement, page.model)
+
+        self.assertIsNone(page.viewer.gcode_preview)
+        self.assertEqual(page._selected_operation_id, operation.operation_id)
+        self.assertFalse(page.operation_preview_button.isEnabled())
+        self.assertFalse(page.operation_export_button.isEnabled())
+        self.assertEqual(page.operation_generation_status.text(), page._t("generation_draft"))
+        self.assertIs(page.editor_stack.currentWidget(), page.operation_editor)
+
+    def test_ui_rejects_unbound_multiple_setups_before_committing_project(self) -> None:
         window = MainWindow(http_port=0, model_viewer_factory=TubeViewerStub)
         loaded = ProjectLoaded(
             project_directory=Path("."),
@@ -764,7 +838,9 @@ class TubeUiTests(unittest.TestCase):
             payload={},
         )
 
-        with self.assertRaisesRegex(ProjectFormatError, "at most one"):
+        with self.assertRaisesRegex(
+            ProjectFormatError, "require explicit workbench setup_bindings"
+        ):
             window._commit_loaded_project(loaded)
 
     def test_ui_rejects_untyped_setup_before_mutating_committed_state(self) -> None:
@@ -935,7 +1011,8 @@ class TubeUiTests(unittest.TestCase):
         self.assertEqual(viewer.active_coordinate_frame_id, "machine")
         QTest.mouseClick(page.model_view_button, Qt.LeftButton)
         self.assertEqual(page.state_json()["view_mode"], "model")
-        self.assertIsNone(viewer.build_surface)
+        self.assertIsNotNone(viewer.build_surface)
+        self.assertEqual(viewer.build_surface.diameter_mm, 250.0)
         self.assertMatrixAlmostEqual(
             viewer.model_transform,
             (
@@ -1618,6 +1695,28 @@ with tube.transaction():
         state = window.handle_automation("/model/state", {})["model_load"]
         self.assertEqual(state["length_unit_override"], "inch")
         self.assertEqual(state["status"], "ready")
+
+    def test_shell_step_import_routes_home_to_manufacturing(self) -> None:
+        window = self._window()
+        selected = str(Path("shell-model.step").resolve())
+        for page in (window.home_page, window.planar_page, window.result_page):
+            with self.subTest(page=page.objectName()):
+                window.stack.setCurrentWidget(page)
+                with (
+                    mock.patch(
+                        "five_axis_slicer.ui.QFileDialog.getOpenFileName",
+                        return_value=(selected, ""),
+                    ),
+                    mock.patch.object(window, "start_model_load") as manufacturing,
+                    mock.patch.object(window, "start_result_load") as preview,
+                ):
+                    window.open_action.trigger()
+                if page is window.result_page:
+                    preview.assert_called_once_with(model_path=selected)
+                    manufacturing.assert_not_called()
+                else:
+                    manufacturing.assert_called_once_with(selected, prompt_for_unknown_unit=True)
+                    preview.assert_not_called()
 
     def test_step_file_dialog_enables_unknown_unit_prompting(self) -> None:
         window = self._window()

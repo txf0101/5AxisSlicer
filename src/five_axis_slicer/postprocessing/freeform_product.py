@@ -53,7 +53,7 @@ from .thermal_program import (
     wrap_thermal_program,
 )
 
-FREEFORM_ALGORITHM_VERSION = "paper-core-freeform-product-v2"
+FREEFORM_ALGORITHM_VERSION = "paper-core-freeform-product-v4"
 CancelCheck = Callable[[], bool]
 
 

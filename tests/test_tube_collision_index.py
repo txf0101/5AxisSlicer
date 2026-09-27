@@ -10,7 +10,53 @@ from five_axis_slicer.validation.indexed_tube import (
     _collision_issues,
     _point_segment_distance,
     validate_indexed_tube,
+    CollisionBox,
+    _box_ahead_of_tip,
+    _record_deposition,
 )
+
+
+def test_variable_bead_start_is_present_in_ipw_broad_phase():
+    fixture = pipeline.IndexedValidationTests()
+    fixture.setUp()
+    left, right = fixture.toolpath.points[:2]
+    left = replace(left, position=(0, 0, 0), bead_width_mm=2.0, layer_height_mm=0.2)
+    right = replace(right, position=(2, 0, 0), bead_width_mm=0.2, layer_height_mm=0.2)
+    index = _DepositedSegmentIndex(0.1)
+    deposited = []
+    _record_deposition(left, right, deposited, index, True)
+    assert deposited[0][2] == pytest.approx(1.0)
+    assert 0 in index.near_candidates((0, 0.9, 0), 0.1, before=1)
+
+
+@pytest.mark.parametrize("height,blocked", [(0.1, False), (0.0, True), (-0.1, True)])
+@pytest.mark.parametrize("role", ["substrate", "fixture"])
+def test_tip_plane_separation_preserves_contact_and_penetration(height, blocked, role):
+    fixture = pipeline.IndexedValidationTests()
+    fixture.setUp()
+    nozzle = replace(fixture.nozzle, outer_profile_rz_mm=((0.9, 0.0), (2.0, 18.0)), length_mm=18.0)
+    path = replace(
+        fixture.toolpath,
+        points=tuple(
+            replace(point, position=(0.0, 0.0, z), nozzle_axis=(0.0, 0.0, -1.0),
+                    point_type=kind, material_volume_mm3=0.0, extrusion_role="none")
+            for point, z, kind in zip(fixture.toolpath.points, (height, 5.0), ("approach", "depart"))
+        ),
+        events=(),
+    )
+    box = CollisionBox("base", role, (-10.0, -10.0, -5.0), (10.0, 10.0, 0.0))
+    issues, _ = _collision_issues(path, nozzle, (box,), 0.25, check_ipw=False)
+    assert bool(issues) is blocked
+    reverse = replace(path, points=tuple(reversed(path.points)))
+    reverse_issues, _ = _collision_issues(reverse, nozzle, (box,), 0.25, check_ipw=False)
+    assert bool(reverse_issues) is blocked
+
+
+def test_tip_plane_uses_all_box_extents_for_oblique_axes():
+    box = CollisionBox("box", "fixture", (1.0, 1.0, -1.0), (2.0, 2.0, 1.0))
+    assert _box_ahead_of_tip((0.0, 0.0, 0.0), (2**-0.5, 2**-0.5, 0.0), box)
+    assert not _box_ahead_of_tip((1.5, 1.5, 0.0), (2**-0.5, 2**-0.5, 0.0), box)
+    assert not _box_ahead_of_tip((0.0, 0.0, 0.0), (-1.0, 0.0, 0.0), box)
 
 
 def test_collision_checkpoint_preserves_report_and_propagates_cancellation():

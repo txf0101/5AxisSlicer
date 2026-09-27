@@ -2,6 +2,11 @@
 
 ## 六个工作台算法开发
 
+- [第二代收尾复核与点击矩阵](reviews/2026-09-26_v2_final_delivery_review.md)：按用户纠正后的计划推进 V2-01—V2-05。
+
+- [扇叶计划顺序复核](reviews/2026-09-26_fan_sequential_audit.md)：当前输入与契约核对、旧 NC 重扫、历史资格纠正与后续判据缺口。
+
+- [第二代离线产品收尾计划](planning/v2_final_delivery_plan_20260925.md)：五工作台界面闭环、长任务、教程图片重制与发行停止条件；Research 和仿真列入第三代。
 - [离线产品交付计划](planning/product_delivery_20260923.md)：首次使用、五工作台、四例真实点击、长任务、教程和停止线。
 - [FAN15 四例交付复盘](reviews/2026-09-21_fan15_github_delivery_review.md)：模型、新旧代码、可重绘中间文件的收口范围，以及离线与实机资格边界。
 - [FAN15 四例文件索引](../example/README.md)：下载模型、新旧 G-code、对比图和 Git LFS 路径数据。
@@ -97,6 +102,8 @@
 - [原开发目标文档](../圭臬/开发目标文档.docx)：历史目标与示意图，阅读时结合最新计划和实现状态。
 
 ## 历史规划与阶段复盘
+
+- [叶轮界面与 G-code 无标注截图更新](reviews/2026-09-26_paper_screenshot_refresh.md)：当前 V2.6.2 界面、较新整件离线程序与两张独立 PNG。
 
 项目既有复盘继续集中在 `docs/reviews/`，不迁移或重命名原文件。
 

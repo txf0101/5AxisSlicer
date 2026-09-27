@@ -16,6 +16,8 @@ The **Surface-solid growth** selector appears in the Surface Solid Fill paramete
 
 ## Shared parameters
 
+Thickness mode starts at the selected supporting face and advances into the solid, opposite to that face's outward normal, toward the opposite face. The nozzle axis points back toward the supporting face, opposite to growth. The first layer centre is one effective layer height from the supporting face. Confirm actual existing support there; selecting a face does not create a substrate. For upward printing on a horizontal base, select the bottom supporting face and its root edge, with the top face opposite. Changing thickness alone does not correct a top-face assignment.
+
 - Bead width determines finite material coverage; a CAD boundary alone is not a path centreline.
 - Layer height can mean base Z layers, spherical radial layers, surface-thickness layers, or blade radial layers. The same label refers to different physical directions.
 - Check path spacing in the physical metric of the relevant surface. A planar chart distance is not spherical surface length; general surfaces need an in-surface distance measure.

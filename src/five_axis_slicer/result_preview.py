@@ -20,6 +20,7 @@ import numpy as np
 
 from .gcode_source import GCodeSourceIndex
 from .localization import tr
+from .preview_coordinate_text import coordinate_text
 from .result_state import (
     IllustrativeProcessParameters,
     LoadRequest,
@@ -1327,26 +1328,12 @@ if QT_AVAILABLE:
         # Statistics, source context, and export options
 
         def _retranslate_statistics(self) -> None:
-            keys = {
-                "bodies": "statistics_bodies",
-                "edges": "statistics_edges",
-                "base_layers": "statistics_base_layers",
-                "blade_stages": "statistics_blade_stages",
-                "spatial_segments": "statistics_spatial_segments",
-                "extrusion_segments": "statistics_extrusion_segments",
-                "travel_segments": "statistics_travel_segments",
-                "layer_range": "statistics_layer_range",
-                "a_range": "statistics_a_range",
-                "c_range": "statistics_c_range",
-            }
-            for name, key in keys.items():
-                self.statistic_labels[name].setText(tr(self.language, key))
-            self.statistics_evidence.setText(tr(self.language, "statistics_actual_data"))
-            self.continuity_label.setText(
-                f"{tr(self.language, 'statistics_continuity_tolerance')}: 0.02 mm"
-            )
+            from .result_statistics_text import retranslate_statistics
+
+            retranslate_statistics(self)
 
         def _update_statistics(self) -> None:
+            self.coordinate_formula.setText(coordinate_text(self._preview, self.language))
             unavailable = (
                 tr(self.language, "statistics_unavailable")
                 if hasattr(self, "statistic_values")

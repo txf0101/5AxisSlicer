@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from collections import Counter
-from collections.abc import Mapping
 from pathlib import Path
 from typing import Any, Callable
 
@@ -27,15 +26,16 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
+from .build_surface_presentation import refresh_source_platform
 from .command_kernel import CommandError
 from .curve_commands import CurveCommandService
 from .curve_controller import CurveController
 from .gcode_preview import GCodePreview
 from .generation_event_pump import throttled_event_pump
 from .manufacturing.toolpath import GeneratedToolpath
-from .tube_ui_text import TUBE_ISSUE_LABELS
 from .ui_controls import ScrollSafeDoubleSpinBox, ScrollSafeSpinBox
 from .viewer import ModelViewer
+from .workbench_issue_ui import jump_to_issue, operation_status_text, refresh_issue_list
 
 
 _TEXT = {
@@ -329,7 +329,10 @@ class CurvePage(QWidget):
             self.viewer.set_model_visible(visible)
 
     def _set_path_display(self, _index: int) -> None:
-        if hasattr(self.viewer, "set_quality_mode") and getattr(self.viewer, "gcode_preview", None) is not None:
+        if (
+            hasattr(self.viewer, "set_quality_mode")
+            and getattr(self.viewer, "gcode_preview", None) is not None
+        ):
             self.viewer.set_quality_mode(str(self.path_display_combo.currentData()))
 
     def _add_row(self, form: QFormLayout, widget: QWidget, key: str) -> None:
@@ -345,10 +348,14 @@ class CurvePage(QWidget):
         self.show_model_checkbox.setText(text["show_model"])
         self.path_display_combo.setItemText(0, text["path_lines"])
         self.path_display_combo.setItemText(1, text["path_beads"])
-        self.pick_kind_label.setText("Viewer 选取类型" if self.language == "zh" else "Viewer selection type")
+        self.pick_kind_label.setText(
+            "Viewer 选取类型" if self.language == "zh" else "Viewer selection type"
+        )
         for index, kind in enumerate(("edge", "face", "body", "vertex")):
             names = {"edge": "边", "face": "面", "body": "实体", "vertex": "顶点"}
-            self.pick_kind_combo.setItemText(index, names[kind] if self.language == "zh" else kind.title())
+            self.pick_kind_combo.setItemText(
+                index, names[kind] if self.language == "zh" else kind.title()
+            )
         for _, label, key in self._rows:
             label.setText(text[key])
         self.normal_mode_combo.setItemText(0, text["adjacent"])
@@ -368,6 +375,13 @@ class CurvePage(QWidget):
             button.setText(text[key])
         self.help_label.setText(text["help"])
         if hasattr(self, "controller"):
+            operation = self._selected_operation()
+            result = (
+                None
+                if operation is None
+                else self.controller.product_result(operation.operation_id)
+            )
+            self._refresh_issues(self.controller.validation_report().issues, result)
             self._update_status_label()
 
     def set_controller(self, controller: CurveController) -> None:
@@ -399,10 +413,11 @@ class CurvePage(QWidget):
         )
         return state
 
-    def refresh(self, *_ignored: Any) -> None:
+    def refresh(self, *_ignored: Any, reload_controls: bool = True) -> None:
+        refresh_source_platform(self)
         self._refresh_operation_combo()
         operation = self._selected_operation()
-        if operation is not None:
+        if operation is not None and reload_controls:
             self._load_controls(operation)
         result = (
             None if operation is None else self.controller.product_result(operation.operation_id)
@@ -413,6 +428,7 @@ class CurvePage(QWidget):
         self._update_status_label(state)
         if result is not None and state is not None and state.status in {"ready", "warning"}:
             self.viewer.load_gcode_preview(_preview_from_toolpath(result.preview_toolpath))
+            self._set_path_display(self.path_display_combo.currentIndex())
             if self._auto_hide_model_on_result:
                 self.show_model_checkbox.setChecked(False)
                 self._auto_hide_model_on_result = False
@@ -428,24 +444,11 @@ class CurvePage(QWidget):
         if state is None:
             operation = self._selected_operation()
             state = (
-                None
-                if operation is None
-                else self.controller.product_state(operation.operation_id)
+                None if operation is None else self.controller.product_state(operation.operation_id)
             )
         status = "draft" if state is None else state.status
-        if self.language == "zh":
-            labels = {
-                "draft": "草稿",
-                "ready": "就绪",
-                "warning": "有警告",
-                "error": "错误",
-                "stale": "待更新",
-                "invalid": "无效",
-            }
-            message = f"状态：{labels.get(status, status)}"
-        else:
-            message = f"Status: {status}"
-        self.status_label.setText(self._last_error or message)
+        self.status_label.setText(operation_status_text(status, self._last_error, self.language))
+        self.status_label.setToolTip(self._last_error or "")
 
     def _refresh_operation_combo(self) -> None:
         operations = self.controller.operations
@@ -512,6 +515,9 @@ class CurvePage(QWidget):
             self._last_error = None
         except (CommandError, KeyError, ValueError, TypeError) as exc:
             self._last_error = str(exc)
+            # Keep the rejected draft available so the user can correct one field.
+            self.refresh(reload_controls=False)
+            return
         self.refresh()
 
     def _directed_edge_inputs(self) -> tuple[tuple[str, ...], tuple[bool, ...]]:
@@ -589,8 +595,9 @@ class CurvePage(QWidget):
         self.refresh()
 
     def _use_selected_edges(self) -> None:
-        self.edge_ids_edit.setText(",".join(sorted(self.viewer.selection.edge_ids)))
-        self.reverse_flags_edit.setText(",".join("0" for _ in self.viewer.selection.edge_ids))
+        edges = self.viewer.selection.ordered_edge_ids()
+        self.edge_ids_edit.setText(",".join(edges))
+        self.reverse_flags_edit.setText(",".join("0" for _ in edges))
 
     def _load_controls(self, operation: Any) -> None:
         self.edge_ids_edit.setText(
@@ -623,39 +630,15 @@ class CurvePage(QWidget):
             return None
 
     def _refresh_issues(self, setup_issues: Any, result: Any) -> None:
-        self.issue_list.clear()
-        issues = list(setup_issues)
-        if result is not None:
-            issues.extend(result.validation.issues)
-        for issue in issues:
-            severity = getattr(issue.severity, "value", issue.severity).upper()
-            label = TUBE_ISSUE_LABELS[self.language].get(issue.code)
-            item_text = (
-                f"[{severity}] {label}"
-                if label else f"[{severity}] {issue.code} · {issue.object_id}"
-            )
-            self.issue_list.addItem(item_text)
-            item = self.issue_list.item(self.issue_list.count() - 1)
-            item.setData(Qt.UserRole, issue.to_json())
-            item.setToolTip(f"{issue.code} · {issue.object_id}")
-        if not issues:
-            self.issue_list.addItem(self._t("no_issues"))
+        refresh_issue_list(
+            self.issue_list, setup_issues, result, self.language, self._t("no_issues")
+        )
 
     def _jump_to_issue(self) -> None:
-        item = self.issue_list.currentItem()
-        payload = None if item is None else item.data(Qt.UserRole)
-        if isinstance(payload, Mapping):
-            object_id = str(payload.get("object_id", ""))
-            if object_id.startswith("edge-"):
-                self.viewer.set_selection(edge_ids=[object_id])
-            elif object_id.startswith("face-"):
-                self.viewer.set_selection(face_ids=[object_id])
-            self.status_label.setText(f"{payload.get('code', '')} · {object_id}")
+        jump_to_issue(self.issue_list, self.viewer, self.status_label)
 
     def _install_generation_event_pump(self) -> None:
-        self.controller.set_generation_event_pump(
-            throttled_event_pump(QApplication.processEvents)
-        )
+        self.controller.set_generation_event_pump(throttled_event_pump(QApplication.processEvents))
 
     def _t(self, key: str) -> str:
         return _TEXT[self.language][key]

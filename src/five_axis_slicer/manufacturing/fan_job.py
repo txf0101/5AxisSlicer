@@ -14,6 +14,7 @@ from enum import Enum
 from typing import Any, Mapping
 
 from .coordinates import GeometryReference, RigidTransform
+from .fan_provenance import measurements_recorded, provenance_issues
 from .json_contract import parse_json_bool
 from .resources import canonical_json_bytes
 
@@ -187,11 +188,17 @@ class FanManufacturingContract:
 
     @property
     def offline_ready(self) -> bool:
-        return True
+        """Process inputs are sourced; this does not qualify a generated program."""
+        return not self.provenance_issues
+
+    @property
+    def provenance_issues(self) -> tuple[str, ...]:
+        return provenance_issues(self)
 
     @property
     def machine_ready(self) -> bool:
-        return self.machine_measurements_complete
+        """Contract inputs only; motion, controller and site gates remain separate."""
+        return self.offline_ready and measurements_recorded(self)
 
     def semantic_hash_input(self) -> dict[str, Any]:
         return {

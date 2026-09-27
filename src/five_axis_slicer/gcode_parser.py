@@ -27,11 +27,13 @@ from .gcode_preview import (
     GCodeTimelineStep,
     ProgressCallback,
 )
+from .indexed_preview_metadata import IndexedPreviewMetadata, material_preview_positions
 from .manufacturing.preview_kinematics import (
     DEFAULT_PREVIEW_KINEMATICS_REGISTRY,
     MACHINE_COORDINATE_TRANSFORM,
     NC_PREVIEW_OBJECT_ID,
     OWN_AC_PREVIEW_SEMANTICS,
+    PreviewTransformCache,
     reconstruct_preview_motion,
 )
 from .manufacturing.setup import IssueSeverity, ValidationIssue
@@ -110,6 +112,7 @@ class _ParserState:
         self.relative_e = True
         self.units = 1.0
         self.motion_command: str | None = None
+        self.indexed_metadata = IndexedPreviewMetadata()
         self.layer = -1
         self.current_role = "unknown"
         self.current_width: float | None = DEFAULT_BEAD_WIDTH
@@ -130,6 +133,9 @@ class _MotionValues:
     width: float | None
     height: float | None
     count_path_segment: bool
+    indexed_material: bool = False
+    center_offset_start: float = 0.0
+    center_offset_end: float = 0.0
 
 
 def _split_comment(line: str) -> tuple[str, str]:
@@ -221,6 +227,7 @@ def _apply_g92_words(state: _ParserState, words: dict[str, float]) -> None:
 
 
 def _apply_comment_tag(state: _ParserState, comment: str) -> None:
+    state.indexed_metadata.comment(comment)
     type_match = TYPE_RE.match(comment)
     if type_match is not None:
         state.current_role = normalize_role(type_match.group(1))
@@ -273,6 +280,10 @@ def _apply_motion_words(
     move_type = _classify_move(command, linear_motion or rotary_motion, linear_motion, delta_e)
     if has_spatial_axis and not e_motion and move_type == "noop":
         move_type = "travel"
+    indexed, offset_start, offset_end, dimensions = state.indexed_metadata.motion(has_spatial_axis)
+    if dimensions is not None:
+        state.current_width = dimensions["width_mm"]
+        state.current_height = dimensions["height_mm"]
     return _MotionValues(
         move_type,
         state.current_role,
@@ -286,6 +297,9 @@ def _apply_motion_words(
         state.current_width,
         state.current_height,
         has_spatial_axis,
+        indexed,
+        offset_start,
+        offset_end,
     )
 
 
@@ -344,8 +358,9 @@ def _append_motion(
         values.rotary_end,
         controller_semantics=controller_semantics,
         tool_length_mm=tool_length_mm,
+        transform_cache=stats.transform_cache,
     )
-    display_start, display_end = reconstruction.start, reconstruction.end
+    display_start, display_end = material_preview_positions(reconstruction, values)
     has_spatial_length = _points_differ(display_start, display_end)
     stats.add_values(
         values,
@@ -585,6 +600,7 @@ class _PreviewStats:
         self.coordinate_transform = MACHINE_COORDINATE_TRANSFORM
         self.controller_semantics = controller_semantics
         self.tool_length_mm = 0.0
+        self.transform_cache = PreviewTransformCache()
         self.validation_issues: list[ValidationIssue] = []
         self._issue_keys: set[str] = set()
 

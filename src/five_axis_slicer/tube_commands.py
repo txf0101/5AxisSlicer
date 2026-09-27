@@ -41,7 +41,7 @@ from .setup_config import SetupConfig
 from .setup_config_session import apply_setup_config
 from .tube_controller import TubeSetupController
 from .tube_drafts import OperationLimitError, TubeControllerError
-from .tube_resource_selection import configured_nozzle_copy, nozzle_editor_profile
+from .tube_resource_selection import configured_nozzle_copy, nozzle_editor_profile, project_profile_name
 
 _QUERY_COMMANDS = frozenset({"help", "state", "issues", "validate"})
 _MUTATION_COMMANDS = frozenset(
@@ -507,7 +507,7 @@ class TubeCommandProvider:
                     resolved.to_json(),
                     {"review_confirmed": review_confirmed},
                 ),
-                display_name=f"{resolved.display_name} · project profile",
+                display_name=project_profile_name(resolved.display_name),
                 profile_version=1,
                 review_confirmed=review_confirmed,
                 is_builtin=False,

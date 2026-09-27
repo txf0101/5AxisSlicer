@@ -38,6 +38,8 @@ The app projects X onto the plane normal to Z and forms a right-handed frame wit
 
 After Machine and Build CS are valid, choose a bed mount. Enter `DX/DY/DZ` in mm and `RX/RY/RZ` in degrees if measured adjustments are needed, then Apply. Transform order is translation, `Rx`, `Ry`, `Rz`. Keep all six values at zero when no measured offset is available.
 
+If a saved project places the model far from the plate, zero local adjustments may still retain an earlier placement reference offset. Select the intended mount, click **Reset to mount origin**, then **Apply** to clear both that reference offset and all six local adjustments. Reset alone creates a draft. It pairs the current Build CS with the selected mount; it does not automatically find the model centre or bottom face. Define Build CS at the intended fixture location and direction, then inspect centring and contact with the plate. Do not guess a compensating offset.
+
 An empty mount list usually means no machine has been applied or the selected profile has no mounts.
 
 ## Check, save, and reopen

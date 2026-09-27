@@ -296,6 +296,43 @@ def test_rotary_qt_page_binds_selected_edge_and_face_and_generates(tmp_path: Pat
     assert page.path_display_combo.itemText(0) == "完整线条（快速）"
 
 
+def test_invalid_rotary_surface_has_bilingual_recovery_guidance(tmp_path: Path) -> None:
+    controller, _operation, model, axis, surface = _controller(tmp_path, "rotary_spiral")
+    page = RotaryPage(controller=controller, viewer_factory=TubeViewerStub)
+    try:
+        page.generate_button.click()
+        previous_result = controller.product_result(controller.operation().operation_id)
+        assert previous_result is not None
+        assert page.export_button.isEnabled()
+        plane = next(face for face in model.faces if face.surface_type == "plane")
+        page.viewer.set_selection(edge_ids=[axis.edge_id], face_ids=[plane.face_id])
+        page._use_selected_axis()
+        page._use_selected_surfaces()
+        page.apply_button.click()
+        assert page._last_error == "rotary.surface_reference_invalid"
+        assert page.axis_edge_edit.text() == axis.edge_id
+        assert page.surface_faces_edit.text() == plane.face_id
+        for language, expected in (("zh", "圆柱面或圆锥面"), ("en", "cylindrical or conical")):
+            page.set_language(language)
+            assert page.axis_edge_edit.text() == axis.edge_id
+            assert page.surface_faces_edit.text() == plane.face_id
+            assert expected in page.status_label.text()
+            assert "rotary.surface_reference_invalid" in page.status_label.text()
+            assert not page.export_button.isEnabled()
+            assert not page.generate_button.isEnabled()
+        page.generate_button.click()
+        assert controller.product_result(controller.operation().operation_id) is previous_result
+        page.viewer.set_selection(edge_ids=[axis.edge_id], face_ids=[surface.face_id])
+        page._use_selected_axis()
+        page._use_selected_surfaces()
+        page.apply_button.click()
+        assert page._last_error is None
+        assert page.generate_button.isEnabled()
+        assert "rotary.surface_reference_invalid" not in page.status_label.text()
+    finally:
+        page.close()
+
+
 def test_preview_only_region_and_missing_reference_block_generation(tmp_path: Path) -> None:
     controller, operation, _model, _axis, _surface = _controller(tmp_path, "rotary_spiral")
     controller.configure_operation(

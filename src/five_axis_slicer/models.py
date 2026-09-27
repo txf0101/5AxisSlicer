@@ -322,11 +322,18 @@ class SelectionState:
     face_ids: set[str] = field(default_factory=set)
     edge_ids: set[str] = field(default_factory=set)
     vertex_ids: set[str] = field(default_factory=set)
+    edge_pick_order: list[str] = field(default_factory=list)
+
+    def ordered_edge_ids(self) -> list[str]:
+        # Older projects and programmatic selections have no click history.
+        ordered = list(dict.fromkeys(e for e in self.edge_pick_order if e in self.edge_ids))
+        return ordered + sorted(self.edge_ids.difference(ordered))
 
     def clear(self) -> None:
         self.body_ids.clear()
         self.face_ids.clear()
         self.edge_ids.clear()
+        self.edge_pick_order.clear()
         self.vertex_ids.clear()
 
     def to_json(self) -> dict[str, Any]:

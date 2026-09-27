@@ -41,7 +41,7 @@ LAYER_RE = re.compile(r"^Layer\s+(-?\d+)", re.IGNORECASE)
 TYPE_RE = re.compile(r"^TYPE\s*:\s*(.+)$", re.IGNORECASE)
 WIDTH_RE = re.compile(rf"^WIDTH\s*:\s*({NUMBER_RE})", re.IGNORECASE)
 HEIGHT_RE = re.compile(rf"^HEIGHT\s*:\s*({NUMBER_RE})", re.IGNORECASE)
-CACHE_VERSION = "gcode-preview-v8-tool-length"
+CACHE_VERSION = "gcode-preview-v9-indexed-tcp-material"
 # Older preview caches may contain silently ignored rotary axes.  They are
 # intentionally invalidated at this safety boundary and rebuilt from source.
 LEGACY_CACHE_VERSIONS: tuple[str, ...] = ()
@@ -825,57 +825,9 @@ def _bundled_controller_semantics(source_path: Path) -> str | None:
 
 
 def _bundled_controller_setup(source_path: Path) -> tuple[str | None, float]:
-    """Recognize only the bundled NC profile's explicit machine declaration."""
+    from .gcode_preview_profile import _bundled_controller_setup as read_setup
 
-    from .manufacturing.own_printer import OWN_AC_ID
-    from .manufacturing.preview_kinematics import OWN_AC_PREVIEW_SEMANTICS
-
-    prefix = b"; CONTROLLER_PROFILE "
-    tool_prefix = b"; TOOL_LENGTH_MM "
-    profile_id: str | None = None
-    tool_length: float | None = None
-    with source_path.open("rb") as stream:
-        for line in stream.read(32768).splitlines():
-            if line.startswith(prefix):
-                try:
-                    profile = json.loads(line[len(prefix) :])
-                except (ValueError, UnicodeDecodeError):
-                    return None, 0.0
-                if isinstance(profile, dict):
-                    profile_id = profile.get("machine_profile_id")
-            elif line.startswith(tool_prefix):
-                try:
-                    value = float(line[len(tool_prefix) :])
-                except ValueError:
-                    continue
-                if math.isfinite(value) and value >= 0.0:
-                    tool_length = value
-    if profile_id != OWN_AC_ID:
-        return None, 0.0
-    if tool_length is None and source_path.name == "main.gcode":
-        # Older bundled exports keep this value in their adjacent manifest.
-        try:
-            manifest = json.loads(
-                (source_path.parent / "manifest.json").read_text(encoding="utf-8")
-            )
-            trajectory = manifest["machine_trajectory_summary"]
-            readback = manifest["readback"]
-            if (
-                manifest["manifest"]["machine_profile_id"] == OWN_AC_ID
-                and trajectory["machine_profile_id"] == OWN_AC_ID
-                and readback["passed"] is True
-                and readback["expected_points"]
-                == readback["read_points"]
-                == trajectory["sample_count"]
-            ):
-                value = float(trajectory["tool_length_mm"])
-                if math.isfinite(value) and value >= 0.0:
-                    tool_length = value
-        except (OSError, KeyError, TypeError, ValueError):
-            pass
-    if tool_length is None:
-        return None, 0.0
-    return OWN_AC_PREVIEW_SEMANTICS, tool_length
+    return read_setup(source_path)
 
 
 def _validated_gcode_path(path: str | Path) -> Path:

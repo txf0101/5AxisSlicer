@@ -262,10 +262,11 @@ def update_detail(page: Any) -> None:
             f"\nRotary output: {rotary_mapping}",
         )
     if profile.profile_id == OWN_AC_ID:
+        diameter = next((surface.diameter_mm for surface in profile.build_surfaces), None)
         detail += _text(
             page,
-            "\n默认机型 · 台面180 mm，建议160 mm，试验150 mm。\nA ±180°；C ±360°。XYZ行程、轴速度及回转中心待标定。",
-            "\nDefault · table 180 mm, recommended 160 mm, tested 150 mm.\nA ±180°; C ±360°. XYZ travel, axis speeds and rotary centers need calibration.",
+            f"\n当前配置平台直径：{diameter} mm。\nA ±180°；C ±360°。XYZ行程、轴速度及回转中心待标定。",
+            f"\nConfigured platform diameter: {diameter} mm.\nA ±180°; C ±360°. XYZ travel, axis speeds and rotary centers need calibration.",
         )
     page.machine_detail.setText(detail)
     page.machine_detail.setToolTip(profile.source_uri)

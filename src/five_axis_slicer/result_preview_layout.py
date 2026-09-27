@@ -401,7 +401,7 @@ def _build_statistics_grid(page: Any, card: _Card) -> QGridLayout:
 def _add_statistics_evidence(page: Any, card: _Card, layout: QVBoxLayout) -> None:
     formula = _WrappingLabel(parent=card)
     formula.setObjectName("formulaLabel")
-    formula.setText("P_part = Rz(-C) × Rx(-A) × P_machine")
+    page.coordinate_formula = formula
     formula.setTextInteractionFlags(Qt.TextSelectableByMouse)
     layout.addWidget(formula)
     page.continuity_label = _WrappingLabel("Polyline: 0.02 mm", card)

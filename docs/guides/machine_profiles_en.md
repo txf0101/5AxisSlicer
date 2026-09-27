@@ -2,11 +2,11 @@
 
 New desktop projects default to **Own AC FDM**. Open **Common Manufacturing Setup**, select **Machine**, choose a profile, and click **Apply**. Merely browsing the list does not change the applied machine. Existing projects keep their saved machine. After changing a profile, recheck placement and regenerate affected operations.
 
-![Machine profile selection in Common Manufacturing Setup](assets/product_delivery/08_machine_setup_zh.png)
+![Machine profile selection in Common Manufacturing Setup](assets/current_delivery/machine150_en.png)
 
-This screenshot shows the machine page before part, nozzle, and material setup. Its not-ready status is expected and does not indicate a completed slice.
+This crop shows the public machine configuration panel and circular platform preview, including the 150 mm diameter and reference-configuration notice. It illustrates machine settings only; it does not show full project status or qualify a generated operation or calibrated machine.
 
-The own-machine reference specifies a 180 mm physical bed, A ±180°, and C ±360°. Suggested print diameter (160 mm) and paper-specimen range (150 mm) are process references, not collision limits that adjust automatically with tilt. XYZ travel, axis speed, acceleration, rotary centre, and zero pose still require machine-specific calibration.
+Following the user's confirmation on 2026-09-27, the default own-machine profile uses a circular usable platform with a diameter of 150 mm, A ±180°, and C ±360°. Profile version 2 records this correction; existing projects retain their saved machine snapshots. The paper's 180 mm bed and 160 mm suggested range remain historical references. The circular boundary is not a collision limit that adjusts automatically with tilt. XYZ travel, axis speed, acceleration, rotary centre, and zero pose still require machine-specific calibration.
 
 ## Customize and exchange profiles
 

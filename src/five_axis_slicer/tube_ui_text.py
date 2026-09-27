@@ -7,6 +7,7 @@ from typing import Any
 
 from PyQt5.QtCore import Qt
 
+from .manufacturing.resources import NozzleProfile
 from .manufacturing.setup import (
     BUILD_CS_NODE,
     MACHINE_NODE,
@@ -39,6 +40,7 @@ TUBE_TEXT: dict[str, dict[str, str]] = {
         "setup": "制造设置 1",
         "operations": "操作",
         "part": "零件（Part）",
+        "part_requires_solid": "零件必须包含至少一个实体。请将一个实体的角色设为“零件”，然后点击“确认”。",
         "machine": "机床（Machine）",
         "nozzle": "喷嘴",
         "material": "材料",
@@ -66,6 +68,7 @@ TUBE_TEXT: dict[str, dict[str, str]] = {
         "after_tube": "底座在管体之后",
         "seam_angle": "接缝角 (deg)",
         "operation_applied": "操作几何角色和工艺参数已应用。",
+        "operation_roles_required": "请补齐管体、入口、出口和既有基体四个角色，再点击应用。",
         "operation_pick": "拾取",
         "operation_pick_pending": "请在模型中点击对应实体或圆边。",
         "operation_pick_bound": "已选入几何草稿；点击应用后生效。",
@@ -137,7 +140,9 @@ TUBE_TEXT: dict[str, dict[str, str]] = {
         "pick_axis_face": "拾取平面/圆柱/圆锥面",
         "pick_two_vertices": "拾取两个顶点",
         "coordinate_reconfirm_error": "原点、Z 或 X 已修改，请重新确认后再应用。",
-        "placement_help": "Build CS 与打印板安装位配对；微调顺序为平移、Rx、Ry、Rz。",
+        "placement_help": "下方数值是相对已有装夹基准的微调，零值不代表位于平台中心。重置可使 Build CS 与所选安装位重合，再点击应用。",
+        "placement_reset": "重置到安装位原点",
+        "placement_reset_pending": "已重置装夹草稿；点击应用后生效。模型底面位置仍由 Build CS 决定。",
         "mount": "打印板安装位",
         "coordinates_valid": "坐标有效",
         "setup_ready": "设置就绪",
@@ -150,6 +155,9 @@ TUBE_TEXT: dict[str, dict[str, str]] = {
         "status_dirty": "待更新",
         "status_invalid": "无效",
         "coordinate_confirmed": "已确认：原点 {origin} · Z {z} · X {x}",
+        "coordinate_origin_confirmed": "原点已确认。",
+        "coordinate_z_confirmed": "Z 方向已确认。",
+        "coordinate_x_confirmed": "X 方向已确认。",
         "coordinate_applied": "坐标系已应用。",
         "placement_applied": "装夹定位已应用。",
         "help_open": "导入一个可含多个实体的 STEP，并生成零件与坐标参考候选。",
@@ -291,6 +299,7 @@ TUBE_TEXT: dict[str, dict[str, str]] = {
         "setup": "Manufacturing Setup 1",
         "operations": "Operations",
         "part": "Part",
+        "part_requires_solid": "Part must contain at least one solid. Set a body's role to Part, then click Confirm.",
         "machine": "Machine",
         "nozzle": "Nozzle",
         "material": "Material",
@@ -318,6 +327,7 @@ TUBE_TEXT: dict[str, dict[str, str]] = {
         "after_tube": "Base after tube",
         "seam_angle": "Seam angle (deg)",
         "operation_applied": "Operation geometry roles and process parameters applied.",
+        "operation_roles_required": "Select the tube body, inlet, outlet and existing substrate, then click Apply.",
         "operation_pick": "Pick",
         "operation_pick_pending": "Click the required solid or circular edge in the model.",
         "operation_pick_bound": "Geometry selected in draft; click Apply to commit.",
@@ -391,7 +401,9 @@ TUBE_TEXT: dict[str, dict[str, str]] = {
         "pick_axis_face": "Pick plane/cylinder/cone face",
         "pick_two_vertices": "Pick two vertices",
         "coordinate_reconfirm_error": "Origin, Z, or X changed. Confirm it again before Apply.",
-        "placement_help": "Pair Build CS to a plate mount; adjustment order is translate, Rx, Ry, Rz.",
+        "placement_help": "Values adjust the existing placement reference; zero does not mean plate center. Reset aligns Build CS with the selected mount. Click Apply to commit.",
+        "placement_reset": "Reset to mount origin",
+        "placement_reset_pending": "Placement draft reset. Click Apply to commit. Build CS still determines the model bottom position.",
         "mount": "Build-plate mount",
         "coordinates_valid": "Coordinates Valid",
         "setup_ready": "Setup Ready",
@@ -404,6 +416,9 @@ TUBE_TEXT: dict[str, dict[str, str]] = {
         "status_dirty": "Dirty",
         "status_invalid": "Invalid",
         "coordinate_confirmed": "Confirmed: origin {origin} · Z {z} · X {x}",
+        "coordinate_origin_confirmed": "Origin confirmed.",
+        "coordinate_z_confirmed": "Z direction confirmed.",
+        "coordinate_x_confirmed": "X direction confirmed.",
         "coordinate_applied": "Coordinate system applied.",
         "placement_applied": "Placement applied.",
         "help_open": "Import one STEP containing one or more bodies and create Part and coordinate candidates.",
@@ -550,6 +565,12 @@ TUBE_TEXT: dict[str, dict[str, str]] = {
 
 TUBE_ISSUE_LABELS: dict[str, dict[str, str]] = {
     "zh": {
+        "tube.transition_support_gap": "分区首层缺少此前沉积材料承接：查看所示层与路径点，修正分区过渡后重新生成；当前结果不可导出",
+        "tube.transition_support_dimensions_missing": "路径缺少道宽或道高，无法核对分区承接：补全工艺尺寸后重新生成",
+        "freeform.metric.solid_relative_volume_error": "填充体积与实体体积偏差超限：核对实体角色、填充厚度、层高和道距后重新生成",
+        "motion.non_deposition_route_unavailable": "未找到安全空移路线：核对喷嘴外形、已沉积材料及目标姿态；查看详情定位接触，修正后重新生成",
+        "motion.transition_route_unavailable": "层或工序之间无安全转换路线：核对承载面、生长方向、喷嘴外形和目标姿态；查看接触详情后修正并重新生成",
+        "tube.port_not_outer_boundary": "端口必须使用管体外圆边：请重新选择入口和出口外圆后生成",
         "MACHINE_REFERENCE_ONLY": "参考机型仅供离线检查；投入设备前需完成标定",
         "RESOURCE_LIBRARY_DIVERGED": "项目配置与资源库版本不同，当前继续使用项目内配置",
         "RESOURCE_LIBRARY_ENTRY_MISSING": "资源库中没有对应条目，当前继续使用项目内配置",
@@ -557,6 +578,12 @@ TUBE_ISSUE_LABELS: dict[str, dict[str, str]] = {
         "RESOURCE_LIBRARY_ENTRY_INVALID": "资源库条目无效，请检查或重新选择配置",
     },
     "en": {
+        "tube.transition_support_gap": "The first layer of a region lacks contact with prior deposited material: inspect the indicated layer and point, correct the region transition, then regenerate; export is blocked",
+        "tube.transition_support_dimensions_missing": "Bead width or height is missing, so region support cannot be checked: complete the process dimensions and regenerate",
+        "freeform.metric.solid_relative_volume_error": "Fill volume differs too much from the solid: check solid roles, fill thickness, layer height and path spacing, then regenerate",
+        "motion.non_deposition_route_unavailable": "No safe travel route: check nozzle geometry, deposited material and target pose; inspect contact details, correct the setup and regenerate",
+        "motion.transition_route_unavailable": "No safe transition between layers or operations: check supporting face, growth direction, nozzle geometry and target pose; inspect contact details, correct and regenerate",
+        "tube.port_not_outer_boundary": "Ports must use outer circular edges: reselect the inlet and outlet outer edges, then generate",
         "MACHINE_REFERENCE_ONLY": "Reference machine for offline review; calibrate before device use",
         "RESOURCE_LIBRARY_DIVERGED": "Project and library versions differ; using the project copy",
         "RESOURCE_LIBRARY_ENTRY_MISSING": "Library entry not found; using the project copy",
@@ -564,6 +591,92 @@ TUBE_ISSUE_LABELS: dict[str, dict[str, str]] = {
         "RESOURCE_LIBRARY_ENTRY_INVALID": "Library entry is invalid; check or select another profile",
     },
 }
+
+
+_SETUP_NODE_ACTIONS = {
+    "PART": (
+        "零件",
+        "Part",
+        "打开零件页，至少指定一个闭合实体为零件并确认",
+        "Open Part, assign at least one closed solid as Part, and confirm",
+    ),
+    "MACHINE": (
+        "机床",
+        "Machine",
+        "打开机床页，选择有效配置并应用",
+        "Open Machine, select a valid profile, and Apply",
+    ),
+    "NOZZLE": (
+        "喷嘴",
+        "Nozzle",
+        "打开喷嘴页，补全配置并应用",
+        "Open Nozzle, complete the profile, and Apply",
+    ),
+    "MATERIAL": (
+        "材料",
+        "Material",
+        "打开材料页，核对材料参数并确认复核后应用",
+        "Open Material, check its values, confirm review, and Apply",
+    ),
+    "MODEL_CS": (
+        "模型坐标系",
+        "Model CS",
+        "打开模型坐标系页，确认原点、Z 和 X 后应用",
+        "Open Model CS, confirm origin, Z and X, then Apply",
+    ),
+    "BUILD_CS": (
+        "构建坐标系",
+        "Build CS",
+        "打开构建坐标系页，确认原点、Z 和 X 后应用",
+        "Open Build CS, confirm origin, Z and X, then Apply",
+    ),
+    "PLACEMENT": (
+        "装夹定位",
+        "Placement",
+        "打开装夹定位页，核对安装基准和偏移后应用",
+        "Open Placement, check the mount and offsets, then Apply",
+    ),
+}
+for _node, (_zh_name, _en_name, _zh_action, _en_action) in _SETUP_NODE_ACTIONS.items():
+    for _state, _zh_state, _en_state in (
+        ("MISSING", "未设置", "is missing"),
+        ("INVALID", "无效", "is invalid"),
+        ("DRAFT", "尚未应用", "has unapplied changes"),
+        ("DIRTY", "需要重新应用", "needs to be reapplied"),
+    ):
+        _prefix = (
+            "SETUP_"
+            if _node in {"PART", "MACHINE", "NOZZLE", "MATERIAL"}
+            and _state in {"MISSING", "INVALID"}
+            else ""
+        )
+        _code = f"{_prefix}{_node}_{_state}"
+        TUBE_ISSUE_LABELS["zh"][_code] = f"{_zh_name}{_zh_state}：{_zh_action}"
+        TUBE_ISSUE_LABELS["en"][_code] = f"{_en_name} {_en_state}: {_en_action}"
+TUBE_ISSUE_LABELS["zh"]["MATERIAL_REVIEW_REQUIRED"] = "材料需要复核：核对材料参数，勾选已复核后应用"
+TUBE_ISSUE_LABELS["en"]["MATERIAL_REVIEW_REQUIRED"] = (
+    "Material review required: check its values, confirm review, and Apply"
+)
+
+
+def nozzle_readiness_text(profile: NozzleProfile, language: str) -> str:
+    """Show the applied profile's blocking fields, preserving unknown issue codes."""
+    fields = {
+        "interface": ("安装接口", "mounting interface"),
+        "length_mm": ("总长", "total length"),
+        "outer_profile_rz_mm": ("R–Z 碰撞外形", "R–Z collision envelope"),
+        "orifice_diameter_mm": ("孔径", "orifice diameter"),
+        "filament_diameter_mm": ("丝径", "filament diameter"),
+        "temperature_limit_c": ("温度上限", "temperature limit"),
+    }
+    index = 0 if language == "zh" else 1
+    labels = dict.fromkeys(
+        fields[issue.field][index] if issue.field in fields else issue.code
+        for issue in profile.readiness_blockers
+    )
+    prefix = "喷嘴：请补全或修正 " if language == "zh" else "Nozzle: complete or correct "
+    return prefix + ("、" if language == "zh" else ", ").join(labels)
+
 
 TUBE_CONTROL_TEXT = (
     ("title_label", "title"),
@@ -600,6 +713,7 @@ TUBE_CONTROL_TEXT = (
     ("mount_label", "mount"),
     ("placement_apply_button", "apply"),
     ("placement_cancel_button", "cancel"),
+    ("placement_reset_button", "placement_reset"),
     ("issue_title", "issues"),
 )
 

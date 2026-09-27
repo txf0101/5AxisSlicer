@@ -38,7 +38,7 @@ def enter_workbench(host: Any, key: str) -> None:
         and page.controller.setup.setup_id == common_setup.setup_id
         and shell.sync_shared_setup(page.controller, common_setup)
     ):
-        page.refresh()
+        page.refresh(reload_controls=False)
     refresh_panels = getattr(host, "_refresh_setup_panels", None)
     if callable(refresh_panels):
         refresh_panels()

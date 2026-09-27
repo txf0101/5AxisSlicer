@@ -1,5 +1,7 @@
 # Rotary 工作台图文使用手册
 
+本页坐标和错误状态局部图用于说明输入与状态；完整布局及公共设置入口按当前点击教程操作。参数图不作为路径覆盖或设备资格证明。
+
 > 初次使用请先完成[学习总册](user_learning_manual_zh.md)的 L01—L06；本页是 Rotary 专项参考。圆柱或轮毂案例用于练习固定轴、零角和周期，不能把示例 face ID、角区间或轴范围复制到其他零件。
 
 Rotary 工作台在有明确回转轴和圆柱/圆锥表面的 STEP 零件上生成 Rotary Spiral、Rotary Thin Wall 和 Around Part。内部长度使用 mm，内部角度使用 rad；界面的起止角和区域角使用 deg，角速度使用 rad/s。
@@ -30,9 +32,9 @@ Rotary 工作台在有明确回转轴和圆柱/圆锥表面的 STEP 零件上生
 5. 核对回转坐标、轮廓和工艺参数，点击“应用几何与参数”。
 6. 点击“生成与检查”，核对状态、问题列表、三维路径和机床轴轨迹。模型挡住周向道时，取消“显示模型”；用“完整线条（快速）”检查轨迹连贯性，用“沉积道宽”检查相邻道覆盖。只导出 Ready/Warning 结果。
 
-下图是中文工作台界面。左侧可查看操作与几何引用；右侧显示从圆柱面生成的 Around Part 路径。为看清两段周向道，画面已关闭模型并切到“沉积道宽”。
+下图是中文工作台界面。左侧可查看操作与几何引用；右侧显示从圆柱面生成的 Around Part 路径。为看清两段周向道，画面已关闭模型并使用“完整线条（快速）”，蓝色路径较细，颜色保持原始截图。
 
-![Rotary 工作台生成结果与路径显示控制](assets/product_delivery/09_rotary_around_part_paths_zh.png)
+![Rotary 工作台生成结果与路径显示控制](assets/current_delivery/rotary_around_two_regions_zh.png)
 
 ## 2. 选边、选面与稳定引用
 
@@ -44,15 +46,17 @@ Rotary 工作台在有明确回转轴和圆柱/圆锥表面的 STEP 零件上生
 
 应用时会保存对象 ID、几何类型、父实体和 kernel signature。STEP 更新后使用签名唯一重绑；引用缺失、候选不唯一或几何类型改变时，操作进入 Invalid/Stale，需要重新选择。
 
-下图将轴 edge 和圆柱 face 同时高亮。正确顺序是先在 Viewer 切到相应选择模式并点击几何，再按“采用 Viewer 已选轴向边/已选表面”；橙色面和蓝色边是待应用选择，左侧文本框中的稳定 ID 是保存对象。
+下图为 Viewer 局部图，橙色圆柱侧面和蓝色边表示已选几何，不代表已生成路径。正确顺序是先切换选择模式并点击几何，再按“采用 Viewer 已选轴向边/已选表面”，核对编辑器内稳定 ID；编辑器不在此裁图内。
 
-![Viewer 选边选面](assets/rotary/live_qt/02_selection_overview_zh.png)
+![Viewer 选边选面](assets/current_delivery/rotary_selected_surface.png)
 
 ### 2.1 扇叶模型的选面示例
 
-`example/扇叶/风扇扇叶(1).STEP` 可用于判断选择是否落在 Rotary 支持范围内。三片叶片的主面是 B-spline 自由曲面，选中后 Apply 会返回 `rotary.surface_reference_invalid`；中央轮毂外表面是 R17.5 mm 圆柱面，配 65 mm 轴向边可以正确派生轴线、半径和轴向范围。
+`example/扇叶/风扇扇叶(1).STEP` 可用于判断选择是否落在 Rotary 支持范围内。三片叶片的主面是 B-spline 自由曲面，不属于本节支持的圆柱/圆锥表面；中央轮毂外表面是 R17.5 mm 圆柱面，配 65 mm 轴向边可以正确派生轴线、半径和轴向范围。
 
-![扇叶面与轮毂面的选择判定](assets/rotary/fan_blade_check/04_fan_selection_decision.png)
+下图当前实际 GUI 使用圆柱的平顶面作为拒绝例：选中橙色平端面，采用 Viewer 表面后点击应用，提示 `rotary.surface_reference_invalid`，生成和导出禁用。该图证明平端面被拒绝，不代表本轮已对风扇叶片进行相同操作。
+
+![当前平端面选择被 Rotary 拒绝](assets/current_delivery/rotary_flat_face_rejected_zh.png)
 
 轮毂外表面由两个半圆柱 face 组成。要建立完整 360° 轮毂操作，应同时选择两个同轴、同半径面，再显式填写起止角。face 选择不会自动把修剪面的 180° 边界转换成 Around Part 角区间；周向覆盖始终由操作角度或 Around Part Region 决定。生成后还应检查坐标注册、轴运动跨步和完整周向覆盖。
 
@@ -69,7 +73,7 @@ Rotary frame 在 Source 坐标中包含：
 
 界面允许输入跨周期端点。例如区域 `350:20` 且方向为 CCW 时，计划使用 350°→380°，不在 360° 重置为 0°。多区域之间把下一起点移到距前一终点最近的等价相位，减少无必要的整周绕行。
 
-下图显示当前非零回转中心、轴单位方向、零角方向、正方向、face 引用和 Source 单位。
+下图是坐标参数示例：轴原点为 (0, 0, 0)，轴方向为 +Z，零角方向为 +X；同时显示正方向、face 引用和 Source 单位。图中模型遮住部分路径，本图只用于说明坐标字段，不作为路径覆盖检查。
 
 ![Rotary 坐标设置](assets/rotary/live_qt/03_coordinates_zh.png)
 
@@ -98,13 +102,13 @@ Around Part 在一个或多个有向角区域内生成局部周向道，再按�
 
 轴向相邻道交替方向。程序从净空半径上的首个安全点开始，经 safe approach 到首道起点。跨区域时先 Retract，沿“当前/目标半径的较大值 + 安全连接间隙”离开表面，在该净空半径上插值相位和轴向位置，然后 Approach 到下一道起点并 Prime。最后一道结束后执行 Retract、safe depart 和 finish，使入口、段间和出口均进入后续轴限和碰撞检查。
 
-![关闭圆柱模型后显示的两个 Around Part 周向区域](assets/product_delivery/09_rotary_around_part_paths_zh.png)
+![关闭圆柱模型后显示的两个 Around Part 周向区域](assets/current_delivery/rotary_around_two_regions_zh.png)
 
-图中两个紫色区域是 `350:20;120:210` 的沉积道宽视图，间隔处没有沉积。示例角度、轴边 ID 和表面 ID 只适用于图中的圆柱；自己的模型必须重新选择并核对角区间。
+图中两个蓝色路径组对应 `350:20;120:210` 的沉积区域，间隔处没有沉积。此例由 CAD 解析 R20 mm/H20 mm，轴向步长 2 mm、角度采样 5°、打印/空移进给 900/1800 mm/min、角速度 0.5 rad/s。示例角度、轴边 ID 和表面 ID 只适用于图中的圆柱；自己的模型必须重新选择并核对角区间。
 
-下图同时显示 `350:20;120:210`、跨 0° 展开和区域间非沉积安全连接。
+下图复用同次真实生成结果，角区字段为 `350:20;120:210`、方向 CCW；第一段跨 0°，第二段不跨 0°。截图没有显示空移或区域间安全连接，不用它判断连接策略。
 
-![Around Part 跨 0° 周期](assets/rotary/current_r01_r05/06_rotary_cross_zero_zh_1366x768.png)
+![Around Part 跨 0° 周期](assets/current_delivery/rotary_around_two_regions_zh.png)
 
 ## 5. 参数、默认值和作用域
 
@@ -186,15 +190,15 @@ Viewer 直接读取 generated shared Toolpath，其 source 标识为 `<generated
 | `rotary.nozzle_obstacle_collision` / `rotary.nozzle_ipw_collision` | 喷嘴包络与夹具或已沉积段相交 | 先定位问题点，再修改安装、区域、顺序或连接间隙 |
 | `rotary.gcode_readback_failed` | NC 点、轴、F/E 或事件回读不一致 | 不导出；恢复注册控制器语义并重新生成 |
 
-计划与 IK 异常会保存结构化 `code/severity/object_id/context`，界面问题项可定位到操作或点。下方错误图明确显示 `xyzac.acceleration_limit_exceeded · sample-1` 和禁用的导出按钮；恢复图来自修正限制后的重新生成。
+计划与 IK 异常会保存结构化 `code/severity/object_id/context`，界面问题项可定位到操作或点。下方当前界面局部显示 `acceleration_limit_exceeded` 和禁用的导出按钮。本例使用独立离线参考机型限位，保留 150 mm 圆台与零装夹，不作为真实设备参数。角速度 0.5 rad/s、打印进给 600 mm/min、空移 1800 mm/min 时生成 Error；改为角速度 0.1 rad/s、空移 300 mm/min，应用并重新生成后恢复为 Warning，导出入口可用。参考机型及碰撞几何相关警告仍需审查。
 
-![轴限 Error](assets/rotary/current_r01_r05/07_rotary_axis_limit_error_zh_1366x768.png)
+![轴限 Error](assets/current_delivery/rotary_acceleration_error_controls_zh.png)
 
 下图是错误状态：问题列表包含 `acceleration_limit_exceeded`，导出按钮禁用。
 
 ![回转轴加速度限制错误示例](assets/rotary/live_qt/06_acceleration_limit_error_zh.png)
 
-![调整参数后重新生成的 Warning 结果](assets/rotary/current_r01_r05/08_rotary_axis_limit_recovered_zh_1366x768.png)
+![调整参数后重新生成的 Warning 结果](assets/current_delivery/rotary_recovered_controls_zh.png)
 
 ## 10. 六件套与 G-code 回读
 
@@ -211,9 +215,9 @@ Viewer 直接读取 generated shared Toolpath，其 source 标识为 `<generated
 
 导出目录应同时包含上述六个文件；若导出中断，请核对 `manifest.json` 和结果状态后再使用。
 
-下图展示导出位置和六个文件。换模型后仍需重新检查路径和回读报告。
+下图复用恢复后的参数与状态局部，显示 Warning 和可用的导出入口，不包含路径细节或导出目录。导出后请在所选目录核对上述六个文件；换模型后需重新检查路径和回读报告。
 
-![Rotary 六件套导出](assets/rotary/current_r01_r05/09_rotary_export_zh_1600x900.png)
+![Rotary Warning 状态与导出入口](assets/current_delivery/rotary_recovered_controls_zh.png)
 
 ## 11. 撤销、保存重开、STEP 更新和迁移
 
@@ -226,7 +230,9 @@ Viewer 直接读取 generated shared Toolpath，其 source 标识为 `<generated
 
 ![Rotary 输入变化后的 Stale](assets/rotary/live_qt/07_input_change_stale_zh.png)
 
-![Rotary 项目重开后 Stale](assets/rotary/current_r01_r05/10_rotary_reopen_stale_en_1920x1080.png)
+当前项目保存后实际重开为 Stale，导出再次禁用；需要重新生成并检查。下图仅展示保留参数和状态。
+
+![Rotary 项目重开后 Stale](assets/current_delivery/rotary_reopened_controls_zh.png)
 
 ## 12. 受限脚本与 HTTP
 

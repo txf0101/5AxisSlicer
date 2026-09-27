@@ -18,9 +18,9 @@ python -m five_axis_slicer.app --results --model "example\叶轮\叶轮.stp" --g
 
 文件预览页显示输入来源、路径、统计和代码上下文。只打开 G-code 也能看路径；若需检查路径是否贴合实体，再点“打开 STEP”叠加对应模型。历史或外部 G-code 应保留来源说明，不能据此反推本软件的路径生成方法。
 
-![G-code 文件预览：左侧打开文件，中央查看完整路线，右侧控制显隐](assets/product_delivery/10_gcode_file_preview_zh.jpg)
+![G-code 文件预览局部：打开文件与校徽操作 2 路径](assets/current_delivery/gcode_logo_file_preview_zh.png)
 
-图中只载入了 G-code，所以右侧出现“尚未载入 STEP 模型”的提示。路径可以单独查看；沿右侧面板向下滚动可看到统计和代码上下文。图片用于定位控件；检查自己的程序时，应叠加对应 STEP 并核对路径位置。
+图中裁取左侧文件入口和中央校徽操作 2 路径，STEP 显示“未加载”；右侧统计与显隐面板未包含在裁图内。可单独查看 NC；检查自己的程序时，应叠加对应 STEP 并核对路径位置。
 
 ## 2. 模型叠加与视图
 
@@ -47,11 +47,18 @@ python -m five_axis_slicer.app --results --model "example\叶轮\叶轮.stp" --g
 
 ## 5. pipe2 路径查看案例
 
-`example/pipe2/弯管新.stp` 是管体与底座示例。选择 Tube Buildup 操作，生成后点击“查看路径”，中央选择“完整线条（快速）”并关闭“显示模型”。检查底座是否完整、管壁是否连续、入口和出口是否与模型相接。下图中的道宽 0.6 mm、层高 0.2 mm 和弦高误差 0.02 mm 是这个案例的练习值；自己的管件应按设备、喷嘴、材料和精度要求重新设定。
+`example/pipe2/弯管新.stp` 是管体与底座示例。下图是 Tube Indexed 操作的工作台生成结果，模型已隐藏，导出已完成。图中道宽 0.6 mm、层高 0.2 mm 和最大角步长 15° 是案例参数；自己的管件应按设备、喷嘴、材料和精度要求重新设定。要在本页介绍的 G-code 文件预览中检查它，请打开导出目录的 `main.gcode`，再调整层范围、沉积和空移显示。
 
-![弯管与底座的完整路线及预览开关](assets/product_delivery/pipe2_full_path_zh_20260923.png)
+![Tube Indexed 工作台路径与导出完成状态](assets/current_delivery/tube_indexed_export_zh.png)
 
 `example/pipe2/弯管.gcode` 是另一份历史 NC 观察输入，来源包含外部切片/人工拼接。对照时应分别记录模型、程序来源和控制器语义，再比较层序、空移、A/C 范围及覆盖；不要仅凭整体外观认定两份程序等价。
+
+
+### 球面校徽的阶段查看
+
+打开球面校徽导出的 `main.gcode` 后，在底部阶段导航中选择“操作 2”，关闭“空走路径”可单独查看文字、图案和环形边界。下图为三维结果区域裁图，未叠加 STEP；它展示阶段筛选的路径外观，不证明碰撞或设备资格。返回“操作 1”可查看基体。
+
+![球面校徽操作 2 的文字与图案路径局部](assets/current_delivery/logo_nc_stage2_detail.png)
 
 ## 6. 常见问题
 

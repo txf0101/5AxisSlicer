@@ -32,6 +32,7 @@ from ..manufacturing.freeform_solid_parameters import (
     RadialSolidGeometrySelection,
     SphericalSolidGeometrySelection,
     SurfaceSolidGeometrySelection,
+    SolidFillProcessParameters,
 )
 from ..manufacturing.material_plan import apply_material_plan
 from ..manufacturing.toolpath import GeneratedToolpath
@@ -175,17 +176,7 @@ def generate_solid_fill_product_path(
         )
         raw_paths = (base_path, *raw_paths)
     source_ids = tuple(path.toolpath_id for path in raw_paths)
-    source_path = (
-        raw_paths[0]
-        if len(raw_paths) == 1
-        else merge_toolpath_sequence(
-            operation.operation_id,
-            raw_paths,
-            safe_clearance_mm=parameters.safe_clearance_mm,
-            travel_feedrate_mm_min=parameters.travel_feedrate_mm_min,
-            retract_length_mm=parameters.retract_length_mm,
-        )
-    )
+    source_path = _combine_operation_paths(operation.operation_id, raw_paths, parameters)
     toolpath = transform_toolpath(source_path, T_build_from_source)
     if operation.material_plan is not None:
         toolpath = apply_material_plan(toolpath, operation.material_plan)
@@ -197,6 +188,25 @@ def generate_solid_fill_product_path(
             asdict(audit),
         ),
         toolpath,
+    )
+
+
+def _combine_operation_paths(
+    operation_id: str,
+    raw_paths: tuple[GeneratedToolpath, ...],
+    parameters: SolidFillProcessParameters,
+) -> GeneratedToolpath:
+    """Keep a complete parent path or merge children under the parent identity."""
+    return (
+        raw_paths[0]
+        if len(raw_paths) == 1 and raw_paths[0].operation_id == operation_id
+        else merge_toolpath_sequence(
+            operation_id,
+            raw_paths,
+            safe_clearance_mm=parameters.safe_clearance_mm,
+            travel_feedrate_mm_min=parameters.travel_feedrate_mm_min,
+            retract_length_mm=parameters.retract_length_mm,
+        )
     )
 
 

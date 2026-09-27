@@ -7,7 +7,6 @@ from collections.abc import Callable, Mapping
 from typing import Any
 
 from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import (
     QCheckBox,
     QComboBox,
@@ -61,8 +60,6 @@ from .manufacturing.setup import (
     OPERATION_NODE,
     PART_NODE,
     PLACEMENT_NODE,
-    IssueSeverity,
-    NodeState,
 )
 from .models import (
     CadModel,
@@ -73,11 +70,11 @@ from .step_loader import geometry_candidates
 from .tube_commands import TubeCommandProvider
 from .tube_controller import BodyRole, DraftNotFoundError, TubeSetupController
 from .tube_drafts import CoordinateFrameDraft
+from .tube_placement_ui import create_reset_button
 from .tube_resource_context import is_project_resource_id
 from .tube_resource_selection import NozzleEditorError
 from .tube_ui_text import (
     TUBE_CONTROL_TEXT,
-    TUBE_ISSUE_LABELS,
     apply_tube_help,
     setup_tree_node,
     tube_language,
@@ -87,6 +84,7 @@ from .tube_ui_text import (
 )
 from .ui_controls import OptionalDoubleSpinBox
 from .viewer import ModelViewer
+from .workbench_issue_ui import refresh_setup_feedback, refresh_setup_tree
 
 _NODE_ORDER = (
     PART_NODE,
@@ -289,6 +287,8 @@ class TubeSetupPage(QWidget):
         self.show_model_checkbox.toggled.connect(self._set_model_visible)
         self.path_display_combo = QComboBox()
         self.path_display_combo.setObjectName("tubePathDisplay")
+        self.path_display_combo.setSizeAdjustPolicy(QComboBox.AdjustToMinimumContentsLengthWithIcon)
+        self.path_display_combo.setMinimumContentsLength(8)
         self.path_display_combo.addItem("", "paper")
         self.path_display_combo.addItem("", "interactive")
         self.path_display_combo.currentIndexChanged.connect(self._set_path_display)
@@ -506,14 +506,15 @@ class TubeSetupPage(QWidget):
         self.placement_apply_button = QPushButton()
         self.placement_apply_button.setObjectName("primaryButton")
         self.placement_cancel_button = QPushButton()
+        self.placement_reset_button = create_reset_button(self)
         self.placement_apply_button.clicked.connect(self._apply_placement)
         self.placement_cancel_button.clicked.connect(self._cancel_placement)
         buttons.addWidget(self.placement_apply_button)
         buttons.addWidget(self.placement_cancel_button)
-        self.placement_feedback = QLabel()
-        self.placement_feedback.setWordWrap(True)
+        self.placement_feedback = QLabel(wordWrap=True)
         layout.addWidget(self.placement_help)
         layout.addLayout(form)
+        layout.addWidget(self.placement_reset_button)
         layout.addLayout(buttons)
         layout.addWidget(self.placement_feedback)
         layout.addStretch(1)
@@ -651,9 +652,10 @@ class TubeSetupPage(QWidget):
             self.operation_type_combo.setItemText(index, t(f"operation_type_{operation_type}"))
         tube_operation_ui.retranslate(self, t)
         english = self.language == "en"
-        self.tree_panel.setFixedWidth(380 if english else 340)
-        self.editor_panel.setFixedWidth(580 if english else 460)
-        view_width = 220 if english else 128
+        self.tree_panel.setFixedWidth(340)
+        self.editor_panel.setFixedWidth(540 if english else 460)
+        # Keep the two view buttons inside the space left by the Setup panels.
+        view_width = 128
         self.model_view_button.setMinimumWidth(view_width)
         self.machine_view_button.setMinimumWidth(view_width)
         self.show_model_checkbox.setText(t("show_model"))
@@ -685,9 +687,22 @@ class TubeSetupPage(QWidget):
         self._rebuild_tree()
         self._populate_coordinate_candidates(preserve_selection=True)
         self.refresh()
+        self._refresh_editor_title()
 
     def _t(self, key: str) -> str:
         return _TEXT[self.language][key]
+
+    @property
+    def common_setup_view(self) -> bool:
+        return self._common_setup_mode and self._local_setup_workbench is None
+
+    def _refresh_editor_title(self) -> None:
+        item = self.tree.currentItem()
+        node = item.data(0, Qt.UserRole) if item is not None else None
+        if isinstance(node, str) and node.startswith("operation:"):
+            self.editor_title.setText(self._t(f"operation_type_{self._selected_operation_type}"))
+        else:
+            self.editor_title.setText(self._t(node) if node in _TEXT[self.language] else "")
 
     def set_common_setup_mode(self, enabled: bool) -> None:
         self._local_setup_workbench = None
@@ -744,6 +759,11 @@ class TubeSetupPage(QWidget):
         self.controller = controller
         self.controller.set_resource_library(self.resource_library)
         self.model = model
+        # Runtime paths belong to the previous controller, not to matching operation IDs.
+        if hasattr(self.viewer, "clear_gcode_preview"):
+            self.viewer.clear_gcode_preview()
+        self._selected_operation_id = None
+        tube_operation_ui._refresh_product_status(self)
         self._pick_context = None
         self._operation_pick_field = None
         self._two_point_hits.clear()
@@ -768,6 +788,9 @@ class TubeSetupPage(QWidget):
         self._populate_part_table()
         self._populate_coordinate_candidates()
         self.refresh()
+
+        # Tree rebuilding blocks selection signals; explicitly bind the new editor state.
+        self.activate_selected_editor()
 
     def set_command_executor(self, callback: CommandExecutor | None) -> None:
         """Route applied Setup changes through the application command boundary."""
@@ -831,39 +854,18 @@ class TubeSetupPage(QWidget):
     def refresh(self) -> None:
         self._rebuild_tree()
         report = self.controller.validation_report()
-        for node, item in self._tree_items.items():
-            if node not in report.node_states:
-                continue
-            state = report.node_states[node]
-            base = self._t("operations") if node == OPERATION_NODE else self._t(node)
-            item.setText(0, f"{base}  [{self._t('status_' + state.value)}]")
-            item.setForeground(0, _state_color(state))
+        refresh_setup_tree(self._tree_items, report, self.language)
         self.create_operation_button.setEnabled(self.controller.can_create_operation)
         self.operation_type_combo.setEnabled(self.controller.can_create_operation)
         self.update_source_button.setEnabled(self.model is not None)
-        self.coordinate_status.setText(
-            f"{self._t('coordinates_valid')}: {'✓' if report.coordinates_valid else '—'}"
+        refresh_setup_feedback(
+            self.issue_list,
+            self.coordinate_status,
+            self.setup_status,
+            report,
+            self.controller.setup,
+            self.language,
         )
-        ready_label = self._t("setup_ready")
-        if report.setup_ready and report.has_warnings:
-            ready_value = self._t("ready_warning")
-        else:
-            ready_value = "✓" if report.setup_ready else "—"
-        self.setup_status.setText(f"{ready_label}: {ready_value}")
-        self.issue_list.clear()
-        for issue in report.issues:
-            marker = {
-                IssueSeverity.ERROR: "E",
-                IssueSeverity.WARNING: "W",
-                IssueSeverity.INFO: "I",
-            }[issue.severity]
-            label = TUBE_ISSUE_LABELS[self.language].get(issue.code, issue.code)
-            self.issue_list.addItem(f"[{marker}] {label}")
-            item = self.issue_list.item(self.issue_list.count() - 1)
-            item.setData(Qt.UserRole, issue.to_json())
-            item.setToolTip(f"{issue.code} · {issue.object_id or self.controller.setup.setup_id}")
-        if not report.issues:
-            self.issue_list.addItem(self._t("no_issues"))
         self._refresh_overlays()
         self.state_changed.emit(self.controller.state_json())
 
@@ -887,13 +889,7 @@ class TubeSetupPage(QWidget):
         editor = editors.get("operation" if is_operation else node, self.empty_editor)
         self.editor_stack.setCurrentWidget(editor)
         _set_operation_footer_visible(self, is_operation)
-        self.editor_title.setText(
-            self._t("operation")
-            if is_operation
-            else self._t(node)
-            if node in _TEXT[self.language]
-            else ""
-        )
+        self._refresh_editor_title()
         if node == PART_NODE:
             self._populate_part_table()
             self.set_view_mode("model")
@@ -909,6 +905,8 @@ class TubeSetupPage(QWidget):
             self._update_material_detail()
         elif is_operation:
             tube_operation_ui.populate_editor(self, node.removeprefix("operation:"))
+        # Each Setup entry starts at its instructions and primary inputs.
+        self.editor_scroll.verticalScrollBar().setValue(0)
 
     def activate_coordinate_entry(self) -> None:
         self.refresh()
@@ -1195,7 +1193,7 @@ class TubeSetupPage(QWidget):
                 self._set_coordinate_reference_from_controls(component)
             self.controller.confirm_coordinate_reference(self._coordinate_node, component)
             self._coordinate_control_dirty.discard(component)
-            self.coordinate_feedback.setText(f"{component.upper()} confirmed")
+            self.coordinate_feedback.setText(self._t(f"coordinate_{component}_confirmed"))
             self._refresh_overlays()
             self.refresh()
         except Exception as exc:
@@ -1672,6 +1670,8 @@ def _publish_error(
     target: QLabel | None,
 ) -> None:
     message = str(error)
+    if message == "Part must contain at least one solid":
+        message = page._t("part_requires_solid")
     if target is not None:
         target.setText(message)
     page.error_raised.emit(message)
@@ -1725,16 +1725,6 @@ def _entity_kind(entity_id: str) -> str:
         if f"_{kind}_" in entity_id:
             return kind
     return ""
-
-
-def _state_color(state: NodeState) -> QColor:
-    return {
-        NodeState.MISSING: QColor("#C27825"),
-        NodeState.DRAFT: QColor("#8B5CF6"),
-        NodeState.VALID: QColor("#20815D"),
-        NodeState.DIRTY: QColor("#B7791F"),
-        NodeState.INVALID: QColor("#C43D4E"),
-    }[state]
 
 
 __all__ = ["TubeSetupPage"]
