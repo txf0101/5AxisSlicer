@@ -24,9 +24,9 @@ Spiral 使用中间 Z 的真实实体有限采样；支撑检查完整运动段�
 
 工作台包含一个预览操作和五个制造操作。`Planar Region` 只显示分层区域、孔和岛，不生成 NC，也不导出六件套；`Planar Zigzag`、`Planar Offset`、`Planar Thin Wall`、`Planar Spiral` 和 `Planar Support` 都进入共享 Toolpath、MachineAxisTrajectory、ValidationReport、后处理与 G-code 回读链。新建类型和现有操作使用两个独立选择框，可在一个项目中切换多个操作及其 Viewer 结果。
 
-![Planar Zigzag 单层填充线局部](assets/current_delivery/planar_zigzag_path_detail.png)
+![Planar Zigzag 单层填充路径](assets/hd_v27/planar_zigzag_path_detail.png)
 
-图中裁取矩形试件的整层路径，模型已隐藏；显示开关不在此裁图中。这个单层示例使用 `body_001`、`Z=0.2 mm`；本手册下方的 `body_002`、`Z=60 mm` 是另一组练习设置，不能混用。需要检查路径与模型的贴合关系时重新勾选“显示模型”；需要观察道宽时切换为“沉积道宽”。
+图中显示矩形试件的整层路径。这个单层示例使用 `body_001`、`Z=0.2 mm`；本手册下方的 `body_002`、`Z=60 mm` 是另一组练习设置，不能混用。需要检查路径与模型的贴合关系时勾选“显示模型”；需要观察道宽时切换为“沉积道宽”。
 
 ## 创建操作与参数
 
@@ -78,7 +78,7 @@ Spiral 使用中间 Z 的真实实体有限采样；支撑检查完整运动段�
 
 绑定有效 STEP body，将 `first_layer_z_mm` 设为与 `layer_height_mm` 相等，使首个沉积平面位于 Build Z=0 上方一层高，再设置末层 Z 和其余支撑参数，点击“应用 / Apply”后“生成预览 / Generate preview”。在三维预览中分别检查浅绿色 `support_material` 主体和深绿色 `support_interface` 接触层，确认 Warning/Error、路径顺序和模型间隙，再按通用流程导出、保存和重开。生成时间较长时可点击“取消生成 / Cancel generation”；上一份有效结果和 Viewer 保留。
 
-![平台支撑中文参数与模型总览](assets/planar/current_p01_p07/p07/00_support_grid_zh_1366x768_parameters.png)
+![平台支撑中文参数](assets/hd_v27/planar_support_00_support_grid_zh_1920x1080_parameters.png)
 
 以下情况应按问题列表处理：
 
@@ -102,15 +102,15 @@ Spiral 使用中间 Z 的真实实体有限采样；支撑检查完整运动段�
 
 在下图的浮空梁练习中，检查平台到模型悬垂区是否存在连续支撑，主体和 Interface 是否分开显示。若出现 `xyzac.rotary_singularity` Warning，须核对机型约束，不要把它当成无警告的 Ready。
 
-![Grid 支撑中文结果](assets/planar/current_p01_p07/p07/01_support_grid_zh_1366x768_ready.png)
+![Grid 支撑中文结果](assets/hd_v27/planar_support_01_support_grid_zh_1920x1080_ready.png)
 
-![Lines 支撑英文结果](assets/planar/current_p01_p07/p07/02_support_lines_en_1600x900_ready.png)
+![Lines 支撑英文结果](assets/hd_v27/planar_support_02_support_lines_en_1920x1080_ready.png)
 
-下图是道宽大于支撑域后的真实错误示例。长错误码完整换行，导出按钮禁用；恢复道宽后可重新生成，见 [中文恢复截图](assets/planar/current_p01_p07/p07/05_support_error_recovered_zh_1600x900.png)。
+下图是道宽大于支撑域后的真实错误示例。长错误码完整换行，导出按钮禁用；恢复道宽后可重新生成，见 [中文恢复截图](assets/hd_v27/planar_support_05_support_error_recovered_zh_1920x1080.png)。
 
-![支撑区域过窄的错误状态](assets/planar/current_p01_p07/p07/04_support_error_en_1366x768.png)
+![支撑区域过窄的错误状态](assets/hd_v27/planar_support_04_support_error_en_1920x1080.png)
 
-修改支撑线间距后旧结果进入 Stale、保留预览并禁止导出；对照[输入变化后的状态图](assets/planar/current_p01_p07/p07/06_support_stale_en_1920x1080.png)和[重新生成后的状态图](assets/planar/current_p01_p07/p07/07_support_stale_recovered_zh_1600x900.png)。
+修改支撑线间距后旧结果进入 Stale、保留预览并禁止导出；对照[输入变化后的状态图](assets/hd_v27/planar_support_06_support_stale_en_1920x1080.png)和[重新生成后的状态图](assets/hd_v27/planar_support_07_support_stale_recovered_zh_1920x1080.png)。
 
 对于 `Supportless_sample.stp`，选择 `body_002` 后核对支撑是否从平台连续到悬垂区。若提示端点修正超过容差，操作进入 Error，检查模型、层高和目标 Z；不要绕过该诊断导出。
 
@@ -137,11 +137,11 @@ Spiral 使用中间 Z 的真实实体有限采样；支撑检查完整运动段�
 | Stale | 参数、实体引用、坐标或资源在生成后改变。 | 不使用旧结果导出，重新 Generate。 |
 | 取消生成 | 用户取消或后台任务中断。 | 上一份 Ready 结果保留；确认输入后重新生成。 |
 
-![Spiral 单层输入：首层与末层 Z 相同](assets/planar/current_p01_p07/p06/07_planar_spiral_error_zh_1366x768.png)
+![Spiral 单层输入触发层数不足，禁止导出](assets/hd_v27/planar_spiral_07_planar_spiral_error_zh_1920x1080.png)
 
 图中首层和末层都为 60 mm，尚未构成连续螺旋所需的两个相邻层；这张图只显示输入，未包含错误详情或导出按钮。生成后应向下滚动核对错误提示和导出禁用状态。将末层改为相邻层后，再应用、生成并检查回读：
 
-![Spiral 相邻两层参数与轮廓路径（英文界面）](assets/planar/current_p01_p07/p06/08_planar_spiral_recovered_en_1600x900.png)
+![Spiral 恢复后的轮廓路径与 Warning（英文界面）](assets/hd_v27/planar_spiral_08_planar_spiral_recovered_en_1920x1080.png)
 
 ## 导出文件
 

@@ -11,7 +11,7 @@ In Freeform, the material table assigns deposition regions to T0, T1, and other 
 
 The table shows a T0/T1 channel draft with no region assignments yet. Use the region selector and Add selected region to populate the lower table. These values have not been confirmed or applied and do not mean the current impeller is configured for multicolour printing. Tune temperature and filament lengths for the actual material, extruder, and machine.
 
-![T0/T1 channel draft and region-assignment controls](assets/current_delivery/material_en_draft.png)
+![T0/T1 channel draft and region-assignment controls](assets/hd_v27/material_en_draft.png)
 
 The following JSON is an advanced example for the three-blade fan. `op01-` through `op04-` describe only that example's merged order. For another model, choose its displayed region candidates instead of copying these IDs:
 

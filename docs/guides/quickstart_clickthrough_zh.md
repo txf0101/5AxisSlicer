@@ -13,17 +13,17 @@
 
 ## 0. 所有工作台先做 Setup
 
-![首页的五个工作台入口与 G-code 文件预览入口](assets/current_delivery/home_zh.png)
+![首页的五个工作台入口与 G-code 文件预览入口](assets/hd_v27/home_zh.png)
 
 1. 在仓库根目录运行 `run_app.py`（或 `scripts/run_app.ps1`）。进入工作台后打开自己的 STEP/STP。若只是导入到模型预览页，仍须进入制造工作台创建操作。
 2. 点顶部“公共制造设置 / Manufacturing Setup”；在 **Part** 中把参与打印的封闭实体标为 Part，其他实体不要误选。依次应用 **Machine → Model CS → Build CS → Placement**，并检查 **Nozzle** 和 **Material** 已审核。每页有草稿时点“应用”或“确认”。
 3. 回到工作台首页。检查状态“设置就绪”；如果为 Error，点问题列表查缺少的资源或坐标。参考机型的 Warning 需要保留并审阅，不代表可上机。
 
-![叶轮项目的九个实体角色表（局部）](assets/current_delivery/part_impeller_roles_zh.png)
+![叶轮项目的九个实体角色表](assets/hd_v27/part_impeller_roles_zh.png)
 
 图例来自叶轮项目：九个封闭实体的角色均为“零件”，只用于说明角色表。它不代表弯管的实体数量或完整设置就绪状态；自己的模型须逐项判断。
 
-完整设置状态位于左侧树和底部，未包含在此裁图内。修改角色后，向下滚动点“确认”；Model CS 的三参考编辑位置见[叶轮项目的坐标编辑草稿图](assets/current_delivery/modelcs_draft_zh.png)，完整说明见[Setup 手册](tube_coordinate_setup_zh.md)。
+设置状态可在左侧树及底部查看。修改角色后，向下滚动点“确认”；Model CS 的三参考编辑位置见[叶轮项目的坐标编辑草稿图](assets/hd_v27/modelcs_draft_zh.png)，完整说明见[Setup 手册](tube_coordinate_setup_zh.md)。
 
 如果底部“设置脚本”占用画面，可在顶部“工具”菜单取消勾选“设置脚本”；需要脚本操作时再打开。
 
@@ -31,9 +31,9 @@
 
 Planar、Curve、Rotary 和 Freeform 的左侧都有“制造设置”栏，列出 Part、Machine、Nozzle、Material、Model CS、Build CS 和 Placement。栏内会显示当前使用“公共制造设置”还是“本工作台独立设置”，以及当前机床、喷嘴和材料。Tube 左侧的项目树就是公共设置编辑入口。
 
-![Planar 公共制造设置栏局部](assets/current_delivery/planar_common_scope_zh.png)
+![Planar 公共制造设置界面](assets/hd_v27/planar_common_scope_zh.png)
 
-裁图显示“使用公共制造设置”；点设置节点可编辑公共参数。操作参数区未包含在裁图中，其中层高、道宽等属于当前切片操作，不会因为保存制造设置而变成所有工作台的统一工艺值。
+图中显示“使用公共制造设置”；点设置节点可编辑公共参数。操作参数区的层高、道宽等属于当前切片操作，不会因为保存制造设置而变成所有工作台的统一工艺值。
 
 1. **各工作台共用一套参数**：在顶部点“公共制造设置”，完成并应用各项；返回目标工作台。左侧显示“使用公共制造设置”。以后修改公共设置，使用它的工作台会取得新设置，旧生成结果须重新生成。
 2. **从公共设置开始，但仅在一个工作台调整**：在该工作台左侧点“导入公共设置到本工作台”。页面打开本工作台设置编辑器；点 Part、Machine 等节点修改并应用，再点“返回当前工作台”。左侧会显示“本工作台独立设置”。点左侧“保存本工作台设置…”或顶部“保存项目”，这份设置便随项目保存，其他工作台的参数不变。已有独立设置时再次导入会提示覆盖；确认前应检查是否需要保留原值。
@@ -42,11 +42,11 @@ Planar、Curve、Rotary 和 Freeform 的左侧都有“制造设置”栏，列�
 
 左侧任一设置节点都可直接打开当前生效的编辑器：使用公共设置时编辑会影响所有共用工作台；使用独立设置时只影响当前工作台。无论选择哪种范围，切片前都要核对零件角色、坐标、机床和材料。示例值只供学习，自己的模型和设备应重新设置。
 
-![导入公共设置后进入本工作台制造设置编辑页](assets/current_delivery/planar_local_editor_header_zh.png)
+![导入公共设置后进入本工作台制造设置编辑页](assets/hd_v27/planar_local_editor_header_zh.png)
 
-图中裁取编辑页上部，标题明确写着“Planar 本工作台制造设置”；可见“返回当前工作台”和右侧机床“应用”。该图仅说明本地设置入口，不作为路径结果或完整项目状态证明。
+图中标题明确写着“Planar 本工作台制造设置”；可见“返回当前工作台”和右侧机床“应用”。该图用于说明本地设置入口，不作为路径结果证明。
 
-![Planar 本工作台独立设置栏及保存、发布、改用公共设置入口](assets/current_delivery/planar_local_scope_zh.png)
+![Planar 本工作台独立设置栏及保存、发布、改用公共设置入口](assets/hd_v27/planar_local_scope_zh.png)
 
 返回后左侧显示“本工作台独立设置”。“保存本工作台设置…”会保存项目中的独立副本；“保存到公共制造设置”会更新共用副本；“改用公共设置”会放弃当前工作台的独立副本。保存或切换设置后，按问题列表重新生成已过期的路径。
 
@@ -56,7 +56,7 @@ Planar、Curve、Rotary 和 Freeform 的左侧都有“制造设置”栏，列�
 2. 点“新建操作 / Create operation”，在“实体”下拉框选要切的 body，填写首层、末层、层高、道宽等参数，点“应用 / Apply”。`Support` 的首层 Z 应等于层高，它只支持从打印平台起的垂直支撑。
 3. 点“生成预览 / Generate preview”。先保留“显示模型”，核对路径与 STEP 的位置；若模型挡住内部路线，取消“显示模型”，选择“完整线条（快速）”检查全部沉积线。需要观察沉积道宽时切到“沉积道宽”。`Region` 只显示截面区域，不能导出 NC。
 
-![取消显示模型后，平面单层往复填充线完整显示](assets/current_delivery/planar_zigzag_path_detail.png)
+![取消显示模型后，平面单层往复填充线完整显示](assets/hd_v27/planar_zigzag_path_detail.png)
 
 图中选用三叶扇 STEP 的 `body_001`、`Z=0.2 mm` 单层，只示范如何查看整层填充线；它不是完整扇叶程序。换模型时按实际几何重新选择实体、截层范围和工艺值。
 
@@ -68,9 +68,9 @@ Planar、Curve、Rotary 和 Freeform 的左侧都有“制造设置”栏，列�
 2. 在左侧“Viewer 选取类型”选“边”，按沉积方向逐条点边；需要明确邻面时，再切到“面”并点该面。向下滚动点“采用 Viewer 已选边”，检查边链顺序、每条反向标志和邻面 ID。没有权威邻面时，可改用“用户指定方向”。
 3. 输入道宽、采样步长和对应的层/道参数，点“应用”，再点“生成与检查”。在右侧追踪起点、终点、道间距及法向，遇到断链或 trim 越界应回到选择步骤。
 
-![Curve 的 Viewer 拾取类型；橙色为已选面，蓝色为已选边](assets/current_delivery/curve_edges_normal_face_zh.png)
+![Curve 的 Viewer 拾取类型；橙色为已选面，蓝色为已选边](assets/hd_v27/curve_edges_normal_face_zh.png)
 
-图中为现有操作的几何拾取局部；点“采用 Viewer 已选边”后按点击顺序填入边 ID，默认反向标志为 0。应用前需核对边序、反向和法向面，此图不证明方向检查或生成已完成。选边顺序、反向和法向判断见[Curve 手册](curve_workbench_zh.md)。
+图中为现有操作的几何拾取界面；点“采用 Viewer 已选边”后按点击顺序填入边 ID，默认反向标志为 0。应用前需核对边序、反向和法向面，此图不证明方向检查或生成已完成。选边顺序、反向和法向判断见[Curve 手册](curve_workbench_zh.md)。
 
 ## 3. Rotary：固定轴回转
 
@@ -78,9 +78,9 @@ Planar、Curve、Rotary 和 Freeform 的左侧都有“制造设置”栏，列�
 2. 在左侧“Viewer 选取类型”先选“边”，点轴向参考边并点“采用 Viewer 已选轴向边”；再切到“面”，点同轴圆柱/圆锥面并点“采用 Viewer 已选表面”。可选轮廓边要单独采用。仅填写数值轴不足以生成产品。
 3. 核对轴、零角、角度区域和工艺值，点“应用几何与参数”→“生成与检查”。先保留“显示模型”核对所选表面，再取消勾选，选择“完整线条（快速）”检查周向轨迹；需要观察相邻道覆盖时切到“沉积道宽”。跨 0° 的角区间应按连续方向展开。
 
-![Rotary Viewer 局部：橙色回转面和蓝色选中边](assets/current_delivery/rotary_selected_surface.png)
+![Rotary Viewer：橙色回转面和蓝色选中边](assets/hd_v27/rotary_selection_zh.png)
 
-![关闭模型后查看两个 Around Part 周向区域的蓝色路径](assets/current_delivery/rotary_around_two_regions_zh.png)
+![关闭模型后查看两个 Around Part 周向区域的蓝色路径](assets/hd_v27/rotary_around_zh.png)
 
 第二张图是已生成的 `350:20;120:210` 圆柱案例，两个分离的蓝色细线路径组对应两段沉积区域；此图没有显示空移。它只演示预览方式；自己的模型需重新选择轴边、回转面和角区间。
 
@@ -92,11 +92,11 @@ Planar、Curve、Rotary 和 Freeform 的左侧都有“制造设置”栏，列�
 2. 如下图，在右侧分别点“管体实体”“入口端口”“出口端口”旁的“拾取”，随后在中央模型上点对应 body 或圆边。操作需要基体时，再拾取“既有基体”。逐项检查字段不再显示“未填写”；入口应在打印起始端，出口应在终止端。
 3. 输入道宽、层高、弦误差和该模式需要的参数，点右下角“应用”。参数或几何改变后操作显示“待更新”，继续点“生成”，完成后点“查看路径”。重点核对路径从基体开始、每层得到承接、转位与空移避开已打印部分。
 
-![Tube 操作已选择管体、入口端口、出口端口和既有基体](assets/current_delivery/tube_roles_zh.png)
+![Tube 操作已选择管体、入口端口、出口端口和既有基体](assets/hd_v27/tube_roles_zh.png)
 
-图中裁取四项几何输入与模型，状态树未包含在内；该操作仍需应用并重新生成，这四个 ID 只属于该弯管 STEP。模式差异、生成和适用范围见[Tube 手册](tube_workbench_zh.md)。导出前应检查逐层承接、空移与问题列表。
+图中显示四项几何输入、模型和设置状态树；该操作仍需应用并重新生成，这四个 ID 只属于该弯管 STEP。模式差异、生成和适用范围见[Tube 手册](tube_workbench_zh.md)。导出前应检查逐层承接、空移与问题列表。
 
-![Indexed 弯管生成路径与导出按钮](assets/current_delivery/tube_indexed_export_zh.png)
+![导出的 Indexed 弯管 G-code 路径预览](assets/hd_v27/tube_indexed_export_zh.png)
 
 路径生成后可取消“显示模型”并选择“完整线条（快速）”检查背面路线。图中的弯管参数只适用于该示例；自己的管件应重新拾取入口、出口和基体，并核定层高、道宽与设备行程。
 
@@ -104,23 +104,23 @@ Planar、Curve、Rotary 和 Freeform 的左侧都有“制造设置”栏，列�
 
 1. 首页点“自由曲面工作台 / Freeform Workbench”。“新建操作类型”只决定下一次创建的模式；如已打开项目，先看“现有操作”，它才是当前正在编辑的操作。要换模式，先从前者选择，再点页面下方“新建操作”。
 2. `Surface` 和 `Thin Wall` 要求导引 edge 及明确邻 face。在左侧“Viewer 选取类型”先选“边”并点导引边，再切“面”并点邻面。向下滚动点“采用 Viewer 已选边”，核对边顺序、反向标志、邻面与受限面组。可用普通字段编辑单条导引线，多条导引线才填写 JSON。
-3. `Spherical Solid Fill`、`Surface Solid Fill`、`Radial Solid Fill` 使用实体角色。选中当前操作后，按需要把“Viewer 选取类型”切为“实体”“面”或“边”，点相关几何，再点“从 Viewer 已选几何建立候选”。人工核对球心与球面实体、承载面/对面与根边，或 hub/叶片与生长轴。下图的三叶扇仅展示待应用的角色输入：`body_001` 等 ID 只属于此 STEP，换模型后必须重新拾取。
+3. `Spherical Solid Fill`、`Surface Solid Fill`、`Radial Solid Fill` 使用实体角色。选中当前操作后，按需要把“Viewer 选取类型”切为“实体”“面”或“边”，点相关几何，再点“从 Viewer 已选几何建立候选”。人工核对球心与球面实体、承载面/对面与根边，或 hub/叶片与生长轴。下图的三叶扇展示加载已保存项目后的角色输入：`body_001` 等 ID 只属于此 STEP，换模型后必须重新拾取。
 4. 若选 `Surface Solid Fill`，在“曲面实体生长方式”选择“沿侧面厚度叠层”或“从根边向外生长”。前者沿厚度方向叠层；后者要求根边有承载，并沿曲面向外扩展。核定道宽、层高等参数后先点“应用”。如需多色，点“编辑材料表…”，从区域下拉框选实体或阶段，点“添加所选区域”，再把各行分配给 T0/T1；具体填写见[材料教程](material_channels_zh.md)。修改材料后再次点“应用”。
 5. 点“生成与检查”，滚到页面下方查看状态和问题列表；只有当前结果允许导出时，“导出六件套”才可用。放大右侧路径，确认首道贴着基体、后续曲层沿所选方向生长，空移不穿过已打印部分。新模型要重新核对实体角色、承载根边和设备参数。
 
-![Freeform 顶部：新建操作类型与当前操作分别显示](assets/current_delivery/freeform_existing_surface_solid_zh.png)
+![Freeform 顶部：新建操作类型与当前操作分别显示](assets/hd_v27/freeform_existing_surface_solid_zh.png)
 
-![Freeform 实体角色输入及基体、轮毂、叶片摘要](assets/current_delivery/freeform_three_leaf_roles_zh.png)
+![Freeform 实体角色输入及基体、轮毂、叶片摘要](assets/hd_v27/freeform_three_leaf_roles_zh.png)
 
-第二张图为生成期间的设置界面局部，显示待核对的三叶扇角色：`body_001` 是基体和轮毂，`body_002` 至 `body_004` 是叶片。摘要用于快速核对角色，仍要逐个检查根面、外表面与实际模型对应；图中显示的是 STEP 与角色设置，不代表当前生成已经完成。导引模式见[Freeform 手册](freeform_workbench_zh.md)，实体生长的几何选择和适用条件见[完整实体方法](solid_fill_method_zh.md)。大型操作完成生成前，旧预览不能代表当前参数。
+第二张图为加载已保存项目后的设置界面，本次尚未重新生成路径，显示待核对的三叶扇角色：`body_001` 是基体和轮毂，`body_002` 至 `body_004` 是叶片。摘要用于快速核对角色，仍要逐个检查根面、外表面与实际模型对应；图中显示的是 STEP 与角色设置，不代表当前生成已经完成。导引模式见[Freeform 手册](freeform_workbench_zh.md)，实体生长的几何选择和适用条件见[完整实体方法](solid_fill_method_zh.md)。大型操作完成生成前，旧预览不能代表当前参数。
 
 ## 6. 查看已有 G-code
 
 点顶部“G-code 文件预览”或“打开现有 G-code…”，选择已有 `.gcode`、`.nc` 或 `.tap`；需要对照模型时再点“打开 STEP”。先点 FIT 看全程，再用鼠标滚轮放大路线；右侧“场景显隐”可分别开关模型、沉积路径和空走路径。沿右侧面板向下滚动可查看统计和代码上下文。旧程序的旋转轴含义未经确认时，应先核对其控制器定义，不能把旧 B 直接当成当前 C。
 
-![G-code 文件预览局部：校徽操作 2 路径](assets/current_delivery/gcode_logo_file_preview_zh.png)
+![G-code 文件预览：校徽操作 2 路径](assets/hd_v27/gcode_logo_file_preview_zh.png)
 
-裁图展示文件入口与校徽操作 2 路径，STEP 字段为“未加载”；右侧统计与显隐面板未包含在图内。检查自己的程序时，应叠加对应 STEP 并核对路径位置。
+图中显示文件入口、校徽操作 2 路径及右侧统计与显隐面板，STEP 字段为“未加载”。检查自己的程序时，应叠加对应 STEP 并核对路径位置。
 
 定位和坐标语义见[G-code 预览手册](gcode_preview_zh.md)。
 

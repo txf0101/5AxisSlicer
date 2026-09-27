@@ -1,0 +1,32 @@
+Checked 88 local image references; missing 0.
+Below 1920x1080: 0
+Low-contrast images to review: 29
+  4.7  1920x1080  docs\guides\assets\hd_v27\rotary_axis_words_zh.png
+  6.5  1920x1080  docs\guides\assets\hd_v27\station_zh_empty.png
+  7.6  1920x1080  docs\guides\assets\hd_v27\material_en_draft.png
+  8.2  1920x1080  docs\guides\assets\hd_v27\planar_support_00_support_grid_zh_1920x1080_parameters.png
+  8.2  1920x1080  docs\guides\assets\hd_v27\material_zh_draft.png
+  8.3  1920x1080  docs\guides\assets\hd_v27\rotary_coordinates_zh.png
+  8.7  1920x1080  docs\guides\assets\hd_v27\planar_support_04_support_error_en_1920x1080.png
+  8.9  1920x1080  docs\guides\assets\hd_v27\planar_support_06_support_stale_en_1920x1080.png
+  9.0  1920x1080  docs\guides\assets\hd_v27\planar_common_scope_zh.png
+  9.1  1920x1080  docs\guides\assets\hd_v27\planar_local_scope_zh.png
+  9.3  1920x1080  docs\guides\assets\hd_v27\rotary_around_zh.png
+  9.4  1920x1080  docs\guides\assets\hd_v27\rotary_error_zh.png
+  9.5  1920x1080  docs\guides\assets\hd_v27\rotary_reopened_zh.png
+  9.6  1920x1080  docs\guides\assets\hd_v27\rotary_stale_zh.png
+  9.6  1920x1080  docs\guides\assets\hd_v27\rotary_recovered_zh.png
+  9.9  1920x1080  docs\guides\assets\hd_v27\planar_support_02_support_lines_en_1920x1080_ready.png
+  9.9  1920x1080  docs\guides\assets\hd_v27\home_en.png
+ 10.3  1920x1080  docs\guides\assets\hd_v27\curve_07_curve_multi_pass_en_1920x1080_path_only.png
+ 10.4  1920x1080  docs\guides\assets\hd_v27\curve_08_curve_offset_buildup_en_1920x1080_path_only.png
+ 10.5  1920x1080  docs\guides\assets\hd_v27\planar_support_01_support_grid_zh_1920x1080_ready.png
+ 10.6  1920x1080  docs\guides\assets\hd_v27\planar_zigzag_path_detail.png
+ 10.7  1920x1080  docs\guides\assets\hd_v27\home_zh.png
+ 10.9  1920x1080  docs\guides\assets\hd_v27\curve_06_curve_buildup_zh_1920x1080_path_only.png
+ 10.9  1920x1080  docs\guides\assets\hd_v27\planar_spiral_08_planar_spiral_recovered_en_1920x1080.png
+ 11.4  1920x1080  docs\guides\assets\hd_v27\planar_support_07_support_stale_recovered_zh_1920x1080.png
+ 11.4  1920x1080  docs\guides\assets\hd_v27\planar_support_05_support_error_recovered_zh_1920x1080.png
+ 17.6  1920x1080  docs\guides\assets\hd_v27\curve_09_curve_overview_edge_normal_zh_1920x1080.png
+ 18.5  1920x1080  docs\guides\assets\hd_v27\gcode_logo_file_preview_zh.png
+ 19.6  1920x1080  docs\guides\assets\hd_v27\logo_nc_stage2_detail.png

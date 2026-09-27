@@ -1,0 +1,29 @@
+[
+  {
+    "file": "freeform_existing_surface_solid_zh.png",
+    "size": [
+      1920,
+      1080
+    ],
+    "method": "Live QWidget.grab, native pixels, no OS cursor or computer-use overlay",
+    "sha256": "880fcd298c85a9eaca66d2f74589d7465f3ce2f6d9bd58a86ec6156ab358d8d4"
+  },
+  {
+    "file": "freeform_three_leaf_roles_zh.png",
+    "size": [
+      1920,
+      1080
+    ],
+    "method": "Live QWidget.grab, native pixels, no OS cursor or computer-use overlay",
+    "sha256": "16a60eb42635cb0bdb0a0183cfb90a318a30d4958917f7743dcd4fac8f466b92"
+  },
+  {
+    "file": "tube_roles_zh.png",
+    "size": [
+      1920,
+      1080
+    ],
+    "method": "Live QWidget.grab, native pixels, no OS cursor or computer-use overlay",
+    "sha256": "d063b7f6f7f2ff42a7815367bd86b761c297897a4cf4161e2da70dfc8768286a"
+  }
+]

@@ -95,9 +95,9 @@ flowchart LR
 4. 右侧编辑器：当前树节点或操作的参数。
 5. 底部问题列表：Error、Warning 和可定位诊断。
 
-![首页的五个工作台入口与 G-code 文件预览入口](assets/current_delivery/home_zh.png)
+![首页的五个工作台入口与 G-code 文件预览入口](assets/hd_v27/home_zh.png)
 
-图中裁取工作台首页卡片区域；打开 STEP 和公共制造设置位于上方工具栏，未包含在裁图中。打开 STEP 后再到对应工作台观察模型、body/edge 列表和问题列表；此时不用记住实体编号。换一个 STEP 后，应根据几何角色重新确认。
+图中显示工作台首页，上方工具栏包含打开 STEP 和公共制造设置按钮。打开 STEP 后再到对应工作台观察模型、body/edge 列表和问题列表；此时不用记住实体编号。换一个 STEP 后，应根据几何角色重新确认。
 
 Planar、Curve、Rotary、Freeform 的左侧还有“制造设置”栏。这里能看到当前机床、喷嘴、材料和设置作用范围，点击 Part、Machine、Nozzle、Material、Model CS、Build CS、Placement 会打开对应编辑页。Tube 的左侧项目树提供相同的公共设置节点。公共设置与独立设置的复制、保存和影响范围，按[点击教程的设置作用域](quickstart_clickthrough_zh.md#公共设置与本工作台设置)操作。
 
@@ -109,11 +109,11 @@ Planar、Curve、Rotary、Freeform 的左侧还有“制造设置”栏。这里
 
 Part 可以包含多个封闭 solid。参与制造的实体设为 Part；辅助 sheet、基体、夹具或明确忽略的实体保留各自角色。不要因为示例里多个 body 都是 Part，就把新模型中的所有对象全部选为 Part。
 
-![叶轮项目的九个实体角色表（局部）](assets/current_delivery/part_impeller_roles_zh.png)
+![叶轮项目的九个实体角色表](assets/hd_v27/part_impeller_roles_zh.png)
 
 图例来自叶轮项目：九个封闭实体的角色均为“零件”，只用于说明角色表。它不代表弯管的实体数量或完整设置就绪状态；自己的模型须逐项判断。
 
-上图仅展示叶轮角色表，其他设置状态不在裁图内。参考机型仍会在问题列表中保留标定警告。右侧修改角色后，向下滚动点“确认”；再按问题列表核对其他设置。
+上图显示叶轮角色表及左侧设置树。参考机型仍会在问题列表中保留标定警告。右侧修改角色后，向下滚动点“确认”；再按问题列表核对其他设置。
 
 ### 5.2 按固定顺序完成 Setup
 
@@ -126,7 +126,7 @@ Part 可以包含多个封闭 solid。参与制造的实体设为 Part；辅助 
 5. **Build CS**：定义构建方向和构建平面。
 6. **Placement**：把 Build CS 放入机床安装位，并录入有证据的微调。
 
-![Model CS 三参考编辑器](assets/current_delivery/modelcs_draft_zh.png)
+![Model CS 三参考编辑器](assets/hd_v27/modelcs_draft_zh.png)
 
 图为叶轮项目的坐标编辑草稿：原点为 (0, 0, 0)，Z 方向为 +Z，X 方向为 +X。它说明三参考编辑器的位置和确认方式，不代表已应用，也不是弯管的推荐坐标值；自己的模型须按几何和构建方向重新定义。
 
@@ -134,7 +134,7 @@ Part 可以包含多个封闭 solid。参与制造的实体设为 Part；辅助 
 
 ### 5.3 机型选择只冻结当前项目快照
 
-![当前公共制造设置中的机型选择和参考资格提示](assets/current_delivery/machine150_zh.png)
+![当前公共制造设置中的机型选择和参考资格提示](assets/hd_v27/machine150_zh.png)
 
 内置资源是只读模板。项目保存的是冻结快照，之后用户资源库发生变化不会静默改写旧项目。参考机型产生 Warning 是正常安全边界，不应删除警告来获得绿色状态。
 
@@ -155,11 +155,11 @@ Part 可以包含多个封闭 solid。参与制造的实体设为 Part；辅助 
 
 ### 6.1 几何外观相似也可能选择不同
 
-![Curve 的有向边链和明确法向](assets/curve/current_c01_c05/09_curve_overview_edge_normal_zh_1366x768.png)
+![Curve 的有向边链和明确法向](assets/hd_v27/curve_09_curve_overview_edge_normal_zh_1920x1080.png)
 
 叶轮可用于学习 Curve 的 edge 链，也可用有限面组学习 Freeform；两者的输入契约不同。选择 Curve 时制造中心是边链，选择 Freeform 时区域由面组和导引线共同限定。
 
-![Rotary 关闭模型后显示的两个局部环绕沉积区域](assets/current_delivery/rotary_around_two_regions_zh.png)
+![Rotary 关闭模型后显示的两个局部环绕沉积区域](assets/hd_v27/rotary_around_zh.png)
 
 图中蓝色细线是圆柱表面的两个局部环绕区域，当前图没有显示空移；它们共用固定回转轴。弯管虽然局部截面呈圆形，中心线方向持续变化，通常应进入 Tube，而不是把每个弯曲段硬解释成一个 Rotary 操作。
 
@@ -190,9 +190,9 @@ Part 可以包含多个封闭 solid。参与制造的实体设为 Part；辅助 
 
 从 Region 或 Zigzag 开始，观察层高、道宽、填充间距如何改变路径。Offset、Thin Wall、Spiral 和 Planar Support 放在掌握区域与层以后学习。
 
-![Planar 单层往复填充路径，已隐藏模型并选完整线条](assets/current_delivery/planar_zigzag_path_detail.png)
+![Planar 单层往复填充路径，已隐藏模型并选完整线条](assets/hd_v27/planar_zigzag_path_detail.png)
 
-这张局部图使用矩形试件的 `body_001`、`Z=0.2 mm` 单层来练习查看路径。看不清内部线条时，取消“显示模型”；核对路径与实体是否对齐时，再勾选它。此图不表示整件已经完成切片。
+这张路径预览使用矩形试件的 `body_001`、`Z=0.2 mm` 单层来练习查看路径。看不清内部线条时，取消“显示模型”；核对路径与实体是否对齐时，再勾选它。此图不表示整件已经完成切片。
 
 迁移任务：换一个带孔或岛的平面截面，确认路径没有穿过孔洞，层数和首末 Z 与输入一致。
 
@@ -230,11 +230,11 @@ Indexed 用于分段转位薄壁，Buildup 用于多道加厚和可选底座，C
 | Error | 生成或验证失败 | 导出应禁用；按错误定位根因 |
 | Stale | 几何、参数、材料、Setup 或控制器已改变 | 重新生成，不能沿用旧导出资格 |
 
-![输入改变后的 Stale 状态](assets/rotary/live_qt/07_input_change_stale_zh.png)
+![输入改变后的 Stale 状态](assets/hd_v27/rotary_stale_zh.png)
 
 上图中旧路径仍保留，方便比较，但导出按钮已经禁用。重新生成完成前，旧图形只用于观察。
 
-![运动限制触发的 Error 状态](assets/rotary/live_qt/06_acceleration_limit_error_zh.png)
+![运动限制触发的 Error 状态](assets/hd_v27/rotary_error_zh.png)
 
 遇到运动限位、加速度、碰撞或坐标错误时，先检查单位、frame、机型和操作参数。不要直接删除检查项或任意扩大限值。
 
@@ -248,9 +248,9 @@ Indexed 用于分段转位薄壁，Buildup 用于多道加厚和可选底座，C
 2. **运动层**：空移、退离、转位、接近、速度、加速度、轴限、FK 回代和碰撞报告。
 3. **代码层**：G90/G91、M82/M83、G93/G94、轴字、E、F、材料事件和宏展开是否符合注册控制器语义。
 
-![离线参考机型 Warning 状态及可用导出入口](assets/current_delivery/rotary_recovered_controls_zh.png)
+![离线参考机型 Warning 状态及可用导出入口](assets/hd_v27/rotary_recovered_zh.png)
 
-这张当前界面局部显示离线参考机型重新生成后的 `Warning` 和可用导出入口；图中没有路径细节或导出目录。必须审查警告后才允许人工决定是否导出。Viewer 看起来连续不能替代 NC 回读；NC 回读通过也不能替代真实控制器和现场碰撞验证。
+这张界面图显示离线参考机型重新生成后的 `Warning` 和可用导出入口。必须审查警告后才允许人工决定是否导出。Viewer 看起来连续不能替代 NC 回读；NC 回读通过也不能替代真实控制器和现场碰撞验证。
 
 ## 10. L08：理解六件套、保存和重开
 

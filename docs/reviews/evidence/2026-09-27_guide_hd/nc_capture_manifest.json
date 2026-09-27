@@ -1,0 +1,29 @@
+[
+  {
+    "file": "gcode_logo_file_preview_zh.png",
+    "size": [
+      1920,
+      1080
+    ],
+    "method": "Live QWidget.grab, native pixels, no OS cursor or computer-use overlay",
+    "sha256": "c58d430ac6bc91b6b0bd8caa436f21b7b618d9dc1bfe84609190a12401a709a8"
+  },
+  {
+    "file": "logo_nc_stage2_detail.png",
+    "size": [
+      1920,
+      1080
+    ],
+    "method": "Live QWidget.grab, native pixels, no OS cursor or computer-use overlay",
+    "sha256": "b1ffdde574542c653ca3ccd7fab20f2312d211ea6d1f49d36888e34ae181cefb"
+  },
+  {
+    "file": "tube_indexed_export_zh.png",
+    "size": [
+      1920,
+      1080
+    ],
+    "method": "Live QWidget.grab, native pixels, no OS cursor or computer-use overlay",
+    "sha256": "b8b35b943bcfb09af3898cd506cce78de6706dfb5a3b570ec75dd2b1651a5324"
+  }
+]

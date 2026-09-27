@@ -12,9 +12,9 @@ Open **Planar Slicing**, create Region, Zigzag, Offset, Thin Wall, Spiral, or Su
 
 For Support, select **Planar Support**, set **First-layer Z** equal to **Layer height**, then set the last-layer Z, overhang angle, XY/Z gaps, line spacing, interface layers, and Lines or Grid pattern. Click **Apply** and **Generate Preview**. Inspect both support body and interface paths against the model. If no support is required, or a region cannot reach the build plate, check part orientation and layer range before changing parameters.
 
-![Planar path with the model hidden](assets/current_delivery/planar_zigzag_path_detail.png)
+![Planar path with the model hidden](assets/hd_v27/planar_zigzag_path_detail.png)
 
-This path-detail crop uses `body_001` at Z=0.2 mm. Other practice settings use a different body and Z; do not mix or copy case values. Show the model to check placement, then hide it and choose **Full lines (fast)** for all paths or **Bead width** for width inspection.
+This path preview uses `body_001` at Z=0.2 mm. Other practice settings use a different body and Z; do not mix or copy case values. Show the model to check placement, then hide it and choose **Full lines (fast)** for all paths or **Bead width** for width inspection.
 
 ## Parameters and units
 

@@ -11,9 +11,9 @@ Freeform 的材料表把沉积区域分配给 T0、T1 等通道。软件不会�
 
 下图是 T0/T1 材料通道的编辑草稿，区域表尚为空；区域下拉框和“添加所选区域”用于建立分配。图中设置尚未确认或应用，不表示当前叶轮已启用多色。温度与进退丝长度仅用于说明界面，使用时应按材料、挤出机和机床调试。
 
-![T0/T1 通道编辑草稿与区域分配入口](assets/current_delivery/material_zh_draft.png)
+![T0/T1 通道编辑草稿与区域分配入口](assets/hd_v27/material_zh_draft.png)
 
-![换料站空白字段：机床坐标与切刀命令填写入口](assets/current_delivery/station_zh_empty.png)
+![换料站空白字段：机床坐标与切刀命令填写入口](assets/hd_v27/station_zh_empty.png)
 
 换料站图展示空白填写入口，尚未配置、应用或验证任何站位。下方数值是另列的离线格式示例，不能把空白对话框当成验证通过。
 

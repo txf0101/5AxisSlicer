@@ -1,0 +1,92 @@
+[
+  {
+    "file": "home_zh.png",
+    "size": [
+      1920,
+      1080
+    ],
+    "method": "Live QWidget.grab, native pixels, no OS cursor or computer-use overlay",
+    "sha256": "646be8681562064664f56b3f15cc60d812ec038a733a76eb08fa799f8e95dce9"
+  },
+  {
+    "file": "home_en.png",
+    "size": [
+      1920,
+      1080
+    ],
+    "method": "Live QWidget.grab, native pixels, no OS cursor or computer-use overlay",
+    "sha256": "ddb09a401d434405f380bde4711d49d6ad80cb595ac23e53d56d010fb8c56851"
+  },
+  {
+    "file": "part_impeller_roles_zh.png",
+    "size": [
+      1920,
+      1080
+    ],
+    "method": "Live QWidget.grab, native pixels, no OS cursor or computer-use overlay",
+    "sha256": "faeba519b9bbbe1c3641ed9eb8748a8b17dbd2f50496b02c11e8e43bddaa6cf8"
+  },
+  {
+    "file": "machine150_zh.png",
+    "size": [
+      1920,
+      1080
+    ],
+    "method": "Live QWidget.grab, native pixels, no OS cursor or computer-use overlay",
+    "sha256": "a0343923650e7b60638723432e5b7a8114fb9874510560d47fd61157646e220f"
+  },
+  {
+    "file": "material_zh_draft.png",
+    "size": [
+      1920,
+      1080
+    ],
+    "method": "Live QWidget.grab, native pixels, no OS cursor or computer-use overlay",
+    "sha256": "06e10c27a9a31a63e6143f41a0bc24dfc87bf698cfc78da8fbb6e8e0711f860e"
+  },
+  {
+    "file": "modelcs_draft_zh.png",
+    "size": [
+      1920,
+      1080
+    ],
+    "method": "Live QWidget.grab, native pixels, no OS cursor or computer-use overlay",
+    "sha256": "7041e2d9b053298493d6686f38735f85af66136f5a3a22c37378691876cdb570"
+  },
+  {
+    "file": "buildcs_draft_zh.png",
+    "size": [
+      1920,
+      1080
+    ],
+    "method": "Live QWidget.grab, native pixels, no OS cursor or computer-use overlay",
+    "sha256": "db0055e8d6adf0be7674f391cbc0436844a8be5402a174f5c5f5b7b6df58a382"
+  },
+  {
+    "file": "placement_draft_controls_zh.png",
+    "size": [
+      1920,
+      1080
+    ],
+    "method": "Live QWidget.grab, native pixels, no OS cursor or computer-use overlay",
+    "sha256": "442bcc9ff6c95a3042916d49c6d49ab91de27783ec16b9ee7ee1103bac9a491c"
+  },
+  {
+    "file": "machine150_en.png",
+    "size": [
+      1920,
+      1080
+    ],
+    "method": "Live QWidget.grab, native pixels, no OS cursor or computer-use overlay",
+    "sha256": "63c24e364e681d29bec90b205da84e22e47a2b5afc6f9a1a09680535181f4046"
+  },
+  {
+    "file": "material_en_draft.png",
+    "size": [
+      1920,
+      1080
+    ],
+    "method": "Live QWidget.grab, native pixels, no OS cursor or computer-use overlay",
+    "sha256": "63a09d7315e8a546419a82676d705c5f486f385b6241a2cb72ec2a9af9f563de"
+  }
+]

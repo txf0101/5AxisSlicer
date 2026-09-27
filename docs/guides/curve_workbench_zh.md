@@ -1,6 +1,6 @@
 # Curve 工作台图文手册
 
-本页路径类型和错误恢复图用于说明道线、参数和状态；完整布局与公共设置入口以前面的当前界面局部图为准。图中参考机型与示例 ID 不能直接用于自己的零件。
+本页路径类型和错误恢复图用于说明道线、参数和状态；完整布局与公共设置入口以前面的当前界面图为准。图中参考机型与示例 ID 不能直接用于自己的零件。
 
 > 初次使用请先完成[学习总册](user_learning_manual_zh.md)的 L01—L06；本页是 Curve 专项参考。叶轮边链用于练习有向链和法向，换零件后必须重新选择 edge、邻面和工艺参数。
 
@@ -19,9 +19,9 @@ Curve 工作台沿 STEP 有向 edge 链生成 Buildup、Multi-pass Buildup 和 O
 
 项目保存的是 edge/face 的完整 `GeometryReference` 描述符、父实体信息和 kernel signature。STEP 更新后会做唯一重绑；缺失、重复候选或拓扑漂移会使操作无效并要求重新选择。
 
-![在 Viewer 中选边并写入有向边链](assets/current_delivery/curve_edges_zh.png)
+![在 Viewer 中选边并写入有向边链](assets/hd_v27/curve_edges_zh.png)
 
-图中裁取有向边链字段和两条蓝色选中边，表示几何选择状态，不代表路径已生成或验证通过。采用边后仍须检查顺序、连通性、反向标志和法向引用。选择自己的模型时，边 ID 会不同。左侧设置栏和中间操作栏均可独立滚动。
+图中显示有向边链字段和两条蓝色选中边，表示几何选择状态，不代表路径已生成或验证通过。采用边后仍须检查顺序、连通性、反向标志和法向引用。选择自己的模型时，边 ID 会不同。左侧设置栏和中间操作栏均可独立滚动。
 
 ## 2. 边链顺序、反向和法向
 
@@ -39,15 +39,15 @@ Curve 工作台沿 STEP 有向 edge 链生成 Buildup、Multi-pass Buildup 和 O
 | Multi-pass Buildup | 按层高沿法向累计抬升；相邻层交替方向 | 层数、累计高度、换向、Retract/Prime/Dwell 与沉积段分离 |
 | Offset Buildup | 以原链为第 0 道，沿 `normal × tangent` 正方向生成横向多道 | 道间距、道序、局部标架反转、自交、trimmed face 越界 |
 
-![当前界面选面和选边；橙色为面、蓝色为边](assets/current_delivery/curve_edges_normal_face_zh.png)
+![当前界面选面和选边；橙色为面、蓝色为边](assets/hd_v27/curve_edges_normal_face_zh.png)
 
-图中是现有 Curve 操作的 Viewer 几何选择局部：两条相邻蓝边和橙色法向面。采用 Viewer 选边会按点击顺序填入边 ID，并默认反向标志为 0；应用前必须核对边序、反向和法向面。此图不证明方向已通过检查或路径已生成。生成后请在结果预览中单独检查路径；不能以 CAD 高亮代替路径检查。
+图中是现有 Curve 操作的 Viewer 几何选择界面：两条相邻蓝边和橙色法向面。采用 Viewer 选边会按点击顺序填入边 ID，并默认反向标志为 0；应用前必须核对边序、反向和法向面。此图不证明方向已通过检查或路径已生成。生成后请在结果预览中单独检查路径；不能以 CAD 高亮代替路径检查。
 
-![Buildup 生成 Toolpath 的路径专用视图](assets/curve/current_c01_c05/06_curve_buildup_zh_1366x768_path_only.png)
+![Buildup 生成 Toolpath 的路径专用视图](assets/hd_v27/curve_06_curve_buildup_zh_1920x1080_path_only.png)
 
-![Multi-pass 三层路径专用视图](assets/curve/current_c01_c05/07_curve_multi_pass_en_1600x900_path_only.png)
+![Multi-pass 三层路径专用视图](assets/hd_v27/curve_07_curve_multi_pass_en_1920x1080_path_only.png)
 
-![Offset Buildup 三道横向路径专用视图](assets/curve/current_c01_c05/08_curve_offset_buildup_en_1920x1080_path_only.png)
+![Offset Buildup 三道横向路径专用视图](assets/hd_v27/curve_08_curve_offset_buildup_en_1920x1080_path_only.png)
 
 后两图关闭了模型显示，避免 CAD 遮住路径。生成时先打开模型核对路径落在哪片面上，再关闭模型查看所有道；该显示切换不改变输出 G-code。
 
@@ -101,11 +101,11 @@ Curve 工作台沿 STEP 有向 edge 链生成 Buildup、Multi-pass Buildup 和 O
 
 ### 6.2 Offset 越界
 
-![Offset 跨出 trimmed face，Error 阻止导出](assets/curve/current_c01_c05/04_offset_failure_zh_1366x768.png)
+![Offset 跨出 trimmed face，Error 阻止导出](assets/hd_v27/curve_04_offset_failure_zh_1920x1080.png)
 
 该例在 8 × 6 × 1 mm 解析 STEP 上选择了会向面外偏移的边，第三道越过 trimmed face，状态显示 `curve.offset_outside_face`，导出按钮禁用。
 
-![改选可偏置边后的恢复结果](assets/curve/current_c01_c05/05_offset_recovered_zh_1366x768.png)
+![改选可偏置边后的恢复结果](assets/hd_v27/curve_05_offset_recovered_zh_1920x1080.png)
 
 改选面内方向的 edge、重新“应用”和“生成与检查”后恢复为 Warning；警告来自 Generic XYZAC 参考机型，不影响离线六件套导出。
 

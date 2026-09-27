@@ -18,7 +18,7 @@ Freeform 的导引模式支持在一个明确修剪面或最多 16 个显式面�
 6. 点“生成与检查 / Generate”。若 CAD 模型遮住路线，可在右侧取消“显示模型”查看完整线条；切换“沉积道宽”可检查线宽效果。状态为 `Warning` 且导出按钮可用时，说明离线产品和严格回读通过；控制器尚需用户核对的项目会保留 Warning。
 7. 导出目录固定包含 `main.gcode`、`toolpath.json`、`machine_axes.csv`、`warnings.json`、`preview.json`、`manifest.json` 六个文件。
 
-![Freeform 顶部的新建操作类型和当前操作](assets/current_delivery/freeform_existing_surface_solid_zh.png)
+![Freeform 顶部的新建操作类型和当前操作](assets/hd_v27/freeform_existing_surface_solid_zh.png)
 
 图中“现有操作”为 Surface Solid Fill 曲面实体，只用来说明两个选择框的区别；执行本节导引模式时，应新建 `Surface` 或 `Thin Wall`。图中只有 CAD 模型，尚未生成路径。
 

@@ -1,0 +1,101 @@
+[
+  {
+    "file": "docs/guides/assets/hd_v27/planar_support_01_support_grid_zh_1920x1080_ready.png",
+    "width": 1920,
+    "height": 1080,
+    "language": "zh",
+    "backend": "production OpenGL",
+    "capture_method": "QWidget.grab of current styled OpenGL page; no cursor, scaling or compositing",
+    "status": "路径已生成并完成 G-code 回读，存在警告。请核对下方原因。",
+    "export_enabled": true,
+    "sha256": "aea53b8d8bde504f1c00d4dd3fe0d2394fbfa89e466c2585dc756f30058b2928"
+  },
+  {
+    "file": "docs/guides/assets/hd_v27/planar_support_00_support_grid_zh_1920x1080_parameters.png",
+    "width": 1920,
+    "height": 1080,
+    "language": "zh",
+    "backend": "production OpenGL",
+    "capture_method": "QWidget.grab of current styled OpenGL page; no cursor, scaling or compositing",
+    "status": "路径已生成并完成 G-code 回读，存在警告。请核对下方原因。",
+    "export_enabled": true,
+    "sha256": "ea47ce3caeb67d3816c75742cabe5c3d0ae87c5c5882dc8d46beb6470e7ef6a5"
+  },
+  {
+    "file": "docs/guides/assets/hd_v27/planar_support_02_support_lines_en_1920x1080_ready.png",
+    "width": 1920,
+    "height": 1080,
+    "language": "en",
+    "backend": "production OpenGL",
+    "capture_method": "QWidget.grab of current styled OpenGL page; no cursor, scaling or compositing",
+    "status": "Toolpath generated and G-code readback passed, with warnings. Review the reasons below.",
+    "export_enabled": true,
+    "sha256": "5128e403d21ce1758780ab075a91fd7195adb86a1c0ecfbee5180f24d5acfd6a"
+  },
+  {
+    "file": "docs/guides/assets/hd_v27/planar_support_00_support_lines_en_1920x1080_parameters.png",
+    "width": 1920,
+    "height": 1080,
+    "language": "en",
+    "backend": "production OpenGL",
+    "capture_method": "QWidget.grab of current styled OpenGL page; no cursor, scaling or compositing",
+    "status": "Toolpath generated and G-code readback passed, with warnings. Review the reasons below.",
+    "export_enabled": true,
+    "sha256": "b0b4373cc8e1c07c0649c1c9bb09d44478179af46c36b832dbee7ba46b413cbe"
+  },
+  {
+    "file": "docs/guides/assets/hd_v27/planar_support_03_support_grid_en_1920x1080_ready.png",
+    "width": 1920,
+    "height": 1080,
+    "language": "en",
+    "backend": "production OpenGL",
+    "capture_method": "QWidget.grab of current styled OpenGL page; no cursor, scaling or compositing",
+    "status": "Toolpath generated and G-code readback passed, with warnings. Review the reasons below.",
+    "export_enabled": true,
+    "sha256": "b5dc20650d2934836a407e60d9356d787064611f7151c77d377801c319fa02c7"
+  },
+  {
+    "file": "docs/guides/assets/hd_v27/planar_support_04_support_error_en_1920x1080.png",
+    "width": 1920,
+    "height": 1080,
+    "language": "en",
+    "backend": "production OpenGL",
+    "capture_method": "QWidget.grab of current styled OpenGL page; no cursor, scaling or compositing",
+    "status": "Generation or validation failed. Export is blocked. Review the defects below, correct them and generate again.\nplanar.support_region_too_narrow: The support region is too narrow for a printable bead.",
+    "export_enabled": false,
+    "sha256": "221e6e7ec5bb1a30427f38a2e1da28843ad87e0de08e90dfcd88f657f3638d5d"
+  },
+  {
+    "file": "docs/guides/assets/hd_v27/planar_support_05_support_error_recovered_zh_1920x1080.png",
+    "width": 1920,
+    "height": 1080,
+    "language": "zh",
+    "backend": "production OpenGL",
+    "capture_method": "QWidget.grab of current styled OpenGL page; no cursor, scaling or compositing",
+    "status": "路径已生成并完成 G-code 回读，存在警告。请核对下方原因。",
+    "export_enabled": true,
+    "sha256": "490ddf82a2eeec6eb8716f9065d8ee06848b462d9f94e20e00f61663148a11d0"
+  },
+  {
+    "file": "docs/guides/assets/hd_v27/planar_support_06_support_stale_en_1920x1080.png",
+    "width": 1920,
+    "height": 1080,
+    "language": "en",
+    "backend": "production OpenGL",
+    "capture_method": "QWidget.grab of current styled OpenGL page; no cursor, scaling or compositing",
+    "status": "Inputs changed; the existing result is stale. Generate again.",
+    "export_enabled": false,
+    "sha256": "a41e987af49ea5a5a590b43c11927bbb553206f921155550f35ab8b2a708eb42"
+  },
+  {
+    "file": "docs/guides/assets/hd_v27/planar_support_07_support_stale_recovered_zh_1920x1080.png",
+    "width": 1920,
+    "height": 1080,
+    "language": "zh",
+    "backend": "production OpenGL",
+    "capture_method": "QWidget.grab of current styled OpenGL page; no cursor, scaling or compositing",
+    "status": "路径已生成并完成 G-code 回读，存在警告。请核对下方原因。",
+    "export_enabled": true,
+    "sha256": "2e341f600c1096f86863cdf5ae6479a1f6dadcdad2497043f725845ac12a99e0"
+  }
+]

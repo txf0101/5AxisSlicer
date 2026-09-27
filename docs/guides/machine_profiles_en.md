@@ -2,9 +2,9 @@
 
 New desktop projects default to **Own AC FDM**. Open **Common Manufacturing Setup**, select **Machine**, choose a profile, and click **Apply**. Merely browsing the list does not change the applied machine. Existing projects keep their saved machine. After changing a profile, recheck placement and regenerate affected operations.
 
-![Machine profile selection in Common Manufacturing Setup](assets/current_delivery/machine150_en.png)
+![Machine profile selection in Common Manufacturing Setup](assets/hd_v27/machine150_en.png)
 
-This crop shows the public machine configuration panel and circular platform preview, including the 150 mm diameter and reference-configuration notice. It illustrates machine settings only; it does not show full project status or qualify a generated operation or calibrated machine.
+The screenshot shows the public machine configuration panel and circular platform preview, including the 150 mm diameter and reference-configuration notice. It illustrates machine settings and does not qualify a generated operation or calibrated machine.
 
 Following the user's confirmation on 2026-09-27, the default own-machine profile uses a circular usable platform with a diameter of 150 mm, A ±180°, and C ±360°. Profile version 2 records this correction; existing projects retain their saved machine snapshots. The paper's 180 mm bed and 160 mm suggested range remain historical references. The circular boundary is not a collision limit that adjusts automatically with tilt. XYZ travel, axis speed, acceleration, rotary centre, and zero pose still require machine-specific calibration.
 

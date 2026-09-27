@@ -604,3 +604,5 @@ V2-02下一输入已定位：2026-09-24_three_color_fan_gui_project_corrected/pr
 2026-09-27 V2-02三叶扇多色生成完成：原进程2448生成结束、last_error=null，真实GUI显示路径、Warning及可用导出。v2_02_three_color_completed_state.json确认offline_exportable=true、machine_executable=false，strict readback340193/340193点、62716/62716事件、issues为空。实际点击导出到three_color_current150_gui_export，六文件已落盘（main.gcode59135880、toolpath.json330029556、preview.json236696908、manifest.json1522272、machine_axes.csv38330179、warnings.json1418956字节）；generated截图已保存，磁盘独立摘要及哈希由Agent核对。尝试Ctrl+S时工具报告用户正在操作，刷新确认用户在放大查看，故未继续抢输入；当前保存重开及NC空移/工序可视核验待做，不预报V2-02关闭。使用Skills：computer-use、开发与验证。目标active。
 
 2026-09-27 Skill 调用记录：V2.7 发布使用 five-axis-workbench-development 与 five-axis-slicer-validation，统一界面/命令行/包回退版本标识，复用刚完成的离线验收，执行发行质量核查；发布说明见 ../reviews/2026-09-27_v2_7_release.md。
+
+2026-09-27 Skill 调用记录：教程高清纠正使用 computer-use、five-axis-workbench-development、five-axis-slicer-validation。用户本轮要求覆盖此前光晕暂缓决定；全部指南图片采用原生至少1920×1080、无光标叠层的新图。处理与证据见[高清重拍复盘](../reviews/2026-09-27_guide_hd_review.md)。
