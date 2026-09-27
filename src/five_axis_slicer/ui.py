@@ -2476,7 +2476,9 @@ class MainWindow(QMainWindow):
         self.script_console_manager.add_guarded_actions((self.zoom_in_action, self.zoom_out_action))
 
     def _apply_style(self) -> None:
-        QApplication.setStyle("Fusion")
+        # 应用样式已经一致时保留它，避免重新刷新所有现存窗口。
+        if QApplication.style().objectName().lower() != "fusion":
+            QApplication.setStyle("Fusion")
         self.setStyleSheet(APP_STYLE)
 
     _show_home = workbench_navigation.show_home

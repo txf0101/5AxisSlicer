@@ -8,7 +8,7 @@ from typing import Any
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor
-from PyQt5.QtWidgets import QLabel, QListWidget, QTreeWidgetItem
+from PyQt5.QtWidgets import QLabel, QListWidget, QListWidgetItem, QTreeWidgetItem
 
 from .manufacturing.setup import (
     OPERATION_NODE,
@@ -36,9 +36,8 @@ def refresh_issue_list(
         item_text = (
             f"[{severity}] {label}" if label else f"[{severity}] {issue.code} · {issue.object_id}"
         )
-        issue_list.addItem(item_text)
-        item = issue_list.item(issue_list.count() - 1)
-        item.setData(Qt.UserRole, issue.to_json())
+        item = QListWidgetItem(item_text, issue_list)
+        item.setData(Qt.ItemDataRole.UserRole, issue.to_json())
         item.setToolTip(
             f"{issue.code} · {issue.object_id}\n"
             + json.dumps(issue.to_json().get("context", {}), ensure_ascii=False, indent=2)
@@ -49,7 +48,7 @@ def refresh_issue_list(
 
 def jump_to_issue(issue_list: QListWidget, viewer: Any, status_label: QLabel) -> None:
     item = issue_list.currentItem()
-    payload = None if item is None else item.data(Qt.UserRole)
+    payload = None if item is None else item.data(Qt.ItemDataRole.UserRole)
     if isinstance(payload, Mapping):
         object_id = str(payload.get("object_id", ""))
         if object_id.startswith("edge-"):
@@ -163,9 +162,8 @@ def refresh_setup_feedback(
             else:
                 if profile.readiness_blockers:
                     label = nozzle_readiness_text(profile, language)
-        issue_list.addItem(f"[{marker}] {label}")
-        item = issue_list.item(issue_list.count() - 1)
-        item.setData(Qt.UserRole, issue.to_json())
+        item = QListWidgetItem(f"[{marker}] {label}", issue_list)
+        item.setData(Qt.ItemDataRole.UserRole, issue.to_json())
         item.setToolTip(f"{issue.code} · {issue.object_id or setup.setup_id}")
     if not report.issues:
         issue_list.addItem(text["no_issues"])
@@ -238,9 +236,8 @@ def refresh_rotary_issues(
         seen.add(key)
         severity = str(payload.get("severity", "error")).upper()
         text = f"{severity[:1]}{index}: {code.rsplit('.', 1)[-1]}"
-        issue_list.addItem(text)
-        item = issue_list.item(issue_list.count() - 1)
-        item.setData(Qt.UserRole, dict(payload))
+        item = QListWidgetItem(text, issue_list)
+        item.setData(Qt.ItemDataRole.UserRole, dict(payload))
         item.setToolTip(f"[{severity}] {code} · {object_id}")
     if not seen:
         issue_list.addItem(empty_text)
@@ -248,7 +245,7 @@ def refresh_rotary_issues(
 
 def jump_to_rotary_issue(page: Any) -> None:
     item = page.issue_list.currentItem()
-    payload = None if item is None else item.data(Qt.UserRole)
+    payload = None if item is None else item.data(Qt.ItemDataRole.UserRole)
     if not isinstance(payload, Mapping):
         return
     object_id = str(payload.get("object_id", ""))
