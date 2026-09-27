@@ -11,3 +11,5 @@
 使用的 Skills：computer-use、five-axis-workbench-development、five-axis-slicer-validation。捕获脚本原执行位置为tmp；证据目录保存脚本原文供追溯，重用时应在原tmp位置运行或调整ROOT。此任务是教程纠正，不重开已通过的完整算法验收。
 
 最终引用核查：20份指南更新，49张旧图映射为48张不同高清图，共88处图片引用（含普通链接），全部1920×1080、缺图0、本地链接缺失0。当前质量脚本退出0，Ruff/格式/Context budget/Mypy均通过。逐图复查见visual_audit.md；最终文件哈希以final_references.json为准，过程清单用于记录拍摄迭代。旧V2.7标签不移动，GitHub主分支教程更新。
+
+归档CI纠正：96027fb的质量检查将证据目录内临时脚本原文当作正式Python源码执行风格检查而失败。按归档用途改存*.py.txt，内容不变；这些原文依赖原tmp相对位置，不是项目可执行入口。没有放宽代码质量门槛，图片和生产源码未改变。
