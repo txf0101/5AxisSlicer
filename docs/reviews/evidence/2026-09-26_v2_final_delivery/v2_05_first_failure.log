@@ -1,0 +1,29 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+_______ test_curve_and_freeform_show_setup_warning_in_selected_language _______
+
+    def test_curve_and_freeform_show_setup_warning_in_selected_language() -> None:
+        page = SimpleNamespace(issue_list=QListWidget(), language="zh")
+        issue = ValidationIssue(
+            "MACHINE_REFERENCE_ONLY", IssueSeverity.WARNING, "builtin.machine.own_ac_fdm.v1"
+        )
+>       CurvePage._refresh_issues(page, (issue,), None)
+
+tests\test_curve_integration.py:258: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = namespace(issue_list=<PyQt5.QtWidgets.QListWidget object at 0x0000022A279B1D00>, language='zh')
+setup_issues = (ValidationIssue(code='MACHINE_REFERENCE_ONLY', severity=<IssueSeverity.WARNING: 'warning'>, object_id='builtin.machine.own_ac_fdm.v1', context=mappingproxy({})),)
+result = None
+
+    def _refresh_issues(self, setup_issues: Any, result: Any) -> None:
+        refresh_issue_list(
+>           self.issue_list, setup_issues, result, self.language, self._t("no_issues")
+                                                                  ^^^^^^^
+        )
+E       AttributeError: 'types.SimpleNamespace' object has no attribute '_t'
+
+src\five_axis_slicer\curve_ui.py:634: AttributeError
+=========================== short test summary info ===========================
+FAILED tests/test_curve_integration.py::test_curve_and_freeform_show_setup_warning_in_selected_language
+1 failed in 3.20s
