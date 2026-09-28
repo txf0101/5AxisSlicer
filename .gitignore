@@ -30,5 +30,17 @@ example/**/*.m
 example/**/*_stats*.txt
 **/~$*.docx
 
+# Local project governance, research drafts, and verification archives.
+/AGENTS.md
+/圭臬/
+/docs/README.md
+/docs/planning/
+/docs/reviews/
+/docs/references/
+/example/manuscript.docx
+/example/**/复盘/
+/example/**/FAN15_审查结果_*/
+/example/本软件五轴PLA切片_20260920.json
+
 # This STEP copy is the authoritative source for the reopenable pipe2 demo.
 !example/pipe2/tube_setup_coordinate_demo/source/116e99fd43492bd1f4f519c80c93cd1f7cd0bf2cb6861b3e123148e4031a0d4b.stp

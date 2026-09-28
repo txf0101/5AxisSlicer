@@ -16,11 +16,10 @@ Freeform 的球面、一般曲面与径向实体填充需要明确选择对应�
 
 初次使用请从[《5AxisSclicer 学习手册》](docs/guides/user_learning_manual_zh.md)开始。手册首页写明 IDE 的 `run_app.py` 和 PowerShell 的 `scripts/run_app.ps1` 启动方式，并按界面、Setup、工作台选择、操作、生成恢复、回读、六件套和独立迁移组织课程。pipe2、平面件、叶轮、扇叶和半球只作为练手材料，不要求复制案例 ID 或参数。熟悉公共流程后，可从[学习与参考手册中心](docs/guides/README.md)进入 Tube、Planar、Curve、Rotary、Freeform、多材料、机型和 G-code 专项参考。
 
-开发计划、验证记录与公开资料统一从[开发文档索引](docs/README.md)进入。Research 入口不可用；第二机型需要独立配置与验证。
+Research 入口不可用；第二机型需要独立配置与验证。
 
 Tube 的 Indexed 支持受限圆管的分块切层和安全转位，Buildup 支持多道加厚和可选平面底座工序，Continuous 支持沿单支管中心线的连续螺旋。三种操作共用生成、检查、参考 XYZAC 求解、NC 后处理、回读、导出和结果过期状态。Generic XYZAC 是离线参考机型；实际机床参数和打印效果以用户设备的调试结果为准，本项目持续完善中。
 
-Tube Indexed 的参考来源、方法映射和许可证边界见[来源登记](docs/planning/tube_reference_provenance.md)。
 
 当前范围：
 
@@ -43,7 +42,7 @@ Tube Indexed 的参考来源、方法映射和许可证边界见[来源登记](d
 - Planar 的 Generic XYZAC 是离线参考配置。平台支撑仅支持从 buildplate 连通的垂直支撑，使用 Lines/Grid 图案和主体/界面分层；控制器、装夹和打印效果以用户设备调试为准。
 - Curve 的 Generic XYZAC 包含 FK、运动限制、夹具 AABB 扫掠和 G-code 回读等离线检查；控制器、机床标定和打印效果以用户设备调试为准。
 
-公开来源、术语边界和控制器语义限制见[参考资料检索](docs/planning/reference_research.md)；其中 M82 按 Marlin/RepRap 语义处理，不称为 LinuxCNC 定义。
+M82 按 Marlin/RepRap 语义处理，不称为 LinuxCNC 定义。
 
 ## 环境
 

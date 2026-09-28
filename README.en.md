@@ -53,5 +53,3 @@ curl http://127.0.0.1:8765/health
 curl http://127.0.0.1:8765/state
 curl -Method POST http://127.0.0.1:8765/workbench/select -Body '{"key":"curve"}' -ContentType 'application/json'
 ```
-
-The [developer documentation index](docs/README.md) links architecture, validation, and reference-source records.
