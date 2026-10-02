@@ -3,7 +3,16 @@
 from collections.abc import Callable
 
 from PyQt5.QtCore import QEvent, QObject, QTimer
-from PyQt5.QtWidgets import QDoubleSpinBox, QPushButton, QSpinBox
+from PyQt5.QtWidgets import (
+    QDoubleSpinBox,
+    QFrame,
+    QLayout,
+    QPushButton,
+    QScrollArea,
+    QSpinBox,
+    QVBoxLayout,
+    QWidget,
+)
 
 
 class ScrollSafeDoubleSpinBox(QDoubleSpinBox):
@@ -53,9 +62,22 @@ def action_button(
     return button
 
 
+def scrollable_panel() -> tuple[QScrollArea, QVBoxLayout]:
+    content = QWidget()
+    layout = QVBoxLayout(content)
+    # 内容放不下时滚动整个面板，避免各区块被压缩到一起。
+    layout.setSizeConstraint(QLayout.SetMinimumSize)
+    scroll = QScrollArea()
+    scroll.setWidgetResizable(True)
+    scroll.setFrameShape(QFrame.NoFrame)
+    scroll.setWidget(content)
+    return scroll, layout
+
+
 __all__ = [
     "OptionalDoubleSpinBox",
     "ScrollSafeDoubleSpinBox",
     "ScrollSafeSpinBox",
     "action_button",
+    "scrollable_panel",
 ]

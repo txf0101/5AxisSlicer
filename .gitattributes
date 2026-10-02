@@ -24,4 +24,5 @@ docs/reviews/evidence/2026-09-20_fan15_repairs/**/nc_readback_paths.npz filter=l
 
 # Generated/frozen evidence preserves tool output verbatim, including traceback spacing.
 docs/reviews/evidence/** -whitespace
+docs/verification/daily_ui_20261002/*.patch -text -whitespace
 docs/references/own_ac_printer/manuscript_text.txt -whitespace

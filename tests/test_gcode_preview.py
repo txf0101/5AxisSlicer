@@ -24,6 +24,28 @@ from five_axis_slicer.manufacturing.toolpath import GeneratedToolpath, ToolpathP
 
 
 class GCodePreviewTests(unittest.TestCase):
+    def test_numbered_layer_markers_accept_colon_and_space_syntax(self) -> None:
+        for marker in ("LAYER:{n}", "Layer {n}", "layer : {n}", "Layer\t{n}"):
+            with self.subTest(marker=marker):
+                text = "G90\nM83\n" + "\n".join(
+                    f";{marker.format(n=n)}\nG1 X{n + 2} Y0 Z{n + 3} E0.1"
+                    for n in (0, 1, 2)
+                )
+                preview = parse_gcode(text)
+                self.assertEqual((preview.layer_min, preview.layer_max), (0, 2))
+                self.assertEqual([segment.layer for segment in preview.segments], [0, 1, 2])
+
+    def test_original_daily_witness_detects_eight_layers_without_editing_input(self) -> None:
+        source = (
+            Path(__file__).resolve().parents[1]
+            / "tests/fixtures"
+            / "preview_layered_infill_witness.gcode"
+        )
+        preview = load_gcode(source)
+        self.assertEqual((preview.layer_min, preview.layer_max, preview.layer_count), (0, 7, 8))
+        self.assertEqual(preview.summary()["segment_count"], 280)
+        self.assertEqual({segment.layer for segment in preview.segments}, set(range(8)))
+
     def test_generated_path_preview_uses_source_cad_coordinates(self) -> None:
         common = dict(
             tangent=(1.0, 0.0, 0.0),

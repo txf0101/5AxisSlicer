@@ -73,7 +73,7 @@ from .styles import APP_STYLE
 from .tube_controller import PendingDraftError, TubeSetupController
 from .tube_script_service import ProjectOpenCancelled, TubeScriptService
 from .tube_ui import TubeSetupPage
-from .ui_controls import action_button
+from .ui_controls import action_button, scrollable_panel
 from .viewer import ModelViewer
 from .workbench_issue_ui import command_error_text
 from .workbench_setup_panel import WorkbenchSetupPanel, confirm_setup_change, draft_setup_prompt
@@ -279,6 +279,7 @@ class MainWindow(QMainWindow):
             "status": "loading",
         }
         self.result_page.begin_load(request)
+        self._result_cancel_pending = False
         self._show_results()
         self.result_loader.start(request)
         self._update_context_actions()
@@ -290,8 +291,8 @@ class MainWindow(QMainWindow):
 
     def cancel_result_load(self) -> None:
         if self._is_load_active("result"):
-            self.load_coordinator.cancel()
             self.statusBar().showMessage(tr(self.language, "result_cancel_requested"))
+            self.load_coordinator.cancel()
 
     @staticmethod
     def _load_kind(request_id: object) -> str:
@@ -659,7 +660,7 @@ class MainWindow(QMainWindow):
         self._update_file_labels()
         self._update_checks()
         self._update_context_actions()
-        self.statusBar().showMessage(tr(self.language, "result_state_ready_detail"))
+        self.statusBar().showMessage(self.result_page.status_detail.text().replace("\n", " "))
 
     def _on_result_load_failed(self, request_id: object, message: str) -> None:
         if self.result_page.fail_load(request_id, message):
@@ -669,11 +670,19 @@ class MainWindow(QMainWindow):
 
     def _on_result_load_cancelled(self, request_id: object) -> None:
         if self.result_page.cancel_load(request_id):
-            self.statusBar().showMessage(tr(self.language, "error_load_cancelled"))
+            self._result_cancel_pending = self.load_coordinator.busy
+            key = (
+                "result_cancel_requested" if self._result_cancel_pending else "error_load_cancelled"
+            )
+            self.statusBar().showMessage(tr(self.language, key))
         self._update_context_actions()
         self._finish_result_load_metric(request_id, "cancelled", "")
 
-    def _on_result_busy_changed(self, _busy: bool) -> None:
+    def _on_result_busy_changed(self, busy: bool) -> None:
+        if not busy and self._result_cancel_pending:
+            # busy=False 在工作线程退出并释放后发出，才显示取消终态。
+            self._result_cancel_pending = False
+            self.statusBar().showMessage(tr(self.language, "error_load_cancelled"))
         self._update_context_actions()
 
     def _finish_result_load_metric(self, request_id: object, status: str, message: str) -> None:
@@ -1854,6 +1863,7 @@ class MainWindow(QMainWindow):
         QMessageBox.warning(self, tr(self.language, "app_title"), message)
 
     def _build_ui(self) -> None:
+        self._result_cancel_pending = False
         self._build_actions()
 
         self.stack = QStackedWidget()
@@ -2042,7 +2052,7 @@ class MainWindow(QMainWindow):
         toolbar = QToolBar("Main", self)
         toolbar.setObjectName("mainToolbar")
         toolbar.setMovable(False)
-        self.product_title_label = QLabel("5AxisSclicer V2.7")
+        self.product_title_label = QLabel("5AxisSclicer V2.9")
         self.product_title_label.setObjectName("productTitle")
         toolbar.addWidget(self.product_title_label)
         toolbar.addSeparator()
@@ -2324,8 +2334,7 @@ class MainWindow(QMainWindow):
         return widget
 
     def _build_preview_tab(self) -> QWidget:
-        widget = QWidget()
-        layout = QVBoxLayout(widget)
+        scroll, layout = scrollable_panel()
         self.preview_summary_title = QLabel()
         self.preview_summary_title.setObjectName("panelTitle")
         self.preview_summary = QLabel()
@@ -2417,7 +2426,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.segment_property_title)
         layout.addWidget(self.segment_property)
         layout.addStretch(1)
-        return widget
+        return scroll
 
     def _build_checks_tab(self) -> QWidget:
         widget = QWidget()
@@ -2615,7 +2624,7 @@ class MainWindow(QMainWindow):
         QMessageBox.about(
             self,
             tr(self.language, "action_about"),
-            "5AxisSclicer V2.7\nPyQt5 · OpenGL/VTK · AC inverse preview",
+            "5AxisSclicer V2.9\nPyQt5 · OpenGL/VTK · AC inverse preview",
         )
 
     def _on_operation_changed(self, index: int) -> None:

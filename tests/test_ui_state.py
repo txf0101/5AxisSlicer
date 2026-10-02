@@ -4,8 +4,10 @@ import os
 from pathlib import Path
 import sys
 import tempfile
+import threading
 import time
 import unittest
+from unittest.mock import patch
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
@@ -14,7 +16,10 @@ from PyQt5.QtCore import QSettings
 from PyQt5.QtGui import QColor, QImage
 from PyQt5.QtWidgets import QApplication, QWidget
 
-from five_axis_slicer.gcode_preview import PreviewSettings, parse_gcode
+from five_axis_slicer import background_load
+from five_axis_slicer.gcode_preview import GCodeLoadCancelled, PreviewSettings, parse_gcode
+from five_axis_slicer.localization import tr
+from five_axis_slicer.result_state import LoadRequest, LoadResult
 from five_axis_slicer.ui import MainWindow
 
 
@@ -95,7 +100,67 @@ class UiStateTests(unittest.TestCase):
         cls.app = QApplication.instance() or QApplication([])
 
     def setUp(self) -> None:
-        QSettings("5AxisSclicer", "5AxisSclicer V2.0").clear()
+        # 测试使用独立 INI，保留用户当前桌面窗口的设置。
+        settings_dir = tempfile.TemporaryDirectory()
+        self.addCleanup(settings_dir.cleanup)
+        settings = QSettings(str(Path(settings_dir.name) / "settings.ini"), QSettings.IniFormat)
+        settings_patch = patch("five_axis_slicer.ui.QSettings", return_value=settings)
+        settings_patch.start()
+        self.addCleanup(settings_patch.stop)
+
+    def test_cancel_restores_warning_and_terminal_message_waits_for_worker_exit(self) -> None:
+        window = MainWindow(http_port=0, result_viewer_factory=ResultViewerStub)
+        self.addCleanup(window.close)
+        entered = threading.Event()
+        release = threading.Event()
+
+        def wait_until(predicate) -> None:
+            deadline = time.monotonic() + 5.0
+            while not predicate() and time.monotonic() < deadline:
+                self.app.processEvents()
+                time.sleep(0.005)
+            self.assertTrue(predicate())
+
+        def cancellable_load(_path, *, cancel_check, **_kwargs):
+            entered.set()
+            release.wait(5.0)
+            self.assertTrue(cancel_check())
+            raise GCodeLoadCancelled("cancelled")
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            source = Path(tmpdir) / "old.gcode"
+            source.write_text("G90\nM83\nG1 X1 Y0 E0.1\n", encoding="utf-8")
+            replacement = Path(tmpdir) / "replacement.gcode"
+            replacement.write_bytes(source.read_bytes())
+            page = window.result_page
+            page.begin_load(LoadRequest("old", gcode_path=source))
+            page.commit_load(LoadResult("old", gcode_path=source, gcode_preview=parse_gcode(source.read_text())))
+            previous_state = page.state.to_json()
+            previous_preview = page.viewer.gcode_preview
+            warning_detail = page.status_detail.text()
+            self.assertEqual(page.state.status, "warning")
+            with patch.object(background_load, "load_gcode", side_effect=cancellable_load):
+                try:
+                    window.start_result_load(gcode_path=replacement)
+                    wait_until(entered.is_set)
+                    page.cancel_button.click()
+                    self.assertEqual(page.state.to_json(), previous_state)
+                    self.assertEqual(page.status_detail.text(), warning_detail)
+                    self.assertIs(page.viewer.gcode_preview, previous_preview)
+                    self.assertTrue(window.result_loader.busy)
+                    self.assertEqual(window.statusBar().currentMessage(), tr(window.language, "result_cancel_requested"))
+                finally:
+                    release.set()
+                    wait_until(lambda: not window.result_loader.busy)
+            self.assertEqual(window.statusBar().currentMessage(), tr(window.language, "error_load_cancelled"))
+            window.start_result_load(gcode_path=source)
+            wait_until(lambda: not window.result_loader.busy)
+            self.assertEqual(page.state.status, "warning")
+            self.assertEqual(page.state.active_gcode_path, source.resolve())
+            self.assertEqual(
+                window.statusBar().currentMessage(), page.status_detail.text().replace("\n", " ")
+            )
+            page.shutdown()
 
     def test_coordinate_label_distinguishes_reconstructed_and_unresolved_raw_preview(
         self,

@@ -1,0 +1,426 @@
+--- a/candidate/src/five_axis_slicer/display_bead_buffers.py
++++ b/candidate/src/five_axis_slicer/display_bead_buffers.py
+@@ -25,6 +25,7 @@
+     viewer._active_solid_key = "path_solid"
+     viewer._bead_display_info = {}
+     viewer._bead_label = QLabel(viewer)
++    viewer._bead_label.setWordWrap(True)
+     viewer._bead_label.setAttribute(Qt.WA_TransparentForMouseEvents)
+     viewer._bead_label.setStyleSheet("color: #334155; background: rgba(255,255,255,210); padding: 4px;")
+     viewer._bead_label.move(8, 8)
+@@ -72,8 +73,15 @@
+     dimensions = " · 宽厚 NC/默认 0.4×0.2 mm" if unspecified else ""
+     detail_note = " · 大范围简化截面" if limited else ""
+     viewer._bead_label.setText(f"Nominal bead / 名义料条 · LOD {sides}{note}{dimensions}{detail_note}")
++    viewer._bead_label.setToolTip(viewer._bead_label.text())
++    resize_label(viewer)
++    viewer._bead_label.show()
++
++
++def resize_label(viewer: Any) -> None:
++    # 说明随视口换行，右侧为方向立方体保留 112px 及边距。
++    viewer._bead_label.setFixedWidth(max(1, viewer.width() - 148))
+     viewer._bead_label.adjustSize()
+-    viewer._bead_label.show()
+ 
+ 
+ def prepare_lighting(viewer: Any) -> np.ndarray:
+--- a/candidate/src/five_axis_slicer/gcode_preview.py
++++ b/candidate/src/five_axis_slicer/gcode_preview.py
+@@ -37,11 +37,11 @@
+ NUMBER_RE = r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?"
+ AXIS_RE = re.compile(rf"([XYZABCUVWEFxyzabcuvwef])\s*({NUMBER_RE})")
+ COMMAND_RE = re.compile(r"\bG(0|1|20|21|28|90|91|92)\b", re.IGNORECASE)
+-LAYER_RE = re.compile(r"^Layer\s+(-?\d+)", re.IGNORECASE)
++LAYER_RE = re.compile(r"^Layer(?:\s*:\s*|\s+)(-?\d+)(?!\d|\.\d)", re.IGNORECASE)
+ TYPE_RE = re.compile(r"^TYPE\s*:\s*(.+)$", re.IGNORECASE)
+ WIDTH_RE = re.compile(rf"^WIDTH\s*:\s*({NUMBER_RE})", re.IGNORECASE)
+ HEIGHT_RE = re.compile(rf"^HEIGHT\s*:\s*({NUMBER_RE})", re.IGNORECASE)
+-CACHE_VERSION = "gcode-preview-v9-indexed-tcp-material"
++CACHE_VERSION = "gcode-preview-v10-layer-markers-indexed-tcp-material"
+ # Older preview caches may contain silently ignored rotary axes.  They are
+ # intentionally invalidated at this safety boundary and rebuilt from source.
+ LEGACY_CACHE_VERSIONS: tuple[str, ...] = ()
+--- a/candidate/src/five_axis_slicer/opengl_viewer.py
++++ b/candidate/src/five_axis_slicer/opengl_viewer.py
+@@ -951,6 +951,7 @@
+ 
+     def resizeGL(self, width: int, height: int) -> None:  # noqa: N802 - Qt API
+         glViewport(0, 0, max(1, width), max(1, height))
++        _bead_buffers.resize_label(self)
+         if self._build_surface is not None and self.model is None and self.gcode_preview is None:
+             self.fit_view()
+ 
+--- a/candidate/src/five_axis_slicer/result_preview.py
++++ b/candidate/src/five_axis_slicer/result_preview.py
+@@ -315,7 +315,7 @@
+             self.setMinimumSize(540, 280)
+             layout = QVBoxLayout(self)
+             layout.setContentsMargins(0, 0, 0, 0)
+-            layout.addWidget(viewer)
++            layout.setSpacing(0)
+             self.viewer = viewer
+ 
+             self.orientation_cube = OrientationCubeOverlay(viewer, self)
+@@ -334,6 +334,9 @@
+                 button.setFixedSize(68, 36)
+                 rail_layout.addWidget(button)
+             self.tool_rail.adjustSize()
++            # 工具栏占独立布局行，避免遮挡渲染器的料条说明。
++            layout.addWidget(self.tool_rail, 0, Qt.AlignLeft)
++            layout.addWidget(viewer, 1)
+ 
+             self.fit_button.clicked.connect(self._fit_view)
+             self.home_button.clicked.connect(self._home_view)
+@@ -351,11 +354,9 @@
+         def resizeEvent(self, event) -> None:  # noqa: N802 - Qt API
+             super().resizeEvent(event)
+             margin = 12
+-            self.tool_rail.adjustSize()
+-            self.tool_rail.move(margin, margin)
+             self.orientation_cube.move(
+                 max(margin, self.width() - self.orientation_cube.width() - margin),
+-                margin,
++                self.tool_rail.sizeHint().height() + margin,
+             )
+             self.axis_triad.move(
+                 margin,
+@@ -365,7 +366,7 @@
+                 max(margin, self.width() - self.legend.width() - margin),
+                 max(margin, self.height() - self.legend.height() - margin),
+             )
+-            for child in (self.tool_rail, self.orientation_cube, self.axis_triad, self.legend):
++            for child in (self.orientation_cube, self.axis_triad, self.legend):
+                 child.raise_()
+ 
+     class GCodeSyntaxHighlighter(QSyntaxHighlighter):
+@@ -596,6 +597,7 @@
+             if not self.state.cancel_load(request_id):
+                 return False
+             self.cancel_button.setEnabled(False)
++            self._update_sources()
+             self._update_status()
+             self._emit_display_state()
+             return True
+--- a/candidate/src/five_axis_slicer/result_state.py
++++ b/candidate/src/five_axis_slicer/result_state.py
+@@ -197,6 +197,9 @@
+     show_axes: bool = True
+     show_orientation_cube: bool = True
+     current_request_id: int | str | None = None
++    _before_load: tuple[str, float, str, Path | None, Path | None] | None = field(
++        default=None, init=False, repr=False, compare=False
++    )
+ 
+     def __post_init__(self) -> None:
+         self.selected_model_path = _path_or_none(self.selected_model_path)
+@@ -213,6 +216,12 @@
+         self.parameters.validate()
+ 
+     def begin_load(self, request: LoadRequest) -> None:
++        # 连续替换请求共用同一份已提交状态，取消时保留原有警告和来源。
++        if self.status != "loading":
++            self._before_load = (
++                self.status, self.progress, self.message,
++                self.selected_model_path, self.selected_gcode_path,
++            )
+         if request.model_path is not None:
+             self.selected_model_path = request.model_path
+         if request.gcode_path is not None:
+@@ -243,6 +252,7 @@
+         self.progress = 1.0
+         self.message = ""
+         self.current_request_id = None
++        self._before_load = None
+         return True
+ 
+     def fail_load(self, request_id: int | str, message: str) -> bool:
+@@ -251,19 +261,27 @@
+         self.status = "error"
+         self.message = str(message)
+         self.current_request_id = None
++        self._before_load = None
+         return True
+ 
+     def cancel_load(self, request_id: int | str) -> bool:
+         if self.status != "loading" or request_id != self.current_request_id:
+             return False
+-        self.status = (
+-            "ready"
+-            if self.active_model_path is not None or self.active_gcode_path is not None
+-            else "empty"
+-        )
+-        self.progress = 0.0
+-        self.message = ""
++        if self._before_load is not None:
++            (
++                self.status, self.progress, self.message,
++                self.selected_model_path, self.selected_gcode_path,
++            ) = self._before_load
++        else:
++            self.status = (
++                "ready"
++                if self.active_model_path is not None or self.active_gcode_path is not None
++                else "empty"
++            )
++            self.progress = 0.0
++            self.message = ""
+         self.current_request_id = None
++        self._before_load = None
+         return True
+ 
+     def to_json(self) -> dict[str, Any]:
+--- a/candidate/src/five_axis_slicer/styles.py
++++ b/candidate/src/five_axis_slicer/styles.py
+@@ -367,7 +367,7 @@
+ QCheckBox::indicator:checked, #toggleCheck::indicator:checked,
+ #roleCheck::indicator:checked {
+     background-color: @PRIMARY@;
+-    border: 3px solid @PANEL@;
++    border: 1px solid @PRIMARY@;
+ }
+ QRadioButton::indicator:checked {
+     background-color: @PRIMARY@;
+--- a/candidate/src/five_axis_slicer/ui.py
++++ b/candidate/src/five_axis_slicer/ui.py
+@@ -79,7 +79,7 @@
+ from .tube_controller import PendingDraftError, TubeSetupController
+ from .tube_script_service import ProjectOpenCancelled, TubeScriptService
+ from .tube_ui import TubeSetupPage
+-from .ui_controls import action_button
++from .ui_controls import action_button, scrollable_panel
+ from .ui_menu_titles import set_menu_titles
+ from .viewer import ModelViewer
+ from .workbench_issue_ui import command_error_text
+@@ -289,6 +289,7 @@
+             "status": "loading",
+         }
+         self.result_page.begin_load(request)
++        self._result_cancel_pending = False
+         self._show_results()
+         self.result_loader.start(request)
+         self._update_context_actions()
+@@ -300,8 +301,8 @@
+ 
+     def cancel_result_load(self) -> None:
+         if self._is_load_active("result"):
++            self.statusBar().showMessage(tr(self.language, "result_cancel_requested"))
+             self.load_coordinator.cancel()
+-            self.statusBar().showMessage(tr(self.language, "result_cancel_requested"))
+ 
+     @staticmethod
+     def _load_kind(request_id: object) -> str:
+@@ -669,7 +670,7 @@
+         self._update_file_labels()
+         self._update_checks()
+         self._update_context_actions()
+-        self.statusBar().showMessage(tr(self.language, "result_state_ready_detail"))
++        self.statusBar().showMessage(self.result_page.status_detail.text().replace("\n", " "))
+ 
+     def _on_result_load_failed(self, request_id: object, message: str) -> None:
+         if self.result_page.fail_load(request_id, message):
+@@ -679,11 +680,19 @@
+ 
+     def _on_result_load_cancelled(self, request_id: object) -> None:
+         if self.result_page.cancel_load(request_id):
+-            self.statusBar().showMessage(tr(self.language, "error_load_cancelled"))
++            self._result_cancel_pending = self.load_coordinator.busy
++            key = (
++                "result_cancel_requested" if self._result_cancel_pending else "error_load_cancelled"
++            )
++            self.statusBar().showMessage(tr(self.language, key))
+         self._update_context_actions()
+         self._finish_result_load_metric(request_id, "cancelled", "")
+ 
+-    def _on_result_busy_changed(self, _busy: bool) -> None:
++    def _on_result_busy_changed(self, busy: bool) -> None:
++        if not busy and self._result_cancel_pending:
++            # busy=False 在工作线程退出并释放后发出，才显示取消终态。
++            self._result_cancel_pending = False
++            self.statusBar().showMessage(tr(self.language, "error_load_cancelled"))
+         self._update_context_actions()
+ 
+     def _finish_result_load_metric(self, request_id: object, status: str, message: str) -> None:
+@@ -1857,6 +1866,7 @@
+         QMessageBox.warning(self, tr(self.language, "app_title"), message)
+ 
+     def _build_ui(self) -> None:
++        self._result_cancel_pending = False
+         self._install_actions()
+ 
+         self.stack = QStackedWidget()
+@@ -2052,7 +2062,7 @@
+         toolbar = QToolBar("Main", self)
+         toolbar.setObjectName("mainToolbar")
+         toolbar.setMovable(False)
+-        self.product_title_label = QLabel("5AxisSclicer V2.7")
++        self.product_title_label = QLabel("5AxisSclicer V2.9")
+         self.product_title_label.setObjectName("productTitle")
+         toolbar.addWidget(self.product_title_label)
+         toolbar.addSeparator()
+@@ -2334,8 +2344,7 @@
+         return widget
+ 
+     def _build_preview_tab(self) -> QWidget:
+-        widget = QWidget()
+-        layout = QVBoxLayout(widget)
++        scroll, layout = scrollable_panel()
+         self.preview_summary_title = QLabel()
+         self.preview_summary_title.setObjectName("panelTitle")
+         self.preview_summary = QLabel()
+@@ -2427,7 +2436,7 @@
+         layout.addWidget(self.segment_property_title)
+         layout.addWidget(self.segment_property)
+         layout.addStretch(1)
+-        return widget
++        return scroll
+ 
+     def _build_checks_tab(self) -> QWidget:
+         widget = QWidget()
+@@ -2625,7 +2634,7 @@
+         QMessageBox.about(
+             self,
+             tr(self.language, "action_about"),
+-            "5AxisSclicer V2.7\nPyQt5 · OpenGL/VTK · AC inverse preview",
++            "5AxisSclicer V2.9\nPyQt5 · OpenGL/VTK · AC inverse preview",
+         )
+ 
+     def _on_operation_changed(self, index: int) -> None:
+--- a/candidate/src/five_axis_slicer/ui_controls.py
++++ b/candidate/src/five_axis_slicer/ui_controls.py
+@@ -3,7 +3,16 @@
+ from collections.abc import Callable
+ 
+ from PyQt5.QtCore import QEvent, QObject, QTimer
+-from PyQt5.QtWidgets import QDoubleSpinBox, QPushButton, QSpinBox
++from PyQt5.QtWidgets import (
++    QDoubleSpinBox,
++    QFrame,
++    QLayout,
++    QPushButton,
++    QScrollArea,
++    QSpinBox,
++    QVBoxLayout,
++    QWidget,
++)
+ 
+ 
+ class ScrollSafeDoubleSpinBox(QDoubleSpinBox):
+@@ -53,9 +62,22 @@
+     return button
+ 
+ 
++def scrollable_panel() -> tuple[QScrollArea, QVBoxLayout]:
++    content = QWidget()
++    layout = QVBoxLayout(content)
++    # 内容放不下时滚动整个面板，避免各区块被压缩到一起。
++    layout.setSizeConstraint(QLayout.SetMinimumSize)
++    scroll = QScrollArea()
++    scroll.setWidgetResizable(True)
++    scroll.setFrameShape(QFrame.NoFrame)
++    scroll.setWidget(content)
++    return scroll, layout
++
++
+ __all__ = [
+     "OptionalDoubleSpinBox",
+     "ScrollSafeDoubleSpinBox",
+     "ScrollSafeSpinBox",
+     "action_button",
++    "scrollable_panel",
+ ]
+--- a/candidate/src/five_axis_slicer/__init__.py
++++ b/candidate/src/five_axis_slicer/__init__.py
+@@ -5,6 +5,6 @@
+ try:
+     __version__ = version("five-axis-slicer")
+ except PackageNotFoundError:  # Source checkout before installation.
+-    __version__ = "2.7"
++    __version__ = "2.9"
+ 
+ __all__ = ["__version__"]
+--- a/candidate/src/five_axis_slicer/app.py
++++ b/candidate/src/five_axis_slicer/app.py
+@@ -13,7 +13,7 @@
+ 
+ 
+ def build_parser() -> argparse.ArgumentParser:
+-    parser = argparse.ArgumentParser(description="5AxisSclicer V2.7 workbench and NC preview")
++    parser = argparse.ArgumentParser(description="5AxisSclicer V2.9 workbench and NC preview")
+     parser.add_argument("--model", help="STEP/STP file to open on startup")
+     parser.add_argument("--gcode", help="NC/G-code file to open on startup")
+     parser.add_argument(
+--- a/candidate/src/five_axis_slicer/automation_routes.py
++++ b/candidate/src/five_axis_slicer/automation_routes.py
+@@ -112,7 +112,7 @@
+         raise RuntimeError(f"Unknown endpoint: {path}")
+ 
+     def _health(self, _payload: Payload) -> Response:
+-        return {"status": "ready", "app": "5AxisSclicer V2.7"}
++        return {"status": "ready", "app": "5AxisSclicer V2.9"}
+ 
+     def _state(self, _payload: Payload) -> Response:
+         return self.window.current_state()
+--- a/candidate/src/five_axis_slicer/localization.py
++++ b/candidate/src/five_axis_slicer/localization.py
+@@ -3,7 +3,7 @@
+ 
+ TRANSLATIONS: dict[str, dict[str, str]] = {
+     "zh": {
+-        "app_title": "5AxisSclicer V2.7 五轴切片工作台",
++        "app_title": "5AxisSclicer V2.9 五轴切片工作台",
+         "workbench_home": "工作台",
+         "manufacturing_setup_entry": "公共制造设置",
+         "home_title": "五轴塑料/树脂增材工作台",
+@@ -101,7 +101,7 @@
+         "check_warning_policy": "策略：Warning 可继续预览并写入项目记录；Error 才阻止最终代码输出。",
+     },
+     "en": {
+-        "app_title": "5AxisSclicer V2.7 5-Axis Slicing Workbench",
++        "app_title": "5AxisSclicer V2.9 5-Axis Slicing Workbench",
+         "workbench_home": "Workbench",
+         "manufacturing_setup_entry": "Manufacturing Setup",
+         "home_title": "5-axis polymer/resin additive workbenches",
+--- a/candidate/pyproject.toml
++++ b/candidate/pyproject.toml
+@@ -69,7 +69,7 @@
+ "share/doc/five-axis-slicer/guides/assets/motion_simulation" = ["docs/guides/assets/motion_simulation/*"]
+ 
+ [tool.setuptools_scm]
+-fallback_version = "2.7"
++fallback_version = "2.9"
+ 
+ [tool.ruff]
+ target-version = "py310"
+--- a/start_daily_candidate.ps1
++++ b/start_daily_candidate.ps1
+@@ -1,4 +1,5 @@
+ ﻿param([switch]$VerifyOnly)
++$ErrorActionPreference = 'Stop'
+ $candidateSource = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot 'candidate/src'))
+ $projectRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../../../..'))
+ $candidatePython = Join-Path $projectRoot 'tmp/pytest9/Scripts/python.exe'
+@@ -7,15 +8,20 @@
+ $previousPythonPath = $env:PYTHONPATH
+ $previousQtPlatform = $env:QT_QPA_PLATFORM
+ $previousBackend = $env:FIVE_AXIS_RENDER_BACKEND
++$candidateExitCode = 0
+ try {
+     $env:PYTHONPATH = $candidateSource
+     $env:QT_QPA_PLATFORM = 'windows'
+     $env:FIVE_AXIS_RENDER_BACKEND = 'opengl'
+-    & $candidatePython -X utf8 -c 'import sys,pathlib,five_axis_slicer; actual=pathlib.Path(five_axis_slicer.__file__).resolve(); expected=pathlib.Path(sys.argv[1]).resolve(); assert actual.is_relative_to(expected), str(actual); print("候选源码确认："+str(actual))' $candidateSource
+-    if ($LASTEXITCODE -ne 0) { throw '解释器没有加载候选源码，已停止启动。' }
+-    if (-not $VerifyOnly) { & $candidatePython -X utf8 -m five_axis_slicer }
++    & $candidatePython -X utf8 -c 'import sys,pathlib,json,five_axis_slicer; from jsonschema import Draft202012Validator; from five_axis_slicer.setup_config import schema_path; actual=pathlib.Path(five_axis_slicer.__file__).resolve(); expected=pathlib.Path(sys.argv[1]).resolve(); assert actual.is_relative_to(expected), str(actual); resources=expected.parent/"schemas"; assert schema_path().resolve()==resources/"manufacturing-setup-v1.schema.json", "候选 Schema 缺失"; names=("manufacturing-setup-v1.schema.json","simulation_report_v1.schema.json","simulation_scene_v1.schema.json","simulation_source_v1.schema.json"); [Draft202012Validator.check_schema(json.loads((resources/n).read_text(encoding="utf-8"))) for n in names]; print("候选源码确认："+str(actual)); print("候选 Schema 确认：4 项")' $candidateSource
++    if ($LASTEXITCODE -ne 0) { throw '候选源码或 Schema 核查失败，已停止启动。' }
++    if (-not $VerifyOnly) {
++        & $candidatePython -X utf8 -m five_axis_slicer
++        $candidateExitCode = $LASTEXITCODE
++    }
+ } finally {
+     $env:PYTHONPATH = $previousPythonPath
+     $env:QT_QPA_PLATFORM = $previousQtPlatform
+     $env:FIVE_AXIS_RENDER_BACKEND = $previousBackend
+ }
++exit $candidateExitCode

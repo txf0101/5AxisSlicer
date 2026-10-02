@@ -1,6 +1,6 @@
 # G-code 预览中文手册
 
-本文说明 5AxisSclicer V2.6.2 中读取 NC/G-code、叠加 STEP、检查路径和定位代码的操作。预览用于离线检查。实际参数、实际效果以用户设备调试结果为准，本项目持续完善中。
+本文说明读取 NC/G-code、叠加 STEP、检查路径和定位代码的操作。预览用于离线检查。实际参数、实际效果以用户设备调试结果为准，本项目持续完善中。
 
 ## 1. 打开 G-code 文件预览
 
@@ -18,9 +18,9 @@ python -m five_axis_slicer.app --results --model "example\叶轮\叶轮.stp" --g
 
 文件预览页显示输入来源、路径、统计和代码上下文。只打开 G-code 也能看路径；若需检查路径是否贴合实体，再点“打开 STEP”叠加对应模型。历史或外部 G-code 应保留来源说明，不能据此反推本软件的路径生成方法。
 
-![G-code 文件预览：打开文件与校徽操作 2 路径](assets/hd_v27/gcode_logo_file_preview_zh.png)
+![打开八层见证文件，右侧检测到 8 层](assets/daily_ui_20261002/01_open_eight_layers_zh.png)
 
-图中显示文件入口、校徽操作 2 路径及右侧统计和显隐面板，STEP 显示“未加载”。可单独查看 NC；检查自己的程序时，应叠加对应 STEP 并核对路径位置。
+图中用八层显示样例演示文件入口、层统计和代码上下文，未叠加 STEP。“尚未载入 STEP 模型”是可继续查看路径的警告；检查模型贴合时再打开对应 STEP。样例可从仓库的 `skills/five-axis-daily-ui-review/assets/preview_layered_infill_witness.gcode` 打开，仅用于离线显示练习。截图来自修复后的日常预览候选。
 
 ## 2. 模型叠加与视图
 
@@ -38,6 +38,26 @@ python -m five_axis_slicer.app --results --model "example\叶轮\叶轮.stp" --g
 - Extrusion：显示材料沉积段；隐藏后可检查是否存在误沉积。
 - 角色分色：按 travel、deposition、retract、index、approach、prime 等事件区分；颜色是诊断标记，不代表机床颜色或材料属性。
 - 进度与代码上下文：拖动进度条或选择代码行，查看当前段、层、区段、进给和坐标；底部代码窗口用于核对原始行号。
+
+### 八层、路径进度与取消重开
+
+`;LAYER:0` 和 `;Layer 0` 都可作为编号层注释。八层样例应显示“检测层数 8”，阶段导航为“层 0–7”。更多层的文件会显示多个层分组；阶段分组与旧 Preview 的任意层上下限是两个入口。
+
+选择层分组后，拖动“路径进度”显示该组的路径前缀，并在右栏核对当前代码行。下图位于索引 140，显示 50.2%；只看整个 0–7 分组不等于验证任意子范围。
+
+![八层样例的中间路径进度](assets/daily_ui_20261002/04_progress_140_zh.png)
+
+在候选的“交互质量”中，FIT/ISO 位于料条说明上方；料条宽厚取自 NC 或默认值，姿态为近似值。旋转、缩放只改变观察视角。
+
+![工具栏与中文名义料条说明分开](assets/daily_ui_20261002/02_bead_caption_zh.png)
+
+打开新文件后出现加载进度时，可以点“取消加载”。取消过程中保留上一份路径和来源；显示“正在安全取消…”时等待后台退出。结束后底部显示“加载已取消”，原有警告也应保留。
+
+![取消结束后仍保留缺 STEP 警告](assets/daily_ui_20261002/05_cancel_restores_warning_zh.png)
+
+需要继续时，点“打开 G-code”重新选择小文件。下面已重新识别八层并恢复完整进度；单独打开 NC 的缺 STEP 警告仍然有效。
+
+![取消后重新打开八层样例](assets/daily_ui_20261002/06_reopen_after_cancel_zh.png)
 
 ## 4. 五轴 A/C 逆变换安全回退
 

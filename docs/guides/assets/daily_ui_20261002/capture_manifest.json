@@ -1,0 +1,72 @@
+{
+  "captured_on": "2026-10-02",
+  "source": "repaired original daily-use candidate",
+  "witness_sha256": "ae29c7d7a64d971651c5b82ce98f50c44c2286a1284afee6cf7a065db5594cc2",
+  "images": [
+    {
+      "file": "01_open_eight_layers_zh.png",
+      "source_file": "03_original_witness_loaded_0.png",
+      "sha256": "eb6a95f71bf68430042225c68bd9b104c39403a5b66eb93bd12cf62d68ff049c",
+      "pixel_size": [
+        1701,
+        1067
+      ],
+      "purpose": "原八层文件打开，未叠加 STEP"
+    },
+    {
+      "file": "02_bead_caption_zh.png",
+      "source_file": "05_bead_caption_cn_0.png",
+      "sha256": "64fde416081f60cc5ba06bf994c1af6b62bf3fcd488ab491f17f13af9889b627",
+      "pixel_size": [
+        1701,
+        1067
+      ],
+      "purpose": "中文实体料条说明与 FIT/ISO 分开"
+    },
+    {
+      "file": "03_bead_caption_en.png",
+      "source_file": "08_bead_caption_en_0.png",
+      "sha256": "d7c9249b902a2f90a824e40f76ae7a3811cc4fd882f1fdba146864fa40825e2d",
+      "pixel_size": [
+        1701,
+        1067
+      ],
+      "purpose": "英文实体料条及独立工具栏"
+    },
+    {
+      "file": "04_progress_140_zh.png",
+      "source_file": "17_eight_layer_progress_140_0.png",
+      "sha256": "2e6a3a76bf9cc1fc3c5e560ffd60ef3ecbc5d7013f89b02474e78838e6bd26fa",
+      "pixel_size": [
+        1701,
+        1067
+      ],
+      "purpose": "路径索引 140，50.2% 前缀"
+    },
+    {
+      "file": "05_cancel_restores_warning_zh.png",
+      "source_file": "23_cancel_final_status_visible_0.png",
+      "sha256": "9242a785538f6cceec9a4d41048acc2a9b77bb9a32fc8ea5fe4f7581db5a6b5b",
+      "pixel_size": [
+        1701,
+        1067
+      ],
+      "purpose": "取消后恢复原警告并显示加载已取消"
+    },
+    {
+      "file": "06_reopen_after_cancel_zh.png",
+      "source_file": "26_original_reopened_after_cancel_0.png",
+      "sha256": "00b7b89b882bdf7eb0f6dab3973abefaf90c714bed85d156048569cf821ce1a8",
+      "pixel_size": [
+        1701,
+        1067
+      ],
+      "purpose": "取消后重开原八层文件"
+    }
+  ],
+  "pending": [
+    "narrow viewport pixel capture",
+    "new-process final completion-message capture"
+  ],
+  "qualification": "offline UI workflow only; no machine or full-performance qualification"
+}

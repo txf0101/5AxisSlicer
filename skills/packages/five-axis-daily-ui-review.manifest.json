@@ -1,0 +1,31 @@
+{
+  "archive": "five-axis-daily-ui-review.zip",
+  "sha256": "5e58ee597d25f5cc52092f2ebae8e92cc12607422b9b08f186dc3bfd9fcf5b12",
+  "files": [
+    {
+      "path": "five-axis-daily-ui-review/agents/openai.yaml",
+      "size": 322,
+      "sha256": "3af386322001962b11a5ebe2479c32326ce5760d3097d02a58a013b85bb3e1e3"
+    },
+    {
+      "path": "five-axis-daily-ui-review/assets/layer_range_52.gcode",
+      "size": 4698,
+      "sha256": "b142af1961cee073adef500370b32edeaab55fbe807e2ef48cfea1697405d0c9"
+    },
+    {
+      "path": "five-axis-daily-ui-review/assets/preview_layered_infill_witness.gcode",
+      "size": 8469,
+      "sha256": "ae29c7d7a64d971651c5b82ce98f50c44c2286a1284afee6cf7a065db5594cc2"
+    },
+    {
+      "path": "five-axis-daily-ui-review/references/daily-ui-checks.md",
+      "size": 4868,
+      "sha256": "e68f3fd7eb14e9dc9822cba8d9699df8254f2c0b66ff5a88efa2b36bbc6b5dac"
+    },
+    {
+      "path": "five-axis-daily-ui-review/SKILL.md",
+      "size": 2722,
+      "sha256": "aaf298a7c43756ea6627b26dbc9cd50372a6a59a628542e47dee44d490de83c8"
+    }
+  ]
+}

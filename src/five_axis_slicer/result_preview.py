@@ -315,7 +315,7 @@ if QT_AVAILABLE:
             self.setMinimumSize(540, 280)
             layout = QVBoxLayout(self)
             layout.setContentsMargins(0, 0, 0, 0)
-            layout.addWidget(viewer)
+            layout.setSpacing(0)
             self.viewer = viewer
 
             self.orientation_cube = OrientationCubeOverlay(viewer, self)
@@ -334,6 +334,9 @@ if QT_AVAILABLE:
                 button.setFixedSize(68, 36)
                 rail_layout.addWidget(button)
             self.tool_rail.adjustSize()
+            # 工具栏占独立布局行，避免遮挡渲染器的料条说明。
+            layout.addWidget(self.tool_rail, 0, Qt.AlignLeft)
+            layout.addWidget(viewer, 1)
 
             self.fit_button.clicked.connect(self._fit_view)
             self.home_button.clicked.connect(self._home_view)
@@ -351,11 +354,9 @@ if QT_AVAILABLE:
         def resizeEvent(self, event) -> None:  # noqa: N802 - Qt API
             super().resizeEvent(event)
             margin = 12
-            self.tool_rail.adjustSize()
-            self.tool_rail.move(margin, margin)
             self.orientation_cube.move(
                 max(margin, self.width() - self.orientation_cube.width() - margin),
-                margin,
+                self.tool_rail.sizeHint().height() + margin,
             )
             self.axis_triad.move(
                 margin,
@@ -365,7 +366,7 @@ if QT_AVAILABLE:
                 max(margin, self.width() - self.legend.width() - margin),
                 max(margin, self.height() - self.legend.height() - margin),
             )
-            for child in (self.tool_rail, self.orientation_cube, self.axis_triad, self.legend):
+            for child in (self.orientation_cube, self.axis_triad, self.legend):
                 child.raise_()
 
     class GCodeSyntaxHighlighter(QSyntaxHighlighter):
@@ -596,6 +597,7 @@ if QT_AVAILABLE:
             if not self.state.cancel_load(request_id):
                 return False
             self.cancel_button.setEnabled(False)
+            self._update_sources()
             self._update_status()
             self._emit_display_state()
             return True

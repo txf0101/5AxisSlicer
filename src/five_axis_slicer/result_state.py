@@ -197,6 +197,9 @@ class ResultPreviewState:
     show_axes: bool = True
     show_orientation_cube: bool = True
     current_request_id: int | str | None = None
+    _before_load: tuple[str, float, str, Path | None, Path | None] | None = field(
+        default=None, init=False, repr=False, compare=False
+    )
 
     def __post_init__(self) -> None:
         self.selected_model_path = _path_or_none(self.selected_model_path)
@@ -213,6 +216,12 @@ class ResultPreviewState:
         self.parameters.validate()
 
     def begin_load(self, request: LoadRequest) -> None:
+        # 连续替换请求共用同一份已提交状态，取消时保留原有警告和来源。
+        if self.status != "loading":
+            self._before_load = (
+                self.status, self.progress, self.message,
+                self.selected_model_path, self.selected_gcode_path,
+            )
         if request.model_path is not None:
             self.selected_model_path = request.model_path
         if request.gcode_path is not None:
@@ -243,6 +252,7 @@ class ResultPreviewState:
         self.progress = 1.0
         self.message = ""
         self.current_request_id = None
+        self._before_load = None
         return True
 
     def fail_load(self, request_id: int | str, message: str) -> bool:
@@ -251,19 +261,27 @@ class ResultPreviewState:
         self.status = "error"
         self.message = str(message)
         self.current_request_id = None
+        self._before_load = None
         return True
 
     def cancel_load(self, request_id: int | str) -> bool:
         if self.status != "loading" or request_id != self.current_request_id:
             return False
-        self.status = (
-            "ready"
-            if self.active_model_path is not None or self.active_gcode_path is not None
-            else "empty"
-        )
-        self.progress = 0.0
-        self.message = ""
+        if self._before_load is not None:
+            (
+                self.status, self.progress, self.message,
+                self.selected_model_path, self.selected_gcode_path,
+            ) = self._before_load
+        else:
+            self.status = (
+                "ready"
+                if self.active_model_path is not None or self.active_gcode_path is not None
+                else "empty"
+            )
+            self.progress = 0.0
+            self.message = ""
         self.current_request_id = None
+        self._before_load = None
         return True
 
     def to_json(self) -> dict[str, Any]:
