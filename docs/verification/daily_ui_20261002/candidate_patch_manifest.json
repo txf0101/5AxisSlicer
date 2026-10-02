@@ -1,0 +1,103 @@
+{
+  "base": "original daily-use candidate before UI and V2.9 repairs",
+  "release": "V2.9",
+  "files": [
+    {
+      "path": "candidate/src/five_axis_slicer/display_bead_buffers.py",
+      "before_sha256": "3bd2bfa4cdcbffbfaf264c9d31fb742fdb1b427ef8716cc69d7414527412503e",
+      "after_sha256": "d18f9f1e52b8819ff44759a209660c569a9da9e5a4c4c7c460ce346bb6bb99ca"
+    },
+    {
+      "path": "candidate/src/five_axis_slicer/gcode_preview.py",
+      "before_sha256": "43f51fcd039dfebe8fc54a15cac0868d17b4e08a66212575a5eee11e14301d72",
+      "after_sha256": "adccbf3a94d52069bc7865bdfdf22bedb8beaec1335eebeeb12033158341112b"
+    },
+    {
+      "path": "candidate/src/five_axis_slicer/opengl_viewer.py",
+      "before_sha256": "f5bb98885c8c7cac35c519be1d053db4e6a13fe61d2dda8d6fcdb50335e05724",
+      "after_sha256": "7873bb55d77293335798bf985df2d4da68792ecf4fad6f8cbabf03f9ffd98770"
+    },
+    {
+      "path": "candidate/src/five_axis_slicer/result_preview.py",
+      "before_sha256": "36e49681c9bb6c2a2df0b6bc890ab900137d28a8e0b162e69877cdf310edca63",
+      "after_sha256": "a461c99300a9e4b69fd28d01e198a796b097b4afb71b8057b9f6db93aed19577"
+    },
+    {
+      "path": "candidate/src/five_axis_slicer/result_state.py",
+      "before_sha256": "4bc7903a1df62b52226331fee2c1fcb8624ab420a0b7e967c72df03ef5687247",
+      "after_sha256": "aa35ce65f3a4ce4e1d4e88215cb729bbe62fc24fcf30a1a0ffeb38379bb34efc"
+    },
+    {
+      "path": "candidate/src/five_axis_slicer/styles.py",
+      "before_sha256": "70fe903b9135279368b5ae4c3871f8300e5c68aabc6d5956d70b85d90d71a2e2",
+      "after_sha256": "21d308f1a464925f133193882444144bb02ce823c634fe2faa0b072ae21190d1"
+    },
+    {
+      "path": "candidate/src/five_axis_slicer/ui.py",
+      "before_sha256": "a334c6b650e70f1b7897943f1d13be56f5cca9801462f5f6ec4410914d7fbe71",
+      "after_sha256": "09a7ad8d9d89bf5cd4e2b8857bc52e084a0f3e139d09ed0307f724289c09c719"
+    },
+    {
+      "path": "candidate/src/five_axis_slicer/ui_controls.py",
+      "before_sha256": "081b04a70221c404cea0a947910bd996a06cdc9a4d1507c5ffd0334afd193365",
+      "after_sha256": "ada4bdfe4e392b57768c5b162734891e741a94631f5472205be3b6243057da83"
+    },
+    {
+      "path": "candidate/src/five_axis_slicer/__init__.py",
+      "before_sha256": "db11d41129c91d71c2f7929d3a2bf352e682b66353555ed6acfd33baae1bc048",
+      "after_sha256": "cb89e41f25a64a34dd3afe96f9adbd38885aa5158f44227e5b10c2b5ec96720a"
+    },
+    {
+      "path": "candidate/src/five_axis_slicer/app.py",
+      "before_sha256": "ffc54232f9e9c30ca5baea30663775b2907059618eb25aabb298f2313367494e",
+      "after_sha256": "d9a7b31db5ef929f8ac06cef043e38a650c9ca15840d61c0646c34fb1acf7744"
+    },
+    {
+      "path": "candidate/src/five_axis_slicer/automation_routes.py",
+      "before_sha256": "8fa2b83a4ca45f287f8a5ce33e12adebcbd89abaafe10a1e6f3cab243398f4d4",
+      "after_sha256": "98858145d0eaa0c6a50f5f216ee642aa2687bdd3448e9d167f2e2c057368a9b3"
+    },
+    {
+      "path": "candidate/src/five_axis_slicer/localization.py",
+      "before_sha256": "2bff3605287ad1d8fa2bcd0efa9d648ee04b444dc17e04078d43ac984e80b586",
+      "after_sha256": "d5a5aad88a8254e08b38fb6d411daaa8e8d145bbe9fd90697a95600556bfba86"
+    },
+    {
+      "path": "candidate/pyproject.toml",
+      "before_sha256": "bae3496f7c7e059d8e2d84270081666b61b80cf998ece02267f707ce70a45dd2",
+      "after_sha256": "f0c93ca24b9df3bf5aa77f87dcfe91996101d7311455303a560a713931f494dc"
+    },
+    {
+      "path": "start_daily_candidate.ps1",
+      "before_sha256": "86a93176b617e2f1e68e89b71065d2df06645da5ad9f288139d014f33c65b078",
+      "after_sha256": "e5158b0647d36bc892d7ceb20d7e0c242848dbe4675186da7ea1753bc01ec539"
+    }
+  ],
+  "patch_apply_content_verified": true,
+  "patch_line_endings_note": "git apply may normalize CRLF; use the ZIP overlay for exact byte reproduction",
+  "schemas": [
+    {
+      "path": "candidate/schemas/manufacturing-setup-v1.schema.json",
+      "project_source": "schemas/manufacturing-setup-v1.schema.json",
+      "sha256": "a78b1261954760f7e1f8a846485c6b97e6024bc4f3ef0d0c3c8f0f572885ec57"
+    },
+    {
+      "path": "candidate/schemas/simulation_report_v1.schema.json",
+      "project_source": "schemas/simulation_report_v1.schema.json",
+      "sha256": "abf88f40a1c5649aa15a746dbd103229228b1eae2bef670da2b8102bd1a776ea"
+    },
+    {
+      "path": "candidate/schemas/simulation_scene_v1.schema.json",
+      "project_source": "schemas/simulation_scene_v1.schema.json",
+      "sha256": "bc53f3f3663829eb6174319da1b848e5c6623ae9113f56d8494ae87edaece3aa"
+    },
+    {
+      "path": "candidate/schemas/simulation_source_v1.schema.json",
+      "project_source": "schemas/simulation_source_v1.schema.json",
+      "sha256": "a09d54892ba59ae287b2d4ae9d3159d29744f0f36766f8e0c403324be2fd7932"
+    }
+  ],
+  "overlay_zip": "candidate_ui_repairs_v29.zip",
+  "overlay_sha256": "e3992aa9aeac614a54a29b4425fd0cfb3095fb6dd86ad2dec27e492431d64549",
+  "overlay_files_verified": 18
+}

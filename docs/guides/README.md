@@ -1,10 +1,10 @@
-# 5AxisSclicer V2.6.2 学习与参考手册中心
+# 5AxisSclicer V2.9 学习与参考手册中心
 
 English readers: start with the [click-through guide](quickstart_clickthrough_en.md), then use the [learning manual](user_learning_manual_en.md) and topic guides below. The Chinese guides remain available in the Chinese index.
 
 这里是软件使用者的统一入口。按顺序使用：[五工作台图文点击教程](quickstart_clickthrough_zh.md)完成一次操作 → [学习总册](user_learning_manual_zh.md)理解判断与错误恢复 → 下方的工作台专项与参数参考。
 
-快速操作可从[点击教程](quickstart_clickthrough_zh.md)开始，系统学习再读[《5AxisSclicer V2.6.2 学习手册》](user_learning_manual_zh.md)。pipe2、平面件、叶轮、扇叶和半球是练手材料；模型 ID、参数、点数和轴范围都不应复制到自己的零件。
+快速操作可从[点击教程](quickstart_clickthrough_zh.md)开始，系统学习再读[《5AxisSclicer V2.9 学习手册》](user_learning_manual_zh.md)。pipe2、平面件、叶轮、扇叶和半球是练手材料；模型 ID、参数、点数和轴范围都不应复制到自己的零件。
 
 机床、喷嘴、材料和坐标可设为所有工作台共用，也可复制成某个工作台的独立设置。入口、保存范围及旧路径何时需要重新生成，见[公共设置与本工作台设置](quickstart_clickthrough_zh.md#公共设置与本工作台设置)。
 
@@ -72,3 +72,7 @@ Start with the [five-Workbench click-through guide](quickstart_clickthrough_en.m
 These guides describe offline inspection and export. Example parameters are not universal machine settings. Review warnings and strict readback; `machine_executable=false` means device-specific automated qualification is incomplete. Before machine use, verify the controller and macros, axes, fixture, path safety, and trial results on the target equipment.
 
 Some screenshots show the Chinese interface. The English interface uses the same control positions; follow the English button names in each guide.
+
+## 日常文件预览练习
+
+2026-10-02 更新了 [中文 G-code 预览](gcode_preview_zh.md)和 [English File Preview](gcode_preview_en.md)的八层样例、路径进度、取消与重开截图。图片来源、尺寸和 SHA256 见 [截图清单](assets/daily_ui_20261002/capture_manifest.json)。软件仍按各工作台的离线能力和实际设备资格使用。

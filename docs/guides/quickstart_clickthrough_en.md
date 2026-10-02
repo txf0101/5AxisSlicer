@@ -71,9 +71,9 @@ The screenshot shows role settings after reopening the saved three-blade fan pro
 
 Choose **G-code File Preview** or **Open Existing G-code…** and select an existing file. Open the matching STEP only when needed. Use FIT, zoom, and scene visibility controls for model, extrusion, and travel; scroll the right panel for statistics and code context. Confirm the source controller semantics before interpreting rotary axes.
 
-![G-code file preview: logo operation 2](assets/hd_v27/gcode_logo_file_preview_en.png)
+![Eight-layer nominal-bead sample](assets/daily_ui_20261002/03_bead_caption_en.png)
 
-The screenshot contains G-code only. See the [G-code preview guide](gcode_preview_en.md).
+The daily preview candidate shows G-code only. Numbered layers accept `;LAYER:0` and `;Layer 0`. Select a layer group, move Path Progress and inspect source context. You can cancel a new load and reopen a small file; the previous result retains its warnings. See the [G-code preview guide](gcode_preview_en.md) for illustrated steps.
 
 ## 7. Finish each generation
 

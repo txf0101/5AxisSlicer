@@ -367,7 +367,7 @@ QCheckBox::indicator:hover, QRadioButton::indicator:hover {
 QCheckBox::indicator:checked, #toggleCheck::indicator:checked,
 #roleCheck::indicator:checked {
     background-color: @PRIMARY@;
-    border: 3px solid @PANEL@;
+    border: 1px solid @PRIMARY@;
 }
 QRadioButton::indicator:checked {
     background-color: @PRIMARY@;

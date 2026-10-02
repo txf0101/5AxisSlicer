@@ -37,11 +37,11 @@ from .native_preview_index import build_preview_index
 NUMBER_RE = r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?"
 AXIS_RE = re.compile(rf"([XYZABCUVWEFxyzabcuvwef])\s*({NUMBER_RE})")
 COMMAND_RE = re.compile(r"\bG(0|1|20|21|28|90|91|92)\b", re.IGNORECASE)
-LAYER_RE = re.compile(r"^Layer\s+(-?\d+)", re.IGNORECASE)
+LAYER_RE = re.compile(r"^Layer(?:\s*:\s*|\s+)(-?\d+)(?!\d|\.\d)", re.IGNORECASE)
 TYPE_RE = re.compile(r"^TYPE\s*:\s*(.+)$", re.IGNORECASE)
 WIDTH_RE = re.compile(rf"^WIDTH\s*:\s*({NUMBER_RE})", re.IGNORECASE)
 HEIGHT_RE = re.compile(rf"^HEIGHT\s*:\s*({NUMBER_RE})", re.IGNORECASE)
-CACHE_VERSION = "gcode-preview-v9-indexed-tcp-material"
+CACHE_VERSION = "gcode-preview-v10-layer-markers-indexed-tcp-material"
 # Older preview caches may contain silently ignored rotary axes.  They are
 # intentionally invalidated at this safety boundary and rebuilt from source.
 LEGACY_CACHE_VERSIONS: tuple[str, ...] = ()

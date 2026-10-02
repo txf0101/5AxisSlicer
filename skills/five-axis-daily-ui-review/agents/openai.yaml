@@ -1,0 +1,4 @@
+interface:
+  display_name: "五轴软件日常界面验收"
+  short_description: "验收五轴软件的启动、预览、层范围及取消恢复，整理真实截图和修复证据"
+  default_prompt: "使用 $five-axis-daily-ui-review 验收当前五轴候选的日常界面，保留已有窗口并报告实际结果。"

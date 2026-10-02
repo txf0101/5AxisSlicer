@@ -210,6 +210,9 @@ class ResultPreviewPageTests(unittest.TestCase):
         self.app.processEvents()
         self.assertGreaterEqual(page.viewer_canvas.height(), 280)
         self.assertLess(page.viewer_canvas.geometry().bottom(), page.navigation_card.geometry().top())
+        self.assertLess(
+            page.viewer_canvas.tool_rail.geometry().bottom(), page.viewer.geometry().top()
+        )
 
     def test_bilingual_type_ramp_is_readable_and_product_text_is_not_clipped(self) -> None:
         page = self.make_page()

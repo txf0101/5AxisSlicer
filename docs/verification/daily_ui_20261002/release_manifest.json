@@ -1,0 +1,35 @@
+{
+  "release": "V2.9",
+  "release_url": "https://github.com/txf0101/5AxisSlicer/releases/tag/V2.9",
+  "publication_pending": true,
+  "wheel_metadata_version": "2.9",
+  "wheel_schema_present": true,
+  "twine_check_exit_code": 0,
+  "assets": [
+    {
+      "name": "candidate_ui_repairs_v29.manifest.json",
+      "size": 5023,
+      "sha256": "c8b8dd6eae95e4954e90a8b095283f10c1c2d17c3a46ee57086120b0f1aa8cb8"
+    },
+    {
+      "name": "candidate_ui_repairs_v29.zip",
+      "size": 98632,
+      "sha256": "e3992aa9aeac614a54a29b4425fd0cfb3095fb6dd86ad2dec27e492431d64549"
+    },
+    {
+      "name": "five-axis-daily-ui-review.manifest.json",
+      "size": 1101,
+      "sha256": "eb9311e9fc5be3ab1c1f405b9efeb01fad93b9db613100c8fa3ce79d3e0394e8"
+    },
+    {
+      "name": "five-axis-daily-ui-review.zip",
+      "size": 6953,
+      "sha256": "5e58ee597d25f5cc52092f2ebae8e92cc12607422b9b08f186dc3bfd9fcf5b12"
+    },
+    {
+      "name": "five_axis_slicer-2.9-py3-none-any.whl",
+      "size": 907755,
+      "sha256": "db6ad0a24bddf2bea7e4c369e68665cbaf1baa6ae9d175622259e595254c2e59"
+    }
+  ]
+}

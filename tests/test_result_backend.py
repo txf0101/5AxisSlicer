@@ -18,7 +18,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from PyQt5.QtWidgets import QApplication
 
 from five_axis_slicer import background_load
-from five_axis_slicer import gcode_preview
+from five_axis_slicer import gcode_cache, gcode_preview
 from five_axis_slicer.background_load import ResultLoadCoordinator
 from five_axis_slicer.gcode_preview import GCodeLoadCancelled, parse_gcode
 from five_axis_slicer.gcode_source import GCodeSourceIndex
@@ -156,8 +156,30 @@ class ResultStateAndProjectTests(unittest.TestCase):
 
             state.begin_load(LoadRequest("retry", gcode_path=new_path))
             self.assertTrue(state.cancel_load("retry"))
-            self.assertEqual(state.status, "ready")
+            self.assertEqual(state.status, "error")
+            self.assertEqual(state.message, "damaged source")
             self.assertEqual(state.active_gcode_path, old_path.resolve())
+
+    def test_cancelling_replacement_restores_warning_even_after_supersession(self) -> None:
+        old_path = Path("old.gcode").resolve()
+        state = ResultPreviewState(
+            active_gcode_path=old_path, selected_gcode_path=old_path,
+            status="warning", progress=1.0, message="尚未载入 STEP",
+        )
+        previous = state.to_json()
+        state.begin_load(LoadRequest("first", gcode_path="first.gcode"))
+        state.update_progress("first", 0.5, "parse")
+        state.begin_load(LoadRequest("second", gcode_path="second.gcode"))
+        self.assertFalse(state.cancel_load("first"))
+        self.assertTrue(state.cancel_load("second"))
+        self.assertEqual(state.to_json(), previous)
+
+    def test_cancelling_first_load_restores_empty_sources(self) -> None:
+        state = ResultPreviewState()
+        previous = state.to_json()
+        state.begin_load(LoadRequest("first", gcode_path="first.gcode"))
+        self.assertTrue(state.cancel_load("first"))
+        self.assertEqual(state.to_json(), previous)
 
 
 class GCodeSourceIndexTests(unittest.TestCase):
@@ -353,6 +375,21 @@ class PreviewCacheTests(unittest.TestCase):
             self.assertFalse(first_binary.exists())
             self.assertTrue(second_binary.exists())
             self.assertEqual(set(cache_root.iterdir()), {manifest_path, second_binary})
+
+    def test_previous_layer_parser_cache_is_ignored(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source, preview = self._sparse_source(root)
+            cache_root = root / "cache"
+            old_version = "gcode-preview-v9-indexed-tcp-material"
+            with patch.object(
+                gcode_preview, "_cache_stem",
+                side_effect=self._cache_stem_factory(cache_root),
+            ):
+                with patch.object(gcode_cache, "CACHE_VERSION", old_version):
+                    gcode_preview._write_preview_cache(preview)
+                    self.assertIsNotNone(gcode_preview._load_preview_cache(source))
+                self.assertIsNone(gcode_preview._load_preview_cache(source))
 
     def test_manifest_replace_failure_preserves_valid_generation_and_cleans_temps(
         self,

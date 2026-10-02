@@ -1,4 +1,4 @@
-# 5AxisSclicer
+# 5AxisSclicer V2.9
 
 5AxisSclicer is a Windows desktop slicer for five-axis additive manufacturing. Open a STEP/STP model, set up the part, machine, and material, choose a Workbench for the geometry, preview the generated path, and export NC/G-code for offline review.
 
@@ -26,3 +26,11 @@
 | G-code File Preview | Open existing NC/G-code and inspect the 3D path and code | [Preview guide](docs/guides/gcode_preview_en.md) |
 
 Find guides for machine profiles, materials, and coordinates in the [guide index](docs/guides/README.md#english-guides). The software is still being tested and improved; check settings and paths against your equipment before printing.
+
+## Daily preview update — 2026-10-02
+
+Numbered layers accept both `;LAYER:0` and `;Layer 0`. Cancelling a load restores the previous paths, sources and warnings; the final cancelled message follows worker shutdown. FIT/ISO has a separate layout row, checkbox states align, and the legacy Preview legend and segment properties scroll without overlap.
+
+The updated [file-preview guide](docs/guides/gcode_preview_en.md) covers eight layers, progress, cancellation and reopening. The screenshots use the repaired daily preview candidate. Nominal beads use approximate orientation and NC/default width and height.
+
+The reusable [five-axis-daily-ui-review Skill](skills/five-axis-daily-ui-review/SKILL.md) is available as a [ZIP](skills/packages/five-axis-daily-ui-review.zip). Copy its `five-axis-daily-ui-review` folder to your Codex skills directory. Example: `Use $five-axis-daily-ui-review to inspect the current candidate offline while preserving existing windows.` See the [delivery record](docs/verification/daily_ui_20261002.md) for checks and remaining capture limitations.

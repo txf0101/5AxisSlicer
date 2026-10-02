@@ -18,9 +18,9 @@ python -m five_axis_slicer.app --results --model "example\叶轮\叶轮.stp" --g
 
 Paths generated in a Workbench should first be inspected there. To inspect the exported code in this page, export it and open `main.gcode`. G-code can be viewed without a model; open the matching STEP when checking path placement. Keep the source of historical or external code clear; its appearance does not establish how it was generated.
 
-![G-code file preview: logo operation 2](assets/hd_v27/gcode_logo_file_preview_en.png)
+![English nominal-bead preview with a separate FIT/ISO row](assets/daily_ui_20261002/03_bead_caption_en.png)
 
-The interface shows file controls, logo operation 2, statistics, and visibility controls with no STEP loaded. Overlay the matching STEP to check your own program’s path placement.
+This eight-layer display sample has no STEP overlay. The missing-STEP warning allows path inspection; load the matching model to check placement. Open `skills/five-axis-daily-ui-review/assets/preview_layered_infill_witness.gcode` from the repository for the same offline exercise. The image comes from the repaired daily preview candidate. Its nominal beads use approximate orientation and NC/default dimensions.
 
 ## Model, view, and path filters
 
@@ -34,6 +34,22 @@ The X/Y/Z orientation marker at the lower left follows camera rotation. It indic
 - Extrusion: show or hide deposited material.
 - Role colours: distinguish travel, deposition, retract, index, approach, and prime. Colours are diagnostic and do not represent machine or material colours.
 - Progress and code context: select a progress point or source line to inspect the segment, layer, region, feed, and coordinates.
+
+## Eight layers, progress, cancellation and reopening
+
+Both `;LAYER:0` and `;Layer 0` identify numbered layers. The sample reports eight layers, 0–7. Longer files provide multiple layer groups. Group selection in File Preview and arbitrary lower/upper bounds in the legacy Preview are separate controls.
+
+Select a group, then move Path Progress and inspect the corresponding source context. The image below uses index 140 and shows a 50.2% prefix. Checking the full 0–7 group alone does not establish arbitrary subrange coverage.
+
+![Mid-path prefix at index 140; Chinese interface](assets/daily_ui_20261002/04_progress_140_zh.png)
+
+When loading another file, choose Cancel Load after progress appears. The previous result and source remain visible. Wait while safe cancellation is pending; the final message is Load cancelled after worker shutdown. Previous warnings remain attached to the restored result.
+
+![Cancelled load with the original missing-STEP warning; Chinese interface](assets/daily_ui_20261002/05_cancel_restores_warning_zh.png)
+
+Use Open G-code again to reopen the small file. The restored eight-layer view below returns to full progress. Loading NC alone still leaves the missing-STEP warning.
+
+![Eight-layer sample reopened after cancellation; Chinese interface](assets/daily_ui_20261002/06_reopen_after_cancel_zh.png)
 
 ## Safe fallback for five-axis A/C transforms
 

@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-02",
+  "publication_base": "7498daac814d81be9370d96a85312f222c439f65",
+  "publication_tests": {
+    "passed": 70,
+    "subtests": 18,
+    "seconds": 14.03,
+    "junit": "publication_tests.xml"
+  },
+  "candidate_tests": {
+    "passed": 70,
+    "subtests": 18,
+    "seconds": 13.94,
+    "junit": "candidate_publication_tests.xml",
+    "python_module_origins": 254
+  },
+  "quality": {
+    "exit_code": 0,
+    "ruff": "passed",
+    "format": "passed",
+    "context_budget": "passed without raising limits",
+    "mypy": "220 source files passed",
+    "log": "publication_quality_v29.log"
+  },
+  "guide_images": {
+    "references": 95,
+    "missing": 0,
+    "minimum_checked_size": [
+      1600,
+      900
+    ],
+    "below_minimum": 0
+  },
+  "skill_validation": "passed",
+  "zip_manifest": "../../../skills/packages/five-axis-daily-ui-review.manifest.json",
+  "gui_pending": [
+    "narrow viewport pixel capture",
+    "fresh-process final completion-message capture"
+  ],
+  "whole_daily_acceptance": false,
+  "machine_release": false,
+  "release": "V2.9",
+  "v29_tests": {
+    "publication": {
+      "passed": 70,
+      "subtests": 18,
+      "seconds": 14.14,
+      "junit": "publication_v29_tests.xml"
+    },
+    "candidate": {
+      "passed": 70,
+      "subtests": 18,
+      "seconds": 12.42,
+      "junit": "candidate_v29_tests.xml",
+      "module_origins": 254
+    }
+  }
+}
